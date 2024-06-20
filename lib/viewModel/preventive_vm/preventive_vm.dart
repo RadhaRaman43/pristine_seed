@@ -1,0 +1,1593 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:dotted_border/dotted_border.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:image_picker/image_picker.dart';
+
+//import 'package:marquee/marquee.dart';
+import 'package:navigation_drawer_flutter/models/servicePreventiveModel/service_preventive_list_model.dart';
+import 'package:navigation_drawer_flutter/repository/preventive_repository/preventive_repository.dart';
+import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
+
+import '../../constants/app_colors.dart';
+import '../../constants/app_font_size.dart';
+import '../../models/reasonModel/reason_master_response.dart';
+import '../../models/servicePreventiveModel/createPreventiveCalenderModel.dart';
+import '../../models/servicePreventiveModel/indent_header_line_create_model.dart';
+import '../../models/servicePreventiveModel/item_details_model.dart';
+import '../../models/servicePreventiveModel/preventive_item_no_moel.dart';
+import '../../models/servicePreventiveModel/service_preventive_details_model.dart';
+import '../../reources/app_url/app_url.dart';
+import '../../reources/routes/routes_name.dart';
+import '../../utils/app_utils.dart';
+import 'package:http/http.dart' as http;
+
+import '../../models/serviceInstallationModel/service_offsite_closure_model.dart';
+
+class PreventiveViewModel extends GetxController {
+  final _api = PreventiveRepository();
+  SessionManagement sessionManagement = SessionManagement();
+  RxBool loading = false.obs;
+  RxInt is_done = 0.obs;
+  RxString date_filter = "TODAY".obs;
+  String email = "";
+  int pageNumber = 0;
+  int rowsPerPage = 10;
+  int total_rows = 0;
+  int id = 0;
+  RxString image_description_flag = "".obs;
+  RxBool isExpand = true.obs;
+  String reason_code = "";
+  RxString flag = ''.obs;
+  RxString description = "".obs;
+  RxString image_flag = "".obs;
+  RxString upLoadLocalImagesList = ''.obs;
+  final ImagePicker _picker = ImagePicker();
+  Size size = Get.size;
+
+  String item_no = "";
+  RxBool isCheckBox = false.obs;
+
+  RxList<PreventiveItemNoResponse> item_no_list =
+      <PreventiveItemNoResponse>[].obs;
+  RxList<ServicePreventiveListResponse> service_preventive_list =
+      <ServicePreventiveListResponse>[].obs;
+  RxList<ServicePreventiveDetailsResponse> service_preventive_details_list =
+      <ServicePreventiveDetailsResponse>[].obs;
+
+  RxList<PreventiveIndentHeaderCreateResponse> service_indent_header_list =
+      <PreventiveIndentHeaderCreateResponse>[].obs;
+
+  RxList<CreatePreventiveCalender> create_preventive_calender_list =
+      <CreatePreventiveCalender>[].obs;
+
+  RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
+
+  RxList<PreventiveItemDetailsResponse> item_details_list =
+      <PreventiveItemDetailsResponse>[].obs;
+
+  var reason_code_controller = TextEditingController();
+  var reason_description_controller = TextEditingController();
+  var reschdule_date_controller = TextEditingController();
+  var reschdule_remark_controller = TextEditingController();
+  var indent_remark_controller = TextEditingController();
+  var indent_visit_charge_controller = TextEditingController();
+  var image_description_controller = TextEditingController();
+  var item_no_controller = TextEditingController();
+  var item_no_description_controller = TextEditingController();
+  var consumer_quantity_controller = TextEditingController();
+  var remain_quantity_controller = TextEditingController();
+  var bad_quantity_controller = TextEditingController();
+  var quantity_controller = TextEditingController();
+
+  var warranty_visit_date_controller = TextEditingController();
+  var warranty_visit_time_controller = TextEditingController();
+  var globle_search_controller = TextEditingController();
+  var customer_no_search_controller = TextEditingController();
+  var serial_no_search_controller = TextEditingController();
+  var item_no_search_controller = TextEditingController();
+  var invoice_no_search_controller = TextEditingController();
+  var invoice_date_search_controller = TextEditingController();
+  var discount_controller = TextEditingController();
+  var closure_remark_controller = TextEditingController();
+  RxDouble currentLat = 0.0.obs;
+  RxDouble currentLng = 0.0.obs;
+
+  @override
+  void onInit() async {
+    email = await sessionManagement.getEmail() ?? '';
+    getServicePreventiveList(is_done.value, pageNumber, date_filter.value);
+    getReasonMaster();
+    initCurrentLocationLatLant();
+  }
+
+  void toggle() {
+    isExpand.value = !isExpand.value;
+  }
+
+  Future<void> refreshPreventiveDetailsData() async {
+    // Implement your refresh logic here
+    getServicePreventiveDetails(id, "");
+  }
+
+  Future<void> refreshPreventiveListData() async {
+    print("lmlkgnk");
+    // Implement your refresh logic here
+    getServicePreventiveList(is_done.value, pageNumber, date_filter.value);
+  }
+
+  Future<void> refreshIndentListData() async {
+    // Implement your refresh logic here
+    IndentHeaderListApi();
+    getServicePreventiveDetails(id, "Refresh");
+  }
+
+  getServicePreventiveList(int is_done, int page_no, String date_filter,
+      {String globle_search_value = ""}) {
+    Map data;
+    if (globle_search_value != null &&
+        globle_search_value!.isNotEmpty &&
+        globle_search_value != "") {
+      data = {
+        "flag": "GlobalFilterApp",
+        "service_type": "Preventive",
+        "date_filter": date_filter,
+        "service_no": globle_search_value,
+        "service_status": "",
+        "is_done": is_done,
+        "email_id": email,
+        "customer_no_name": "",
+        "item_no_name": "",
+        "serial_no": "",
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no
+      };
+    } else {
+      data = {
+        "service_type": "Preventive",
+        "date_filter": date_filter,
+        "service_no": "",
+        "service_status": "",
+        "is_done": is_done,
+        "email_id": email,
+        "invoice_date": invoice_date_search_controller.value.text.isEmpty
+            ? ""
+            : invoice_date_search_controller.value.text,
+        "customer_no_name": customer_no_search_controller.value.text.isEmpty
+            ? ""
+            : customer_no_search_controller.value.text,
+        "item_no_name": item_no_search_controller.value.text.isEmpty
+            ? ""
+            : item_no_search_controller.text,
+        "serial_no": serial_no_search_controller.value.text.isEmpty
+            ? ""
+            : serial_no_search_controller.text,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no
+      };
+    }
+
+    loading.value = true;
+    print(data);
+    try {
+      _api.serviceCorrectiveListApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServicePreventiveListResponse> response = JsonResponse.map(
+                (e) => ServicePreventiveListResponse.fromJson(e)).toList();
+
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              if (page_no == 0) {
+                service_preventive_list.clear();
+              }
+              service_preventive_list.addAll(response);
+              total_rows = service_preventive_list[0].totalCount!;
+            } else {
+              loading.value = false;
+              service_preventive_list.value = [];
+            }
+          } else {
+            loading.value = false;
+            service_preventive_list.value = [];
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getItemNo() {
+    Map data = {
+      "indent_no": service_indent_header_list[0].indentNo,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.item_noApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveItemNoResponse> response =
+                JsonResponse.map((e) => PreventiveItemNoResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              item_no_list.value = response;
+            } else {
+              loading.value = false;
+              item_no_list.value = [];
+            }
+          } else {
+            loading.value = false;
+            item_no_list.value = [];
+
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          item_no_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      item_no_list.value = [];
+      print(e);
+    }
+  }
+
+  getItemDetails() {
+    Map<String, String> data = {
+      'item_no': service_preventive_details_list[0].itemNo.toString(),
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.itemDetailsApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveItemDetailsResponse> response = JsonResponse.map(
+                (e) => PreventiveItemDetailsResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              item_details_list.value = response;
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            item_details_list.value = [];
+
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          item_details_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      item_details_list.value = [];
+      print(e);
+    }
+  }
+
+  MarkClosureApi() {
+    Map data = {
+      "service_id": id,
+      "email_id": email,
+      "reopen_remark": closure_remark_controller.text,
+      "request_current_status": "Completed"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceOffsiteMarkCloserApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServiceOffsiteClosureResponse> response = JsonResponse.map(
+                (e) => ServiceOffsiteClosureResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification("Success!", response[0].message!);
+              Get.offAllNamed(RoutesName.corrective_screen);
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification("Error!", response[0].message!);
+            }
+          } else {
+            loading.value = false;
+
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+
+      print(e);
+    }
+  }
+
+  IndentComplete(String indent_no) {
+    Map data = {"indent_no": indent_no, "email_id": email};
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceIndentCompleteApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              //service_indent_header_create_list.value = response;
+              IndentHeaderListApi();
+              Get.toNamed(RoutesName.preventive_screen);
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+
+      print(e);
+    }
+  }
+
+  IndentConsumerLineApi(
+    String indent_no,
+    int line_no,
+  ) {
+    Map data = {
+      "indent_no": indent_no,
+      "line_no": line_no,
+      "consume_qty": consumer_quantity_controller.text,
+      "bad_qty": bad_quantity_controller.text,
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceIndentConsumerLineMarkApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              service_indent_header_list.value = response;
+              consumer_quantity_controller.clear();
+              bad_quantity_controller.clear();
+
+              Utils.showToastification("Success!", response[0].message!);
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification("Error!", response[0].message!);
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getServicePreventiveDetails(int id, String flag) {
+    print("flag........" + flag);
+    Map data = {"service_id": id.toString(), "email_id": email};
+    print(data);
+    loading.value = true;
+    try {
+      _api.servicePreventiveDetailsApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServicePreventiveDetailsResponse> response = JsonResponse.map(
+                (e) => ServicePreventiveDetailsResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              service_preventive_details_list.value = response;
+              if (flag != "Refresh") {
+                Get.toNamed(RoutesName.preventive_details_screen);
+              } else {
+                print("mgkfngknk");
+              }
+            } else {
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getReasonMaster() {
+    Map data = {
+      "flag": "select",
+      "reason_code": "",
+      "reason_type": "Preventive",
+      "reason_description": "",
+      "created_by": email,
+      "id": "",
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.preventiveReasonMasterApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ReasonModel> response =
+                JsonResponse.map((e) => ReasonModel.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              reason_master_list.value = response;
+            } else {
+              loading.value = false;
+              reason_master_list.value = [];
+            }
+          } else {
+            loading.value = false;
+            reason_master_list.value = [];
+
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          reason_master_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      reason_master_list.value = [];
+      print(e);
+    }
+  }
+
+  IndentLineCreate(String indent_no) {
+    if (item_no_controller.text.isEmpty) {
+      Utils.showErrorToastification("Message!", "Please Select Item Code");
+      return;
+    }
+    if (quantity_controller.text.isEmpty) {
+      Utils.showErrorToastification("Message!", "Please Enter Quantity ");
+      return;
+    }
+    if (discount_controller.text.isEmpty) {
+      discount_controller.text = "0";
+    }
+
+    Map data = {
+      "indent_no": indent_no,
+      "item_no": item_no,
+      "qty": quantity_controller.text,
+      "is_customer_damage": isCheckBox.value == true ? '1' : "0",
+      "discount_per": discount_controller.text,
+      "email_id": email,
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceIndentLineCreateApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              service_indent_header_list.value = response;
+              /*IndentHeaderCreateApi(
+                  service_indent_header_create_list[0].indentNo!);*/
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          Utils.showExceptionToastification("Api Error!", error.toString());
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      service_indent_header_list.value = [];
+      print(e);
+    }
+  }
+
+  IndentHeaderLineDelete(String indent_no, String indent_line_no, String flag) {
+    Map data = {
+      "flag": flag == "HeaderDiscard" ? "HeaderDiscard" : "LineDiscard",
+      "indent_no": indent_no,
+      "indent_line_no": flag == "HeaderDiscard" ? -1 : indent_line_no,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceIndentDeleteLineAndHeaderApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              //
+              if (flag == "HeaderDiscard") {
+                print("if......" + flag);
+                Get.toNamed(RoutesName.preventive_markvisit_screen);
+                IndentHeaderListApi();
+              }
+              service_indent_header_list.value = response;
+
+              /*IndentHeaderCreateApi(
+                  service_indent_header_create_list[0].indentNo!);*/
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
+            } else {
+              loading.value = false;
+              service_indent_header_list.value = [];
+              /*Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());*/
+            }
+          } else {
+            loading.value = false;
+            service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      service_indent_header_list.value = [];
+      print(e);
+    }
+  }
+
+  IndentConsumerHeaderMarkApi(String indent_no) {
+    Map data = {"indent_no": indent_no, "email_id": email};
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceIndentConsumerHeaderMarkApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              service_indent_header_list.value = response;
+              IndentHeaderListApi();
+              //    Get.toNamed(RoutesName.installation_screen);
+              Utils.showToastification("Success!", response[0].message!);
+            } else {
+              loading.value = false;
+              print(response);
+              Utils.showErrorToastification("Error!", response[0].message!);
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  IndentHeaderListApi() {
+    Map data = {"service_id": id, "email_id": email};
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceIndentListApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              service_indent_header_list.value = response;
+              print("ifnjngbh");
+            } else {
+              loading.value = false;
+              print("else........");
+              service_indent_header_list.value = [];
+              /*Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());*/
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      service_indent_header_list.value = [];
+      print(e);
+    }
+  }
+
+  PreventiveMarkVisitApi() {
+    Map data = {"service_id": id, "user_remark": "", "email_id": email};
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceMarkVisitApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServicePreventiveDetailsResponse> response = JsonResponse.map(
+                (e) => ServicePreventiveDetailsResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              IndentHeaderListApi();
+              Get.toNamed(RoutesName.preventive_markvisit_screen);
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+            service_preventive_details_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          service_preventive_details_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      service_preventive_details_list.value = [];
+      print(e);
+    }
+  }
+
+  createPreventiveCalenderCallApi() {
+    Map data = {"email_id": email};
+    print(data);
+    loading.value = true;
+    try {
+      _api.createPreventiveCalenderCallApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<CreatePreventiveCalender> response =
+                JsonResponse.map((e) => CreatePreventiveCalender.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              create_preventive_calender_list.value = response;
+              Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+            } else {
+              loading.value = false;
+              create_preventive_calender_list.value = [];
+              /* Utils.showErrorToastification(
+                  "Error!", "No Calender Date Found");*/
+              Utils.showErrorToastification("Error!", response[0].message!);
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      service_indent_header_list.value = [];
+      print(e);
+    }
+  }
+
+  createPreventiveCallApi(
+    String warranty_id, String service_id, String dateAndTime) {
+    Map data = {
+      "warranty_id": warranty_id,
+      "service_id": service_id,
+      "email_id": email,
+      "service_tat_datetime": dateAndTime
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.createPreventiveCallApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<CreatePreventiveCalender> response =
+                JsonResponse.map((e) => CreatePreventiveCalender.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              getServicePreventiveList(
+                  is_done.value, pageNumber, date_filter.value);
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
+              Get.offAllNamed(RoutesName.preventive_screen);
+            } else {
+              loading.value = false;
+
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      service_indent_header_list.value = [];
+      print(e);
+    }
+  }
+
+  reAssignRequestApi() {
+    if (reason_code_controller.text.isEmpty) {
+      Utils.showErrorToastification("Message", "Please Select Reason Code");
+      return;
+    }
+    if (reason_description_controller.text.isEmpty) {
+      Utils.showErrorToastification("Message", "Please Enter Remark");
+      return;
+    }
+
+    Map data = {
+      "service_id": id,
+      "reason_code": reason_code,
+      "user_remark": reason_description_controller.text,
+      "email_id": email
+    };
+    print(data);
+
+    loading.value = true;
+    try {
+      _api.reassignmentApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServicePreventiveDetailsResponse> response = JsonResponse.map(
+                (e) => ServicePreventiveDetailsResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
+              Get.offAllNamed(RoutesName.preventive_screen);
+              //  getServicePreventiveDetails(id, "Refresh");
+              // service_installation_details_list.value = response;
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+            service_preventive_details_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          service_preventive_details_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      service_preventive_details_list.value = [];
+      print(e);
+    }
+  }
+
+  reSchduleRequestApi(BuildContext context) {
+    Map data = {
+      "service_id": id,
+      "reschedule_datetime": reschdule_date_controller.text,
+      "reason_code": reason_code,
+      "user_remark": reschdule_remark_controller.text,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.reScheduleApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<ServicePreventiveDetailsResponse> response = JsonResponse.map(
+                (e) => ServicePreventiveDetailsResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              reason_code_controller.clear();
+              reschdule_date_controller.clear();
+              reschdule_remark_controller.clear();
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
+              getServicePreventiveDetails(id, "Refresh");
+            } else {
+              loading.value = false;
+
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_installation_details_list.value = [];
+
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+          // service_installation_details_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  IndentHeaderCreateApi(String indent_no) {
+    Map data = {"service_id": id, "indent_no": indent_no, "email_id": email};
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceIndentHeaderCreateApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              service_indent_header_list.value = response;
+              Get.toNamed(RoutesName.preventive_Indent_header_view_screen);
+              if (response[0].message != null) {
+                Utils.showToastification(
+                    "Success!", response[0].message.toString());
+              }
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  PreventiveMarkComplete(String service_id) {
+    if (indent_remark_controller.text.isEmpty) {
+      Utils.showErrorToastification("Message!", "Please Enter remark");
+      return;
+    }
+    Map data = {
+      "service_id": service_id,
+      "user_remark": indent_remark_controller.text,
+      "visit_charges": indent_visit_charge_controller.text,
+      "from_latitude": currentLat.value,
+      "from_longitude": currentLng.value,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serVicePreventiveMarkCompletedApiHit(data, sessionManagement).then(
+        (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PreventiveIndentHeaderCreateResponse> response =
+                JsonResponse.map(
+                        (e) => PreventiveIndentHeaderCreateResponse.fromJson(e))
+                    .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              indent_remark_controller.clear();
+              getServicePreventiveList(
+                  is_done.value, pageNumber, date_filter.value);
+              Get.toNamed(RoutesName.preventive_screen);
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error!", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+        (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+
+      print(e);
+    }
+  }
+
+  Future<void> upLoadImageApi(BuildContext context) async {
+    if (image_description_controller.text.isEmpty) {
+      Utils.showErrorToastification("Message", "Please Enter Description");
+      return;
+    }
+    try {
+      final server_uri = Uri.parse(AppUrl.preventiveCertificateImage);
+      final clint_request = http.MultipartRequest('POST', server_uri);
+      var fields = <String, String>{
+        "service_id": id.toString(),
+        "service_type": 'Preventive',
+        "document_type": image_flag.value,
+        "email_id": email,
+        "file_desc": image_description_controller.text,
+      };
+      clint_request.fields.addAll(fields);
+      clint_request.files.add(await http.MultipartFile.fromPath(
+          'files', upLoadLocalImagesList.toString()));
+      loading.value = true;
+      print(fields);
+
+      _api
+          .serviceIndentImageInsert(clint_request, sessionManagement)
+          .then((value) {
+        print(value);
+        final jsonResponse = json.decode(value);
+        if (jsonResponse is List) {
+          List<ServicePreventiveDetailsResponse> response_data = jsonResponse
+              .map((data) => ServicePreventiveDetailsResponse.fromJson(data))
+              .toList();
+
+          if (response_data != null &&
+              response_data.length > 0 &&
+              response_data[0].condition == 'True') {
+            loading.value = false;
+            upLoadLocalImagesList.value = '';
+            Navigator.pop(context);
+            getServicePreventiveDetails(id, "Refresh");
+
+            Utils.sanckBarSuccess(
+                'Message!', response_data[0].message.toString());
+          } else {
+            print("Errror.....${response_data[0].message}");
+            loading.value = false;
+            Navigator.of(context).pop();
+            Utils.sanckBarError(
+                'False Message!', response_data[0].message.toString());
+          }
+        } else {
+          loading.value = false;
+          Utils.sanckBarException("Api Error!", jsonResponse);
+          /*Utils.sanckBarError(
+              'API Error',
+              jsonResponse["message"] == null
+                  ? 'Invalid response format'
+                  : jsonResponse["message"]);*/
+        }
+      }).onError((error, stackTrace) {
+        print("errorrrrrr.....${error}");
+        print("stack......r.....${stackTrace}");
+        loading.value = false;
+        // Utils.sanckBarError('Error!', "Api Response Error");
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future upLoadImage(BuildContext context) async {
+    var image = null;
+    try {
+      image =
+          await _picker.pickImage(source: ImageSource.camera, imageQuality: 60);
+      upLoadLocalImagesList.value = image.path.toString();
+      Navigator.of(context).pop();
+      //showLineImagesPopup(context);
+      imageDescriptionDialog(context);
+    } catch (e) {
+      //Utils.sanckBarError("Image Exception!", e.toString());
+    }
+  }
+
+  void showLineImagesPopup(BuildContext context) {
+    List<FileList> dialog_file_list = [];
+    if (image_flag.value == "Preventive_Certificate") {
+      dialog_file_list = service_preventive_details_list[0]
+          .fileList!
+          .where((element) =>
+              element.documentType!.toLowerCase() ==
+              'Preventive_Certificate'.toLowerCase())
+          .toList();
+    } else if (image_flag.value == "Preventive_Product") {
+      dialog_file_list = service_preventive_details_list[0]
+          .fileList!
+          .where((element) =>
+              element.documentType!.toLowerCase() ==
+              'Preventive_Product'.toLowerCase())
+          .toList();
+    }
+    if (dialog_file_list.length > 0) {
+      upLoadLocalImagesList.value = dialog_file_list[0].fileUrl!;
+      description.value = dialog_file_list[0].fileDesc!;
+    } else {
+      upLoadLocalImagesList.value = "";
+      description.value = "";
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.0),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppBar(
+                  title: Text(
+                    'View Images',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  actions: [
+                    Row(
+                      children: [
+                        IconButton(
+                          icon:
+                              Icon(Icons.cancel, color: AllColors.primaryDark1),
+                          onPressed: () {
+                            Navigator.of(context).pop(); // Dismiss the dialog
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                Divider(
+                  height: 2,
+                  color: AllColors.primaryliteColor,
+                ),
+                SizedBox(height: 10),
+                Visibility(
+                  visible: false,
+                  child: Container(
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () async {
+                          //upLoadImage(context);
+                        },
+                        child: Column(
+                          children: [
+                            DottedBorder(
+                              color: AllColors.primaryDark1,
+                              strokeWidth: 2,
+                              borderType: BorderType.RRect,
+                              radius: Radius.circular(8),
+                              dashPattern: [20, 10, 20, 10],
+                              child: Container(
+                                width: size.height * 0.1,
+                                height: size.height * 0.1,
+                                child: Icon(Icons.camera_alt_outlined,
+                                    color: AllColors.primaryDark1,
+                                    size: size.height * 0.1),
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              'Capture Image',
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twentee,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Obx(() {
+                  return Container(
+                    width: size.width * .98,
+                    height: size.height * .5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      border: Border.all(
+                          color: AllColors.primaryliteColor, width: .5),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(3.0),
+                      child: upLoadBigImageSection(),
+                    ),
+                  );
+                }),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6.0, bottom: 6.0),
+                          child: Divider(
+                              color: AllColors.primaryliteColor, height: 1),
+                        ),
+                        SizedBox(height: 10),
+                        // Check if imageUrls is empty, display a message, else display images
+                        dialog_file_list == null &&
+                                dialog_file_list!.length <= 0
+                            ? Center(
+                                child: Text(
+                                  'No Images found',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: AllFontSize.eighteen,
+                                      fontWeight: FontWeight.w700,
+                                      color: AllColors.primaryDark1),
+                                ),
+                              )
+                            : Container(
+                                height: 100,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: dialog_file_list!.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        upLoadLocalImagesList.value =
+                                            dialog_file_list![index].fileUrl!;
+                                        description.value =
+                                            dialog_file_list![index].fileDesc!;
+                                      },
+                                      child: Container(
+                                        width: 100,
+                                        margin: EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                          border: Border.all(
+                                              color: Colors.blueGrey,
+                                              width: 0.5),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(3.0),
+                                          child: upLoadImageSection(
+                                              dialog_file_list![index]),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget upLoadBigImageSection() {
+    return Stack(
+      children: [
+        Positioned(
+          width: 400,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(2),
+            child: Image.network(
+              upLoadLocalImagesList.value.toString(),
+              fit: BoxFit.cover, // Use BoxFit.cover to make the image fit
+            ),
+          ),
+        ),
+        Positioned(
+          // bottom: 20,
+          child: Obx(
+            () {
+              return Visibility(
+                visible: description.value.isNotEmpty,
+                child: Container(
+                  width: 500,
+                  height: 50,
+                  decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        offset: Offset(0.0, 1.0),
+                        color: Colors.black54,
+                        blurRadius: 10,
+                        blurStyle: BlurStyle.outer,
+                        spreadRadius: 2)
+                  ], color: Colors.white60),
+                  child: Tooltip(
+                    message: description.value,
+                    child: Text(
+                      " " + description.value,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontWeight: FontWeight.w700,
+                          fontSize: AllFontSize.twenteetwo),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              );
+            },
+            //child:
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget upLoadImageSection(FileList? file_model_data) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(2),
+      child: Image.network(
+        file_model_data!.fileUrl!.toString(),
+        fit: BoxFit.cover, // Use BoxFit.cover to make the image fit
+      ),
+    );
+  }
+
+  imageDescriptionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          // Set the shape to make it full-screen
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: Text(
+            image_description_flag.value == "Certificate"
+                ? image_description_flag + " Details...."
+                : "Product Details...",
+            style: GoogleFonts.poppins(
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+              color: AllColors.primaryDark1,
+            ),
+          ),
+          content: Container(
+            height: 280,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: image_description_controller,
+                  //   keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: image_description_flag.value == "Certificate"
+                        ? image_description_flag + " Description"
+                        : "Product Description",
+                    labelStyle: TextStyle(color: AllColors.primaryDark1),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          AllColors.primaryDark1,
+                        ),
+                      ),
+                      onPressed: () {
+                        //  Navigator.of(context).pop();
+                        description.value = image_description_controller.text;
+                        upLoadImageApi(context);
+
+                        // todo  Your onPressed logic...
+                      },
+                      child: Container(
+                        width: 60,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Ok',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.customDarkerWhite,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          AllColors.primaryDark1,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 60,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Cancel',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.customDarkerWhite,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Container(
+                  width: 100,
+                  height: 120,
+                  margin: EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.blueGrey, width: 0.5),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(2),
+                      child: Image.file(
+                        File(upLoadLocalImagesList.toString()),
+                        fit: BoxFit
+                            .cover, // Use BoxFit.cover to make the image fit
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future upLoadGalleryImage(BuildContext context) async {
+    var image = null;
+    try {
+      image = await _picker.pickImage(
+          source: ImageSource.gallery, imageQuality: 60);
+      upLoadLocalImagesList.value = image.path.toString();
+      Navigator.of(context).pop();
+      //showLineImagesPopup(context);
+      imageDescriptionDialog(context);
+    } catch (e) {
+      //Utils.sanckBarError("Image Exception!", e.toString());
+    }
+  }
+
+  initCurrentLocationLatLant() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+    permission = await Geolocator.checkPermission();
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (serviceEnabled &&
+        (permission == LocationPermission.always ||
+            permission == LocationPermission.whileInUse)) {
+      Position userLocation = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      currentLat.value = userLocation.latitude;
+      currentLng.value = userLocation.longitude;
+    }
+  }
+}

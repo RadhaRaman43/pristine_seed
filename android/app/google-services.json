@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "527318396886",
+    "project_id": "pristinecrmservicemanagement",
+    "storage_bucket": "pristinecrmservicemanagement.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:527318396886:android:103dc585066fd36524fe77",
+        "android_client_info": {
+          "package_name": "com.pristine.service_managment"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD29tdDUeZm-lBUK_mGlfPspa1PZ5zHmx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
