@@ -682,14 +682,23 @@ class InstallationScreen extends StatelessWidget {
                     width: size.width * .04,
                   ),
                   Spacer(),
-                  Text(
+                  Obx(
+                    () {
+                      return Text(installation_page_controller
+                          .service_intallatallation_list[position].isUnderApproval!>0 &&
+                          installation_page_controller
+                              .service_intallatallation_list[position].serviceStatus=="Completed"?"Under Approval":
                       installation_page_controller
                           .service_intallatallation_list[position]
                           .serviceStatus!,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),);
+
+                    },
+                   // child:
+                  ),
                 ],
               ),
             ],

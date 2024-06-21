@@ -594,6 +594,9 @@ class PreventiveScreen extends StatelessWidget{
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
+
+
+
                   Text(
                     "Status ",
                     style: GoogleFonts.poppins(
@@ -606,15 +609,24 @@ class PreventiveScreen extends StatelessWidget{
                     width: size.width * .04,
                   ),
                   Spacer(),
-                  Text(
+
+                  Obx(
+                        () {
+                      return Text(preventive_page_controller
+                          .service_preventive_list[position].isUnderApproval!>0 &&
+                          preventive_page_controller
+                              .service_preventive_list[position].serviceStatus=="Completed"?"Under Approval":
                       preventive_page_controller
                           .service_preventive_list[position]
                           .serviceStatus!,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.end,),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),);
+
+                    },
+                    // child:
+                  ),
                 ],
               ),
             ],

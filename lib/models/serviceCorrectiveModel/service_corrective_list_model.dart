@@ -42,9 +42,26 @@ class CorrectiveListResponse {
   String? complainReasonCode;
   String? complainReasonDesc;
   String? complainRemark;
-  String? serviceTatDatetime;
   String? reopenRemark;
   String? completeRemark;
+  int? isWarrantyReceive;
+  String? warrantyStartDate;
+  String? warrantyEndDate;
+  int? frequencyOfPm;
+  String? serviceTatDatetime;
+  double? visitCharges;
+  String? fromLatitude;
+  String? fromLongitude;
+  String? completedOn;
+  int? isUnderApproval;
+  String? completeApprovalStatus;
+  String? completeApprovalBy;
+  String? completeApprovalOn;
+  String? completeApprovalRemark;
+  String? recheduleApprovalStatus;
+  String? recheduleApprovalBy;
+  String? recheduleApprovalOn;
+  String? recheduleApprovalRemark;
 
   CorrectiveListResponse(
       {this.condition,
@@ -90,9 +107,26 @@ class CorrectiveListResponse {
         this.complainReasonCode,
         this.complainReasonDesc,
         this.complainRemark,
-        this.serviceTatDatetime,
         this.reopenRemark,
-        this.completeRemark});
+        this.completeRemark,
+        this.isWarrantyReceive,
+        this.warrantyStartDate,
+        this.warrantyEndDate,
+        this.frequencyOfPm,
+        this.serviceTatDatetime,
+        this.visitCharges,
+        this.fromLatitude,
+        this.fromLongitude,
+        this.completedOn,
+        this.isUnderApproval,
+        this.completeApprovalStatus,
+        this.completeApprovalBy,
+        this.completeApprovalOn,
+        this.completeApprovalRemark,
+        this.recheduleApprovalStatus,
+        this.recheduleApprovalBy,
+        this.recheduleApprovalOn,
+        this.recheduleApprovalRemark});
 
   CorrectiveListResponse.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -138,9 +172,26 @@ class CorrectiveListResponse {
     complainReasonCode = json['complain_reason_code'];
     complainReasonDesc = json['complain_reason_desc'];
     complainRemark = json['complain_remark'];
-    serviceTatDatetime = json['service_tat_datetime'];
     reopenRemark = json['reopen_remark'];
     completeRemark = json['complete_remark'];
+    isWarrantyReceive = json['is_warranty_receive'];
+    warrantyStartDate = json['warranty_start_date'];
+    warrantyEndDate = json['warranty_end_date'];
+    frequencyOfPm = json['frequency_of_pm'];
+    serviceTatDatetime = json['service_tat_datetime'];
+    visitCharges = json['visit_charges'];
+    fromLatitude = json['from_latitude'];
+    fromLongitude = json['from_longitude'];
+    completedOn = json['completed_on'];
+    isUnderApproval = json['is_under_approval'];
+    completeApprovalStatus = json['complete_approval_status'];
+    completeApprovalBy = json['complete_approval_by'];
+    completeApprovalOn = json['complete_approval_on'];
+    completeApprovalRemark = json['complete_approval_remark'];
+    recheduleApprovalStatus = json['rechedule_approval_status'];
+    recheduleApprovalBy = json['rechedule_approval_by'];
+    recheduleApprovalOn = json['rechedule_approval_on'];
+    recheduleApprovalRemark = json['rechedule_approval_remark'];
   }
 
   Map<String, dynamic> toJson() {
@@ -188,9 +239,26 @@ class CorrectiveListResponse {
     data['complain_reason_code'] = this.complainReasonCode;
     data['complain_reason_desc'] = this.complainReasonDesc;
     data['complain_remark'] = this.complainRemark;
-    data['service_tat_datetime'] = this.serviceTatDatetime;
     data['reopen_remark'] = this.reopenRemark;
     data['complete_remark'] = this.completeRemark;
+    data['is_warranty_receive'] = this.isWarrantyReceive;
+    data['warranty_start_date'] = this.warrantyStartDate;
+    data['warranty_end_date'] = this.warrantyEndDate;
+    data['frequency_of_pm'] = this.frequencyOfPm;
+    data['service_tat_datetime'] = this.serviceTatDatetime;
+    data['visit_charges'] = this.visitCharges;
+    data['from_latitude'] = this.fromLatitude;
+    data['from_longitude'] = this.fromLongitude;
+    data['completed_on'] = this.completedOn;
+    data['is_under_approval'] = this.isUnderApproval;
+    data['complete_approval_status'] = this.completeApprovalStatus;
+    data['complete_approval_by'] = this.completeApprovalBy;
+    data['complete_approval_on'] = this.completeApprovalOn;
+    data['complete_approval_remark'] = this.completeApprovalRemark;
+    data['rechedule_approval_status'] = this.recheduleApprovalStatus;
+    data['rechedule_approval_by'] = this.recheduleApprovalBy;
+    data['rechedule_approval_on'] = this.recheduleApprovalOn;
+    data['rechedule_approval_remark'] = this.recheduleApprovalRemark;
     return data;
   }
 }

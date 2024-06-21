@@ -36,11 +36,10 @@ class NotificationScreen extends StatelessWidget{
       drawer: CustomDrawer(),
       body: Container(
         width: double.infinity,
-        height: double.infinity,
-        child: Container(
+        height: size.height,
+        child: SingleChildScrollView(
           child: Column(
             children: [
-
               Obx(
                 () {
                   return  Container(
@@ -56,7 +55,7 @@ class NotificationScreen extends StatelessWidget{
                 },
                 // child:
               ),
-
+          
               Container(
                 // padding: EdgeInsets.all(5),
                  // margin: EdgeInsets.only(top: 5, left: 10, right: 10),
@@ -64,9 +63,9 @@ class NotificationScreen extends StatelessWidget{
                     //color: AllColors.grayColor1,
                       borderRadius: BorderRadius.circular(5)),
                   child: Obx(() {
-                    return SingleChildScrollView(child: BindListView(context));
+                    return BindListView(context);
                   })),
-
+          
             ],
           ),
         ),
@@ -83,18 +82,21 @@ class NotificationScreen extends StatelessWidget{
         notification_page_controller
             .notification_list.length >
             0) {
-      return ListView.separated(
-          padding: EdgeInsets.only(bottom: 60),
-          separatorBuilder: (context, index) => Divider(
-            height: .05,
-            color: AllColors.primaryDark1,
-          ),
-          shrinkWrap: true,
-          itemCount: notification_page_controller
-              .notification_list.value.length,
-          itemBuilder: (BuildContext context, int index) {
-            return BindNotificationListView(context, index);
-          });
+      return Expanded(
+        child: ListView.separated(
+          physics: ClampingScrollPhysics(),
+            padding: EdgeInsets.zero,
+            separatorBuilder: (context, index) => Divider(
+              height: .05,
+              color: AllColors.primaryDark1,
+            ),
+            shrinkWrap: true,
+            itemCount: notification_page_controller
+                .notification_list.value.length,
+            itemBuilder: (BuildContext context, int index) {
+              return BindNotificationListView(context, index);
+            }),
+      );
     } else {
       return Center(
         //child: Image.asset("assests/images/no_record_found.gif",),

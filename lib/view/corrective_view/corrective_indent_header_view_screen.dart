@@ -218,7 +218,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                           .indentNo!);
                                 },
                                 child: Text(
-                                  'Received',
+                                  'Receive',
                                   style: GoogleFonts.poppins(
                                       color: AllColors.textColor,
                                       fontSize: AllFontSize.sisxteen,
@@ -1203,7 +1203,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                       .consumer_quantity_controller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                    labelText: "Consumer Qty ",
+                    labelText: "Consume Qty ",
                     labelStyle: TextStyle(color: AllColors.primaryDark1),
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: AllColors.primaryDark1),

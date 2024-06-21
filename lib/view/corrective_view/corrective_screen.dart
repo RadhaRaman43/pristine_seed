@@ -593,14 +593,24 @@ class CorrectiveScreen extends StatelessWidget{
                     width: size.width * .04,
                   ),
                   Spacer(),
-                  Text(
+
+                  Obx(
+                        () {
+                      return Text(corrective_page_controller
+                          .service_corrective_list[position].isUnderApproval!>0 &&
+                          corrective_page_controller
+                              .service_corrective_list[position].serviceStatus=="Completed"?"Under Approval":
                       corrective_page_controller
                           .service_corrective_list[position]
-                          .serviceStatus?? "",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500)),
+                          .serviceStatus!,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),);
+
+                    },
+                    // child:
+                  ),
                 ],
               ),
             ],
