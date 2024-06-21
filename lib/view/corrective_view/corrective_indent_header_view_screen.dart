@@ -716,6 +716,12 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
         ) ,
           subtitle: Container(
             child: Table(
+              columnWidths: {
+                0: FlexColumnWidth(1.9),
+                1: FlexColumnWidth(1.3),
+                2: FlexColumnWidth(1.5),
+                3: FlexColumnWidth(0.8),
+              },
               children: [
                 TableRow(
                   children: [

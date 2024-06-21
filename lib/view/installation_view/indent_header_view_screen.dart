@@ -676,6 +676,13 @@ class IndentHeaderViewScreen extends StatelessWidget {
          ),
           subtitle: Container(
             child: Table(
+              columnWidths: {
+                0: FlexColumnWidth(1.9),
+                1: FlexColumnWidth(1.3),
+                2: FlexColumnWidth(1.5),
+                3: FlexColumnWidth(0.8),
+              },
+
               children: [
                 TableRow(
                   children: [
@@ -770,7 +777,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                 TableRow(
                   children: [
                     Text(
-                      "Con Qty.:",
+                      "Consume Qty.:",
                       style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -809,7 +816,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500,
                       ),
-                      textAlign: TextAlign.end,
+
                     ),
                   ],
                 ),
