@@ -753,7 +753,9 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500,
                       ),
+
                     ),
+
                     Text(
                       indent_deatils_page_controller
                           .service_indent_header_create_list[0]
