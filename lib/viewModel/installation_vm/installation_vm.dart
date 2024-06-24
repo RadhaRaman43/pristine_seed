@@ -57,6 +57,11 @@ class InstallationViewModel extends GetxController {
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
   RxList<ItemDetailsResponse> item_details_list = <ItemDetailsResponse>[].obs;
   RxList<ItemNoResponse> item_no_list = <ItemNoResponse>[].obs;
+  RxList<String> indent_type_list = <String>["Self","Warehouse"].obs;
+
+
+
+
   RxString upLoadLocalImagesList = ''.obs;
   var reason_code_controller = TextEditingController();
   var reason_description_controller = TextEditingController();
@@ -79,6 +84,8 @@ class InstallationViewModel extends GetxController {
   var invoice_date_search_controller = TextEditingController();
   var remain_quantity_controller=TextEditingController();
   var closure_remark_controller=TextEditingController();
+  var indent_type_controller=TextEditingController();
+  var unit_price_controller=TextEditingController();
 
   RxBool isCheckBox = false.obs;
 
@@ -86,10 +93,18 @@ class InstallationViewModel extends GetxController {
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
 
+  RxBool is_Showindent=false.obs;
+  RxBool is_indent_type_dropDown=false.obs;
+
 
   int id = 0;
   String reason_code = "";
   String item_no = "";
+  double item_Qty = 0.0;
+
+  RxDouble damage= 0.0.obs;
+   int is_warrenty= 0;
+   double unit_price= 0;
 
   RxInt is_done = 0.obs;
 
@@ -541,7 +556,7 @@ class InstallationViewModel extends GetxController {
               service_indent_header_list.value = response;
             } else {
               loading.value = false;
-              service_indent_header_list.value = [];
+             // service_indent_header_list.value = [];
             /*  Utils.showErrorToastification(
                   "Error!", response[0].message.toString());*/
               //service_installation_details_list.value=[];
@@ -616,7 +631,12 @@ class InstallationViewModel extends GetxController {
 
 
   IndentHeaderCreateApi(String indent_no) {
-    Map data = {"service_id": id, "indent_no": indent_no, "email_id": email};
+    Map data = {
+      "service_id": id,
+      "indent_no": indent_no,
+      "indent_type": indent_type_controller.text,
+      "email_id": email
+    };
     print(data);
     loading.value = true;
     try {
@@ -633,7 +653,17 @@ class InstallationViewModel extends GetxController {
                 response[0].condition == "True") {
               loading.value = false;
               service_indent_header_create_list.value = response;
-              Get.toNamed(RoutesName.installation_Indent_view);
+              indent_type_controller.clear();
+              is_Showindent.value=true;
+              is_indent_type_dropDown.value=false;
+              if(indent_no!="" ){
+                is_Showindent.value=true;
+                is_indent_type_dropDown.value=false;
+               Get.toNamed(RoutesName.installation_Indent_view);
+              }/*else{
+                is_Showindent.value=true;
+                is_indent_type_dropDown.value=false;
+              }*/
               if(response[0].message!=null){
                 Utils.showToastification(
                     "Success!", response[0].message.toString());
@@ -676,6 +706,7 @@ class InstallationViewModel extends GetxController {
       "item_no": item_no,
       "qty": quantity_controller.text,
       "is_customer_damage":isCheckBox.value==true?'1':"0",
+      "unit_price": unit_price_controller.text,
       "discount_per":discount_controller.text,
       "email_id": email,
     };

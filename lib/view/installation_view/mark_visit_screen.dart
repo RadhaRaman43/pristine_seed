@@ -868,7 +868,8 @@ class MarkVisit extends StatelessWidget {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [Obx(
+                                    children: [
+                                      Obx(
                                           () {
                                           return Visibility(
                                             visible:
@@ -886,9 +887,14 @@ class MarkVisit extends StatelessWidget {
                                                             .primaryDark1,
                                                         width: 1)),
                                                 onPressed: () {
-                                                  installation_indent_page_controller
+                                                  installation_indent_page_controller.is_indent_type_dropDown.value=true;
+                                                  installation_indent_page_controller.is_Showindent.value=false;
+                                                  Get.toNamed(RoutesName.installation_Indent_view);
+
+
+                                                 /* installation_indent_page_controller
                                                       .IndentHeaderCreateApi(
-                                                      "");
+                                                      "");*/
                                                 },
                                                 icon: Icon(Icons.add_shopping_cart,color: AllColors.primaryDark1,),
                                                 label: Container(

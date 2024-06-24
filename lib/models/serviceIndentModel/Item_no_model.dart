@@ -5,13 +5,17 @@ class ItemNoResponse {
   String? componentProductCode;
   double? componentQuantity;
   String? displayName;
+  double? costPerUnit;
+  int? isWarranty;
   ItemNoResponse(
       {this.condition,
         this.message,
         this.itemCode,
         this.componentProductCode,
         this.componentQuantity,
-      this.displayName});
+      this.displayName,
+        this.isWarranty,
+        this.costPerUnit});
 
   ItemNoResponse.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -20,6 +24,9 @@ class ItemNoResponse {
     displayName = json['display_name'];
     componentProductCode = json['component_product_code'];
     componentQuantity = json['component_quantity'];
+    isWarranty = json['is_warranty'];
+
+    costPerUnit = json['cost_per_unit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -30,6 +37,8 @@ class ItemNoResponse {
     data['component_product_code'] = this.componentProductCode;
     data['component_quantity'] = this.componentQuantity;
     data['display_name'] = this.displayName;
+    data['is_warranty'] = this.isWarranty;
+    data['cost_per_unit'] = this.costPerUnit;
     return data;
   }
 }
