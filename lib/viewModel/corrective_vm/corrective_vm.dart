@@ -72,7 +72,7 @@ class CorrectiveViewModel extends GetxController{
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
 
-  RxString flag = ''.obs;
+  RxString capture_flag = ''.obs;
   String item_no = "";
 
   final ImagePicker _picker = ImagePicker();
@@ -862,6 +862,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
         "document_type": image_flag.value,
         "email_id": email,
         "file_desc": image_description_controller.text,
+        "capture_type":capture_flag.value
+
       };
       clint_request.fields.addAll(fields);
       clint_request.files.add(await http.MultipartFile.fromPath(
@@ -883,6 +885,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
+            capture_flag.value='';
             getServiceCorrectiveDetailsGet(id, "Refresh");
 
             Utils.sanckBarSuccess(

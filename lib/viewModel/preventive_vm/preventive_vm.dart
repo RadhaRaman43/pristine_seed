@@ -42,7 +42,7 @@ class PreventiveViewModel extends GetxController {
   RxString image_description_flag = "".obs;
   RxBool isExpand = true.obs;
   String reason_code = "";
-  RxString flag = ''.obs;
+  RxString capture_flag = ''.obs;
   RxString description = "".obs;
   RxString image_flag = "".obs;
   RxString upLoadLocalImagesList = ''.obs;
@@ -1116,6 +1116,7 @@ class PreventiveViewModel extends GetxController {
         "document_type": image_flag.value,
         "email_id": email,
         "file_desc": image_description_controller.text,
+        "capture_type":capture_flag.value
       };
       clint_request.fields.addAll(fields);
       clint_request.files.add(await http.MultipartFile.fromPath(
@@ -1138,6 +1139,7 @@ class PreventiveViewModel extends GetxController {
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
+            capture_flag.value='';
             Navigator.pop(context);
             getServicePreventiveDetails(id, "Refresh");
 

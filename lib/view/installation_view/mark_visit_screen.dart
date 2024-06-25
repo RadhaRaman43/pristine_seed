@@ -1151,7 +1151,6 @@ class MarkVisit extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      installation_indent_page_controller.flag.value = "View";
                    //   Navigator.pop(context);
                       installation_indent_page_controller
                           .showLineImagesPopup(context);
@@ -1182,7 +1181,7 @@ class MarkVisit extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      installation_indent_page_controller.flag.value =
+                      installation_indent_page_controller.capture_flag.value =
                           "Capture";
                       installation_indent_page_controller.upLoadImage(context);
 
@@ -1239,8 +1238,8 @@ class MarkVisit extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      installation_indent_page_controller.flag.value =
-                      "Capture";
+                      installation_indent_page_controller.capture_flag.value =
+                      "Gallery";
                       installation_indent_page_controller.upLoadGalleryImage(context);
 
                       // installation_indent_page_controller.upLoadImage(context);

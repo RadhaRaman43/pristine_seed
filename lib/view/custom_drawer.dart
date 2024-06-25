@@ -310,15 +310,11 @@ class _Drawer extends State<CustomDrawer> {
         return Icons.exit_to_app; // Default icon
     }
   }
-
-
-
   bindprofileMenu() {
     return PopupMenuButton<String>(
       offset: Offset(0, 30),
       onSelected: (value) {
         if (value == 'Logout') {
-
           Get.defaultDialog(
             title: "LogOut",
             titleStyle: const TextStyle(
@@ -337,10 +333,6 @@ class _Drawer extends State<CustomDrawer> {
             cancel: OutlinedButton(onPressed: () => Get.back(),
               child: const Text("No", style: TextStyle(color: Colors.red)),),
           );
-
-
-
-
         }else if(value=="Profile"){
           Get.toNamed(RoutesName.profile_screen);
         }

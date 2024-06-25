@@ -1060,7 +1060,6 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () {
-                      corrective_indent_page_controller.flag.value = "View";
                       Navigator.pop(context);
                       corrective_indent_page_controller
                           .showLineImagesPopup(context);
@@ -1091,7 +1090,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () async {
-                      corrective_indent_page_controller.flag.value =
+                      corrective_indent_page_controller.capture_flag.value =
                       "Capture";
                       corrective_indent_page_controller.upLoadImage(context);
                       // installation_indent_page_controller.upLoadImage(context);
@@ -1151,8 +1150,8 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () async {
-                      corrective_indent_page_controller.flag.value =
-                      "Capture";
+                      corrective_indent_page_controller.capture_flag.value =
+                      "Gallery";
                       corrective_indent_page_controller.upLoadGalleryImage(context);
 
                       // installation_indent_page_controller.upLoadImage(context);

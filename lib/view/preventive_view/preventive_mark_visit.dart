@@ -1096,7 +1096,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      preventive_indent_page_controller.flag.value = "View";
+
                       Navigator.pop(context);
                       preventive_indent_page_controller
                           .showLineImagesPopup(context);
@@ -1127,7 +1127,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      preventive_indent_page_controller.flag.value == "Capture";
+                      preventive_indent_page_controller.capture_flag.value == "Capture";
                       preventive_indent_page_controller.upLoadImage(context);
 
                       // installation_indent_page_controller.upLoadImage(context);
@@ -1184,8 +1184,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () async {
-                      preventive_indent_page_controller.flag.value =
-                      "Capture";
+                      preventive_indent_page_controller.capture_flag.value = "Gallery";
                       preventive_indent_page_controller.upLoadGalleryImage(context);
 
                       // installation_indent_page_controller.upLoadImage(context);

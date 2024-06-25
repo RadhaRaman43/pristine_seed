@@ -113,7 +113,7 @@ class InstallationViewModel extends GetxController {
   int total_rows = 0;
 
 
-  RxString flag = ''.obs;
+  RxString capture_flag = ''.obs;
 
   RxString image_flag = "".obs;
 
@@ -969,6 +969,7 @@ class InstallationViewModel extends GetxController {
         "document_type": image_flag.value,
         "email_id": email,
         "file_desc": description.isEmpty && description==null ?"":description.value,
+        "capture_type":capture_flag.value
       };
       print(fields);
       clint_request.fields.addAll(fields);
@@ -991,6 +992,7 @@ class InstallationViewModel extends GetxController {
               response_data[0].condition == 'True') {
             loading.value = false;
             upLoadLocalImagesList.value = '';
+            capture_flag.value="";
             Navigator.pop(context);
             getServiceInstallationDetails(id, "Refresh");
 
@@ -1541,7 +1543,6 @@ class InstallationViewModel extends GetxController {
                   child: Padding(
                     padding: const EdgeInsets.all(3.0),
                     child:ClipRRect(
-
                       borderRadius: BorderRadius.circular(2),
                       child:Image.file(
                         File(upLoadLocalImagesList.toString()),

@@ -119,16 +119,15 @@ class DashBoard extends StatelessWidget {
                     Divider(
                       color: AllColors.lightgreyColor,
                     ),
-                    Obx(
-                      () {
+                    Obx(() {
                         return Container(
                           margin: EdgeInsets.fromLTRB(3, 0, 3, 0),
                           padding: EdgeInsets.fromLTRB(3, 0, 3,0),
                             height: size.height*.75,
                           child: ListView.builder(
                            // / scrollDirection: Axis.horizontal,
-                                                    //  padding: EdgeInsets.fromLTRB(5, 0, 5, 100),
-                                                     // padding: EdgeInsets.zero,
+                           //  padding: EdgeInsets.fromLTRB(5, 0, 5, 100),
+                           // padding: EdgeInsets.zero,
                             itemBuilder: (context, index) {
                               final service = dashboard_page_controller
                                   .service_installation_list[index];
@@ -136,37 +135,14 @@ class DashBoard extends StatelessWidget {
                                   .getImagePath(service.serviceType);
                               var title=dashboard_page_controller
                                   .service_installation_list[index].serviceType!;
-                            //  return Obx(
-                                    //  () =>
                                        return   BindListView(index, imagePath,title);
-                              //);
-                                      //);
                             },
-                            /*separatorBuilder: (context, index) {
-                              return Divider(
-                                color: AllColors.lightgreyColor,
-                              );
-                            },*/
-
-
                             itemCount: dashboard_page_controller
                                 .service_installation_list.value.length,
                           ),
                         );
                       },
-                      //child:
                     ),
-
-
-                /*
-                    Divider(
-                      color: AllColors.lightgreyColor,
-                    ),*/
-
-
-
-
-
                     //todo quick access Commented....
                     /*Obx(
                       () {
@@ -394,37 +370,25 @@ class DashBoard extends StatelessWidget {
                     )
                   ],
                 ))
-
-            // Text("bjbjmfgbm,jbg"),
-
             ),
       ),
     );
   }
-
-
-
   void navigateToScreen(String? menuTitle) {
     switch (menuTitle) {
       case 'Installation Request':
         Get.toNamed(RoutesName.installation_screen, preventDuplicates: false);
         break;
-
       case 'Corrective Request':
         Get.toNamed(RoutesName.corrective_screen, preventDuplicates: false);
         break;
-
       case 'Preventive Request':
         Get.toNamed(RoutesName.preventive_screen, preventDuplicates: false);
         break;
-
-
       default:
         print('Unknown menu title: $menuTitle');
     }
   }
-
-
   Future<void> refreshData() async {
     print("bmglmbgb");
     notification_page_controller.getNotificationList("get", "");
