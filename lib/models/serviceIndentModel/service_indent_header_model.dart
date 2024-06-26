@@ -9,6 +9,7 @@ class ServiceIndentHeaderResponse {
   String? createdBy;
   String? indentStatus;
   String? updatedOn;
+  String? locationCode;
 
   ServiceIndentHeaderResponse(
       {this.condition,
@@ -20,7 +21,8 @@ class ServiceIndentHeaderResponse {
         this.createdOn,
         this.createdBy,
         this.indentStatus,
-        this.updatedOn});
+        this.updatedOn,
+        this.locationCode});
 
   ServiceIndentHeaderResponse.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -33,6 +35,8 @@ class ServiceIndentHeaderResponse {
     createdBy = json['created_by'];
     indentStatus = json['indent_status'];
     updatedOn = json['updated_on'];
+    locationCode = json['location_code'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +51,8 @@ class ServiceIndentHeaderResponse {
     data['created_by'] = this.createdBy;
     data['indent_status'] = this.indentStatus;
     data['updated_on'] = this.updatedOn;
+    data['location_code'] = this.locationCode;
+
     return data;
   }
 }

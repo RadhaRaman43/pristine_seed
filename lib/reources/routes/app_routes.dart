@@ -10,6 +10,7 @@ import 'package:navigation_drawer_flutter/view/notification_view/notification_sc
 import 'package:navigation_drawer_flutter/view/preventive_view/preventive_mark_visit.dart';
 import 'package:navigation_drawer_flutter/view/preventive_view/preventive_screen.dart';
 import 'package:navigation_drawer_flutter/view/preventive_view/preventive_view_detail_screen.dart';
+import 'package:navigation_drawer_flutter/view/return_indent/new_return_indent.dart';
 import 'package:navigation_drawer_flutter/view/show_route/show_route.dart';
 import 'package:navigation_drawer_flutter/view/splash_view/splash_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/create_expense_screen.dart';
@@ -233,6 +234,13 @@ class AppRoutes{
     ),
 
 
+    //todo return indent.....
+
+    GetPage(name: RoutesName.newReturnIndentScreen,
+        page: ()=>NewReturnIndentScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
   ];
 }

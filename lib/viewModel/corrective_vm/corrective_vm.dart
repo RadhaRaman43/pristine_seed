@@ -42,7 +42,7 @@ class CorrectiveViewModel extends GetxController{
   String reason_code = "";
   RxString image_description_flag = "".obs;
   RxString upLoadLocalImagesList = ''.obs;
-
+  int is_warrenty= 0;
   RxBool isCheckBox = false.obs;
 
   int id = 0;
@@ -68,12 +68,16 @@ class CorrectiveViewModel extends GetxController{
   var discount_controller = TextEditingController();
   var closure_remark_controller=TextEditingController();
   var remain_quantity_controller=TextEditingController();
+  var unit_price_controller=TextEditingController();
+  var indent_type_controller=TextEditingController();
 
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
 
   RxString capture_flag = ''.obs;
   String item_no = "";
+  RxBool is_Showindent=false.obs;
+  RxBool is_indent_type_dropDown=false.obs;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -93,6 +97,7 @@ class CorrectiveViewModel extends GetxController{
 
   RxList<CorrectiveIndentHeaderCreateResponse> service_indent_header_create_list =
       <CorrectiveIndentHeaderCreateResponse>[].obs;
+  RxList<String> indent_type_list = <String>["Self","Warehouse"].obs;
 
   RxList<CorrectiveItemNoResponse> item_no_list = <CorrectiveItemNoResponse>[].obs;
   void toggle() {
@@ -442,10 +447,13 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
       print(e);
     }
   }
-
-
   IndentHeaderCreateApi(String indent_no) {
-    Map data = {"service_id": id, "indent_no": indent_no, "email_id": email};
+    Map data = {
+      "service_id": id,
+      "indent_no": indent_no,
+      "indent_type": indent_type_controller.text,
+      "email_id": email
+    };
     print(data);
     loading.value = true;
     try {
@@ -462,8 +470,14 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                 response[0].condition == "True") {
               loading.value = false;
               service_indent_header_create_list.value = response;
-              Get.toNamed(RoutesName.corrective_indent_screen);
-
+              indent_type_controller.clear();
+              is_Showindent.value=true;
+              is_indent_type_dropDown.value=false;
+              if(indent_no!="" ){
+                is_Showindent.value=true;
+                is_indent_type_dropDown.value=false;
+                Get.toNamed(RoutesName.corrective_indent_screen);
+              }
               if(response[0].message!=null){
                 Utils.showToastification(
                     "Success!", response[0].message.toString());
@@ -702,6 +716,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
       "item_no": item_no,
       "qty": quantity_controller.text,
       "is_customer_damage":isCheckBox.value==true?'1':"0",
+      "unit_price": unit_price_controller.text,
       "discount_per":discount_controller.text,
       "email_id": email,
     };

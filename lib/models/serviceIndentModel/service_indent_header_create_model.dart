@@ -71,14 +71,20 @@ class Lines {
   String? itemNo;
   String? itemName;
   double? qty;
+  int? isCustomerDamage;
+  double? discountPer;
+  double? unitPrice;
+  double? subTotal;
+  double? discountAmount;
+  double? totalPrice;
   String? lineStatus;
   String? updatedOn;
   double? qtyIssueFromNav;
   double? consumeQty;
   double? badQty;
-  double? subTotal;
-  double? discountAmount;
-  double? totalPrice;
+  double? remainingQty;
+  int? isReturn;
+  double? returnQty;
 
   Lines(
       {this.indentNo,
@@ -86,14 +92,20 @@ class Lines {
         this.itemNo,
         this.itemName,
         this.qty,
+        this.isCustomerDamage,
+        this.discountPer,
+        this.unitPrice,
+        this.subTotal,
+        this.discountAmount,
+        this.totalPrice,
         this.lineStatus,
         this.updatedOn,
         this.qtyIssueFromNav,
         this.consumeQty,
-      this.badQty,
-       this.totalPrice,
-      this.discountAmount,
-      this.subTotal});
+        this.badQty,
+        this.remainingQty,
+        this.isReturn,
+        this.returnQty});
 
   Lines.fromJson(Map<String, dynamic> json) {
     indentNo = json['indent_no'];
@@ -101,14 +113,20 @@ class Lines {
     itemNo = json['item_no'];
     itemName = json['item_name'];
     qty = json['qty'];
+    isCustomerDamage = json['is_customer_damage'];
+    discountPer = json['discount_per'];
+    unitPrice = json['unit_price'];
+    subTotal = json['sub_total'];
+    discountAmount = json['discount_amount'];
+    totalPrice = json['total_price'];
     lineStatus = json['line_status'];
     updatedOn = json['updated_on'];
     qtyIssueFromNav = json['qty_issue_from_nav'];
     consumeQty = json['consume_qty'];
     badQty = json['bad_qty'];
-    subTotal = json['sub_total'];
-    discountAmount = json['discount_amount'];
-    totalPrice = json['total_price'];
+    remainingQty = json['remaining_qty'];
+    isReturn = json['is_return'];
+    returnQty = json['return_qty'];
   }
 
   Map<String, dynamic> toJson() {
@@ -118,14 +136,20 @@ class Lines {
     data['item_no'] = this.itemNo;
     data['item_name'] = this.itemName;
     data['qty'] = this.qty;
+    data['is_customer_damage'] = this.isCustomerDamage;
+    data['discount_per'] = this.discountPer;
+    data['unit_price'] = this.unitPrice;
+    data['sub_total'] = this.subTotal;
+    data['discount_amount'] = this.discountAmount;
+    data['total_price'] = this.totalPrice;
     data['line_status'] = this.lineStatus;
     data['updated_on'] = this.updatedOn;
     data['qty_issue_from_nav'] = this.qtyIssueFromNav;
     data['consume_qty'] = this.consumeQty;
     data['bad_qty'] = this.badQty;
-    data['sub_total'] = this.subTotal;
-    data['discount_amount'] = this.discountAmount;
-    data['total_price'] = this.totalPrice;
+    data['remaining_qty'] = this.remainingQty;
+    data['is_return'] = this.isReturn;
+    data['return_qty'] = this.returnQty;
     return data;
   }
 }

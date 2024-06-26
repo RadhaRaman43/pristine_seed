@@ -22,9 +22,6 @@ class AppUrl {
   static const String serviceInstallationDetailsGet = "$BASE_URL/api/ServiceActivity/ServiceMstDetailGet";
   static const String reasonMasterGet = "$BASE_URL/api/Master/ReasonMasterAll";
   static const String itemDetailsGet = "$BASE_URL/api/ItemMaster/ItemComponentMstGet";
-
-
-
   static const String itemNoGet = "$BASE_URL/api/ServiceIndent/IndentLineItemGet";
   static const String reAssignment = "$BASE_URL/api/ServiceActivity/ServiceMarkReassignment";
   static const String reSchedule = "$BASE_URL/api/ServiceActivity/ServiceMarkRescheduled";
@@ -118,4 +115,6 @@ class AppUrl {
   //todo show google map and rotes.........
   static const String getDateWiseUserCoordinate="$BASE_URL/api/Travel/GetDateWiseUserCoordinate";
 
+  //todo return indent.....
+  static const String getReturnLocation="$BASE_URL/api/Master/GetLocationList";
 }

@@ -818,9 +818,11 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                                             .primaryDark1,
                                                         width: 1)),
                                                 onPressed: () {
-                                                  preventive_indent_page_controller
-                                                      .IndentHeaderCreateApi(
-                                                          "");
+
+                                                  preventive_indent_page_controller.is_indent_type_dropDown.value=true;
+                                                  preventive_indent_page_controller.is_Showindent.value=false;
+                                                  Get.toNamed(RoutesName.preventive_Indent_header_view_screen);
+
                                                 },
                                                 icon: Icon(Icons.add_shopping_cart,color: AllColors.primaryDark1,),
                                                 label: Container(

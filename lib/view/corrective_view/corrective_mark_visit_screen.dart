@@ -792,9 +792,14 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                                              .primaryDark1,
                                                          width: 1)),
                                                  onPressed: () {
-                                                   corrective_indent_page_controller
+                                                   corrective_indent_page_controller.is_indent_type_dropDown.value=true;
+                                                   corrective_indent_page_controller.is_Showindent.value=false;
+                                                   Get.toNamed(RoutesName.corrective_indent_screen);
+
+                                                  /* corrective_indent_page_controller
                                                        .IndentHeaderCreateApi(
-                                                       "");
+                                                       "");*/
+
                                                  },
 
 

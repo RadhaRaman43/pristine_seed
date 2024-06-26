@@ -21,6 +21,8 @@ import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_man
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
 import '../../models/reasonModel/reason_master_response.dart';
+import '../../models/serviceCorrectiveModel/indent_header_line_create_model.dart';
+import '../../models/serviceCorrectiveModel/indent_header_line_create_model.dart';
 import '../../models/serviceIndentModel/Item_no_model.dart';
 import '../../models/serviceIndentModel/service_indent_header_create_model.dart';
 import '../../models/serviceIndentModel/service_indent_header_model.dart';
@@ -53,6 +55,10 @@ class InstallationViewModel extends GetxController {
       <ServiceIndentHeaderResponse>[].obs;
   RxList<IndentHeaderCreateResponse> service_indent_header_create_list =
       <IndentHeaderCreateResponse>[].obs;
+
+
+
+
   RxBool isExpand = true.obs;
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
   RxList<ItemDetailsResponse> item_details_list = <ItemDetailsResponse>[].obs;

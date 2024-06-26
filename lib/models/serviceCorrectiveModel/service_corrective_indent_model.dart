@@ -9,6 +9,7 @@ class ServiceCorrectiveIndentHeaderResponse {
   String? createdBy;
   String? indentStatus;
   String? updatedOn;
+  String? locationCode;
 
   ServiceCorrectiveIndentHeaderResponse(
       {this.condition,
@@ -20,7 +21,8 @@ class ServiceCorrectiveIndentHeaderResponse {
         this.createdOn,
         this.createdBy,
         this.indentStatus,
-        this.updatedOn});
+        this.updatedOn,
+        this.locationCode});
 
   ServiceCorrectiveIndentHeaderResponse.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -33,6 +35,7 @@ class ServiceCorrectiveIndentHeaderResponse {
     createdBy = json['created_by'];
     indentStatus = json['indent_status'];
     updatedOn = json['updated_on'];
+    locationCode = json['location_code'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +50,7 @@ class ServiceCorrectiveIndentHeaderResponse {
     data['created_by'] = this.createdBy;
     data['indent_status'] = this.indentStatus;
     data['updated_on'] = this.updatedOn;
+    data['location_code'] = this.locationCode;
     return data;
   }
 }

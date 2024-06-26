@@ -13,6 +13,7 @@ import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
+import '../../models/serviceIndentModel/service_indent_header_create_model.dart';
 import '../../viewModel/installation_vm/installation_vm.dart';
 
 class IndentHeaderViewScreen extends StatelessWidget {
@@ -22,14 +23,16 @@ class IndentHeaderViewScreen extends StatelessWidget {
 
   static String _displayItemNoForOption(ItemNoResponse option) =>
       option.itemCode!;
+
   static String _displayIndentTypeForOption(String option) => option!;
   Size size = Get.size;
+  List<Lines> lines = [];
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        indent_deatils_page_controller.is_Showindent.value=false;
+        indent_deatils_page_controller.is_Showindent.value = false;
         indent_deatils_page_controller.IndentHeaderListApi();
         Get.toNamed(RoutesName.installation_mark_visit);
         return true;
@@ -67,429 +70,544 @@ class IndentHeaderViewScreen extends StatelessWidget {
                   );
                 },
               ),
-              Obx( () {
-                return  Visibility(
-                  visible: indent_deatils_page_controller.is_indent_type_dropDown.value,
-                  child: Container(
-                      margin: EdgeInsets.all(10),
-                      child:   Column(
-                        crossAxisAlignment:CrossAxisAlignment.start ,
-                        children: [
-                          bindIndentDropDropDown(context),
-                          SizedBox(height: 10,),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark, width: 1),
-                                )),
-                            onPressed: () {
-
-                              indent_deatils_page_controller.IndentHeaderCreateApi("");
-
-                              ;
-                            },
-                            child: Text(
-                              'Create',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      )
-                  ),
-                );
-              },
-
-              ),
-              Obx( () {
-                if(indent_deatils_page_controller
-                    .service_indent_header_create_list!=null && indent_deatils_page_controller
-                    .service_indent_header_create_list.isNotEmpty && indent_deatils_page_controller
-                    .service_indent_header_create_list.length>0){
-                  return  Visibility(
-                    visible:indent_deatils_page_controller.is_Showindent.value ,
+              Obx(
+                () {
+                  return Visibility(
+                    visible: indent_deatils_page_controller
+                        .is_indent_type_dropDown.value,
                     child: Container(
-                      child: Expanded(
+                        margin: EdgeInsets.all(10),
                         child: Column(
+                          //crossAxisAlignment:CrossAxisAlignment.start ,
                           children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              //    height: size.height * .16,
-                              decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: Colors.black54,
-                                  blurRadius: 1.0,
-                                  offset: Offset(0.0, 0.55),
-                                )
-                              ], color: Colors.white),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Indent No. ",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        indent_deatils_page_controller
-                                            .service_indent_header_create_list[0]
-                                            .indentNo ??
-                                            ''!,
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.textColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Service No.",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        indent_deatils_page_controller
-                                            .service_indent_header_create_list[0].serviceNo??"",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.textColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Obx(
-                                        () {
-                                      return Row(
-                                        children: [
-                                          Text(
-                                            "Indent Status",
-                                            style: GoogleFonts.poppins(
-                                              color: AllColors.primaryDark1,
-                                              fontSize: AllFontSize.fourtine,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Text(
-                                            indent_deatils_page_controller
-                                                .service_indent_header_create_list![0]
-                                                .indentStatus ??
-                                                "",
-                                            style: GoogleFonts.poppins(
-                                              color: AllColors.redColor,
-                                              fontSize: AllFontSize.fourtine,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                            textAlign: TextAlign.end,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Obx(
-                                            () {
-                                          return Visibility(
-                                            visible: indent_deatils_page_controller
-                                                .service_indent_header_create_list[0]
-                                                .indentStatus ==
-                                                "Issued From Warehouse"
-                                                ? true
-                                                : false,
-                                            child: Container(
-                                              width: size.width * 0.4,
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    foregroundColor: AllColors.lightgreyColor,
-                                                    backgroundColor: AllColors.whiteColor,
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(15),
-                                                      side: BorderSide(
-                                                          color: AllColors.primaryDark,
-                                                          width: 1),
-                                                    )),
-                                                onPressed: () {
-                                                  indent_deatils_page_controller
-                                                      .IndentConsumerHeaderMarkApi(
-                                                      indent_deatils_page_controller
-                                                          .service_indent_header_create_list[
-                                                      0]
-                                                          .indentNo!);
-                                                },
-                                                child: Text(
-                                                  'Received',
-                                                  style: GoogleFonts.poppins(
-                                                      color: AllColors.primaryDark1,
-                                                      fontSize: AllFontSize.sisxteen,
-                                                      fontWeight: FontWeight.w700),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      Obx(
-                                            () {
-                                          return Visibility(
-                                            visible: indent_deatils_page_controller
-                                                .service_indent_header_create_list[0]
-                                                .indentStatus ==
-                                                "Pending"
-                                                ? true
-                                                : false,
-                                            child: Container(
-                                              width: size.width * 0.4,
-                                              child: ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                    foregroundColor: AllColors.lightgreyColor,
-                                                    backgroundColor: AllColors.whiteColor,
-                                                    shape: RoundedRectangleBorder(
-                                                      borderRadius: BorderRadius.circular(15),
-                                                      side: BorderSide(
-                                                          color: AllColors.primaryDark,
-                                                          width: 1),
-                                                    )),
-                                                onPressed: () {
-                                                  indent_deatils_page_controller.IndentComplete(
-                                                      indent_deatils_page_controller
-                                                          .service_indent_header_create_list[
-                                                      0]
-                                                          .indentNo!);
-                                                },
-                                                child: Text(
-                                                  'Complete',
-                                                  style: GoogleFonts.poppins(
-                                                      color: AllColors.primaryDark1,
-                                                      fontSize: AllFontSize.sisxteen,
-                                                      fontWeight: FontWeight.w700),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                            bindIndentDropDropDown(context),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  foregroundColor: AllColors.lightgreyColor,
+                                  backgroundColor: AllColors.whiteColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: BorderSide(
+                                        color: AllColors.primaryDark, width: 1),
+                                  )),
+                              onPressed: () {
+                                indent_deatils_page_controller
+                                    .IndentHeaderCreateApi("");
+
+                                ;
+                              },
+                              child: Text(
+                                'Create',
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700),
                               ),
                             ),
-                        
-                            //todo lines... details.....
-                        
-                            Container(
-                              decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  offset: Offset(0.0, 0.55),
-                                  color: Colors.black54,
-                                  blurRadius: 0.5,
-                                )
-                              ], color: Colors.white),
-                              padding: EdgeInsets.only(left: 10, top: 10, right: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Line Details",
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700,
+                          ],
+                        )),
+                  );
+                },
+              ),
+              Obx(
+                () {
+                  if (indent_deatils_page_controller
+                              .service_indent_header_create_list !=
+                          null &&
+                      indent_deatils_page_controller
+                          .service_indent_header_create_list.isNotEmpty &&
+                      indent_deatils_page_controller
+                              .service_indent_header_create_list.length >
+                          0) {
+                    return Visibility(
+                      visible:
+                          indent_deatils_page_controller.is_Showindent.value,
+                      child: Container(
+                        child: Expanded(
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                //    height: size.height * .16,
+                                decoration:
+                                    BoxDecoration(boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.black54,
+                                    blurRadius: 1.0,
+                                    offset: Offset(0.0, 0.55),
+                                  )
+                                ], color: Colors.white),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Indent No. ",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          indent_deatils_page_controller
+                                                  .service_indent_header_create_list[
+                                                      0]
+                                                  .indentNo ??
+                                              ''!,
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                  Spacer(
-                                    flex: 8,
-                                  ),
-                                  Obx(
-                                        () {
-                                      final lines = indent_deatils_page_controller
-                                          .service_indent_header_create_list[0].lines;
-                        
-                                      // Check if lines is not null and has at least one element
-                                      if (lines != null &&
-                                          lines.isNotEmpty &&
-                                          lines[0].lineNo == null) {
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Service No.",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          indent_deatils_page_controller
+                                                  .service_indent_header_create_list[
+                                                      0]
+                                                  .serviceNo ??
+                                              "",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Obx(
+                                      () {
+                                        return Row(
+                                          children: [
+                                            Text(
+                                              "Indent Status",
+                                              style: GoogleFonts.poppins(
+                                                color: AllColors.primaryDark1,
+                                                fontSize: AllFontSize.fourtine,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              indent_deatils_page_controller
+                                                      .service_indent_header_create_list![
+                                                          0]
+                                                      .indentStatus ??
+                                                  "",
+                                              style: GoogleFonts.poppins(
+                                                color: AllColors.redColor,
+                                                fontSize: AllFontSize.fourtine,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              textAlign: TextAlign.end,
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Obx(
+                                      () {
                                         return Visibility(
-                                          visible: lines[0].lineNo == null,
-                                          child: Obx(
-                                                () {
-                                              return Visibility(
-                                                visible: indent_deatils_page_controller
-                                                    .service_indent_header_create_list[
-                                                0]
-                                                    .indentStatus ==
-                                                    "Pending"
-                                                    ? true
-                                                    : false,
-                                                child: Tooltip(
-                                                  message: "Header Delete",
-                                                  child: IconButton(
-                                                    icon: Icon(Icons.delete,
-                                                        color: AllColors.redColor),
-                                                    onPressed: () {
-                                                      Get.defaultDialog(
-                                                        title: "Header Delete",
-                                                        titleStyle: TextStyle(
-                                                          color: AllColors.primaryDark1,
-                                                          fontSize: 18,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                        content: Padding(
-                                                          padding: EdgeInsets.symmetric(
-                                                              vertical: 15.0),
-                                                          child: Text(
-                                                            "Do you want to Delete?",
-                                                            style: TextStyle(
-                                                              color: AllColors.primaryDark1,
-                                                              fontWeight: FontWeight.w600,
-                                                              fontSize: AllFontSize.fourtine,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        confirm: OutlinedButton(
-                                                          onPressed: () {
-                                                            Get.back();
-                                                            indent_deatils_page_controller
-                                                                .IndentHeaderLineDelete(
-                                                              indent_deatils_page_controller
-                                                                  .service_indent_header_create_list[
-                                                              0]
-                                                                  .indentNo!,
-                                                              lines[0].lineNo.toString(),
-                                                              "HeaderDiscard",
-                                                            );
-                                                          },
-                                                          child: Text("Yes",
-                                                              style: TextStyle(
-                                                                  color: Colors.red)),
-                                                        ),
-                                                        cancel: OutlinedButton(
-                                                          onPressed: () => Get.back(),
-                                                          child: Text(
-                                                            "No",
-                                                            style: TextStyle(
-                                                                color:
-                                                                AllColors.primaryDark1),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
+                                          visible: indent_deatils_page_controller
+                                                      .service_indent_header_list[
+                                                          0]
+                                                      .indentStatus ==
+                                                  "Issued From Warehouse" || indent_deatils_page_controller
+                                              .service_indent_header_list[
+                                          0]
+                                              .indentStatus =="Received"
+                                              ? true
+                                              : false,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Location",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize:
+                                                      AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
                                                 ),
-                                              );
-                                            },
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                indent_deatils_page_controller
+                                                        .service_indent_header_list![
+                                                            0]
+                                                        .locationCode ??
+                                                    "",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.textColor,
+                                                  fontSize:
+                                                      AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                            ],
                                           ),
                                         );
-                                      } else {
-                                        return SizedBox(); // Return an empty widget if conditions are not met
-                                      }
-                                    },
-                                  ),
-                                  Spacer(),
-                                  Obx(
-                                        () {
-                                      return Visibility(
-                                        visible: indent_deatils_page_controller
-                                            .service_indent_header_create_list[0]
-                                            .indentStatus ==
-                                            "Pending"
-                                            ? true
-                                            : false,
-                                        child: Tooltip(
-                                          message: "Add Line",
-                                          child: IconButton(
-                                            icon: Icon(Icons.add,
-                                                color: AllColors.primaryDark1),
-                                            onPressed: () {
-                                              indent_deatils_page_controller.isCheckBox.value=false;
-                                              indent_deatils_page_controller.getItemNo();
-                                              indent_deatils_page_controller
-                                                  .item_no_controller
-                                                  .clear();
-                                              indent_deatils_page_controller
-                                                  .item_no_description_controller
-                                                  .clear();
-                                              indent_deatils_page_controller
-                                                  .quantity_controller
-                                                  .clear();
-                                              indent_deatils_page_controller.discount_controller.clear();
-                                              indent_deatils_page_controller.unit_price_controller.clear();
-                        
-                                              showAddLineBottomSheet(context);
-                                              //addLineDialog(context);
-                                            },
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
+                                        Spacer(),
+                                        Obx(
+                                          () {
+                                            return Visibility(
+                                              visible: indent_deatils_page_controller
+                                                          .service_indent_header_create_list[
+                                                              0]
+                                                          .indentStatus ==
+                                                      "Issued From Warehouse"
+                                                  ? true
+                                                  : false,
+                                              child: Container(
+                                                width: size.width * 0.4,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          foregroundColor:
+                                                              AllColors
+                                                                  .lightgreyColor,
+                                                          backgroundColor:
+                                                              AllColors
+                                                                  .whiteColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            side: BorderSide(
+                                                                color: AllColors
+                                                                    .primaryDark,
+                                                                width: 1),
+                                                          )),
+                                                  onPressed: () {
+                                                    indent_deatils_page_controller
+                                                        .IndentConsumerHeaderMarkApi(
+                                                            indent_deatils_page_controller
+                                                                .service_indent_header_create_list[
+                                                                    0]
+                                                                .indentNo!);
+                                                  },
+                                                  child: Text(
+                                                    'Received',
+                                                    style: GoogleFonts.poppins(
+                                                        color: AllColors
+                                                            .primaryDark1,
+                                                        fontSize: AllFontSize
+                                                            .sisxteen,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        Obx(
+                                          () {
+                                            return Visibility(
+                                              visible:
+                                                  indent_deatils_page_controller
+                                                              .service_indent_header_create_list[
+                                                                  0]
+                                                              .indentStatus ==
+                                                          "Pending"
+                                                      ? true
+                                                      : false,
+                                              child: Container(
+                                                width: size.width * 0.4,
+                                                child: ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                          foregroundColor:
+                                                              AllColors
+                                                                  .lightgreyColor,
+                                                          backgroundColor:
+                                                              AllColors
+                                                                  .whiteColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            side: BorderSide(
+                                                                color: AllColors
+                                                                    .primaryDark,
+                                                                width: 1),
+                                                          )),
+                                                  onPressed: () {
+                                                    indent_deatils_page_controller
+                                                        .IndentComplete(
+                                                            indent_deatils_page_controller
+                                                                .service_indent_header_create_list[
+                                                                    0]
+                                                                .indentNo!);
+                                                  },
+                                                  child: Text(
+                                                    'Complete',
+                                                    style: GoogleFonts.poppins(
+                                                        color: AllColors
+                                                            .primaryDark1,
+                                                        fontSize: AllFontSize
+                                                            .sisxteen,
+                                                        fontWeight:
+                                                            FontWeight.w700),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                        
-                        
-                            //  Divider(height: 0.55,color: AllColors.bluegrayColor,),
-                            SizedBox(
-                              height: 3,
-                            ),
-                            Obx(() => bindList(context),)
-                        
-                        
-                        
-                          ],
+
+                              //todo lines... details.....
+
+                              Container(
+                                decoration:
+                                    BoxDecoration(boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    offset: Offset(0.0, 0.55),
+                                    color: Colors.black54,
+                                    blurRadius: 0.5,
+                                  )
+                                ], color: Colors.white),
+                                padding: EdgeInsets.only(
+                                    left: 10, top: 10, right: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Line Details",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.sisxteen,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Spacer(
+                                      flex: 8,
+                                    ),
+                                    Obx(
+                                      () {
+                                        final lines =
+                                            indent_deatils_page_controller
+                                                .service_indent_header_create_list[
+                                                    0]
+                                                .lines;
+
+                                        // Check if lines is not null and has at least one element
+                                        if (lines != null &&
+                                            lines.isNotEmpty &&
+                                            lines[0].lineNo == null) {
+                                          return Visibility(
+                                            visible: lines[0].lineNo == null,
+                                            child: Obx(
+                                              () {
+                                                return Visibility(
+                                                  visible: indent_deatils_page_controller
+                                                              .service_indent_header_create_list[
+                                                                  0]
+                                                              .indentStatus ==
+                                                          "Pending"
+                                                      ? true
+                                                      : false,
+                                                  child: Tooltip(
+                                                    message: "Header Delete",
+                                                    child: IconButton(
+                                                      icon: Icon(Icons.delete,
+                                                          color: AllColors
+                                                              .redColor),
+                                                      onPressed: () {
+                                                        Get.defaultDialog(
+                                                          title:
+                                                              "Header Delete",
+                                                          titleStyle: TextStyle(
+                                                            color: AllColors
+                                                                .primaryDark1,
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          content: Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        15.0),
+                                                            child: Text(
+                                                              "Do you want to Delete?",
+                                                              style: TextStyle(
+                                                                color: AllColors
+                                                                    .primaryDark1,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontSize:
+                                                                    AllFontSize
+                                                                        .fourtine,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          confirm:
+                                                              OutlinedButton(
+                                                            onPressed: () {
+                                                              Get.back();
+                                                              indent_deatils_page_controller
+                                                                  .IndentHeaderLineDelete(
+                                                                indent_deatils_page_controller
+                                                                    .service_indent_header_create_list[
+                                                                        0]
+                                                                    .indentNo!,
+                                                                lines[0]
+                                                                    .lineNo
+                                                                    .toString(),
+                                                                "HeaderDiscard",
+                                                              );
+                                                            },
+                                                            child: Text("Yes",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red)),
+                                                          ),
+                                                          cancel:
+                                                              OutlinedButton(
+                                                            onPressed: () =>
+                                                                Get.back(),
+                                                            child: Text(
+                                                              "No",
+                                                              style: TextStyle(
+                                                                  color: AllColors
+                                                                      .primaryDark1),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        } else {
+                                          return SizedBox(); // Return an empty widget if conditions are not met
+                                        }
+                                      },
+                                    ),
+                                    Spacer(),
+                                    Obx(
+                                      () {
+                                        return Visibility(
+                                          visible: indent_deatils_page_controller
+                                                      .service_indent_header_create_list[
+                                                          0]
+                                                      .indentStatus ==
+                                                  "Pending"
+                                              ? true
+                                              : false,
+                                          child: Tooltip(
+                                            message: "Add Line",
+                                            child: IconButton(
+                                              icon: Icon(Icons.add,
+                                                  color:
+                                                      AllColors.primaryDark1),
+                                              onPressed: () {
+                                                indent_deatils_page_controller
+                                                    .isCheckBox.value = false;
+                                                indent_deatils_page_controller
+                                                    .getItemNo();
+                                                indent_deatils_page_controller
+                                                    .item_no_controller
+                                                    .clear();
+                                                indent_deatils_page_controller
+                                                    .item_no_description_controller
+                                                    .clear();
+                                                indent_deatils_page_controller
+                                                    .quantity_controller
+                                                    .clear();
+                                                indent_deatils_page_controller
+                                                    .discount_controller
+                                                    .clear();
+                                                indent_deatils_page_controller
+                                                    .unit_price_controller
+                                                    .clear();
+
+                                                showAddLineBottomSheet(
+                                                    context, null, "");
+                                                //addLineDialog(context);
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              //  Divider(height: 0.55,color: AllColors.bluegrayColor,),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Obx(
+                                () => bindList(context),
+                              )
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }
-                else{
-                  return Container();
-                }
-              },
-               // child:
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
               )
-
-
-
             ],
           ),
         ),
@@ -529,301 +647,312 @@ class IndentHeaderViewScreen extends StatelessWidget {
 
   bindIntentListView(BuildContext context, int index) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        showAddLineBottomSheet(
+            context,
+            indent_deatils_page_controller
+                .service_indent_header_create_list[0].lines![index],
+            "View");
+      },
       child: ListTile(
-         title:  Row(
-           mainAxisAlignment: MainAxisAlignment.start,
-           children: [
-             Text(
-               "Item :",
-               style: GoogleFonts.poppins(
-                 color: AllColors.primaryDark1,
-                 fontSize: AllFontSize.fourtine,
-                 fontWeight: FontWeight.w500,
-               ),
-             ),
-             SizedBox(
-               width: size.width * 0.02,
-             ),
-             Text(
-               indent_deatils_page_controller
-                   .service_indent_header_create_list[0]
-                   .lines![index]
-                   .itemName
-                   .toString() +
-                   "(" +
-                   indent_deatils_page_controller
-                       .service_indent_header_create_list[0]
-                       .lines![index]
-                       .itemNo
-                       .toString() +
-                   ")",
-               style: GoogleFonts.poppins(
-                 color: AllColors.textColor,
-                 fontSize: AllFontSize.fourtine,
-                 fontWeight: FontWeight.w500,
-               ),
-             ),
-             Spacer(),
-             Container(
-               alignment: Alignment.centerRight,
-               child: Row(
-                 children: [
-                   Obx(() =>Visibility(
-                     visible: indent_deatils_page_controller
-                         .service_indent_header_create_list[0]
-                         .indentStatus ==
-                         "Pending"
-                         ? true
-                         : false,
-                     child: InkWell(
-                         onTap: () {
-                           Get.defaultDialog(
-                             title: "Line Delete",
-                             titleStyle: const TextStyle(
-                                 color: AllColors.primaryDark1,
-                                 fontSize: 18,
-                                 fontWeight: FontWeight.bold),
-                             content: const Padding(
-                               padding: EdgeInsets.symmetric(vertical: 15.0),
-                               child: Text(
-                                 "Do you want to Delete?",
-                                 style: TextStyle(
-                                     color: AllColors.primaryDark1,
-                                     fontWeight: FontWeight.w600,
-                                     fontSize: AllFontSize.fourtine),
-                               ),
-                             ),
-                             confirm: OutlinedButton(
-                               onPressed: () {
-                                 Get.back();
-                                 indent_deatils_page_controller
-                                     .IndentHeaderLineDelete(
-                                     indent_deatils_page_controller
-                                         .service_indent_header_create_list[0]
-                                         .indentNo!,
-                                     indent_deatils_page_controller
-                                         .service_indent_header_create_list[0]
-                                         .lines![index]
-                                         .lineNo
-                                         .toString(),
-                                     "LineDiscard");
-                               },
-                               child: const Text("Yes",
-                                   style: TextStyle(color: Colors.red)),
-                             ),
-                             cancel: OutlinedButton(
-                                 onPressed: () => Get.back(),
-                                 child: const Text(
-                                   "No",
-                                   style: TextStyle(color: AllColors.primaryDark1),
-                                 )),
-                           );
-                         },
-                         child: Icon(
-                           size: 25,
-                           Icons.delete,
-                           color: AllColors.redColor,
-                         )),
-                   ), ),
-                   Obx(() =>  Visibility(
-                     visible: indent_deatils_page_controller
-                         .service_indent_header_create_list[0]
-                         .indentStatus ==
-                         "Issued From Warehouse"
-                         ? true
-                         : false,
-                     child: InkWell(
-                         onTap: () {
-                           print(indent_deatils_page_controller
-                               .service_indent_header_create_list[0]
-                               .lines![index]
-                               .consumeQty);
-                           //  indent_deatils_page_controller.consumer_quantity_controller.clear();
-                           // indent_deatils_page_controller.bad_quantity_controller.clear();
-                           indent_deatils_page_controller
-                               .bad_quantity_controller.text =
-                               indent_deatils_page_controller
-                                   .service_indent_header_create_list[0]
-                                   .lines![index]
-                                   .badQty!
-                                   .toString();
-                           indent_deatils_page_controller
-                               .consumer_quantity_controller.text ==
-                               indent_deatils_page_controller
-                                   .service_indent_header_create_list[0]
-                                   .lines![index]
-                                   .consumeQty
-                                   .toString();
-                           addConsumeDialog(context, index);
-                         },
-                         child: Image.asset(
-                           "assests/images/view.png",
-                           width: 23,
-                           height: 23,
-                         )
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              "Item :",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            SizedBox(
+              width: size.width * 0.02,
+            ),
+            Text(
+              indent_deatils_page_controller
+                      .service_indent_header_create_list[0]
+                      .lines![index]
+                      .itemName
+                      .toString() +
+                  "(" +
+                  indent_deatils_page_controller
+                      .service_indent_header_create_list[0].lines![index].itemNo
+                      .toString() +
+                  ")",
+              style: GoogleFonts.poppins(
+                color: AllColors.textColor,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Spacer(),
+            Container(
+              alignment: Alignment.centerRight,
+              child: Row(
+                children: [
+                  Obx(
+                    () => Visibility(
+                      visible: indent_deatils_page_controller
+                                  .service_indent_header_create_list[0]
+                                  .indentStatus ==
+                              "Pending"
+                          ? true
+                          : false,
+                      child: InkWell(
+                          onTap: () {
+                            Get.defaultDialog(
+                              title: "Line Delete",
+                              titleStyle: const TextStyle(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold),
+                              content: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 15.0),
+                                child: Text(
+                                  "Do you want to Delete?",
+                                  style: TextStyle(
+                                      color: AllColors.primaryDark1,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: AllFontSize.fourtine),
+                                ),
+                              ),
+                              confirm: OutlinedButton(
+                                onPressed: () {
+                                  Get.back();
+                                  indent_deatils_page_controller
+                                      .IndentHeaderLineDelete(
+                                          indent_deatils_page_controller
+                                              .service_indent_header_create_list[
+                                                  0]
+                                              .indentNo!,
+                                          indent_deatils_page_controller
+                                              .service_indent_header_create_list[
+                                                  0]
+                                              .lines![index]
+                                              .lineNo
+                                              .toString(),
+                                          "LineDiscard");
+                                },
+                                child: const Text("Yes",
+                                    style: TextStyle(color: Colors.red)),
+                              ),
+                              cancel: OutlinedButton(
+                                  onPressed: () => Get.back(),
+                                  child: const Text(
+                                    "No",
+                                    style: TextStyle(
+                                        color: AllColors.primaryDark1),
+                                  )),
+                            );
+                          },
+                          child: Icon(
+                            size: 25,
+                            Icons.delete,
+                            color: AllColors.redColor,
+                          )),
+                    ),
+                  ),
+                  Obx(
+                    () => Visibility(
+                      visible: indent_deatils_page_controller
+                                  .service_indent_header_create_list[0]
+                                  .indentStatus ==
+                              "Issued From Warehouse"
+                          ? true
+                          : false,
+                      child: InkWell(
+                          onTap: () {
+                            print(indent_deatils_page_controller
+                                .service_indent_header_create_list[0]
+                                .lines![index]
+                                .consumeQty);
+                            //  indent_deatils_page_controller.consumer_quantity_controller.clear();
+                            // indent_deatils_page_controller.bad_quantity_controller.clear();
+                            indent_deatils_page_controller
+                                    .bad_quantity_controller.text =
+                                indent_deatils_page_controller
+                                    .service_indent_header_create_list[0]
+                                    .lines![index]
+                                    .badQty!
+                                    .toString();
+                            indent_deatils_page_controller
+                                    .consumer_quantity_controller.text ==
+                                indent_deatils_page_controller
+                                    .service_indent_header_create_list[0]
+                                    .lines![index]
+                                    .consumeQty
+                                    .toString();
+                            addConsumeDialog(context, index);
+                          },
+                          child: Image.asset(
+                            "assests/images/view.png",
+                            width: 23,
+                            height: 23,
+                          )
 /*
                         Icon(
                         Icons.remove_red_eye,
                         //color: AllColors.bluegrayColor,
                       )*/
-                     ),
-                   ),)
-                 ],
-               ),
-             )
-           ],
-         ),
-          subtitle: Container(
-            child: Table(
-              columnWidths: {
-                0: FlexColumnWidth(1.9),
-                1: FlexColumnWidth(1.3),
-                2: FlexColumnWidth(1.5),
-                3: FlexColumnWidth(0.8),
-              },
-
-              children: [
-                TableRow(
-                  children: [
-                    Text(
-                      "Qty.:",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                          ),
                     ),
-                    Text(
-                      indent_deatils_page_controller
-                              .service_indent_header_create_list[0]
-                              .lines![index]
-                              .qty
-                              .toString() ??
-                          '',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+        subtitle: Container(
+          child: Table(
+            columnWidths: {
+              0: FlexColumnWidth(1.9),
+              1: FlexColumnWidth(1.3),
+              2: FlexColumnWidth(1.5),
+              3: FlexColumnWidth(1.1),
+              //3: FlexColumnWidth(0.8),
+            },
+            children: [
+              TableRow(
+                children: [
+                  Text(
+                    "Qty.:",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      "Appr. Qty.:",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  Text(
+                    indent_deatils_page_controller
+                            .service_indent_header_create_list[0]
+                            .lines![index]
+                            .qty
+                            .toString() ??
+                        '',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      indent_deatils_page_controller
-                              .service_indent_header_create_list[0]
-                              .lines![index]
-                              .qty
-                              .toString() ??
-                          '',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    )
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text(
-                      "Dis. Amt.:",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  Text(
+                    "Appr. Qty.:",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      indent_deatils_page_controller
-                          .service_indent_header_create_list[0]
-                          .lines![index]
-                          .discountAmount.toString(),
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  Text(
+                    indent_deatils_page_controller
+                            .service_indent_header_create_list[0]
+                            .lines![index]
+                            .qty
+                            .toString() ??
+                        '',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      "Total Price:",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  )
+                ],
+              ),
+              TableRow(
+                children: [
+                  Text(
+                    "Dis. Amt.:",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      indent_deatils_page_controller
-                          .service_indent_header_create_list[0]
-                          .lines![index]
-                          .totalPrice
-                          .toString() ??
-                          '',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  Text(
+                    indent_deatils_page_controller
+                        .service_indent_header_create_list[0]
+                        .lines![index]
+                        .discountAmount
+                        .toString(),
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
-                TableRow(
-                  children: [
-                    Text(
-                      "Consume Qty.:",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  Text(
+                    "Total Price:",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      indent_deatils_page_controller
-                          .service_indent_header_create_list[0]
-                          .lines![index]
-                          .consumeQty!
-                          .toString(),
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                  Text(
+                    indent_deatils_page_controller
+                            .service_indent_header_create_list[0]
+                            .lines![index]
+                            .totalPrice
+                            .toString() ??
+                        '',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      "Bad Qty.:",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
+                  ),
+                ],
+              ),
+              TableRow(
+                children: [
+                  Text(
+                    "Consume Qty.:",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                    Text(
-                      indent_deatils_page_controller
-                              .service_indent_header_create_list[0]
-                              .lines![index]
-                              .badQty
-                              .toString() ??
-                          '',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-
+                  ),
+                  Text(
+                    indent_deatils_page_controller
+                        .service_indent_header_create_list[0]
+                        .lines![index]
+                        .consumeQty!
+                        .toString(),
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  Text(
+                    "Bad Qty.:",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    indent_deatils_page_controller
+                            .service_indent_header_create_list[0]
+                            .lines![index]
+                            .badQty
+                            .toString() ??
+                        '',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          /*Visibility(
+        ),
+        /*Visibility(
           visible:  indent_deatils_page_controller.bad_quantity_controller[0].indentStatus=="Completed"?false:true,
           child: InkWell(
             onTap: () {
@@ -852,12 +981,11 @@ class IndentHeaderViewScreen extends StatelessWidget {
             },
               child: Icon(Icons.delete,color: AllColors.redColor,)),
         ),*/
-
-          ),
+      ),
     );
   }
 
-  void addLineDialog(BuildContext context) {
+/*  void addLineDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {
@@ -1005,11 +1133,9 @@ class IndentHeaderViewScreen extends StatelessWidget {
         );
       },
     );
-  }
+  }*/
 
-
-
-  Widget bindItemNoDropDown(context) {
+  Widget bindItemNoDropDown(context, String flag) {
     return Autocomplete<ItemNoResponse>(
       displayStringForOption: _displayItemNoForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -1031,21 +1157,23 @@ class IndentHeaderViewScreen extends StatelessWidget {
             _displayItemNoForOption(selection).toString();
         indent_deatils_page_controller.item_no = selection.itemCode!;
 
-        indent_deatils_page_controller.item_Qty =selection.componentQuantity!;
-        indent_deatils_page_controller.is_warrenty =selection.isWarranty!;
+        indent_deatils_page_controller.item_Qty = selection.componentQuantity!;
+        indent_deatils_page_controller.is_warrenty = selection.isWarranty!;
         indent_deatils_page_controller.unit_price = selection.costPerUnit!;
-        indent_deatils_page_controller.unit_price_controller.text=selection.costPerUnit.toString()!;
+        indent_deatils_page_controller.unit_price_controller.text =
+            selection.costPerUnit.toString()!;
         indent_deatils_page_controller.item_no_description_controller.text =
             selection.displayName!;
-        if(indent_deatils_page_controller.is_warrenty>0){
-          indent_deatils_page_controller.discount_controller.text="100";
-
+        if (indent_deatils_page_controller.is_warrenty > 0) {
+          indent_deatils_page_controller.discount_controller.text = "100";
         }
         FocusScope.of(context).unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
+          readOnly: flag == "View" ? true : false,
+          enabled: flag == "View" ? false : true,
           onChanged: (value) {
             if (value.isEmpty) {
               indent_deatils_page_controller.item_no_description_controller
@@ -1067,6 +1195,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
               // fontWeight: FontWeight.w300,
               //  fontSize: AllFontSize.ten
             ),
+
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 // fontWeight: FontWeight.w700,
@@ -1100,18 +1229,38 @@ class IndentHeaderViewScreen extends StatelessWidget {
                     },
                     child: Container(
                         padding: EdgeInsets.all(8.0),
-                        child: Text(
-                          overflow: TextOverflow.ellipsis,
-                          option.itemCode.toString() +
-                              " (${option.displayName??""} )",
-                          style: GoogleFonts.poppins(
-                              color: AllColors.blackColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: AllFontSize
-                                  .
-                              sisxteen // Change the text color here
-                              ),
-                        )),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              overflow: TextOverflow.ellipsis,
+                              option.itemCode.toString() +
+                                  " (${option.displayName ?? ""} )",
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                                  ),
+                            ),
+                            Spacer(),
+
+                            Visibility(
+                              visible: option.isWarranty! > 0 ? true : false,
+                              child: Padding(
+                                  padding: const EdgeInsets.only(right: 22.0),
+                                  child: Icon(
+                                    Icons.verified_user,
+                                    size: 15,
+                                    color: AllColors.primaryDark1,
+                                  )),
+                            ),
+
+                            // child:
+                          ],
+                          // child:
+                        )
+                    ),
                   );
                 },
               ),
@@ -1123,8 +1272,11 @@ class IndentHeaderViewScreen extends StatelessWidget {
   }
 
   void addConsumeDialog(BuildContext context, int index) {
-    double remaining_qty= indent_deatils_page_controller.service_indent_header_create_list[0].lines![index].qtyIssueFromNav!;
-    indent_deatils_page_controller.remain_quantity_controller.text=remaining_qty.toString();
+    double remaining_qty = indent_deatils_page_controller
+        .service_indent_header_create_list[0].lines![index].qtyIssueFromNav!
+        .toDouble();
+    indent_deatils_page_controller.remain_quantity_controller.text =
+        remaining_qty.toString();
     showDialog(
       context: context,
       builder: (context) {
@@ -1164,10 +1316,21 @@ class IndentHeaderViewScreen extends StatelessWidget {
               children: [
                 TextFormField(
                   onChanged: (value) {
-                    double consume_qty=double.parse( (value=="")?"0":value);
-                    double bad_qty=double.parse(indent_deatils_page_controller.bad_quantity_controller.text=="" ?'0':indent_deatils_page_controller.bad_quantity_controller.text);
-                    double remaining_qty=indent_deatils_page_controller.service_indent_header_create_list[0].lines![index].qtyIssueFromNav!-(consume_qty+bad_qty);
-                    indent_deatils_page_controller.remain_quantity_controller.text=remaining_qty.toString();
+                    double consume_qty =
+                        double.parse((value == "") ? "0" : value);
+                    double bad_qty = double.parse(indent_deatils_page_controller
+                                .bad_quantity_controller.text ==
+                            ""
+                        ? '0'
+                        : indent_deatils_page_controller
+                            .bad_quantity_controller.text);
+                    double remaining_qty = indent_deatils_page_controller
+                            .service_indent_header_create_list[0]
+                            .lines![index]
+                            .qtyIssueFromNav! -
+                        (consume_qty + bad_qty);
+                    indent_deatils_page_controller.remain_quantity_controller
+                        .text = remaining_qty.toString();
                   },
                   controller: indent_deatils_page_controller
                       .consumer_quantity_controller,
@@ -1185,12 +1348,22 @@ class IndentHeaderViewScreen extends StatelessWidget {
                 ),
                 TextFormField(
                   onChanged: (value) {
-                    double bad_qty=double.parse( (value=="")?"0":value);
-                    double consume_qty=double.parse(indent_deatils_page_controller.consumer_quantity_controller.text=="" ?'0':indent_deatils_page_controller.consumer_quantity_controller.text);
-                    double remaining_qty=indent_deatils_page_controller.service_indent_header_create_list[0].lines![index].qtyIssueFromNav!-(consume_qty+bad_qty);
-                    indent_deatils_page_controller.remain_quantity_controller.text=remaining_qty.toString();
+                    double bad_qty = double.parse((value == "") ? "0" : value);
+                    double consume_qty = double.parse(
+                        indent_deatils_page_controller
+                                    .consumer_quantity_controller.text ==
+                                ""
+                            ? '0'
+                            : indent_deatils_page_controller
+                                .consumer_quantity_controller.text);
+                    double remaining_qty = indent_deatils_page_controller
+                            .service_indent_header_create_list[0]
+                            .lines![index]
+                            .qtyIssueFromNav! -
+                        (consume_qty + bad_qty);
+                    indent_deatils_page_controller.remain_quantity_controller
+                        .text = remaining_qty.toString();
                   },
-
                   controller:
                       indent_deatils_page_controller.bad_quantity_controller,
                   keyboardType: TextInputType.number,
@@ -1205,10 +1378,9 @@ class IndentHeaderViewScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 TextFormField(
-                  controller: indent_deatils_page_controller
-                      .remain_quantity_controller,
+                  controller:
+                      indent_deatils_page_controller.remain_quantity_controller,
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
                     labelText: "Remain Qty ",
@@ -1260,6 +1432,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
       },
     );
   }
+
   Widget bindIndentDropDropDown(context) {
     return Autocomplete<String>(
       displayStringForOption: _displayIndentTypeForOption,
@@ -1331,7 +1504,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                             fontWeight: FontWeight.w300,
                             fontSize: AllFontSize
                                 .sisxteen // Change the text color here
-                        ),
+                            ),
                       ),
                     ),
                   );
@@ -1344,9 +1517,28 @@ class IndentHeaderViewScreen extends StatelessWidget {
     );
   }
 
-  void showAddLineBottomSheet(BuildContext context) {
-    RxDouble qty=0.0.obs;
-    RxDouble discount=0.0.obs;
+  void showAddLineBottomSheet(BuildContext context, Lines? lines, String flag) {
+    RxDouble sub_total = 0.0.obs;
+    RxDouble discount_amount = 0.0.obs;
+    RxDouble total_amount = 0.0.obs;
+    if (flag == "View") {
+      indent_deatils_page_controller.isCheckBox.value =
+          lines!.isCustomerDamage! > 0 ? true : false;
+      indent_deatils_page_controller.item_no_controller.text = lines!.itemNo!;
+      indent_deatils_page_controller.item_no_description_controller.text =
+          lines!.itemName!;
+      indent_deatils_page_controller.quantity_controller.text =
+          lines!.qty!.toString();
+      indent_deatils_page_controller.discount_controller.text =
+          lines!.discountPer!.toString();
+      ;
+      indent_deatils_page_controller.unit_price_controller.text =
+          lines!.unitPrice!.toString();
+      sub_total.value=lines!.subTotal!;
+      discount_amount.value=lines!.discountAmount!;
+      total_amount.value=lines!.totalPrice!;
+    }
+
 
     showModalBottomSheet(
       context: context,
@@ -1393,85 +1585,157 @@ class IndentHeaderViewScreen extends StatelessWidget {
                 ),
                 Center(
                     child: Divider(
-                      height: 1,
-                      color: AllColors.primaryDark1,
-                    )),
+                  height: 1,
+                  color: AllColors.primaryDark1,
+                )),
                 SingleChildScrollView(
                   child: Container(
                     //height: 420,
                     child: Column(
                       children: [
-
-                        bindItemNoDropDown(context),
+                        bindItemNoDropDown(context, flag),
                         TextFormField(
                           readOnly: true,
                           controller: indent_deatils_page_controller
                               .item_no_description_controller,
-                          //   keyboardType: TextInputType.number,
+                          // keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             labelText: "Item Name",
-                            labelStyle: TextStyle(color: AllColors.primaryDark1),
+                            labelStyle:
+                                TextStyle(color: AllColors.primaryDark1),
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1),
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1),
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
                             ),
                           ),
                         ),
                         TextFormField(
+                          readOnly: flag == "View" ? true : false,
                           onChanged: (value) {
-                            qty.value= double.parse((value.isEmpty) ? "0" : value);
-
-                            double currentQty = double.parse((indent_deatils_page_controller.quantity_controller.text.isEmpty)
-                                ? "0"
-                                : indent_deatils_page_controller.quantity_controller.text);
-                            double unitPrice = double.parse((indent_deatils_page_controller.unit_price_controller.text.isEmpty)
-                                ? "0"
-                                : indent_deatils_page_controller.unit_price_controller.text);
-                            qty.value = currentQty * unitPrice;
+                            double currentQty = double.parse(
+                                (indent_deatils_page_controller
+                                        .quantity_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .quantity_controller.text);
+                            double current_unitPrice = double.parse(
+                                (indent_deatils_page_controller
+                                        .unit_price_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .unit_price_controller.text);
+                            double current_discount_per = double.parse(
+                                (indent_deatils_page_controller
+                                        .discount_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .discount_controller.text);
+                            sub_total.value = currentQty * current_unitPrice;
+                            discount_amount.value = currentQty *
+                                current_unitPrice *
+                                current_discount_per /
+                                100;
+                            total_amount.value =
+                                (currentQty * current_unitPrice) -
+                                    (currentQty *
+                                        current_unitPrice *
+                                        current_discount_per /
+                                        100);
                           },
-                          controller:
-                          indent_deatils_page_controller.quantity_controller,
+                          controller: indent_deatils_page_controller
+                              .quantity_controller,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             labelText: "Enter Quantity",
-                            labelStyle: TextStyle(color: AllColors.primaryDark1),
+                            labelStyle:
+                                TextStyle(color: AllColors.primaryDark1),
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1),
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1),
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
                             ),
                           ),
                         ),
                         Row(
-                          mainAxisAlignment:MainAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Obx(() => Checkbox(
-                              fillColor:  MaterialStateProperty.all<Color>(
-                                Colors.white,
-                              ),
-                              focusColor: AllColors.primaryDark1,
-                              checkColor: AllColors.primaryDark1,
-                              value:
-                              indent_deatils_page_controller.isCheckBox.value,
-                              onChanged: (value) {
-                                indent_deatils_page_controller.isCheckBox.value =
-                                    value ?? false;
-                                if(indent_deatils_page_controller.isCheckBox.value){
-                                  indent_deatils_page_controller. discount_controller.text="0";
-                                }else{
-                                    indent_deatils_page_controller. discount_controller.text="";
-                                }
-                                if(indent_deatils_page_controller.is_warrenty>0 && !indent_deatils_page_controller.isCheckBox.value){
-                                  indent_deatils_page_controller.discount_controller.text="100";
 
-                                }
-                                print(
-                                    "Checkbox value: ${indent_deatils_page_controller.isCheckBox.value}");
-                              },
-                            )),
+                                  fillColor: MaterialStateProperty.all<Color>(
+                                    Colors.white,
+                                  ),
+                                  focusColor: AllColors.primaryDark1,
+                                  checkColor: AllColors.primaryDark1,
+                                  value: indent_deatils_page_controller
+                                      .isCheckBox.value,
+                                  onChanged: (value) {
+                                    if(flag=="View"){
+                                      return null;
+                                    }
+                                    indent_deatils_page_controller
+                                        .isCheckBox.value = value ?? false;
+                                    if (indent_deatils_page_controller
+                                        .isCheckBox.value) {
+                                      indent_deatils_page_controller
+                                          .discount_controller.text = "0";
+                                    } else {
+                                      indent_deatils_page_controller
+                                          .discount_controller.text = "";
+                                    }
+                                    if (indent_deatils_page_controller
+                                                .is_warrenty >
+                                            0 &&
+                                        !indent_deatils_page_controller
+                                            .isCheckBox.value) {
+                                      indent_deatils_page_controller
+                                          .discount_controller.text = "100";
+                                    }
+
+                                    double currentQty = double.parse(
+                                        (indent_deatils_page_controller
+                                                .quantity_controller
+                                                .text
+                                                .isEmpty)
+                                            ? "0"
+                                            : indent_deatils_page_controller
+                                                .quantity_controller.text);
+                                    double current_unitPrice = double.parse(
+                                        (indent_deatils_page_controller
+                                                .unit_price_controller
+                                                .text
+                                                .isEmpty)
+                                            ? "0"
+                                            : indent_deatils_page_controller
+                                                .unit_price_controller.text);
+                                    double current_discount_per = double.parse(
+                                        (indent_deatils_page_controller
+                                                .discount_controller
+                                                .text
+                                                .isEmpty)
+                                            ? "0"
+                                            : indent_deatils_page_controller
+                                                .discount_controller.text);
+                                    sub_total.value =
+                                        currentQty * current_unitPrice;
+                                    discount_amount.value = currentQty *
+                                        current_unitPrice *
+                                        current_discount_per /
+                                        100;
+                                    total_amount.value =
+                                        (currentQty * current_unitPrice) -
+                                            (currentQty *
+                                                current_unitPrice *
+                                                current_discount_per /
+                                                100);
+                                  },
+                                )),
                             Text(
                               "Customer Damage",
                               style: GoogleFonts.poppins(
@@ -1482,56 +1746,113 @@ class IndentHeaderViewScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Obx(() {
-
-
-                            return  TextFormField(
+                        Obx(
+                          () {
+                            return TextFormField(
                               onChanged: (value) {
-                                double parsedValue = double.parse((value.isEmpty) ? "0" : value);
-                                double qtyValue = double.parse(qty.value.toString());
-                                double discountControllerValue = double.parse(indent_deatils_page_controller.discount_controller.text);
-                                discount.value = qtyValue *discountControllerValue/100;
+                                double currentQty = double.parse(
+                                    (indent_deatils_page_controller
+                                            .quantity_controller.text.isEmpty)
+                                        ? "0"
+                                        : indent_deatils_page_controller
+                                            .quantity_controller.text);
+                                double current_unitPrice = double.parse(
+                                    (indent_deatils_page_controller
+                                            .unit_price_controller.text.isEmpty)
+                                        ? "0"
+                                        : indent_deatils_page_controller
+                                            .unit_price_controller.text);
+                                double current_discount_per = double.parse(
+                                    (indent_deatils_page_controller
+                                            .discount_controller.text.isEmpty)
+                                        ? "0"
+                                        : indent_deatils_page_controller
+                                            .discount_controller.text);
+                                sub_total.value =
+                                    currentQty * current_unitPrice;
+                                discount_amount.value = currentQty *
+                                    current_unitPrice *
+                                    current_discount_per /
+                                    100;
+                                total_amount.value =
+                                    (currentQty * current_unitPrice) -
+                                        (currentQty *
+                                            current_unitPrice *
+                                            current_discount_per /
+                                            100);
                               },
-                              readOnly: indent_deatils_page_controller.isCheckBox.value==true?true:false,
-                              controller:  indent_deatils_page_controller.discount_controller,
+                              readOnly: indent_deatils_page_controller
+                                              .isCheckBox.value ==
+                                          true ||
+                                      flag == "View"
+                                  ? true
+                                  : false,
+                              controller: indent_deatils_page_controller
+                                  .discount_controller,
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 labelText: "Enter Discount%",
-                                labelStyle: TextStyle(color: AllColors.primaryDark1),
+                                labelStyle:
+                                    TextStyle(color: AllColors.primaryDark1),
                                 enabledBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AllColors.primaryDark1),
+                                  borderSide:
+                                      BorderSide(color: AllColors.primaryDark1),
                                 ),
                                 focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: AllColors.primaryDark1),
+                                  borderSide:
+                                      BorderSide(color: AllColors.primaryDark1),
                                 ),
                               ),
                             );
                           },
                         ),
                         TextFormField(
+                          readOnly: flag == "View" ? true : false,
                           onChanged: (value) {
-                            qty.value= double.parse((value.isEmpty) ? "0" : value);
-
-                            double currentQty = double.parse((indent_deatils_page_controller.quantity_controller.text.isEmpty)
-                                ? "0"
-                                : indent_deatils_page_controller.quantity_controller.text);
-                            double unitPrice = double.parse((indent_deatils_page_controller.unit_price_controller.text.isEmpty)
-                                ? "0"
-                                : indent_deatils_page_controller.unit_price_controller.text);
-                            qty.value = currentQty * unitPrice;
-
+                            double currentQty = double.parse(
+                                (indent_deatils_page_controller
+                                        .quantity_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .quantity_controller.text);
+                            double current_unitPrice = double.parse(
+                                (indent_deatils_page_controller
+                                        .unit_price_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .unit_price_controller.text);
+                            double current_discount_per = double.parse(
+                                (indent_deatils_page_controller
+                                        .discount_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .discount_controller.text);
+                            sub_total.value = currentQty * current_unitPrice;
+                            discount_amount.value = currentQty *
+                                current_unitPrice *
+                                current_discount_per /
+                                100;
+                            total_amount.value =
+                                (currentQty * current_unitPrice) -
+                                    (currentQty *
+                                        current_unitPrice *
+                                        current_discount_per /
+                                        100);
                           },
-                          controller:
-                          indent_deatils_page_controller.unit_price_controller,
+                          controller: indent_deatils_page_controller
+                              .unit_price_controller,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             labelText: "Unit Price",
-                            labelStyle: TextStyle(color: AllColors.primaryDark1),
+                            labelStyle:
+                                TextStyle(color: AllColors.primaryDark1),
                             enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1),
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
                             ),
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1),
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
                             ),
                           ),
                         ),
@@ -1545,80 +1866,96 @@ class IndentHeaderViewScreen extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Text("Sub Total",style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w500,
-                                    ),),
-                                    Spacer(),
-
-                                    Obx(() {
-                                     return Text( qty.value.toStringAsFixed(5),style: GoogleFonts.poppins(
-                                       color: AllColors.textColor,
-                                       fontSize: AllFontSize.fourtine,
-                                       fontWeight: FontWeight.w500,
-                                     ),);
-                                    },
-                                      //child:
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 3,),
-                                Row(
-                                  children: [
-                                    Text("Discount:",style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w500,
-                                    ),),
-                                    Spacer(),
-
-                                    Obx(() {
-                                      return Text(discount.value.toStringAsFixed(5),style: GoogleFonts.poppins(
-                                        color: AllColors.textColor,
+                                    Text(
+                                      "Sub Total",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
                                         fontSize: AllFontSize.fourtine,
                                         fontWeight: FontWeight.w500,
-                                      ),);
-                                    },
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Obx(
+                                      () {
+                                        return Text(
+                                          sub_total.value.toStringAsFixed(2),
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        );
+                                      },
                                       //child:
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 3,),
+                                SizedBox(
+                                  height: 3,
+                                ),
                                 Row(
                                   children: [
-                                    Text("Discount:",style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w500,
-                                    ),),
-                                    Spacer(),
-                                    Obx(() {
-                                      double calculatedValue = (qty.value ?? 0) - (discount.value ?? 0);
-                                      String formattedValue = calculatedValue.toStringAsFixed(3);
-                                      return Text(
-                                        formattedValue,
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.textColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      );
-                                    },
-                            //child:
+                                    Text(
+                                      "Discount:",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-
+                                    Spacer(),
+                                    Obx(
+                                      () {
+                                        return Text(
+                                          discount_amount.value
+                                              .toStringAsFixed(2),
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        );
+                                      },
+                                      //child:
+                                    ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 3,
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Paybal Amount:",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    Obx(
+                                      () {
+                                        return Text(
+                                          total_amount.value.toStringAsFixed(2),
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        );
+                                      },
+                                      //child:
+                                    ),
                                   ],
                                 )
                               ],
                             ),
                           ),
                         ),
-
                         SizedBox(
                           height: 13,
                         ),
-
                         ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all<Color>(
@@ -1628,7 +1965,9 @@ class IndentHeaderViewScreen extends StatelessWidget {
                           onPressed: () {
                             indent_deatils_page_controller.IndentLineCreate(
                                 indent_deatils_page_controller
-                                    .service_indent_header_create_list[0].indentNo!,context);
+                                    .service_indent_header_create_list[0]
+                                    .indentNo!,
+                                context);
                             //  Navigator.pop(context);
                             // todo  Your onPressed logic...
                           },
@@ -1645,8 +1984,6 @@ class IndentHeaderViewScreen extends StatelessWidget {
                             ),
                           ),
                         )
-
-
                       ],
                     ),
                   ),
@@ -1658,6 +1995,4 @@ class IndentHeaderViewScreen extends StatelessWidget {
       },
     );
   }
-
-
 }

@@ -1,6 +1,7 @@
 class ServiceInstallationDetails {
   String? condition;
   int? isGeoTag;
+  int? isWarranty;
   int? id;
   String? serviceNo;
   int? lineNo;
@@ -63,6 +64,7 @@ class ServiceInstallationDetails {
       {this.condition,
         this.id,
         this.isGeoTag,
+        this.isWarranty,
         this.serviceNo,
         this.lineNo,
         this.message,
@@ -124,6 +126,7 @@ class ServiceInstallationDetails {
     condition = json['condition'];
     id = json['id'];
     isGeoTag = json['is_geo_tag'];
+    isWarranty = json['is_warranty'];
     message = json['message'];
     serviceNo = json['service_no'];
     lineNo = json['line_no'];
@@ -196,6 +199,7 @@ class ServiceInstallationDetails {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
     data['is_geo_tag'] = this.isGeoTag;
+    data['is_warranty'] = this.isWarranty;
     data['id'] = this.id;
     data['message'] = this.message;
     data['service_no'] = this.serviceNo;

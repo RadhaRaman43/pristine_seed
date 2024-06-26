@@ -51,6 +51,10 @@ class PreventiveViewModel extends GetxController {
 
   String item_no = "";
   RxBool isCheckBox = false.obs;
+  int is_warrenty= 0;
+  RxBool is_Showindent=false.obs;
+  RxBool is_indent_type_dropDown=false.obs;
+
 
   RxList<PreventiveItemNoResponse> item_no_list =
       <PreventiveItemNoResponse>[].obs;
@@ -69,6 +73,7 @@ class PreventiveViewModel extends GetxController {
 
   RxList<PreventiveItemDetailsResponse> item_details_list =
       <PreventiveItemDetailsResponse>[].obs;
+  RxList<String> indent_type_list = <String>["Self","Warehouse"].obs;
 
   var reason_code_controller = TextEditingController();
   var reason_description_controller = TextEditingController();
@@ -94,6 +99,8 @@ class PreventiveViewModel extends GetxController {
   var invoice_date_search_controller = TextEditingController();
   var discount_controller = TextEditingController();
   var closure_remark_controller = TextEditingController();
+  var unit_price_controller=TextEditingController();
+  var indent_type_controller=TextEditingController();
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
 
@@ -530,7 +537,7 @@ class PreventiveViewModel extends GetxController {
     }
   }
 
-  IndentLineCreate(String indent_no) {
+  IndentLineCreate(String indent_no, BuildContext context) {
     if (item_no_controller.text.isEmpty) {
       Utils.showErrorToastification("Message!", "Please Select Item Code");
       return;
@@ -548,6 +555,7 @@ class PreventiveViewModel extends GetxController {
       "item_no": item_no,
       "qty": quantity_controller.text,
       "is_customer_damage": isCheckBox.value == true ? '1' : "0",
+      "unit_price": unit_price_controller.text,
       "discount_per": discount_controller.text,
       "email_id": email,
     };
@@ -568,6 +576,7 @@ class PreventiveViewModel extends GetxController {
                 response[0].condition == "True") {
               loading.value = false;
               service_indent_header_list.value = response;
+              Navigator.pop(context);
               /*IndentHeaderCreateApi(
                   service_indent_header_create_list[0].indentNo!);*/
               Utils.showToastification(
@@ -1003,7 +1012,12 @@ class PreventiveViewModel extends GetxController {
   }
 
   IndentHeaderCreateApi(String indent_no) {
-    Map data = {"service_id": id, "indent_no": indent_no, "email_id": email};
+    Map data = {
+      "service_id": id,
+      "indent_no": indent_no,
+      "indent_type": indent_type_controller.text,
+      "email_id": email
+    };
     print(data);
     loading.value = true;
     try {
@@ -1021,7 +1035,15 @@ class PreventiveViewModel extends GetxController {
                 response[0].condition == "True") {
               loading.value = false;
               service_indent_header_list.value = response;
-              Get.toNamed(RoutesName.preventive_Indent_header_view_screen);
+              indent_type_controller.clear();
+              is_Showindent.value=true;
+              is_indent_type_dropDown.value=false;
+              if(indent_no!="" ){
+                is_Showindent.value=true;
+                is_indent_type_dropDown.value=false;
+                Get.toNamed(RoutesName.preventive_Indent_header_view_screen);
+              }
+
               if (response[0].message != null) {
                 Utils.showToastification(
                     "Success!", response[0].message.toString());
