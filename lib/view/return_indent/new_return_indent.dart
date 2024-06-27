@@ -46,6 +46,21 @@ class NewReturnIndentScreen extends StatelessWidget{
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Obx(() {
+                    return Container(
+                      margin: EdgeInsets.only(top: 0.3),
+                      child: Visibility(
+                        visible: return_indent_page_controller.loading.value,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AllColors.primaryDark1,
+                          color: AllColors.textColor,
+                        ),
+                      ),
+                    );
+                  },
+                  ),
+
+
                   bindLocationDropDown(context),
                   SizedBox(height: 5),
                   ElevatedButton.icon(
@@ -57,6 +72,7 @@ class NewReturnIndentScreen extends StatelessWidget{
                                 .primaryDark1,
                             width: 1)),
                     onPressed: () {
+                      return_indent_page_controller.ReturnIndentHeaderCreate("",return_indent_page_controller.location_code_controller.text);
 
                     },
                     icon: Icon(Icons.create,color: AllColors.primaryDark1,),
@@ -66,12 +82,9 @@ class NewReturnIndentScreen extends StatelessWidget{
                         child: Text(
                           "Create",
                           style: GoogleFonts.poppins(
-                            color: AllColors
-                                .primaryDark1,
-                            fontSize:
-                            AllFontSize.fourtine,
-                            fontWeight:
-                            FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
@@ -115,6 +128,10 @@ class NewReturnIndentScreen extends StatelessWidget{
         print(selection.locationName);
         return_indent_page_controller.location_code_controller.text =
             _displayLocationNameForOption(selection).toString();
+        return_indent_page_controller.location_code=selection.locationId!;
+
+
+
         FocusScope.of(context).unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,

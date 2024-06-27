@@ -117,4 +117,8 @@ class AppUrl {
 
   //todo return indent.....
   static const String getReturnLocation="$BASE_URL/api/Master/GetLocationList";
+  static const String returnIndentHeaderCreate="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderCreate";
+  static const String returnIndentList="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderListGet";
+  static const String returnIndentItemWise="$BASE_URL/api/ReturnIndent/ReturnIndentGetItemWise";
+  static const String returnIndentAddLine="$BASE_URL/api/ReturnIndent/ReturnIndentAddLine";
 }

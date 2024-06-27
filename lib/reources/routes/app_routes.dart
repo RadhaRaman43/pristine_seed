@@ -31,6 +31,9 @@ import '../../view/login_view/login_screen.dart';
 import '../../view/preventive_view/CreatePreventiveCalenderScreen.dart';
 import '../../view/preventive_view/preventive_indent_header_view_screen.dart';
 import '../../view/profile_view/profile_screen.dart';
+import '../../view/return_indent/return_header_details_view_screen.dart';
+import '../../view/return_indent/return_indent_screen.dart';
+import '../../view/return_indent/return_ndent_add_line.dart';
 import '../../view/user_expense/expense_approver_header_view_screen.dart';
 
 class AppRoutes{
@@ -241,6 +244,28 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+    GetPage(name: RoutesName.returnHeaderDetailsScreen,
+        page: ()=>ReturnHeaderDetailsScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.returnIndentScreen,
+        page: ()=>ReturnIndentScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+
+    GetPage(name: RoutesName.returnIndentAddLineScreen,
+        page: ()=>ReturnIndentAddLine(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+
 
   ];
 }

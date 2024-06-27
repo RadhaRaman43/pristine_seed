@@ -47,5 +47,8 @@ class RoutesName{
   //todo return indent......
 
   static const newReturnIndentScreen="/new_return_indent.dart";
+  static const returnHeaderDetailsScreen="/return_header_details_view_screen.dart";
+  static const returnIndentScreen="/return_indent_screen.dart";
+  static const returnIndentAddLineScreen="/return_ndent_add_line.dart";
 
 }

@@ -10,4 +10,27 @@ class ReturnIndentRepository{
   }
 
 
+  Future<String> returnIndentHeaderCreateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data,AppUrl.returnIndentHeaderCreate,sessionManagement);
+  }
+
+  Future<String> returnIndentListApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data,AppUrl.returnIndentList,sessionManagement);
+  }
+
+
+  Future<String> returnIndentItemApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data,AppUrl.returnIndentItemWise,sessionManagement);
+  }
+
+
+  Future<String> returnIndentAddLineApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data,AppUrl.returnIndentAddLine,sessionManagement);
+  }
+
+
+
+
+
+
 }
