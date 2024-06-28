@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/viewModel/return_indent_vm/return_indent_vm.dart';
 
+import '../../component/custome_confirm_dialog.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
 import '../custom_drawer.dart';
@@ -20,7 +21,9 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-      //  Get.offAllNamed(RoutesName.)
+        Get.offAllNamed(RoutesName.returnIndentScreen);
+
+       // return_header_details_controller.ReturnIndentHeaderCreate()
         return false;
       },
       child: Scaffold(
@@ -150,6 +153,94 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                         )
                       ],
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+
+                       ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                              AllColors.textColor2,
+                              side: BorderSide(
+                                  color: AllColors
+                                      .primaryDark1,
+                                  width: 1)),
+                          onPressed: () {
+                            CustomConfirmDialog.showDialog(
+                              context: context,
+                              title: "Complete",
+                              content: "Do you want to Continue?",
+                              onPress: () {
+                                return_header_details_controller.returnIndentHeaderCompleteApiHit(return_header_details_controller
+                                    .return_create_header_list[0].returnNo.toString());
+                                // Your onPress function
+                              },
+                              isLoading: return_header_details_controller.loading,
+                            );
+
+                          },
+                          icon: Icon(Icons.check,color: AllColors.primaryDark1,),
+                          label: Container(
+                            child: Tooltip(
+                              message: "Complete",
+                              child: Text(
+                                "Complete",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          //  child:
+                        ),
+
+
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                              AllColors.textColor2,
+                              side: BorderSide(
+                                  color: AllColors
+                                      .redColor,
+                                  width: 1)),
+                          onPressed: () {
+
+                            CustomConfirmDialog.showDialog(context: context, title: "Header Delete",
+                              content: "Do you want to Continue?",
+                              onPress: () {
+                              return_header_details_controller.returnIndentHeaderDeleteApiHit(return_header_details_controller
+                                  .return_create_header_list[0].returnNo.toString());
+
+                            }, isLoading: return_header_details_controller.loading,);
+
+
+
+                          },
+                          icon: Icon(Icons.delete,color: AllColors.redColor,),
+                          label: Container(
+                            child: Tooltip(
+                              message: "Header Delete",
+                              child: Text(
+                                " Header Delete",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          //  child:
+                        ),
+
+
+
+
+                      ],
+                    )
+
                   ],
                 ),
               ),
@@ -175,19 +266,12 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                           fontSize: AllFontSize.sisxteen,
                           fontWeight: FontWeight.w700,
                         )),
-                    Spacer(),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.add,
-                          size: 22,
 
-                        ))
                   ],
                 ),
               ),
+                 Obx(() =>  bindListView(context),)
 
-              bindListView(context),
 
 
             ],
@@ -240,23 +324,31 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),),
             Spacer(),
-            Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: InkWell(
-                onTap: () {
+            Row(
+              children: [
 
-                  return_header_details_controller.getIndentItemName(return_header_details_controller
-                      .return_create_header_list[0].returnNo.toString(),return_header_details_controller
-                      .return_create_header_list[0].lines![index].itemNo.toString());
+                Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: InkWell(
+                      onTap: () {
+                        return_header_details_controller.getIndentItemName(return_header_details_controller
+                            .return_create_header_list[0].returnNo.toString(),return_header_details_controller
+                            .return_create_header_list[0].lines![index].itemNo.toString());
 
-                  return_header_details_controller.returnIndentAddLineApiHit(return_header_details_controller
-                      .return_create_header_list[0].lines![index].returnNo.toString(),return_header_details_controller
-                      .return_create_header_list[0].lines![index].itemNo.toString(),"InIt");
+                        return_header_details_controller.returnIndentAddLineApiHit(return_header_details_controller
+                            .return_create_header_list[0].lines![index].returnNo.toString(),return_header_details_controller
+                            .return_create_header_list[0].lines![index].itemNo.toString(),"InIt");
 
 
-                },
-                  child: Icon(Icons.remove_red_eye,color: AllColors.primaryDark1,)),
-            )
+                      },
+                      child: Icon(Icons.remove_red_eye,color: AllColors.primaryDark1,)),
+                ),
+
+              ],
+            ),
+
+
+
 
           ],
         ),
@@ -272,7 +364,7 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 3.0),
-                  child: Text("Unused Qty.",
+                  child: Text("Qty.",
                     style:  GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -281,17 +373,22 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 3.0),
-                  child: Text(return_header_details_controller
-                      .return_create_header_list[0].lines![index].unusedQty.toString(),
-                    style:  GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),),
+                  child: Tooltip(
+                    message: "Good: ${return_header_details_controller
+                        .return_create_header_list[0].lines![index].unusedQty.toString()} Bad:${return_header_details_controller
+                        .return_create_header_list[0].lines![index].damageQty.toString()}",
+                    child: Text(return_header_details_controller
+                        .return_create_header_list[0].lines![index].totalQty.toString(),
+                      style:  GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                      ),),
+                  ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 3.0),
-                  child: Text("Damage Qty.",
+                  child: Text("Return Qty.",
                     style:  GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -300,61 +397,22 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 3.0),
-                  child: Text(return_header_details_controller
-                      .return_create_header_list[0].lines![index].damageQty.toString(),
-                    style:  GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),),
+                  child: Tooltip(
+                    message: "Good: ${return_header_details_controller
+                        .return_create_header_list[0].lines![index].returnUnusedQty.toString()} Bad:${return_header_details_controller
+                        .return_create_header_list[0].lines![index].returnDamageQty.toString()}",
+                    child: Text(return_header_details_controller
+                        .return_create_header_list[0].lines![index].totalReturnQty.toString(),
+                      style:  GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                      ),),
+                  ),
                 ),
               ]
             ),
-            TableRow(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Text("Total",
-                      style:  GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Text(return_header_details_controller
-                        .return_create_header_list[0].lines![index].totalQty.toString() ,
-                      style:  GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Text("Return Qty.",
-                      style:  GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Text(return_header_details_controller
-                        .return_create_header_list[0].lines![index].damageQty.toString() ,
-                      style:  GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),),
-                  ),
 
-
-
-                ]
-            )
           ],
         ),
 
@@ -363,6 +421,10 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
 
 
 
+
+  }
+
+  void showConfirmCompleteDialog(BuildContext context) {
 
   }
 }

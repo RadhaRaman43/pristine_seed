@@ -121,4 +121,7 @@ class AppUrl {
   static const String returnIndentList="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderListGet";
   static const String returnIndentItemWise="$BASE_URL/api/ReturnIndent/ReturnIndentGetItemWise";
   static const String returnIndentAddLine="$BASE_URL/api/ReturnIndent/ReturnIndentAddLine";
+  static const String returnIndentLineDelete="$BASE_URL/api/ReturnIndent/ReturnIndentLineDiscard";
+  static const String returnIndentHeaderDelete="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderDiscard";
+  static const String returnIndentHeaderComplete="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderComplete";
 }

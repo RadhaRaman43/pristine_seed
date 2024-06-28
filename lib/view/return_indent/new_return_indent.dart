@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/viewModel/return_indent_vm/return_indent_vm.dart';
 
+import '../../component/custome_loading_button.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
 import '../../models/return_indent_model/location_model.dart';
@@ -63,7 +64,17 @@ class NewReturnIndentScreen extends StatelessWidget{
 
                   bindLocationDropDown(context),
                   SizedBox(height: 5),
-                  ElevatedButton.icon(
+
+                  LoadingButton(
+
+                    label: 'Create',
+                    icon: Icons.create,
+                    onPressed: () async {
+                      // Call your method here
+
+                    },
+                  ),
+               /*   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                         backgroundColor:
                         AllColors.textColor2,
@@ -90,7 +101,7 @@ class NewReturnIndentScreen extends StatelessWidget{
                       ),
                     ),
                     //  child:
-                  ),
+                  ),*/
 
                 ],
               ),

@@ -19,156 +19,164 @@ class ReturnIndentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Row(
-          children: [
-            Text(
-              'Return Indent Screen',
-              style: GoogleFonts.poppins(
-                color: AllColors.whiteColor,
-                fontSize: AllFontSize.twentee,
-                fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop: () async {
+        Get.offAllNamed(RoutesName.homeScreen);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Row(
+            children: [
+              Text(
+                'Return Indent Screen',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            Spacer(),
-            IconButton(onPressed: () {
-              Get.toNamed(RoutesName.newReturnIndentScreen);
-            }, icon: Icon(Icons.add))
-          ],
+              Spacer(),
+              IconButton(onPressed: () {
+                Get.toNamed(RoutesName.newReturnIndentScreen);
+              }, icon: Icon(Icons.add))
+            ],
+          ),
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor, // Change this to the desired color
+          ),
+          backgroundColor: AllColors.primaryDark1,
         ),
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor, // Change this to the desired color
-        ),
-        backgroundColor: AllColors.primaryDark1,
-      ),
-      drawer: CustomDrawer(),
-      body: Container(
-        width: double.infinity,
-        height: size.height,
-        child: Column(
-          children: [
-            Obx(
-              () {
-                return Container(
-                  margin: EdgeInsets.only(top: 0.3),
-                  child: Visibility(
-                    visible: return_indent_page_controller.loading.value,
-                    child: LinearProgressIndicator(
-                      backgroundColor: AllColors.textColor,
-                      color: AllColors.primaryDark1,
-                    ),
-                  ),
-                );
-              },
-            ),
-
-            Container(
-              padding: EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  TextFormField(
-                   controller:return_indent_page_controller.global_search_controller,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: AllColors.primaryDark1), // Customize the border color
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(
-                            color: Colors.grey), // Customize the border color
-                      ),
-                      suffixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.search),
-                            onPressed: () async {
-                             // return_indent_page_controller.is_done.value=0;
-                              return_indent_page_controller.pageNumber=0;
-                              return_indent_page_controller.ReturnIndentList(return_indent_page_controller.pageNumber,global_search_value:return_indent_page_controller.global_search_controller.text);
-
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              return_indent_page_controller.global_search_controller.clear();
-                              return_indent_page_controller.pageNumber=0;
-                              return_indent_page_controller.ReturnIndentList(return_indent_page_controller.pageNumber);
-
-
-                              // Add clear functionality here
-                            },
-                          ),
-                        ],
+        drawer: CustomDrawer(),
+        body: Container(
+          width: double.infinity,
+          height: size.height,
+          child: Column(
+            children: [
+              Obx(
+                () {
+                  return Container(
+                    margin: EdgeInsets.only(top: 0.3),
+                    child: Visibility(
+                      visible: return_indent_page_controller.loading.value,
+                      child: LinearProgressIndicator(
+                        backgroundColor: AllColors.textColor,
+                        color: AllColors.primaryDark1,
                       ),
                     ),
-                  ),
-                  // SizedBox(height: size.height*0.01,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Obx(() {
-                         return
-                          ActionChip(
-                            elevation: 2,
-                            padding: EdgeInsets.all(2),
-                            backgroundColor:return_indent_page_controller.is_done.value==0?AllColors.primaryDark1:AllColors.grayColor,
-                            shadowColor: Colors.black,
-                            shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor)),
-                            //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                            //CircleAvatar
-                            label: Text('Pending',
-                                style: GoogleFonts.poppins(
-                                  color:return_indent_page_controller.is_done.value==0?AllColors.whiteColor:AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                            onPressed: () {
-                              return_indent_page_controller.is_done.value=0;
+                  );
+                },
+              ),
+
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    TextFormField(
+                     controller:return_indent_page_controller.global_search_controller,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.all(10),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: AllColors.primaryDark1), // Customize the border color
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: Colors.grey), // Customize the border color
+                        ),
+                        suffixIcon: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.search),
+                              onPressed: () async {
+                               // return_indent_page_controller.is_done.value=0;
+                                return_indent_page_controller.pageNumber=0;
+                                return_indent_page_controller.ReturnIndentList(return_indent_page_controller.pageNumber,global_search_value:return_indent_page_controller.global_search_controller.text);
+
+                              },
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                return_indent_page_controller.global_search_controller.clear();
+                                return_indent_page_controller.pageNumber=0;
+                                return_indent_page_controller.ReturnIndentList(return_indent_page_controller.pageNumber);
 
 
-                            }, //Text
-                          );
-                        },),
-
-                      SizedBox(width: 5,),
-                     Obx(() {
-                         return
+                                // Add clear functionality here
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    // SizedBox(height: size.height*0.01,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Obx(() {
+                           return
                             ActionChip(
-                            elevation: 2,
-                            padding: EdgeInsets.all(2),
-                            backgroundColor:return_indent_page_controller.is_done.value==1?AllColors.primaryDark1:AllColors.grayColor,
-                            shadowColor: Colors.black,
-                            shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor)),
-                            //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                            //CircleAvatar
-                            label: Text('Complete',
-                                style: GoogleFonts.poppins(
-                                  color:return_indent_page_controller.is_done.value==1?AllColors.whiteColor:AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                            onPressed: () {
-                              return_indent_page_controller.is_done.value=1;
+                              elevation: 2,
+                              padding: EdgeInsets.all(2),
+                              backgroundColor:return_indent_page_controller.is_done.value==0?AllColors.primaryDark1:AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                  side: BorderSide(color: AllColors.grayColor)),
+                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                              //CircleAvatar
+                              label: Text('Pending',
+                                  style: GoogleFonts.poppins(
+                                    color:return_indent_page_controller.is_done.value==0?AllColors.whiteColor:AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              onPressed: () {
+                                return_indent_page_controller.is_done.value=0;
+                                return_indent_page_controller.pageNumber=0;
+                                return_indent_page_controller.ReturnIndentList(return_indent_page_controller.pageNumber);
 
-                            }, //Text
-                          );
-                        },)
+                              }, //Text
+                            );
+                          },),
 
-                    ],
-                  ),
-                  // SizedBox(height: size.height*0.01,),
+                        SizedBox(width: 5,),
+                       Obx(() {
+                           return
+                              ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.all(2),
+                              backgroundColor:return_indent_page_controller.is_done.value==1?AllColors.primaryDark1:AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                  side: BorderSide(color: AllColors.grayColor)),
+                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                              //CircleAvatar
+                              label: Text('Complete',
+                                  style: GoogleFonts.poppins(
+                                    color:return_indent_page_controller.is_done.value==1?AllColors.whiteColor:AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              onPressed: () {
+                                return_indent_page_controller.is_done.value=1;
+                                return_indent_page_controller.pageNumber=0;
+                                return_indent_page_controller.ReturnIndentList(return_indent_page_controller.pageNumber);
 
-                ],
+                              }, //Text
+                            );
+                          },)
+
+                      ],
+                    ),
+                    // SizedBox(height: size.height*0.01,),
+
+                  ],
+                ),
               ),
-            ),
 
 
 
@@ -176,10 +184,11 @@ class ReturnIndentScreen extends StatelessWidget {
 
 
 
-            Obx(
-              () => bindListView(context),
-            ),
-          ],
+              Obx(
+                () => bindListView(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -191,7 +200,6 @@ class ReturnIndentScreen extends StatelessWidget {
         return_indent_page_controller.return_indent_list.length > 0) {
       ScrollController scrollController = ScrollController();
         scrollController.addListener(() {
-          print("rmgfrnrnknkvb");
 
           if (scrollController.position.pixels ==
               scrollController.position.maxScrollExtent) {
@@ -241,6 +249,8 @@ class ReturnIndentScreen extends StatelessWidget {
   BindReturnList(BuildContext context, int index) {
     return InkWell(
       onTap: () {
+        return_indent_page_controller.return_no=return_indent_page_controller.return_indent_list[index].returnNo!;
+        return_indent_page_controller.list_location_code=return_indent_page_controller.return_indent_list[index].locationCode!;
         return_indent_page_controller.ReturnIndentHeaderCreate(return_indent_page_controller.return_indent_list[index].returnNo.toString(),return_indent_page_controller.return_indent_list[index].locationCode.toString());
       },
       child: ListTile(

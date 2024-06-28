@@ -28,6 +28,24 @@ class ReturnIndentRepository{
     return _apiServices.postApi(data,AppUrl.returnIndentAddLine,sessionManagement);
   }
 
+  Future<String> returnIndentLineDeleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data,AppUrl.returnIndentLineDelete,sessionManagement);
+  }
+
+
+  Future<String> returnIndentHeaderDeleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data,AppUrl.returnIndentHeaderDelete,sessionManagement);
+  }
+
+
+  Future<String> returnIndentHeaderCompleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data,AppUrl.returnIndentHeaderComplete,sessionManagement);
+  }
+
+
+
+
+
 
 
 
