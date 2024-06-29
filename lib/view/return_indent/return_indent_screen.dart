@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,9 +38,24 @@ class ReturnIndentScreen extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {
-                Get.toNamed(RoutesName.newReturnIndentScreen);
-              }, icon: Icon(Icons.add))
+              Obx(() {
+                // Ensure the list is not empty before accessing the first element
+                if (return_indent_page_controller.return_indent_list.isNotEmpty) {
+                  return Visibility(
+                    visible: return_indent_page_controller.return_indent_list[0].isDone! <= 0,
+                    child: IconButton(
+                      onPressed: () {
+                        Get.toNamed(RoutesName.newReturnIndentScreen);
+                      },
+                      icon: Icon(Icons.add),
+                    ),
+                  );
+                } else {
+                  // Handle the case where the list is empty, e.g., return a placeholder or nothing
+                  return SizedBox(); // Or return a placeholder widget
+                }
+              })
+
             ],
           ),
           iconTheme: IconThemeData(
@@ -251,7 +267,8 @@ class ReturnIndentScreen extends StatelessWidget {
       onTap: () {
         return_indent_page_controller.return_no=return_indent_page_controller.return_indent_list[index].returnNo!;
         return_indent_page_controller.list_location_code=return_indent_page_controller.return_indent_list[index].locationCode!;
-        return_indent_page_controller.ReturnIndentHeaderCreate(return_indent_page_controller.return_indent_list[index].returnNo.toString(),return_indent_page_controller.return_indent_list[index].locationCode.toString());
+        //return_indent_page_controller.ReturnIndentHeaderCreate(return_indent_page_controller.return_indent_list[index].returnNo.toString(),return_indent_page_controller.return_indent_list[index].locationCode.toString(),"ListView");
+        return_indent_page_controller.ReturnIndentHeaderCreate("ListView");
       },
       child: ListTile(
         title:Table(
@@ -324,7 +341,7 @@ class ReturnIndentScreen extends StatelessWidget {
                Text(
                  return_indent_page_controller.return_indent_list[index].isDone==0?"Pending":"Completed",
                  style: GoogleFonts.poppins(
-                   color: AllColors.textColor,
+                   color: AllColors.redColor,
                    fontSize: AllFontSize.fourtine,
                    fontWeight: FontWeight.w300,
                  ),

@@ -63,6 +63,7 @@ class Lines {
   double? returnUnusedQty;
   double? returnDamageQty;
   double? totalReturnQty;
+  String? displayName;
 
   Lines(
       {this.returnNo,
@@ -72,7 +73,8 @@ class Lines {
         this.totalQty,
         this.returnUnusedQty,
         this.returnDamageQty,
-        this.totalReturnQty});
+        this.totalReturnQty,
+        this.displayName});
 
   Lines.fromJson(Map<String, dynamic> json) {
     returnNo = json['return_no'];
@@ -83,6 +85,7 @@ class Lines {
     returnUnusedQty = json['return_unused_qty'];
     returnDamageQty = json['return_damage_qty'];
     totalReturnQty = json['total_return_qty'];
+    displayName = json['display_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -95,6 +98,7 @@ class Lines {
     data['return_unused_qty'] = this.returnUnusedQty;
     data['return_damage_qty'] = this.returnDamageQty;
     data['total_return_qty'] = this.totalReturnQty;
+    data['display_name'] = this.displayName;
     return data;
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:navigation_drawer_flutter/models/return_indent_model/return_indent_header_create_model.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/repository/return_indent_repository/return_indent_repository.dart';
@@ -42,11 +43,14 @@ class ReturnIndentViewModel extends GetxController {
   String email = "";
 
   RxInt is_done = 0.obs;
+  RxBool is_location_dropdown=false.obs;
 
 
   int pageNumber = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
+
+  String item_no="";
 
   String return_no = "";
   String list_location_code = "";
@@ -98,13 +102,38 @@ class ReturnIndentViewModel extends GetxController {
     }
   }
 
-  ReturnIndentHeaderCreate(String return_no, String location_code) {
+  ReturnIndentHeaderCreate(String flag) {
+
+
     loading.value = true;
-    Map data = {
+    Map data;
+    if(flag=="Init"){
+      data = {
+        "return_no": "",
+        "location_code": location_code_controller.text,
+        "email_id": email
+      };
+    }
+    else if(flag=="ListView"){
+      data = {
+        "return_no": return_no,
+        "location_code": location_code,
+        "email_id": email
+      };
+    }else if(flag=="back"){
+      data = {
+        "return_no":return_create_header_list[0].returnNo.toString() ,
+        "location_code": location_code_controller.text,
+        "email_id": email
+      };
+    }else{
+      return;
+    }
+   /* data = {
       "return_no": return_no,
       "location_code": location_code,
       "email_id": email
-    };
+    };*/
     print(data);
     try {
       _api.returnIndentHeaderCreateApiHit(data, sessionManagement).then((
@@ -117,13 +146,12 @@ class ReturnIndentViewModel extends GetxController {
               ReturnIndentHeaderCreateResponse.fromJson(e)).toList();
           if (response != null && response.length > 0 &&
               response[0].condition == "True") {
-            loading.value = false;
             return_create_header_list.value = response;
-
-            Get.toNamed(RoutesName.returnHeaderDetailsScreen);
+            if(flag!="back"){
+              Get.toNamed(RoutesName.returnHeaderDetailsScreen);
+            }
           } else {
-            loading.value = false;
-            return_create_header_list.value = [];
+           // return_create_header_list.value = [];
           }
         } else {
           loading.value = false;
@@ -164,40 +192,46 @@ class ReturnIndentViewModel extends GetxController {
       };
     }
     print(data);
-    try {
+
       _api.returnIndentListApiHit(data, sessionManagement).then((value) {
         print(value);
         final JsonResponse = json.decode(value);
-        if (JsonResponse is List) {
-          List<ReturnIndentListResponse> response = JsonResponse.map((e) =>
-              ReturnIndentListResponse.fromJson(e)).toList();
-          if (response != null && response.length > 0 &&
-              response[0].condition == "True") {
-            loading.value = false;
-            if (page_no == 0) {
-              return_indent_list.clear();
+        try{
+          if (JsonResponse is List) {
+            List<ReturnIndentListResponse> response = JsonResponse.map((e) =>
+                ReturnIndentListResponse.fromJson(e)).toList();
+            if (response != null && response.length > 0 &&
+                response[0].condition == "True") {
+
+              if (page_no == 0) {
+                return_indent_list.clear();
+              }
+              return_indent_list.addAll(response);
+              total_rows = return_indent_list[0].totalCount!;
+            } else {
+
+              return_indent_list.value = [];
             }
-            return_indent_list.addAll(response);
-            total_rows = return_indent_list[0].totalCount!;
           } else {
-            loading.value = false;
-            return_indent_list.value = [];
+
+            Utils.showErrorToastification("Api Error!", JsonResponse);
+            print(JsonResponse);
           }
-        } else {
+        }catch(e){
+          print(e);
+        }finally{
           loading.value = false;
-          Utils.showErrorToastification("Api Error!", JsonResponse);
-          print(JsonResponse);
         }
+
+      },).onError((error, stackTrace) {
+        loading.value = false;
+      },).whenComplete(() {
+        loading.value = false;
       },);
-    } catch (e) {
-      loading.value = false;
-      print(e);
-    } finally {
-      loading.value = false;
-    }
+
   }
 
-  getIndentItemName(String return_no, String item_no) {
+  getIndentItemName(String return_no, String item_no){
     loading.value = true;
     Map data = {
       "return_no": return_no,
@@ -205,33 +239,38 @@ class ReturnIndentViewModel extends GetxController {
       "email_id": email
     };
     print(data);
-    try {
+
       _api.returnIndentItemApiHit(data, sessionManagement).then((value) {
         print(value);
         final JsonResponse = json.decode(value);
-        if (JsonResponse is List) {
-          List<IndentItemResponse> response = JsonResponse.map((e) =>
-              IndentItemResponse.fromJson(e)).toList();
-          if (response != null && response.length > 0 &&
-              response[0].condition == "True") {
-            loading.value = false;
-            indent_name_list.value = response;
-            Get.toNamed(RoutesName.returnIndentAddLineScreen);
+        try{
+          if (JsonResponse is List) {
+            List<IndentItemResponse> response = JsonResponse.map((e) =>
+                IndentItemResponse.fromJson(e)).toList();
+            if (response != null && response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              indent_name_list.value = response;
+              Get.toNamed(RoutesName.returnIndentAddLineScreen);
+            } else {
+              loading.value = false;
+              indent_name_list.value = [];
+            }
           } else {
-            loading.value = false;
-            indent_name_list.value = [];
+
+            Utils.showErrorToastification("Api Error!", JsonResponse);
           }
-        } else {
+        }catch(e){
+          print(e);
+        }finally{
           loading.value = false;
-          Utils.showErrorToastification("Api Error!", JsonResponse);
         }
+      },).onError((error, stackTrace) {
+        loading.value = false;
+      },).whenComplete(() {
+        loading.value = false;
       },);
-    } catch (e) {
-      loading.value = false;
-      print(e);
-    } finally {
-      loading.value = false;
-    }
+
   }
   returnIndentAddLineApiHit(String return_no, String item_no, String flag) {
     loading.value = true;
@@ -256,41 +295,53 @@ class ReturnIndentViewModel extends GetxController {
     } else {
       return;
     }
-
-    try {
       _api.returnIndentAddLineApiHit(data, sessionManagement).then((value) {
         print(value);
         final JsonResponse = json.decode(value);
-        if (JsonResponse is List) {
-          List<ReturnIndentAddLineReponse> response = JsonResponse.map((e) =>
-              ReturnIndentAddLineReponse.fromJson(e)).toList();
-          if (response != null && response.length > 0 &&
-              response[0].condition == "True") {
-            loading.value = false;
-            indent_return_add_line_list.value = response;
-            selected_indent_data = null;
-            selected_item_check.value = false;
-           is_show_indent_dropDown.value=false;
-            is_show_indent_dropDown.value=true;
-            indent_name_controller.clear();
-            unused_qty_controller.clear();
-            bad_qty_controller.clear();
+        try{
+          if (JsonResponse is List) {
+            List<ReturnIndentAddLineReponse> response = JsonResponse.map((e) =>
+                ReturnIndentAddLineReponse.fromJson(e)).toList();
+            if (response != null && response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              indent_return_add_line_list.value = response;
+              selected_indent_data = null;
+              getIndentItemName(return_create_header_list[0].returnNo.toString(),item_no);
+              selected_item_check.value = false;
+              is_show_indent_dropDown.value=false;
+              is_show_indent_dropDown.value=true;
+              indent_name_controller.clear();
+
+              unused_qty_controller.clear();
+              bad_qty_controller.clear();
+            } else {
+              loading.value = false;
+              if(flag!="InIt"){
+                Utils.showErrorToastification("Error!", response[0].message!);
+              }
+              // indent_return_add_line_list.value = [];
+            }
           } else {
             loading.value = false;
-            indent_return_add_line_list.value = [];
+            Utils.showErrorToastification("Api Error!", JsonResponse);
           }
-        } else {
+        }catch(e){
+          print(e);
+        }finally{
           loading.value = false;
-          Utils.showErrorToastification("Api Error!", JsonResponse);
         }
+      },).onError((error, stackTrace) {
+        loading.value = false;
+      },  ).whenComplete(() {
+        loading.value = false;
       },);
-    } catch (e) {
-      loading.value = false;
-      print(e);
-    } finally {
-      loading.value = false;
-    }
+
+
   }
+
+
+
   returnIndentLineDeleteApiHit(String return_no, String? line_no,String item_no) {
     loading.value = true;
     Map data = {
@@ -312,11 +363,14 @@ class ReturnIndentViewModel extends GetxController {
           if (response != null && response.length > 0 && response[0].condition == "True") {
             loading.value = false;
             if(response[0].itemNo==null){
+              Get.back();
               indent_return_add_line_list.value=[];
               is_show_indent_dropDown.value=false;
               is_show_indent_dropDown.value=true;
               indent_name_controller.clear();
+              getIndentItemName(return_create_header_list[0].returnNo.toString(),item_no);
             }else{
+              Get.back();
               indent_return_add_line_list.value = response;
               is_show_indent_dropDown.value=false;
               is_show_indent_dropDown.value=true;
@@ -324,7 +378,7 @@ class ReturnIndentViewModel extends GetxController {
             }
           } else {
             loading.value = false;
-            indent_return_add_line_list.value = [];
+            //indent_return_add_line_list.value = [];
           }
         } else {
           loading.value = false;

@@ -6,7 +6,7 @@ class ReturnIndentListResponse {
   String? createdBy;
   String? createdOn;
   int? isDone;
-  Null? completedOn;
+  String? completedOn;
 
   ReturnIndentListResponse(
       {this.condition,

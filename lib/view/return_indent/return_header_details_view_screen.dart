@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -153,93 +154,95 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                         )
                       ],
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
+                    Obx( () {
+                      return  Visibility(
+                        visible:return_header_details_controller
+                            .return_create_header_list[0].isDone!>0?false:true ,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                  AllColors.textColor2,
+                                  side: BorderSide(
+                                      color: AllColors
+                                          .primaryDark1,
+                                      width: 1)),
+                              onPressed: () {
+                                CustomConfirmDialog.showDialog(
+                                  context: context,
+                                  title: "Complete",
+                                  content: "Do you want to Continue?",
+                                  onPress: () {
+                                    return_header_details_controller.returnIndentHeaderCompleteApiHit(return_header_details_controller
+                                        .return_create_header_list[0].returnNo.toString());
+                                    // Your onPress function
+                                  },
+                                  isLoading: return_header_details_controller.loading,
+                                );
 
-                       ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                              AllColors.textColor2,
-                              side: BorderSide(
-                                  color: AllColors
-                                      .primaryDark1,
-                                  width: 1)),
-                          onPressed: () {
-                            CustomConfirmDialog.showDialog(
-                              context: context,
-                              title: "Complete",
-                              content: "Do you want to Continue?",
-                              onPress: () {
-                                return_header_details_controller.returnIndentHeaderCompleteApiHit(return_header_details_controller
-                                    .return_create_header_list[0].returnNo.toString());
-                                // Your onPress function
                               },
-                              isLoading: return_header_details_controller.loading,
-                            );
-
-                          },
-                          icon: Icon(Icons.check,color: AllColors.primaryDark1,),
-                          label: Container(
-                            child: Tooltip(
-                              message: "Complete",
-                              child: Text(
-                                "Complete",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                              icon: Icon(Icons.check,color: AllColors.primaryDark1,),
+                              label: Container(
+                                child: Tooltip(
+                                  message: "Complete",
+                                  child: Text(
+                                    "Complete",
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
                               ),
+                              //  child:
                             ),
-                          ),
-                          //  child:
-                        ),
 
 
-                        ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                              AllColors.textColor2,
-                              side: BorderSide(
-                                  color: AllColors
-                                      .redColor,
-                                  width: 1)),
-                          onPressed: () {
+                            ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                  AllColors.textColor2,
+                                  side: BorderSide(
+                                      color: AllColors
+                                          .redColor,
+                                      width: 1)),
+                              onPressed: () {
 
-                            CustomConfirmDialog.showDialog(context: context, title: "Header Delete",
-                              content: "Do you want to Continue?",
-                              onPress: () {
-                              return_header_details_controller.returnIndentHeaderDeleteApiHit(return_header_details_controller
-                                  .return_create_header_list[0].returnNo.toString());
+                                CustomConfirmDialog.showDialog(context: context, title: "Header Delete",
+                                  content: "Do you want to Continue?",
+                                  onPress: () {
+                                    return_header_details_controller.returnIndentHeaderDeleteApiHit(return_header_details_controller
+                                        .return_create_header_list[0].returnNo.toString());
 
-                            }, isLoading: return_header_details_controller.loading,);
+                                  }, isLoading: return_header_details_controller.loading,);
 
 
 
-                          },
-                          icon: Icon(Icons.delete,color: AllColors.redColor,),
-                          label: Container(
-                            child: Tooltip(
-                              message: "Header Delete",
-                              child: Text(
-                                " Header Delete",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                              },
+                              icon: Icon(Icons.delete,color: AllColors.redColor,),
+                              label: Container(
+                                child: Tooltip(
+                                  message: "Header Discard",
+                                  child: Text(
+                                    " Discard",
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
                               ),
+                              //  child:
                             ),
-                          ),
-                          //  child:
+                          ],
                         ),
-
-
-
-
-                      ],
-                    )
+                      );
+                    },
+                    ),
 
                   ],
                 ),
@@ -296,9 +299,14 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
       );
     }else{
       return Container(
-        child: Center(
-          child: Text(""),
-        ),
+        child:Center(
+          //child: Image.asset("assests/images/no_record_found.gif",),
+          child: Image.asset(
+            "assests/images/no_data_remove.png",
+            width: 300,
+            height: 180,
+          ),
+        )
       );
 
     }
@@ -316,8 +324,9 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),),
             SizedBox(width:size.width*.1,),
-            Text( return_header_details_controller
-                .return_create_header_list[0].lines![index].itemNo??"",
+            Text( "${return_header_details_controller
+                .return_create_header_list[0].lines![index].displayName??""}(${return_header_details_controller
+                .return_create_header_list[0].lines![index].itemNo??""})"   ,
               style: GoogleFonts.poppins(
               color: AllColors.textColor,
               fontSize: AllFontSize.sisxteen,
@@ -331,6 +340,10 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: InkWell(
                       onTap: () {
+
+                        return_header_details_controller.item_no= return_header_details_controller
+                            .return_create_header_list[0].lines![index].itemNo.toString();
+
                         return_header_details_controller.getIndentItemName(return_header_details_controller
                             .return_create_header_list[0].returnNo.toString(),return_header_details_controller
                             .return_create_header_list[0].lines![index].itemNo.toString());
@@ -346,10 +359,6 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
 
               ],
             ),
-
-
-
-
           ],
         ),
         subtitle: Table(
@@ -424,7 +433,4 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
 
   }
 
-  void showConfirmCompleteDialog(BuildContext context) {
-
-  }
 }

@@ -10,6 +10,7 @@ class ReturnIndentAddLineReponse {
   double? returnBadQty;
   double? returnTotalQty;
   String? createdOn;
+  String? displayName;
 
   ReturnIndentAddLineReponse(
       {this.condition,
@@ -22,7 +23,8 @@ class ReturnIndentAddLineReponse {
         this.returnUnusedQty,
         this.returnBadQty,
         this.returnTotalQty,
-        this.createdOn});
+        this.createdOn,
+        this.displayName});
 
   ReturnIndentAddLineReponse.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -36,6 +38,7 @@ class ReturnIndentAddLineReponse {
     returnBadQty = json['return_bad_qty'];
     returnTotalQty = json['return_total_qty'];
     createdOn = json['created_on'];
+    displayName = json['display_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +54,7 @@ class ReturnIndentAddLineReponse {
     data['return_bad_qty'] = this.returnBadQty;
     data['return_total_qty'] = this.returnTotalQty;
     data['created_on'] = this.createdOn;
+    data['display_name'] = this.displayName;
     return data;
   }
 }
