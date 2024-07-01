@@ -7,6 +7,9 @@ import 'package:navigation_drawer_flutter/view/home_view/home_screen.dart';
 import 'package:navigation_drawer_flutter/view/installation_view/installation_screen.dart';
 import 'package:navigation_drawer_flutter/view/installation_view/installation_view_details_screen.dart';
 import 'package:navigation_drawer_flutter/view/notification_view/notification_screen.dart';
+import 'package:navigation_drawer_flutter/view/order_view/order_item_category_screen.dart';
+import 'package:navigation_drawer_flutter/view/order_view/order_item_veriety_screen.dart';
+import 'package:navigation_drawer_flutter/view/order_view/order_screen.dart';
 import 'package:navigation_drawer_flutter/view/preventive_view/preventive_mark_visit.dart';
 import 'package:navigation_drawer_flutter/view/preventive_view/preventive_screen.dart';
 import 'package:navigation_drawer_flutter/view/preventive_view/preventive_view_detail_screen.dart';
@@ -28,6 +31,7 @@ import '../../view/corrective_view/corrective_view_details_screen.dart';
 import '../../view/installation_view/indent_header_view_screen.dart';
 import '../../view/installation_view/mark_visit_screen.dart';
 import '../../view/login_view/login_screen.dart';
+import '../../view/order_view/view_cart_screen.dart';
 import '../../view/preventive_view/CreatePreventiveCalenderScreen.dart';
 import '../../view/preventive_view/preventive_indent_header_view_screen.dart';
 import '../../view/profile_view/profile_screen.dart';
@@ -263,6 +267,37 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    //todo order screen....
+
+    GetPage(name: RoutesName.order_screen,
+        page: ()=>OrderScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.order_item_category_screen,
+        page: ()=>OrderItemCategoryScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.order_view_cart_screen,
+        page: ()=>ViewCartScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.order_variety_screen,
+        page: ()=>OrderItemVarietyScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+
+
 
 
 

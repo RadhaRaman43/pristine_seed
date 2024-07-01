@@ -51,4 +51,13 @@ class RoutesName{
   static const returnIndentScreen="/return_indent_screen.dart";
   static const returnIndentAddLineScreen="/return_ndent_add_line.dart";
 
+
+
+  //todo order screen.......
+
+    static const order_screen="/order_screen.dart";
+    static const order_item_category_screen="/order_item_category_screen.dart";
+    static const order_view_cart_screen="/view_cart_screen.dart";
+    static const order_variety_screen="/order_item_veriety_screen.dart";
+
 }

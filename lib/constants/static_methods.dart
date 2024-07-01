@@ -154,8 +154,8 @@ class StaticMethod{
             .install_desktop_outlined;
         break;
     // Change this icon as per your requirement
-      case 1:
-        return Icons.home; // Change this icon as per your requirement
+      case "Order List":
+        return Icons.shopping_cart; // Change this icon as per your requirement
     // Add more cases for different indices if needed
       default:
         return Icons.exit_to_app; // Default icon

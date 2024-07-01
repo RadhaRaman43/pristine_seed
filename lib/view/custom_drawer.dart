@@ -231,6 +231,12 @@ class _Drawer extends State<CustomDrawer> {
                                             Get.toNamed(RoutesName.returnIndentScreen,preventDuplicates: false);
                                             Navigator.of(context);
                                             break;
+                                          case 'Order List':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            Get.toNamed(RoutesName.order_screen,preventDuplicates: false);
+                                            Navigator.of(context);
+                                            break;
 
 
                                         }

@@ -124,4 +124,13 @@ class AppUrl {
   static const String returnIndentLineDelete="$BASE_URL/api/ReturnIndent/ReturnIndentLineDiscard";
   static const String returnIndentHeaderDelete="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderDiscard";
   static const String returnIndentHeaderComplete="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderComplete";
+
+
+  //todo order......
+
+  static const String orderHeaderGet="$BASE_URL/api/Order/OrderHeaderGet";
+  static const String orderDetailsGet="$BASE_URL/api/Order/OrderHeaderCreate";
+  static const String orderItemCategoryGet="$BASE_URL/api/Order/OrderItemCategoryGet";
+  static const String orderItemGet="$BASE_URL/api/Order/OrderItemGet";
+
 }
