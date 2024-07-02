@@ -7,6 +7,8 @@ import 'package:navigation_drawer_flutter/view/home_view/home_screen.dart';
 import 'package:navigation_drawer_flutter/view/installation_view/installation_screen.dart';
 import 'package:navigation_drawer_flutter/view/installation_view/installation_view_details_screen.dart';
 import 'package:navigation_drawer_flutter/view/notification_view/notification_screen.dart';
+import 'package:navigation_drawer_flutter/view/order_view/new_order_screen.dart';
+import 'package:navigation_drawer_flutter/view/order_view/order_approval_screen.dart';
 import 'package:navigation_drawer_flutter/view/order_view/order_item_category_screen.dart';
 import 'package:navigation_drawer_flutter/view/order_view/order_item_veriety_screen.dart';
 import 'package:navigation_drawer_flutter/view/order_view/order_screen.dart';
@@ -31,6 +33,7 @@ import '../../view/corrective_view/corrective_view_details_screen.dart';
 import '../../view/installation_view/indent_header_view_screen.dart';
 import '../../view/installation_view/mark_visit_screen.dart';
 import '../../view/login_view/login_screen.dart';
+import '../../view/order_view/approval_view_cart.dart';
 import '../../view/order_view/view_cart_screen.dart';
 import '../../view/preventive_view/CreatePreventiveCalenderScreen.dart';
 import '../../view/preventive_view/preventive_indent_header_view_screen.dart';
@@ -291,6 +294,25 @@ class AppRoutes{
 
     GetPage(name: RoutesName.order_variety_screen,
         page: ()=>OrderItemVarietyScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.new_order_screen,
+        page: ()=>NewOrderScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.order_approval_screen,
+        page: ()=>OrderApprovalScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.order_approval_view_cart_screen,
+        page: ()=>ApprovalViewCart(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

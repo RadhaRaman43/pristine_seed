@@ -16,107 +16,113 @@ class OrderItemCategoryScreen extends StatelessWidget{
   final order_category_page_controller=Get.put(OrderViewModel());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-         Get.toNamed(RoutesName.order_view_cart_screen);
-        },
-        child: Stack(
-          children: [
-            Container(
-              width: 60,
-              height: 60,
-              child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 4.0),
-                  child: buildShoppingBagBadge(),
-                ),
-                Icon(Icons.shopping_cart_rounded, color: AllColors.whiteColor, size: 30), // Your shopping bag icon
-              ],),
-            ),
-
-          ],
-
-        ), // You can change the icon as needed
-        backgroundColor: AllColors
-            .primaryDark1, // Customize the button's background color
-
-      ),
-      appBar: AppBar(
-        title:Text(
-          'Order Category Screen',
-          style: GoogleFonts.poppins(
-            color: AllColors.whiteColor,
-            fontSize: AllFontSize.twentee,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor, // Change this to the desired color
-        ),
-        backgroundColor: AllColors.primaryDark1,
-      ),
-      drawer: CustomDrawer(),
-      body: Container(
-        child: Column(
-          children: [
-            Obx(() {
-              return  Container(
-                margin: EdgeInsets.only(top: 0.2),
-                child: Visibility(
-                  visible:order_category_page_controller.loading.value ,
-                  child: LinearProgressIndicator(
-                    color: AllColors.textColor,
-                    backgroundColor: AllColors.primaryDark1,
+    return WillPopScope(
+      onWillPop: () async  {
+        Get.offAllNamed(RoutesName.order_screen);
+        return false;
+      },
+      child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+           Get.toNamed(RoutesName.order_view_cart_screen);
+          },
+          child: Stack(
+            children: [
+              Container(
+                width: 60,
+                height: 60,
+                child: Column(children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: buildShoppingBagBadge(),
                   ),
-                ),
-              );
-            },
+                  Icon(Icons.shopping_cart_rounded, color: AllColors.whiteColor, size: 30), // Your shopping bag icon
+                ],),
+              ),
+
+            ],
+
+          ), // You can change the icon as needed
+          backgroundColor: AllColors
+              .primaryDark1, // Customize the button's background color
+
+        ),
+        appBar: AppBar(
+          title:Text(
+            'Order Category Screen',
+            style: GoogleFonts.poppins(
+              color: AllColors.whiteColor,
+              fontSize: AllFontSize.twentee,
+              fontWeight: FontWeight.w700,
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.only(left: 0, right: 0, top: 5),
-                  child: Column(
-                    children: [
-                      Container(
-                        child: Column(crossAxisAlignment: CrossAxisAlignment
-                            .start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                  order_category_page_controller
-                                      .order_details_list[0].captionForCategory!,
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.sisxteen,
-                                    fontWeight: FontWeight.w700,
-                                  )
+          ),
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor, // Change this to the desired color
+          ),
+          backgroundColor: AllColors.primaryDark1,
+        ),
+        drawer: CustomDrawer(),
+        body: Container(
+          child: Column(
+            children: [
+              Obx(() {
+                return  Container(
+                  margin: EdgeInsets.only(top: 0.2),
+                  child: Visibility(
+                    visible:order_category_page_controller.loading.value ,
+                    child: LinearProgressIndicator(
+                      color: AllColors.textColor,
+                      backgroundColor: AllColors.primaryDark1,
+                    ),
+                  ),
+                );
+              },
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.only(left: 0, right: 0, top: 5),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Column(crossAxisAlignment: CrossAxisAlignment
+                              .start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    order_category_page_controller
+                                        .order_details_list[0].captionForCategory!,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    )
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 8.0, right: 8.0),
-                              child: bindSearchCategoryItemCrop1(context),
-                            ),
-                            // bindItemCategoryCropDropDown(context),
-                            Obx((){
-                              return  bindListLayout();
-                            })
-                          ],
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8.0, right: 8.0),
+                                child: bindSearchCategoryItemCrop1(context),
+                              ),
+                              // bindItemCategoryCropDropDown(context),
+                              Obx((){
+                                return  bindListLayout();
+                              })
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
 
-          ],
+            ],
+          ),
         ),
-      ),
 
+      ),
     );
   }
   //todo bind for list layout category items.....
@@ -157,9 +163,9 @@ class OrderItemCategoryScreen extends StatelessWidget{
       return InkWell(
         child: ListTile(
           onTap: () {
-print(order_category_page_controller.searchResult[index].categoryCode);
+            print(order_category_page_controller.searchResult[index].categoryCode);
             order_category_page_controller.index=index;
-            order_category_page_controller.getOrderItemGet(order_category_page_controller.order_details_list[0].orderNo!,order_category_page_controller.searchResult[index].categoryCode!);
+            order_category_page_controller.getOrderItemGet(order_category_page_controller.order_details_list[0].orderNo!,order_category_page_controller.searchResult[index].categoryCode!,"VARIETY");
 
 
            // order_category_page_controller. search_item_varieties_controller.clear();

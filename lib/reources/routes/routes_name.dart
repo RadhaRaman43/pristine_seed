@@ -59,5 +59,8 @@ class RoutesName{
     static const order_item_category_screen="/order_item_category_screen.dart";
     static const order_view_cart_screen="/view_cart_screen.dart";
     static const order_variety_screen="/order_item_veriety_screen.dart";
+    static const new_order_screen="/new_order_screen.dart";
+    static const order_approval_screen="/order_approval_screen.dart";
+    static const order_approval_view_cart_screen="/approval_view_cart.dart";
 
 }

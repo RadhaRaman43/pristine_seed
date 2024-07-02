@@ -132,5 +132,13 @@ class AppUrl {
   static const String orderDetailsGet="$BASE_URL/api/Order/OrderHeaderCreate";
   static const String orderItemCategoryGet="$BASE_URL/api/Order/OrderItemCategoryGet";
   static const String orderItemGet="$BASE_URL/api/Order/OrderItemGet";
+  static const String orderLineInsert="$BASE_URL/api/Order/OrderLineInsert";
+  static const String orderHeaderComplete="$BASE_URL/api/Order/OrderHeaderComplete";
+  static const String customerGet="$BASE_URL/api/Customer/CustomerGet";
+  static const String orderHeaderCreate="$BASE_URL/api/Order/OrderHeaderCreate";
+  static const String orderApprovalGet="$BASE_URL/api/Order/OrderINApproverGet";
+  static const String orderApprovalLineUpdate="$BASE_URL/api/Order/OrderApprovalLineUpdate";
+  static const String OrderMarkApprove="$BASE_URL/api/Order/OrderMarkApprove";
+
 
 }

@@ -4,12 +4,14 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
 
 import '../../component/default_button.dart';
 import '../../component/default_button_red.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
+import '../../utils/app_utils.dart';
 import '../custom_drawer.dart';
 
 class ViewCartScreen extends StatelessWidget{
@@ -20,63 +22,72 @@ class ViewCartScreen extends StatelessWidget{
   Size size= Get.size;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:Text(
-          'View Cart Screen',
-          style: GoogleFonts.poppins(
-            color: AllColors.whiteColor,
-            fontSize: AllFontSize.twentee,
-            fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop: () async  {
+
+        Get.toNamed(RoutesName.order_variety_screen);
+
+
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title:Text(
+            'View Cart Screen',
+            style: GoogleFonts.poppins(
+              color: AllColors.whiteColor,
+              fontSize: AllFontSize.twentee,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor, // Change this to the desired color
+          ),
+          backgroundColor: AllColors.primaryDark1,
+        ),
+        drawer: CustomDrawer(),
+
+        body: Container(
+          child: Column(
+            children: [
+              Obx((){
+                return Visibility(
+                  visible: view_cart_page_controller.loading.value?true:false,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 1),
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.ripple_green,
+                      minHeight: 5,
+                      value: 0,
+                    ),
+                  ),
+                );
+              }),
+              SizedBox(height: size.height * .01),
+              Obx((){
+                return  Container(
+                  padding: EdgeInsets.only(left: 0, right: 0, top: 5),
+                  child: bindHeaderDetails(context),
+                );
+              }),
+
+              Divider(
+                height: 2,
+                color: AllColors.primaryDark1,
+              ),
+              Obx((){
+                return Expanded(
+                  child: Container(
+                    child: bindListLayout(),
+                  ),
+                );
+              }),
+            ],
           ),
         ),
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor, // Change this to the desired color
-        ),
-        backgroundColor: AllColors.primaryDark1,
+
       ),
-      drawer: CustomDrawer(),
-
-      body: Container(
-        child: Column(
-          children: [
-            Obx((){
-              return Visibility(
-                visible: view_cart_page_controller.loading.value?true:false,
-                child: Container(
-                  margin: EdgeInsets.only(top: 1),
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.primaryDark1,
-                    color: AllColors.ripple_green,
-                    minHeight: 5,
-                    value: 0,
-                  ),
-                ),
-              );
-            }),
-            SizedBox(height: size.height * .01),
-            Obx((){
-              return  Container(
-                padding: EdgeInsets.only(left: 0, right: 0, top: 5),
-                child: bindHeaderDetails(context),
-              );
-            }),
-
-            Divider(
-              height: 2,
-              color: AllColors.primaryDark1,
-            ),
-            Obx((){
-              return Expanded(
-                child: Container(
-                  child: bindListLayout(),
-                ),
-              );
-            }),
-          ],
-        ),
-      ),
-
     );
   }
 
@@ -121,7 +132,7 @@ class ViewCartScreen extends StatelessWidget{
                     child: DefaultButton(
                       text: "Create Order",
                       press: () {
-                       // view_cart_page_controller.orderHeaderComplete(view_cart_page_controller.order_details_list[0].orderNo!);
+                        view_cart_page_controller.orderHeaderComplete(view_cart_page_controller.order_details_list[0].orderNo!);
                       },
                       // loading: view_cart_page_controller.loading.value,
                     ),
@@ -386,10 +397,9 @@ class ViewCartScreen extends StatelessWidget{
 
 
                             if(view_cart_page_controller.order_details_list[0].orderStatus=='Pending'){
-/*
                               view_cart_page_controller.orderItemLineInsert(view_cart_page_controller.order_details_list[0].lines![position].orderNo!,
                                   view_cart_page_controller.order_details_list[0].lines![position].itemNo!,
-                                  view_cart_page_controller.order_details_list[0].lines![position].qty!,'REMOVE','CART');*/
+                                  view_cart_page_controller.order_details_list[0].lines![position].qty!,'REMOVE','CART');
 
                             }
                           },
@@ -407,7 +417,7 @@ class ViewCartScreen extends StatelessWidget{
                             ),
                             onTap: (){
                               if(view_cart_page_controller.order_details_list[0].orderStatus=='Pending') {
-                                //showRemarkDialog(context, position);
+                                showRemarkDialog(context, position);
                               }
                             },
                           );
@@ -425,7 +435,7 @@ class ViewCartScreen extends StatelessWidget{
                                 child: Icon(Icons.add,color: AllColors.customDarkerWhite,),
                               )),
                           onPressed: () {
-                          /*  if(view_cart_page_controller.order_details_list[0].orderStatus=='Pending') {
+                            if(view_cart_page_controller.order_details_list[0].orderStatus=='Pending') {
                               view_cart_page_controller.orderItemLineInsert(
                                   view_cart_page_controller.order_details_list[0]
                                       .lines![position].orderNo!,
@@ -433,7 +443,7 @@ class ViewCartScreen extends StatelessWidget{
                                       .lines![position].itemNo!,
                                   view_cart_page_controller.order_details_list[0]
                                       .lines![position].qty!, 'ADD', 'CART');
-                            }*/
+                            }
                           },
                         ),
                       ],
@@ -457,9 +467,9 @@ class ViewCartScreen extends StatelessWidget{
                       child: DefaultButtonRed(
                         text: "Delete",
                         press: () {
-                          /*view_cart_page_controller.orderItemLineInsert(view_cart_page_controller.order_details_list[0].lines![position].orderNo!,
+                          view_cart_page_controller.orderItemLineInsert(view_cart_page_controller.order_details_list[0].lines![position].orderNo!,
                               view_cart_page_controller.order_details_list[0].lines![position].itemNo!,
-                              0,'DELETE','CART');*/
+                              0,'DELETE','CART');
                         },
                       ),
                     );
@@ -524,6 +534,48 @@ class ViewCartScreen extends StatelessWidget{
 
   }
 
-  
+  showRemarkDialog(BuildContext context, int position) {
+    view_cart_page_controller.qty_controller.text=view_cart_page_controller.order_details_list[0].lines![position].qty!.toString();
+    print('dialog...');
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Confirm...",style: TextStyle(color:AllColors.primaryDark1,),),
+          content: TextFormField(
+            keyboardType: TextInputType.number,
+            controller: view_cart_page_controller.qty_controller,
+            decoration: InputDecoration(labelText: "Enter Qty",labelStyle: TextStyle(color:AllColors.primaryDark1, ),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color:AllColors.primaryDark1,)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color:AllColors.primaryDark1,))
+            ),
+
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Cancel button pressed
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                if(view_cart_page_controller.qty_controller.text.isNotEmpty){
+                  view_cart_page_controller.orderItemLineInsert(view_cart_page_controller.order_details_list[0].lines![position].orderNo!,
+                      view_cart_page_controller.order_details_list[0].lines![position].itemNo!,
+                      int.parse(view_cart_page_controller.qty_controller.text) ,'','Dialog');
+                  Navigator.of(context).pop();
+                }
+                else
+                  Utils.showErrorToastification('Order!', 'Please Enter Order Qty');
+              },
+              child: Text("Submit",style: TextStyle(color: AllColors.primaryDark1),),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
 }

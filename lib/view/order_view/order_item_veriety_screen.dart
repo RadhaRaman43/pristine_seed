@@ -7,6 +7,7 @@ import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
 import '../../reources/routes/routes_name.dart';
+import '../../utils/app_utils.dart';
 import '../custom_drawer.dart';
 
 class OrderItemVarietyScreen extends StatelessWidget{
@@ -18,120 +19,126 @@ class OrderItemVarietyScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-       floatingActionButton: FloatingActionButton(
-         onPressed: () {
-           Get.toNamed(RoutesName.order_view_cart_screen);
-         },
-         child: Stack(
-           children: [
-             Container(
-               width: 60,
-               height: 60,
-               child: Column(children: [
-                 Padding(
-                   padding: const EdgeInsets.only(top: 4.0),
-                   child: buildShoppingBagBadge(),
-                 ),
-                 Icon(Icons.shopping_cart_rounded, color: AllColors.whiteColor, size: 30), // Your shopping bag icon
-               ],),
+     return WillPopScope(
+       onWillPop:  ()  async {
+         Get.toNamed(RoutesName.order_item_category_screen);
+         return false;
+       },
+       child: Scaffold(
+         floatingActionButton: FloatingActionButton(
+           onPressed: () {
+             Get.toNamed(RoutesName.order_view_cart_screen);
+           },
+           child: Stack(
+             children: [
+               Container(
+                 width: 60,
+                 height: 60,
+                 child: Column(children: [
+                   Padding(
+                     padding: const EdgeInsets.only(top: 4.0),
+                     child: buildShoppingBagBadge(),
+                   ),
+                   Icon(Icons.shopping_cart_rounded, color: AllColors.whiteColor, size: 30), // Your shopping bag icon
+                 ],),
+               ),
+             ],
+
+           ), // You can change the icon as needed
+           backgroundColor: AllColors
+               .primaryDark1, // Customize the button's background color
+
+         ),
+         appBar: AppBar(
+           title:Text(
+             'Item View Screen',
+             style: GoogleFonts.poppins(
+               color: AllColors.whiteColor,
+               fontSize: AllFontSize.twentee,
+               fontWeight: FontWeight.w700,
              ),
-           ],
-
-         ), // You can change the icon as needed
-         backgroundColor: AllColors
-             .primaryDark1, // Customize the button's background color
-
-       ),
-       appBar: AppBar(
-         title:Text(
-           'Item View Screen',
-           style: GoogleFonts.poppins(
-             color: AllColors.whiteColor,
-             fontSize: AllFontSize.twentee,
-             fontWeight: FontWeight.w700,
            ),
+           iconTheme: IconThemeData(
+             color: AllColors.whiteColor, // Change this to the desired color
+           ),
+           backgroundColor: AllColors.primaryDark1,
          ),
-         iconTheme: IconThemeData(
-           color: AllColors.whiteColor, // Change this to the desired color
-         ),
-         backgroundColor: AllColors.primaryDark1,
-       ),
-       drawer: CustomDrawer(),
-       body: Container(
-         child: Column(
-           children: [
-             Obx((){
-               return Visibility(
-                 visible: item_variety_page_controller.loading.value?true:false,
-                 child: Container(
-                   margin: EdgeInsets.only(top: 1),
-                   child: LinearProgressIndicator(
-                     backgroundColor: AllColors.primaryDark1,
-                     color: AllColors.textColor,
+         drawer: CustomDrawer(),
+         body: Container(
+           child: Column(
+             children: [
+               Obx((){
+                 return Visibility(
+                   visible: item_variety_page_controller.loading.value?true:false,
+                   child: Container(
+                     margin: EdgeInsets.only(top: 1),
+                     child: LinearProgressIndicator(
+                       backgroundColor: AllColors.primaryDark1,
+                       color: AllColors.textColor,
+                     ),
                    ),
-                 ),
-               );
-             }),
+                 );
+               }),
 
-             SizedBox(height: size.height * .01),
-             Obx((){
-               return  Container(
-                 padding: EdgeInsets.only(left: 0, right: 0, top: 5),
-                 child: ListTile(
-                   subtitle: Row(
-                     children: [
-                       bindImage(item_variety_page_controller.index),
-                       SizedBox(width: size.width*.04),
-                       Column(
-                         crossAxisAlignment: CrossAxisAlignment.start,
-                         children: [
-                           Text(item_variety_page_controller.order_item_get_list[0].categoryCode ?? ''
-                             ,style: GoogleFonts.poppins(
-                                 color: AllColors.primaryDark1,
-                                 fontSize: AllFontSize.sisxteen,
-                                 fontWeight: FontWeight.w700
-                             ),),
-                           Text(item_variety_page_controller.order_item_get_list[0].itemName ?? '',
-                               style: GoogleFonts.poppins(
-                                 color: AllColors.primaryDark1,
-                                 fontWeight: FontWeight.w500,
-                                 fontSize: AllFontSize.fourtine,
-                               )),
-                           Text('Ordered Qty: ${item_variety_page_controller.order_item_get_list[0].orderQty! ?? ''}',
-                               style: GoogleFonts.poppins(
-                                 color: item_variety_page_controller.order_item_get_list[0].orderQty!>0?AllColors.redColor:AllColors.blackColor,
-                                 fontWeight: FontWeight.w500,
-                                 fontSize: AllFontSize.fourtine,
-                               )),
-                           /*Text('In ${item_variety_page_controller.order_item_get_list[0].baseUnitOfMeasure.toString()}: ${item_variety_page_controller.order_item_get_list[0].orderInKg!.toString() ?? ''}',
-                               style: GoogleFonts.poppins(
-                                 color: item_variety_page_controller.order_item_get_list[0].orderInKg!>0?AllColors.redColor:AllColors.blackColor,
-                                 fontWeight: FontWeight.w500,
-                                 fontSize: AllFontSize.fourtine,
-                               )),*/
-                         ],
-                       ),
-                     ],
+               SizedBox(height: size.height * .01),
+               Obx((){
+                 return  Container(
+                   padding: EdgeInsets.only(left: 0, right: 0, top: 5),
+                   child: ListTile(
+                     subtitle: Row(
+                       children: [
+                         bindImage(item_variety_page_controller.index),
+                         SizedBox(width: size.width*.04),
+                         Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           children: [
+                             Text(item_variety_page_controller.order_item_get_list[0].categoryCode ?? ''
+                               ,style: GoogleFonts.poppins(
+                                   color: AllColors.primaryDark1,
+                                   fontSize: AllFontSize.sisxteen,
+                                   fontWeight: FontWeight.w700
+                               ),),
+                             Text(item_variety_page_controller.order_item_get_list[0].itemName ?? '',
+                                 style: GoogleFonts.poppins(
+                                   color: AllColors.primaryDark1,
+                                   fontWeight: FontWeight.w500,
+                                   fontSize: AllFontSize.fourtine,
+                                 )),
+                             Text('Ordered Qty: ${item_variety_page_controller.order_item_get_list[0].orderQty! ?? ''}',
+                                 style: GoogleFonts.poppins(
+                                   color: item_variety_page_controller.order_item_get_list[0].orderQty!>0?AllColors.redColor:AllColors.blackColor,
+                                   fontWeight: FontWeight.w500,
+                                   fontSize: AllFontSize.fourtine,
+                                 )),
+                             /*Text('In ${item_variety_page_controller.order_item_get_list[0].baseUnitOfMeasure.toString()}: ${item_variety_page_controller.order_item_get_list[0].orderInKg!.toString() ?? ''}',
+                                 style: GoogleFonts.poppins(
+                                   color: item_variety_page_controller.order_item_get_list[0].orderInKg!>0?AllColors.redColor:AllColors.blackColor,
+                                   fontWeight: FontWeight.w500,
+                                   fontSize: AllFontSize.fourtine,
+                                 )),*/
+                           ],
+                         ),
+                       ],
+                     ),
+
                    ),
+                 );
+               }),
 
-                 ),
-               );
-             }),
+               Divider(
+                 height: 2,
+                 color: AllColors.blackColor,
+               ),
+               Obx((){
+                 return Expanded(
+                   child: Container(
+                     child: bindListLayout(),
+                   ),
+                 );
+               }),
 
-             Divider(
-               height: 2,
-               color: AllColors.blackColor,
-             ),
-             Obx((){
-               return Expanded(
-                 child: Container(
-                   child: bindListLayout(),
-                 ),
-               );
-             }),
-
-           ],
+             ],
+           ),
          ),
        ),
      );
@@ -226,9 +233,9 @@ class OrderItemVarietyScreen extends StatelessWidget{
                                 child: Icon(Icons.remove,color: AllColors.customDarkerWhite,),
                               )),
                           onPressed: () {
-                            /*item_variety_page_controller.orderItemLineInsert(item_variety_page_controller.order_detail_list[0].orderNo!,
+                            item_variety_page_controller.orderItemLineInsert(item_variety_page_controller.order_details_list[0].orderNo!,
                                 item_variety_page_controller.order_item_get_list[position].itemNo!,
-                                item_variety_page_controller.order_item_get_list[position].orderQty!,'REMOVE','VARIETY');*/
+                                item_variety_page_controller.order_item_get_list[position].orderQty!,'REMOVE','VARIETY');
                           },
                         ),
                         Obx((){
@@ -243,7 +250,7 @@ class OrderItemVarietyScreen extends StatelessWidget{
                                 ),
                               ),
                               onTap: (){
-                                //showRemarkDialog(context,position);
+                               showRemarkDialog(context,position);
                               },
                             ),
                           );
@@ -261,10 +268,10 @@ class OrderItemVarietyScreen extends StatelessWidget{
                                 child: Icon(Icons.add,color: AllColors.customDarkerWhite,),
                               )),
                           onPressed: () {
-                           /* print(item_variety_page_controller.order_item_get_list[position].itemNo);
-                            item_variety_page_controller.orderItemLineInsert(item_variety_page_controller.order_detail_list[0].orderNo!,
+                            print(item_variety_page_controller.order_item_get_list[position].itemNo);
+                            item_variety_page_controller.orderItemLineInsert(item_variety_page_controller.order_details_list[0].orderNo!,
                                 item_variety_page_controller.order_item_get_list[position].itemNo!,
-                                item_variety_page_controller.order_item_get_list[position].orderQty!,'ADD','VARIETY');*/
+                                item_variety_page_controller.order_item_get_list[position].orderQty!,'ADD','VARIETY');
                           },
                         ),
                       ],
@@ -311,7 +318,7 @@ class OrderItemVarietyScreen extends StatelessWidget{
   Widget bindImage(int index) {
     print(item_variety_page_controller.order_item_get_list[0].imageUrl.toString());
     if(item_variety_page_controller.order_item_get_list.length>0
-        && item_variety_page_controller.order_item_get_list[0].imageUrl != null &&
+        && item_variety_page_controller.order_item_get_list[0].imageUrl!= null &&
         item_variety_page_controller.order_item_get_list[0].imageUrl != "")
       return Container(
         decoration: BoxDecoration(
@@ -359,7 +366,51 @@ class OrderItemVarietyScreen extends StatelessWidget{
           ),
         ),
       );
+  }
 
+  showRemarkDialog(BuildContext context, int position) {
+    item_variety_page_controller.qty_controller.text=item_variety_page_controller.order_item_get_list[position].orderQty.toString();
+    print('dialog...');
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Confirm...",style: TextStyle(color: AllColors.primaryDark1,),),
+          content: TextFormField(
+            cursorColor:AllColors.primaryDark1,
+            keyboardType: TextInputType.number,
+            controller: item_variety_page_controller.qty_controller,
+            decoration: InputDecoration(labelText: "Enter Qty",labelStyle: TextStyle(color: AllColors.primaryDark1,),
+                enabledBorder:UnderlineInputBorder(borderSide: BorderSide(color:AllColors.primaryDark1, )),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color:AllColors.primaryDark1, ))
+
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Cancel button pressed
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                if(item_variety_page_controller.qty_controller.text.isNotEmpty){
+                  item_variety_page_controller.orderItemLineInsert(item_variety_page_controller.order_details_list[0].orderNo!,
+                      item_variety_page_controller.order_item_get_list[position].itemNo!,
+                      int.parse(item_variety_page_controller.qty_controller.text),'','Dialog');
+                  Navigator.of(context).pop();
+                }
+                else
+                  Utils.showErrorToastification('Order!', 'Please Enter Order Qty');
+              },
+              child: Text("Submit",style: TextStyle(color: AllColors.primaryDark1),),
+            ),
+          ],
+        );
+      },
+    );
   }
 
 }

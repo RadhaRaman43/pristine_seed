@@ -21,6 +21,29 @@ class OrderRepository {
     return _apiService.postApi(data, AppUrl.orderItemGet, sessionManagement);
   }
 
+    Future<String> orderLineInsert(Map<String, String> data, SessionManagement sessionManagement) async {
+     return _apiService.postApi(data, AppUrl.orderLineInsert, sessionManagement);
+    }
+
+  Future<String> orderHeaderComplete(Map<String, String> data, SessionManagement sessionManagement) async {
+    return _apiService.postApi(data, AppUrl.orderHeaderComplete, sessionManagement);
+  }
+
+  Future<String> getCustomersApiHit(var data,SessionManagement sessionManagement)async{
+    return _apiService.postApi(data, AppUrl.customerGet, sessionManagement);
+  }
+  Future<String> orderHeaderCreate(Map<String, String> data, SessionManagement sessionManagement) async {
+    return _apiService.postApi(data, AppUrl.orderHeaderCreate, sessionManagement);
+  }
+
+  Future<String> getApprovelData(Map<String, String> data, SessionManagement sessionManagement) async {
+    return _apiService.postApi(data, AppUrl.orderApprovalGet, sessionManagement);
+  }
+
+
+
+
+
 }
 
 
