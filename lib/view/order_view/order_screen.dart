@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
 
@@ -34,12 +35,17 @@ class OrderScreen extends StatelessWidget{
               ),
             ),
             Spacer(),
+            IconButton(onPressed: () {
+              showFilterBottomSheet(context);
+
+
+            }, icon: Icon(Icons.filter_alt_sharp)),
             Obx( () {
               return Visibility(
                 visible: order_header_page_controller.order_header_list.isNotEmpty
                     && order_header_page_controller.order_header_list[0].orderStatus=="Pending"?true:false,
                 child: IconButton(onPressed: () {
-                  Get.toNamed(RoutesName.new_order_screen);
+                  order_header_page_controller.resetAllNewOrderFields();
                   Get.toNamed(RoutesName.new_order_screen);
                 }, icon: Icon(Icons.add)),
               );
@@ -71,9 +77,50 @@ class OrderScreen extends StatelessWidget{
                },
              ),
              Container(
-               padding: EdgeInsets.only(left: size.width*.03),
+               padding: EdgeInsets.all(8.0),
                child: Column(
                  children: [
+                   TextFormField(
+                     controller: order_header_page_controller.global_search_controller,
+                     decoration: InputDecoration(
+                       hintText: "Enter Order No.",
+
+                       contentPadding: EdgeInsets.all(10),
+                       focusedBorder: OutlineInputBorder(
+                         borderRadius: BorderRadius.circular(10),
+                         borderSide: BorderSide(
+                             color: AllColors.primaryDark1), // Customize the border color
+                       ),
+                       enabledBorder: OutlineInputBorder(
+                         borderRadius: BorderRadius.circular(10),
+                         borderSide: BorderSide(
+                             color: Colors.grey), // Customize the border color
+                       ),
+                       suffixIcon: Row(
+                         mainAxisSize: MainAxisSize.min,
+                         children: [
+                           IconButton(
+                             icon: Icon(Icons.search),
+                             onPressed: () async {
+                               order_header_page_controller.pageNumber=0;
+                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber,global_search:order_header_page_controller.global_search_controller.text);
+                             },
+                           ),
+                           IconButton(
+                             icon: Icon(Icons.clear),
+                             onPressed: () {
+                               order_header_page_controller.pageNumber=0;
+                               order_header_page_controller.global_search_controller.clear();
+                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+
+                               // Add clear functionality here
+                             },
+                           ),
+                         ],
+                       ),
+                     ),
+                   ),
+
                    Row(
                      mainAxisAlignment: MainAxisAlignment.start,
                      children: [
@@ -88,23 +135,12 @@ class OrderScreen extends StatelessWidget{
                                  side: BorderSide(color: AllColors.grayColor)),
                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                              //CircleAvatar
-                             label: Column(
-                               children: [
-                                 Text(order_header_page_controller.pending_amt.toString(),
-                                     style: GoogleFonts.poppins(
-                                       color:order_header_page_controller.status.value=="Pending"?AllColors.whiteColor:AllColors.primaryDark1,
-                                       fontSize: AllFontSize.fourtine,
-                                       fontWeight: FontWeight.w500,
-                                     )),
-
-                                 Text('Pending',
-                                     style: GoogleFonts.poppins(
-                                       color:order_header_page_controller.status.value=="Pending"?AllColors.whiteColor:AllColors.primaryDark1,
-                                       fontSize: AllFontSize.fourtine,
-                                       fontWeight: FontWeight.w500,
-                                     )
-                                 ),
-                               ],
+                             label: Text('Pending',
+                                 style: GoogleFonts.poppins(
+                                   color:order_header_page_controller.status.value=="Pending"?AllColors.whiteColor:AllColors.primaryDark1,
+                                   fontSize: AllFontSize.fourtine,
+                                   fontWeight: FontWeight.w500,
+                                 )
                              ),
                              onPressed: () {
                                order_header_page_controller.status.value="Pending";
@@ -126,22 +162,12 @@ class OrderScreen extends StatelessWidget{
                                  side: BorderSide(color: AllColors.grayColor)),
                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                              //CircleAvatar
-                             label: Column(
-                               children: [
-                                 Text(order_header_page_controller.under_approval_amt.toString(),
-                                     style: GoogleFonts.poppins(
-                                       color:order_header_page_controller.status.value=="Completed"?AllColors.whiteColor:AllColors.primaryDark1,
-                                       fontSize: AllFontSize.fourtine,
-                                       fontWeight: FontWeight.w500,
-                                     )),
-                                 Text('Under Approval',
-                                     style: GoogleFonts.poppins(
-                                       color:order_header_page_controller.status.value=="Completed"?AllColors.whiteColor:AllColors.primaryDark1,
-                                       fontSize: AllFontSize.fourtine,
-                                       fontWeight: FontWeight.w500,
-                                     )),
-                               ],
-                             ),
+                             label: Text('Under Approval',
+                                 style: GoogleFonts.poppins(
+                                   color:order_header_page_controller.status.value=="Completed"?AllColors.whiteColor:AllColors.primaryDark1,
+                                   fontSize: AllFontSize.fourtine,
+                                   fontWeight: FontWeight.w500,
+                                 )),
                              onPressed: () {
                                order_header_page_controller.status.value="Completed";
                                order_header_page_controller.pageNumber=0;
@@ -161,24 +187,13 @@ class OrderScreen extends StatelessWidget{
                                side: BorderSide(color: AllColors.grayColor)),
                            //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                            //CircleAvatar
-                           label: Column(
-                             crossAxisAlignment: CrossAxisAlignment.center,
-                             children: [
-                               Text(order_header_page_controller.pending_shipment_amt.toString(),
-                                   style: GoogleFonts.poppins(
-                                     color:order_header_page_controller.status.value=="Approved"? AllColors.whiteColor:AllColors.primaryDark1,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w500,
-                                   )),
-                               Text('Pending Shipped',
-                                 style: GoogleFonts.poppins(
-                                   color:order_header_page_controller.status.value=="Approved"? AllColors.whiteColor:AllColors.primaryDark1,
-                                   fontSize: AllFontSize.fourtine,
-                                   fontWeight: FontWeight.w500,
-                                 ),
-                                 overflow: TextOverflow.ellipsis,
-                               ),
-                             ],
+                           label: Text('Pending Shipped',
+                             style: GoogleFonts.poppins(
+                               color:order_header_page_controller.status.value=="Approved"? AllColors.whiteColor:AllColors.primaryDark1,
+                               fontSize: AllFontSize.fourtine,
+                               fontWeight: FontWeight.w500,
+                             ),
+                             overflow: TextOverflow.ellipsis,
                            ),
                            onPressed: () {
                              order_header_page_controller.status.value="Approved";
@@ -352,5 +367,251 @@ class OrderScreen extends StatelessWidget{
       ),
     );
   }
+
+  void showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Ensure minimal height
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Filters",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.twentee,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: Icon(
+                            Icons.cancel,
+                            color: AllColors.primaryDark1,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Center(
+                    child: Divider(
+                      height: 1,
+                      color: AllColors.primaryDark1,
+                    )),
+                SingleChildScrollView(
+                  child: Container(
+                   // height: 420,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextField(
+                         controller: order_header_page_controller.order_filter_customer_no_controller,
+                          decoration: InputDecoration(
+                            labelText: 'Customer No.',
+                            hintText: 'Customer No.',
+                            hintStyle: GoogleFonts.poppins(
+                              color: AllColors.lightblackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize.ten,
+                            ),
+                            labelStyle: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontWeight: FontWeight.w700,
+                              fontSize: AllFontSize.sisxteen,
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: AllColors.primaryDark1), // Change the color to green
+                            ),
+                          ),
+                          cursorColor: AllColors.primaryDark1,
+                          onChanged: (value) {
+                            // Handle the text field value changes if needed
+                          },
+                        ),
+
+                        SizedBox(
+                          height: 5,
+                        ),
+                        TextField(
+                         controller: order_header_page_controller.order_filter_customer_name_controller,
+                          decoration: InputDecoration(
+                            labelText: 'Customer Name',
+                            hintText: 'Customer Name',
+                            hintStyle: GoogleFonts.poppins(
+                              color: AllColors.lightblackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize.ten,
+                            ),
+                            labelStyle: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontWeight: FontWeight.w700,
+                              fontSize: AllFontSize.sisxteen,
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: AllColors.primaryDark1), // Change the color to green
+                            ),
+                          ),
+                          cursorColor: AllColors.primaryDark1,
+                          onChanged: (value) {
+                            // Handle the text field value changes if needed
+                          },
+                        ),
+
+                        SizedBox(
+                          height: 5,
+                        ),
+                        bindDate(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: size.width * 0.4,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                      color: AllColors.primaryDark,
+                                      width: 1),
+                                )),
+                                onPressed: () {
+                                  Get.back();
+                                  order_header_page_controller.pageNumber=0;
+                                  order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+
+                                },
+                                child: Text(
+                                  'Submit',
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: size.width * 0.4,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                      color: AllColors.redColor, width: 1),
+                                )),
+                                onPressed: () {
+                                  Get.back();
+                                  order_header_page_controller.order_filter_customer_name_controller.clear();
+                                  order_header_page_controller.order_filter_customer_no_controller.clear();
+                                  order_header_page_controller.order_filter_date_controller.clear();
+
+
+                                },
+                                child: Text(
+                                  'Reset',
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.redColor,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget bindDate(context) {
+    return TextFormField(
+        controller: order_header_page_controller.order_filter_date_controller,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.one),
+        hintText: "Order Date",
+        labelText: 'Order Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w700,
+            fontSize: AllFontSize.sisxteen),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onTap: () async {
+        DateTime stating_date = new DateTime(1900);
+        DateTime ending_date = new DateTime(2200);
+        FocusScope.of(context).requestFocus(new FocusNode());
+        DateTime? date = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: stating_date,
+          lastDate: ending_date,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1, // Header background color
+                //accentColor: AllColors.primaryDark1, // Color of the buttons
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!,
+            );
+          },
+        );
+        var outputFormat = DateFormat('dd-MM-yyyy');
+        if (date != null && date != "")
+          order_header_page_controller.order_filter_date_controller.text = outputFormat.format(date);
+        else
+          order_header_page_controller.order_filter_date_controller.text = "";
+      },
+    );
+  }
+
 
 }

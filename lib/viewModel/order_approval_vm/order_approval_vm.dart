@@ -13,7 +13,6 @@ import '../../reources/routes/routes_name.dart';
 import '../../utils/app_utils.dart';
 
 class OrderApprovalViewModel extends GetxController{
-
   final _api=OrderApprovalRepository();
 
   RxBool loading=false.obs;
@@ -63,7 +62,7 @@ class OrderApprovalViewModel extends GetxController{
       }
     }).onError((error, stackTrace) {
       employess_List = [];
-      Utils.sanckBarError('Api Exception onError', error.toString());
+      Utils.showErrorToastification('Api Exception onError', error.toString());
     }).whenComplete(() {
       loading.value = false;
       this.getApprovalList('');
@@ -74,7 +73,7 @@ class OrderApprovalViewModel extends GetxController{
   getApprovalList(String flag) {
     this.loading.value = true;
     Map data = {
-      'email_id': "ashish.nalwa@pristinebs.co.in",
+      'email_id': email,
       'filter_date': filter_date_controller.text.toString(),
       'filter_created_by': flag,
       'approve_status': selection_type
@@ -137,18 +136,18 @@ class OrderApprovalViewModel extends GetxController{
           if (response!=null && response.length>0 && response[0].condition == 'True') {
             loading.value = false;
             order_detail_list.value=response;
-            Utils.sanckBarSuccess('Success Message!', response[0].message.toString());
+            Utils.showToastification('Success Message!', response[0].message.toString());
             //Get.offAllNamed(RoutesName.orderItemCategoryScreen);
             Get.toNamed(RoutesName.order_approval_view_cart_screen);
 
           } else {
             loading.value = false;
-            Utils.sanckBarError('False Message!', response[0].message.toString());
+            Utils.showErrorToastification('False Message!', response[0].message.toString());
             print(value);
           }
         } else {
           loading.value = false;
-          Utils.sanckBarError('API Response Error', jsonResponse);
+          Utils.showErrorToastification('API Response Error', jsonResponse);
         }
       } catch (e) {
         loading.value = false;
@@ -193,19 +192,19 @@ class OrderApprovalViewModel extends GetxController{
           } else {
             loading.value = false;
             isButtonEnabled = true;
-            Utils.sanckBarError('False Message!', response[0].message.toString());
+            Utils.showErrorToastification('False Message!', response[0].message.toString());
             print(value);
           }
         } else {
           loading.value = false;
           isButtonEnabled = true;
-          Utils.sanckBarError('API Response Error', jsonResponse);
+          Utils.showErrorToastification('API Response Error', jsonResponse);
         }
       } catch (e) {
         loading.value = false;
         isButtonEnabled = true;
         printError();
-        Utils.sanckBarException('Exception Message!', e.toString());
+        Utils.showErrorToastification('Exception Message!', e.toString());
       }
     }).onError((error, stackTrace) {
       print(error);
@@ -223,7 +222,7 @@ class OrderApprovalViewModel extends GetxController{
     Map data = {
       'order_no': document_no,
       'approve_status': approve_status,
-      'approve_by':  "ashish.nalwa@pristinebs.co.in",
+      'approve_by': email,
       'reject_reason':remarks
     };
     _api.markApproveReject(data, sessionManagement).then((value) {
@@ -237,14 +236,14 @@ class OrderApprovalViewModel extends GetxController{
           this.loading.value = false;
           Get.offAllNamed(RoutesName.order_approval_screen);
         //  this.getApprovalList('GOTO_LIST');
-          Utils.sanckBarSuccess('Message : ', approver_list[0].message);
+          Utils.showToastification('Message : ', approver_list[0].message);
         } else {
           this.loading.value = false;
-          Utils.sanckBarError('Message : ', approver_list[0].message);
+          Utils.showErrorToastification('Message : ', approver_list[0].message);
         }
       } catch (e) {
         this.loading.value = false;
-        Utils.sanckBarError('Exception : ', e.toString());
+        Utils.showErrorToastification('Exception : ', e.toString());
       }
     }).onError((error, stackTrace) {
       this.loading.value = false;

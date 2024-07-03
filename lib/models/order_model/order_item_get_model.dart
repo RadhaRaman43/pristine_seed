@@ -8,6 +8,7 @@ class OrderItemGetModel {
   double? unitPrice;
   String? imageUrl;
   int? orderQty;
+  int? categoryWiseTotalQty;
 
   OrderItemGetModel(
       {this.condition,
@@ -18,7 +19,8 @@ class OrderItemGetModel {
         this.baseUnitOfMeasure,
         this.unitPrice,
         this.imageUrl,
-        this.orderQty});
+        this.orderQty,
+        this.categoryWiseTotalQty});
 
   OrderItemGetModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -30,6 +32,7 @@ class OrderItemGetModel {
     unitPrice = json['unit_price'];
     imageUrl = json['image_url'];
     orderQty = json['order_qty'];
+    categoryWiseTotalQty = json['category_wise_total_qty'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +46,7 @@ class OrderItemGetModel {
     data['unit_price'] = this.unitPrice;
     data['image_url'] = this.imageUrl;
     data['order_qty'] = this.orderQty;
+    data['category_wise_total_qty'] = this.categoryWiseTotalQty;
     return data;
   }
 }

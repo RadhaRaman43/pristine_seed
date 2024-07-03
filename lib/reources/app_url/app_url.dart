@@ -139,6 +139,7 @@ class AppUrl {
   static const String orderApprovalGet="$BASE_URL/api/Order/OrderINApproverGet";
   static const String orderApprovalLineUpdate="$BASE_URL/api/Order/OrderApprovalLineUpdate";
   static const String OrderMarkApprove="$BASE_URL/api/Order/OrderMarkApprove";
+  static const String getConsigneeMstGet="$BASE_URL/api/Customer/ConsigneeMstGet";
 
 
 }

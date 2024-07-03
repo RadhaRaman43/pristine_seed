@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,11 +8,12 @@ import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/models/order_model/order_item_category_model.dart';
 import 'package:navigation_drawer_flutter/repository/order_repository/order_repository.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
-
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
+import '../../models/order_model/consignee_Model.dart';
 import '../../models/order_model/customer_model.dart';
-import '../../models/order_model/order_approval_model.dart';
+
+
 import '../../models/order_model/order_header_create_model.dart';
 import '../../models/order_model/order_item_get_model.dart';
 import '../../models/order_model/order_list_screen.dart';
@@ -23,12 +23,12 @@ import '../../utils/app_utils.dart';
 class OrderViewModel extends GetxController{
   final _api=OrderRepository();
 
-  SessionManagement sessionManagement=SessionManagement();
-   RxBool loading=false.obs;
-    String email='';
-  int pageNumber=0;
-  int rowsPerPage=10;
-  int total_rows=0;
+    SessionManagement sessionManagement=SessionManagement();
+     RxBool loading=false.obs;
+     String email='';
+     int pageNumber=0;
+     int rowsPerPage=10;
+     int total_rows=0;
 
   RxBool isShowListView = false.obs;
 
@@ -41,6 +41,7 @@ class OrderViewModel extends GetxController{
   RxList<OrderItemCategoryModel> order_item_category_list = <OrderItemCategoryModel>[].obs;
   RxList<OrderItemGetModel> order_item_get_list = <OrderItemGetModel>[].obs;
   List<CustomersModel> customers_list=[];
+  RxList<ConsigneeModel> consignee_list = <ConsigneeModel>[].obs;
   Rx<CustomersModel> selected_customer=new CustomersModel().obs;
   RxBool isShowCustomerDetails = false.obs;
   RxBool isShowCheck = false.obs;
@@ -53,14 +54,16 @@ class OrderViewModel extends GetxController{
   var customers_controller = TextEditingController();
   var order_date_controller = TextEditingController();
   var order_expiry_date_controller = TextEditingController();
+  var consignee_name_drop_down_controller = TextEditingController();
+  var global_search_controller = TextEditingController();
+  var order_filter_date_controller = TextEditingController();
+  var order_filter_customer_no_controller = TextEditingController();
+  var order_filter_customer_name_controller = TextEditingController();
 
 
   RxString pending_amt = ''.obs;
   RxString under_approval_amt = ''.obs;
   RxString pending_shipment_amt = ''.obs;
-  /*RxInt pending_amt = 0.obs;
-  RxInt under_approval_amt = 0.obs;
-  RxInt pending_shipment_amt =0.obs;*/
   RxString status="Pending".obs;
 
   @override
@@ -78,19 +81,36 @@ class OrderViewModel extends GetxController{
     return formatter.format(now);
   }
 
-  orderHeaderApi(int page_no){
-    Map data={
-      "order_no": "",
-      "order_date": "",
-      "customer_no": "",
-      "customer_name": "",
-      "consignee_id": "",
-      "consignee_name": "",
-      "order_status": status.value,
-      "email_id": email,
-      "rowsPerPage": rowsPerPage,
-      "pageNumber": page_no
-    };
+  orderHeaderApi(int page_no,{String global_search=""}){
+    Map data;
+    if(global_search!=null && global_search!='' && global_search.isNotEmpty){
+      print("fjdbfgjdb");
+      data={
+        "order_no":global_search,
+        "order_date": "",
+        "customer_no": "",
+        "customer_name": "",
+        "consignee_id": "",
+        "consignee_name": "",
+        "order_status": status.value,
+        "email_id": email,
+        "rowsPerPage": rowsPerPage,
+        "pageNumber": page_no
+      };
+    }else{
+      data={
+        "order_no":"",
+        "order_date":order_filter_date_controller.text,
+        "customer_no":order_filter_customer_no_controller.text,
+        "customer_name":order_filter_customer_name_controller.text,
+        "consignee_id": "",
+        "consignee_name": "",
+        "order_status": status.value,
+        "email_id": email,
+        "rowsPerPage": rowsPerPage,
+        "pageNumber": page_no
+      };
+    }
     loading.value=true;
     _api.orderHeaderListApiHit(data, sessionManagement).then((value) {
       final jsonResponse = json.decode(value);
@@ -102,11 +122,15 @@ class OrderViewModel extends GetxController{
             if(page_no==0){
               order_header_list.clear();
             }
+            order_filter_date_controller.clear();
+            order_filter_customer_no_controller.clear();
+            order_filter_customer_name_controller.clear();
             order_header_list.addAll(response);
             total_rows!=response[0].totalRows!;
             pending_amt.value=response[0].pendingAmount.toString();
             under_approval_amt.value=response[0].underApproveAmount.toString();
             pending_shipment_amt.value=response[0].pendingShipmentAmount.toString();
+
           }else{
             pending_amt.value=response[0].pendingAmount.toString();
             under_approval_amt.value=response[0].underApproveAmount.toString();
@@ -290,6 +314,7 @@ class OrderViewModel extends GetxController{
       "group_code": ""
     };
     print(data);
+    loading.value=true;
     _api.orderItemApiHit(data, sessionManagement).then((value) {
       try {
         print(value);
@@ -303,7 +328,7 @@ class OrderViewModel extends GetxController{
             if(flag=='VARIETY'){
               Get.toNamed(RoutesName.order_variety_screen);
             }
-         //   Get.toNamed(RoutesName.order_variety_screen);
+             //Get.toNamed(RoutesName.order_variety_screen);
             print('list length:: ${searchResult.length.toString()}');
           } else {
             order_item_get_list.value = [];
@@ -320,10 +345,15 @@ class OrderViewModel extends GetxController{
       } catch (e) {
         order_item_category_list.value = [];
         print(e);
+      }finally{
+        loading.value=false;
       }
     }).onError((error, stackTrace) {
+      loading.value=false;
       order_item_category_list.value = [];
-    });
+    }).whenComplete(() {
+      loading.value=false;
+    },);
   }
   orderItemLineInsert(String orderNo,String itemNo,int qty,String tag,String from_page) {
     if (!isButtonEnabled)
@@ -464,16 +494,7 @@ class OrderViewModel extends GetxController{
                             )
                         ),
                         onPressed: () {
-
                           Get.offAllNamed(RoutesName.order_screen);
-
-                          /*if(screen_change=="Distributor"){
-                            Get.offAllNamed(RoutesName.distributorOrder);
-                          }else{
-                            getOrderHeader('Pending',0,'list_page');
-                          }*/
-
-
                         },
                         style: TextButton.styleFrom(
                             foregroundColor: Colors.grey,
@@ -507,7 +528,9 @@ class OrderViewModel extends GetxController{
         .onError((error, stackTrace) {
       print(error);
       loading.value = false;
-    });
+    }).whenComplete(() {
+      loading.value = false;
+    },);
   }
 
   orderHeaderCreate(String order_type){
@@ -519,23 +542,26 @@ class OrderViewModel extends GetxController{
         return;
       }
     }
- /*   if(isCheckBoxChecked.value && consignee_name_drop_down_controller.text.isEmpty){
+    if(isCheckBoxChecked.value && consignee_name_drop_down_controller.text.isEmpty){
       Utils.sanckBarError('Error : ', 'Please Select Consignee Name.');
       return;
-    }*/
+    }
 
     if(order_date_controller.text.isEmpty){
       Utils.sanckBarError('Error : ', 'Please Select Order Date.');
       return;
     }
+
     /*if(location_center_controller.text.isEmpty){
       Utils.sanckBarError('Error : ', 'Please Select Payment Term.');
       return;
     }*/
-    /*if(order_expiry_date_controller.text.isEmpty){
+
+
+    if(order_expiry_date_controller.text.isEmpty){
       Utils.sanckBarError('Error : ', 'Please Select Expiry Date.');
       return;
-    }*/
+    }
     loading.value = true;
     Map<String ,String> data={
       "order_no": "",
@@ -556,19 +582,19 @@ class OrderViewModel extends GetxController{
           if (response[0].condition == 'True') {
             loading.value = false;
             order_details_list.value=response;
-            Utils.sanckBarSuccess('Success Message!', response[0].message.toString());
+            Utils.showToastification('Success Message!', response[0].message.toString());
             //Get.offAllNamed(RoutesName.orderItemCategoryScreen);
             Get.toNamed(RoutesName.order_item_category_screen);
             getOrderItemCategoryGet(order_details_list[0].orderNo!);
 
           } else {
             loading.value = false;
-            Utils.sanckBarError('False Message!', response[0].message.toString());
+            Utils.showErrorToastification('False Message!', response[0].message.toString());
             print(value);
           }
         } else {
           loading.value = false;
-          Utils.sanckBarError('API Response Error!',jsonResponse);
+          Utils.showErrorToastification('API Response Error!',jsonResponse);
         }
       } catch (e) {
         loading.value = false;
@@ -578,13 +604,57 @@ class OrderViewModel extends GetxController{
     }).onError((error, stackTrace) {
       print(error);
       loading.value = false;
-    });
+    }).whenComplete(() {
+      loading.value = false;
+    },);
   }
 
+
+  getConsignee(String code){
+    print('code......'+code);
+    Map data = {
+      'name':'',
+      'customer_code': code
+    };
+    print("code.......${data}");
+    _api.getConsignee(data, sessionManagement).then((value) {
+      print("code.......${data}");
+      try {
+        final jsonResponse = json.decode(value);
+        if (jsonResponse is List) {
+          List<ConsigneeModel> response =
+          jsonResponse
+              .map((data) => ConsigneeModel.fromJson(data))
+              .toList();
+          if (response[0].condition == 'True') {
+            consignee_list.value = response;
+            print(consignee_list);
+
+          } else {
+            consignee_list.value = [];
+            Utils.sanckBarError('Consignee!', response[0].message.toString());
+          }
+        } else {
+          consignee_list.value = [];
+          Utils.sanckBarError('API Error', jsonResponse);
+        }
+      } catch (e) {
+        consignee_list.value = [];
+        printError();
+      }
+    }).onError((error, stackTrace) {
+      print(error);
+      consignee_list.value = [];
+    }).whenComplete(() {
+      loading.value = false;
+    },);
+  }
 
   void resetAllNewOrderFields(){
     isShowDropDown.value=false;
     isShowCustomerDetails.value = false;
+
+    
    // isShowConsigneeDetails.value = false;
     isCheckBoxChecked.value=false;
    // consignee_name_drop_down_controller.clear();

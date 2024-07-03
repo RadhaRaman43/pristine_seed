@@ -14,6 +14,8 @@ class OrderItemCategoryScreen extends StatelessWidget{
   OrderItemCategoryScreen({super.key});
 
   final order_category_page_controller=Get.put(OrderViewModel());
+
+  Size size= Get.size;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -48,13 +50,29 @@ class OrderItemCategoryScreen extends StatelessWidget{
 
         ),
         appBar: AppBar(
-          title:Text(
-            'Order Category Screen',
-            style: GoogleFonts.poppins(
-              color: AllColors.whiteColor,
-              fontSize: AllFontSize.twentee,
-              fontWeight: FontWeight.w700,
-            ),
+          title:Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Order Category Screen',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Text(
+                  "(${order_category_page_controller
+                      .order_details_list[0].orderNo != null ?
+                  order_category_page_controller.order_details_list[0]
+                      .orderNo! : ''}"+')',
+                  style: GoogleFonts.poppins(
+                    color: AllColors.whiteColor,
+                    fontSize: AllFontSize.sisxteen,
+                    fontWeight: FontWeight.w600,
+                  )
+              ),
+            ],
           ),
           iconTheme: IconThemeData(
             color: AllColors.whiteColor, // Change this to the desired color
@@ -80,39 +98,102 @@ class OrderItemCategoryScreen extends StatelessWidget{
               ),
               Expanded(
                 child: SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.only(left: 0, right: 0, top: 5),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: Column(crossAxisAlignment: CrossAxisAlignment
-                              .start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                    order_category_page_controller
-                                        .order_details_list[0].captionForCategory!,
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700,
-                                    )
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      refreshCatagery();
+
+                    },
+                    child: Container(
+                      padding: EdgeInsets.only(left: 0, right: 0, top: 5),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Column(crossAxisAlignment: CrossAxisAlignment
+                                .start,
+                              children: [
+                                Obx((){
+                                  return Container(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 3,),
+                                        Container(
+                                          padding: const EdgeInsets.only(left: 8.0),
+                                          // /width: size.width*.4,
+                                          child: Row(
+                                            children: [
+                                              Text("Customer Name:",
+                                                  style: GoogleFonts.poppins(
+                                                    color: AllColors.primaryDark1,
+                                                    fontSize: AllFontSize.fourtine,
+                                                    fontWeight: FontWeight.w600,
+                                                  )
+                                              ),
+                                              SizedBox(width: size.width*.02, ),
+                                              InkWell(
+                                                onTap:() {
+                                                  showCustomerDetailsBottomSheet(context);
+                                                },
+                                                child: Container(
+                                                  width:size.width*.55 ,
+                                                  child: Tooltip(
+                                                    message:"${order_category_page_controller
+                                                        .order_details_list[0].customerName!= null ?
+                                                    order_category_page_controller.order_details_list[0]
+                                                        .customerName!+"( ${ order_category_page_controller.order_details_list[0]
+                                                        .customerNo!} )":""}",
+                                                    child: Text(
+                                                        overflow: TextOverflow.ellipsis,
+                                                        textAlign: TextAlign.start,
+                                                        "${order_category_page_controller
+                                                            .order_details_list[0].customerName!= null ?
+                                                        order_category_page_controller.order_details_list[0]
+                                                            .customerName!+"( ${ order_category_page_controller.order_details_list[0]
+                                                            .customerNo!} )": ''}",
+                                                        style: GoogleFonts.poppins(
+                                                          color: AllColors.primaryDark1,
+                                                          fontSize: AllFontSize.fourtine,
+                                                          fontWeight: FontWeight.w600,
+                                                        ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                      order_category_page_controller
+                                          .order_details_list[0].captionForCategory!,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.sisxteen,
+                                        fontWeight: FontWeight.w700,
+                                      )
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8.0, right: 8.0),
-                                child: bindSearchCategoryItemCrop1(context),
-                              ),
-                              // bindItemCategoryCropDropDown(context),
-                              Obx((){
-                                return  bindListLayout();
-                              })
-                            ],
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 8.0, right: 8.0),
+                                  child: bindSearchCategoryItemCrop1(context),
+                                ),
+                                // bindItemCategoryCropDropDown(context),
+                                Obx((){
+                                  return  bindListLayout();
+                                })
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -262,4 +343,217 @@ class OrderItemCategoryScreen extends StatelessWidget{
         )
     );
   }
+
+
+  void showCustomerDetailsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Ensure minimal height
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Show Details",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.twentee,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: Icon(
+                            Icons.cancel,
+                            color: AllColors.primaryDark1,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Center(
+                    child: Divider(
+                      height: 1,
+                      color: AllColors.primaryDark1,
+                    )),
+                SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    // height: 420,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text("Customer Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+                            Spacer(),
+
+                            Container(
+                              width: size.width*.6,
+                              child: Text(order_category_page_controller.order_details_list[0].customerName??"",style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer No.:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(order_category_page_controller.order_details_list[0].customerNo??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+
+
+                        Row(
+                          children: [
+                            Text("Customer Phone No.:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(order_category_page_controller.order_details_list[0].customerPhoneNo??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer Address:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(order_category_page_controller.order_details_list[0].customerAddress??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Country Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(order_category_page_controller.order_details_list[0].customerCountryName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Country State:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(order_category_page_controller.order_details_list[0].customerStateName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+
+
+
+
+
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> refreshCatagery() async {
+    order_category_page_controller.getOrderItemCategoryGet(order_category_page_controller.order_details_list[0].orderNo!);
+
+  }
+
+
 }

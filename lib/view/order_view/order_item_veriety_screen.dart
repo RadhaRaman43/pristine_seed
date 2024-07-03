@@ -21,7 +21,10 @@ class OrderItemVarietyScreen extends StatelessWidget{
   Widget build(BuildContext context) {
      return WillPopScope(
        onWillPop:  ()  async {
+
          Get.toNamed(RoutesName.order_item_category_screen);
+         item_variety_page_controller.getOrderItemCategoryGet(item_variety_page_controller.order_details_list[0].orderNo!);
+
          return false;
        },
        child: Scaffold(
@@ -50,13 +53,29 @@ class OrderItemVarietyScreen extends StatelessWidget{
 
          ),
          appBar: AppBar(
-           title:Text(
-             'Item View Screen',
-             style: GoogleFonts.poppins(
-               color: AllColors.whiteColor,
-               fontSize: AllFontSize.twentee,
-               fontWeight: FontWeight.w700,
-             ),
+           title:Column(
+             crossAxisAlignment: CrossAxisAlignment.start,
+             children: [
+               Text(
+                 'Item View Screen',
+                 style: GoogleFonts.poppins(
+                   color: AllColors.whiteColor,
+                   fontSize: AllFontSize.twentee,
+                   fontWeight: FontWeight.w700,
+                 ),
+               ),Text(
+                   "(${item_variety_page_controller
+                       .order_details_list[0].orderNo != null ?
+                   item_variety_page_controller.order_details_list[0]
+                       .orderNo! : ''}"+')',
+                   style: GoogleFonts.poppins(
+                     color: AllColors.whiteColor,
+                     fontSize: AllFontSize.sisxteen,
+                     fontWeight: FontWeight.w600,
+                   )
+               ),
+
+             ],
            ),
            iconTheme: IconThemeData(
              color: AllColors.whiteColor, // Change this to the desired color
@@ -82,46 +101,105 @@ class OrderItemVarietyScreen extends StatelessWidget{
 
                SizedBox(height: size.height * .01),
                Obx((){
-                 return  Container(
-                   padding: EdgeInsets.only(left: 0, right: 0, top: 5),
-                   child: ListTile(
-                     subtitle: Row(
-                       children: [
-                         bindImage(item_variety_page_controller.index),
-                         SizedBox(width: size.width*.04),
-                         Column(
-                           crossAxisAlignment: CrossAxisAlignment.start,
+                 return  Column(
+                   children: [
+                     Container(
+                       padding: const EdgeInsets.only(left: 8.0),
+                       // /width: size.width*.4,
+                       child: Row(
+                         children: [
+                           Text("Customer Name:",
+                               style: GoogleFonts.poppins(
+                                 color: AllColors.primaryDark1,
+                                 fontSize: AllFontSize.fourtine,
+                                 fontWeight: FontWeight.w600,
+                               )
+                           ),
+                           SizedBox(width: size.width*.02, ),
+                           InkWell(
+                             onTap: () {
+                               showCustomerDetailsBottomSheet(context);
+                             },
+                             child: Container(
+                               width:size.width*.55 ,
+                               child: Tooltip(
+                                 message:"${item_variety_page_controller
+                                     .order_details_list[0].customerName!= null ?
+                                 item_variety_page_controller.order_details_list[0]
+                                     .customerName!:""}",
+                                 child: Text(
+                                   overflow: TextOverflow.ellipsis,
+                                   textAlign: TextAlign.start,
+                                   "${item_variety_page_controller
+                                       .order_details_list[0].customerName!= null ?
+                                   item_variety_page_controller.order_details_list[0]
+                                       .customerName!+"(${ item_variety_page_controller.order_details_list[0]
+                                       .customerNo!} )": ''}",
+                                   style: GoogleFonts.poppins(
+                                     color: AllColors.primaryDark1,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w600,
+                                   ),
+                                 ),
+                               ),
+                             ),
+                           ),
+                         ],
+                       ),
+                     ),
+                     Container(
+                       padding: EdgeInsets.only(left: 0, right: 0, top: 5),
+                       child: ListTile(
+                         subtitle: Row(
                            children: [
-                             Text(item_variety_page_controller.order_item_get_list[0].categoryCode ?? ''
-                               ,style: GoogleFonts.poppins(
-                                   color: AllColors.primaryDark1,
-                                   fontSize: AllFontSize.sisxteen,
-                                   fontWeight: FontWeight.w700
-                               ),),
-                             Text(item_variety_page_controller.order_item_get_list[0].itemName ?? '',
-                                 style: GoogleFonts.poppins(
-                                   color: AllColors.primaryDark1,
-                                   fontWeight: FontWeight.w500,
-                                   fontSize: AllFontSize.fourtine,
-                                 )),
-                             Text('Ordered Qty: ${item_variety_page_controller.order_item_get_list[0].orderQty! ?? ''}',
-                                 style: GoogleFonts.poppins(
-                                   color: item_variety_page_controller.order_item_get_list[0].orderQty!>0?AllColors.redColor:AllColors.blackColor,
-                                   fontWeight: FontWeight.w500,
-                                   fontSize: AllFontSize.fourtine,
-                                 )),
-                             /*Text('In ${item_variety_page_controller.order_item_get_list[0].baseUnitOfMeasure.toString()}: ${item_variety_page_controller.order_item_get_list[0].orderInKg!.toString() ?? ''}',
-                                 style: GoogleFonts.poppins(
-                                   color: item_variety_page_controller.order_item_get_list[0].orderInKg!>0?AllColors.redColor:AllColors.blackColor,
-                                   fontWeight: FontWeight.w500,
-                                   fontSize: AllFontSize.fourtine,
-                                 )),*/
+                             bindImage(item_variety_page_controller.index),
+                             SizedBox(width: size.width*.04),
+                             Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+                               children: [
+                                 Text(item_variety_page_controller.order_item_get_list[0].categoryCode ?? ''
+                                   ,style: GoogleFonts.poppins(
+                                       color: AllColors.primaryDark1,
+                                       fontSize: AllFontSize.sisxteen,
+                                       fontWeight: FontWeight.w700
+                                   ),),
+                                 Text(item_variety_page_controller.order_item_get_list[0].itemName ?? '',
+                                     style: GoogleFonts.poppins(
+                                       color: AllColors.primaryDark1,
+                                       fontWeight: FontWeight.w500,
+                                       fontSize: AllFontSize.fourtine,
+                                     )),
+                              /*   Text('Ordered Qty: ${item_variety_page_controller.order_item_get_list[0].orderQty! ?? ''}',
+                                     style: GoogleFonts.poppins(
+                                       color: item_variety_page_controller.order_item_get_list[0].orderQty!>0?AllColors.redColor:AllColors.blackColor,
+                                       fontWeight: FontWeight.w500,
+                                       fontSize: AllFontSize.fourtine,
+                                     )),
+*/
+
+                                 Text('Ordered Qty: ${item_variety_page_controller.order_item_get_list[0].categoryWiseTotalQty.toString()}',
+                                     style: GoogleFonts.poppins(
+                                       color: item_variety_page_controller.order_item_get_list[0].categoryWiseTotalQty!=null ?AllColors.redColor:AllColors.blackColor,
+                                       fontWeight: FontWeight.w500,
+                                       fontSize: AllFontSize.fourtine,
+                                     )),
+
+
+
+                                 /*Text('In ${item_variety_page_controller.order_item_get_list[0].baseUnitOfMeasure.toString()}: ${item_variety_page_controller.order_item_get_list[0].orderInKg!.toString() ?? ''}',
+                                     style: GoogleFonts.poppins(
+                                       color: item_variety_page_controller.order_item_get_list[0].orderInKg!>0?AllColors.redColor:AllColors.blackColor,
+                                       fontWeight: FontWeight.w500,
+                                       fontSize: AllFontSize.fourtine,
+                                     )),*/
+                               ],
+                             ),
                            ],
                          ),
-                       ],
-                     ),
 
-                   ),
+                       ),
+                     ),
+                   ],
                  );
                }),
 
@@ -316,8 +394,8 @@ class OrderItemVarietyScreen extends StatelessWidget{
   }
 
   Widget bindImage(int index) {
-    print(item_variety_page_controller.order_item_get_list[0].imageUrl.toString());
-    if(item_variety_page_controller.order_item_get_list.length>0
+  //  print(item_variety_page_controller.order_item_get_list[0].imageUrl.toString());
+    if(item_variety_page_controller.order_item_get_list.length>0 && item_variety_page_controller.order_item_get_list.isNotEmpty
         && item_variety_page_controller.order_item_get_list[0].imageUrl!= null &&
         item_variety_page_controller.order_item_get_list[0].imageUrl != "")
       return Container(
@@ -412,5 +490,204 @@ class OrderItemVarietyScreen extends StatelessWidget{
       },
     );
   }
+
+  void showCustomerDetailsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Ensure minimal height
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Show Details",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.twentee,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: Icon(
+                            Icons.cancel,
+                            color: AllColors.primaryDark1,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Center(
+                    child: Divider(
+                      height: 1,
+                      color: AllColors.primaryDark1,
+                    )),
+                SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    // height: 420,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text("Customer Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+                            Spacer(),
+
+                            Container(
+                              width: size.width*.6,
+                              child: Text(item_variety_page_controller.order_details_list[0].customerName??"",style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.end,
+
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer No.:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(item_variety_page_controller.order_details_list[0].customerNo??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+
+
+                        Row(
+                          children: [
+                            Text("Customer Phone No.:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(item_variety_page_controller.order_details_list[0].customerPhoneNo??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer Address:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(item_variety_page_controller.order_details_list[0].customerAddress??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Country Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(item_variety_page_controller.order_details_list[0].customerCountryName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Country State:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+                            Text(item_variety_page_controller.order_details_list[0].customerStateName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
 }

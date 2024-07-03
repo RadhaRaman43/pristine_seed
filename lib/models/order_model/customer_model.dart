@@ -11,6 +11,7 @@ class CustomersModel {
   String? customerPhoneNo;
   String? customerIfscCode;
   String? customerEmailId;
+  int? expiryNoOfDays;
 
   CustomersModel(
       {this.condition,
@@ -24,7 +25,8 @@ class CustomersModel {
         this.contactPerson,
         this.customerPhoneNo,
         this.customerIfscCode,
-        this.customerEmailId});
+        this.customerEmailId,
+        this.expiryNoOfDays});
 
   CustomersModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -39,6 +41,7 @@ class CustomersModel {
     customerPhoneNo = json['customer_phone_no'];
     customerIfscCode = json['customer_ifsc_code'];
     customerEmailId = json['customer_email_id'];
+    expiryNoOfDays = json['expiry_no_of_days'];
   }
 
   Map<String, dynamic> toJson() {
@@ -55,6 +58,7 @@ class CustomersModel {
     data['customer_phone_no'] = this.customerPhoneNo;
     data['customer_ifsc_code'] = this.customerIfscCode;
     data['customer_email_id'] = this.customerEmailId;
+    data['expiry_no_of_days'] = this.expiryNoOfDays;
     return data;
   }
 }

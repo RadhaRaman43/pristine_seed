@@ -40,6 +40,10 @@ class OrderRepository {
     return _apiService.postApi(data, AppUrl.orderApprovalGet, sessionManagement);
   }
 
+  Future<String> getConsignee(var data,SessionManagement sessionManagement)async{
+    return _apiService.postApi(data, AppUrl.getConsigneeMstGet, sessionManagement);
+  }
+
 
 
 
