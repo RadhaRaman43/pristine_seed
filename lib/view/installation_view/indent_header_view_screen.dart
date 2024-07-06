@@ -96,8 +96,6 @@ class IndentHeaderViewScreen extends StatelessWidget {
                               onPressed: () {
                                 indent_deatils_page_controller
                                     .IndentHeaderCreateApi("");
-
-                                ;
                               },
                               child: Text(
                                 'Create',
@@ -186,8 +184,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                           indent_deatils_page_controller
                                                   .service_indent_header_create_list[
                                                       0]
-                                                  .serviceNo ??
-                                              "",
+                                                  .serviceNo ?? "",
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
                                             fontSize: AllFontSize.fourtine,
@@ -233,14 +230,17 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     SizedBox(
                                       height: 8,
                                     ),
-                                    Obx(
+
+                                    /*Obx(
                                       () {
                                         return Visibility(
                                           visible: indent_deatils_page_controller
+                                              .service_indent_header_list.isNotEmpty &&  indent_deatils_page_controller
                                                       .service_indent_header_list[
                                                           0]
                                                       .indentStatus ==
                                                   "Issued From Warehouse" || indent_deatils_page_controller
+                                              .service_indent_header_list.isNotEmpty &&   indent_deatils_page_controller
                                               .service_indent_header_list[
                                           0]
                                               .indentStatus =="Received"
@@ -276,7 +276,53 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                           ),
                                         );
                                       },
+                                    ),*/
+
+
+                                    Obx(
+                                          () {
+                                        // Check if the list is not empty before accessing its elements
+                                        bool isVisible = indent_deatils_page_controller
+                                            .service_indent_header_list.isNotEmpty &&
+                                            (indent_deatils_page_controller
+                                                .service_indent_header_list[0].indentStatus ==
+                                                "Issued From Warehouse" ||
+                                                indent_deatils_page_controller
+                                                    .service_indent_header_list[0].indentStatus == "Received");
+
+                                        return Visibility(
+                                          visible: isVisible,
+                                          child: Row(
+                                            children: [
+                                              Text(
+                                                "Location",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Text(
+                                                indent_deatils_page_controller
+                                                    .service_indent_header_list.isNotEmpty
+                                                    ? indent_deatils_page_controller
+                                                    .service_indent_header_list[0].locationCode ??
+                                                    ""
+                                                    : "",
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.textColor,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                                textAlign: TextAlign.end,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
                                     ),
+
                                     SizedBox(
                                       height: 8,
                                     ),
@@ -622,16 +668,15 @@ class IndentHeaderViewScreen extends StatelessWidget {
       var lines = headerList[0].lines;
 
       if (lines != null && lines.isNotEmpty && lines[0].lineNo != null) {
-        return Expanded(
-          child: ListView.separated(
-            itemBuilder: (context, index) {
-              return bindIntentListView(context, index);
-            },
-            separatorBuilder: (context, index) {
-              return Divider(height: 0.5, color: AllColors.bluegrayColor);
-            },
-            itemCount: lines.length,
-          ),
+        return ListView.separated(
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return bindIntentListView(context, index);
+          },
+          separatorBuilder: (context, index) {
+            return Divider(height: 0.5, color: AllColors.bluegrayColor);
+          },
+          itemCount: lines.length,
         );
       }
     }
@@ -1521,7 +1566,9 @@ class IndentHeaderViewScreen extends StatelessWidget {
     RxDouble sub_total = 0.0.obs;
     RxDouble discount_amount = 0.0.obs;
     RxDouble total_amount = 0.0.obs;
+
     if (flag == "View") {
+
       indent_deatils_page_controller.isCheckBox.value =
           lines!.isCustomerDamage! > 0 ? true : false;
       indent_deatils_page_controller.item_no_controller.text = lines!.itemNo!;
@@ -1537,6 +1584,8 @@ class IndentHeaderViewScreen extends StatelessWidget {
       sub_total.value=lines!.subTotal!;
       discount_amount.value=lines!.discountAmount!;
       total_amount.value=lines!.totalPrice!;
+
+
     }
 
 
@@ -1956,34 +2005,44 @@ class IndentHeaderViewScreen extends StatelessWidget {
                         SizedBox(
                           height: 13,
                         ),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              AllColors.primaryDark1,
+                      Visibility(
+                            visible:flag=="View"?false:true,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.primaryDark1,
+                                  ),
+                                ),
+                                onPressed: () {
+                                  indent_deatils_page_controller.IndentLineCreate(
+                                      indent_deatils_page_controller
+                                          .service_indent_header_create_list[0]
+                                          .indentNo!,
+                                      context);
+                                  //  Navigator.pop(context);
+                                  // todo  Your onPressed logic...
+                                },
+                                child:   Visibility(
+                                  visible: flag=="View"?false:true,
+                                  child: Container(
+                                    width: 80,
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      'Add item',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.customDarkerWhite,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                  ),
+                                )
+
+                              // child:
+
                             ),
                           ),
-                          onPressed: () {
-                            indent_deatils_page_controller.IndentLineCreate(
-                                indent_deatils_page_controller
-                                    .service_indent_header_create_list[0]
-                                    .indentNo!,
-                                context);
-                            //  Navigator.pop(context);
-                            // todo  Your onPressed logic...
-                          },
-                          child: Container(
-                            width: 80,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Add item',
-                              style: GoogleFonts.poppins(
-                                color: AllColors.customDarkerWhite,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        )
+
                       ],
                     ),
                   ),

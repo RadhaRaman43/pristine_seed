@@ -59,6 +59,7 @@ class OrderViewModel extends GetxController{
   var order_filter_date_controller = TextEditingController();
   var order_filter_customer_no_controller = TextEditingController();
   var order_filter_customer_name_controller = TextEditingController();
+  var order_Complete_remark_controller = TextEditingController();
 
 
   RxString pending_amt = ''.obs;
@@ -429,7 +430,8 @@ class OrderViewModel extends GetxController{
   orderHeaderComplete(String orderNo) {
     Map<String, String> data ={
       "order_no": orderNo,
-      "email_id":email
+      "email_id":email,
+      "description": order_Complete_remark_controller.text
     };
     print(data);
     loading.value = true;

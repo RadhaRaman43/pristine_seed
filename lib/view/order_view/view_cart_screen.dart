@@ -203,7 +203,7 @@ class ViewCartScreen extends StatelessWidget{
                     child: DefaultButton(
                       text: "Create Order",
                       press: () {
-                        view_cart_page_controller.orderHeaderComplete(view_cart_page_controller.order_details_list[0].orderNo!);
+                        showOrderCompleteRemarkDialog(context);
                       },
                       // loading: view_cart_page_controller.loading.value,
                     ),
@@ -821,6 +821,49 @@ class ViewCartScreen extends StatelessWidget{
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+
+
+  showOrderCompleteRemarkDialog(BuildContext context) {
+    print('dialog...');
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Confirm...",style: TextStyle(color:AllColors.primaryDark1,),),
+          content: TextFormField(
+            controller: view_cart_page_controller.order_Complete_remark_controller,
+            decoration: InputDecoration(labelText: "Remark",labelStyle: TextStyle(color:AllColors.primaryDark1, ),
+                enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color:AllColors.primaryDark1,)),
+                focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color:AllColors.primaryDark1,))
+            ),
+
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Cancel button pressed
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+
+                if(view_cart_page_controller.order_Complete_remark_controller.text.isNotEmpty){
+                  view_cart_page_controller.orderHeaderComplete(view_cart_page_controller.order_details_list[0].orderNo!);
+                  Navigator.of(context).pop();
+                }
+                else
+                  Utils.showErrorToastification('Order!', 'Please Enter Remark');
+              },
+              child: Text("Submit",style: TextStyle(color: AllColors.primaryDark1),),
+            ),
+          ],
         );
       },
     );

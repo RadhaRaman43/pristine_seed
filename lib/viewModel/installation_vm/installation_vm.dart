@@ -562,9 +562,11 @@ class InstallationViewModel extends GetxController {
               service_indent_header_list.value = response;
             } else {
               loading.value = false;
-             // service_indent_header_list.value = [];
+              service_indent_header_list.value = [];
+
             /*  Utils.showErrorToastification(
                   "Error!", response[0].message.toString());*/
+
               //service_installation_details_list.value=[];
             }
           } else {
@@ -1033,10 +1035,11 @@ class InstallationViewModel extends GetxController {
 
 
   Future upLoadImage(BuildContext context) async {
-    var image = null;
+   // var image = null;
+    final XFile? image;
     try {
       image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 60);
-      upLoadLocalImagesList.value=image.path.toString();
+      upLoadLocalImagesList.value=image!.path.toString();
       Navigator.of(context).pop();
       //showLineImagesPopup(context);
       imageDescriptionDialog(context);
