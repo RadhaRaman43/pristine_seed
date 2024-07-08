@@ -10,7 +10,7 @@ import 'base_api_service.dart';
 
 class NetworkApiServices<T> extends BaseApiServices {
   @override
-  Future<String> getApi(String url,SessionManagement sessionManagement,Map<String, String> queryParams  ) async {
+  Future<String> getApi(String url,SessionManagement sessionManagement,Map<String, String> queryParams) async {
     if (kDebugMode) {
       print(url);
     }

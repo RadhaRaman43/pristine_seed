@@ -72,6 +72,7 @@ class ReturnIndentViewModel extends GetxController {
   getLocation() {
     loading.value = true;
     Map <String, String> data = {
+
     };
     print(data);
     try {
@@ -81,11 +82,11 @@ class ReturnIndentViewModel extends GetxController {
         if (JsonResponse is List) {
           List<LocationResponse> response = JsonResponse.map((e) =>
               LocationResponse.fromJson(e)).toList();
-          if (response != null && response.length > 0 &&
-              response[0].condition == "True") {
+          if (response != null && response.length > 0 && response[0].condition == "True") {
             loading.value = false;
             location_list.value = response;
           } else {
+
             loading.value = false;
             location_list.value = [];
           }
