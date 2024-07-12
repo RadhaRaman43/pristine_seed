@@ -497,6 +497,7 @@ class OrderViewModel extends GetxController{
                         ),
                         onPressed: () {
                           Get.offAllNamed(RoutesName.order_screen);
+                        //  orderHeaderApi(pageNumber);
                         },
                         style: TextButton.styleFrom(
                             foregroundColor: Colors.grey,

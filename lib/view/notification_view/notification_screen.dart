@@ -82,21 +82,19 @@ class NotificationScreen extends StatelessWidget{
         notification_page_controller
             .notification_list.length >
             0) {
-      return Expanded(
-        child: ListView.separated(
-          physics: ClampingScrollPhysics(),
-            padding: EdgeInsets.zero,
-            separatorBuilder: (context, index) => Divider(
-              height: .05,
-              color: AllColors.primaryDark1,
-            ),
-            shrinkWrap: true,
-            itemCount: notification_page_controller
-                .notification_list.value.length,
-            itemBuilder: (BuildContext context, int index) {
-              return BindNotificationListView(context, index);
-            }),
-      );
+      return ListView.separated(
+        physics: ClampingScrollPhysics(),
+          padding: EdgeInsets.zero,
+          separatorBuilder: (context, index) => Divider(
+            height: .05,
+            color: AllColors.primaryDark1,
+          ),
+          shrinkWrap: true,
+          itemCount: notification_page_controller
+              .notification_list.value.length,
+          itemBuilder: (BuildContext context, int index) {
+            return BindNotificationListView(context, index);
+          });
     } else {
       return Center(
         //child: Image.asset("assests/images/no_record_found.gif",),

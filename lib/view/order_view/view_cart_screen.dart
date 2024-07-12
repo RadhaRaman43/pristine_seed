@@ -72,9 +72,7 @@ class ViewCartScreen extends StatelessWidget{
                     margin: EdgeInsets.only(top: 1),
                     child: LinearProgressIndicator(
                       backgroundColor: AllColors.primaryDark1,
-                      color: AllColors.ripple_green,
-                      minHeight: 5,
-                      value: 0,
+                      color: AllColors.textColor,
                     ),
                   ),
                 );
@@ -853,7 +851,7 @@ class ViewCartScreen extends StatelessWidget{
             ),
             TextButton(
               onPressed: () {
-
+                view_cart_page_controller.order_Complete_remark_controller.text="";
                 if(view_cart_page_controller.order_Complete_remark_controller.text.isNotEmpty){
                   view_cart_page_controller.orderHeaderComplete(view_cart_page_controller.order_details_list[0].orderNo!);
                   Navigator.of(context).pop();

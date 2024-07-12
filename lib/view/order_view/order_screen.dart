@@ -22,207 +22,209 @@ class OrderScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     print(order_header_page_controller.pending_amt);
-    return Scaffold(
-      appBar: AppBar(
-        title:Row(
-          children: [
-            Text(
-              'Order Screen',
-              style: GoogleFonts.poppins(
-                color: AllColors.whiteColor,
-                fontSize: AllFontSize.twentee,
-                fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop: () async {
+        Get.offAllNamed(RoutesName.homeScreen);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title:Row(
+            children: [
+              Text(
+                'Order Screen',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            Spacer(),
-            IconButton(onPressed: () {
-              showFilterBottomSheet(context);
+              Spacer(),
+              IconButton(onPressed: () {
+                showFilterBottomSheet(context);
 
 
-            }, icon: Icon(Icons.filter_alt_sharp)),
-            Obx( () {
-              return Visibility(
-                visible: order_header_page_controller.order_header_list.isNotEmpty
-                    && order_header_page_controller.order_header_list[0].orderStatus=="Pending"?true:false,
-                child: IconButton(onPressed: () {
+              }, icon: Icon(Icons.filter_alt_sharp)),
+             // Obx( () {
+             // //  return
+                  IconButton(onPressed: () {
                   order_header_page_controller.resetAllNewOrderFields();
                   Get.toNamed(RoutesName.new_order_screen);
                 }, icon: Icon(Icons.add)),
-              );
-            },
-            )
-          ],
+              //},)
+            ],
+          ),
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor, // Change this to the desired color
+          ),
+          backgroundColor: AllColors.primaryDark1,
         ),
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor, // Change this to the desired color
-        ),
-        backgroundColor: AllColors.primaryDark1,
-      ),
-      drawer: CustomDrawer(),
+        drawer: CustomDrawer(),
 
-       body: Container(
-         child: Column(
-           children: [
-             Obx(() {
-                 return  Container(
-                   margin: EdgeInsets.only(top: 0.5),
-                   child: Visibility(
-                     visible:order_header_page_controller.loading.value ,
-                     child: LinearProgressIndicator(
-                       color: AllColors.textColor,
-                       backgroundColor: AllColors.primaryDark1,
-                     ),
-                   ),
-                 );
-               },
-             ),
-             Container(
-               padding: EdgeInsets.all(8.0),
-               child: Column(
-                 children: [
-                   TextFormField(
-                     controller: order_header_page_controller.global_search_controller,
-                     decoration: InputDecoration(
-                       hintText: "Enter Order No.",
-
-                       contentPadding: EdgeInsets.all(10),
-                       focusedBorder: OutlineInputBorder(
-                         borderRadius: BorderRadius.circular(10),
-                         borderSide: BorderSide(
-                             color: AllColors.primaryDark1), // Customize the border color
-                       ),
-                       enabledBorder: OutlineInputBorder(
-                         borderRadius: BorderRadius.circular(10),
-                         borderSide: BorderSide(
-                             color: Colors.grey), // Customize the border color
-                       ),
-                       suffixIcon: Row(
-                         mainAxisSize: MainAxisSize.min,
-                         children: [
-                           IconButton(
-                             icon: Icon(Icons.search),
-                             onPressed: () async {
-                               order_header_page_controller.pageNumber=0;
-                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber,global_search:order_header_page_controller.global_search_controller.text);
-                             },
-                           ),
-                           IconButton(
-                             icon: Icon(Icons.clear),
-                             onPressed: () {
-                               order_header_page_controller.pageNumber=0;
-                               order_header_page_controller.global_search_controller.clear();
-                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
-
-                               // Add clear functionality here
-                             },
-                           ),
-                         ],
+         body: Container(
+           child: Column(
+             children: [
+               Obx(() {
+                   return  Container(
+                     margin: EdgeInsets.only(top: 0.5),
+                     child: Visibility(
+                       visible:order_header_page_controller.loading.value ,
+                       child: LinearProgressIndicator(
+                         color: AllColors.textColor,
+                         backgroundColor: AllColors.primaryDark1,
                        ),
                      ),
-                   ),
-
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.start,
-                     children: [
-                      Obx(() {
-                         return
-                           ActionChip(
-                             elevation: 2,
-                             padding: EdgeInsets.all(2),
-                             backgroundColor:order_header_page_controller.status.value=="Pending"?AllColors.primaryDark1:AllColors.grayColor,
-                             shadowColor: Colors.black,
-                             shape: StadiumBorder(
-                                 side: BorderSide(color: AllColors.grayColor)),
-                             //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                             //CircleAvatar
-                             label: Text('Pending',
-                                 style: GoogleFonts.poppins(
-                                   color:order_header_page_controller.status.value=="Pending"?AllColors.whiteColor:AllColors.primaryDark1,
-                                   fontSize: AllFontSize.fourtine,
-                                   fontWeight: FontWeight.w500,
-                                 )
-                             ),
-                             onPressed: () {
-                               order_header_page_controller.status.value="Pending";
-                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
-;
-                             }, //Text
-                           );
-                         },),
-                       SizedBox(width: 5,),
-                       Obx(() {
-                           return
-
-                             ActionChip(
-                             elevation: 2,
-                             padding: EdgeInsets.all(2),
-                             backgroundColor:order_header_page_controller.status.value=="Completed"?AllColors.primaryDark1:AllColors.grayColor,
-                             shadowColor: Colors.black,
-                             shape: StadiumBorder(
-                                 side: BorderSide(color: AllColors.grayColor)),
-                             //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                             //CircleAvatar
-                             label: Text('Under Approval',
-                                 style: GoogleFonts.poppins(
-                                   color:order_header_page_controller.status.value=="Completed"?AllColors.whiteColor:AllColors.primaryDark1,
-                                   fontSize: AllFontSize.fourtine,
-                                   fontWeight: FontWeight.w500,
-                                 )),
-                             onPressed: () {
-                               order_header_page_controller.status.value="Completed";
-                               order_header_page_controller.pageNumber=0;
-                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
-
-                             }, //Text
-                           );
-                     },),
-                       SizedBox(width: 5,),
-                       Obx(() {
-                         return ActionChip(
-                           elevation: 2,
-                           padding: EdgeInsets.all(2),
-                           backgroundColor:order_header_page_controller.status.value=="Approved"?AllColors.primaryDark1:AllColors.grayColor,
-                           shadowColor: Colors.black,
-                           shape: StadiumBorder(
-                               side: BorderSide(color: AllColors.grayColor)),
-                           //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                           //CircleAvatar
-                           label: Text('Pending Shipped',
-                             style: GoogleFonts.poppins(
-                               color:order_header_page_controller.status.value=="Approved"? AllColors.whiteColor:AllColors.primaryDark1,
-                               fontSize: AllFontSize.fourtine,
-                               fontWeight: FontWeight.w500,
-                             ),
-                             overflow: TextOverflow.ellipsis,
-                           ),
-                           onPressed: () {
-                             order_header_page_controller.status.value="Approved";
-                             order_header_page_controller.pageNumber=0;
-                             order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
-
-                           }, //Text
-                         );
-                       },
-                         //child:
-                       ),
-
-                     ],
-                   ),
-                 ],
+                   );
+                 },
                ),
-             ),
+               Container(
+                 padding: EdgeInsets.all(8.0),
+                 child: Column(
+                   children: [
+                     TextFormField(
+                       controller: order_header_page_controller.global_search_controller,
+                       decoration: InputDecoration(
+                         hintText: "Enter Order No.",
 
-             SizedBox(height: size.height*0.01,),
+                         contentPadding: EdgeInsets.all(10),
+                         focusedBorder: OutlineInputBorder(
+                           borderRadius: BorderRadius.circular(10),
+                           borderSide: BorderSide(
+                               color: AllColors.primaryDark1), // Customize the border color
+                         ),
+                         enabledBorder: OutlineInputBorder(
+                           borderRadius: BorderRadius.circular(10),
+                           borderSide: BorderSide(
+                               color: Colors.grey), // Customize the border color
+                         ),
+                         suffixIcon: Row(
+                           mainAxisSize: MainAxisSize.min,
+                           children: [
+                             IconButton(
+                               icon: Icon(Icons.search),
+                               onPressed: () async {
+                                 order_header_page_controller.pageNumber=0;
+                                 order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber,global_search:order_header_page_controller.global_search_controller.text);
+                               },
+                             ),
+                             IconButton(
+                               icon: Icon(Icons.clear),
+                               onPressed: () {
+                                 order_header_page_controller.pageNumber=0;
+                                 order_header_page_controller.global_search_controller.clear();
+                                 order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
 
-             Obx(() =>   bindListView(context),)
+                                 // Add clear functionality here
+                               },
+                             ),
+                           ],
+                         ),
+                       ),
+                     ),
+
+                     Row(
+                       mainAxisAlignment: MainAxisAlignment.start,
+                       children: [
+                        Obx(() {
+                           return
+                             ActionChip(
+                               elevation: 2,
+                               padding: EdgeInsets.all(2),
+                               backgroundColor:order_header_page_controller.status.value=="Pending"?AllColors.primaryDark1:AllColors.grayColor,
+                               shadowColor: Colors.black,
+                               shape: StadiumBorder(
+                                   side: BorderSide(color: AllColors.grayColor)),
+                               //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                               //CircleAvatar
+                               label: Text('Pending',
+                                   style: GoogleFonts.poppins(
+                                     color:order_header_page_controller.status.value=="Pending"?AllColors.whiteColor:AllColors.primaryDark1,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w500,
+                                   )
+                               ),
+                               onPressed: () {
+                                 order_header_page_controller.status.value="Pending";
+                                 order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+      ;
+                               }, //Text
+                             );
+                           },),
+                         SizedBox(width: 5,),
+                         Obx(() {
+                             return
+
+                               ActionChip(
+                               elevation: 2,
+                               padding: EdgeInsets.all(2),
+                               backgroundColor:order_header_page_controller.status.value=="Completed"?AllColors.primaryDark1:AllColors.grayColor,
+                               shadowColor: Colors.black,
+                               shape: StadiumBorder(
+                                   side: BorderSide(color: AllColors.grayColor)),
+                               //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                               //CircleAvatar
+                               label: Text('Under Approval',
+                                   style: GoogleFonts.poppins(
+                                     color:order_header_page_controller.status.value=="Completed"?AllColors.whiteColor:AllColors.primaryDark1,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w500,
+                                   )),
+                               onPressed: () {
+                                 order_header_page_controller.status.value="Completed";
+                                 order_header_page_controller.pageNumber=0;
+                                 order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+
+                               }, //Text
+                             );
+                       },),
+                         SizedBox(width: 5,),
+                         Obx(() {
+                           return ActionChip(
+                             elevation: 2,
+                             padding: EdgeInsets.all(2),
+                             backgroundColor:order_header_page_controller.status.value=="Approved"?AllColors.primaryDark1:AllColors.grayColor,
+                             shadowColor: Colors.black,
+                             shape: StadiumBorder(
+                                 side: BorderSide(color: AllColors.grayColor)),
+                             //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                             //CircleAvatar
+                             label: Text('Pending Shipped',
+                               style: GoogleFonts.poppins(
+                                 color:order_header_page_controller.status.value=="Approved"? AllColors.whiteColor:AllColors.primaryDark1,
+                                 fontSize: AllFontSize.fourtine,
+                                 fontWeight: FontWeight.w500,
+                               ),
+                               overflow: TextOverflow.ellipsis,
+                             ),
+                             onPressed: () {
+                               order_header_page_controller.status.value="Approved";
+                               order_header_page_controller.pageNumber=0;
+                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+
+                             }, //Text
+                           );
+                         },
+                           //child:
+                         ),
+
+                       ],
+                     ),
+                   ],
+                 ),
+               ),
+
+               SizedBox(height: size.height*0.01,),
+
+               Obx(() =>   bindListView(context),)
 
 
-           ],
+             ],
+           ),
+
          ),
 
-       ),
 
-
+      ),
     );
   }
 
