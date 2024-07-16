@@ -217,7 +217,7 @@ class ReturnIndentAddLine extends StatelessWidget {
                             padding: EdgeInsets.only(left: 8.0,right: 8.0),
                             child: Row(
                               children: [
-                                Text("Line Details:", style: GoogleFonts.poppins(
+                                Text("Indent Line Details:", style: GoogleFonts.poppins(
                                   color: AllColors.primaryDark1,
                                   fontSize: AllFontSize.sisxteen,
                                   fontWeight: FontWeight.w700,
