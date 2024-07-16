@@ -40,9 +40,8 @@ class ReturnIndentScreen extends StatelessWidget {
               Spacer(),
               Obx(() {
                 // Ensure the list is not empty before accessing the first element
-                if (return_indent_page_controller.return_indent_list.isNotEmpty) {
                   return Visibility(
-                    visible: return_indent_page_controller.return_indent_list[0].isDone! <= 0,
+                    visible: return_indent_page_controller.is_done.value==0,
                     child: IconButton(
                       onPressed: () {
                         Get.toNamed(RoutesName.newReturnIndentScreen);
@@ -50,10 +49,7 @@ class ReturnIndentScreen extends StatelessWidget {
                       icon: Icon(Icons.add),
                     ),
                   );
-                } else {
-                  // Handle the case where the list is empty, e.g., return a placeholder or nothing
-                  return SizedBox(); // Or return a placeholder widget
-                }
+
               })
 
             ],

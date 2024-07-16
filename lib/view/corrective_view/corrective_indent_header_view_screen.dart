@@ -215,13 +215,22 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                   ),
                                   Obx(
                                         () {
+
+                                          bool isVisible = indent_deatils_page_controller
+                                              .service_indent_header_list.isNotEmpty &&
+                                              (indent_deatils_page_controller
+                                                  .service_indent_header_list[0].indentStatus ==
+                                                  "Issued From Warehouse" ||
+                                                  indent_deatils_page_controller
+                                                      .service_indent_header_list[0].indentStatus == "Received");
                                       return Visibility(
-                                        visible: indent_deatils_page_controller
+                                        visible: isVisible
+                                        /*indent_deatils_page_controller
                                             .service_indent_header_list[0]
                                             .indentStatus ==
                                             "Issued From Warehouse" || indent_deatils_page_controller
                                             .service_indent_header_list[0]
-                                            .indentStatus =="Receive"
+                                            .indentStatus =="Receive"*/
                                             ? true
                                             : false,
                                         child: Row(

@@ -445,13 +445,13 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
 
 
   Future<void> openImageSource(ImageSource source) async {
-    if (!kIsWeb) {
+    if (!kIsWeb){
       final ImagePicker _picker = ImagePicker();
       XFile? image = await _picker.pickImage(source: source, imageQuality: 80);
       if (image != null) {
         var selected = File(image.path);
         pickedImagef.value = selected;
-        print('moblie image path' + pickedImagef.value.toString());
+        print('mobile image path' + pickedImagef.value.toString());
         uploadImageToServer();
       } else {
         Utils.sanckBarError('Image!', 'no image has been picked');

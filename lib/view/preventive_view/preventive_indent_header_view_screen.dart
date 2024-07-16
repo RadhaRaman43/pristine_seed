@@ -212,15 +212,24 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                   SizedBox(
                                     height: 3,
                                   ),
-                                  Obx(
-                                        () {
+                                  Obx(() {
+                                          bool isVisible = preventive_indent_detils_page_controller
+                                              .service_indent_header_list.isNotEmpty &&
+                                              (preventive_indent_detils_page_controller
+                                                  .service_indent_header_list[0].indentStatus ==
+                                                  "Issued From Warehouse" ||
+                                                  preventive_indent_detils_page_controller
+                                                      .service_indent_header_list[0].indentStatus == "Received");
                                       return Visibility(
-                                        visible: preventive_indent_detils_page_controller
+                                        visible:isVisible
+
+                                        /*preventive_indent_detils_page_controller
                                             .service_indent_header_list[0]
                                             .indentStatus ==
                                             "Issued From Warehouse" || preventive_indent_detils_page_controller
                                             .service_indent_header_list[0]
-                                            .indentStatus =="Received"
+                                            .indentStatus =="Received"*/
+
                                             ? true
                                             : false,
                                         child: Row(
