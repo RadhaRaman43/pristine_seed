@@ -360,7 +360,7 @@ class ReturnIndentAddLine extends StatelessWidget {
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text("${option.indentNo.toString()+"("+option.lineNo.toString()+")"+"(${option.totalQty.toString()})"}",
+                      child: Text("${option.indentNo.toString()+"("+option.itemNo.toString()+")"+"(${option.totalQty.toString()})"}",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,

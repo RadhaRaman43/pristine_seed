@@ -146,7 +146,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                             Row(
                               children: [
                                 Text(
-                                  "Customer Name",
+                                  "Customer",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.fourtine,
