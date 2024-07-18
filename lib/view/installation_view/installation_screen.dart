@@ -35,7 +35,6 @@ class InstallationScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-
         appBar: AppBar(
           title: Row(
             children: [
@@ -50,8 +49,6 @@ class InstallationScreen extends StatelessWidget {
               Spacer(),
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
-
-
               }, icon: Icon(Icons.filter_alt_sharp))
             ],
           ),
@@ -61,395 +58,415 @@ class InstallationScreen extends StatelessWidget {
           backgroundColor: AllColors.primaryDark1,
         ),
         drawer: CustomDrawer(),
-        body: RefreshIndicator(
-          onRefresh:installation_page_controller.InstallionListrefreshListData,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child:Container(
-              child: Column(
-                children: [
-                  Obx(() {
-                      return Container(
-                        margin: EdgeInsets.only(top: 0.3),
-                        child: Visibility(
-                          visible: installation_page_controller.loading.value,
-                          child: LinearProgressIndicator(
-                            backgroundColor: AllColors.primaryDark1,
-                            color: AllColors.textColor,
+        body:  Container(
+          width: double.infinity,
+          height: size.height,
+          child:Container(
+            child: Column(
+              children: [
+                Obx(() {
+                    return Container(
+                      margin: EdgeInsets.only(top: 0.3),
+                      child: Visibility(
+                        visible: installation_page_controller.loading.value,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AllColors.primaryDark1,
+                          color: AllColors.textColor,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                Container(
+                  padding: EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller:
+                        installation_page_controller.globle_search_controller,
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.all(10),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: AllColors.primaryDark1), // Customize the border color
                           ),
-                        ),
-                      );
-                    },
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          controller:
-                          installation_page_controller.globle_search_controller,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.all(10),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: AllColors.primaryDark1), // Customize the border color
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: BorderSide(
-                                  color: Colors.grey), // Customize the border color
-                            ),
-                            suffixIcon: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.search),
-                                  onPressed: () async {
-                                    installation_page_controller
-                                        .getServiceInstallationList(
-                                        installation_page_controller
-                                            .is_done.value,
-                                        installation_page_controller.pageNumber,
-                                        installation_page_controller
-                                            .date_filter.value,
-                                        globle_search_value:
-                                        installation_page_controller
-                                            .globle_search_controller.text);
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.clear),
-                                  onPressed: () {
-                                    installation_page_controller.pageNumber=0;
-                                    installation_page_controller
-                                        .globle_search_controller.text = "";
-                                    installation_page_controller
-                                        .getServiceInstallationList(
-                                        installation_page_controller
-                                            .is_done.value,
-                                        installation_page_controller.pageNumber,
-                                        installation_page_controller
-                                            .date_filter.value);
-                                    // Add clear functionality here
-                                  },
-                                ),
-                              ],
-                            ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: BorderSide(
+                                color: Colors.grey), // Customize the border color
                           ),
-                        ),
-                       // SizedBox(height: size.height*0.01,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Obx(
-                                  () {
-                                return ActionChip(
-                                  elevation: 2,
-                                  padding: EdgeInsets.all(2),
-                                  backgroundColor:
-                                  installation_page_controller.is_done.value == 0
-                                      ? AllColors.primaryDark1
-                                      : AllColors.grayColor,
-                                  shadowColor: Colors.black,
-                                  shape: StadiumBorder(
-                                      side: BorderSide(color: AllColors.grayColor)),
-                                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                  //CircleAvatar
-                                  label: Text('Pending',
-                                      style: GoogleFonts.poppins(
-                                        color: installation_page_controller
-                                            .is_done.value ==
-                                            0
-                                            ? AllColors.whiteColor
-                                            : AllColors.primaryDark1,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  onPressed: () {
-                                    installation_page_controller.pageNumber=0;
-                                    installation_page_controller
-                                        .globle_search_controller.text = "";
-                                    installation_page_controller.is_done.value = 0;
-                                    installation_page_controller
-                                        .getServiceInstallationList(
-                                        installation_page_controller
-                                            .is_done.value,
-                                        installation_page_controller.pageNumber,
-                                        installation_page_controller
-                                            .date_filter.value);
-                                  }, //Text
-                                );
-                              },
-                            ),
-                            SizedBox(width: 5,),
-                            Obx(
-                                  () {
-                                return ActionChip(
-                                  elevation: 2,
-                                  padding: EdgeInsets.all(2),
-                                  backgroundColor:
-                                  installation_page_controller.is_done.value == 1
-                                      ? AllColors.primaryDark1
-                                      : AllColors.grayColor,
-                                  shadowColor: Colors.black,
-                                  shape: StadiumBorder(
-                                      side: BorderSide(color: AllColors.grayColor)),
-                                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                  //CircleAvatar
-                                  label: Text('Complete',
-                                      style: GoogleFonts.poppins(
-                                        color: installation_page_controller
-                                            .is_done.value ==
-                                            1
-                                            ? AllColors.whiteColor
-                                            : AllColors.primaryDark1,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  onPressed: () {
-                                    installation_page_controller.pageNumber=0;
-                                    installation_page_controller
-                                        .globle_search_controller.text = "";
-                                    installation_page_controller.is_done.value = 1;
-                                    installation_page_controller
-                                        .date_filter.value = "";
-                                    installation_page_controller
-                                        .getServiceInstallationList(
-                                        installation_page_controller
-                                            .is_done.value,
-                                        installation_page_controller.pageNumber,
-                                        installation_page_controller
-                                            .date_filter.value);
-                                  }, //Text
-                                );
-                              },
-                            )
-
-                          ],
-                        ),
-                       // SizedBox(height: size.height*0.01,),
-                        Obx(
-                              () {
-                            return Visibility(
-                              visible: installation_page_controller.is_done.value == 1
-                                  ? false
-                                  : true,
-                              child: Container(
-                                //padding: EdgeInsets.only(left: 10),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Obx(() {
-                                        return ActionChip(
-                                          elevation: 2,
-                                          padding: EdgeInsets.all(2),
-                                          backgroundColor: installation_page_controller
-                                              .date_filter.value ==
-                                              ""
-                                              ? AllColors.primaryDark1
-                                              : AllColors.grayColor,
-                                          shadowColor: Colors.black,
-                                          shape: StadiumBorder(
-                                              side: BorderSide(
-                                                  color: AllColors.grayColor)),
-                                          //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                          //CircleAvatar
-                                          label: Text('All',
-                                              style: GoogleFonts.poppins(
-                                                color: installation_page_controller
-                                                    .date_filter.value ==
-                                                    ""
-                                                    ? AllColors.whiteColor
-                                                    : AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              )),
-                                          onPressed: () {
-                                            installation_page_controller.pageNumber=0;
-                                            installation_page_controller
-                                                .globle_search_controller.text = "";
-                                            installation_page_controller.is_done.value =
-                                            0;
-                                            installation_page_controller
-                                                .date_filter.value = "";
-                                            installation_page_controller
-                                                .getServiceInstallationList(
-                                                installation_page_controller
-                                                    .is_done.value,
-                                                installation_page_controller
-                                                    .pageNumber,
-                                                installation_page_controller
-                                                    .date_filter.value);
-                                          }, //Text
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.02,
-                                    ),
-                                    Obx(
-                                          () {
-                                        return ActionChip(
-                                          elevation: 2,
-                                          padding: EdgeInsets.all(2),
-                                          backgroundColor: installation_page_controller
-                                              .date_filter.value ==
-                                              "TODAY"
-                                              ? AllColors.primaryDark1
-                                              : AllColors.grayColor,
-                                          shadowColor: Colors.black,
-                                          shape: StadiumBorder(
-                                              side: BorderSide(
-                                                  color: AllColors.grayColor)),
-                                          //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                          //CircleAvatar
-                                          label: Text('Today',
-                                              style: GoogleFonts.poppins(
-                                                color: installation_page_controller
-                                                    .date_filter.value ==
-                                                    "TODAY"
-                                                    ? AllColors.whiteColor
-                                                    : AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              )),
-                                          onPressed: () {
-                                            installation_page_controller.pageNumber=0;
-                                            installation_page_controller
-                                                .globle_search_controller.text = "";
-                                            installation_page_controller.is_done.value =
-                                            0;
-                                            installation_page_controller
-                                                .date_filter.value = "TODAY";
-                                            installation_page_controller
-                                                .getServiceInstallationList(
-                                                installation_page_controller
-                                                    .is_done.value,
-                                                installation_page_controller
-                                                    .pageNumber,
-                                                installation_page_controller
-                                                    .date_filter.value);
-                                          }, //Text
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.02,
-                                    ),
-                                    Obx(() {
-                                        return ActionChip(
-                                          elevation: 2,
-                                          padding: EdgeInsets.all(2),
-                                          backgroundColor: installation_page_controller
-                                              .date_filter.value ==
-                                              "OverDue"
-                                              ? AllColors.primaryDark1
-                                              : AllColors.grayColor,
-                                          shadowColor: Colors.black,
-                                          shape: StadiumBorder(
-                                              side: BorderSide(
-                                                  color: AllColors.grayColor)),
-                                          //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                          //CircleAvatar
-                                          label: Text('Breached',
-                                              style: GoogleFonts.poppins(
-                                                color: installation_page_controller
-                                                    .date_filter.value ==
-                                                    "OverDue"
-                                                    ? AllColors.whiteColor
-                                                    : AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              )),
-                                          onPressed: () {
-                                            installation_page_controller.pageNumber=0;
-                                            installation_page_controller
-                                                .globle_search_controller.text = "";
-                                            installation_page_controller.is_done.value =
-                                            0;
-                                            installation_page_controller
-                                                .date_filter.value = "OverDue";
-                                            installation_page_controller
-                                                .getServiceInstallationList(
-                                                installation_page_controller
-                                                    .is_done.value,
-                                                installation_page_controller
-                                                    .pageNumber,
-                                                installation_page_controller
-                                                    .date_filter.value);
-                                          }, //Text
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.02,
-                                    ),
-                                    Obx(
-                                          () {
-                                        return ActionChip(
-                                          elevation: 2,
-                                          padding: EdgeInsets.all(2),
-                                          backgroundColor: installation_page_controller
-                                              .date_filter.value ==
-                                              "Future"
-                                              ? AllColors.primaryDark1
-                                              : AllColors.grayColor,
-                                          shadowColor: Colors.black,
-                                          shape: StadiumBorder(
-                                              side: BorderSide(
-                                                  color: AllColors.grayColor)),
-                                          //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                          //CircleAvatar
-                                          label: Text('Future',
-                                              style: GoogleFonts.poppins(
-                                                color: installation_page_controller
-                                                    .date_filter.value ==
-                                                    "Future"
-                                                    ? AllColors.whiteColor
-                                                    : AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              )),
-                                          onPressed: () {
-                                            installation_page_controller.pageNumber=0;
-                                            installation_page_controller
-                                                .globle_search_controller.text = "";
-                                            installation_page_controller.is_done.value =
-                                            0;
-                                            installation_page_controller
-                                                .date_filter.value = "Future";
-                                            installation_page_controller
-                                                .getServiceInstallationList(
-                                                installation_page_controller
-                                                    .is_done.value,
-                                                installation_page_controller
-                                                    .pageNumber,
-                                                installation_page_controller
-                                                    .date_filter.value);
-                                          }, //Text
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                ),
+                          suffixIcon: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: Icon(Icons.search),
+                                onPressed: () async {
+                                  installation_page_controller
+                                      .getServiceInstallationList(
+                                      installation_page_controller
+                                          .is_done.value,
+                                      installation_page_controller.pageNumber,
+                                      installation_page_controller
+                                          .date_filter.value,
+                                      globle_search_value:
+                                      installation_page_controller
+                                          .globle_search_controller.text);
+                                },
                               ),
-                            );
-                          },
+                              IconButton(
+                                icon: Icon(Icons.clear),
+                                onPressed: () {
+                                  installation_page_controller.pageNumber=0;
+                                  installation_page_controller
+                                      .globle_search_controller.text = "";
+                                  installation_page_controller
+                                      .getServiceInstallationList(
+                                      installation_page_controller
+                                          .is_done.value,
+                                      installation_page_controller.pageNumber,
+                                      installation_page_controller
+                                          .date_filter.value);
+                                  // Add clear functionality here
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
-                  ),
+                      ),
+                     // SizedBox(height: size.height*0.01,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Obx(
+                                () {
+                              return ActionChip(
+                                elevation: 2,
+                                padding: EdgeInsets.all(2),
+                                backgroundColor:
+                                installation_page_controller.is_done.value == 0
+                                    ? AllColors.primaryDark1
+                                    : AllColors.grayColor,
+                                shadowColor: Colors.black,
+                                shape: StadiumBorder(
+                                    side: BorderSide(color: AllColors.grayColor)),
+                                //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                //CircleAvatar
+                                label: Text('Pending',
+                                    style: GoogleFonts.poppins(
+                                      color: installation_page_controller
+                                          .is_done.value ==
+                                          0
+                                          ? AllColors.whiteColor
+                                          : AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                                onPressed: () {
+                                  installation_page_controller.pageNumber=0;
+                                  installation_page_controller
+                                      .globle_search_controller.text = "";
+                                  installation_page_controller.is_done.value = 0;
+                                  installation_page_controller
+                                      .getServiceInstallationList(
+                                      installation_page_controller
+                                          .is_done.value,
+                                      installation_page_controller.pageNumber,
+                                      installation_page_controller
+                                          .date_filter.value);
+                                }, //Text
+                              );
+                            },
+                          ),
+                          SizedBox(width: 5,),
+                          Obx(
+                                () {
+                              return ActionChip(
+                                elevation: 2,
+                                padding: EdgeInsets.all(2),
+                                backgroundColor:
+                                installation_page_controller.is_done.value == 1
+                                    ? AllColors.primaryDark1
+                                    : AllColors.grayColor,
+                                shadowColor: Colors.black,
+                                shape: StadiumBorder(
+                                    side: BorderSide(color: AllColors.grayColor)),
+                                //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                //CircleAvatar
+                                label: Text('Complete',
+                                    style: GoogleFonts.poppins(
+                                      color: installation_page_controller
+                                          .is_done.value ==
+                                          1
+                                          ? AllColors.whiteColor
+                                          : AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                                onPressed: () {
+                                  installation_page_controller.pageNumber=0;
+                                  installation_page_controller
+                                      .globle_search_controller.text = "";
+                                  installation_page_controller.is_done.value = 1;
+                                  installation_page_controller
+                                      .date_filter.value = "";
+                                  installation_page_controller
+                                      .getServiceInstallationList(
+                                      installation_page_controller
+                                          .is_done.value,
+                                      installation_page_controller.pageNumber,
+                                      installation_page_controller
+                                          .date_filter.value);
+                                }, //Text
+                              );
+                            },
+                          )
 
-                  Obx(() {
-                    return BindCustomerListView(context);
-                  }),
-                ],
-              ),
-            )
-          ),
+                        ],
+                      ),
+                     // SizedBox(height: size.height*0.01,),
+                      Obx(
+                            () {
+                          return Visibility(
+                            visible: installation_page_controller.is_done.value == 1
+                                ? false
+                                : true,
+                            child: Container(
+                              //padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Obx(() {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor: installation_page_controller
+                                            .date_filter.value ==
+                                            ""
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(
+                                                color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('All',
+                                            style: GoogleFonts.poppins(
+                                              color: installation_page_controller
+                                                  .date_filter.value ==
+                                                  ""
+                                                  ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          installation_page_controller.pageNumber=0;
+                                          installation_page_controller
+                                              .globle_search_controller.text = "";
+                                          installation_page_controller.is_done.value =
+                                          0;
+                                          installation_page_controller
+                                              .date_filter.value = "";
+                                          installation_page_controller
+                                              .getServiceInstallationList(
+                                              installation_page_controller
+                                                  .is_done.value,
+                                              installation_page_controller
+                                                  .pageNumber,
+                                              installation_page_controller
+                                                  .date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.02,
+                                  ),
+                                  Obx(
+                                        () {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor: installation_page_controller
+                                            .date_filter.value ==
+                                            "TODAY"
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(
+                                                color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('Today',
+                                            style: GoogleFonts.poppins(
+                                              color: installation_page_controller
+                                                  .date_filter.value ==
+                                                  "TODAY"
+                                                  ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          installation_page_controller.pageNumber=0;
+                                          installation_page_controller
+                                              .globle_search_controller.text = "";
+                                          installation_page_controller.is_done.value =
+                                          0;
+                                          installation_page_controller
+                                              .date_filter.value = "TODAY";
+                                          installation_page_controller
+                                              .getServiceInstallationList(
+                                              installation_page_controller
+                                                  .is_done.value,
+                                              installation_page_controller
+                                                  .pageNumber,
+                                              installation_page_controller
+                                                  .date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.02,
+                                  ),
+                                  Obx(() {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor: installation_page_controller
+                                            .date_filter.value ==
+                                            "OverDue"
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(
+                                                color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('Breached',
+                                            style: GoogleFonts.poppins(
+                                              color: installation_page_controller
+                                                  .date_filter.value ==
+                                                  "OverDue"
+                                                  ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          installation_page_controller.pageNumber=0;
+                                          installation_page_controller
+                                              .globle_search_controller.text = "";
+                                          installation_page_controller.is_done.value =
+                                          0;
+                                          installation_page_controller
+                                              .date_filter.value = "OverDue";
+                                          installation_page_controller
+                                              .getServiceInstallationList(
+                                              installation_page_controller
+                                                  .is_done.value,
+                                              installation_page_controller
+                                                  .pageNumber,
+                                              installation_page_controller
+                                                  .date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.02,
+                                  ),
+                                  Obx(
+                                        () {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor: installation_page_controller
+                                            .date_filter.value ==
+                                            "Future"
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(
+                                                color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('Future',
+                                            style: GoogleFonts.poppins(
+                                              color: installation_page_controller
+                                                  .date_filter.value ==
+                                                  "Future"
+                                                  ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          installation_page_controller.pageNumber=0;
+                                          installation_page_controller
+                                              .globle_search_controller.text = "";
+                                          installation_page_controller.is_done.value =
+                                          0;
+                                          installation_page_controller
+                                              .date_filter.value = "Future";
+                                          installation_page_controller
+                                              .getServiceInstallationList(
+                                              installation_page_controller
+                                                  .is_done.value,
+                                              installation_page_controller
+                                                  .pageNumber,
+                                              installation_page_controller
+                                                  .date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+
+                Obx(() {
+                  return BindCustomerListView(context);
+                }),
+              ],
+            ),
+          )
         ),
+
+
+
+
+        /*Container(
+          child: RefreshIndicator(
+            onRefresh: () async {
+
+            },
+            child:  ListView(
+              children: [
+                // Replace these with your list items
+                ListTile(title: Text('Item 1')),
+                ListTile(title: Text('Item 2')),
+                ListTile(title: Text('Item 3')),
+              ],
+            ),
+          ),
+        )*/
+
+
+
+
       ),
     );
   }

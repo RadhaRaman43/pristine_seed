@@ -851,7 +851,7 @@ class ViewCartScreen extends StatelessWidget{
             ),
             TextButton(
               onPressed: () {
-                view_cart_page_controller.order_Complete_remark_controller.text="";
+                //view_cart_page_controller.order_Complete_remark_controller.text="";
                 if(view_cart_page_controller.order_Complete_remark_controller.text.isNotEmpty){
                   view_cart_page_controller.orderHeaderComplete(view_cart_page_controller.order_details_list[0].orderNo!);
                   Navigator.of(context).pop();

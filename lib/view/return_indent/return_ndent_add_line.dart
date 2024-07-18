@@ -17,15 +17,19 @@ class ReturnIndentAddLine extends StatelessWidget {
 
   final return_indent_add_line_controller = Get.put(ReturnIndentViewModel());
   Size size = Get.size;
+
   static String _displayLocationNameForOption(IndentItemResponse option) =>
       option.indentNo!;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        return_indent_add_line_controller.selected_item_check.value=false;
+        return_indent_add_line_controller.indent_name_controller.clear();
         Get.toNamed(RoutesName.returnHeaderDetailsScreen);
-
-        print(return_indent_add_line_controller.return_create_header_list[0].returnNo) ;
+        print(return_indent_add_line_controller
+            .return_create_header_list[0].returnNo);
         return_indent_add_line_controller.ReturnIndentHeaderCreate("back");
         return false;
       },
@@ -46,236 +50,320 @@ class ReturnIndentAddLine extends StatelessWidget {
           ),
           drawer: CustomDrawer(),
           body: Container(
-         //   padding: EdgeInsets.all(10),
-        width: double.infinity,
-        height: size.height,
-        child: Column(
-          children: [
-            Obx(
-              () {
-                return Container(
-                  margin: EdgeInsets.only(top: 0.3),
-                  child: Visibility(
-                    visible: return_indent_add_line_controller.loading.value,
-                    child: LinearProgressIndicator(
-                      backgroundColor: AllColors.textColor,
-                      color: AllColors.primaryDark1,
-                    ),
-                  ),
-                );
-              },
-            ),
-            Obx(() {
-              return  Visibility(
-                  visible:return_indent_add_line_controller.is_show_indent_dropDown.value && return_indent_add_line_controller
-                      .return_create_header_list[0].isDone!>0?false:true ,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 8.0,right: 8.0),
-                    child: bindIndentReturnDropDown(context),
-                  ));
-            },
-            ),
-            Obx(() {
-              return Visibility(
-                visible: return_indent_add_line_controller.selected_item_check.value ,
-               // visible:true,
-                child: Container(
-                  padding: EdgeInsets.only(left: 8.0,right: 8.0),
-                  margin: EdgeInsets.only(top: 5),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //SizedBox(width: 3,),
-                          Expanded(
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                return_indent_add_line_controller.unused_qty_controller.text=value;
-                              },
-
-                              controller:return_indent_add_line_controller.unused_qty_controller ,
-                              decoration: InputDecoration(
-                                  labelText: "Enter Unused Qty",
-                                  labelStyle: TextStyle(color: AllColors.primaryDark1),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: AllColors.primaryDark1),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: AllColors.primaryDark1))),
-                            ),
-                          ),
-                          SizedBox(width: size.width*.1,),
-                          Expanded(
-                            child: TextFormField(
-                              keyboardType: TextInputType.number,
-                              onChanged: (value) {
-                                return_indent_add_line_controller.bad_qty_controller.text=value;
-                              },
-                              controller: return_indent_add_line_controller.bad_qty_controller,
-                              decoration: InputDecoration(
-                                  labelText: "Enter Bad Qty",
-                                  labelStyle: TextStyle(color: AllColors.primaryDark1),
-                                  enabledBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: AllColors.primaryDark1),
-                                  ),
-                                  focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(color: AllColors.primaryDark1))),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: size.height*.02,),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0,right: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                  AllColors.textColor2,
-                                  side: BorderSide(
-                                      color: AllColors
-                                          .primaryDark1,
-                                      width: 1)),
-                              onPressed: () {
-                                FocusScope.of(context).unfocus();
-                                return_indent_add_line_controller.returnIndentAddLineApiHit(return_indent_add_line_controller.return_create_header_list[0].returnNo.toString(),return_indent_add_line_controller.selected_indent_data!.itemNo!,"Add");
-
-                              },
-                              icon: Icon(Icons.save,color: AllColors.primaryDark1,),
-                              label: Container(
-                                child: Tooltip(
-                                  message: "Save",
-                                  child: Text(
-                                    "Save",
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              //  child:
-                            ),
-                            ElevatedButton.icon(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                  AllColors.textColor2,
-                                  side: BorderSide(
-                                      color: AllColors
-                                          .primaryDark1,
-                                      width: 1)),
-                              onPressed: () {
-                                return_indent_add_line_controller.is_show_indent_dropDown.value=false;
-                                return_indent_add_line_controller.is_show_indent_dropDown.value=true;
-                                return_indent_add_line_controller.selected_item_check.value=false;
-                                return_indent_add_line_controller.selected_indent_data=null;
-                                return_indent_add_line_controller.indent_name_controller.clear();
-                                return_indent_add_line_controller.bad_qty_controller.clear();
-                                return_indent_add_line_controller.unused_qty_controller.clear();
-                              },
-                              icon: Icon(Icons.clear,color: AllColors.primaryDark1,),
-                              label: Container(
-                                child: Tooltip(
-                                  message: "Clear",
-                                  child: Text(
-                                    "Clear",
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              //  child:
-                            ),
-                          ],
+            //   padding: EdgeInsets.all(10),
+            width: double.infinity,
+            height: size.height,
+            child: Column(
+              children: [
+                Obx(
+                  () {
+                    return Container(
+                      margin: EdgeInsets.only(top: 0.3),
+                      child: Visibility(
+                        visible:
+                            return_indent_add_line_controller.loading.value,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AllColors.textColor,
+                          color: AllColors.primaryDark1,
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },),
-            SizedBox(height: size.height*.03,),
-
-            Obx(() {
-
-              return  Visibility(
-              visible: return_indent_add_line_controller.indent_return_add_line_list.length>0 && return_indent_add_line_controller
-                  .return_create_header_list[0].isDone==0?true:false,
-                child: Container(
-                  child: Column(
-                    children: [
-                      Divider( height: 0.5,color: AllColors.primaryDark1,),
-                          Container(
-                            padding: EdgeInsets.only(left: 8.0,right: 8.0),
-                            child: Row(
+                Obx(
+                  () {
+                    return Visibility(
+                        visible: return_indent_add_line_controller
+                                    .is_show_indent_dropDown.value &&
+                                return_indent_add_line_controller
+                                        .return_create_header_list[0].isDone! >
+                                    0
+                            ? false
+                            : true,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                          child: bindIndentReturnDropDown(context),
+                        ));
+                  },
+                ),
+                Obx(
+                  () {
+                    return Visibility(
+                      visible: return_indent_add_line_controller
+                          .selected_item_check.value,
+                      // visible:true,
+                      child: Container(
+                        padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                        margin: EdgeInsets.only(top: 5),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Indent Line Details:", style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700,
-                                ),),
-
-                                Spacer(),
-                                ElevatedButton.icon(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor:
-                                      AllColors.textColor2,
-                                      side: BorderSide(
-                                          color: AllColors
-                                              .redColor,
-                                          width: 1)),
-                                  onPressed: () {
-
-                                    CustomConfirmDialog.showDialog(context: context, title: "Delete", content: "Do you want to Continue?", onPress: (){
-
-                                      return_indent_add_line_controller.returnIndentLineDeleteApiHit(return_indent_add_line_controller.return_create_header_list[0].returnNo.toString(),null,return_indent_add_line_controller.indent_return_add_line_list[0].itemNo.toString());
-
-                                        }, isLoading: return_indent_add_line_controller.loading,
-                                    );
-                                   // return_indent_add_line_controller.returnIndentLineDeleteApiHit(return_indent_add_line_controller.return_create_header_list[0].returnNo.toString(),null,return_indent_add_line_controller.indent_return_add_line_list[0].itemNo.toString());
-                                  },
-                                  icon: Icon(Icons.delete,color: AllColors.redColor,),
-                                  label: Container(
-                                    child: Tooltip(
-                                      message: "Discard All Line",
-                                      child: Text(
-                                        "Discard",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
+                                //SizedBox(width: 3,),
+                                Expanded(
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      return_indent_add_line_controller
+                                          .unused_qty_controller.text = value;
+                                    },
+                                    controller:
+                                        return_indent_add_line_controller
+                                            .unused_qty_controller,
+                                    decoration: InputDecoration(
+                                        labelText: "Enter Unused Qty",
+                                        labelStyle: TextStyle(
+                                            color: AllColors.primaryDark1),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: AllColors.primaryDark1),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                    AllColors.primaryDark1))),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: size.width * .1,
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.number,
+                                    onChanged: (value) {
+                                      return_indent_add_line_controller
+                                          .bad_qty_controller.text = value;
+                                    },
+                                    controller:
+                                        return_indent_add_line_controller
+                                            .bad_qty_controller,
+                                    decoration: InputDecoration(
+                                        labelText: "Enter Bad Qty",
+                                        labelStyle: TextStyle(
+                                            color: AllColors.primaryDark1),
+                                        enabledBorder: UnderlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: AllColors.primaryDark1),
+                                        ),
+                                        focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                                color:
+                                                    AllColors.primaryDark1))),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: size.height * .02,
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 8.0, right: 8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: AllColors.textColor2,
+                                        side: BorderSide(
+                                            color: AllColors.primaryDark1,
+                                            width: 1)),
+                                    onPressed: () {
+                                      FocusScope.of(context).unfocus();
+                                      return_indent_add_line_controller
+                                          .returnIndentAddLineApiHit(
+                                              return_indent_add_line_controller
+                                                  .return_create_header_list[0]
+                                                  .returnNo
+                                                  .toString(),
+                                              return_indent_add_line_controller
+                                                  .selected_indent_data!
+                                                  .itemNo!,
+                                              "Add");
+                                    },
+                                    icon: Icon(
+                                      Icons.save,
+                                      color: AllColors.primaryDark1,
+                                    ),
+                                    label: Container(
+                                      child: Tooltip(
+                                        message: "Save",
+                                        child: Text(
+                                          "Save",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                         ),
                                       ),
                                     ),
+                                    //  child:
                                   ),
-                                  //  child:
-                                ),
-
-
-                              ],
+                                  ElevatedButton.icon(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: AllColors.textColor2,
+                                        side: BorderSide(
+                                            color: AllColors.primaryDark1,
+                                            width: 1)),
+                                    onPressed: () {
+                                      return_indent_add_line_controller
+                                          .is_show_indent_dropDown
+                                          .value = false;
+                                      return_indent_add_line_controller
+                                          .is_show_indent_dropDown.value = true;
+                                      return_indent_add_line_controller
+                                          .selected_item_check.value = false;
+                                      return_indent_add_line_controller
+                                          .selected_indent_data = null;
+                                      return_indent_add_line_controller
+                                          .indent_name_controller
+                                          .clear();
+                                      return_indent_add_line_controller
+                                          .bad_qty_controller
+                                          .clear();
+                                      return_indent_add_line_controller
+                                          .unused_qty_controller
+                                          .clear();
+                                    },
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: AllColors.primaryDark1,
+                                    ),
+                                    label: Container(
+                                      child: Tooltip(
+                                        message: "Clear",
+                                        child: Text(
+                                          "Clear",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    //  child:
+                                  ),
+                                ],
+                              ),
                             )
-                          // child:
+                          ],
                         ),
-
-                      Divider( height: 0.5,color: AllColors.primaryDark1,),
-                    ],
-                  ),
+                      ),
+                    );
+                  },
                 ),
-              );
-            },),
-           SizedBox(height: size.height*.02,),
-           Obx(() =>  bindListView(context),)
-          ],
-        ),
-      )),
+                SizedBox(
+                  height: size.height * .03,
+                ),
+                Obx(
+                  () {
+                    return Visibility(
+                      visible: return_indent_add_line_controller
+                                      .indent_return_add_line_list.length >
+                                  0 &&
+                              return_indent_add_line_controller
+                                      .return_create_header_list[0].isDone ==
+                                  0
+                          ? true
+                          : false,
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Divider(
+                              height: 0.5,
+                              color: AllColors.primaryDark1,
+                            ),
+                            Container(
+                                padding: EdgeInsets.only(left: 8.0, right: 8.0),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Indent Line Details:",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.sisxteen,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Spacer(),
+                                    ElevatedButton.icon(
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor: AllColors.textColor2,
+                                          side: BorderSide(
+                                              color: AllColors.redColor,
+                                              width: 1)),
+                                      onPressed: () {
+                                        CustomConfirmDialog.showDialog(
+                                          context: context,
+                                          title: "Delete",
+                                          content: "Do you want to Continue?",
+                                          onPress: () {
+                                            return_indent_add_line_controller
+                                                .returnIndentLineDeleteApiHit(
+                                                    return_indent_add_line_controller
+                                                        .return_create_header_list[
+                                                            0]
+                                                        .returnNo
+                                                        .toString(),
+                                                    null,
+                                                    return_indent_add_line_controller
+                                                        .indent_return_add_line_list[
+                                                            0]
+                                                        .itemNo
+                                                        .toString());
+                                          },
+                                          isLoading:
+                                              return_indent_add_line_controller
+                                                  .loading,
+                                        );
+                                        // return_indent_add_line_controller.returnIndentLineDeleteApiHit(return_indent_add_line_controller.return_create_header_list[0].returnNo.toString(),null,return_indent_add_line_controller.indent_return_add_line_list[0].itemNo.toString());
+                                      },
+                                      icon: Icon(
+                                        Icons.delete,
+                                        color: AllColors.redColor,
+                                      ),
+                                      label: Container(
+                                        child: Tooltip(
+                                          message: "Discard All Line",
+                                          child: Text(
+                                            "Discard",
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      //  child:
+                                    ),
+                                  ],
+                                )
+                                // child:
+                                ),
+                            Divider(
+                              height: 0.5,
+                              color: AllColors.primaryDark1,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                SizedBox(
+                  height: size.height * .02,
+                ),
+                Obx(
+                  () => bindListView(context),
+                )
+              ],
+            ),
+          )),
     );
   }
 
@@ -298,10 +386,12 @@ class ReturnIndentAddLine extends StatelessWidget {
         print(selection.indentNo);
         return_indent_add_line_controller.indent_name_controller.text =
             _displayLocationNameForOption(selection).toString();
-        return_indent_add_line_controller.bad_qty_controller.text=selection.badQty.toString();
-        return_indent_add_line_controller.unused_qty_controller.text=selection.unusedQty.toString();
-        return_indent_add_line_controller.selected_indent_data=selection;
-        return_indent_add_line_controller.selected_item_check.value=true;
+        return_indent_add_line_controller.bad_qty_controller.text =
+            selection.badQty.toString();
+        return_indent_add_line_controller.unused_qty_controller.text =
+            selection.unusedQty.toString();
+        return_indent_add_line_controller.selected_indent_data = selection;
+        return_indent_add_line_controller.selected_item_check.value = true;
         FocusScope.of(context).unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
@@ -314,7 +404,8 @@ class ReturnIndentAddLine extends StatelessWidget {
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = return_indent_add_line_controller.indent_name_controller.text ,
+            ..text =
+                return_indent_add_line_controller.indent_name_controller.text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
@@ -353,21 +444,42 @@ class ReturnIndentAddLine extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final IndentItemResponse option = suggestions.elementAt(index);
+                  final IndentItemResponse option =
+                      suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
                       onSelected(option);
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text("${option.indentNo.toString()+"("+option.itemNo.toString()+")"+"(${option.totalQty.toString()})"}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                              Tooltip(
+                                message:option.customerName.toString(),
+                                child: Text(
+                                  "${option.indentNo.toString() + " ( " + option.customerName.toString()} )",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                      ),
+                                ),
+                              ),
+
+                          Text(
+                            "${option.displayName.toString() + " ( " + option.itemNo.toString()} ) Qty: ${option.totalQty.toString()}",
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontWeight: FontWeight.w300,
+                                fontSize: AllFontSize
+                                    .sisxteen // Change the text color here
                             ),
+                          ),
+                        ],
                       ),
                     ),
                   );
@@ -381,20 +493,27 @@ class ReturnIndentAddLine extends StatelessWidget {
   }
 
   bindListView(BuildContext context) {
-    if(return_indent_add_line_controller.indent_return_add_line_list!=null &&
-        return_indent_add_line_controller.indent_return_add_line_list.isNotEmpty &&
-        return_indent_add_line_controller.indent_return_add_line_list.length>0){
+    if (return_indent_add_line_controller.indent_return_add_line_list != null &&
+        return_indent_add_line_controller
+            .indent_return_add_line_list.isNotEmpty &&
+        return_indent_add_line_controller.indent_return_add_line_list.length >
+            0) {
       return Expanded(
-        child: ListView.separated(itemBuilder: (context, index) {
-          return bindReturnIndentLine(context,index);
-
-        }, separatorBuilder: (context, index) {
-          return Divider(height:0.5,color: AllColors.grayColor,);
-
-        }, itemCount: return_indent_add_line_controller.indent_return_add_line_list.length),
+        child: ListView.separated(
+            itemBuilder: (context, index) {
+              return bindReturnIndentLine(context, index);
+            },
+            separatorBuilder: (context, index) {
+              return Divider(
+                height: 0.5,
+                color: AllColors.grayColor,
+              );
+            },
+            itemCount: return_indent_add_line_controller
+                .indent_return_add_line_list.length),
       );
-    }else{
-      return  Center(
+    } else {
+      return Center(
         //child: Image.asset("assests/images/no_record_found.gif",),
         child: Image.asset(
           "assests/images/no_data_remove.png",
@@ -404,6 +523,7 @@ class ReturnIndentAddLine extends StatelessWidget {
       );
     }
   }
+
   bindReturnIndentLine(BuildContext context, int index) {
     return Container(
       child: ListTile(
@@ -411,183 +531,238 @@ class ReturnIndentAddLine extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text("Item No.",style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontWeight: FontWeight.w500,
-                    fontSize: AllFontSize
-                        .sisxteen // Change the text color here
-                ),),
-               SizedBox(width: size.width*.03,),
+                Text(
+                  "Item No.",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize:
+                          AllFontSize.sisxteen // Change the text color here
+                      ),
+                ),
+                SizedBox(
+                  width: size.width * .03,
+                ),
                 Text(
                   "${return_indent_add_line_controller.indent_return_add_line_list[index].displayName ?? ""} (${return_indent_add_line_controller.indent_return_add_line_list[index].itemNo ?? ""})",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontWeight: FontWeight.w300,
-                    fontSize: AllFontSize.sisxteen, // Ensure this constant is correctly named
+                    fontSize: AllFontSize
+                        .sisxteen, // Ensure this constant is correctly named
                   ),
                 ),
-
-
                 Spacer(),
-                Obx(  () {
-                  return Visibility(
-                    visible: return_indent_add_line_controller
-                        .return_create_header_list[0].isDone!>0?false:true,
-                    child: InkWell(
-                        onTap: () {
-                          return_indent_add_line_controller.returnIndentLineDeleteApiHit(return_indent_add_line_controller.return_create_header_list[0].returnNo.toString(),return_indent_add_line_controller.indent_return_add_line_list[index].lineNo.toString(),return_indent_add_line_controller.indent_return_add_line_list[index].itemNo.toString());
-                        },
-                        child: Tooltip(
-                          message: "Delete Line",
-                            child: Icon(Icons.delete,color: AllColors.redColor,))),
-                  );
-                },
-
+                Obx(
+                  () {
+                    return Visibility(
+                      visible: return_indent_add_line_controller
+                                  .return_create_header_list[0].isDone! >
+                              0
+                          ? false
+                          : true,
+                      child: InkWell(
+                          onTap: () {
+                            return_indent_add_line_controller
+                                .returnIndentLineDeleteApiHit(
+                                    return_indent_add_line_controller
+                                        .return_create_header_list[0].returnNo
+                                        .toString(),
+                                    return_indent_add_line_controller
+                                        .indent_return_add_line_list[index]
+                                        .lineNo
+                                        .toString(),
+                                    return_indent_add_line_controller
+                                        .indent_return_add_line_list[index]
+                                        .itemNo
+                                        .toString());
+                          },
+                          child: Tooltip(
+                              message: "Delete Line",
+                              child: Icon(
+                                Icons.delete,
+                                color: AllColors.redColor,
+                              ))),
+                    );
+                  },
                 ),
-
-
-
               ],
             )
           ],
-
         ),
         subtitle: Table(
           columnWidths: {
-            0:FlexColumnWidth(2.5),
-            1:FlexColumnWidth(1),
-            2:FlexColumnWidth(1.8),
-            3:FlexColumnWidth(1.8),
+            0: FlexColumnWidth(2.5),
+            1: FlexColumnWidth(1),
+            2: FlexColumnWidth(1.8),
+            3: FlexColumnWidth(1.8),
           },
           children: [
-            TableRow(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Text("Line No.",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontWeight: FontWeight.w500,
-                        fontSize: AllFontSize.fourtine // Change the text color here
-                    ),),
+            TableRow(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  "Line No.",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Text(return_indent_add_line_controller.indent_return_add_line_list[index].lineNo.toString(),
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontWeight: FontWeight.w300,
-                        fontSize: AllFontSize.fourtine // Change the text color here
-                    ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  return_indent_add_line_controller
+                      .indent_return_add_line_list[index].lineNo
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Text("Indent No.",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontWeight: FontWeight.w500,
-                        fontSize: AllFontSize.fourtine // Change the text color here
-                    ),),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  "Indent No.",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 5.0),
-                  child: Text(return_indent_add_line_controller.indent_return_add_line_list[index].indentNo.toString(),
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontWeight: FontWeight.w300,
-                        fontSize: AllFontSize.fourtine // Change the text color here
-                    ),),
-                )
-
-              ]
-            ),
-            TableRow(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text("Indent Line No.",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w500,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text(return_indent_add_line_controller.indent_return_add_line_list[index].indentLineNo.toString(),
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontWeight: FontWeight.w300,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text("Used Qty.",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w500,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text(return_indent_add_line_controller.indent_return_add_line_list[index].returnUnusedQty.toString(),
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontWeight: FontWeight.w300,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  )
-
-                ]
-            ),
-            TableRow(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text("Return bad Qty.",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w500,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text(return_indent_add_line_controller.indent_return_add_line_list[index].returnBadQty.toString(),
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontWeight: FontWeight.w300,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text("Total Qty.",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w500,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Text(return_indent_add_line_controller.indent_return_add_line_list[index].returnTotalQty.toString(),
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontWeight: FontWeight.w300,
-                          fontSize: AllFontSize.fourtine // Change the text color here
-                      ),),
-                  )
-
-                ]
-            )
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  return_indent_add_line_controller
+                      .indent_return_add_line_list[index].indentNo
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              )
+            ]),
+            TableRow(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  "Indent Line No.",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  return_indent_add_line_controller
+                      .indent_return_add_line_list[index].indentLineNo
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  "Used Qty.",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  return_indent_add_line_controller
+                      .indent_return_add_line_list[index].returnUnusedQty
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              )
+            ]),
+            TableRow(children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  "Return bad Qty.",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  return_indent_add_line_controller
+                      .indent_return_add_line_list[index].returnBadQty
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  "Total Qty.",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Text(
+                  return_indent_add_line_controller
+                      .indent_return_add_line_list[index].returnTotalQty
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize:
+                          AllFontSize.fourtine // Change the text color here
+                      ),
+                ),
+              )
+            ])
           ],
         ),
       ),
     );
-
-
   }
 }

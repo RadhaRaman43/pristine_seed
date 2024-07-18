@@ -1149,10 +1149,13 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                                     return Padding(
                                       padding: const EdgeInsets.only(left: 2),
                                       child: Visibility(
-                                        visible: installation_deatils_page_controller
+                                        visible: (installation_deatils_page_controller
                                             .service_installation_details_list[0]
                                             .serviceStatus ==
-                                            "Rescheduled" || installation_deatils_page_controller
+                                            "Rescheduled" && installation_deatils_page_controller
+                                            .service_installation_details_list[0]
+                                            .recheduleApprovalStatus ==
+                                            "Pending") || installation_deatils_page_controller
                                             .service_installation_details_list[
                                         0]
                                             .serviceStatus ==

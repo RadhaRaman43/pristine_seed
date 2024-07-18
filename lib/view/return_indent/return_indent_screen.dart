@@ -30,7 +30,7 @@ class ReturnIndentScreen extends StatelessWidget {
           title: Row(
             children: [
               Text(
-                'Return Indent Screen',
+                'Return Indent',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: AllFontSize.twentee,
@@ -44,6 +44,7 @@ class ReturnIndentScreen extends StatelessWidget {
                     visible: return_indent_page_controller.is_done.value==0,
                     child: IconButton(
                       onPressed: () {
+                        return_indent_page_controller.location_code_controller.clear();
                         Get.toNamed(RoutesName.newReturnIndentScreen);
                       },
                       icon: Icon(Icons.add),

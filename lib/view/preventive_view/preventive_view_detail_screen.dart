@@ -1165,11 +1165,13 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                             const EdgeInsets.only(left: 2.0),
                                         child: Visibility(
                                           visible:
-                                              preventive_deatils_page_controller
-                                                          .service_preventive_details_list[
-                                                              0]
-                                                          .serviceStatus ==
-                                                      "Rescheduled" ||   preventive_deatils_page_controller
+                                          (preventive_deatils_page_controller
+                                              .service_preventive_details_list[0]
+                                              .serviceStatus ==
+                                              "Rescheduled" && preventive_deatils_page_controller
+                                              .service_preventive_details_list[0]
+                                              .recheduleApprovalStatus ==
+                                              "Pending")  ||   preventive_deatils_page_controller
                                                   .service_preventive_details_list[
                                               0]
                                                   .serviceStatus ==

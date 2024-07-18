@@ -24,7 +24,7 @@ class NewReturnIndentScreen extends StatelessWidget{
     return Scaffold(
         appBar: AppBar(
           title: Text(
-            'New Indent ',
+            'Create Return Indent ',
             style: GoogleFonts.poppins(
               color: AllColors.whiteColor,
               fontSize: AllFontSize.twentee,
@@ -75,11 +75,11 @@ class NewReturnIndentScreen extends StatelessWidget{
                     icon:  Icons.create,
                     text: "Create",
                     press: (){
+
+
                       return_indent_page_controller.ReturnIndentHeaderCreate("Init");
                     },
                   )
-
-
 
                  /* ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
@@ -113,138 +113,11 @@ class NewReturnIndentScreen extends StatelessWidget{
                 ],
               ),
             )
-            
-            
-            
-        
-
-
-
-
-
-
           ],
         ),
       )
     );
   }
-
-
- /* Widget bindLocationDropDown(context) {
-    return_indent_page_controller.location_code_controller.addListener(() {
-      return_indent_page_controller.update(); // Call update to refresh the state
-    });
-    return Autocomplete<LocationResponse>(
-      displayStringForOption: _displayLocationNameForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return return_indent_page_controller.location_list.value;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return return_indent_page_controller.location_list.value.where((LocationResponse option) {
-          return option.locationName!.toLowerCase().contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (LocationResponse selection) {
-        print(selection.locationName);
-        return_indent_page_controller.location_code_controller.text =
-            _displayLocationNameForOption(selection).toString();
-        return_indent_page_controller.location_code=selection.locationId!;
-
-
-
-        FocusScope.of(context).unfocus();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          *//*onChanged: (value) {
-            if (value.isEmpty) {
-              return_indent_page_controller.location_code_controller
-                  .clear();
-            }
-          },*//*
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = return_indent_page_controller.location_code_controller.text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.one),
-            hintText: 'Select Location',
-            labelText: 'Select Location',
-            hintStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              // fontWeight: FontWeight.w300,
-              //  fontSize: AllFontSize.ten
-            ),
-            suffixIcon: InkWell(
-              onTap: () {
-                controller.clear();
-                return_indent_page_controller.location_code_controller.clear();
-                return_indent_page_controller.location_code = '';
-                FocusScope.of(context).unfocus();
-
-                return_indent_page_controller.location_code_controller.clear();
-              },
-                child: Icon(Icons.clear)),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                // fontWeight: FontWeight.w700,
-                fontSize: AllFontSize.sisxteen),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AllColors.primaryDark1), // Change the color to green
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<LocationResponse> onSelected,
-          Iterable<LocationResponse> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              color: AllColors.grayColor1,
-              //width: size.width * .65,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final LocationResponse option = suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text(
-                              overflow: TextOverflow.ellipsis,
-                              option.locationName.toString(),
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize
-                                      .sisxteen // Change the text color here
-                              ),
-                            ),
-
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
-
-
   Widget bindLocationDropDown(BuildContext context) {
     // Initialize a TextEditingController if not already done
     return_indent_page_controller.location_code_controller.addListener(() {

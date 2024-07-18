@@ -2,8 +2,10 @@ class IndentItemResponse {
   String? condition;
   String? message;
   String? indentNo;
+  String? displayName;
   int? lineNo;
   String? itemNo;
+  String? customerName;
   double? unusedQty;
   double? badQty;
   double? totalQty;
@@ -12,6 +14,8 @@ class IndentItemResponse {
       {this.condition,
         this.message,
         this.indentNo,
+        this.customerName,
+        this.displayName,
         this.lineNo,
         this.itemNo,
         this.unusedQty,
@@ -22,6 +26,8 @@ class IndentItemResponse {
     condition = json['condition'];
     message = json['message'];
     indentNo = json['indent_no'];
+    customerName = json['customer_name'];
+    displayName = json['display_name'];
     lineNo = json['line_no'];
     itemNo = json['item_no'];
     unusedQty = json['unused_qty'];
@@ -34,6 +40,8 @@ class IndentItemResponse {
     data['condition'] = this.condition;
     data['message'] = this.message;
     data['indent_no'] = this.indentNo;
+    data['customer_name'] = this.customerName;
+    data['display_name'] = this.displayName;
     data['line_no'] = this.lineNo;
     data['item_no'] = this.itemNo;
     data['unused_qty'] = this.unusedQty;

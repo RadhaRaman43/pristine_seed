@@ -80,7 +80,7 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Return No',
+                          'Return No.',
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.sisxteen,
@@ -97,6 +97,7 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                             fontSize: AllFontSize.sisxteen,
                             fontWeight: FontWeight.w500,
                           ),
+
                         )
                       ],
                     ),
@@ -106,7 +107,7 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          'Location',
+                          'Location Code',
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.sisxteen,
@@ -318,7 +319,7 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
       child: ListTile(
         title: Row(
           children: [
-            Text("Item No:",style:  GoogleFonts.poppins(
+            Text("Item No.:",style:  GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w500,
@@ -347,6 +348,8 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                         return_header_details_controller.getIndentItemName(return_header_details_controller
                             .return_create_header_list[0].returnNo.toString(),return_header_details_controller
                             .return_create_header_list[0].lines![index].itemNo.toString());
+
+                        return_header_details_controller. indent_return_add_line_list.value=[];
 
                         return_header_details_controller.returnIndentAddLineApiHit(return_header_details_controller
                             .return_create_header_list[0].lines![index].returnNo.toString(),return_header_details_controller

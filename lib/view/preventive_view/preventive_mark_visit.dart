@@ -26,6 +26,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
         "");
     return WillPopScope(
       onWillPop: () async {
+        preventive_indent_page_controller. getServicePreventiveDetails(preventive_indent_page_controller.id, "");
         Get.toNamed(RoutesName.preventive_details_screen);
         return false;
       },

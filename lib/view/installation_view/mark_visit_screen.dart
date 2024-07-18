@@ -30,8 +30,10 @@ class MarkVisit extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
+        installation_indent_page_controller.getServiceInstallationDetails(installation_indent_page_controller.id,"Refresh");
         Get.toNamed(RoutesName.installation_details_screen);
-        return true;
+
+        return false;
       },
       child: Scaffold(
         appBar: AppBar(

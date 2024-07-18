@@ -105,20 +105,19 @@ class ReturnIndentViewModel extends GetxController {
 
   ReturnIndentHeaderCreate(String flag) {
 
-
     loading.value = true;
     Map data;
     if(flag=="Init"){
       data = {
         "return_no": "",
-        "location_code": location_code_controller.text,
+        "location_code": location_code,
         "email_id": email
       };
     }
     else if(flag=="ListView"){
       data = {
         "return_no": return_no,
-        "location_code": location_code,
+        "location_code": list_location_code,
         "email_id": email
       };
     }else if(flag=="back"){
@@ -152,6 +151,7 @@ class ReturnIndentViewModel extends GetxController {
               Get.toNamed(RoutesName.returnHeaderDetailsScreen);
             }
           } else {
+            Utils.showErrorToastification("False!", response[0].message!);
            // return_create_header_list.value = [];
           }
         } else {

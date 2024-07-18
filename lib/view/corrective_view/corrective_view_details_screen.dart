@@ -1100,12 +1100,14 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                         return Padding(
                                           padding: const EdgeInsets.only(left:2.0),
                                           child: Visibility(
-                                            visible:  corrective_deatils_page_controller
+                                            visible: (corrective_deatils_page_controller
                                                 .service_corrective_details_list[0]
                                                 .serviceStatus ==
-                                                "Rescheduled" ||corrective_deatils_page_controller
-                                                .service_corrective_details_list[
-                                            0]
+                                                "Rescheduled" && corrective_deatils_page_controller
+                                                .service_corrective_details_list[0]
+                                                .recheduleApprovalStatus ==
+                                                "Pending") ||corrective_deatils_page_controller
+                                                .service_corrective_details_list[0]
                                                 .serviceStatus ==
                                                 "Completed"?false:true,
                                             child: ElevatedButton(
