@@ -32,7 +32,7 @@ class OrderScreen extends StatelessWidget{
           title:Row(
             children: [
               Text(
-                'Order Screen',
+                'Order',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: AllFontSize.twentee,

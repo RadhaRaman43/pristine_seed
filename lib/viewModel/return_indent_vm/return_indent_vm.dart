@@ -72,7 +72,7 @@ class ReturnIndentViewModel extends GetxController {
   getLocation() {
     loading.value = true;
     Map <String, String> data = {
-
+      "email_id":email
     };
     print(data);
     try {

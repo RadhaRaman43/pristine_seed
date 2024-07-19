@@ -116,7 +116,8 @@ class AppUrl {
   static const String getDateWiseUserCoordinate="$BASE_URL/api/Travel/GetDateWiseUserCoordinate";
 
   //todo return indent.....
-  static const String getReturnLocation="$BASE_URL/api/Master/GetLocationList";
+ // static const String getReturnLocation="$BASE_URL/api/Master/GetLocationList";
+  static const String getReturnLocation="$BASE_URL/api/ReturnIndent/GetReturnLocationList";
   static const String returnIndentHeaderCreate="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderCreate";
   static const String returnIndentList="$BASE_URL/api/ReturnIndent/ReturnIndentHeaderListGet";
   static const String returnIndentItemWise="$BASE_URL/api/ReturnIndent/ReturnIndentGetItemWise";

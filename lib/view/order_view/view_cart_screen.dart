@@ -35,7 +35,7 @@ class ViewCartScreen extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'View Cart Screen',
+                'View Cart',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: AllFontSize.twentee,

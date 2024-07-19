@@ -33,7 +33,7 @@ class NewOrderScreen extends StatelessWidget {
         title: Row(
           children: [
             Text(
-              'New Order Screen',
+              'New Order',
               style: GoogleFonts.poppins(
                 color: AllColors.whiteColor,
                 fontSize: AllFontSize.twentee,

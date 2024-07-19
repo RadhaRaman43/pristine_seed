@@ -57,7 +57,7 @@ class OrderItemVarietyScreen extends StatelessWidget{
              crossAxisAlignment: CrossAxisAlignment.start,
              children: [
                Text(
-                 'Item View Screen',
+                 'Item View',
                  style: GoogleFonts.poppins(
                    color: AllColors.whiteColor,
                    fontSize: AllFontSize.twentee,

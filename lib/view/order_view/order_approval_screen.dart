@@ -26,7 +26,7 @@ class  OrderApprovalScreen extends StatelessWidget{
     return Scaffold(
       appBar: AppBar(
         title:Text(
-          'Order Approval Screen',
+          'Order Approval',
           style: GoogleFonts.poppins(
             color: AllColors.whiteColor,
             fontSize: AllFontSize.twentee,
