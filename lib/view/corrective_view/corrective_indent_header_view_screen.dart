@@ -13,6 +13,7 @@ import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
 import '../../models/serviceCorrectiveModel/corrective_item_no_model.dart';
 import '../../models/serviceIndentModel/Item_no_model.dart';
+import '../../utils/app_utils.dart';
 import '../../viewModel/corrective_vm/corrective_vm.dart';
 import '../custom_drawer.dart';
 
@@ -1975,6 +1976,22 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                               sub_total.value = currentQty * current_unitPrice;
                               discount_amount.value = currentQty * current_unitPrice*current_discount_per/100;
                               total_amount.value = (currentQty * current_unitPrice)-(currentQty * current_unitPrice*current_discount_per/100);
+
+
+                              //todo discount not grether 100....
+                              double enteredDiscount = double.tryParse(value) ?? 0;
+
+                              // Check if entered discount is greater than 100
+                              if (enteredDiscount > 100) {
+                                enteredDiscount = 100;
+                                // Set the text to 100 if it's greater than 100
+                                indent_deatils_page_controller.discount_controller.text = "100";
+
+                                Utils.showErrorToastification("Error!", "Discount % Cannot Be Greater Than 100");
+                              }
+
+
+
                             },
                             readOnly: indent_deatils_page_controller.isCheckBox.value==true ||  flag=="View"?true:false,
                             controller:  indent_deatils_page_controller.discount_controller,

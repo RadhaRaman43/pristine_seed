@@ -9,6 +9,7 @@ import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/models/serviceIndentModel/Item_no_model.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
+import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
 
 import '../../constants/app_colors.dart';
@@ -1566,7 +1567,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
     RxDouble sub_total = 0.0.obs;
     RxDouble discount_amount = 0.0.obs;
     RxDouble total_amount = 0.0.obs;
-
+    indent_deatils_page_controller.discount_controller.text="100";
     if (flag == "View") {
 
       indent_deatils_page_controller.isCheckBox.value =
@@ -1736,7 +1737,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                           .discount_controller.text = "0";
                                     } else {
                                       indent_deatils_page_controller
-                                          .discount_controller.text = "";
+                                          .discount_controller.text = "100";
                                     }
                                     if (indent_deatils_page_controller
                                                 .is_warrenty >
@@ -1817,6 +1818,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         ? "0"
                                         : indent_deatils_page_controller
                                             .discount_controller.text);
+                            //    double current_discount_per = enteredDiscount;
                                 sub_total.value =
                                     currentQty * current_unitPrice;
                                 discount_amount.value = currentQty *
@@ -1829,6 +1831,21 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                             current_unitPrice *
                                             current_discount_per /
                                             100);
+
+
+                                //todo discount not grether 100....
+                                double enteredDiscount = double.tryParse(value) ?? 0;
+
+                                // Check if entered discount is greater than 100
+                                if (enteredDiscount > 100) {
+                                  enteredDiscount = 100;
+                                  // Set the text to 100 if it's greater than 100
+                                  indent_deatils_page_controller.discount_controller.text = "100";
+
+                                  Utils.showErrorToastification("Error!", "Discount % Cannot Be Greater Than 100");
+                                }
+
+
                               },
                               readOnly: indent_deatils_page_controller
                                               .isCheckBox.value ==
@@ -1841,8 +1858,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                               keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 labelText: "Enter Discount%",
-                                labelStyle:
-                                    TextStyle(color: AllColors.primaryDark1),
+                                labelStyle: TextStyle(color: AllColors.primaryDark1),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide:
                                       BorderSide(color: AllColors.primaryDark1),

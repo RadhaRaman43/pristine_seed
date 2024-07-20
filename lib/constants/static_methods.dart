@@ -104,6 +104,19 @@ class StaticMethod{
   }
 
 
+  static String? onlyMonthNameThreeCharacter(String inputDate) {
+    final inputFormat = DateFormat('yyyy-MM-dd');
+    final outputFormat = DateFormat('d MMM');  // Format to get only the 3-letter month name
+    try {
+      final date = inputFormat.parse(inputDate);
+      return outputFormat.format(date);
+    } catch (e) {
+      print("Error parsing date: $e");
+      return null; // Return null or handle the error as needed
+    }
+  }
+
+
   static String? onlyYearName(String inputDate) {
     final inputFormat = DateFormat('yyyy-MM-dd');
     //final outputFormat = DateFormat('d MMMM');  // Format to get only the month name and day

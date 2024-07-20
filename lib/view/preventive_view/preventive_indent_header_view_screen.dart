@@ -11,6 +11,7 @@ import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
 import '../../models/servicePreventiveModel/preventive_item_no_moel.dart';
+import '../../utils/app_utils.dart';
 import '../../viewModel/preventive_vm/preventive_vm.dart';
 import '../custom_drawer.dart';
 
@@ -1915,6 +1916,17 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                               sub_total.value = currentQty * current_unitPrice;
                               discount_amount.value = currentQty * current_unitPrice*current_discount_per/100;
                               total_amount.value = (currentQty * current_unitPrice)-(currentQty * current_unitPrice*current_discount_per/100);
+
+                              //todo discount not grether 100....
+                              double enteredDiscount = double.tryParse(value) ?? 0;
+                              // Check if entered discount is greater than 100
+                              if (enteredDiscount > 100) {
+                                enteredDiscount = 100;
+                                // Set the text to 100 if it's greater than 100
+                                preventive_indent_detils_page_controller.discount_controller.text = "100";
+                                Utils.showErrorToastification("Error!", "Discount % Cannot Be Greater Than 100");
+                              }
+
                             },
                             readOnly: preventive_indent_detils_page_controller.isCheckBox.value==true || flag=="View"?true:false,
                             controller:  preventive_indent_detils_page_controller.discount_controller,

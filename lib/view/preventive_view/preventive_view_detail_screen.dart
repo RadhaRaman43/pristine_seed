@@ -2257,7 +2257,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                 ? true
                 : false,
             child: ListView.builder(
-              controller: scrollController,
+             controller: scrollController,
                 shrinkWrap: true,
                 itemCount:
                 preventive_deatils_page_controller
@@ -2456,42 +2456,87 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                                           ),
                                                           softWrap: true,
                                                         ),
+
                                                         Obx(
                                                               () {
                                                             return Visibility(
                                                               visible: preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark != null && preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark!.isNotEmpty,
                                                               child: Padding(
                                                                 padding: const EdgeInsets.only(left: 1.0),
-                                                                child: Expanded(
-                                                                  child: RichText(
-                                                                    text: TextSpan(
-                                                                      children: [
-                                                                        TextSpan(
-                                                                          text: "Remark:  ",
-                                                                          style: GoogleFonts.poppins(
-                                                                            color: AllColors.primaryDark1,
-                                                                            fontSize: AllFontSize.fourtine,
-                                                                            fontWeight: FontWeight.w500,
+                                                                child: Container(
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Expanded(
+                                                                        child: RichText(
+                                                                          text: TextSpan(
+                                                                            children: [
+                                                                              TextSpan(
+                                                                                text: "Remark:  ",
+                                                                                style: GoogleFonts.poppins(
+                                                                                  color: AllColors.primaryDark1,
+                                                                                  fontSize: AllFontSize.fourtine,
+                                                                                  fontWeight: FontWeight.w500,
+                                                                                ),
+                                                                              ),
+                                                                              if (preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark != null && preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark!.isNotEmpty)
+                                                                                TextSpan(
+                                                                                  text: preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark.toString()!,
+                                                                                  style: GoogleFonts.poppins(
+                                                                                    color: AllColors.textColor,
+                                                                                    fontSize: AllFontSize.fourtine,
+                                                                                    fontWeight: FontWeight.w500,
+                                                                                  ),
+
+                                                                                ),
+                                                                            ],
                                                                           ),
+                                                                          softWrap: true,
                                                                         ),
-                                                                        if (preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark != null && preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark!.isNotEmpty)
-                                                                          TextSpan(
-                                                                            text: preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark.toString()!,
-                                                                            style: GoogleFonts.poppins(
-                                                                              color: AllColors.textColor,
-                                                                              fontSize: AllFontSize.fourtine,
-                                                                              fontWeight: FontWeight.w500,
-                                                                            ),
-                                                                          ),
-                                                                      ],
-                                                                    ),
-                                                                    softWrap: true,
+                                                                      ),
+
+                                                                    ],
                                                                   ),
                                                                 ),
                                                               ),
                                                             );
                                                           },
                                                         ),
+
+
+                                                       /* Obx(
+                                                              () {
+                                                            return Visibility(
+                                                              visible: preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark != null && preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark!.isNotEmpty,
+                                                              child: Padding(
+                                                                padding: const EdgeInsets.only(left: 1.0),
+                                                                child: RichText(
+                                                                  text: TextSpan(
+                                                                    children: [
+                                                                      TextSpan(
+                                                                        text: "Remark:  ",
+                                                                        style: GoogleFonts.poppins(
+                                                                          color: AllColors.primaryDark1,
+                                                                          fontSize: AllFontSize.fourtine,
+                                                                          fontWeight: FontWeight.w500,
+                                                                        ),
+                                                                      ),
+                                                                      if (preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark != null && preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark!.isNotEmpty)
+                                                                        TextSpan(
+                                                                          text: preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark.toString()!,
+                                                                          style: GoogleFonts.poppins(
+                                                                            color: AllColors.textColor,
+                                                                            fontSize: AllFontSize.fourtine,
+                                                                            fontWeight: FontWeight.w500,
+                                                                          ),
+                                                                        ),
+                                                                    ],
+                                                                  ),
+                                                                  softWrap: true,
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                        ),*/
                                                         Row(
                                                           children: [
                                                             Spacer(),
