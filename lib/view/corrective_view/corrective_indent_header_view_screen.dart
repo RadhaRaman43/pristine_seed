@@ -221,7 +221,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                               .service_indent_header_list.isNotEmpty &&
                                               (indent_deatils_page_controller
                                                   .service_indent_header_list[0].indentStatus ==
-                                                  "Issued From Warehouse" ||
+                                                  "Ready For Consumption" ||
                                                   indent_deatils_page_controller
                                                       .service_indent_header_list[0].indentStatus == "Received");
                                       return Visibility(
@@ -229,7 +229,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                         /*indent_deatils_page_controller
                                             .service_indent_header_list[0]
                                             .indentStatus ==
-                                            "Issued From Warehouse" || indent_deatils_page_controller
+                                            "Ready For Consumption" || indent_deatils_page_controller
                                             .service_indent_header_list[0]
                                             .indentStatus =="Receive"*/
                                             ? true
@@ -281,7 +281,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                             visible: indent_deatils_page_controller
                                                 .service_indent_header_create_list[0]
                                                 .indentStatus ==
-                                                "Issued From Warehouse"
+                                                "Ready For Consumption"
                                                 ? true
                                                 : false,
                                             child: Container(
@@ -305,7 +305,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                                           .indentNo!);
                                                 },
                                                 child: Text(
-                                                  'Received',
+                                                  'Consume',
                                                   style: GoogleFonts.poppins(
                                                       color: AllColors.primaryDark1,
                                                       fontSize: AllFontSize.sisxteen,
@@ -513,16 +513,11 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                 ],
                               ),
                             ),
-
-
                             //  Divider(height: 0.55,color: AllColors.bluegrayColor,),
                             SizedBox(
                               height: 3,
                             ),
                             Obx(() => bindList(context),)
-
-
-
                           ],
                         ),
                       ),
@@ -637,7 +632,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                   .service_indent_header_create_list[
                               0]
                                   .indentStatus ==
-                                  "Issued From Warehouse" || indent_deatils_page_controller
+                                  "Ready For Consumption" || indent_deatils_page_controller
                                   .service_indent_header_create_list[
                               0].indentStatus ==
                                   "Completed" ||
@@ -670,7 +665,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                 .service_indent_header_create_list[
                             0]
                                 .indentStatus ==
-                                "Issued From Warehouse"
+                                "Ready For Consumption"
                                 ? true
                                 : false,
                             child: Container(
@@ -764,7 +759,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                     .service_indent_header_create_list[
                                 0]
                                     .indentStatus ==
-                                    "Issued From Warehouse"
+                                    "Ready For Consumption"
                                     ? true
                                     : true,
                                 child: InkWell(
@@ -794,7 +789,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                     .service_indent_header_create_list[
                                 0]
                                     .indentStatus ==
-                                    "Issued From Warehouse" ||
+                                    "Ready For Consumption" ||
                                 indent_deatils_page_controller
                                     .service_indent_header_create_list[
                                 0]
@@ -964,7 +959,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                               indent_deatils_page_controller
                                   .service_indent_header_create_list[0]
                                   .indentStatus ==
-                                  "Issued From Warehouse" ||
+                                  "Ready For Consumption" ||
                               indent_deatils_page_controller
                                   .service_indent_header_create_list[0]
                                   .indentStatus ==
@@ -1162,7 +1157,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                     visible: indent_deatils_page_controller
                         .service_indent_header_create_list[0]
                         .indentStatus ==
-                        "Issued From Warehouse"
+                        "Ready For Consumption"
                         ? true
                         : false
                     ,

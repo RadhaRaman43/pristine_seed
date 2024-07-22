@@ -240,7 +240,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                                       .service_indent_header_list[
                                                           0]
                                                       .indentStatus ==
-                                                  "Issued From Warehouse" || indent_deatils_page_controller
+                                                  "Ready For Consumption" || indent_deatils_page_controller
                                               .service_indent_header_list.isNotEmpty &&   indent_deatils_page_controller
                                               .service_indent_header_list[
                                           0]
@@ -287,7 +287,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                             .service_indent_header_list.isNotEmpty &&
                                             (indent_deatils_page_controller
                                                 .service_indent_header_list[0].indentStatus ==
-                                                "Issued From Warehouse" ||
+                                                "Ready For Consumption" ||
                                                 indent_deatils_page_controller
                                                     .service_indent_header_list[0].indentStatus == "Received");
 
@@ -345,7 +345,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                                           .service_indent_header_create_list[
                                                               0]
                                                           .indentStatus ==
-                                                      "Issued From Warehouse"
+                                                      "Ready For Consumption"
                                                   ? true
                                                   : false,
                                               child: Container(
@@ -379,7 +379,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                                                 .indentNo!);
                                                   },
                                                   child: Text(
-                                                    'Received',
+                                                    'Consume',
                                                     style: GoogleFonts.poppins(
                                                         color: AllColors
                                                             .primaryDark1,
@@ -804,7 +804,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                       visible: indent_deatils_page_controller
                                   .service_indent_header_create_list[0]
                                   .indentStatus ==
-                              "Issued From Warehouse"
+                              "Ready For Consumption"
                           ? true
                           : false,
                       child: InkWell(

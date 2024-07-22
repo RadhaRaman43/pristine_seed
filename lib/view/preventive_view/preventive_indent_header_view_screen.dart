@@ -218,7 +218,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                               .service_indent_header_list.isNotEmpty &&
                                               (preventive_indent_detils_page_controller
                                                   .service_indent_header_list[0].indentStatus ==
-                                                  "Issued From Warehouse" ||
+                                                  "Ready For Consumption" ||
                                                   preventive_indent_detils_page_controller
                                                       .service_indent_header_list[0].indentStatus == "Received");
                                       return Visibility(
@@ -227,7 +227,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                         /*preventive_indent_detils_page_controller
                                             .service_indent_header_list[0]
                                             .indentStatus ==
-                                            "Issued From Warehouse" || preventive_indent_detils_page_controller
+                                            "Ready For Consumption" || preventive_indent_detils_page_controller
                                             .service_indent_header_list[0]
                                             .indentStatus =="Received"*/
 
@@ -280,7 +280,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                             visible: preventive_indent_detils_page_controller
                                                 .service_indent_header_list[0]
                                                 .indentStatus ==
-                                                "Issued From Warehouse"
+                                                "Ready For Consumption"
                                                 ? true
                                                 : false,
                                             child: Container(
@@ -304,7 +304,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                                           .indentNo!);
                                                 },
                                                 child: Text(
-                                                  'Received',
+                                                  'Consume',
                                                   style: GoogleFonts.poppins(
                                                       color: AllColors.primaryDark1,
                                                       fontSize: AllFontSize.sisxteen,
@@ -489,18 +489,11 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                             onPressed: () {
                                               preventive_indent_detils_page_controller.isCheckBox.value=false;
                                               preventive_indent_detils_page_controller.getItemNo();
-                                              preventive_indent_detils_page_controller
-                                                  .item_no_controller
-                                                  .clear();
-                                              preventive_indent_detils_page_controller
-                                                  .item_no_description_controller
-                                                  .clear();
-                                              preventive_indent_detils_page_controller
-                                                  .quantity_controller
-                                                  .clear();
+                                              preventive_indent_detils_page_controller.item_no_controller.clear();
+                                              preventive_indent_detils_page_controller.item_no_description_controller.clear();
+                                              preventive_indent_detils_page_controller.quantity_controller.clear();
                                               preventive_indent_detils_page_controller.discount_controller.clear();
                                               preventive_indent_detils_page_controller.unit_price_controller.clear();
-
                                               showAddLineBottomSheet(context,null,"");
                                               //addLineDialog(context);
                                             },
@@ -648,7 +641,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                     .service_indent_header_list[
                                 0]
                                     .indentStatus ==
-                                    "Issued From Warehouse"
+                                    "Ready For Consumption"
                                     ? true
                                     : false,
                                 child: InkWell(
@@ -677,7 +670,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                   .service_indent_header_list[
                               0]
                                   .indentStatus ==
-                                  "Issued From Warehouse"
+                                  "Ready For Consumption"
                                   ? true
                                   : false,
                               child: Container(
@@ -768,7 +761,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                     .service_indent_header_list[
                                 0]
                                     .indentStatus! ==
-                                    "Issued From Warehouse" ||
+                                    "Ready For Consumption" ||
                                 preventive_indent_detils_page_controller
                                     .service_indent_header_list[
                                 0]
@@ -1112,7 +1105,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     visible: preventive_indent_detils_page_controller
                         .service_indent_header_list[0]
                         .indentStatus ==
-                        "Issued From Warehouse"
+                        "Ready For Consumption"
                         ? true
                         : false
                     ,

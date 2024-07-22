@@ -33,7 +33,7 @@ class Utils{
       colorText: AllColors.whiteColor,
       backgroundColor: AllColors.primaryDark1,
       barBlur: 2.0,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 5),
 
     );
   }
@@ -44,7 +44,7 @@ class Utils{
       colorText: AllColors.whiteColor,
       backgroundColor: AllColors.redColor,
       barBlur: 2.0,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 5),
     );
   }
   static sanckBarException(String title,String message){
@@ -54,7 +54,7 @@ class Utils{
       colorText: AllColors.whiteColor,
       backgroundColor: AllColors.lightredColor,
       barBlur: 2.0,
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 5),
     );
   }
 
@@ -67,7 +67,7 @@ class Utils{
         description: message,
 
         backgroundColor: AllColors.green,
-        autoCloseDuration: const Duration(seconds: 2),
+        autoCloseDuration: const Duration(seconds: 5),
         icon:Icon(Icons.check),
       );
     } catch (e) {
@@ -83,7 +83,7 @@ class Utils{
           title: title,
           description: message,
           backgroundColor: AllColors.redColor,
-          autoCloseDuration: const Duration(seconds: 2),
+          autoCloseDuration: const Duration(seconds: 5),
           icon:Icon(Icons.error)
       );
     } catch (e) {
@@ -100,7 +100,7 @@ class Utils{
           title: title,
           description: message,
           backgroundColor: AllColors.lightredColor,
-          autoCloseDuration: const Duration(seconds: 2),
+          autoCloseDuration: const Duration(seconds: 5),
           icon:Icon(Icons.error)
       );
     } catch (e) {

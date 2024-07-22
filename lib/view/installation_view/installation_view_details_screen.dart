@@ -1745,7 +1745,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
             elevation: 4.0,
             child: Container(
               color: AllColors.grayColor1,
-              width: size.width * .65,
+              width: size.width * .6,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,
