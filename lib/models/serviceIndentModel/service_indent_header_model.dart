@@ -10,6 +10,7 @@ class ServiceIndentHeaderResponse {
   String? indentStatus;
   String? updatedOn;
   String? locationCode;
+  String? indentType;
 
   ServiceIndentHeaderResponse(
       {this.condition,
@@ -20,6 +21,7 @@ class ServiceIndentHeaderResponse {
         this.serviceNo,
         this.createdOn,
         this.createdBy,
+        this.indentType,
         this.indentStatus,
         this.updatedOn,
         this.locationCode});
@@ -29,6 +31,7 @@ class ServiceIndentHeaderResponse {
     message = json['message'];
     indentNo = json['indent_no'];
     serviceType = json['service_type'];
+    indentType = json['indent_type'];
     serviceId = json['service_id'];
     serviceNo = json['service_no'];
     createdOn = json['created_on'];
@@ -44,6 +47,7 @@ class ServiceIndentHeaderResponse {
     data['condition'] = this.condition;
     data['message'] = this.message;
     data['indent_no'] = this.indentNo;
+    data['indent_type'] = this.indentType;
     data['service_type'] = this.serviceType;
     data['service_id'] = this.serviceId;
     data['service_no'] = this.serviceNo;

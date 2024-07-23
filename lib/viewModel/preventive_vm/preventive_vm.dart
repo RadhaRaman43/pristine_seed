@@ -19,6 +19,7 @@ import '../../models/reasonModel/reason_master_response.dart';
 import '../../models/servicePreventiveModel/createPreventiveCalenderModel.dart';
 import '../../models/servicePreventiveModel/indent_header_line_create_model.dart';
 import '../../models/servicePreventiveModel/item_details_model.dart';
+import '../../models/servicePreventiveModel/preventive_indent_header_create_model.dart';
 import '../../models/servicePreventiveModel/preventive_item_no_moel.dart';
 import '../../models/servicePreventiveModel/service_preventive_details_model.dart';
 import '../../reources/app_url/app_url.dart';
@@ -58,13 +59,14 @@ class PreventiveViewModel extends GetxController {
 
   RxList<PreventiveItemNoResponse> item_no_list =
       <PreventiveItemNoResponse>[].obs;
-  RxList<ServicePreventiveListResponse> service_preventive_list =
-      <ServicePreventiveListResponse>[].obs;
-  RxList<ServicePreventiveDetailsResponse> service_preventive_details_list =
-      <ServicePreventiveDetailsResponse>[].obs;
+  RxList<ServicePreventiveListResponse> service_preventive_list = <ServicePreventiveListResponse>[].obs;
+  RxList<ServicePreventiveDetailsResponse> service_preventive_details_list = <ServicePreventiveDetailsResponse>[].obs;
 
-  RxList<PreventiveIndentHeaderCreateResponse> service_indent_header_list =
-      <PreventiveIndentHeaderCreateResponse>[].obs;
+  RxList<PreventiveIndentHeaderCreateResponse> service_indent_header_list = <PreventiveIndentHeaderCreateResponse>[].obs;
+
+
+  //RxList<ServicePreventiveIndentHeaderResponse> service_indent_header_list = <ServicePreventiveIndentHeaderResponse>[].obs;
+  RxList<PreventiveIndentHeaderCreateResponse> service_indent_header_create_list = <PreventiveIndentHeaderCreateResponse>[].obs;
 
   RxList<CreatePreventiveCalender> create_preventive_calender_list =
       <CreatePreventiveCalender>[].obs;
@@ -220,7 +222,8 @@ class PreventiveViewModel extends GetxController {
 
   getItemNo() {
     Map data = {
-      "indent_no": service_indent_header_list[0].indentNo,
+     // "indent_no": service_indent_header_list[0].indentNo,
+      "indent_no": service_indent_header_create_list[0].indentNo,
       "email_id": email
     };
     print(data);
@@ -395,10 +398,7 @@ class PreventiveViewModel extends GetxController {
     }
   }
 
-  IndentConsumerLineApi(
-    String indent_no,
-    int line_no,
-  ) {
+  IndentConsumerLineApi(String indent_no, int line_no,) {
     Map data = {
       "indent_no": indent_no,
       "line_no": line_no,
@@ -421,7 +421,7 @@ class PreventiveViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
-              service_indent_header_list.value = response;
+              service_indent_header_create_list.value = response;
               consumer_quantity_controller.clear();
               bad_quantity_controller.clear();
 
@@ -438,7 +438,7 @@ class PreventiveViewModel extends GetxController {
       ).onError(
         (error, stackTrace) {
           print(error);
-          service_indent_header_list.value = [];
+          service_indent_header_create_list.value = [];
         },
       );
     } catch (e) {
@@ -575,7 +575,7 @@ class PreventiveViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
-              service_indent_header_list.value = response;
+              service_indent_header_create_list.value = response;
               Navigator.pop(context);
               /*IndentHeaderCreateApi(
                   service_indent_header_create_list[0].indentNo!);*/
@@ -633,7 +633,7 @@ class PreventiveViewModel extends GetxController {
                 Get.toNamed(RoutesName.preventive_markvisit_screen);
                 IndentHeaderListApi();
               }
-              service_indent_header_list.value = response;
+              service_indent_header_create_list.value = response;
 
               /*IndentHeaderCreateApi(
                   service_indent_header_create_list[0].indentNo!);*/
@@ -641,25 +641,25 @@ class PreventiveViewModel extends GetxController {
                   "Success!", response[0].message.toString());
             } else {
               loading.value = false;
-              service_indent_header_list.value = [];
+              service_indent_header_create_list.value = [];
               /*Utils.showErrorToastification(
                   "Error!", response[0].message.toString());*/
             }
           } else {
             loading.value = false;
-            service_indent_header_list.value = [];
+            service_indent_header_create_list.value = [];
             Utils.showExceptionToastification("Api Error!", JsonResponse);
           }
         },
       ).onError(
         (error, stackTrace) {
           print(error);
-          service_indent_header_list.value = [];
+          service_indent_header_create_list.value = [];
         },
       );
     } catch (e) {
       loading.value = false;
-      service_indent_header_list.value = [];
+      service_indent_header_create_list.value = [];
       print(e);
     }
   }
@@ -682,8 +682,8 @@ class PreventiveViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
-              service_indent_header_list.value = response;
-              IndentHeaderListApi();
+              service_indent_header_create_list.value = response;
+               IndentHeaderListApi();
               //    Get.toNamed(RoutesName.installation_screen);
               Utils.showToastification("Success!", response[0].message!);
             } else {
@@ -699,7 +699,7 @@ class PreventiveViewModel extends GetxController {
       ).onError(
         (error, stackTrace) {
           print(error);
-          service_indent_header_list.value = [];
+          service_indent_header_create_list.value = [];
         },
       );
     } catch (e) {
@@ -1034,7 +1034,7 @@ class PreventiveViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
-              service_indent_header_list.value = response;
+              service_indent_header_create_list.value = response;
               indent_type_controller.clear();
               is_Showindent.value=true;
               is_indent_type_dropDown.value=false;

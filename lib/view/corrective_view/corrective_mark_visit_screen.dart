@@ -975,6 +975,35 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                     ),
                   ],
                 ),
+
+                SizedBox(
+                  height: 2,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Indent Type",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Spacer(),
+                    Container(
+                      //width: size.width * .25,
+                      child: Text(
+                        corrective_indent_page_controller
+                            .service_indent_header_list[index].indentType!,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w300),
+                      ),
+                    ),
+                  ],
+                ),
                 SizedBox(
                   height: 2,
                 ),

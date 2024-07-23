@@ -3,6 +3,7 @@ class IndentHeaderCreateResponse {
   String? message;
   String? indentNo;
   String? serviceType;
+  String? indentType;
   String? serviceId;
   String? serviceNo;
   String? createdOn;
@@ -12,18 +13,21 @@ class IndentHeaderCreateResponse {
   String? completedOn;
   String? approveOn;
   String? approveBy;
+  String? locationCode;
   String? rejectReason;
   List<Lines>? lines;
   IndentHeaderCreateResponse(
       {this.condition,
         this.indentNo,
         this.serviceType,
+        this.indentType,
         this.serviceId,
         this.serviceNo,
         this.createdOn,
         this.createdBy,
         this.indentStatus,
         this.updatedOn,
+        this.locationCode,
         this.lines,
       this.message});
 
@@ -32,11 +36,13 @@ class IndentHeaderCreateResponse {
     indentNo = json['indent_no'];
     message = json['message'];
     serviceType = json['service_type'];
+    indentType = json['indent_type'];
     serviceId = json['service_id'];
     serviceNo = json['service_no'];
     createdOn = json['created_on'];
     createdBy = json['created_by'];
     indentStatus = json['indent_status'];
+    locationCode = json['location_code'];
     updatedOn = json['updated_on'];
     if (json['lines'] != null) {
       lines = <Lines>[];
@@ -52,12 +58,14 @@ class IndentHeaderCreateResponse {
     data['indent_no'] = this.indentNo;
     data['message'] = this.message;
     data['service_type'] = this.serviceType;
+    data['indent_type'] = this.indentType;
     data['service_id'] = this.serviceId;
     data['service_no'] = this.serviceNo;
     data['created_on'] = this.createdOn;
     data['created_by'] = this.createdBy;
     data['indent_status'] = this.indentStatus;
     data['updated_on'] = this.updatedOn;
+    data['location_code'] = this.locationCode;
     if (this.lines != null) {
       data['lines'] = this.lines!.map((v) => v.toJson()).toList();
     }

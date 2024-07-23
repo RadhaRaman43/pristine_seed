@@ -1,6 +1,7 @@
 class PreventiveIndentHeaderCreateResponse {
   String? condition;
   String? indentNo;
+  String? indentType;
   String? message;
   String? serviceType;
   String? serviceId;
@@ -16,6 +17,7 @@ class PreventiveIndentHeaderCreateResponse {
       {this.condition,
         this.indentNo,
         this.serviceType,
+        this.indentType,
         this.serviceId,
         this.serviceNo,
         this.createdOn,
@@ -29,6 +31,7 @@ class PreventiveIndentHeaderCreateResponse {
   PreventiveIndentHeaderCreateResponse.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
     indentNo = json['indent_no'];
+    indentType = json['indent_type'];
     message = json['message'];
     serviceType = json['service_type'];
     serviceId = json['service_id'];
@@ -52,6 +55,7 @@ class PreventiveIndentHeaderCreateResponse {
     data['indent_no'] = this.indentNo;
     data['message'] = this.message;
     data['service_type'] = this.serviceType;
+    data['indent_type'] = this.indentType;
     data['service_id'] = this.serviceId;
     data['service_no'] = this.serviceNo;
     data['created_on'] = this.createdOn;

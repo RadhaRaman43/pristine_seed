@@ -51,13 +51,8 @@ class InstallationViewModel extends GetxController {
 
   RxList<ServiceInstallationDetails> service_installation_details_list =
       <ServiceInstallationDetails>[].obs;
-  RxList<ServiceIndentHeaderResponse> service_indent_header_list =
-      <ServiceIndentHeaderResponse>[].obs;
-  RxList<IndentHeaderCreateResponse> service_indent_header_create_list =
-      <IndentHeaderCreateResponse>[].obs;
-
-
-
+  RxList<ServiceIndentHeaderResponse> service_indent_header_list = <ServiceIndentHeaderResponse>[].obs;
+  RxList<IndentHeaderCreateResponse> service_indent_header_create_list = <IndentHeaderCreateResponse>[].obs;
 
   RxBool isExpand = true.obs;
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;

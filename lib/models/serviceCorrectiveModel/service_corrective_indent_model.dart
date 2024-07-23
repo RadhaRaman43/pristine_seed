@@ -4,6 +4,7 @@ class ServiceCorrectiveIndentHeaderResponse {
   String? indentNo;
   String? serviceType;
   String? serviceId;
+  String? indentType;
   String? serviceNo;
   String? createdOn;
   String? createdBy;
@@ -20,6 +21,7 @@ class ServiceCorrectiveIndentHeaderResponse {
         this.serviceNo,
         this.createdOn,
         this.createdBy,
+        this.indentType,
         this.indentStatus,
         this.updatedOn,
         this.locationCode});
@@ -29,6 +31,7 @@ class ServiceCorrectiveIndentHeaderResponse {
     message = json['message'];
     indentNo = json['indent_no'];
     serviceType = json['service_type'];
+    indentType = json['indent_type'];
     serviceId = json['service_id'];
     serviceNo = json['service_no'];
     createdOn = json['created_on'];
@@ -45,6 +48,7 @@ class ServiceCorrectiveIndentHeaderResponse {
     data['indent_no'] = this.indentNo;
     data['service_type'] = this.serviceType;
     data['service_id'] = this.serviceId;
+    data['indent_type'] = this.indentType;
     data['service_no'] = this.serviceNo;
     data['created_on'] = this.createdOn;
     data['created_by'] = this.createdBy;

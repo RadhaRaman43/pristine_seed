@@ -2415,42 +2415,92 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                                       ),
                                                       softWrap: true,
                                                     ),
-                                                    Obx(
+                                                    /*Obx(
                                                           () {
                                                         return Visibility(
                                                           visible: corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark != null && corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark!.isNotEmpty,
                                                           child: Padding(
                                                             padding: const EdgeInsets.only(left: 1.0),
-                                                            child: Expanded(
-                                                              child: RichText(
-                                                                text: TextSpan(
-                                                                  children: [
-                                                                    TextSpan(
-                                                                      text: "Remark:  ",
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.primaryDark1,
-                                                                        fontSize: AllFontSize.fourtine,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                    if (corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark != null && corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark!.isNotEmpty)
+                                                            child: Container(
+                                                              child: Expanded(
+                                                                child: RichText(
+                                                                  text: TextSpan(
+                                                                    children: [
                                                                       TextSpan(
-                                                                        text: corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark.toString()!,
+                                                                        text: "Remark:  ",
                                                                         style: GoogleFonts.poppins(
-                                                                          color: AllColors.textColor,
+                                                                          color: AllColors.primaryDark1,
                                                                           fontSize: AllFontSize.fourtine,
                                                                           fontWeight: FontWeight.w500,
                                                                         ),
                                                                       ),
-                                                                  ],
+                                                                      if (corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark != null && corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark!.isNotEmpty)
+                                                                        TextSpan(
+                                                                          text: corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark.toString()!,
+                                                                          style: GoogleFonts.poppins(
+                                                                            color: AllColors.textColor,
+                                                                            fontSize: AllFontSize.fourtine,
+                                                                            fontWeight: FontWeight.w500,
+                                                                          ),
+                                                                        ),
+                                                                    ],
+                                                                  ),
+                                                                  softWrap: true,
                                                                 ),
-                                                                softWrap: true,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),*/
+
+                                                    Obx(
+                                                          () {
+                                                        return Visibility(
+                                                          visible: corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark != null &&  corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark!.isNotEmpty,
+                                                          child: Padding(
+                                                            padding: const EdgeInsets.only(left: 1.0),
+                                                            child: Container(
+                                                              child: Row(
+                                                                children: [
+                                                                  Expanded(
+                                                                    child: RichText(
+                                                                      text: TextSpan(
+                                                                        children: [
+                                                                          TextSpan(
+                                                                            text: "Remark:  ",
+                                                                            style: GoogleFonts.poppins(
+                                                                              color: AllColors.primaryDark1,
+                                                                              fontSize: AllFontSize.fourtine,
+                                                                              fontWeight: FontWeight.w500,
+                                                                            ),
+                                                                          ),
+                                                                          if ( corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark != null &&  corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark!.isNotEmpty)
+                                                                            TextSpan(
+                                                                              text:  corrective_deatils_page_controller.service_corrective_details_list[0].serviceHistory![index].remark.toString()!,
+                                                                              style: GoogleFonts.poppins(
+                                                                                color: AllColors.textColor,
+                                                                                fontSize: AllFontSize.fourtine,
+                                                                                fontWeight: FontWeight.w500,
+                                                                              ),
+
+                                                                            ),
+                                                                        ],
+                                                                      ),
+                                                                      softWrap: true,
+                                                                    ),
+                                                                  ),
+
+                                                                ],
                                                               ),
                                                             ),
                                                           ),
                                                         );
                                                       },
                                                     ),
+
+
+
                                                     Row(
                                                       children: [
                                                         Spacer(),

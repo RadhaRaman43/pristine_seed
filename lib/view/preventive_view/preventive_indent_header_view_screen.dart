@@ -106,9 +106,9 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
               },),
               Obx( () {
                 if(preventive_indent_detils_page_controller
-                    .service_indent_header_list!=null && preventive_indent_detils_page_controller
-                    .service_indent_header_list.isNotEmpty && preventive_indent_detils_page_controller
-                    .service_indent_header_list.length>0){
+                    .service_indent_header_create_list!=null && preventive_indent_detils_page_controller
+                    .service_indent_header_create_list.isNotEmpty && preventive_indent_detils_page_controller
+                    .service_indent_header_create_list.length>0){
                   return  Visibility(
                     visible:preventive_indent_detils_page_controller.is_Showindent.value ,
                     child: Container(
@@ -130,6 +130,34 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                   Row(
                                     children: [
                                       Text(
+                                        "Indent Type ",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        preventive_indent_detils_page_controller
+                                            .service_indent_header_create_list[0]
+                                            .indentType ??
+                                            '',
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
                                         "Indent No. ",
                                         style: GoogleFonts.poppins(
                                           color: AllColors.primaryDark1,
@@ -140,7 +168,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                       Spacer(),
                                       Text(
                                         preventive_indent_detils_page_controller
-                                            .service_indent_header_list[0]
+                                            .service_indent_header_create_list[0]
                                             .indentNo ??
                                             ''!,
                                         style: GoogleFonts.poppins(
@@ -168,7 +196,35 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                       Spacer(),
                                       Text(
                                         preventive_indent_detils_page_controller
-                                            .service_indent_header_list[0].serviceNo??"",
+                                            .service_indent_header_create_list[0].serviceNo??"",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Location",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        preventive_indent_detils_page_controller
+                                            .service_indent_header_create_list[0]
+                                            .locationCode??"",
                                         style: GoogleFonts.poppins(
                                           color: AllColors.textColor,
                                           fontSize: AllFontSize.fourtine,
@@ -196,7 +252,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                           Spacer(),
                                           Text(
                                             preventive_indent_detils_page_controller
-                                                .service_indent_header_list![0]
+                                                .service_indent_header_create_list![0]
                                                 .indentStatus ??
                                                 "",
                                             style: GoogleFonts.poppins(
@@ -210,10 +266,8 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                       );
                                     },
                                   ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Obx(() {
+
+                                  /*Obx(() {
                                           bool isVisible = preventive_indent_detils_page_controller
                                               .service_indent_header_list.isNotEmpty &&
                                               (preventive_indent_detils_page_controller
@@ -221,16 +275,11 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                                   "Ready For Consumption" ||
                                                   preventive_indent_detils_page_controller
                                                       .service_indent_header_list[0].indentStatus == "Received");
+                                          print(  preventive_indent_detils_page_controller
+                                              .service_indent_header_create_list[0]
+                                              .locationCode);;
                                       return Visibility(
                                         visible:isVisible
-
-                                        /*preventive_indent_detils_page_controller
-                                            .service_indent_header_list[0]
-                                            .indentStatus ==
-                                            "Ready For Consumption" || preventive_indent_detils_page_controller
-                                            .service_indent_header_list[0]
-                                            .indentStatus =="Received"*/
-
                                             ? true
                                             : false,
                                         child: Row(
@@ -246,7 +295,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                             Spacer(),
                                             Text(
                                               preventive_indent_detils_page_controller
-                                                  .service_indent_header_list![0]
+                                                  .service_indent_header_create_list[0]
                                                   .locationCode??"",
                                               style: GoogleFonts.poppins(
                                                 color: AllColors.textColor,
@@ -259,7 +308,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                         ),
                                       );
                                     },
-                                  ),
+                                  ),*/
                                   SizedBox(
                                     height: 8,
                                   ),
@@ -278,7 +327,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                             () {
                                           return Visibility(
                                             visible: preventive_indent_detils_page_controller
-                                                .service_indent_header_list[0]
+                                                .service_indent_header_create_list[0]
                                                 .indentStatus ==
                                                 "Ready For Consumption"
                                                 ? true
@@ -299,7 +348,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                                   preventive_indent_detils_page_controller
                                                       .IndentConsumerHeaderMarkApi(
                                                       preventive_indent_detils_page_controller
-                                                          .service_indent_header_list[
+                                                          .service_indent_header_create_list[
                                                       0]
                                                           .indentNo!);
                                                 },
@@ -319,7 +368,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                             () {
                                           return Visibility(
                                             visible: preventive_indent_detils_page_controller
-                                                .service_indent_header_list[0]
+                                                .service_indent_header_create_list[0]
                                                 .indentStatus ==
                                                 "Pending"
                                                 ? true
@@ -339,7 +388,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                                 onPressed: () {
                                                   preventive_indent_detils_page_controller.IndentComplete(
                                                       preventive_indent_detils_page_controller
-                                                          .service_indent_header_list[
+                                                          .service_indent_header_create_list[
                                                       0]
                                                           .indentNo!);
                                                 },
@@ -386,23 +435,25 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                   Spacer(
                                     flex: 8,
                                   ),
-                                  Obx(
-                                        () {
-                                      final lines = preventive_indent_detils_page_controller
-                                          .service_indent_header_list[0].lines;
+                                  Obx(() {
 
+                                    final lines =
+                                        preventive_indent_detils_page_controller
+                                            .service_indent_header_create_list[
+                                        0]
+                                            .lines;
                                       // Check if lines is not null and has at least one element
-                                      if (lines != null &&
-                                          lines.isNotEmpty &&
-                                          lines[0].lineNo == null) {
+                                    // Check if lines is not null and has at least one element
+                                    if (lines != null &&
+                                        lines.isNotEmpty &&
+                                        lines[0].lineNo == null){
                                         return Visibility(
-                                          visible: lines[0].lineNo == null,
+                                            visible: lines[0].lineNo == null,
                                           child: Obx(
                                                 () {
                                               return Visibility(
                                                 visible: preventive_indent_detils_page_controller
-                                                    .service_indent_header_list[
-                                                0]
+                                                    .service_indent_header_create_list[0]
                                                     .indentStatus ==
                                                     "Pending"
                                                     ? true
@@ -438,10 +489,12 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                                             preventive_indent_detils_page_controller
                                                                 .IndentHeaderLineDelete(
                                                               preventive_indent_detils_page_controller
-                                                                  .service_indent_header_list[
+                                                                  .service_indent_header_create_list[
                                                               0]
                                                                   .indentNo!,
-                                                              lines[0].lineNo.toString(),
+                                                                lines[0]
+                                                                    .lineNo
+                                                                    .toString(),
                                                               "HeaderDiscard",
                                                             );
                                                           },
@@ -476,7 +529,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                         () {
                                       return Visibility(
                                         visible: preventive_indent_detils_page_controller
-                                            .service_indent_header_list[0]
+                                            .service_indent_header_create_list[0]
                                             .indentStatus ==
                                             "Pending"
                                             ? true
@@ -961,48 +1014,49 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
 
   }
 
-  bindList(BuildContext context) {
-    var headerList =
-        preventive_indent_detils_page_controller
-            .service_indent_header_list;
+   bindList(BuildContext context) {
+     var headerList =
+         preventive_indent_detils_page_controller.service_indent_header_create_list;
     if (headerList != null && headerList.isNotEmpty) {
       var lines = headerList[0].lines;
-
       if (lines != null && lines.isNotEmpty && lines[0].lineNo != null) {
-        return Expanded(
-          child: ListView.separated(
-            itemBuilder: (context, index) {
-              return bindIntentListView(context, index);
-            },
-            separatorBuilder: (context, index) {
-              return Divider(height: 0.5, color: AllColors.bluegrayColor);
-            },
-            itemCount: lines.length,
+        return ListView.separated(
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return bindIntentListView(context, index);
+          },
+          separatorBuilder: (context, index) {
+            return Divider(height: 0.5, color: AllColors.bluegrayColor);
+          },
+          itemCount:  lines.length,
+        );
+      }else{
+       return  Center(
+          child: Image.asset(
+            "assests/images/no_data_remove.png",
+            width: 300,
+            height: 180,
           ),
         );
       }
+    }else{
+      return Center(
+        child: Image.asset(
+          "assests/images/no_data_remove.png",
+          width: 300,
+          height: 180,
+        ),
+      );
     }
 
-    return Center(
-      child: Image.asset(
-        "assests/images/no_data_remove.png",
-        width: 300,
-        height: 180,
-      ),
-    );
   }
 
   bindIntentListView(BuildContext context, int index) {
     return InkWell(
       onTap: () {
-
-
-
         showAddLineBottomSheet(context, preventive_indent_detils_page_controller
-            .service_indent_header_list[0]
+            .service_indent_header_create_list[0]
             .lines![index],"View");
-
-
       },
       child: ListTile(
         title:Row(
@@ -1021,13 +1075,13 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
             ),
             Text(
               preventive_indent_detils_page_controller
-                  .service_indent_header_list[0]
+                  .service_indent_header_create_list[0]
                   .lines![index]
                   .itemName
                   .toString() +
                   "(" +
                   preventive_indent_detils_page_controller
-                      .service_indent_header_list[0]
+                      .service_indent_header_create_list[0]
                       .lines![index]
                       .itemNo
                       .toString() +
@@ -1045,7 +1099,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                   Obx(() {
                     return Visibility(
                       visible: preventive_indent_detils_page_controller
-                          .service_indent_header_list[0]
+                          .service_indent_header_create_list[0]
                           .indentStatus ==
                           "Pending"
                           ? true
@@ -1074,10 +1128,10 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                   preventive_indent_detils_page_controller
                                       .IndentHeaderLineDelete(
                                       preventive_indent_detils_page_controller
-                                          .service_indent_header_list[0]
+                                          .service_indent_header_create_list[0]
                                           .indentNo!,
                                       preventive_indent_detils_page_controller
-                                          .service_indent_header_list[0]
+                                          .service_indent_header_create_list[0]
                                           .lines![index]
                                           .lineNo
                                           .toString(),
@@ -1103,7 +1157,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                   ),
                   Visibility(
                     visible: preventive_indent_detils_page_controller
-                        .service_indent_header_list[0]
+                        .service_indent_header_create_list[0]
                         .indentStatus ==
                         "Ready For Consumption"
                         ? true
@@ -1114,20 +1168,16 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                           preventive_indent_detils_page_controller
                               .bad_quantity_controller.text =
                               preventive_indent_detils_page_controller
-                                  .service_indent_header_list[0]
+                                  .service_indent_header_create_list[0]
                                   .lines![index]
                                   .badQty.toString();
 
                           preventive_indent_detils_page_controller
                               .consumer_quantity_controller.text ==
                               preventive_indent_detils_page_controller
-                                  .service_indent_header_list[0]
+                                  .service_indent_header_create_list[0]
                                   .lines![index]
                                   .consumeQty.toString();
-                          print(preventive_indent_detils_page_controller
-                              .service_indent_header_list[0]
-                              .lines![index]
-                              .consumeQty.toString());
                           print("Consume......"+preventive_indent_detils_page_controller
                               .consumer_quantity_controller.value.text);
                           addConsumeDialog(context, index);
@@ -1166,7 +1216,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     ),
                     Text(
                       preventive_indent_detils_page_controller
-                          .service_indent_header_list[0]
+                          .service_indent_header_create_list[0]
                           .lines![index]
                           .qty
                           .toString() ??
@@ -1187,7 +1237,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     ),
                     Text(
                       preventive_indent_detils_page_controller
-                          .service_indent_header_list[0]
+                          .service_indent_header_create_list[0]
                           .lines![index]
                           .qty
                           .toString() ??
@@ -1212,7 +1262,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     ),
                     Text(
                       preventive_indent_detils_page_controller
-                          .service_indent_header_list[0]
+                          .service_indent_header_create_list[0]
                           .lines![index]
                           .discountAmount.toString(),
                       style: GoogleFonts.poppins(
@@ -1231,7 +1281,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     ),
                     Text(
                       preventive_indent_detils_page_controller
-                          .service_indent_header_list[0]
+                          .service_indent_header_create_list[0]
                           .lines![index]
                           .totalPrice
                           .toString() ??
@@ -1256,7 +1306,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     ),
                     Text(
                       preventive_indent_detils_page_controller
-                          .service_indent_header_list[0]
+                          .service_indent_header_create_list[0]
                           .lines![index]
                           .consumeQty!
                           .toString(),
@@ -1276,7 +1326,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     ),
                     Text(
                       preventive_indent_detils_page_controller
-                          .service_indent_header_list[0]
+                          .service_indent_header_create_list[0]
                           .lines![index]
                           .badQty
                           .toString() ??
@@ -1604,7 +1654,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
 
   void addConsumeDialog(BuildContext context, int index) {
     double remaining_qty=   preventive_indent_detils_page_controller
-        .service_indent_header_list[0].lines![index].qtyIssueFromNav!;
+        .service_indent_header_create_list[0].lines![index].qtyIssueFromNav!;
     preventive_indent_detils_page_controller.remain_quantity_controller.text=remaining_qty.toString();
     showDialog(
       context: context,
@@ -1630,7 +1680,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
               ),
               Text(
                 'Total Appr Qty.  (  ${preventive_indent_detils_page_controller
-                    .service_indent_header_list[0].lines![index].qtyIssueFromNav}  ) ',
+                    .service_indent_header_create_list[0].lines![index].qtyIssueFromNav}  ) ',
                 style: GoogleFonts.poppins(
                   fontSize: AllFontSize.sisxteen,
                   fontWeight: FontWeight.w700,
@@ -1649,7 +1699,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     double consume_qty=double.parse( (value=="")?"0":value);
                     double bad_qty=double.parse(preventive_indent_detils_page_controller.bad_quantity_controller.text=="" ?'0':preventive_indent_detils_page_controller.bad_quantity_controller.text);
                     double remaining_qty=preventive_indent_detils_page_controller
-                        .service_indent_header_list[0].lines![index].qtyIssueFromNav!-(consume_qty+bad_qty);
+                        .service_indent_header_create_list[0].lines![index].qtyIssueFromNav!-(consume_qty+bad_qty);
                     preventive_indent_detils_page_controller.remain_quantity_controller.text=remaining_qty.toString();
                   },
                   controller: preventive_indent_detils_page_controller
@@ -1674,7 +1724,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     double bad_qty=double.parse( (value=="")?"0":value);
                     double consume_qty=double.parse(preventive_indent_detils_page_controller.consumer_quantity_controller.text=="" ?'0':preventive_indent_detils_page_controller.consumer_quantity_controller.text);
                     double remaining_qty=preventive_indent_detils_page_controller
-                        .service_indent_header_list[0].lines![index].qtyIssueFromNav!-(consume_qty+bad_qty);
+                        .service_indent_header_create_list[0].lines![index].qtyIssueFromNav!-(consume_qty+bad_qty);
                     preventive_indent_detils_page_controller.remain_quantity_controller.text=remaining_qty.toString();
                   },
                   decoration: InputDecoration(
@@ -1717,9 +1767,9 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                     Navigator.pop(context);
                     preventive_indent_detils_page_controller.IndentConsumerLineApi(
                         preventive_indent_detils_page_controller
-                            .service_indent_header_list[0].indentNo!,
+                            .service_indent_header_create_list[0].indentNo!,
                         preventive_indent_detils_page_controller
-                            .service_indent_header_list[0]
+                            .service_indent_header_create_list[0]
                             .lines![index]
                             .lineNo!);
                   },
@@ -2052,7 +2102,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                           onPressed: () {
                             preventive_indent_detils_page_controller.IndentLineCreate(
                                 preventive_indent_detils_page_controller
-                                    .service_indent_header_list[0].indentNo!,context);
+                                    .service_indent_header_create_list[0].indentNo!,context);
                             //  Navigator.pop(context);
                             // todo  Your onPressed logic...
                           },

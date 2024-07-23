@@ -2,12 +2,14 @@ class CorrectiveIndentHeaderCreateResponse {
   String? condition;
   String? indentNo;
   String? message;
+  String? indentType;
   String? serviceType;
   String? serviceId;
   String? serviceNo;
   String? createdOn;
   String? createdBy;
   String? indentStatus;
+  String? locationCode;
   String? updatedOn;
   List<Lines>? lines;
 
@@ -15,12 +17,14 @@ class CorrectiveIndentHeaderCreateResponse {
       {this.condition,
         this.indentNo,
         this.serviceType,
+        this.indentType,
         this.serviceId,
         this.serviceNo,
         this.createdOn,
         this.createdBy,
         this.indentStatus,
         this.updatedOn,
+        this.locationCode,
         this.lines,
         this.message});
 
@@ -28,11 +32,13 @@ class CorrectiveIndentHeaderCreateResponse {
     condition = json['condition'];
     indentNo = json['indent_no'];
     message = json['message'];
+    indentType = json['indent_type'];
     serviceType = json['service_type'];
     serviceId = json['service_id'];
     serviceNo = json['service_no'];
     createdOn = json['created_on'];
     createdBy = json['created_by'];
+    locationCode = json['location_code'];
     indentStatus = json['indent_status'];
     updatedOn = json['updated_on'];
     if (json['lines'] != null) {
@@ -47,12 +53,14 @@ class CorrectiveIndentHeaderCreateResponse {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
     data['indent_no'] = this.indentNo;
+    data['indent_type'] = this.indentType;
     data['message'] = this.message;
     data['service_type'] = this.serviceType;
     data['service_id'] = this.serviceId;
     data['service_no'] = this.serviceNo;
     data['created_on'] = this.createdOn;
     data['created_by'] = this.createdBy;
+    data['location_code'] = this.locationCode;
     data['indent_status'] = this.indentStatus;
     data['updated_on'] = this.updatedOn;
     if (this.lines != null) {

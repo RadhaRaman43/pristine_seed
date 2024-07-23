@@ -131,6 +131,34 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                   Row(
                                     children: [
                                       Text(
+                                        "Indent Typ ",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        indent_deatils_page_controller
+                                            .service_indent_header_create_list[0]
+                                            .indentType ??
+                                            ''!,
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
                                         "Indent No. ",
                                         style: GoogleFonts.poppins(
                                           color: AllColors.primaryDark1,
@@ -212,9 +240,33 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                     },
                                   ),
                                   SizedBox(
-                                    height: 8,
+                                    height: 3,
                                   ),
-                                  Obx(
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Location",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        indent_deatils_page_controller
+                                            .service_indent_header_create_list![0]
+                                            .locationCode??"",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ],
+                                  ),
+                                 /* Obx(
                                         () {
 
                                           bool isVisible = indent_deatils_page_controller
@@ -226,12 +278,12 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                                       .service_indent_header_list[0].indentStatus == "Received");
                                       return Visibility(
                                         visible: isVisible
-                                        /*indent_deatils_page_controller
+                                        *//*indent_deatils_page_controller
                                             .service_indent_header_list[0]
                                             .indentStatus ==
                                             "Ready For Consumption" || indent_deatils_page_controller
                                             .service_indent_header_list[0]
-                                            .indentStatus =="Receive"*/
+                                            .indentStatus =="Receive"*//*
                                             ? true
                                             : false,
                                         child: Row(
@@ -260,7 +312,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                         ),
                                       );
                                     },
-                                  ),
+                                  ),*/
                                   SizedBox(
                                     height: 8,
                                   ),
@@ -1026,16 +1078,15 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
       var lines = headerList[0].lines;
 
       if (lines != null && lines.isNotEmpty && lines[0].lineNo != null) {
-        return Expanded(
-          child: ListView.separated(
-            itemBuilder: (context, index) {
-              return bindIntentListView(context, index);
-            },
-            separatorBuilder: (context, index) {
-              return Divider(height: 0.5, color: AllColors.bluegrayColor);
-            },
-            itemCount: lines.length,
-          ),
+        return ListView.separated(
+          shrinkWrap: true,
+          itemBuilder: (context, index) {
+            return bindIntentListView(context, index);
+          },
+          separatorBuilder: (context, index) {
+            return Divider(height: 0.5, color: AllColors.bluegrayColor);
+          },
+          itemCount: lines.length,
         );
       }
     }

@@ -144,6 +144,35 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     Row(
                                       children: [
                                         Text(
+                                          "Indent Type ",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          indent_deatils_page_controller
+                                              .service_indent_header_create_list[
+                                          0]
+                                              .indentType ??
+                                              ''!,
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
                                           "Indent No. ",
                                           style: GoogleFonts.poppins(
                                             color: AllColors.primaryDark1,
@@ -229,7 +258,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                       },
                                     ),
                                     SizedBox(
-                                      height: 8,
+                                      height: 3,
                                     ),
 
                                     /*Obx(
@@ -280,7 +309,36 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     ),*/
 
 
-                                    Obx(
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Location",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          indent_deatils_page_controller
+                                              .service_indent_header_list.isNotEmpty
+                                              ? indent_deatils_page_controller
+                                              .service_indent_header_create_list[0].locationCode ??
+                                              ""
+                                              : "",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+
+
+                                   /* Obx(
                                           () {
                                         // Check if the list is not empty before accessing its elements
                                         bool isVisible = indent_deatils_page_controller
@@ -322,7 +380,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                           ),
                                         );
                                       },
-                                    ),
+                                    ),*/
 
                                     SizedBox(
                                       height: 8,
@@ -809,10 +867,6 @@ class IndentHeaderViewScreen extends StatelessWidget {
                           : false,
                       child: InkWell(
                           onTap: () {
-                            print(indent_deatils_page_controller
-                                .service_indent_header_create_list[0]
-                                .lines![index]
-                                .consumeQty);
                             //  indent_deatils_page_controller.consumer_quantity_controller.clear();
                             // indent_deatils_page_controller.bad_quantity_controller.clear();
                             indent_deatils_page_controller
