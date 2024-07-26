@@ -325,14 +325,19 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),),
             SizedBox(width:size.width*.1,),
-            Text( "${return_header_details_controller
-                .return_create_header_list[0].lines![index].displayName??""}(${return_header_details_controller
-                .return_create_header_list[0].lines![index].itemNo??""})"   ,
-              style: GoogleFonts.poppins(
-              color: AllColors.textColor,
-              fontSize: AllFontSize.sisxteen,
-              fontWeight: FontWeight.w500,
-            ),),
+            Container(
+              width: size.width*.5,
+              child: Text( "${return_header_details_controller
+                  .return_create_header_list[0].lines![index].displayName??""}(${return_header_details_controller
+                  .return_create_header_list[0].lines![index].itemNo??""})"   ,
+                style: GoogleFonts.poppins(
+                color: AllColors.textColor,
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             Spacer(),
             Row(
               children: [

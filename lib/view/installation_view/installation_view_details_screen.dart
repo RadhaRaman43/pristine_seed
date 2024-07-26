@@ -1559,7 +1559,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                       height: 3,
                       color: AllColors.primaryDark1,
                     ),
-                    Obx(() =>  bindListView(context),),
+                    Obx(() =>   bindListView(context),),
 
 
                   ],
@@ -1892,7 +1892,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget bindDatePicker(context) {
+ /* Widget bindDatePicker(context) {
     return TextFormField(
       controller:
           installation_deatils_page_controller.reschdule_date_controller,
@@ -1949,7 +1949,65 @@ class InstallationViewDetailsScreen extends StatelessWidget {
               "";
       },
     );
+  }*/
+
+
+  Widget bindDatePicker(BuildContext context) {
+    return TextFormField(
+      controller: installation_deatils_page_controller.reschdule_date_controller,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.one),
+        hintText: "Select Date",
+        labelText: 'Select Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            /*fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen*/),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onTap: () async {
+        DateTime starting_date = DateTime.now();
+        DateTime ending_date = DateTime(2200);
+        FocusScope.of(context).requestFocus(FocusNode());
+        DateTime? date = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: starting_date,
+          lastDate: ending_date,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1, // Header background color
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        var outputFormat = DateFormat('yyyy-MM-dd');
+
+        if (date != null) {
+          installation_deatils_page_controller.reschdule_date_controller.text =
+              outputFormat.format(date);
+        } else {
+          installation_deatils_page_controller.reschdule_date_controller.text = "";
+        }
+      },
+    );
   }
+
 
   Widget setupAlertDialoadContainer() {
     if (installation_deatils_page_controller.item_details_list.length > 0 &&

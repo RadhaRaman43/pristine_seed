@@ -91,6 +91,7 @@ class Lines {
   double? remainingQty;
   int? isReturn;
   double? returnQty;
+  double? actualUnitPrice;
 
   Lines(
       {this.indentNo,
@@ -111,7 +112,8 @@ class Lines {
         this.badQty,
         this.remainingQty,
         this.isReturn,
-        this.returnQty});
+        this.returnQty,
+        this.actualUnitPrice,});
 
   Lines.fromJson(Map<String, dynamic> json) {
     indentNo = json['indent_no'];
@@ -133,6 +135,7 @@ class Lines {
     remainingQty = json['remaining_qty'];
     isReturn = json['is_return'];
     returnQty = json['return_qty'];
+    actualUnitPrice = json['actual_unit_price'];
   }
 
   Map<String, dynamic> toJson() {
@@ -156,6 +159,7 @@ class Lines {
     data['remaining_qty'] = this.remainingQty;
     data['is_return'] = this.isReturn;
     data['return_qty'] = this.returnQty;
+    data['actual_unit_price'] = this.actualUnitPrice;
     return data;
   }
 }

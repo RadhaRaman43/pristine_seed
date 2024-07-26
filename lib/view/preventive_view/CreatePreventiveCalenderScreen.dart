@@ -405,12 +405,19 @@ class CreatePreventiveCalender extends StatelessWidget{
                               fontSize: AllFontSize.fourtine,
                             ),),
                             Spacer(),
-                            Text(item.itemName!+"(${item.itemNo})",style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                            ),
-                              textAlign: TextAlign.end,
+                            Container(
+                              width: size.width*.55,
+                              child: Tooltip(
+                                message:item.itemName!+"(${item.itemNo})" ,
+                                child: Text(item.itemName!+"(${item.itemNo})",style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  textAlign: TextAlign.end,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
                   
                           ],
@@ -514,12 +521,19 @@ class CreatePreventiveCalender extends StatelessWidget{
                               fontSize: AllFontSize.fourtine,
                             ),),
                             Spacer(),
-                            Text(item.customerAddress!,style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                            ),
-                              textAlign: TextAlign.end,
+                            Container(
+                              width: size.width*.55,
+                              child: Tooltip(
+                                message:item.customerAddress! ,
+                                child: Text(item.customerAddress!,style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  textAlign: TextAlign.end,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
 
                           ],

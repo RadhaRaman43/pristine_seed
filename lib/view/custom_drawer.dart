@@ -246,8 +246,12 @@ class _Drawer extends State<CustomDrawer> {
                                             Navigator.of(context);
                                             break;
 
-
-
+                                          case 'Indent List':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            Get.toNamed(RoutesName.indentListscreen,preventDuplicates: false);
+                                            Navigator.of(context);
+                                            break;
 
                                         }
                                       },

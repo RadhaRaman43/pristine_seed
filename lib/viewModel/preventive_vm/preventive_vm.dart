@@ -55,6 +55,7 @@ class PreventiveViewModel extends GetxController {
   int is_warrenty= 0;
   RxBool is_Showindent=false.obs;
   RxBool is_indent_type_dropDown=false.obs;
+  double unit_price= 0;
 
 
   RxList<PreventiveItemNoResponse> item_no_list =
@@ -103,6 +104,12 @@ class PreventiveViewModel extends GetxController {
   var closure_remark_controller = TextEditingController();
   var unit_price_controller=TextEditingController();
   var indent_type_controller=TextEditingController();
+  var paybal_amount_controller=TextEditingController();
+
+  var indent_date_controller=TextEditingController();
+
+  var item_price_controller=TextEditingController();
+
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
 
@@ -354,7 +361,11 @@ class PreventiveViewModel extends GetxController {
   }
 
   IndentComplete(String indent_no) {
-    Map data = {"indent_no": indent_no, "email_id": email};
+    Map data = {
+      "indent_no": indent_no,
+      "email_id": email,
+      "reschedule_datetime": indent_date_controller.text
+    };
     print(data);
     loading.value = true;
     try {
@@ -371,6 +382,7 @@ class PreventiveViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
+              indent_date_controller.clear();
               //service_indent_header_create_list.value = response;
               IndentHeaderListApi();
               Get.toNamed(RoutesName.preventive_screen);
@@ -556,7 +568,6 @@ class PreventiveViewModel extends GetxController {
       "qty": quantity_controller.text,
       "is_customer_damage": isCheckBox.value == true ? '1' : "0",
       "unit_price": unit_price_controller.text,
-      "discount_per": discount_controller.text,
       "email_id": email,
     };
     print(data);

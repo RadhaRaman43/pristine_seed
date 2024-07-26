@@ -43,6 +43,7 @@ class CorrectiveViewModel extends GetxController{
   RxString image_description_flag = "".obs;
   RxString upLoadLocalImagesList = ''.obs;
   int is_warrenty= 0;
+  double unit_price= 0;
   RxBool isCheckBox = false.obs;
 
   int id = 0;
@@ -70,6 +71,10 @@ class CorrectiveViewModel extends GetxController{
   var remain_quantity_controller=TextEditingController();
   var unit_price_controller=TextEditingController();
   var indent_type_controller=TextEditingController();
+  var indent_date_controller=TextEditingController();
+  var paybal_amount_controller=TextEditingController();
+
+  var item_price_controller=TextEditingController();
 
   RxDouble currentLat = 0.0.obs;
   RxDouble currentLng = 0.0.obs;
@@ -652,7 +657,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
   IndentComplete(String indent_no) {
     Map data = {
       "indent_no": indent_no,
-      "email_id": email
+      "email_id": email,
+      "reschedule_datetime": indent_date_controller.text
     };
     print(data);
     loading.value = true;
@@ -669,6 +675,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
+              indent_date_controller.clear();
               //service_indent_header_create_list.value = response;
               CorrectiveIndentHeaderListApi();
               Get.toNamed(RoutesName.corrective_screen);
@@ -717,7 +724,6 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
       "qty": quantity_controller.text,
       "is_customer_damage":isCheckBox.value==true?'1':"0",
       "unit_price": unit_price_controller.text,
-      "discount_per":discount_controller.text,
       "email_id": email,
     };
     print(data);

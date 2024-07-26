@@ -914,6 +914,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                     Obx(() {
                       return bindList();
                     }),
+                   // SizedBox(height: 5,),
                     Obx(
                       () {
                         return Visibility(
@@ -1031,7 +1032,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                         .service_indent_header_list[index].indentType!,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
+                        color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w300),
                   ),
@@ -1081,8 +1082,9 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
         preventive_indent_page_controller.service_indent_header_list != null) {
       return Container(
         margin: EdgeInsets.only(top: 3, bottom: 3),
-        height: size.height * .1,
+        height: size.height * .12,
         child: ListView.separated(
+          shrinkWrap: true,
           separatorBuilder: (context, index) {
             return VerticalDivider(
               color: AllColors.bluegrayColor,

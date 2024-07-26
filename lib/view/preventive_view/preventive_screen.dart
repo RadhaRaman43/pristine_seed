@@ -217,148 +217,197 @@ class PreventiveScreen extends StatelessWidget{
                       Obx((){
                         return  Visibility(
                           visible:preventive_page_controller.is_done.value==1?false:true ,
-                          child: Container(
-                          //  padding: EdgeInsets.only(left: 10),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Obx(() {
-                                  return ActionChip(
-                                    elevation: 2,
-                                    padding: EdgeInsets.all(2),
-                                    backgroundColor: preventive_page_controller.date_filter.value == "" ? AllColors.primaryDark1
-                                        : AllColors.grayColor,
-                                    shadowColor: Colors.black,
-                                    shape: StadiumBorder(
-                                        side: BorderSide(color: AllColors.grayColor)),
-                                    //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                    //CircleAvatar
-                                    label: Text('All',
-                                        style: GoogleFonts.poppins(
-                                          color:preventive_page_controller.date_filter.value == "" ? AllColors.whiteColor
-                                              : AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        )),
-                                    onPressed: () {
-                                      preventive_page_controller.is_done.value = 0;
-                                      preventive_page_controller.date_filter.value = "";
-
-                                      preventive_page_controller
-                                          .getServicePreventiveList(
-                                          preventive_page_controller.is_done.value,
-                                          preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
-
-                                    }, //Text
-                                  );
-                                },
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.02,
-                                ),
-                                Obx(
-                                      () {
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Container(
+                            //  padding: EdgeInsets.only(left: 10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Obx(() {
                                     return ActionChip(
                                       elevation: 2,
                                       padding: EdgeInsets.all(2),
-                                      backgroundColor:
-                                      preventive_page_controller.date_filter.value == "TODAY" ? AllColors.primaryDark1
+                                      backgroundColor: preventive_page_controller.date_filter.value == "" ? AllColors.primaryDark1
                                           : AllColors.grayColor,
                                       shadowColor: Colors.black,
                                       shape: StadiumBorder(
                                           side: BorderSide(color: AllColors.grayColor)),
                                       //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                       //CircleAvatar
-                                      label: Text('Today',
+                                      label: Text('All',
                                           style: GoogleFonts.poppins(
-                                            color: preventive_page_controller.date_filter.value == "TODAY"? AllColors.whiteColor
+                                            color:preventive_page_controller.date_filter.value == "" ? AllColors.whiteColor
                                                 : AllColors.primaryDark1,
                                             fontSize: AllFontSize.fourtine,
                                             fontWeight: FontWeight.w500,
                                           )),
                                       onPressed: () {
                                         preventive_page_controller.is_done.value = 0;
-                                        preventive_page_controller.date_filter.value = "TODAY";
-                                        preventive_page_controller
-                                            .getServicePreventiveList(
-                                            preventive_page_controller.is_done.value,
-                                            preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
-                                      }, //Text
-                                    );
-                                  },
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.02,
-                                ),
-                                Obx(
-                                      () {
-                                    return ActionChip(
-                                      elevation: 2,
-                                      padding: EdgeInsets.all(2),
-                                      backgroundColor:
-                                      preventive_page_controller.date_filter.value == "OverDue"
-                                          ? AllColors.primaryDark1
-                                          : AllColors.grayColor,
-                                      shadowColor: Colors.black,
-                                      shape: StadiumBorder(
-                                          side: BorderSide(color: AllColors.grayColor)),
-                                      //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                      //CircleAvatar
-                                      label: Text('Breached',
-                                          style: GoogleFonts.poppins(
-                                            color: preventive_page_controller.date_filter.value == "OverDue" ? AllColors.whiteColor
-                                                : AllColors.primaryDark1,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      onPressed: () {
-                                        preventive_page_controller.is_done.value = 0;
-                                        preventive_page_controller.date_filter.value = "OverDue";
-                                        preventive_page_controller
-                                            .getServicePreventiveList(
-                                            preventive_page_controller.is_done.value,
-                                            preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
-                                      }, //Text
-                                    );
-                                  },
-                                ),
-                                SizedBox(
-                                  width: size.width * 0.02,
-                                ),
-                                Obx(
-                                      () {
-                                    return ActionChip(
-                                      elevation: 2,
-                                      padding: EdgeInsets.all(2),
-                                      backgroundColor:
-                                      preventive_page_controller.date_filter.value == "Future"
-                                          ? AllColors.primaryDark1
-                                          : AllColors.grayColor,
-                                      shadowColor: Colors.black,
-                                      shape: StadiumBorder(
-                                          side: BorderSide(color: AllColors.grayColor)),
-                                      //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                      //CircleAvatar
-                                      label: Text('Future',
-                                          style: GoogleFonts.poppins(
-                                            color: preventive_page_controller.date_filter.value == "Future" ? AllColors.whiteColor
-                                                : AllColors.primaryDark1,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          )),
-                                      onPressed: () {
-                                        preventive_page_controller.is_done.value = 0;
-                                        preventive_page_controller.date_filter.value = "Future";
-                                        preventive_page_controller
-                                            .getServicePreventiveList(
-                                            preventive_page_controller.is_done.value,
-                                            preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
-                                      }, //Text
-                                    );
-                                  },
-                                )
+                                        preventive_page_controller.date_filter.value = "";
 
-                              ],
+                                        preventive_page_controller
+                                            .getServicePreventiveList(
+                                            preventive_page_controller.is_done.value,
+                                            preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
+
+                                      }, //Text
+                                    );
+                                  },
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.02,
+                                  ),
+                                  Obx(
+                                        () {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor:
+                                        preventive_page_controller.date_filter.value == "TODAY" ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('Today',
+                                            style: GoogleFonts.poppins(
+                                              color: preventive_page_controller.date_filter.value == "TODAY"? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          preventive_page_controller.is_done.value = 0;
+                                          preventive_page_controller.date_filter.value = "TODAY";
+                                          preventive_page_controller
+                                              .getServicePreventiveList(
+                                              preventive_page_controller.is_done.value,
+                                              preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.02,
+                                  ),
+                                  Obx(
+                                        () {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor:
+                                        preventive_page_controller.date_filter.value == "OverDue"
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('Breached',
+                                            style: GoogleFonts.poppins(
+                                              color: preventive_page_controller.date_filter.value == "OverDue" ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          preventive_page_controller.is_done.value = 0;
+                                          preventive_page_controller.date_filter.value = "OverDue";
+                                          preventive_page_controller
+                                              .getServicePreventiveList(
+                                              preventive_page_controller.is_done.value,
+                                              preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.02,
+                                  ),
+                                  Obx(
+                                        () {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor:
+                                        preventive_page_controller.date_filter.value == "Future"
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('Future',
+                                            style: GoogleFonts.poppins(
+                                              color: preventive_page_controller.date_filter.value == "Future" ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          preventive_page_controller.is_done.value = 0;
+                                          preventive_page_controller.date_filter.value = "Future";
+                                          preventive_page_controller
+                                              .getServicePreventiveList(
+                                              preventive_page_controller.is_done.value,
+                                              preventive_page_controller.pageNumber,preventive_page_controller.date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+                                  SizedBox(width: 5,),
+                                  Obx(
+                                        () {
+                                      return ActionChip(
+                                        elevation: 2,
+                                        padding: EdgeInsets.all(2),
+                                        backgroundColor: preventive_page_controller
+                                            .date_filter.value ==
+                                            "Wait For Indent"
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                        shadowColor: Colors.black,
+                                        shape: StadiumBorder(
+                                            side: BorderSide(color: AllColors.grayColor)),
+                                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                        //CircleAvatar
+                                        label: Text('Wait For Indent',
+                                            style: GoogleFonts.poppins(
+                                              color: preventive_page_controller
+                                                  .date_filter.value ==
+                                                  "Wait For Indent"
+                                                  ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                        onPressed: () {
+                                          preventive_page_controller.pageNumber=0;
+                                          preventive_page_controller
+                                              .globle_search_controller.text = "";
+                                          preventive_page_controller.is_done.value =
+                                          0;
+                                          preventive_page_controller
+                                              .date_filter.value = "Wait For Indent";
+                                          preventive_page_controller
+                                              .getServicePreventiveList(
+                                              preventive_page_controller
+                                                  .is_done.value,
+                                              preventive_page_controller
+                                                  .pageNumber,
+                                              preventive_page_controller
+                                                  .date_filter.value);
+                                        }, //Text
+                                      );
+                                    },
+                                  ),
+
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -476,7 +525,7 @@ class PreventiveScreen extends StatelessWidget{
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w300),
+                        fontWeight: FontWeight.w700),
                     textAlign: TextAlign.end,
                   ),
                 ],
@@ -499,7 +548,7 @@ class PreventiveScreen extends StatelessWidget{
                     width: size.width * .065,
                   ),
                   Container(
-                    width: size.width * .61,
+                    width: size.width * .6,
                     child: Tooltip(
                       message: preventive_page_controller
                           .service_preventive_list[position]
@@ -546,6 +595,7 @@ class PreventiveScreen extends StatelessWidget{
                         preventive_page_controller
                             .service_preventive_list[position]
                             .customerAddress??"",
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.fourtine,

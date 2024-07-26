@@ -554,7 +554,14 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                              ),
 
                             Container(
-                              padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
+                              margin: EdgeInsets.only(top: 2),
+                              decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                    offset: Offset(0.0, 1.0),
+                                    color: Colors.black54,
+                                    blurRadius: 1.0)
+                              ], color: Colors.white),
+                            //  padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -803,7 +810,8 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                                  },
 
 
-                                                 icon: Icon(Icons.add_shopping_cart),
+                                                 icon: Icon(Icons.add_shopping_cart, color: AllColors
+                                                     .primaryDark1, ),
 
                                                  label: Container(
                                                    child:  Tooltip(
@@ -885,6 +893,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                      Obx(() {
                        return bindList();
                      }),
+                   // /  SizedBox(height: 5,),
                      Obx(
                        () {
                          return Visibility(
@@ -997,7 +1006,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                             .service_indent_header_list[index].indentType!,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
+                            color: AllColors.primaryDark1,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w300),
                       ),
@@ -1045,7 +1054,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
             .service_indent_header_list.isNotEmpty) {
       return Container(
         margin: EdgeInsets.only(top: 3),
-        height: size.height * .1,
+        height: size.height * .12,
         child: ListView.separated(
           separatorBuilder: (context, index) {
             return VerticalDivider(

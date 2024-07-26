@@ -7,6 +7,7 @@ import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/models/serviceIndentModel/Item_no_model.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
@@ -154,9 +155,9 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         Spacer(),
                                         Text(
                                           indent_deatils_page_controller
-                                              .service_indent_header_create_list[
-                                          0]
-                                              .indentType ??
+                                                  .service_indent_header_create_list[
+                                                      0]
+                                                  .indentType ??
                                               ''!,
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
@@ -214,7 +215,8 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                           indent_deatils_page_controller
                                                   .service_indent_header_create_list[
                                                       0]
-                                                  .serviceNo ?? "",
+                                                  .serviceNo ??
+                                              "",
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
                                             fontSize: AllFontSize.fourtine,
@@ -308,7 +310,6 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                       },
                                     ),*/
 
-
                                     Row(
                                       children: [
                                         Text(
@@ -322,10 +323,13 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         Spacer(),
                                         Text(
                                           indent_deatils_page_controller
-                                              .service_indent_header_list.isNotEmpty
+                                                  .service_indent_header_list
+                                                  .isNotEmpty
                                               ? indent_deatils_page_controller
-                                              .service_indent_header_create_list[0].locationCode ??
-                                              ""
+                                                      .service_indent_header_create_list[
+                                                          0]
+                                                      .locationCode ??
+                                                  ""
                                               : "",
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
@@ -337,8 +341,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                       ],
                                     ),
 
-
-                                   /* Obx(
+                                    /* Obx(
                                           () {
                                         // Check if the list is not empty before accessing its elements
                                         bool isVisible = indent_deatils_page_controller
@@ -485,12 +488,8 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                                                 width: 1),
                                                           )),
                                                   onPressed: () {
-                                                    indent_deatils_page_controller
-                                                        .IndentComplete(
-                                                            indent_deatils_page_controller
-                                                                .service_indent_header_create_list[
-                                                                    0]
-                                                                .indentNo!);
+                                                    RescheduleDateDialog(
+                                                        context);
                                                   },
                                                   child: Text(
                                                     'Complete',
@@ -682,9 +681,10 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                                 indent_deatils_page_controller
                                                     .unit_price_controller
                                                     .clear();
+                                                indent_deatils_page_controller.item_price_controller.clear();
 
-                                                showAddLineBottomSheet(
-                                                    context, null, "");
+                                                showAddLineBottomSheet(context, null, "");
+
                                                 //addLineDialog(context);
                                               },
                                             ),
@@ -773,21 +773,27 @@ class IndentHeaderViewScreen extends StatelessWidget {
             SizedBox(
               width: size.width * 0.02,
             ),
-            Text(
-              indent_deatils_page_controller
-                      .service_indent_header_create_list[0]
-                      .lines![index]
-                      .itemName
-                      .toString() +
-                  "(" +
-                  indent_deatils_page_controller
-                      .service_indent_header_create_list[0].lines![index].itemNo
-                      .toString() +
-                  ")",
-              style: GoogleFonts.poppins(
-                color: AllColors.textColor,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w500,
+            Container(
+              width: size.width * .67,
+              child: Text(
+                indent_deatils_page_controller
+                        .service_indent_header_create_list[0]
+                        .lines![index]
+                        .itemName
+                        .toString() +
+                    "(" +
+                    indent_deatils_page_controller
+                        .service_indent_header_create_list[0]
+                        .lines![index]
+                        .itemNo
+                        .toString() +
+                    ")",
+                style: GoogleFonts.poppins(
+                  color: AllColors.textColor,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w500,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
             Spacer(),
@@ -1260,7 +1266,8 @@ class IndentHeaderViewScreen extends StatelessWidget {
         indent_deatils_page_controller.item_Qty = selection.componentQuantity!;
         indent_deatils_page_controller.is_warrenty = selection.isWarranty!;
         indent_deatils_page_controller.unit_price = selection.costPerUnit!;
-        indent_deatils_page_controller.unit_price_controller.text =
+        indent_deatils_page_controller.unit_price = selection.costPerUnit!;
+        indent_deatils_page_controller.item_price_controller.text=selection.costPerUnit!.toStringAsFixed(2);
             selection.costPerUnit.toString()!;
         indent_deatils_page_controller.item_no_description_controller.text =
             selection.displayName!;
@@ -1295,7 +1302,6 @@ class IndentHeaderViewScreen extends StatelessWidget {
               // fontWeight: FontWeight.w300,
               //  fontSize: AllFontSize.ten
             ),
-
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 // fontWeight: FontWeight.w700,
@@ -1332,16 +1338,23 @@ class IndentHeaderViewScreen extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              overflow: TextOverflow.ellipsis,
-                              option.itemCode.toString() +
-                                  " (${option.displayName ?? ""} )",
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize
-                                      .sisxteen // Change the text color here
-                                  ),
+                            Container(
+                              width: size.width * .8,
+                              child: Tooltip(
+                                message: option.itemCode.toString() +
+                                    " (${option.displayName ?? ""} )",
+                                child: Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  option.itemCode.toString() +
+                                      " (${option.displayName ?? ""} )",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                      ),
+                                ),
+                              ),
                             ),
                             Spacer(),
 
@@ -1359,8 +1372,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                             // child:
                           ],
                           // child:
-                        )
-                    ),
+                        )),
                   );
                 },
               ),
@@ -1621,9 +1633,10 @@ class IndentHeaderViewScreen extends StatelessWidget {
     RxDouble sub_total = 0.0.obs;
     RxDouble discount_amount = 0.0.obs;
     RxDouble total_amount = 0.0.obs;
-    indent_deatils_page_controller.discount_controller.text="100";
+    indent_deatils_page_controller.discount_controller.text = "100";
+    indent_deatils_page_controller.paybal_amount_controller.text =
+        total_amount.value.toString();
     if (flag == "View") {
-
       indent_deatils_page_controller.isCheckBox.value =
           lines!.isCustomerDamage! > 0 ? true : false;
       indent_deatils_page_controller.item_no_controller.text = lines!.itemNo!;
@@ -1636,13 +1649,13 @@ class IndentHeaderViewScreen extends StatelessWidget {
       ;
       indent_deatils_page_controller.unit_price_controller.text =
           lines!.unitPrice!.toString();
-      sub_total.value=lines!.subTotal!;
-      discount_amount.value=lines!.discountAmount!;
-      total_amount.value=lines!.totalPrice!;
-
-
+      sub_total.value = lines!.subTotal!;
+      discount_amount.value = lines!.discountAmount!;
+      total_amount.value = lines!.totalPrice!;
+      indent_deatils_page_controller.paybal_amount_controller.text =
+          total_amount.value.toString();
+      indent_deatils_page_controller.item_price_controller.text=lines.actualUnitPrice!.toString();
     }
-
 
     showModalBottomSheet(
       context: context,
@@ -1717,6 +1730,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+
                         TextFormField(
                           readOnly: flag == "View" ? true : false,
                           onChanged: (value) {
@@ -1738,17 +1752,20 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     ? "0"
                                     : indent_deatils_page_controller
                                         .discount_controller.text);
-                            sub_total.value = currentQty * current_unitPrice;
-                            discount_amount.value = currentQty *
-                                current_unitPrice *
+
+                               indent_deatils_page_controller.unit_price_controller.text= (indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
+
+
+                            sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
+
+                            discount_amount.value =( currentQty *
+                                indent_deatils_page_controller.unit_price *
                                 current_discount_per /
-                                100;
-                            total_amount.value =
-                                (currentQty * current_unitPrice) -
-                                    (currentQty *
-                                        current_unitPrice *
-                                        current_discount_per /
-                                        100);
+                                100).abs();
+                            total_amount.value =(currentQty * current_unitPrice);
+                            indent_deatils_page_controller
+                                .paybal_amount_controller
+                                .text = total_amount.value.toString();
                           },
                           controller: indent_deatils_page_controller
                               .quantity_controller,
@@ -1771,7 +1788,6 @@ class IndentHeaderViewScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Obx(() => Checkbox(
-
                                   fillColor: MaterialStateProperty.all<Color>(
                                     Colors.white,
                                   ),
@@ -1780,9 +1796,10 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                   value: indent_deatils_page_controller
                                       .isCheckBox.value,
                                   onChanged: (value) {
-                                    if(flag=="View"){
+                                    if (flag == "View") {
                                       return null;
                                     }
+
                                     indent_deatils_page_controller
                                         .isCheckBox.value = value ?? false;
                                     if (indent_deatils_page_controller
@@ -1826,18 +1843,20 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                             ? "0"
                                             : indent_deatils_page_controller
                                                 .discount_controller.text);
-                                    sub_total.value =
-                                        currentQty * current_unitPrice;
-                                    discount_amount.value = currentQty *
-                                        current_unitPrice *
+
+                                    indent_deatils_page_controller.unit_price_controller.text= (indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
+
+                                    indent_deatils_page_controller.discount_controller.text=current_discount_per.abs().toStringAsFixed(2);
+                                    sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
+
+                                    discount_amount.value = (currentQty *
+                                        indent_deatils_page_controller.unit_price *
                                         current_discount_per /
-                                        100;
-                                    total_amount.value =
-                                        (currentQty * current_unitPrice) -
-                                            (currentQty *
-                                                current_unitPrice *
-                                                current_discount_per /
-                                                100);
+                                        100).abs();
+                                    total_amount.value =(currentQty * current_unitPrice);
+                                    indent_deatils_page_controller
+                                        .paybal_amount_controller
+                                        .text = total_amount.value.toString();
                                   },
                                 )),
                             Text(
@@ -1850,84 +1869,43 @@ class IndentHeaderViewScreen extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Obx(
-                          () {
-                            return TextFormField(
-                              onChanged: (value) {
-                                double currentQty = double.parse(
-                                    (indent_deatils_page_controller
-                                            .quantity_controller.text.isEmpty)
-                                        ? "0"
-                                        : indent_deatils_page_controller
-                                            .quantity_controller.text);
-                                double current_unitPrice = double.parse(
-                                    (indent_deatils_page_controller
-                                            .unit_price_controller.text.isEmpty)
-                                        ? "0"
-                                        : indent_deatils_page_controller
-                                            .unit_price_controller.text);
-                                double current_discount_per = double.parse(
-                                    (indent_deatils_page_controller
-                                            .discount_controller.text.isEmpty)
-                                        ? "0"
-                                        : indent_deatils_page_controller
-                                            .discount_controller.text);
-                            //    double current_discount_per = enteredDiscount;
-                                sub_total.value =
-                                    currentQty * current_unitPrice;
-                                discount_amount.value = currentQty *
-                                    current_unitPrice *
-                                    current_discount_per /
-                                    100;
-                                total_amount.value =
-                                    (currentQty * current_unitPrice) -
-                                        (currentQty *
-                                            current_unitPrice *
-                                            current_discount_per /
-                                            100);
 
-
-                                //todo discount not grether 100....
-                                double enteredDiscount = double.tryParse(value) ?? 0;
-
-                                // Check if entered discount is greater than 100
-                                if (enteredDiscount > 100) {
-                                  enteredDiscount = 100;
-                                  // Set the text to 100 if it's greater than 100
-                                  indent_deatils_page_controller.discount_controller.text = "100";
-
-                                  Utils.showErrorToastification("Error!", "Discount % Cannot Be Greater Than 100");
-                                }
-
-
-                              },
-                              readOnly: indent_deatils_page_controller
-                                              .isCheckBox.value ==
-                                          true ||
-                                      flag == "View"
-                                  ? true
-                                  : false,
-                              controller: indent_deatils_page_controller
-                                  .discount_controller,
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                labelText: "Enter Discount%",
-                                labelStyle: TextStyle(color: AllColors.primaryDark1),
-                                enabledBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AllColors.primaryDark1),
-                                ),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AllColors.primaryDark1),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
                         TextFormField(
-                          readOnly: flag == "View" ? true : false,
+                          readOnly: true,
+                          controller: indent_deatils_page_controller
+                              .item_price_controller,
+                          // keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: "Unit Price",
+                            labelStyle:
+                            TextStyle(color: AllColors.primaryDark1),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                              BorderSide(color: AllColors.primaryDark1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                              BorderSide(color: AllColors.primaryDark1),
+                            ),
+                          ),
+                        ),
+                        // Obx(
+                        // () {
+                        // return
+                        TextFormField(
                           onChanged: (value) {
+                            double enteredDiscount =
+                                double.tryParse(value) ?? 0;
+                            if (enteredDiscount > 100) {
+                              enteredDiscount = 100;
+                              // Set the text to 100 if it's greater than 100
+                              indent_deatils_page_controller
+                                  .discount_controller.text = "100";
+
+                              Utils.showErrorToastification("Error!",
+                                  "Discount % Cannot Be Greater Than 100");
+                            }
+
                             double currentQty = double.parse(
                                 (indent_deatils_page_controller
                                         .quantity_controller.text.isEmpty)
@@ -1946,23 +1924,99 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     ? "0"
                                     : indent_deatils_page_controller
                                         .discount_controller.text);
-                            sub_total.value = currentQty * current_unitPrice;
-                            discount_amount.value = currentQty *
-                                current_unitPrice *
+
+                            indent_deatils_page_controller.unit_price_controller.text=(indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
+                            //    double current_discount_per = enteredDiscount;
+                            sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
+
+
+
+                            discount_amount.value =(currentQty *
+                                indent_deatils_page_controller.unit_price *
                                 current_discount_per /
-                                100;
+                                100).abs();
+
                             total_amount.value =
                                 (currentQty * current_unitPrice) -
                                     (currentQty *
                                         current_unitPrice *
                                         current_discount_per /
                                         100);
+                            indent_deatils_page_controller
+                                .paybal_amount_controller
+                                .text = total_amount.value.toString();
+                            //todo discount not grether 100....
+
+                            // Check if entered discount is greater than 100
                           },
+                          readOnly: /*indent_deatils_page_controller
+                                              .isCheckBox.value ==
+                                          true ||*/
+                              flag == "View" ? true : false,
                           controller: indent_deatils_page_controller
-                              .unit_price_controller,
+                              .discount_controller,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            labelText: "Unit Price",
+                            labelText: "Enter Discount%",
+                            labelStyle:
+                                TextStyle(color: AllColors.primaryDark1),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: AllColors.primaryDark1),
+                            ),
+                          ),
+                        ),
+                        //  },
+                        //  ),
+
+                        TextFormField(
+                          readOnly: flag == "View" ? true : false,
+                          // enabled: false,
+                          onChanged: (value) {
+                            double currentQty = double.parse(
+                                (indent_deatils_page_controller
+                                        .quantity_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .quantity_controller.text);
+                            double current_unitPrice = double.parse(
+                                (indent_deatils_page_controller
+                                        .unit_price_controller.text.isEmpty)
+                                    ? "0"
+                                    : indent_deatils_page_controller
+                                        .unit_price_controller.text);
+                            double current_discount_per = ((indent_deatils_page_controller.unit_price-current_unitPrice)*100/indent_deatils_page_controller.unit_price);
+
+
+                            if(current_unitPrice>indent_deatils_page_controller.unit_price){
+                              indent_deatils_page_controller.unit_price_controller.text=indent_deatils_page_controller.unit_price.abs().toStringAsFixed(2);
+                              indent_deatils_page_controller.discount_controller.text="0";
+                              current_discount_per=0;
+                              Utils.showErrorToastification("Message!", "Price After Discount Must be Lesser Unit price:${indent_deatils_page_controller.unit_price.toStringAsFixed(2)}");
+                            }
+
+                            indent_deatils_page_controller.discount_controller.text=current_discount_per.abs().toStringAsFixed(2);
+
+
+                            sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
+
+                            discount_amount.value = (currentQty *
+                                indent_deatils_page_controller.unit_price *
+                                current_discount_per /
+                                100).abs();
+                            total_amount.value =(currentQty * current_unitPrice);
+                            indent_deatils_page_controller
+                                .paybal_amount_controller
+                                .text = total_amount.value.toString();
+                          },
+                          controller: indent_deatils_page_controller.unit_price_controller,
+                          keyboardType: TextInputType.number,
+                          decoration: InputDecoration(
+                            labelText: "Price After Discount",
                             labelStyle:
                                 TextStyle(color: AllColors.primaryDark1),
                             enabledBorder: UnderlineInputBorder(
@@ -2026,7 +2080,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     Obx(
                                       () {
                                         return Text(
-                                          discount_amount.value
+                                          discount_amount.value.abs()
                                               .toStringAsFixed(2),
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
@@ -2039,34 +2093,38 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                                SizedBox(
+                                 SizedBox(
                                   height: 3,
                                 ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Paybal Amount:",
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
+                                Container(
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Paybal Amount:",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                    Spacer(),
-                                    Obx(
-                                      () {
-                                        return Text(
-                                          total_amount.value.toStringAsFixed(2),
-                                          style: GoogleFonts.poppins(
-                                            color: AllColors.textColor,
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        );
-                                      },
-                                      //child:
-                                    ),
-                                  ],
+                                      Spacer(),
+                                        Obx(
+                                        () {
+                                          return Text(
+                                            total_amount.value.toStringAsFixed(2),
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.textColor,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          );
+                                        },
+                                        //child:
+                                      ),
+
+
+                                    ],
+                                  ),
                                 )
                               ],
                             ),
@@ -2075,44 +2133,44 @@ class IndentHeaderViewScreen extends StatelessWidget {
                         SizedBox(
                           height: 13,
                         ),
-                      Visibility(
-                            visible:flag=="View"?false:true,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    AllColors.primaryDark1,
-                                  ),
+                        Visibility(
+                          visible: flag == "View" ? false : true,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  AllColors.primaryDark1,
                                 ),
-                                onPressed: () {
-                                  indent_deatils_page_controller.IndentLineCreate(
-                                      indent_deatils_page_controller
-                                          .service_indent_header_create_list[0]
-                                          .indentNo!,
-                                      context);
-                                  //  Navigator.pop(context);
-                                  // todo  Your onPressed logic...
-                                },
-                                child:   Visibility(
-                                  visible: flag=="View"?false:true,
-                                  child: Container(
-                                    width: 80,
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      'Add item',
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.customDarkerWhite,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                              ),
+                              onPressed: () {
+                                indent_deatils_page_controller.IndentLineCreate(
+                                    indent_deatils_page_controller
+                                        .service_indent_header_create_list[0]
+                                        .indentNo!,
+                                    context);
+                                //  Navigator.pop(context);
+                                // todo  Your onPressed logic...
+                              },
+                              child: Visibility(
+                                visible: flag == "View" ? false : true,
+                                child: Container(
+                                  width: 80,
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    'Add item',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.customDarkerWhite,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                )
+                                ),
+                              )
 
                               // child:
 
-                            ),
-                          ),
-
+                              ),
+                        ),
                       ],
                     ),
                   ),
@@ -2121,6 +2179,152 @@ class IndentHeaderViewScreen extends StatelessWidget {
             ),
           ),
         );
+      },
+    );
+  }
+
+  RescheduleDateDialog(BuildContext context) {
+    indent_deatils_page_controller.indent_date_controller.clear();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          // Set the shape to make it full-screen
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: Text(
+            'Reschedule date',
+            style: GoogleFonts.poppins(
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+              color: AllColors.primaryDark1,
+            ),
+          ),
+          content: Container(
+            //height: 220,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                bindDatePicker(context),
+                SizedBox(height: size.height * .03),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          AllColors.primaryDark1,
+                        ),
+                      ),
+                      onPressed: () {
+                        indent_deatils_page_controller.IndentComplete(
+                            indent_deatils_page_controller
+                                .service_indent_header_create_list[0]
+                                .indentNo!);
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 60,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Ok',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.customDarkerWhite,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(
+                          AllColors.primaryDark1,
+                        ),
+                      ),
+                      onPressed: () {
+                        indent_deatils_page_controller.indent_date_controller
+                            .clear();
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 60,
+                        alignment: Alignment.center,
+                        child: Text(
+                          'Cancel',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.customDarkerWhite,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindDatePicker(BuildContext context) {
+    return TextFormField(
+      controller: indent_deatils_page_controller.indent_date_controller,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.one),
+        hintText: "Select Date",
+        labelText: 'Select Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+          color: AllColors.primaryDark1,
+          /*fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen*/
+        ),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onTap: () async {
+        DateTime starting_date = DateTime.now();
+        DateTime ending_date = DateTime(2200);
+        FocusScope.of(context).requestFocus(FocusNode());
+        DateTime? date = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: starting_date,
+          lastDate: ending_date,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1, // Header background color
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme:
+                    ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        var outputFormat = DateFormat('yyyy-MM-dd');
+
+        if (date != null) {
+          indent_deatils_page_controller.indent_date_controller.text =
+              outputFormat.format(date);
+        } else {
+          indent_deatils_page_controller.indent_date_controller.text = "";
+        }
       },
     );
   }

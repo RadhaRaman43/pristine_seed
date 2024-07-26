@@ -976,7 +976,7 @@ class MarkVisit extends StatelessWidget {
                     Obx(() {
                       return bindList();
                     }),
-
+                    //SizedBox(height: 5,),
                     Obx(
                       () {
                         return  Visibility(
@@ -1087,7 +1087,7 @@ class MarkVisit extends StatelessWidget {
                         .service_indent_header_list[index].indentType!,
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
+                        color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w300),
                   ),
@@ -1134,13 +1134,16 @@ class MarkVisit extends StatelessWidget {
         installation_indent_page_controller
             .service_indent_header_list.isNotEmpty) {
       return Container(
-        margin: EdgeInsets.only(top: 3,bottom: 3),
-        height: size.height * .1,
+        margin: EdgeInsets.only(top: 2,bottom: 2),
+         height: size.height * .12,
         child: ListView.separated(
+          shrinkWrap: true,
           separatorBuilder: (context, index) {
             return VerticalDivider(
+
               color: AllColors.bluegrayColor,
               width: 1.0,
+
             );
           },
           scrollDirection: Axis.horizontal,

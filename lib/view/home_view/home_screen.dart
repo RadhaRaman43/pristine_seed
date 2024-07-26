@@ -79,18 +79,17 @@ class _HomeStateScreen extends State<HomeScreen> {
                           width: 15,
                           child: Center(
                               child:
-                              Obx(
-                                    () {
+                              Obx(() {
                                   return Visibility(
                                     visible:notification_page_controller.totalUnacknowledgedCount>=0 ?true:false ,
                                     child: Text(notification_page_controller.totalUnacknowledgedCount.value.toString(),
                                         style: GoogleFonts.poppins(
                                             fontWeight:FontWeight.w700,
                                             fontSize: AllFontSize.twelve,
-                                            color: AllColors.primaryDark1)),
+                                            color: AllColors.primaryDark1)
+                                    ),
                                   );
                                 },
-                                // child:
                               )),
                         ),
                       );

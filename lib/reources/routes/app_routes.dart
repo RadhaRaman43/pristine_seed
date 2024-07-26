@@ -30,6 +30,8 @@ import '../../view/corrective_view/corrective_indent_header_view_screen.dart';
 import '../../view/corrective_view/corrective_mark_visit_screen.dart';
 import '../../view/corrective_view/corrective_screen.dart';
 import '../../view/corrective_view/corrective_view_details_screen.dart';
+import '../../view/indent_list/indent_header_details_screen.dart';
+import '../../view/indent_list/indent_list.dart';
 import '../../view/installation_view/indent_header_view_screen.dart';
 import '../../view/installation_view/mark_visit_screen.dart';
 import '../../view/login_view/login_screen.dart';
@@ -313,6 +315,18 @@ class AppRoutes{
 
     GetPage(name: RoutesName.order_approval_view_cart_screen,
         page: ()=>ApprovalViewCart(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.indentListscreen,
+        page: ()=>IndentListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.indentListDetailsscreen,
+        page: ()=>IndentHeaderDetailsScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

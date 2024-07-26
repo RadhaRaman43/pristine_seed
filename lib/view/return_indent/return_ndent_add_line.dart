@@ -543,13 +543,17 @@ class ReturnIndentAddLine extends StatelessWidget {
                 SizedBox(
                   width: size.width * .03,
                 ),
-                Text(
-                  "${return_indent_add_line_controller.indent_return_add_line_list[index].displayName ?? ""} (${return_indent_add_line_controller.indent_return_add_line_list[index].itemNo ?? ""})",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontWeight: FontWeight.w300,
-                    fontSize: AllFontSize
-                        .sisxteen, // Ensure this constant is correctly named
+                Container(
+                  width: size.width*.4,
+                  child: Text(
+                    "${return_indent_add_line_controller.indent_return_add_line_list[index].displayName ?? ""} (${return_indent_add_line_controller.indent_return_add_line_list[index].itemNo ?? ""})",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: AllFontSize
+                          .sisxteen, // Ensure this constant is correctly named
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 Spacer(),

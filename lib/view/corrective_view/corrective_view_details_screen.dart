@@ -11,6 +11,7 @@ import '../../constants/app_font_size.dart';
 import '../../constants/static_methods.dart';
 import '../../models/reasonModel/reason_master_response.dart';
 import '../../reources/routes/routes_name.dart';
+import '../../utils/app_utils.dart';
 import '../../viewModel/corrective_vm/corrective_vm.dart';
 
 class CorrectiveViewDetailsScreen extends StatelessWidget {
@@ -510,6 +511,13 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                         ? true
                                         : false,
                                     child: Container(
+                                      margin: EdgeInsets.only(top: 2),
+                                      decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                                        BoxShadow(
+                                            offset: Offset(0.0, 1.0),
+                                            color: Colors.black54,
+                                            blurRadius: 1.0)
+                                      ], color: Colors.white),
                                       padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1519,6 +1527,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                       Obx(
                         () {
                           return  Container(
+
                             // padding: EdgeInsets.only(right: 30),
                             margin: EdgeInsets.only(top: 2),
                             child: Row(
@@ -1695,8 +1704,64 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
       },
     );
   }
+  Widget bindDatePicker(BuildContext context) {
+    return TextFormField(
+      controller:corrective_deatils_page_controller.reschdule_date_controller,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.one),
+        hintText: "Select Date",
+        labelText: 'Select Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+          color: AllColors.primaryDark1,
+          /*fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen*/),
+        focusedBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onTap: () async {
+        DateTime starting_date = DateTime.now();
+        DateTime ending_date = DateTime(2200);
+        FocusScope.of(context).requestFocus(FocusNode());
+        DateTime? date = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: starting_date,
+          lastDate: ending_date,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1, // Header background color
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!,
+            );
+          },
+        );
 
-  Widget bindDatePicker(context) {
+        var outputFormat = DateFormat('yyyy-MM-dd');
+
+        if (date != null) {
+          corrective_deatils_page_controller.reschdule_date_controller.text =
+              outputFormat.format(date);
+        } else {
+          corrective_deatils_page_controller.reschdule_date_controller.text = "";
+        }
+      },
+    );
+  }
+
+  //todo caladnder commentd future date only show
+ /* Widget bindDatePicker(context) {
     return TextFormField(
       controller: corrective_deatils_page_controller.reschdule_date_controller,
       readOnly: true,
@@ -1752,7 +1817,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
               "";
       },
     );
-  }
+  }*/
 
   Widget bindReasonDropDown(context) {
     return Autocomplete<ReasonModel>(
@@ -2120,8 +2185,9 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
             ),
           ),
           content: Container(
-            height: 180,
+            //height: 180,
             child: Column(
+             mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
                   controller: corrective_deatils_page_controller.closure_remark_controller,
@@ -2147,8 +2213,14 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
-                        corrective_deatils_page_controller.MarkClosureApi();
+                        if( corrective_deatils_page_controller.closure_remark_controller.text.isEmpty){
+                          Utils.showErrorToastification("Message!", "Please Enter Remark");
+                          return;
+                        }else{
+                          Navigator.pop(context);
+                          corrective_deatils_page_controller.MarkClosureApi();
+                        }
+
                         // todo  Your onPressed logic...
                       },
                       child: Container(

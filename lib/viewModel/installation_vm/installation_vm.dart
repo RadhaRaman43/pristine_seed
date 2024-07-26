@@ -87,6 +87,10 @@ class InstallationViewModel extends GetxController {
   var closure_remark_controller=TextEditingController();
   var indent_type_controller=TextEditingController();
   var unit_price_controller=TextEditingController();
+  var paybal_amount_controller=TextEditingController();
+  var indent_date_controller=TextEditingController();
+  var item_price_controller=TextEditingController();
+
 
   RxBool isCheckBox = false.obs;
 
@@ -710,7 +714,6 @@ class InstallationViewModel extends GetxController {
       "qty": quantity_controller.text,
       "is_customer_damage":isCheckBox.value==true?'1':"0",
       "unit_price": unit_price_controller.text,
-      "discount_per":discount_controller.text,
       "email_id": email,
     };
     print(data);
@@ -735,6 +738,7 @@ class InstallationViewModel extends GetxController {
               Utils.showToastification(
                   "Success!", response[0].message.toString());
             } else {
+              print(response[0].message);
               loading.value = false;
               Utils.showErrorToastification(
                   "Error!", response[0].message.toString());
@@ -819,7 +823,8 @@ class InstallationViewModel extends GetxController {
   IndentComplete(String indent_no) {
     Map data = {
       "indent_no": indent_no,
-      "email_id": email
+      "email_id": email,
+      "reschedule_datetime": indent_date_controller.text
     };
     print(data);
     loading.value = true;
@@ -836,15 +841,14 @@ class InstallationViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
+              indent_date_controller.clear();
               //service_indent_header_create_list.value = response;
               IndentHeaderListApi();
               Get.toNamed(RoutesName.installation_mark_visit);
-              Utils.showToastification(
-                  "Success!", response[0].message.toString());
+              Utils.showToastification("Success!", response[0].message.toString());
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
-                  "Error!", response[0].message.toString());
+              Utils.showErrorToastification("Error!", response[0].message.toString());
             }
           } else {
             loading.value = false;

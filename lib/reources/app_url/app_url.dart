@@ -142,5 +142,9 @@ class AppUrl {
   static const String OrderMarkApprove="$BASE_URL/api/Order/OrderMarkApprove";
   static const String getConsigneeMstGet="$BASE_URL/api/Customer/ConsigneeMstGet";
 
+  //todo indentList...
+  static const String indentListGet="$BASE_URL/api/ServiceIndent/ServiceIndentHeaderDataGet";
+  static const String indentListHeaderGet = "$BASE_URL/api/ServiceIndent/IndentHeaderCreate";
+
 
 }
