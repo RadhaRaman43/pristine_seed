@@ -1815,7 +1815,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
     if(flag=="View"){
       preventive_indent_detils_page_controller.isCheckBox.value=lines!.isCustomerDamage!>1?true:false;
       preventive_indent_detils_page_controller .item_no_controller.text=lines!.itemNo!;
-      preventive_indent_detils_page_controller  .item_no_description_controller.text=lines.itemName!;
+      preventive_indent_detils_page_controller .item_no_description_controller.text=lines.itemName!;
       preventive_indent_detils_page_controller  .quantity_controller.text=lines.qty.toString();
       preventive_indent_detils_page_controller.discount_controller.text=lines.discountPer.toString();
       preventive_indent_detils_page_controller.unit_price_controller.text=lines.unitPrice.toString();
