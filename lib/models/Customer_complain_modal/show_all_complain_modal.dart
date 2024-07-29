@@ -1,0 +1,144 @@
+/* 
+// Example Usage
+Map<String, dynamic> map = jsonDecode(<myJSONString>);
+var myRootNode = Root.fromJson(map);
+*/
+class ShowAllComplainModal {
+  String? condition;
+  String? message;
+  int? id;
+  String? serviceno;
+  int? lineno;
+  String? servicetype;
+  String? invoiceno;
+  String? invoicedate;
+  String? customerno;
+  String? customername;
+  String? customeraddress;
+  String? customerpincode;
+  String? customerstate;
+  String? customerstatecode;
+  String? contactperson;
+  String? customerphoneno;
+  String? customerifsccode;
+  String? customeremailid;
+  String? customerarea;
+  String? itemno;
+  String? itemname;
+  String? serialno;
+  String? salesdate;
+  String? deliverydatetime;
+  String? serviceitemcardno;
+  String? createdby;
+  String? createdon;
+  String? servicestatus;
+  String? parentserviceno;
+  String? parentserviceid;
+  int? isassignment;
+  String? assignedpersonemail;
+  String? updatedby;
+  String? updatedon;
+  String? complainreasoncode;
+  String? complainreasondesc;
+  String? complainremark;
+  int? iswarrantyreceive;
+  int? frequencyofpm;
+  String? servicetatdatetime;
+  double? visitcharges;
+  int? isunderapproval;
+
+  ShowAllComplainModal({this.condition, this.message, this.id, this.serviceno, this.lineno, this.servicetype, this.invoiceno, this.invoicedate, this.customerno, this.customername, this.customeraddress, this.customerpincode, this.customerstate, this.customerstatecode, this.contactperson, this.customerphoneno, this.customerifsccode, this.customeremailid, this.customerarea, this.itemno, this.itemname, this.serialno, this.salesdate, this.deliverydatetime, this.serviceitemcardno, this.createdby, this.createdon, this.servicestatus, this.parentserviceno, this.parentserviceid, this.isassignment, this.assignedpersonemail, this.updatedby, this.updatedon, this.complainreasoncode, this.complainreasondesc, this.complainremark, this.iswarrantyreceive, this.frequencyofpm, this.servicetatdatetime, this.visitcharges, this.isunderapproval});
+
+  ShowAllComplainModal.fromJson(Map<String, dynamic> json) {
+    condition = json['condition'];
+    message = json['message'];
+    id = json['id'];
+    serviceno = json['service_no'];
+    lineno = json['line_no'];
+    servicetype = json['service_type'];
+    invoiceno = json['invoice_no'];
+    invoicedate = json['invoice_date'];
+    customerno = json['customer_no'];
+    customername = json['customer_name'];
+    customeraddress = json['customer_address'];
+    customerpincode = json['customer_pincode'];
+    customerstate = json['customer_state'];
+    customerstatecode = json['customer_state_code'];
+    contactperson = json['contact_person'];
+    customerphoneno = json['customer_phone_no'];
+    customerifsccode = json['customer_ifsc_code'];
+    customeremailid = json['customer_email_id'];
+    customerarea = json['customer_area'];
+    itemno = json['item_no'];
+    itemname = json['item_name'];
+    serialno = json['serial_no'];
+    salesdate = json['sales_date'];
+    deliverydatetime = json['delivery_date_time'];
+    serviceitemcardno = json['service_item_card_no'];
+    createdby = json['created_by'];
+    createdon = json['created_on'];
+    servicestatus = json['service_status'];
+    parentserviceno = json['parent_service_no'];
+    parentserviceid = json['parent_service_id'];
+    isassignment = json['is_assignment'];
+    assignedpersonemail = json['assigned_person_email'];
+    updatedby = json['updated_by'];
+    updatedon = json['updated_on'];
+    complainreasoncode = json['complain_reason_code'];
+    complainreasondesc = json['complain_reason_desc'];
+    complainremark = json['complain_remark'];
+    iswarrantyreceive = json['is_warranty_receive'];
+    frequencyofpm = json['frequency_of_pm'];
+    servicetatdatetime = json['service_tat_datetime'];
+    visitcharges = json['visit_charges'];
+    isunderapproval = json['is_under_approval'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['condition'] = condition;
+    data['message'] = message;
+    data['id'] = id;
+    data['service_no'] = serviceno;
+    data['line_no'] = lineno;
+    data['service_type'] = servicetype;
+    data['invoice_no'] = invoiceno;
+    data['invoice_date'] = invoicedate;
+    data['customer_no'] = customerno;
+    data['customer_name'] = customername;
+    data['customer_address'] = customeraddress;
+    data['customer_pincode'] = customerpincode;
+    data['customer_state'] = customerstate;
+    data['customer_state_code'] = customerstatecode;
+    data['contact_person'] = contactperson;
+    data['customer_phone_no'] = customerphoneno;
+    data['customer_ifsc_code'] = customerifsccode;
+    data['customer_email_id'] = customeremailid;
+    data['customer_area'] = customerarea;
+    data['item_no'] = itemno;
+    data['item_name'] = itemname;
+    data['serial_no'] = serialno;
+    data['sales_date'] = salesdate;
+    data['delivery_date_time'] = deliverydatetime;
+    data['service_item_card_no'] = serviceitemcardno;
+    data['created_by'] = createdby;
+    data['created_on'] = createdon;
+    data['service_status'] = servicestatus;
+    data['parent_service_no'] = parentserviceno;
+    data['parent_service_id'] = parentserviceid;
+    data['is_assignment'] = isassignment;
+    data['assigned_person_email'] = assignedpersonemail;
+    data['updated_by'] = updatedby;
+    data['updated_on'] = updatedon;
+    data['complain_reason_code'] = complainreasoncode;
+    data['complain_reason_desc'] = complainreasondesc;
+    data['complain_remark'] = complainremark;
+    data['is_warranty_receive'] = iswarrantyreceive;
+    data['frequency_of_pm'] = frequencyofpm;
+    data['service_tat_datetime'] = servicetatdatetime;
+    data['visit_charges'] = visitcharges;
+    data['is_under_approval'] = isunderapproval;
+    return data;
+  }
+}
+

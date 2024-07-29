@@ -30,6 +30,7 @@ import '../../view/corrective_view/corrective_indent_header_view_screen.dart';
 import '../../view/corrective_view/corrective_mark_visit_screen.dart';
 import '../../view/corrective_view/corrective_screen.dart';
 import '../../view/corrective_view/corrective_view_details_screen.dart';
+import '../../view/customer_complain/customer_complain_screen.dart';
 import '../../view/indent_list/indent_header_details_screen.dart';
 import '../../view/indent_list/indent_list.dart';
 import '../../view/installation_view/indent_header_view_screen.dart';
@@ -331,6 +332,14 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
+
+
+    //todo Customer Complain Screen
+    GetPage(name: RoutesName.customer_complain_screen,
+        page: ()=>CustomerComplainScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
 
 

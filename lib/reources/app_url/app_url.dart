@@ -147,4 +147,11 @@ class AppUrl {
   static const String indentListHeaderGet = "$BASE_URL/api/ServiceIndent/IndentHeaderCreate";
 
 
+
+  //todo Customer Complain...
+  static const String customerRaiseComplain="$BASE_URL/api/ServiceActivity/ServiceMarkRaiseComplain";
+  static const String getAllComplain="$BASE_URL/api/ServiceActivity/ServiceInatallationAllComplain";
+
+
+
 }

@@ -190,6 +190,18 @@ class _Drawer extends State<CustomDrawer> {
                                             Navigator.of(context);
                                             break;
 
+
+
+                                          case 'Customer Complain':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            Get.toNamed(RoutesName.customer_complain_screen,preventDuplicates: false);
+
+                                            Navigator.of(context);
+                                            break;
+
+
+
                                           case 'Check In/Out':
                                             IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                            home_vm.openMenu(cTitle, iconData);
