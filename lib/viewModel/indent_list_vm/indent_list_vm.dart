@@ -93,13 +93,10 @@ class IndentListViewModel extends GetxController{
               }
               indent_list.addAll(response);
               total_rows=indent_list[0].totalCount!;
-              loading.value = false;
             } else {
-              loading.value = false;
               Utils.showErrorToastification("Error!", response[0].message.toString());
             }
           } else {
-            loading.value = false;
             Utils.showExceptionToastification("Api Error!", JsonResponse);
           }
         },
@@ -112,8 +109,9 @@ class IndentListViewModel extends GetxController{
 
       },);
     } catch (e) {
-      loading.value = false;
       print(e);
+    }finally{
+      loading.value = false;
     }
   }
 
@@ -151,15 +149,20 @@ class IndentListViewModel extends GetxController{
             Utils.showExceptionToastification("Api Error!", JsonResponse);
           }
         },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
+              loading.value = false;
           print(error);
         },
-      );
+      ).whenComplete(() {
+        loading.value = false;
+      },);
     } catch (e) {
       loading.value = false;
       print(e);
+    }finally{
+      loading.value = false;
     }
+
   }
 
 }

@@ -736,6 +736,8 @@ class CustomerComplainScreen extends StatelessWidget{
                             InkWell(
                                 onTap: (){
                                   Navigator.pop(context);
+                                  customer_complain_vm.reason_code_controller.clear();
+                                  customer_complain_vm.user_remark_controller.clear();
                                   remarkDialog(context, id);
                                 },
                                 child: Row(
@@ -829,7 +831,7 @@ class CustomerComplainScreen extends StatelessWidget{
             ],
           ),
           SizedBox(height: 2,),
-           Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
@@ -842,8 +844,8 @@ class CustomerComplainScreen extends StatelessWidget{
               Flexible(
                 fit: FlexFit.loose,
                 child: Tooltip(
-                  message:customer_complain_vm.all_complain_list[index].itemname??"" ,
-                  child: Text(customer_complain_vm.all_complain_list[index].itemname?? "",
+                  message:"${customer_complain_vm.all_complain_list[index].itemname??""}(${customer_complain_vm.all_complain_list[index].itemno??""})" ,
+                  child: Text("${customer_complain_vm.all_complain_list[index].itemname??""}(${customer_complain_vm.all_complain_list[index].itemno??""})",
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
@@ -888,11 +890,12 @@ class CustomerComplainScreen extends StatelessWidget{
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "Complain Remark :   ",
+                "Complain Remark :  ",
                 style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500),
+                    fontWeight: FontWeight.w500
+                ),
               ),
 
               Flexible(
@@ -905,7 +908,7 @@ class CustomerComplainScreen extends StatelessWidget{
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w300),
-                    overflow:  TextOverflow.ellipsis,
+                         overflow:  TextOverflow.ellipsis,
                   ),
                 ),
               ),
@@ -932,8 +935,8 @@ class CustomerComplainScreen extends StatelessWidget{
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),);
-
+                        fontWeight: FontWeight.w500),
+                  );
                 },
                 // child:
               ),
@@ -958,13 +961,31 @@ class CustomerComplainScreen extends StatelessWidget{
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Raise Complaint',
-                style: GoogleFonts.poppins(
-                  fontSize: AllFontSize.sisxteen,
-                  fontWeight: FontWeight.w700,
-                  color: AllColors.primaryDark1,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Raise Complaint',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ),
+                  ),
+                  Spacer(),
+                  InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 1.0),
+                      child: Icon(
+                        Icons.cancel,
+                        color: AllColors.primaryDark1,
+                      ),
+                    ),
+                  )
+                ],
               ),
               SizedBox(
                 height: 8.0,

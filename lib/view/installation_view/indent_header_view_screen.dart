@@ -488,8 +488,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                                                 width: 1),
                                                           )),
                                                   onPressed: () {
-                                                    RescheduleDateDialog(
-                                                        context);
+                                                    RescheduleDateDialog(context);
                                                   },
                                                   child: Text(
                                                     'Complete',
@@ -1806,6 +1805,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         .isCheckBox.value) {
                                       indent_deatils_page_controller
                                           .discount_controller.text = "0";
+                                      //total_amount.value=0.0;
                                     } else {
                                       indent_deatils_page_controller
                                           .discount_controller.text = "100";
@@ -1853,7 +1853,24 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         indent_deatils_page_controller.unit_price *
                                         current_discount_per /
                                         100).abs();
-                                    total_amount.value =(currentQty * current_unitPrice);
+
+                                    //todo total amount change after customer damage comment code...
+
+                                   // total_amount.value =(currentQty * current_unitPrice);
+
+
+                                    //todo total amount change after customer damage...
+
+
+                                    total_amount.value =
+                                        (currentQty *  indent_deatils_page_controller.unit_price) -
+                                            (currentQty *
+                                                current_unitPrice *
+                                                current_discount_per /
+                                                100);
+
+
+
                                     indent_deatils_page_controller
                                         .paybal_amount_controller
                                         .text = total_amount.value.toString();
@@ -1942,6 +1959,8 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         current_unitPrice *
                                         current_discount_per /
                                         100);
+
+
                             indent_deatils_page_controller
                                 .paybal_amount_controller
                                 .text = total_amount.value.toString();
@@ -2008,7 +2027,11 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                 indent_deatils_page_controller.unit_price *
                                 current_discount_per /
                                 100).abs();
+
                             total_amount.value =(currentQty * current_unitPrice);
+
+
+
                             indent_deatils_page_controller
                                 .paybal_amount_controller
                                 .text = total_amount.value.toString();
@@ -2100,7 +2123,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                   child: Row(
                                     children: [
                                       Text(
-                                        "Paybal Amount:",
+                                        "Payable Amount:",
                                         style: GoogleFonts.poppins(
                                           color: AllColors.primaryDark1,
                                           fontSize: AllFontSize.fourtine,
@@ -2194,7 +2217,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
           ),
           title: Text(
-            'Reschedule date',
+            'Reschedule Date',
             style: GoogleFonts.poppins(
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w700,
@@ -2244,8 +2267,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        indent_deatils_page_controller.indent_date_controller
-                            .clear();
+                        indent_deatils_page_controller.indent_date_controller.clear();
                         Navigator.pop(context);
                       },
                       child: Container(

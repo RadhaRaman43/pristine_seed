@@ -1980,7 +1980,24 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                     preventive_indent_detils_page_controller.unit_price *
                                     current_discount_per /
                                     100).abs();
-                                total_amount.value =(currentQty * current_unitPrice);
+
+                                //todo total amount change after customer damage comment code...
+
+                              //  total_amount.value =(currentQty * current_unitPrice);
+
+                                //todo total amount change after customer damage comment code...
+
+
+                                total_amount.value =
+                                    (currentQty *  preventive_indent_detils_page_controller.unit_price) -
+                                        (currentQty *
+                                            current_unitPrice *
+                                            current_discount_per /
+                                            100);
+
+
+
+
                                 preventive_indent_detils_page_controller
                                     .paybal_amount_controller
                                     .text = total_amount.value.toString();
@@ -2184,7 +2201,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                  SizedBox(height: 3,),
                                 Row(
                                   children: [
-                                    Text("Paybal Amount:",style: GoogleFonts.poppins(
+                                    Text("Payable Amount:",style: GoogleFonts.poppins(
                                       color: AllColors.primaryDark1,
                                       fontSize: AllFontSize.fourtine,
                                       fontWeight: FontWeight.w500,
@@ -2377,7 +2394,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
             borderRadius: BorderRadius.circular(10.0),
           ),
           title: Text(
-            'Reschedule date',
+            'Reschedule Date',
             style: GoogleFonts.poppins(
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w700,
