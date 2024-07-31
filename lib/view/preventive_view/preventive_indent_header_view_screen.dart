@@ -1204,7 +1204,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                 0: FlexColumnWidth(1.9),
                 1: FlexColumnWidth(1.3),
                 2: FlexColumnWidth(1.5),
-                3: FlexColumnWidth(0.8),
+                3: FlexColumnWidth(1.1),
               },
               children: [
                 TableRow(
@@ -1902,21 +1902,48 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                             double current_unitPrice = double.parse((preventive_indent_detils_page_controller.unit_price_controller.text.isEmpty) ? "0" : preventive_indent_detils_page_controller.unit_price_controller.text);
                             double current_discount_per = double.parse((preventive_indent_detils_page_controller.discount_controller.text.isEmpty) ? "0" : preventive_indent_detils_page_controller.discount_controller.text);
 
+
                             preventive_indent_detils_page_controller.unit_price_controller.text= (preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
+                            current_unitPrice = double.parse((preventive_indent_detils_page_controller.unit_price_controller.text.isEmpty) ? "0" : preventive_indent_detils_page_controller.unit_price_controller.text);
 
 
                             sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
 
-                            discount_amount.value = (currentQty *
+                            discount_amount.value =( currentQty *
                                 preventive_indent_detils_page_controller.unit_price *
                                 current_discount_per /
                                 100).abs();
+
                             total_amount.value =(currentQty * current_unitPrice);
-                            preventive_indent_detils_page_controller
-                                .paybal_amount_controller
-                                .text = total_amount.value.toString();
+
+                            // total_amount.value =
+                            //     (currentQty *  preventive_indent_detils_page_controller.unit_price) -
+                            //         (currentQty *
+                            //             preventive_indent_detils_page_controller.unit_price *
+                            //             current_discount_per /
+                            //             100);
 
 
+                            //todo some change...31-07-2024
+                            //
+                            // preventive_indent_detils_page_controller.unit_price_controller.text= (preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
+                            //
+                            //
+                            // sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
+                            //
+                            // discount_amount.value = (currentQty *
+                            //     preventive_indent_detils_page_controller.unit_price *
+                            //     current_discount_per /
+                            //     100).abs();
+                            // total_amount.value =(currentQty * current_unitPrice);
+                            // preventive_indent_detils_page_controller
+                            //     .paybal_amount_controller
+                            //     .text = total_amount.value.toString();
+
+
+
+
+                           //todo pre calculation....
                            /* sub_total.value = currentQty * current_unitPrice;
                             discount_amount.value = currentQty * current_unitPrice*current_discount_per/100;
                             total_amount.value = (currentQty * current_unitPrice)-(currentQty * current_unitPrice*current_discount_per/100);
@@ -1971,9 +1998,10 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                 double current_discount_per = double.parse((preventive_indent_detils_page_controller.discount_controller.text.isEmpty) ? "0" : preventive_indent_detils_page_controller.discount_controller.text);
 
 
+
                                 preventive_indent_detils_page_controller.unit_price_controller.text= (preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
 
-
+                                preventive_indent_detils_page_controller.discount_controller.text=current_discount_per.abs().toStringAsFixed(2);
                                 sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
 
                                 discount_amount.value = (currentQty *
@@ -1983,18 +2011,47 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
 
                                 //todo total amount change after customer damage comment code...
 
-                              //  total_amount.value =(currentQty * current_unitPrice);
+                                // total_amount.value =(currentQty * current_unitPrice);
 
-                                //todo total amount change after customer damage comment code...
+
+                                //todo total amount change after customer damage...
 
 
                                 total_amount.value =
                                     (currentQty *  preventive_indent_detils_page_controller.unit_price) -
                                         (currentQty *
-                                            current_unitPrice *
+                                            preventive_indent_detils_page_controller.unit_price *
                                             current_discount_per /
                                             100);
 
+
+
+                                //todo some change....31-07-2024
+
+                              //   preventive_indent_detils_page_controller.unit_price_controller.text= (preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
+                              //
+                              //
+                              //   sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
+                              //
+                              //   discount_amount.value = (currentQty *
+                              //       preventive_indent_detils_page_controller.unit_price *
+                              //       current_discount_per /
+                              //       100).abs();
+                              //
+                              //   //todo total amount change after customer damage comment code...
+                              //
+                              // //  total_amount.value =(currentQty * current_unitPrice);
+                              //
+                              //   //todo total amount change after customer damage comment code...
+                              //
+                              //
+                              //   total_amount.value =
+                              //       (currentQty *  preventive_indent_detils_page_controller.unit_price) -
+                              //           (currentQty *
+                              //               current_unitPrice *
+                              //               current_discount_per /
+                              //               100);
+                              //
 
 
 
@@ -2052,21 +2109,56 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
 
 
                               preventive_indent_detils_page_controller.unit_price_controller.text=(preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
-
+                              //    double current_discount_per = enteredDiscount;
                               sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
-                              discount_amount.value = (currentQty *
-                                  current_unitPrice *
+
+
+
+                              discount_amount.value =(currentQty *
+                                  preventive_indent_detils_page_controller.unit_price *
                                   current_discount_per /
                                   100).abs();
+
+                              // total_amount.value =
+                              //     (currentQty * current_unitPrice) -
+                              //         (currentQty *
+                              //             current_unitPrice *
+                              //             current_discount_per /
+                              //             100);
+
                               total_amount.value =
-                                  (currentQty * current_unitPrice) -
+                                  (currentQty * preventive_indent_detils_page_controller.unit_price) -
                                       (currentQty *
-                                          current_unitPrice *
+                                          preventive_indent_detils_page_controller.unit_price *
                                           current_discount_per /
                                           100);
+
+
+
+
                               preventive_indent_detils_page_controller
                                   .paybal_amount_controller
                                   .text = total_amount.value.toString();
+
+
+                              //todo some change...31-07-2024
+
+                              // preventive_indent_detils_page_controller.unit_price_controller.text=(preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
+                              //
+                              // sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
+                              // discount_amount.value = (currentQty *
+                              //     current_unitPrice *
+                              //     current_discount_per /
+                              //     100).abs();
+                              // total_amount.value =
+                              //     (currentQty * current_unitPrice) -
+                              //         (currentQty *
+                              //             current_unitPrice *
+                              //             current_discount_per /
+                              //             100);
+                              // preventive_indent_detils_page_controller
+                              //     .paybal_amount_controller
+                              //     .text = total_amount.value.toString();
 
 
 
@@ -2103,17 +2195,16 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                             double current_unitPrice = double.parse((preventive_indent_detils_page_controller.unit_price_controller.text.isEmpty) ? "0" : preventive_indent_detils_page_controller.unit_price_controller.text);
 
                             double current_discount_per = ((preventive_indent_detils_page_controller.unit_price-current_unitPrice)*100/preventive_indent_detils_page_controller.unit_price).abs();
+
                             if(current_unitPrice>preventive_indent_detils_page_controller.unit_price){
-                              preventive_indent_detils_page_controller.unit_price_controller.text=preventive_indent_detils_page_controller.unit_price.toStringAsFixed(2);
+                              preventive_indent_detils_page_controller.unit_price_controller.text=preventive_indent_detils_page_controller.unit_price.abs().toStringAsFixed(2);
                               preventive_indent_detils_page_controller.discount_controller.text="0";
                               current_discount_per=0;
                               Utils.showErrorToastification("Message!", "Price After Discount Must be Lesser Unit price:${preventive_indent_detils_page_controller.unit_price.toStringAsFixed(2)}");
                             }
 
+                            preventive_indent_detils_page_controller.discount_controller.text=current_discount_per.abs().toStringAsFixed(2);
 
-                            preventive_indent_detils_page_controller.discount_controller.text= current_discount_per.abs().toStringAsFixed(2);
-
-                           // preventive_indent_detils_page_controller.unit_price_controller.text=(preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
 
                             sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
 
@@ -2121,12 +2212,35 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                 preventive_indent_detils_page_controller.unit_price *
                                 current_discount_per /
                                 100).abs();
+
                             total_amount.value =(currentQty * current_unitPrice);
-                            preventive_indent_detils_page_controller
-                                .paybal_amount_controller
-                                .text = total_amount.value.toString();
 
 
+                              //todo some change...31-07-2024
+                            //  if(current_unitPrice>preventive_indent_detils_page_controller.unit_price){
+                           //    preventive_indent_detils_page_controller.unit_price_controller.text=preventive_indent_detils_page_controller.unit_price.toStringAsFixed(2);
+                           //    preventive_indent_detils_page_controller.discount_controller.text="0";
+                           //    current_discount_per=0;
+                           //    Utils.showErrorToastification("Message!", "Price After Discount Must be Lesser Unit price:${preventive_indent_detils_page_controller.unit_price.toStringAsFixed(2)}");
+                           //  }
+                           //
+                           //
+                           //  preventive_indent_detils_page_controller.discount_controller.text= current_discount_per.abs().toStringAsFixed(2);
+                           //
+                           // // preventive_indent_detils_page_controller.unit_price_controller.text=(preventive_indent_detils_page_controller.unit_price-(preventive_indent_detils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
+                           //
+                           //  sub_total.value = currentQty * preventive_indent_detils_page_controller.unit_price;
+                           //
+                           //  discount_amount.value = (currentQty *
+                           //      preventive_indent_detils_page_controller.unit_price *
+                           //      current_discount_per /
+                           //      100).abs();
+                           //  total_amount.value =(currentQty * current_unitPrice);
+                           //  preventive_indent_detils_page_controller
+                           //      .paybal_amount_controller
+                           //      .text = total_amount.value.toString();
+                           //
+                           //
 
                             /* sub_total.value = currentQty * current_unitPrice;
                             discount_amount.value = currentQty * current_unitPrice*current_discount_per/100;

@@ -751,11 +751,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
   bindIntentListView(BuildContext context, int index) {
     return InkWell(
       onTap: () {
-        showAddLineBottomSheet(
-            context,
-            indent_deatils_page_controller
-                .service_indent_header_create_list[0].lines![index],
-            "View");
+        showAddLineBottomSheet(context, indent_deatils_page_controller.service_indent_header_create_list[0].lines![index], "View");
       },
       child: ListTile(
         title: Row(
@@ -1753,7 +1749,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         .discount_controller.text);
 
                                indent_deatils_page_controller.unit_price_controller.text= (indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
-
+                            current_unitPrice = double.parse((indent_deatils_page_controller.unit_price_controller.text.isEmpty) ? "0" : indent_deatils_page_controller.unit_price_controller.text);
 
                             sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
 
@@ -1761,10 +1757,13 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                 indent_deatils_page_controller.unit_price *
                                 current_discount_per /
                                 100).abs();
+
                             total_amount.value =(currentQty * current_unitPrice);
+
                             indent_deatils_page_controller
                                 .paybal_amount_controller
                                 .text = total_amount.value.toString();
+
                           },
                           controller: indent_deatils_page_controller
                               .quantity_controller,
@@ -1865,7 +1864,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                     total_amount.value =
                                         (currentQty *  indent_deatils_page_controller.unit_price) -
                                             (currentQty *
-                                                current_unitPrice *
+                                                indent_deatils_page_controller.unit_price *
                                                 current_discount_per /
                                                 100);
 
@@ -1953,12 +1952,21 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                 current_discount_per /
                                 100).abs();
 
+                            // total_amount.value =
+                            //     (currentQty * current_unitPrice) -
+                            //         (currentQty *
+                            //             current_unitPrice *
+                            //             current_discount_per /
+                            //             100);
+
                             total_amount.value =
-                                (currentQty * current_unitPrice) -
+                                (currentQty * indent_deatils_page_controller.unit_price) -
                                     (currentQty *
-                                        current_unitPrice *
+                                        indent_deatils_page_controller.unit_price *
                                         current_discount_per /
                                         100);
+
+
 
 
                             indent_deatils_page_controller

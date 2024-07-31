@@ -1274,7 +1274,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                 0: FlexColumnWidth(1.9),
                 1: FlexColumnWidth(1.3),
                 2: FlexColumnWidth(1.5),
-                3: FlexColumnWidth(0.8),
+                3: FlexColumnWidth(1.1),
               },
               children: [
                 TableRow(
@@ -1983,7 +1983,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
 
 
                             indent_deatils_page_controller.unit_price_controller.text= (indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
-
+                            current_unitPrice = double.parse((indent_deatils_page_controller.unit_price_controller.text.isEmpty) ? "0" : indent_deatils_page_controller.unit_price_controller.text);
 
                             sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
 
@@ -2059,18 +2059,20 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                         .discount_controller.text);
 
 
-                                indent_deatils_page_controller.discount_controller.text=current_discount_per.abs().toStringAsFixed(2);
-
                                 indent_deatils_page_controller.unit_price_controller.text= (indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
 
+                                indent_deatils_page_controller.discount_controller.text=current_discount_per.abs().toStringAsFixed(2);
                                 sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
 
                                 discount_amount.value = (currentQty *
                                     indent_deatils_page_controller.unit_price *
                                     current_discount_per /
                                     100).abs();
+
                                 //todo total amount change after customer damage comment code...
-                               // total_amount.value =(currentQty * current_unitPrice);
+
+                                // total_amount.value =(currentQty * current_unitPrice);
+
 
                                 //todo total amount change after customer damage...
 
@@ -2078,9 +2080,46 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                 total_amount.value =
                                     (currentQty *  indent_deatils_page_controller.unit_price) -
                                         (currentQty *
-                                            current_unitPrice *
+                                            indent_deatils_page_controller.unit_price *
                                             current_discount_per /
                                             100);
+
+
+
+
+
+
+                                //todo some change....31-07-2024
+                               //  indent_deatils_page_controller.discount_controller.text=current_discount_per.abs().toStringAsFixed(2);
+                               //
+                               //  indent_deatils_page_controller.unit_price_controller.text= (indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
+                               //
+                               //  sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
+                               //
+                               //  discount_amount.value = (currentQty *
+                               //      indent_deatils_page_controller.unit_price *
+                               //      current_discount_per /
+                               //      100).abs();
+                               //  //todo total amount change after customer damage comment code...
+                               // // total_amount.value =(currentQty * current_unitPrice);
+                               //
+                               //
+                               //  total_amount.value =
+                               //      (currentQty *  indent_deatils_page_controller.unit_price) -
+                               //          (currentQty *
+                               //              indent_deatils_page_controller.unit_price *
+                               //              current_discount_per /
+                               //              100);
+                               //
+                               //  //todo total amount change after customer damage...
+                               //
+                               //
+                               //  /*total_amount.value =
+                               //      (currentQty *  indent_deatils_page_controller.unit_price) -
+                               //          (currentQty *
+                               //              current_unitPrice *
+                               //              current_discount_per /
+                               //              100);*/
 
 
                                 indent_deatils_page_controller
@@ -2145,22 +2184,54 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                               double current_discount_per = double.parse((indent_deatils_page_controller.discount_controller.text.isEmpty) ? "0" : indent_deatils_page_controller.discount_controller.text);
 
 
-                              indent_deatils_page_controller.unit_price_controller.text=(indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
 
+
+                              indent_deatils_page_controller.unit_price_controller.text=(indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
+                              //    double current_discount_per = enteredDiscount;
                               sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
-                              discount_amount.value = (currentQty *
-                                  current_unitPrice *
+
+
+
+                              discount_amount.value =(currentQty *
+                                  indent_deatils_page_controller.unit_price *
                                   current_discount_per /
                                   100).abs();
+
+                              // total_amount.value =
+                              //     (currentQty * current_unitPrice) -
+                              //         (currentQty *
+                              //             current_unitPrice *
+                              //             current_discount_per /
+                              //             100);
+
                               total_amount.value =
-                                  (currentQty * current_unitPrice) -
+                                  (currentQty * indent_deatils_page_controller.unit_price) -
                                       (currentQty *
-                                          current_unitPrice *
+                                          indent_deatils_page_controller.unit_price *
                                           current_discount_per /
                                           100);
-                              indent_deatils_page_controller
-                                  .paybal_amount_controller
-                                  .text = total_amount.value.toString();
+
+
+
+
+                              //todo some chnage.....31-07-2024
+                              // indent_deatils_page_controller.unit_price_controller.text=(indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).abs().toStringAsFixed(2);
+                              //
+                              // sub_total.value = currentQty * indent_deatils_page_controller.unit_price;
+                              // discount_amount.value = (currentQty *
+                              //     current_unitPrice *
+                              //     current_discount_per /
+                              //     100).abs();
+                              // total_amount.value =
+                              //     (currentQty * current_unitPrice) -
+                              //         (currentQty *
+                              //             current_unitPrice *
+                              //             current_discount_per /
+                              //             100);
+                              // indent_deatils_page_controller
+                              //     .paybal_amount_controller
+                              //     .text = total_amount.value.toString();
+                              //
 
 
                              /* sub_total.value = currentQty * current_unitPrice;
@@ -2217,6 +2288,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                 .paybal_amount_controller
                                 .text = total_amount.value.toString();
 
+
                           /*  double current_discount_per = double.parse((indent_deatils_page_controller.discount_controller.text.isEmpty) ? "0" : indent_deatils_page_controller.discount_controller.text);
                             sub_total.value = currentQty * current_unitPrice;
                             discount_amount.value = currentQty * current_unitPrice*current_discount_per/100;
@@ -2265,7 +2337,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 8,),
+                                SizedBox(height: 3,),
                                 Row(
                                   children: [
                                     Text(
