@@ -294,7 +294,8 @@ class _Drawer extends State<CustomDrawer> {
                           ),
                         ],
                         leading: Icon(
-                          _getIconForIndex(index),
+                         // _getIconForIndex(index),
+                          _getIconForIndex(title),
                           color: AllColors.whiteColor,
                         ),
                         title: Text(
@@ -339,13 +340,17 @@ class _Drawer extends State<CustomDrawer> {
     });
   }
 
-  IconData _getIconForIndex(int index) {
-    switch (index) {
-      case 0:
-        return Icons.report; // Change this icon as per your requirement
-      case 1:
-        return Icons.home; // Change this icon as per your requirement
-      // Add more cases for different indices if needed
+  IconData _getIconForIndex(String  Title) {
+    switch (Title) {
+      case "Services":
+        return Icons.miscellaneous_services_outlined; // Change this icon as per your requirement
+      case "Order":
+        return Icons.shop; // Change this icon as per your requirement
+      case "TA/DA":
+        return Icons.car_crash_outlined;
+      case "Approvals":
+        return Icons.approval_outlined;
+        // Add more cases for different indices if needed
       default:
         return Icons.exit_to_app; // Default icon
     }

@@ -168,7 +168,55 @@ class StaticMethod{
         break;
     // Change this icon as per your requirement
       case "Order List":
-        return Icons.shopping_cart; // Change this icon as per your requirement
+        return Icons.shopping_cart;
+
+
+      case "Corrective Request":
+        return Icons.change_circle_outlined; // Change this icon as per your requirement
+      case "Preventive Request":
+        return Icons.sd_card_alert_rounded;
+      case "Customer Complain":
+        return Icons.person_pin_sharp;
+      case "Return Indent":
+        return Icons.format_indent_decrease_outlined;
+
+      case "Indent List":
+        return Icons.list_alt;
+
+      case "Check In/Out":
+        return Icons.location_on_sharp;
+
+      case "User Route":
+        return Icons.route;
+
+
+      case "User Expense":
+        return Icons.explicit_outlined;
+
+
+      case "User Route":
+        return Icons.route;
+
+
+      case "Check In":
+        return Icons.my_location;
+
+
+      case "Expense":
+        return Icons.explicit;
+
+      case "Orders Approval":
+        return Icons.approval_rounded;
+
+
+
+
+
+
+
+
+
+
     // Add more cases for different indices if needed
       default:
         return Icons.exit_to_app; // Default icon

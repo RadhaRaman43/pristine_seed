@@ -561,7 +561,7 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                     color: Colors.black54,
                                     blurRadius: 1.0)
                               ], color: Colors.white),
-                            //  padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
+                              padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -1103,9 +1103,8 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.pop(context);
-                      corrective_indent_page_controller
-                          .showLineImagesPopup(context);
+                        Navigator.pop(context);
+                        corrective_indent_page_controller.showLineImagesPopup(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),

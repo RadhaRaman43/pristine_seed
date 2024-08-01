@@ -12,6 +12,7 @@ import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
+import '../../utils/app_utils.dart';
 import '../../viewModel/installation_vm/installation_vm.dart';
 import '../custom_drawer.dart';
 import '../../constants/static_methods.dart';
@@ -520,6 +521,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                                       ? true
                                       : false,
                                   child: Container(
+                                    margin: EdgeInsets.only(top: 2),
                                     decoration: BoxDecoration(
                                         boxShadow: <BoxShadow>[
                                           BoxShadow(
@@ -528,6 +530,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                                               blurRadius: 1.0)
                                         ],
                                         color: Colors.white),
+                                    padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -1622,9 +1625,9 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                          Navigator.pop(context);
+                        //  Navigator.pop(context);
                         installation_deatils_page_controller
-                            .reAssignRequestApi();
+                            .reAssignRequestApi(context);
                         // todo  Your onPressed logic...
                       },
                       child: Container(
@@ -1681,18 +1684,12 @@ class InstallationViewDetailsScreen extends StatelessWidget {
   Widget bindReasonDropDown(context) {
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
           return installation_deatils_page_controller.reason_master_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return installation_deatils_page_controller.reason_master_list.value
-            .where((ReasonModel option) {
-          return option.reasonCode
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        return await installation_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1745,7 +1742,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
             elevation: 4.0,
             child: Container(
               color: AllColors.grayColor1,
-              width: size.width * .6,
+              width: size.width * .61,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,
@@ -1777,6 +1774,10 @@ class InstallationViewDetailsScreen extends StatelessWidget {
       },
     );
   }
+
+
+
+
 
   ReSchduleRequestDialog(BuildContext context) {
     showDialog(
@@ -2335,7 +2336,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                       0]
                           .serviceHistory![index]
                           .createdOn!);
-                  var timeLine_date = StaticMethod.onlyMonthName(
+                  var timeLine_date = StaticMethod.onlyMonthNameThreeCharacter(
                       installation_deatils_page_controller
                           .service_installation_details_list[
                       0]

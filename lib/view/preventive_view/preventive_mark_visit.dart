@@ -569,6 +569,8 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                       ? true
                                       : false,
                                   child: Container(
+                                    margin: EdgeInsets.only(top: 2),
+                                    padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
                                     decoration: BoxDecoration(
                                         boxShadow: <BoxShadow>[
                                           BoxShadow(

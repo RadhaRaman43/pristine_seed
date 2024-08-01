@@ -1643,12 +1643,12 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                        //Navigator.pop(context);
                         /*installation_deatils_page_controller. reason_code_controller.clear();
                         installation_deatils_page_controller. reschdule_date_controller.clear();
                         installation_deatils_page_controller.reschdule_remark_controller.clear();*/
                         corrective_deatils_page_controller
-                            .reSchduleRequestApi();
+                            .reSchduleRequestApi(context);
                         // todo  Your onPressed logic...
                       },
                       child: Container(
@@ -1822,18 +1822,12 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
   Widget bindReasonDropDown(context) {
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async  {
         if (textEditingValue.text.isEmpty) {
           return corrective_deatils_page_controller.reason_master_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return corrective_deatils_page_controller.reason_master_list.value
-            .where((ReasonModel option) {
-          return option.reasonCode
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        return  await corrective_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1969,10 +1963,12 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                     //   Navigator.pop(context);
+
+
                         /*   installation_deatils_page_controller.reason_code_controller.clear();
                         installation_deatils_page_controller.reason_description_controller.clear();*/
-                        corrective_deatils_page_controller.reAssignRequestApi();
+                        corrective_deatils_page_controller.reAssignRequestApi(context);
                         // todo  Your onPressed logic...
                       },
                       child: Container(
@@ -2313,7 +2309,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                           .serviceHistory![index]
                           .createdOn!);
                   var timeLine_date =
-                  StaticMethod.onlyMonthName(
+                  StaticMethod.onlyMonthNameThreeCharacter(
                       corrective_deatils_page_controller
                           .service_corrective_details_list[
                       0]

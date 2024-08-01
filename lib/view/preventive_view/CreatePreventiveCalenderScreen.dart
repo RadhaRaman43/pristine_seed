@@ -307,7 +307,8 @@ class CreatePreventiveCalender extends StatelessWidget{
    );
   }
 
-  void showPreventiveDetailsBottomSheet(BuildContext context, PreventiveRequests item){
+  void
+  showPreventiveDetailsBottomSheet(BuildContext context, PreventiveRequests item){
     final now = DateTime.now();
     create_preventive_page_controller.warranty_visit_time_controller.text= DateFormat.Hms().format(now);
     var Date=StaticMethod.convertDateFormat1(item.warrantyDate!);
@@ -646,20 +647,19 @@ class CreatePreventiveCalender extends StatelessWidget{
       ),
       cursorColor: AllColors.primaryDark1,
       onTap: () async {
-        DateTime stating_date = new DateTime(1900);
-        DateTime ending_date = new DateTime(2200);
-        FocusScope.of(context).requestFocus(new FocusNode());
+        DateTime currentDate = DateTime.now();
+        DateTime ending_date = DateTime(2200);
+        FocusScope.of(context).requestFocus(FocusNode());
         DateTime? date = await showDatePicker(
           context: context,
-          initialDate: DateTime.now(),
-         firstDate: stating_date,
-           // Set the firstDate to warrantyDate
+          initialDate: currentDate,
+          firstDate: currentDate, // Set the firstDate to currentDate
           lastDate: ending_date,
           builder: (BuildContext context, Widget? child) {
             return Theme(
               data: ThemeData.light().copyWith(
                 primaryColor: AllColors.primaryDark1, // Header background color
-                //accentColor: AllColors.primaryDark1, // Color of the buttons
+                // accentColor: AllColors.primaryDark1, // Color of the buttons
                 colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
                 buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
               ),
@@ -668,17 +668,17 @@ class CreatePreventiveCalender extends StatelessWidget{
           },
         );
         var outputFormat = DateFormat('dd-MM-yyyy');
-        if (date != null && date != "")
+        if (date != null) {
           create_preventive_page_controller.warranty_visit_date_controller.text =
               outputFormat.format(date);
-        //  else
-        // create_preventive_page_controller.warranty_visit_date_controller.text = "";
+        }
       },
     );
   }
 
 
- /* Widget bindDate(context) {
+
+  /*Widget bindDate(context) {
     return TextFormField(
      controller: create_preventive_page_controller.warranty_visit_date_controller,
       readOnly: true,

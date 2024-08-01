@@ -2281,7 +2281,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
 
                             discount_amount.value = (currentQty *
                                 indent_deatils_page_controller.unit_price *
-                                current_discount_per /
+                                 current_discount_per /
                                 100).abs();
                             total_amount.value =(currentQty * current_unitPrice);
                             indent_deatils_page_controller
@@ -2397,28 +2397,34 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                           height: 13,
                         ),
 
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              AllColors.primaryDark1,
+                        Visibility(
+                          visible: flag == "View" ? false : true,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
                             ),
-                          ),
-                          onPressed: () {
-                            indent_deatils_page_controller.IndentLineCreate(
-                                indent_deatils_page_controller
-                                    .service_indent_header_create_list[0].indentNo!,context);
-                            //  Navigator.pop(context);
-                            // todo  Your onPressed logic...
-                          },
-                          child: Container(
-                            width: 80,
-                            alignment: Alignment.center,
-                            child: Text(
-                              'Add item',
-                              style: GoogleFonts.poppins(
-                                color: AllColors.customDarkerWhite,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w700,
+                            onPressed: () {
+                              indent_deatils_page_controller.IndentLineCreate(
+                                  indent_deatils_page_controller
+                                      .service_indent_header_create_list[0].indentNo!,context);
+                              //  Navigator.pop(context);
+                              // todo  Your onPressed logic...
+                            },
+                            child: Visibility(
+                              visible: flag == "View" ? false : true,
+                              child: Container(
+                                width: 80,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  'Add item',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.customDarkerWhite,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                               ),
                             ),
                           ),

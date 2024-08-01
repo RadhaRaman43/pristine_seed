@@ -153,7 +153,7 @@ class InstallationViewModel extends GetxController {
   void onInit() async {
     email = await sessionManagement.getEmail() ?? '';
     getServiceInstallationList(is_done.value, pageNumber,date_filter.value);
-    getReasonMaster();
+   // getReasonMaster();
     initCurrentLocationLatLant();
   }
 
@@ -277,6 +277,9 @@ class InstallationViewModel extends GetxController {
     }
   }
 
+
+  //todo search reason drop down........
+/*
   getReasonMaster() {
     Map data = {
       "flag": "select",
@@ -324,11 +327,50 @@ class InstallationViewModel extends GetxController {
       print(e);
     }
   }
+*/
 
+  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
+    if (text == '') {
+      return const Iterable<ReasonModel>.empty();
+    }
+    Map data = {
+      "flag": "select",
+      "reason_code": text,
+      "reason_type": "Installation",
+      "reason_description": "",
+      "created_by": email,
+      "id": "",
+    };
+
+    String reasondropdownresp =
+    await _api.reasonMasterApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(reasondropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ReasonModel> response = jsonResponse
+            .map((data) => ReasonModel.fromJson(data))
+            .toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          reason_master_list.value = response;
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          reason_master_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        reason_master_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      reason_master_list.value= [];
+    }
+    return   reason_master_list.value;
+  }
   getItemDetails() {
     Map<String, String> data = {
       'item_no': service_installation_details_list[0].itemNo.toString() ,
-
     };
     print(data);
     loading.value = true;
@@ -371,7 +413,7 @@ class InstallationViewModel extends GetxController {
     }
   }
 
-  reAssignRequestApi() {
+  reAssignRequestApi(BuildContext context) {
     if(reason_code_controller.text.isEmpty){
       Utils.showErrorToastification("Message", "Please Select Reason Code");
       return ;
@@ -380,8 +422,6 @@ class InstallationViewModel extends GetxController {
       Utils.showErrorToastification("Message", "Please Enter Reason Remark");
       return ;
     }
-
-
     Map data = {
       "service_id": id,
       "reason_code": reason_code,
@@ -406,6 +446,7 @@ class InstallationViewModel extends GetxController {
              // service_installation_details_list.value = response;
               Utils.showToastification(
                   "Success!", response[0].message.toString());
+              Navigator.pop(context);
               Get.offAllNamed(RoutesName.installation_screen);
                // getServiceInstallationDetails(id, "Refresh");
               // service_installation_details_list.value = response;

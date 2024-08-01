@@ -549,11 +549,20 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                       ? true
                                       : false,
                                   child: Container(
+                                    margin: EdgeInsets.only(top: 2),
                                     padding: EdgeInsets.only(
                                         left: 10.0,
                                         top: 5,
                                         right: 10,
                                         bottom: 10),
+
+                                    decoration: BoxDecoration(boxShadow: <BoxShadow>[
+                                      BoxShadow(
+                                          offset: Offset(0.0, 1.0),
+                                          color: Colors.black54,
+                                          blurRadius: 1.0)
+                                    ], color: Colors.white),
+
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -1636,9 +1645,9 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                       // Navigator.pop(context);
 
-                        preventive_deatils_page_controller.reAssignRequestApi();
+                        preventive_deatils_page_controller.reAssignRequestApi(context);
                         // todo  Your onPressed logic...
                       },
                       child: Container(
@@ -1695,18 +1704,12 @@ class PreventiveViewDetailScreen extends StatelessWidget {
   Widget bindReasonDropDown(context) {
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
           return preventive_deatils_page_controller.reason_master_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return preventive_deatils_page_controller.reason_master_list.value
-            .where((ReasonModel option) {
-          return option.reasonCode
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        return await preventive_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
       },
       onSelected: (ReasonModel selection) {
         print(selection.reasonCode);
@@ -1725,8 +1728,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text =
-                preventive_deatils_page_controller.reason_code_controller.text,
+            ..text = preventive_deatils_page_controller.reason_code_controller.text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
@@ -1843,7 +1845,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        Navigator.pop(context);
+                      //  Navigator.pop(context);
 
                         preventive_deatils_page_controller
                             .reSchduleRequestApi(context);
@@ -2334,7 +2336,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                           .serviceHistory![index]
                           .createdOn!);
                   var timeLine_date =
-                  StaticMethod.onlyMonthName(
+                  StaticMethod.onlyMonthNameThreeCharacter(
                       preventive_deatils_page_controller
                           .service_preventive_details_list[
                       0]

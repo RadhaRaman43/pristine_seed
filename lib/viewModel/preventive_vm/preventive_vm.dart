@@ -117,7 +117,7 @@ class PreventiveViewModel extends GetxController {
   void onInit() async {
     email = await sessionManagement.getEmail() ?? '';
     getServicePreventiveList(is_done.value, pageNumber, date_filter.value);
-    getReasonMaster();
+   // getReasonMaster();
     initCurrentLocationLatLant();
   }
 
@@ -501,7 +501,10 @@ class PreventiveViewModel extends GetxController {
     }
   }
 
-  getReasonMaster() {
+
+  //todo search reason drop down ....
+
+/*  getReasonMaster() {
     Map data = {
       "flag": "select",
       "reason_code": "",
@@ -547,7 +550,49 @@ class PreventiveViewModel extends GetxController {
       reason_master_list.value = [];
       print(e);
     }
+  }*/
+
+
+  Future<Iterable<ReasonModel>> getSearchReasonMaster(String text) async {
+    if (text == '') {
+      return const Iterable<ReasonModel>.empty();
+    }
+    Map data = {
+      "flag": "select",
+      "reason_code": text,
+      "reason_type": "Installation",
+      "reason_description": "",
+      "created_by": email,
+      "id": "",
+    };
+
+    String reasondropdownresp =
+    await _api.preventiveReasonMasterApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(reasondropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ReasonModel> response = jsonResponse
+            .map((data) => ReasonModel.fromJson(data))
+            .toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          reason_master_list.value = response;
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          reason_master_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        reason_master_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      reason_master_list.value= [];
+    }
+    return   reason_master_list.value;
   }
+
 
   IndentLineCreate(String indent_no, BuildContext context) {
     if (item_no_controller.text.isEmpty) {
@@ -908,7 +953,7 @@ class PreventiveViewModel extends GetxController {
     }
   }
 
-  reAssignRequestApi() {
+  reAssignRequestApi(BuildContext context) {
     if (reason_code_controller.text.isEmpty) {
       Utils.showErrorToastification("Message", "Please Select Reason Code");
       return;
@@ -941,6 +986,7 @@ class PreventiveViewModel extends GetxController {
               loading.value = false;
               Utils.showToastification(
                   "Success!", response[0].message.toString());
+              Navigator.pop(context);
               Get.offAllNamed(RoutesName.preventive_screen);
               //  getServicePreventiveDetails(id, "Refresh");
               // service_installation_details_list.value = response;
@@ -969,6 +1015,13 @@ class PreventiveViewModel extends GetxController {
   }
 
   reSchduleRequestApi(BuildContext context) {
+    if(reason_code_controller.text.isEmpty){
+      Utils.showErrorToastification("Message", "Please Select Reason Code");
+      return;
+    }if(reschdule_remark_controller.text.isEmpty){
+      Utils.showErrorToastification("Message", "Please Enter Reschedule Remark");
+      return;
+    }
     Map data = {
       "service_id": id,
       "reschedule_datetime": reschdule_date_controller.text,
@@ -995,6 +1048,7 @@ class PreventiveViewModel extends GetxController {
               reschdule_remark_controller.clear();
               Utils.showToastification(
                   "Success!", response[0].message.toString());
+              Navigator.pop(context);
               getServicePreventiveDetails(id, "Refresh");
             } else {
               loading.value = false;

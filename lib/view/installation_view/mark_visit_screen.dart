@@ -656,12 +656,14 @@ class MarkVisit extends StatelessWidget {
                                     .service_installation_details_list[0]
                                     .complainReasonCode!=""  ?true:false,
                                 child: Container(
+                                  margin: EdgeInsets.only(top: 2),
                                   decoration: BoxDecoration(boxShadow: <BoxShadow>[
                                     BoxShadow(
                                         offset: Offset(0.0, 1.0),
                                         color: Colors.black54,
                                         blurRadius: 1.0)
                                   ], color: Colors.white),
+                                  padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
