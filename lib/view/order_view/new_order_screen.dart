@@ -28,6 +28,9 @@ class NewOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+  //  var outputFormat = DateFormat('dd-MM-yyyy');
+   // new_order_page_controller.order_date_controller.text= outputFormat.format(DateTime.now());
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -382,12 +385,17 @@ class NewOrderScreen extends StatelessWidget {
             );
           },
         );
-        var outputFormat = DateFormat('yyyy-MM-dd');
-        if (date != null && date != "")
+        var outputFormat = DateFormat('dd-MM-yyyy');
+        if (date != null && date != ""){
+          print("tttttttttttttt");
           new_order_page_controller.order_date_controller.text =
               outputFormat.format(date);
-        else
+        }
+        else{
+          print("fmrknkrvnkr");
           new_order_page_controller.order_date_controller.text = "";
+        }
+
       },
     );
   }

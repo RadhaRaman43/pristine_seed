@@ -884,11 +884,11 @@ class PreventiveScreen extends StatelessWidget{
                                       preventive_page_controller.pageNumber,
                                       preventive_page_controller
                                           .date_filter.value);
-                                  preventive_page_controller.customer_no_search_controller.clear();
-                                  preventive_page_controller.serial_no_search_controller.clear();
-                                  preventive_page_controller.invoice_no_search_controller.clear();
-                                  preventive_page_controller.item_no_search_controller.clear();
-                                  preventive_page_controller.invoice_date_search_controller.clear();
+                                //  preventive_page_controller.customer_no_search_controller.clear();
+                                //  preventive_page_controller.serial_no_search_controller.clear();
+                                //  preventive_page_controller.invoice_no_search_controller.clear();
+                               //   preventive_page_controller.item_no_search_controller.clear();
+                               //   preventive_page_controller.invoice_date_search_controller.clear();
 
 
                                 },

@@ -123,9 +123,9 @@ class OrderViewModel extends GetxController{
             if(page_no==0){
               order_header_list.clear();
             }
-            order_filter_date_controller.clear();
-            order_filter_customer_no_controller.clear();
-            order_filter_customer_name_controller.clear();
+         //   order_filter_date_controller.clear();
+          //  order_filter_customer_no_controller.clear();
+          //  order_filter_customer_name_controller.clear();
             order_header_list.addAll(response);
             total_rows!=response[0].totalRows!;
             pending_amt.value=response[0].pendingAmount.toString();

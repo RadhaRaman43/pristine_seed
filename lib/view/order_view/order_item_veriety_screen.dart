@@ -263,19 +263,27 @@ class OrderItemVarietyScreen extends StatelessWidget{
       child:  Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
+            padding: const EdgeInsets.all(8.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(item_variety_page_controller.order_item_get_list[position].itemName ?? ''
-                      ,style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w700
-                      ),),
+                    Container(
+                      width:size.width*.61,
+                      child: Tooltip(
+                        message: item_variety_page_controller.order_item_get_list[position].itemName ?? '',
+                        child: Text(item_variety_page_controller.order_item_get_list[position].itemName ?? ''
+                          ,style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.sisxteen,
+                              fontWeight: FontWeight.w700
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
                     /*Text('Sec.Pack: ${item_variety_page_controller.order_item_get_list[position].secondaryPacking.toString() +' '+
                         item_variety_page_controller.order_item_get_list[position].baseUnitOfMeasure.toString() ?? ''}',
                         style: GoogleFonts.poppins(

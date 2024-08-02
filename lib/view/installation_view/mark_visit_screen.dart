@@ -1186,7 +1186,7 @@ class MarkVisit extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                   //   Navigator.pop(context);
+                      Navigator.pop(context);
                       installation_indent_page_controller
                           .showLineImagesPopup(context);
                     },

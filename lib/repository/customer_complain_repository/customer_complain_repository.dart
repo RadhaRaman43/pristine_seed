@@ -18,4 +18,17 @@ class CustomerComplainRepository{
   Future<String> getAllComplainApi(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.getAllComplain,sessionManagement);
   }
+
+
+  Future<String> serviceCorrectiveListApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.serviceCorrectiveListData,sessionManagement);
+  }
+
+  Future<String> getServiceComplainAddFilter(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.getServiceComplainAddFilter,sessionManagement);
+  }
+
+  Future<String> getServiceComplainAddList(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.getServiceComplainAddList,sessionManagement);
+  }
 }

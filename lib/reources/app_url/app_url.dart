@@ -151,6 +151,9 @@ class AppUrl {
   //todo Customer Complain...
   static const String customerRaiseComplain="$BASE_URL/api/ServiceActivity/ServiceMarkRaiseComplain";
   static const String getAllComplain="$BASE_URL/api/ServiceActivity/ServiceInatallationAllComplain";
+  static const String getServiceComplainAddFilter="$BASE_URL/api/ServiceActivity/ServiceComplainAddFilterGet";
+  static const String getServiceComplainAddList="$BASE_URL/api/ServiceActivity/ServiceComplainAddListGet";
+
 
 
 

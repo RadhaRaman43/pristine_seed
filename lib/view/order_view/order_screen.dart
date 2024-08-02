@@ -40,18 +40,26 @@ class OrderScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
+
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
 
 
               }, icon: Icon(Icons.filter_alt_sharp)),
-             // Obx( () {
-             // //  return
-                  IconButton(onPressed: () {
-                  order_header_page_controller.resetAllNewOrderFields();
-                  Get.toNamed(RoutesName.new_order_screen);
-                }, icon: Icon(Icons.add)),
-              //},)
+
+              Obx(() {
+               return
+                  Visibility(
+                    visible:order_header_page_controller.status.value=="Pending"?true:false,
+                    child: IconButton(onPressed: () {
+                    order_header_page_controller.resetAllNewOrderFields();
+                    var outputFormat = DateFormat('dd-MM-yyyy');
+                    order_header_page_controller.order_date_controller.text =
+                        outputFormat.format(DateTime.now());
+                    Get.toNamed(RoutesName.new_order_screen);
+                                    }, icon: Icon(Icons.add)),
+                  );
+              },)
             ],
           ),
           iconTheme: IconThemeData(
@@ -85,7 +93,6 @@ class OrderScreen extends StatelessWidget{
                        controller: order_header_page_controller.global_search_controller,
                        decoration: InputDecoration(
                          hintText: "Enter Order No.",
-
                          contentPadding: EdgeInsets.all(10),
                          focusedBorder: OutlineInputBorder(
                            borderRadius: BorderRadius.circular(10),

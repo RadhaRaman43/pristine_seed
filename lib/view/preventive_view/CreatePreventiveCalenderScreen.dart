@@ -36,7 +36,6 @@ class CreatePreventiveCalender extends StatelessWidget{
         backgroundColor: AllColors.primaryDark1,
       ),
       drawer: CustomDrawer(),
-
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -57,18 +56,13 @@ class CreatePreventiveCalender extends StatelessWidget{
                   );
                 },
               ),
-
               Obx(() {
                 return BindCustomerListView(context);
               }),
-
             ],
           ),
         ),
-
       ),
-
-
     );
   }
   Widget BindCustomerListView(context) {
@@ -278,11 +272,18 @@ class CreatePreventiveCalender extends StatelessWidget{
             child: Column(
               children: [
                 SizedBox(height: 8,),
-                Text(item.itemName!+"(${item.itemNo})"!,
-                  style:GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: 10,
-                  )
+                Container(
+                  width: size.width*.25,
+                  child: Tooltip(
+                    message:item.itemName!+"(${item.itemNo!})" ,
+                    child: Text(item.itemName!+"(${item.itemNo!}) ",
+                      style:GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: 10,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 3,),
                 Text(item.serialNo!,

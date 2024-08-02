@@ -1161,7 +1161,6 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
   void showLineImagesPopup(BuildContext context) {
     List<FileList> dialog_file_list=[];
-
     if(image_flag.value=="Corrective_Certificate"){
       dialog_file_list=service_corrective_details_list[0].fileList!.where((element) => element.documentType!.toLowerCase()=='Corrective_Certificate'.toLowerCase()).toList();
     }else if(image_flag.value=="Corrective_Product"){

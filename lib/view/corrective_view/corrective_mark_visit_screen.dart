@@ -12,6 +12,7 @@ import '../../reources/routes/routes_name.dart';
 import '../../utils/app_utils.dart';
 import '../../viewModel/corrective_vm/corrective_vm.dart';
 import '../custom_drawer.dart';
+import '../../models/serviceCorrectiveModel/corrective_details_model.dart';
 
 class CorrectiveMarkVisitScreen extends StatelessWidget{
   CorrectiveMarkVisitScreen({super.key});
@@ -1103,8 +1104,8 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: () {
-                        Navigator.pop(context);
-                        corrective_indent_page_controller.showLineImagesPopup(context);
+                         Navigator.pop(context);
+                         corrective_indent_page_controller.showLineImagesPopup(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),

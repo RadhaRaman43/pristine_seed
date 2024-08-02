@@ -73,17 +73,19 @@ class _Drawer extends State<CustomDrawer> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Padding(
+                              //todo comment notification.....
+
+                              /*Padding(
                                 padding: const EdgeInsets.only(left: 8.0),
                                 child: Icon(
                                   Icons.notification_add,
                                   color: Colors.white,
                                   size: 20,
                                 ),
-                              ),
-                              SizedBox(
-                                width: size.width * .02,
-                              ),
+                              ),*/
+
+                              SizedBox(width: size.width * .02,),
+
                               bindprofileMenu(),
                             ],
                           ),
@@ -195,10 +197,10 @@ class _Drawer extends State<CustomDrawer> {
                                           case 'Customer Complain':
                                             IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                             home_vm.openMenu(cTitle, iconData);
-                                            Get.toNamed(RoutesName.customer_complain_screen,preventDuplicates: false);
-
+                                            Get.toNamed(RoutesName.complain_customer_page,preventDuplicates: false);
                                             Navigator.of(context);
                                             break;
+
 
 
 

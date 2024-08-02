@@ -866,11 +866,11 @@ class CorrectiveScreen extends StatelessWidget{
                                       corrective_page_controller.pageNumber,
                                       corrective_page_controller
                                           .date_filter.value);
-                                  corrective_page_controller.customer_no_search_controller.clear();
-                                  corrective_page_controller.serial_no_search_controller.clear();
-                                  corrective_page_controller.invoice_no_search_controller.clear();
-                                  corrective_page_controller.item_no_search_controller.clear();
-                                  corrective_page_controller.invoice_date_search_controller.clear();
+                                 // corrective_page_controller.customer_no_search_controller.clear();
+                                 // corrective_page_controller.serial_no_search_controller.clear();
+                                 // corrective_page_controller.invoice_no_search_controller.clear();
+                                 // corrective_page_controller.item_no_search_controller.clear();
+                                //  corrective_page_controller.invoice_date_search_controller.clear();
 
 
                                 },
