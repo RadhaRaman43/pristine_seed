@@ -1615,6 +1615,9 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
           return option.itemCode
               .toString()
               .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase()) ||  option.displayName
+              .toString()
+              .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },

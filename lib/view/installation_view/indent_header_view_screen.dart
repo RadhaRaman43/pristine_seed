@@ -1053,35 +1053,6 @@ class IndentHeaderViewScreen extends StatelessWidget {
             ],
           ),
         ),
-        /*Visibility(
-          visible:  indent_deatils_page_controller.bad_quantity_controller[0].indentStatus=="Completed"?false:true,
-          child: InkWell(
-            onTap: () {
-              Get.defaultDialog(
-                title: "Line Delete",
-                titleStyle: const TextStyle(
-                    color: AllColors.primaryDark1, fontSize: 18, fontWeight: FontWeight.bold),
-                content: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15.0),
-                  child: Text("Do you want to Delete?",
-                    style: TextStyle(color: AllColors.primaryDark1,
-                        fontWeight: FontWeight.w600,fontSize: AllFontSize.fourtine),),
-
-                ),
-                confirm: OutlinedButton(
-                  onPressed: ()   {
-                    Get.back();
-                    indent_deatils_page_controller.IndentHeaderLineDelete(indent_deatils_page_controller.service_indent_header_create_list[0].indentNo!,indent_deatils_page_controller.service_indent_header_create_list[0].lines![index].lineNo.toString(),"LineDiscard");
-                  } ,
-                  child: const Text("Yes", style: TextStyle(color: Colors.red)),
-                ),
-                cancel: OutlinedButton(onPressed: () => Get.back(), child: const Text("No",
-                  style: TextStyle(color: AllColors.primaryDark1),)),
-              );
-
-            },
-              child: Icon(Icons.delete,color: AllColors.redColor,)),
-        ),*/
       ),
     );
   }
@@ -1249,6 +1220,9 @@ class IndentHeaderViewScreen extends StatelessWidget {
           return option.itemCode
               .toString()
               .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase()) || option.displayName
+              .toString()
+              .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
@@ -1257,11 +1231,10 @@ class IndentHeaderViewScreen extends StatelessWidget {
         indent_deatils_page_controller.item_no_controller.text =
             _displayItemNoForOption(selection).toString();
         indent_deatils_page_controller.item_no = selection.itemCode!;
-
         indent_deatils_page_controller.item_Qty = selection.componentQuantity!;
         indent_deatils_page_controller.is_warrenty = selection.isWarranty!;
         indent_deatils_page_controller.unit_price = selection.costPerUnit!;
-        indent_deatils_page_controller.unit_price = selection.costPerUnit!;
+      //  indent_deatils_page_controller.unit_price = selection.costPerUnit!;
         indent_deatils_page_controller.item_price_controller.text=selection.costPerUnit!.toStringAsFixed(2);
             selection.costPerUnit.toString()!;
         indent_deatils_page_controller.item_no_description_controller.text =

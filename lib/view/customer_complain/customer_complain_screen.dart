@@ -1032,6 +1032,7 @@ class CustomerComplainScreen extends StatelessWidget{
       },
     );
   }
+
   Widget BindComlainListView(context) {
     if (customer_complain_vm.all_complain_list.value.isNotEmpty &&
         customer_complain_vm.all_complain_list.value.length > 0){
@@ -1055,7 +1056,6 @@ class CustomerComplainScreen extends StatelessWidget{
           height: 180,
         ),
       );
-
     }
   }
 

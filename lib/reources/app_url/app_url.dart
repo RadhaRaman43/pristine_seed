@@ -1,9 +1,12 @@
 class AppUrl {
   /*static const String BASE_URL="https://dev4.pristinefulfil.com";
   static const String login_url="$BASE_URL/api/UserLogin/Login";*/
-
   // static const String BASE_URL="https://mahalaxmi.pristinefulfil.com";
-  static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+   //todo testing url...
+    //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+    //todo live url....
+  static const String BASE_URL = "https://Crm.pristinefulfil.com";
+
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
   static const String employeeGet = "$BASE_URL/api/Employee/EmployeeDetailGet";
