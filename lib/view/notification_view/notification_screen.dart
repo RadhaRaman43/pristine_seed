@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
@@ -18,59 +19,65 @@ class NotificationScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title:Text(
-          'Notification List',
-          style: GoogleFonts.poppins(
-            color: AllColors.whiteColor,
-            fontSize: AllFontSize.twentee,
-            fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop: () async  {
+        Get.offAllNamed(RoutesName.homeScreen);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title:Text(
+            'Notification List',
+            style: GoogleFonts.poppins(
+              color: AllColors.whiteColor,
+              fontSize: AllFontSize.twentee,
+              fontWeight: FontWeight.w700,
+            ),
           ),
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor, // Change this to the desired color
+          ),
+          backgroundColor: AllColors.primaryDark1,
         ),
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor, // Change this to the desired color
-        ),
-        backgroundColor: AllColors.primaryDark1,
-      ),
-      drawer: CustomDrawer(),
-      body: Container(
-        width: double.infinity,
-        height: size.height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Obx(
-                () {
-                  return  Container(
-                    margin: EdgeInsets.only(top: 0.2),
-                    child: Visibility(
-                      visible:notification_page_controller.loading.value ,
-                      child: LinearProgressIndicator(
-                        color: AllColors.textColor,
-                        backgroundColor: AllColors.primaryDark1,
+        drawer: CustomDrawer(),
+        body: Container(
+          width: double.infinity,
+          height: size.height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Obx(
+                  () {
+                    return  Container(
+                      margin: EdgeInsets.only(top: 0.2),
+                      child: Visibility(
+                        visible:notification_page_controller.loading.value ,
+                        child: LinearProgressIndicator(
+                          color: AllColors.textColor,
+                          backgroundColor: AllColors.primaryDark1,
+                        ),
                       ),
-                    ),
-                  );
-                },
-                // child:
-              ),
-          
-              Container(
-                // padding: EdgeInsets.all(5),
-                 // margin: EdgeInsets.only(top: 5, left: 10, right: 10),
-                  decoration: BoxDecoration(
-                    //color: AllColors.grayColor1,
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Obx(() {
-                    return BindListView(context);
-                  })),
-          
-            ],
+                    );
+                  },
+                  // child:
+                ),
+
+                Container(
+                  // padding: EdgeInsets.all(5),
+                   // margin: EdgeInsets.only(top: 5, left: 10, right: 10),
+                    decoration: BoxDecoration(
+                      //color: AllColors.grayColor1,
+                        borderRadius: BorderRadius.circular(5)),
+                    child: Obx(() {
+                      return BindListView(context);
+                    })),
+
+              ],
+            ),
           ),
         ),
-      ),
 
+      ),
     );
   }
 

@@ -404,7 +404,7 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
           }else {
             print("rittkk");
             sessionManagement.clearSession();
-            Get.toNamed(RoutesName.loginScreen);
+            Get.offAllNamed(RoutesName.loginScreen);
             Utils.showErrorToastification(
                 'Message', "Employee Details Not Found Of This User!");
             loading.value=false;
@@ -416,9 +416,11 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
       },).onError((error, stackTrace) {
         loading.value=false;
         sessionManagement.clearSession();
-        Get.toNamed(RoutesName.loginScreen);
-        Utils.sanckBarError(
-            'Message', "Employee Details Not Found Of This User!");
+        Get.offAllNamed(RoutesName.loginScreen);
+        // Utils.sanckBarError(
+        //     'Message', "Employee Details Not Found Of This User!");
+
+        Utils.showErrorToastification("Api Error!", error.toString());
         print(error);
       },);
     }catch(e){

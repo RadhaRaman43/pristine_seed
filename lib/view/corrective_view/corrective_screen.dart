@@ -157,6 +157,44 @@ class CorrectiveScreen extends StatelessWidget{
                             SizedBox(
                               width: size.width * 0.02,
                             ),
+
+                            Obx(
+                                  () {
+                                return ActionChip(
+                                  elevation: 2,
+                                  padding: EdgeInsets.all(2),
+                                  backgroundColor: corrective_page_controller.is_done.value == -1 ? AllColors.primaryDark1
+                                      : AllColors.grayColor,
+                                  shadowColor: Colors.black,
+                                  shape: StadiumBorder(
+                                      side: BorderSide(color: AllColors.grayColor)),
+                                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                  //CircleAvatar
+                                  label: Text('Reopen',
+                                      style: GoogleFonts.poppins(
+                                        color:corrective_page_controller.is_done.value == -1 ? AllColors.whiteColor
+                                            : AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500,
+                                      )),
+                                  onPressed: () {
+                                    corrective_page_controller.pageNumber=0;
+                                    corrective_page_controller.is_done.value =-1;
+                                    corrective_page_controller
+                                        .getServiceCorrectiveList(
+                                        corrective_page_controller.is_done.value,
+                                        corrective_page_controller.pageNumber,corrective_page_controller.date_filter.value );
+
+                                  }, //Text
+                                );
+                              },
+                            ),
+
+
+                            SizedBox(
+                              width: size.width * 0.02,
+                            ),
+
                             Obx(
                                   () {
                                 return ActionChip(

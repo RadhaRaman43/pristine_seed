@@ -13,6 +13,7 @@ import 'package:navigation_drawer_flutter/viewModel/dashboard_vm/dashboard_vm.da
 import '../../component/default_button.dart';
 import '../../constants/app_font_size.dart';
 import '../../constants/static_methods.dart';
+import '../../viewModel/corrective_vm/corrective_vm.dart';
 import '../../viewModel/home_vm/HomeViewModel.dart';
 import '../../viewModel/notification_vm/notification_vm.dart';
 import '../custom_drawer.dart';
@@ -24,6 +25,7 @@ class DashBoard extends StatelessWidget {
   final home_vm = Get.put(HomeViewModel());
   final dashboard_page_controller = Get.put(DashBoardViewModel());
   final notification_page_controller = Get.put(NotificationViewModel());
+  final corrective_page_controller=Get.put(CorrectiveViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -296,6 +298,16 @@ class DashBoard extends StatelessWidget {
               home_vm.openMenu(title, iconData);
               Get.toNamed(RoutesName.preventive_screen,preventDuplicates: false);
               break;
+
+            case "Reopen":
+            IconData iconData = StaticMethod.getChildIconForIndex(title);
+              home_vm.openMenu(title, iconData);
+              Get.toNamed(RoutesName.corrective_screen);
+              corrective_page_controller.is_done.value=-1;
+              corrective_page_controller.getServiceCorrectiveList(corrective_page_controller.is_done.value, corrective_page_controller.pageNumber,corrective_page_controller.date_filter.value);
+              break;
+
+
 
           }
         },

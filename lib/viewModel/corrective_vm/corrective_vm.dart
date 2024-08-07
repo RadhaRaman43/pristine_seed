@@ -157,10 +157,10 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
     }else{
          data = {
         "service_type": "Corrective",
-        "service_status": "",
+        "service_status":is_done==-1?"Reopen":"",
         "service_no": "",
         "date_filter": date_filter,
-        "is_done": is_done,
+        "is_done": is_done<0?0:is_done,
         "email_id": email,
         "customer_no_name": customer_no_search_controller.value.text.isEmpty?"":customer_no_search_controller.value.text,
         "invoice_date":invoice_date_search_controller.value.text.isEmpty?"":invoice_date_search_controller.value.text,

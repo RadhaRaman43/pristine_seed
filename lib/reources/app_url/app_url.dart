@@ -3,9 +3,10 @@ class AppUrl {
   static const String login_url="$BASE_URL/api/UserLogin/Login";*/
   // static const String BASE_URL="https://mahalaxmi.pristinefulfil.com";
    //todo testing url...
-    //static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+   // static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-  static const String BASE_URL = "https://Crm.pristinefulfil.com";
+    //static const String BASE_URL = "https://crm.pristinefulfil.com";
+    static const String BASE_URL = "https://crm.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
@@ -14,10 +15,6 @@ class AppUrl {
   static const String getCollectionList = "$BASE_URL/api/Collection/GetCollectionData";
   static const String profile_upload="$BASE_URL/api/UserLogin/ProfileUpload";
   static const String notification_list="$BASE_URL/api/PushNofication/GetNotificationList";
-
-
-
-
 
   //todo for installation......
   static const String serviceInstallationData = "$BASE_URL/api/ServiceActivity/ServiceMstGetDashbord";
