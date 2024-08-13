@@ -30,7 +30,6 @@ class LoginViewModel extends GetxController{
     await _api.loginApiHit(data,sessionManagement).then((value){
       try{
 
-
         List<LoginResponse> loginResponse=(json.decode(value) as List).map((i) =>
             LoginResponse.fromJson(i)).toList();
 

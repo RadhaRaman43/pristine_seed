@@ -323,7 +323,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                         Spacer(),
                                         Text(
                                           indent_deatils_page_controller
-                                                  .service_indent_header_list
+                                                  .service_indent_header_create_list
                                                   .isNotEmpty
                                               ? indent_deatils_page_controller
                                                       .service_indent_header_create_list[

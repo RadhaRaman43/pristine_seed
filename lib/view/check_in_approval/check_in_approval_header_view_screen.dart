@@ -30,14 +30,30 @@ class CheckInApprovalHeaderViewScreen extends StatelessWidget{
         iconTheme: IconThemeData(
           color: AllColors.whiteColor,
         ),
-        title: Text(
-          'Check In Details',
-          style: GoogleFonts.poppins(
-            color: AllColors.whiteColor,
-            fontSize: AllFontSize.twentee,
-            fontWeight: FontWeight.w700,
-          ),
+        title: Row(
+          children: [
+            Text(
+              'Check In Details',
+              style: GoogleFonts.poppins(
+                color: AllColors.whiteColor,
+                fontSize: AllFontSize.twentee,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            Spacer(),
+            Tooltip(
+              message: 'Header Attachment',
+              child: InkWell(onTap: (){
+                checkin_header_page_controller.showHeaderImagesPopup(context);
+              },
+                  child: Icon(Icons.attachment,color: AllColors.whiteColor,size: 35,)),
+            ),
+          ],
+          //child:
+
         ),
+
+
       ),
       drawer: CustomDrawer(),
       backgroundColor: Colors.white,

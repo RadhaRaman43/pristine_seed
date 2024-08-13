@@ -1702,6 +1702,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
   }
 
   Widget bindReasonDropDown(context) {
+    preventive_deatils_page_controller.reason_master_list.value=[];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
@@ -1723,6 +1724,9 @@ class PreventiveViewDetailScreen extends StatelessWidget {
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onChanged: (value) {
+            if(value.isEmpty){
+              FocusScope.of(context).unfocus();
+            }
             preventive_deatils_page_controller.reason_code_controller.text =
                 value;
           },
@@ -1762,6 +1766,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
             child: Container(
               color: AllColors.grayColor1,
               width: size.width * .6,
+              height: size.height*.15,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,

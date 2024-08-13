@@ -319,8 +319,6 @@ class AddExpanseScreen extends StatelessWidget{
                             fontWeight: FontWeight.w700),
                       )),
 
-
-
                   SizedBox(
                     width: size.width * 0.1,
                     child: Row(

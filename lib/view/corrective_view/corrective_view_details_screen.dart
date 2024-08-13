@@ -1820,6 +1820,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
   }*/
 
   Widget bindReasonDropDown(context) {
+    corrective_deatils_page_controller.reason_master_list.value=[];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async  {
@@ -1841,6 +1842,9 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onChanged: (value) {
+            if(value.isEmpty){
+              FocusScope.of(context).unfocus();
+            }
             corrective_deatils_page_controller.reason_code_controller.text =
                 value;
           },
@@ -1881,6 +1885,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
             child: Container(
               color: AllColors.grayColor1,
               width: size.width * .6,
+              height: size.height*.15,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,

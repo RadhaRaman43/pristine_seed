@@ -341,6 +341,174 @@ class CheckInApprovalViewModel extends GetxController{
     );
   }
 
+  void showHeaderImagesPopup(BuildContext context) {
+    Size size = Get.size;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        RxInt selectedindex=0.obs;
+        List<String> imageUrls = [];
+        try{
+          if(checkIn_list_response[0].checkInImages!.frontImage!.isNotEmpty && !checkIn_list_response[0].checkInImages!.frontImage!.contains('image/no_image_placeholder.png') ){
+            imageUrls.add(checkIn_list_response[0].checkInImages!.frontImage!);
+          }
+          if(checkIn_list_response[0].checkInImages!.backImage!.isNotEmpty && !checkIn_list_response[0].checkInImages!.backImage!.contains('image/no_image_placeholder.png')){
+            imageUrls.add(checkIn_list_response[0].checkInImages!.backImage!);
+          }
+          if(checkIn_list_response[0].checkOutImages!.frontImage!.isNotEmpty && !checkIn_list_response[0].checkOutImages!.frontImage!.contains('image/no_image_placeholder.png') ){
+            imageUrls.add(checkIn_list_response[0].checkOutImages!.frontImage!);
+          }
+          if(checkIn_list_response[0].checkOutImages!.backImage!.isNotEmpty && !checkIn_list_response[0].checkOutImages!.backImage!.contains('image/no_image_placeholder.png') ){
+            imageUrls.add(checkIn_list_response[0].checkOutImages!.backImage!);
+          }
+        }catch(e){
+          print(e);
+        }
 
+        return Dialog(
+          insetPadding: EdgeInsets.zero,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.0),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                AppBar(
+                  title: Text('Header Images', style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700
+                  ),),
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  /*actions: [
+                    IconButton(
+                      icon: Icon(Icons.cancel, color: AllColors.primaryDark1,),
+                      onPressed: () {
+                        Navigator.of(context).pop(); // Dismiss the dialog
+                      },
+                    ),
+                  ],*/
+                ),
+                SizedBox(height: size.height*.2,),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Obx((){
+                          return Container(
+                            width: size.width * .97,
+                            height: size.height * .5,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(8)),
+                                border: Border.all(
+                                    color: AllColors.primaryliteColor, width: .5)
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(3.0),
+                              child: Image.network(
+                                (imageUrls.length>0 && imageUrls!=null && imageUrls.isNotEmpty)
+                                    ? imageUrls[selectedindex.value]
+                                    : 'https://dev4.pristinefulfil.com/assets/images/vendor_panel_img/mylogo.png',
+                                fit: BoxFit.cover,
+                                loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                  if (loadingProgress == null) {
+                                    return child; // Return the image if it's fully loaded
+                                  } else {
+                                    return Center(
+                                      child: CircularProgressIndicator(color: AllColors.primaryDark1), // Show a progress indicator while loading
+                                    );
+                                  }
+                                },
+                                errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                  // return Center(child: Text('Failed to load image'),
+                                  return Container(child: Image.asset("assets/images/no_file.png"));
+                                },
+                              ),
+                            ),
+                          );
+                        }),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 6.0,bottom: 6.0),
+                          child: Divider(color: AllColors.primaryliteColor,height: 1,),
+                        ),//
+                        SizedBox(height: 20),
+                        Container(
+                          height: 100,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: imageUrls.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              //return BindListView(context,imageUrls!, index);
+                              if(imageUrls.length<=0 && imageUrls==null){
+                                return Container(
+                                  padding: EdgeInsets.all(10),
+                                  child: Text('No Records Found.',style: TextStyle(
+                                      fontSize: 20,
+                                      color: AllColors.primaryColor
+                                  ),),
+                                );
+                              }
+                              else{
+                                return Container(
+                                  width: 100,
+                                  margin: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(
+                                        color: Colors.blueGrey, width: 0.5),
+                                  ),
+                                  child: InkWell(
+                                    onTap: (){
+                                      selectedindex.value=index;
+                                      print(selectedindex.value);
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(3.0),
+                                      child: Image.network(
+                                        imageUrls[index],
+                                        fit: BoxFit.cover,
+                                        loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                                          if (loadingProgress == null) {
+                                            return child; // Return the image if it's fully loaded
+                                          } else {
+                                            return Center(
+                                              child: CircularProgressIndicator(color: AllColors.primaryDark1), // Show a progress indicator while loading
+                                            );
+                                          }
+                                        },
+                                        errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                                          /* return Center(
+                                            child: Text('Failed to load image'), // Show an error message if image loading fails
+                                          );*/
+                                          return Container(child: Image.asset("assets/images/no_file.png"));
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
 }

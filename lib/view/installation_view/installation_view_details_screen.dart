@@ -1596,6 +1596,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
             height: 200,
             child: Column(
               children: [
+
                 bindReasonDropDown(context),
                 TextFormField(
                   controller: installation_deatils_page_controller
@@ -1682,11 +1683,13 @@ class InstallationViewDetailsScreen extends StatelessWidget {
   }
 
   Widget bindReasonDropDown(context) {
+    installation_deatils_page_controller.reason_master_list.value=[];
     return Autocomplete<ReasonModel>(
       displayStringForOption: _displayReasonCodeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
           return installation_deatils_page_controller.reason_master_list.value;
+
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return await installation_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
@@ -1704,6 +1707,9 @@ class InstallationViewDetailsScreen extends StatelessWidget {
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onChanged: (value) {
+            if(value.isEmpty){
+              FocusScope.of(context).unfocus();
+            }
             installation_deatils_page_controller.reason_code_controller.text =
                 value;
           },
@@ -1743,6 +1749,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
             child: Container(
               color: AllColors.grayColor1,
               width: size.width * .61,
+              height: size.height*.15,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,

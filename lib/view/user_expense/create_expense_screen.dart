@@ -36,7 +36,7 @@ class CreateExpenseScreen extends StatelessWidget{
          title: Row(
            children: [
              Text(
-               'Create Screen',
+               'Create Expense',
                style: GoogleFonts.poppins(
                  color: AllColors.whiteColor,
                  fontSize: AllFontSize.twentee,

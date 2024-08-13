@@ -256,8 +256,8 @@ class CheckInViewModel extends GetxController{
            current_checkIn_response[0].lines![expense_current_index].local_image_path4=image.path.toString();
           }
 
-        //  this.isAddExpense.value = false;
-        //  this.isAddExpense.value = true;
+         this.isAddExpense.value = false;
+          this.isAddExpense.value = true;
 
         } else {
           Utils.sanckBarError(

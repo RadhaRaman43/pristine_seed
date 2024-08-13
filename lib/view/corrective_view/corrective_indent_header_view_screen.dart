@@ -1648,6 +1648,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
             if (value.isEmpty) {
               indent_deatils_page_controller.item_no_description_controller
                   .clear();
+
             }
           },
           cursorColor: AllColors.primaryDark1,
