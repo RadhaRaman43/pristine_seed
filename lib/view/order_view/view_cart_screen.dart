@@ -86,7 +86,7 @@ class ViewCartScreen extends StatelessWidget{
                     children: [
                       SizedBox(height: 3,),
                       Container(
-                        padding: const EdgeInsets.only(left: 8.0),
+                        //padding: const EdgeInsets.only(left: 8.0),
                         // /width: size.width*.4,
                         child: Row(
                           children: [
@@ -693,15 +693,18 @@ class ViewCartScreen extends StatelessWidget{
                             Spacer(),
 
                             Container(
-                              width: size.width*.6,
-                              child: Text(view_cart_page_controller.order_details_list[0].customerName??"",style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.end,
+                              width: size.width*.5,
+                              child: Tooltip(
+                                message: view_cart_page_controller.order_details_list[0].customerName??"",
+                                child: Text(view_cart_page_controller.order_details_list[0].customerName??"",style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
 
+                                ),
                               ),
                             ),
 
@@ -809,9 +812,28 @@ class ViewCartScreen extends StatelessWidget{
                             ),
                               textAlign: TextAlign.end,
                             ),
-
                           ],
                         ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer Postal Code:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+                            Text(view_cart_page_controller.order_details_list[0].customerPostalCode??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+                          ],
+                        ),
+
                       ],
                     ),
                   ),

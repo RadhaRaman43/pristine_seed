@@ -385,16 +385,16 @@ class NewOrderScreen extends StatelessWidget {
             );
           },
         );
-        var outputFormat = DateFormat('dd-MM-yyyy');
+        var outputFormat = DateFormat('yyyy-MM-dd');
         if (date != null && date != ""){
           print("tttttttttttttt");
           new_order_page_controller.order_date_controller.text =
               outputFormat.format(date);
         }
-        else{
+       /* else{
           print("fmrknkrvnkr");
           new_order_page_controller.order_date_controller.text = "";
-        }
+        }*/
 
       },
     );
@@ -423,7 +423,7 @@ class NewOrderScreen extends StatelessWidget {
         ),
       ),
       cursorColor: AllColors.primaryDark1,
-      /* onTap: () async {
+       onTap: () async {
         DateTime stating_date = new DateTime(1900);
         DateTime ending_date = new DateTime(2200);
         FocusScope.of(context).requestFocus(new FocusNode());
@@ -450,7 +450,7 @@ class NewOrderScreen extends StatelessWidget {
               outputFormat.format(date);
         else
           new_order_page_controller.order_expiry_date_controller.text = "";
-      },*/
+      },
     );
   }
 

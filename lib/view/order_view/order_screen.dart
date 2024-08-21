@@ -53,7 +53,7 @@ class OrderScreen extends StatelessWidget{
                     visible:order_header_page_controller.status.value=="Pending"?true:false,
                     child: IconButton(onPressed: () {
                     order_header_page_controller.resetAllNewOrderFields();
-                    var outputFormat = DateFormat('dd-MM-yyyy');
+                    var outputFormat = DateFormat('yyyy-MM-dd');
                     order_header_page_controller.order_date_controller.text =
                         outputFormat.format(DateTime.now());
                     Get.toNamed(RoutesName.new_order_screen);
@@ -129,92 +129,95 @@ class OrderScreen extends StatelessWidget{
                        ),
                      ),
 
-                     Row(
-                       mainAxisAlignment: MainAxisAlignment.start,
-                       children: [
-                        Obx(() {
-                           return
-                             ActionChip(
+
+                     SingleChildScrollView(
+                       scrollDirection: Axis.horizontal,
+                       child: Row(
+                         mainAxisAlignment: MainAxisAlignment.start,
+                         children: [
+                          Obx(() {
+                             return
+                               ActionChip(
+                                 elevation: 2,
+                                 padding: EdgeInsets.all(2),
+                                 backgroundColor:order_header_page_controller.status.value=="Pending"?AllColors.primaryDark1:AllColors.grayColor,
+                                 shadowColor: Colors.black,
+                                 shape: StadiumBorder(
+                                     side: BorderSide(color: AllColors.grayColor)),
+                                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                 //CircleAvatar
+                                 label: Text('Pending',
+                                     style: GoogleFonts.poppins(
+                                       color:order_header_page_controller.status.value=="Pending"?AllColors.whiteColor:AllColors.primaryDark1,
+                                       fontSize: AllFontSize.fourtine,
+                                       fontWeight: FontWeight.w500,
+                                     )
+                                 ),
+                                 onPressed: () {
+                                   order_header_page_controller.status.value="Pending";
+                                   order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+                             ;
+                                 }, //Text
+                               );
+                             },),
+                           SizedBox(width: 5,),
+                           Obx(() {
+                               return
+                                 ActionChip(
+                                 elevation: 2,
+                                 padding: EdgeInsets.all(2),
+                                 backgroundColor:order_header_page_controller.status.value=="Completed"?AllColors.primaryDark1:AllColors.grayColor,
+                                 shadowColor: Colors.black,
+                                 shape: StadiumBorder(
+                                     side: BorderSide(color: AllColors.grayColor)),
+                                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                 //CircleAvatar
+                                 label: Text('Under Approval',
+                                     style: GoogleFonts.poppins(
+                                       color:order_header_page_controller.status.value=="Completed"?AllColors.whiteColor:AllColors.primaryDark1,
+                                       fontSize: AllFontSize.fourtine,
+                                       fontWeight: FontWeight.w500,
+                                     )),
+                                 onPressed: () {
+                                   order_header_page_controller.status.value="Completed";
+                                   order_header_page_controller.pageNumber=0;
+                                   order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+
+                                 }, //Text
+                               );
+                         },),
+                           SizedBox(width: 5,),
+                           Obx(() {
+                             return ActionChip(
                                elevation: 2,
                                padding: EdgeInsets.all(2),
-                               backgroundColor:order_header_page_controller.status.value=="Pending"?AllColors.primaryDark1:AllColors.grayColor,
+                               backgroundColor:order_header_page_controller.status.value=="Approved"?AllColors.primaryDark1:AllColors.grayColor,
                                shadowColor: Colors.black,
                                shape: StadiumBorder(
                                    side: BorderSide(color: AllColors.grayColor)),
                                //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                //CircleAvatar
-                               label: Text('Pending',
-                                   style: GoogleFonts.poppins(
-                                     color:order_header_page_controller.status.value=="Pending"?AllColors.whiteColor:AllColors.primaryDark1,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w500,
-                                   )
+                               label: Text('Pending Shipped',
+                                 style: GoogleFonts.poppins(
+                                   color:order_header_page_controller.status.value=="Approved"? AllColors.whiteColor:AllColors.primaryDark1,
+                                   fontSize: AllFontSize.fourtine,
+                                   fontWeight: FontWeight.w500,
+                                 ),
+                                 overflow: TextOverflow.ellipsis,
                                ),
                                onPressed: () {
-                                 order_header_page_controller.status.value="Pending";
-                                 order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
-      ;
-                               }, //Text
-                             );
-                           },),
-                         SizedBox(width: 5,),
-                         Obx(() {
-                             return
-
-                               ActionChip(
-                               elevation: 2,
-                               padding: EdgeInsets.all(2),
-                               backgroundColor:order_header_page_controller.status.value=="Completed"?AllColors.primaryDark1:AllColors.grayColor,
-                               shadowColor: Colors.black,
-                               shape: StadiumBorder(
-                                   side: BorderSide(color: AllColors.grayColor)),
-                               //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                               //CircleAvatar
-                               label: Text('Under Approval',
-                                   style: GoogleFonts.poppins(
-                                     color:order_header_page_controller.status.value=="Completed"?AllColors.whiteColor:AllColors.primaryDark1,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w500,
-                                   )),
-                               onPressed: () {
-                                 order_header_page_controller.status.value="Completed";
+                                 order_header_page_controller.status.value="Approved";
                                  order_header_page_controller.pageNumber=0;
                                  order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
 
                                }, //Text
                              );
-                       },),
-                         SizedBox(width: 5,),
-                         Obx(() {
-                           return ActionChip(
-                             elevation: 2,
-                             padding: EdgeInsets.all(2),
-                             backgroundColor:order_header_page_controller.status.value=="Approved"?AllColors.primaryDark1:AllColors.grayColor,
-                             shadowColor: Colors.black,
-                             shape: StadiumBorder(
-                                 side: BorderSide(color: AllColors.grayColor)),
-                             //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                             //CircleAvatar
-                             label: Text('Pending Shipped',
-                               style: GoogleFonts.poppins(
-                                 color:order_header_page_controller.status.value=="Approved"? AllColors.whiteColor:AllColors.primaryDark1,
-                                 fontSize: AllFontSize.fourtine,
-                                 fontWeight: FontWeight.w500,
-                               ),
-                               overflow: TextOverflow.ellipsis,
-                             ),
-                             onPressed: () {
-                               order_header_page_controller.status.value="Approved";
-                               order_header_page_controller.pageNumber=0;
-                               order_header_page_controller.orderHeaderApi(order_header_page_controller.pageNumber);
+                           },
+                             //child:
+                           ),
 
-                             }, //Text
-                           );
-                         },
-                           //child:
-                         ),
-
-                       ],
+                         ],
+                       ),
                      ),
                    ],
                  ),

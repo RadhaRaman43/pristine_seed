@@ -3,10 +3,9 @@ class AppUrl {
   static const String login_url="$BASE_URL/api/UserLogin/Login";*/
   // static const String BASE_URL="https://mahalaxmi.pristinefulfil.com";
    //todo testing url...
-    static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+     static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-    //static const String BASE_URL = "https://crm.pristinefulfil.com";
-   // static const String BASE_URL = "https://crm.pristinefulfil.com";
+   // static const String BASE_URL = "https://care.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";

@@ -1480,13 +1480,6 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                       ),
                                     ),
 
-
-
-
-
-
-
-
                                    */ /* SizedBox(width: size.width*.1,),
                                     Obx(() {
                                       return Visibility(

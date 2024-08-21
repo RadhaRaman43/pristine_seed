@@ -76,7 +76,6 @@ dependencies:
   google_maps_flutter: ^2.5.0
   blurry_modal_progress_hud: ^1.1.1
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter

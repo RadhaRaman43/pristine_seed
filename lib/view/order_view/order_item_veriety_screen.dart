@@ -241,7 +241,7 @@ class OrderItemVarietyScreen extends StatelessWidget{
       return Container(
         height: size.height - 170,
         child: ListView.separated(
-            padding: EdgeInsets.zero,
+            padding: EdgeInsets.only(bottom: 120),
             separatorBuilder: (context, index) =>
                 Divider(
                   height: 5,
@@ -566,15 +566,18 @@ class OrderItemVarietyScreen extends StatelessWidget{
                             Spacer(),
 
                             Container(
-                              width: size.width*.6,
-                              child: Text(item_variety_page_controller.order_details_list[0].customerName??"",style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w500,
-                              ),
-                                overflow: TextOverflow.ellipsis,
-                                textAlign: TextAlign.end,
+                              width: size.width*.5,
+                              child: Tooltip(
+                                message:item_variety_page_controller.order_details_list[0].customerName??"",
+                                child: Text(item_variety_page_controller.order_details_list[0].customerName??"",style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
 
+                                ),
                               ),
                             ),
 
@@ -676,6 +679,27 @@ class OrderItemVarietyScreen extends StatelessWidget{
 
                             Spacer(),
                             Text(item_variety_page_controller.order_details_list[0].customerStateName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer Postal Code:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(item_variety_page_controller.order_details_list[0].customerPostalCode??"",style: GoogleFonts.poppins(
                               color: AllColors.textColor,
                               fontSize: AllFontSize.fourtine,
                               fontWeight: FontWeight.w500,

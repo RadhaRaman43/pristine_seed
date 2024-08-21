@@ -590,5 +590,4 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
     }
   }
 
-
 }

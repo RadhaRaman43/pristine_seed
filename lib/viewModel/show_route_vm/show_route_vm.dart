@@ -24,7 +24,7 @@ class ShowRouteViewModel extends GetxController{
   RxBool isVisible = false.obs;
   var typeAheadControllerEmployee = TextEditingController();
   var typeAheadControllerInterval = TextEditingController();
-  RxList<String> interval_list = <String>['5','10','15','20','25','30','35','40','45','50','55'].obs;
+  RxList<String> interval_list = <String>['1','5','10','15','20','25','30','35','40','45','50','55'].obs;
   var filter_date_controller = TextEditingController();
   List<EmpMasterResponse> employess_List = [];
   late GoogleMapController googleMapController;
@@ -38,8 +38,7 @@ class ShowRouteViewModel extends GetxController{
 
   @override
   void onInit() async  {
-
-    typeAheadControllerInterval.text=5.toString();
+    typeAheadControllerInterval.text=1.toString();
     email = await sessionManagement.getEmail() ?? '';
     this.getEmployeeMasterApi('');
 
