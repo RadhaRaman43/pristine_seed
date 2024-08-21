@@ -13,6 +13,15 @@ class OrderHeaderCreateModel {
   String? customerPostalCode;
   String? customerPhoneNo;
   String? customerGstRegistrationNo;
+  String? consigneeId;
+  String? consigneeName;
+  String? consigneeAddress;
+  String? consigneeStateCode;
+  String? consigneeStateName;
+  String? consigneeCountryName;
+  String? consigneePostalCode;
+  String? consigneePhoneNo;
+  String? consigneeGstRegistrationNo;
   int? totalQty;
   double? totalPrice;
   int? totalApproveQty;
@@ -45,6 +54,15 @@ class OrderHeaderCreateModel {
         this.customerPostalCode,
         this.customerPhoneNo,
         this.customerGstRegistrationNo,
+        this.consigneeId,
+        this.consigneeName,
+        this.consigneeAddress,
+        this.consigneeStateCode,
+        this.consigneeStateName,
+        this.consigneeCountryName,
+        this.consigneePostalCode,
+        this.consigneePhoneNo,
+        this.consigneeGstRegistrationNo,
         this.totalQty,
         this.totalPrice,
         this.totalApproveQty,
@@ -77,6 +95,15 @@ class OrderHeaderCreateModel {
     customerPostalCode = json['customer_postal_code'];
     customerPhoneNo = json['customer_phone_no'];
     customerGstRegistrationNo = json['customer_gst_registration_no'];
+    consigneeId = json['consignee_id'];
+    consigneeName = json['consignee_name'];
+    consigneeAddress = json['consignee_address'];
+    consigneeStateCode = json['consignee_state_code'];
+    consigneeStateName = json['consignee_state_name'];
+    consigneeCountryName = json['consignee_country_name'];
+    consigneePostalCode = json['consignee_postal_code'];
+    consigneePhoneNo = json['consignee_phone_no'];
+    consigneeGstRegistrationNo = json['consignee_gst_registration_no'];
     totalQty = json['total_qty'];
     totalPrice = json['total_price'];
     totalApproveQty = json['total_approve_qty'];
@@ -116,6 +143,15 @@ class OrderHeaderCreateModel {
     data['customer_postal_code'] = this.customerPostalCode;
     data['customer_phone_no'] = this.customerPhoneNo;
     data['customer_gst_registration_no'] = this.customerGstRegistrationNo;
+    data['consignee_id'] = this.consigneeId;
+    data['consignee_name'] = this.consigneeName;
+    data['consignee_address'] = this.consigneeAddress;
+    data['consignee_state_code'] = this.consigneeStateCode;
+    data['consignee_state_name'] = this.consigneeStateName;
+    data['consignee_country_name'] = this.consigneeCountryName;
+    data['consignee_postal_code'] = this.consigneePostalCode;
+    data['consignee_phone_no'] = this.consigneePhoneNo;
+    data['consignee_gst_registration_no'] = this.consigneeGstRegistrationNo;
     data['total_qty'] = this.totalQty;
     data['total_price'] = this.totalPrice;
     data['total_approve_qty'] = this.totalApproveQty;
@@ -202,3 +238,5 @@ class Lines {
     return data;
   }
 }
+
+

@@ -86,6 +86,102 @@ class ApprovalViewCart extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
+                children: [
+                  Text("Customer Name:",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w700,
+                      )
+                  ),
+                  SizedBox(width: size.width*.02, ),
+                  InkWell(
+                    onTap:() {
+                      showCustomerDetailsBottomSheet(context);
+                    },
+                    child: Container(
+                      width:size.width*.55 ,
+                      child: Tooltip(
+                        message:"${approval_view_page_controller
+                            .order_detail_list[0].customerName!= null ?
+                        approval_view_page_controller
+                            .order_detail_list[0]
+                            .customerName!+"( ${ approval_view_page_controller
+                            .order_detail_list[0]
+                            .customerNo!} )":""}",
+                        child: Text(
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.start,
+                          "${approval_view_page_controller
+                              .order_detail_list[0].customerName!= null ?
+                          approval_view_page_controller
+                              .order_detail_list[0]
+                              .customerName!+"( ${ approval_view_page_controller
+                              .order_detail_list[0]
+                              .customerNo!} )": ''}",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
+                children: [
+                  Text("Consignee Name:",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w700,
+                      )
+                  ),
+                  SizedBox(width: size.width*.02, ),
+                  Visibility(
+                    visible: approval_view_page_controller
+                        .order_detail_list[0].consigneeId.toString().isNotEmpty?true:false,
+                    child: InkWell(
+                      onTap:() {
+                        showConsigneeDetailsBottomSheet(context);
+                      },
+                      child: Container(
+                        width:size.width*.55 ,
+                        child: Tooltip(
+                          message:"${approval_view_page_controller
+                              .order_detail_list[0].consigneeName!= null ?
+                          approval_view_page_controller
+                              .order_detail_list[0]
+                              .consigneeName!+"( ${ approval_view_page_controller
+                              .order_detail_list[0]
+                              .consigneeId!} )":""}",
+                          child: Text(
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.start,
+                            "${approval_view_page_controller
+                                .order_detail_list[0].consigneeName!= null ?
+                            approval_view_page_controller
+                                .order_detail_list[0]
+                                .consigneeName!+"( ${ approval_view_page_controller
+                                .order_detail_list[0]
+                                .consigneeId!} )":""}",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 10,),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('View Order Details',
@@ -586,10 +682,7 @@ class ApprovalViewCart extends StatelessWidget{
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(color: AllColors.primaryDark1), // Change focused underline color
               ),
-
             ),
-
-
           ),
           actions: <Widget>[
             TextButton(
@@ -620,7 +713,6 @@ class ApprovalViewCart extends StatelessWidget{
 
 
   void showApproveDialog(BuildContext context, String documentNo) {
-
     print('dialog...');
     showDialog(
       context: context,
@@ -638,8 +730,7 @@ class ApprovalViewCart extends StatelessWidget{
             ),
             TextButton(
               onPressed: () {
-
-               // approval_view_page_controller.markApproveReject(documentNo, '','Approved');
+                approval_view_page_controller.markApproveReject(documentNo, '','Approved');
                 Navigator.of(context).pop();
               },
               child: Text("Submit",style: TextStyle(color: AllColors.primaryDark1,)),
@@ -688,6 +779,488 @@ class ApprovalViewCart extends StatelessWidget{
               child: Text("Submit",style: TextStyle(color: AllColors.primaryDark1,)),
             ),
           ],
+        );
+      },
+    );
+  }
+
+
+  void showCustomerDetailsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Ensure minimal height
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Show Details",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.twentee,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: Icon(
+                            Icons.cancel,
+                            color: AllColors.primaryDark1,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Center(
+                    child: Divider(
+                      height: 1,
+                      color: AllColors.primaryDark1,
+                    )),
+                SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    // height: 420,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text("Customer Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+                            Spacer(),
+
+                            Container(
+                              width: size.width*.5,
+                              child: Tooltip(
+                                message: approval_view_page_controller
+                                    .order_detail_list[0].customerName??"",
+                                child: Text(approval_view_page_controller
+                                    .order_detail_list[0].customerName??"",style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
+
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer No.:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].customerNo??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+
+
+                        Row(
+                          children: [
+                            Text("Customer Phone No.:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].customerPhoneNo??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer Address:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Container(
+                              width: size.width*.5,
+                              child: Tooltip(
+                                message: approval_view_page_controller
+                                    .order_detail_list[0].customerAddress??"",
+                                child: Text(approval_view_page_controller
+                                    .order_detail_list[0].customerAddress??"",style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  textAlign: TextAlign.end,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Country Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].customerCountryName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Country State:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].customerStateName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Customer Postal Code:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].customerPostalCode??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showConsigneeDetailsBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Ensure minimal height
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Show Consignee Details",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.twentee,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 18.0),
+                          child: Icon(
+                            Icons.cancel,
+                            color: AllColors.primaryDark1,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Center(
+                    child: Divider(
+                      height: 1,
+                      color: AllColors.primaryDark1,
+                    )),
+                SingleChildScrollView(
+                  child: Container(
+                    padding: EdgeInsets.all(8.0),
+                    // height: 420,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Row(
+                          children: [
+                            Text("Consignee Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+                            Spacer(),
+
+                            Container(
+                              width: size.width*.5,
+                              child: Tooltip(
+                                message: approval_view_page_controller
+                                    .order_detail_list[0].consigneeName??"",
+                                child: Text(approval_view_page_controller
+                                    .order_detail_list[0].consigneeName??"",style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
+
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Id:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].consigneeId??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+
+
+                        Row(
+                          children: [
+                            Text("Phone No.:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].consigneePhoneNo??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Address:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Container(
+                              width: size.width*.5,
+                              child: Tooltip(
+                                message: approval_view_page_controller
+                                    .order_detail_list[0].consigneeAddress??"",
+                                child: Text(approval_view_page_controller
+                                    .order_detail_list[0].consigneeAddress??"",style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                  textAlign: TextAlign.end,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Country Name:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].consigneeCountryName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("State:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].consigneeStateName??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+                        SizedBox(height:  3,),
+                        Row(
+                          children: [
+                            Text("Postal Code:",style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),),
+
+                            Spacer(),
+
+                            Text(approval_view_page_controller
+                                .order_detail_list[0].consigneePostalCode??"",style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                              textAlign: TextAlign.end,
+                            ),
+
+                          ],
+                        ),
+
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
         );
       },
     );

@@ -149,9 +149,9 @@ class CustomerComplainVm extends GetxController {
  }*/
 
  Future<Iterable<ReasonModel>> getReasonMaster(String reason_code) async {
-  /* if (customer_name == '') {
-   return const Iterable<SelectCustomerComplainModal>.empty();
-  }*/
+   if (reason_code == '') {
+   return const Iterable<ReasonModel>.empty();
+  }
   Map data = {
    "flag": "select",
    "reason_code": reason_code,

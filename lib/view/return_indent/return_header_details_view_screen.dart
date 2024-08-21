@@ -326,16 +326,21 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
             ),),
             SizedBox(width:size.width*.1,),
             Container(
-              width: size.width*.5,
-              child: Text( "${return_header_details_controller
-                  .return_create_header_list[0].lines![index].displayName??""}(${return_header_details_controller
-                  .return_create_header_list[0].lines![index].itemNo??""})"   ,
-                style: GoogleFonts.poppins(
-                color: AllColors.textColor,
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-                overflow: TextOverflow.ellipsis,
+              width: size.width*.47,
+              child: Tooltip(
+                message: "${return_header_details_controller
+                    .return_create_header_list[0].lines![index].displayName??""}(${return_header_details_controller
+                    .return_create_header_list[0].lines![index].itemNo??""})",
+                child: Text( "${return_header_details_controller
+                    .return_create_header_list[0].lines![index].displayName??""}(${return_header_details_controller
+                    .return_create_header_list[0].lines![index].itemNo??""})"   ,
+                  style: GoogleFonts.poppins(
+                  color: AllColors.textColor,
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w500,
+                ),
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
             Spacer(),
@@ -352,7 +357,7 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
 
                         return_header_details_controller.getIndentItemName(return_header_details_controller
                             .return_create_header_list[0].returnNo.toString(),return_header_details_controller
-                            .return_create_header_list[0].lines![index].itemNo.toString());
+                            .return_create_header_list[0].lines![index].itemNo.toString(),"InIt");
 
                         return_header_details_controller. indent_return_add_line_list.value=[];
 

@@ -67,6 +67,9 @@ class OrderViewModel extends GetxController{
   RxString pending_shipment_amt = ''.obs;
   RxString status="Pending".obs;
 
+  //todo nirupma code
+  RxString consigneeId="".obs;
+
   @override
   void onInit() async {
     email =await sessionManagement.getEmail()??"";
@@ -537,7 +540,6 @@ class OrderViewModel extends GetxController{
   }
 
   orderHeaderCreate(String order_type){
-
     order_details_list.value=[];
     if(order_type=='order'){
       if(customers_controller.text.isEmpty){
@@ -570,9 +572,9 @@ class OrderViewModel extends GetxController{
       "order_no": "",
       "order_date": order_date_controller.text,
       "payment_term_code": "",
-      "expiry_date": "",
+      "expiry_date": order_expiry_date_controller.text.isNotEmpty?order_expiry_date_controller.text:"",
       "customer_no": selected_customer.value.customerNo.toString(),
-      "consignee_id": "",
+      "consignee_id": consigneeId.value.isNotEmpty?consigneeId.value:"",
       "email_id": email
     };
     print("hlw________dar${data}");
@@ -580,6 +582,7 @@ class OrderViewModel extends GetxController{
       try {
         final jsonResponse = json.decode(value);
         if (jsonResponse is List) {
+          print(value);
           List<OrderHeaderCreateModel> response =
           jsonResponse.map((data) => OrderHeaderCreateModel.fromJson(data)).toList();
           if (response[0].condition == 'True') {
@@ -624,6 +627,7 @@ class OrderViewModel extends GetxController{
       print("code.......${data}");
       try {
         final jsonResponse = json.decode(value);
+        print(value);
         if (jsonResponse is List) {
           List<ConsigneeModel> response =
           jsonResponse
