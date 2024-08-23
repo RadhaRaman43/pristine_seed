@@ -69,6 +69,7 @@ class OrderViewModel extends GetxController{
 
   //todo nirupma code
   RxString consigneeId="".obs;
+  var search_item_variety_controller = TextEditingController();
 
   @override
   void onInit() async {
@@ -315,7 +316,7 @@ class OrderViewModel extends GetxController{
       "order_no": orderNo,
       "email_id": email,
       "category_code":category_code,
-      "group_code": ""
+      "group_code": search_item_variety_controller.text.isNotEmpty?search_item_variety_controller.text.toString():""
     };
     print(data);
     loading.value=true;

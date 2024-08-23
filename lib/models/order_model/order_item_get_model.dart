@@ -1,6 +1,7 @@
 class OrderItemGetModel {
   String? condition;
   String? categoryCode;
+  String? categoryName;
   String? productGroup;
   String? itemNo;
   String? itemName;
@@ -13,6 +14,7 @@ class OrderItemGetModel {
   OrderItemGetModel(
       {this.condition,
         this.categoryCode,
+        this.categoryName,
         this.productGroup,
         this.itemNo,
         this.itemName,
@@ -25,6 +27,7 @@ class OrderItemGetModel {
   OrderItemGetModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
     categoryCode = json['category_code'];
+    categoryName = json['category_name'];
     productGroup = json['product_group'];
     itemNo = json['item_no'];
     itemName = json['item_name'];
@@ -39,6 +42,7 @@ class OrderItemGetModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
     data['category_code'] = this.categoryCode;
+    data['category_name'] = this.categoryName;
     data['product_group'] = this.productGroup;
     data['item_no'] = this.itemNo;
     data['item_name'] = this.itemName;
