@@ -65,10 +65,16 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
+    flutter {
+        source '../..'
+    }
+
+    dependencies {
+
+    }
+
 }
 
-flutter {
-    source '../..'
-}
 
-dependencies {}
+

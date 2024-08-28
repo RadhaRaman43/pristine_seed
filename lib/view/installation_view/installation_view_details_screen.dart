@@ -1689,7 +1689,6 @@ class InstallationViewDetailsScreen extends StatelessWidget {
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
           return installation_deatils_page_controller.reason_master_list.value;
-
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return await installation_deatils_page_controller.getSearchReasonMaster(textEditingValue.text);
@@ -1710,13 +1709,11 @@ class InstallationViewDetailsScreen extends StatelessWidget {
             if(value.isEmpty){
               FocusScope.of(context).unfocus();
             }
-            installation_deatils_page_controller.reason_code_controller.text =
-                value;
+            installation_deatils_page_controller.reason_code_controller.text = value;
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = installation_deatils_page_controller
-                .reason_code_controller.text,
+            ..text = installation_deatils_page_controller.reason_code_controller.text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
@@ -1767,8 +1764,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                            fontSize: AllFontSize.sisxteen // Change the text color here
                             ),
                       ),
                     ),
@@ -1781,11 +1777,6 @@ class InstallationViewDetailsScreen extends StatelessWidget {
       },
     );
   }
-
-
-
-
-
   ReSchduleRequestDialog(BuildContext context) {
     showDialog(
       context: context,

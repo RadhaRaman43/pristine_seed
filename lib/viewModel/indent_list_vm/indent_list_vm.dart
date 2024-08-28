@@ -30,13 +30,9 @@ class IndentListViewModel extends GetxController{
   var service_controller = TextEditingController();
   var date_controller = TextEditingController();
 
-
-
   var indent_serviceType_controller = TextEditingController();
   RxList<String> indent_status_list = <String>["Completed","Approved","Rejected","Ready For Consumption","Received"].obs;
   RxList<String> service_type_list = <String>["Installation","Corrective","Preventive"].obs;
-
-
 
   @override
   void onInit() async{
