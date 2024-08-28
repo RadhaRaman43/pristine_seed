@@ -1096,7 +1096,7 @@ class CustomerComplainScreen extends StatelessWidget{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Select Complain",
+                              "Select Option",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.sisxteen,
@@ -1361,6 +1361,7 @@ class CustomerComplainScreen extends StatelessWidget{
                   InkWell(
                     onTap: () {
                       Navigator.pop(context);
+                      customer_complain_vm.reason_master_list.value = [];
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(right: 1.0),
@@ -1457,7 +1458,7 @@ class CustomerComplainScreen extends StatelessWidget{
       displayStringForOption: _displayReasonCodeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async{
         if (textEditingValue.text.isEmpty) {
-          return customer_complain_vm.reason_master_list.value;
+          return customer_complain_vm.reason_master_list.value=[];
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return await customer_complain_vm.getReasonMaster(textEditingValue.text);

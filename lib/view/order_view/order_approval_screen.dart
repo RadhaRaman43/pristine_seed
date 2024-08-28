@@ -424,7 +424,12 @@ class  OrderApprovalScreen extends StatelessWidget{
           cursorColor: AllColors.primaryDark1,
           controller: controller..text=order_approval_page_controller.employee_controller.text,
           focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
+          onChanged: (value){
+            if(value.isEmpty){
+              order_approval_page_controller.employee_controller.text='';
+            }
+          },
+
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
             hintText: 'Select Employee',

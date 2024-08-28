@@ -147,23 +147,34 @@ class OrderItemVarietyScreen extends StatelessWidget{
                          ],
                        ),
                      ),
+                     SizedBox(height: 5,),
+                     Padding(
+                       padding: const EdgeInsets.only(
+                           left: 8.0, right: 8.0),
+                       child: bindSearchCategoryItemCrop1(context),
+                     ),
+                     SizedBox(height: 5,),
+
                      Container(
                        padding: EdgeInsets.only(left: 0, right: 0, top: 5),
                        child: ListTile(
-                         subtitle: Row(
+                         subtitle: item_variety_page_controller.order_item_get_list.isNotEmpty?
+                         Row(
                            children: [
                              bindImage(item_variety_page_controller.index),
                              SizedBox(width: size.width*.04),
                              Column(
                                crossAxisAlignment: CrossAxisAlignment.start,
                                children: [
-                                 Text(item_variety_page_controller.order_item_get_list[0].categoryCode ?? ''
+                                 Text(item_variety_page_controller.order_item_get_list.isNotEmpty?
+                                 item_variety_page_controller.order_item_get_list[0].categoryCode ?? '':""
                                    ,style: GoogleFonts.poppins(
                                        color: AllColors.primaryDark1,
                                        fontSize: AllFontSize.sisxteen,
                                        fontWeight: FontWeight.w700
                                    ),),
-                                 Text(item_variety_page_controller.order_item_get_list[0].itemName ?? '',
+                                 Text(item_variety_page_controller.order_item_get_list.isNotEmpty?
+                                 item_variety_page_controller.order_item_get_list[0].categoryName ?? '':"",
                                      style: GoogleFonts.poppins(
                                        color: AllColors.primaryDark1,
                                        fontWeight: FontWeight.w500,
@@ -195,7 +206,7 @@ class OrderItemVarietyScreen extends StatelessWidget{
                                ],
                              ),
                            ],
-                         ),
+                         ):Container(height: 0,width: 0,),
 
                        ),
                      ),
@@ -203,10 +214,12 @@ class OrderItemVarietyScreen extends StatelessWidget{
                  );
                }),
 
-               Divider(
+
+
+              /* Divider(
                  height: 2,
                  color: AllColors.blackColor,
-               ),
+               ),*/
                Obx((){
                  return Expanded(
                    child: Container(
@@ -720,6 +733,41 @@ class OrderItemVarietyScreen extends StatelessWidget{
       },
     );
   }
-
+  Widget bindSearchCategoryItemCrop1(context) {
+    return Container(
+        child: new Card(
+          child: new ListTile(
+            leading: new Icon(Icons.search,color: AllColors.primaryDark1,),
+            title: new TextField(
+              controller: item_variety_page_controller
+                  .search_item_variety_controller,
+              decoration: new InputDecoration(
+                  hintText: 'Search Item', border: InputBorder.none,hintStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w500
+              )),
+              onChanged: (value){
+                print("search Item");
+                item_variety_page_controller. getOrderItemGet(
+                    item_variety_page_controller.order_details_list[0].orderNo!,
+                    item_variety_page_controller.searchResult[item_variety_page_controller.index].categoryCode!,"VARIETY");
+                //item_variety_page_controller.onSearchTextforVariety(value);
+              },
+            ),
+            trailing: new IconButton(
+              icon: new Icon(Icons.cancel,color: AllColors.redColor,), onPressed: () {
+              item_variety_page_controller
+                  .search_item_variety_controller.clear();
+              item_variety_page_controller. getOrderItemGet(
+                  item_variety_page_controller.order_details_list[0].orderNo!,
+                  item_variety_page_controller.searchResult[item_variety_page_controller.index].categoryCode!,"VARIETY");
+              //item_variety_page_controller.onSearchTextforVariety('');
+            },
+            ),
+          ),
+        )
+    );
+  }
 
 }

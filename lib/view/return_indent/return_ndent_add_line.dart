@@ -36,7 +36,10 @@ class ReturnIndentAddLine extends StatelessWidget {
       child: Scaffold(
           appBar: AppBar(
             title: Text(
-              'Add Indent',
+              return_indent_add_line_controller
+                  .is_show_indent_dropDown.value &&
+                  return_indent_add_line_controller
+                      .return_create_header_list[0].isDone!>0?"View Indent":'Add Indent',
               style: GoogleFonts.poppins(
                 color: AllColors.whiteColor,
                 fontSize: AllFontSize.twentee,

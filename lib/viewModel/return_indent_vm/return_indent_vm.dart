@@ -232,7 +232,7 @@ class ReturnIndentViewModel extends GetxController {
 
   }
 
-  getIndentItemName(String return_no, String item_no){
+  getIndentItemName(String return_no, String item_no,String flag){
     loading.value = true;
     Map data = {
       "return_no": return_no,
@@ -255,16 +255,19 @@ class ReturnIndentViewModel extends GetxController {
               Get.toNamed(RoutesName.returnIndentAddLineScreen);
             } else {
               loading.value = false;
+             // Utils.showErrorToastification("False Message", response[0].message.toString());
               indent_name_list.value = [];
             }
           } else {
-
             Utils.showErrorToastification("Api Error!", JsonResponse);
           }
         }catch(e){
           print(e);
         }finally{
           loading.value = false;
+          if (flag == 'InIt') {
+            Get.toNamed(RoutesName.returnIndentAddLineScreen);
+          }
         }
       },).onError((error, stackTrace) {
         loading.value = false;
@@ -308,7 +311,7 @@ class ReturnIndentViewModel extends GetxController {
               loading.value = false;
               indent_return_add_line_list.value = response;
               selected_indent_data = null;
-              getIndentItemName(return_create_header_list[0].returnNo.toString(),item_no);
+              getIndentItemName(return_create_header_list[0].returnNo.toString(),item_no,flag);
               selected_item_check.value = false;
               is_show_indent_dropDown.value=false;
               is_show_indent_dropDown.value=true;
@@ -369,7 +372,7 @@ class ReturnIndentViewModel extends GetxController {
               is_show_indent_dropDown.value=false;
               is_show_indent_dropDown.value=true;
               indent_name_controller.clear();
-              getIndentItemName(return_create_header_list[0].returnNo.toString(),item_no);
+              getIndentItemName(return_create_header_list[0].returnNo.toString(),item_no,'');
             }else{
               Get.back();
               indent_return_add_line_list.value = response;

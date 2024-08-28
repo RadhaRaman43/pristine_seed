@@ -448,8 +448,8 @@ class NewOrderScreen extends StatelessWidget {
         if (date != null && date != "")
           new_order_page_controller.order_expiry_date_controller.text =
               outputFormat.format(date);
-        else
-          new_order_page_controller.order_expiry_date_controller.text = "";
+       /* else
+          new_order_page_controller.order_expiry_date_controller.text = "";*/
       },
     );
   }
@@ -478,6 +478,7 @@ class NewOrderScreen extends StatelessWidget {
        // new_order_page_controller.selected_consignee.value = selection;
         new_order_page_controller.consignee_name_drop_down_controller.text=
             _displayConsigneeForOption(selection).toString();
+        new_order_page_controller.consigneeId.value=selection.consigneeId!;
         FocusScope.of(context).unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,

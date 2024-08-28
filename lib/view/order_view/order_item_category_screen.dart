@@ -246,6 +246,8 @@ class OrderItemCategoryScreen extends StatelessWidget{
           onTap: () {
             print(order_category_page_controller.searchResult[index].categoryCode);
             order_category_page_controller.index=index;
+            order_category_page_controller
+                .search_item_variety_controller.text="";
             order_category_page_controller.getOrderItemGet(order_category_page_controller.order_details_list[0].orderNo!,order_category_page_controller.searchResult[index].categoryCode!,"VARIETY");
 
 
