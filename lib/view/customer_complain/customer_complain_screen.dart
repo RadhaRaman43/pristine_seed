@@ -1022,8 +1022,8 @@ class CustomerComplainScreen extends StatelessWidget{
                   height: size.height/2,
                   child: Obx(() {
                     return BindComlainListView(context);
-                  }),
-
+                  }
+                  ),
                 ),
               )
             ],

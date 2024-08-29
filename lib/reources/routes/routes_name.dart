@@ -73,6 +73,11 @@ class RoutesName{
 
 
 
+  static const bulk_indent_screen="/bulk_indent_screen.dart";
+  static const create_bulk_indent_screen="/create_bulk_indent_screen.dart";
+
+
+
 
 
 }

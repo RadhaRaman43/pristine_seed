@@ -1777,6 +1777,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
       },
     );
   }
+
   ReSchduleRequestDialog(BuildContext context) {
     showDialog(
       context: context,

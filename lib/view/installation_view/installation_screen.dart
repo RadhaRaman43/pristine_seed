@@ -47,6 +47,7 @@ class InstallationScreen extends StatelessWidget {
                 ),
               ),
               Spacer(),
+
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
               }, icon: Icon(Icons.filter_alt_sharp))

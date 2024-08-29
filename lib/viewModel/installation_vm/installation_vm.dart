@@ -57,7 +57,9 @@ class InstallationViewModel extends GetxController {
   RxBool isExpand = true.obs;
   RxList<ReasonModel> reason_master_list = <ReasonModel>[].obs;
   RxList<ItemDetailsResponse> item_details_list = <ItemDetailsResponse>[].obs;
+
   RxList<ItemNoResponse> item_no_list = <ItemNoResponse>[].obs;
+
   RxList<String> indent_type_list = <String>["Self","Warehouse"].obs;
 
 
@@ -368,6 +370,7 @@ class InstallationViewModel extends GetxController {
     }
     return   reason_master_list.value;
   }
+
   getItemDetails() {
     Map<String, String> data = {
       'item_no': service_installation_details_list[0].itemNo.toString() ,

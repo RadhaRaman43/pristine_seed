@@ -648,9 +648,6 @@ class IndentListScreen extends StatelessWidget{
     );
   }
 
-
-
-
   Widget bindServiceTypeDropDropDown(context) {
     return Autocomplete<String>(
       displayStringForOption: _displayIndentTypeForOption,

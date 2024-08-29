@@ -3,9 +3,9 @@ class AppUrl {
   static const String login_url="$BASE_URL/api/UserLogin/Login";*/
   // static const String BASE_URL="https://mahalaxmi.pristinefulfil.com";
    //todo testing url...
-   //  static const String BASE_URL = "https://devlogin.pristinefulfil.com";
+     static const String BASE_URL = "https://devlogin.pristinefulfil.com";
     //todo live url....
-     static const String BASE_URL = "https://care.pristinefulfil.com";
+    // static const String BASE_URL = "https://care.pristinefulfil.com";
 
   static const String login_url = "$BASE_URL/api/UserLogin/Login";
   static const String logout_url = "$BASE_URL/api/UserLogin/Logout";
@@ -154,6 +154,9 @@ class AppUrl {
   static const String getServiceComplainAddList="$BASE_URL/api/ServiceActivity/ServiceComplainAddListGet";
 
 
-
+  //todo Bulk Indent.....
+     static const String bulkIndentList = "$BASE_URL/api/ServiceIndent/ServiceIndentHeaderDataGet";
+     static const String bulkIndentHeaderCreate = "$BASE_URL/api/ServiceIndent/IndentHeaderCreate";
+     static const String itemMasterGet = "$BASE_URL/api/ItemMaster/ItemMstGet";
 
 }

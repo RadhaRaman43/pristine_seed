@@ -22,6 +22,8 @@ import 'package:navigation_drawer_flutter/view/user_expense/create_expense_scree
 import 'package:navigation_drawer_flutter/view/user_expense/expense_approver_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/expense_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/my_expense_screen.dart';
+import '../../view/bulk_indent_view/bulk_indent_screen.dart';
+import '../../view/bulk_indent_view/create_bulk_indent_screen.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
 import '../../view/check_out_view/add_expense_screen.dart';
@@ -347,6 +349,22 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+   //todo create bulk indent.......
+
+    GetPage(name: RoutesName.bulk_indent_screen,
+        page: ()=>BulkIndentListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+     GetPage(name: RoutesName.create_bulk_indent_screen,
+        page: ()=>CreateBulkIndentScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+     ),
+
 
 
 
