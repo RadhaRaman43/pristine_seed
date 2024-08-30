@@ -18,5 +18,17 @@ class BulkIndentRepository{
     return _apiServices.postApi(data, AppUrl.itemMasterGet,sessionManagement);
   }
 
+  Future<String>bulkIndentLineCreateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data, AppUrl.serviceIndentLineCreate,sessionManagement);
+  }
+
+  Future<String>bulkIndentDeleteLineAndHeaderApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data, AppUrl.bulkIndentLineAndHeader,sessionManagement);
+  }
+
+  Future<String>bulkIndentCompleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data, AppUrl.bulkIndentHeadercomplete,sessionManagement);
+  }
+
 
 }

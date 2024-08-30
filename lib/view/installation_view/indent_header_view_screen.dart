@@ -1236,6 +1236,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
         indent_deatils_page_controller.unit_price = selection.costPerUnit!;
       //  indent_deatils_page_controller.unit_price = selection.costPerUnit!;
         indent_deatils_page_controller.item_price_controller.text=selection.costPerUnit!.toStringAsFixed(2);
+        print(  indent_deatils_page_controller.item_price_controller.text);
             selection.costPerUnit.toString()!;
         indent_deatils_page_controller.item_no_description_controller.text =
             selection.displayName!;
@@ -1861,8 +1862,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
 
                         TextFormField(
                           readOnly: true,
-                          controller: indent_deatils_page_controller
-                              .item_price_controller,
+                          controller: indent_deatils_page_controller.item_price_controller,
                           // keyboardType: TextInputType.number,
                           decoration: InputDecoration(
                             labelText: "Unit Price",

@@ -158,5 +158,7 @@ class AppUrl {
      static const String bulkIndentList = "$BASE_URL/api/ServiceIndent/ServiceIndentHeaderDataGet";
      static const String bulkIndentHeaderCreate = "$BASE_URL/api/ServiceIndent/IndentHeaderCreate";
      static const String itemMasterGet = "$BASE_URL/api/ItemMaster/ItemMstGet";
-
+     static const String bulkIndentLineCreate = "$BASE_URL/api/ServiceIndent/IndentLineAdd";
+     static const String bulkIndentLineAndHeader = "$BASE_URL/api/ServiceIndent/IndentHeaderLineDiscard";
+     static const String bulkIndentHeadercomplete = "$BASE_URL/api/ServiceIndent/IndentHeaderComplete";
 }
