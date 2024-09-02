@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
@@ -30,676 +31,556 @@ class CreateBulkIndentScreen extends StatelessWidget{
   static String _displayIndentTypeForOption(String option) => option!;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AllColors.primaryDark1,
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor,
-        ),
-        title: Row(
-          children: [
-            Text(
-              'Create Bulk Indent',
-              style: GoogleFonts.poppins(
-                color: AllColors.whiteColor,
-                fontSize: AllFontSize.twentee,
-                fontWeight: FontWeight.w700,
+    return WillPopScope(
+      onWillPop:() async  {
+        Get.offAllNamed(RoutesName.bulk_indent_screen);
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: AllColors.primaryDark1,
+          iconTheme: IconThemeData(
+            color: AllColors.whiteColor,
+          ),
+          title: Row(
+            children: [
+              Text(
+                'Create Bulk Indent',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      drawer: CustomDrawer(),
-      body: Container(
-        child: Column(
-          children: [
-            Obx(
-                  () {
-                return Visibility(
-                  visible: create_bulk_controller
-                      .is_indent_type_dropDown.value,
-                  child: Container(
-                      margin: EdgeInsets.all(10),
-                      child: Column(
-                        //crossAxisAlignment:CrossAxisAlignment.start ,
-                        children: [
-                          bindIndentDropDropDown(context),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark, width: 1),
-                                )),
-                            onPressed: () {
-                              create_bulk_controller.BulkHeaderCreateApi("");
-                            },
-                            child: Text(
-                              'Create',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      )),
-                );
-              },
-            ),
-            Obx(
-                  () {
-                if (create_bulk_controller
-                    . bulk_indent_header_create_list !=
-                    null &&
-                    create_bulk_controller
-                        . bulk_indent_header_create_list.isNotEmpty &&
-                    create_bulk_controller
-                        . bulk_indent_header_create_list.length >
-                        0) {
+        drawer: CustomDrawer(),
+        body: Container(
+          child: Column(
+            children: [
+              Obx(
+                    () {
                   return Visibility(
-                    visible:
-                    create_bulk_controller.is_Showindent.value,
+                    visible: create_bulk_controller
+                        .is_indent_type_dropDown.value,
                     child: Container(
-                      child: Expanded(
+                        margin: EdgeInsets.all(10),
                         child: Column(
+                          //crossAxisAlignment:CrossAxisAlignment.start ,
                           children: [
-                            Container(
-                              padding: EdgeInsets.all(10),
-                              //    height: size.height * .16,
-                              decoration:
-                              BoxDecoration(boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: Colors.black54,
-                                  blurRadius: 1.0,
-                                  offset: Offset(0.0, 0.55),
-                                )
-                              ], color: Colors.white),
-                              child: Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Indent Type ",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        create_bulk_controller
-                                            . bulk_indent_header_create_list[
-                                        0]
-                                            .indentType ??
-                                            ''!,
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.textColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Indent No. ",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        create_bulk_controller
-                                            . bulk_indent_header_create_list[
-                                        0]
-                                            .indentNo ??
-                                            ''!,
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.textColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Service No.",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        create_bulk_controller
-                                            . bulk_indent_header_create_list[
-                                        0]
-                                            .serviceNo ??
-                                            "",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.textColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-                                  Obx(
-                                        () {
-                                      return Row(
-                                        children: [
-                                          Text(
-                                            "Indent Status",
-                                            style: GoogleFonts.poppins(
-                                              color: AllColors.primaryDark1,
-                                              fontSize: AllFontSize.fourtine,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          Text(
-                                            create_bulk_controller
-                                                . bulk_indent_header_create_list![
-                                            0]
-                                                .indentStatus ??
-                                                "",
-                                            style: GoogleFonts.poppins(
-                                              color: AllColors.redColor,
-                                              fontSize: AllFontSize.fourtine,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                            textAlign: TextAlign.end,
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  ),
-                                  SizedBox(
-                                    height: 3,
-                                  ),
-
-                                  /*Obx(
-                                      () {
-                                        return Visibility(
-                                          visible: indent_deatils_page_controller
-                                              .service_indent_header_list.isNotEmpty &&  indent_deatils_page_controller
-                                                      .service_indent_header_list[
-                                                          0]
-                                                      .indentStatus ==
-                                                  "Ready For Consumption" || indent_deatils_page_controller
-                                              .service_indent_header_list.isNotEmpty &&   indent_deatils_page_controller
-                                              .service_indent_header_list[
-                                          0]
-                                              .indentStatus =="Received"
-                                              ? true
-                                              : false,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                "Location",
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.primaryDark1,
-                                                  fontSize:
-                                                      AllFontSize.fourtine,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Text(
-                                                indent_deatils_page_controller
-                                                        .service_indent_header_list![
-                                                            0]
-                                                        .locationCode ??
-                                                    "",
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.textColor,
-                                                  fontSize:
-                                                      AllFontSize.fourtine,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                textAlign: TextAlign.end,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),*/
-
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Location",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Text(
-                                        create_bulk_controller
-                                            . bulk_indent_header_create_list
-                                            .isNotEmpty
-                                            ? create_bulk_controller
-                                            . bulk_indent_header_create_list[
-                                        0]
-                                            .locationCode ??
-                                            ""
-                                            : "",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.textColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                        textAlign: TextAlign.end,
-                                      ),
-                                    ],
-                                  ),
-
-                                  /* Obx(
-                                          () {
-                                        // Check if the list is not empty before accessing its elements
-                                        bool isVisible = indent_deatils_page_controller
-                                            .service_indent_header_list.isNotEmpty &&
-                                            (indent_deatils_page_controller
-                                                .service_indent_header_list[0].indentStatus ==
-                                                "Ready For Consumption" ||
-                                                indent_deatils_page_controller
-                                                    .service_indent_header_list[0].indentStatus == "Received");
-
-                                        return Visibility(
-                                          visible: isVisible,
-                                          child: Row(
-                                            children: [
-                                              Text(
-                                                "Location",
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.primaryDark1,
-                                                  fontSize: AllFontSize.fourtine,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Text(
-                                                indent_deatils_page_controller
-                                                    .service_indent_header_list.isNotEmpty
-                                                    ? indent_deatils_page_controller
-                                                    .service_indent_header_list[0].locationCode ??
-                                                    ""
-                                                    : "",
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.textColor,
-                                                  fontSize: AllFontSize.fourtine,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                                textAlign: TextAlign.end,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),*/
-
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                      Spacer(),
-                                      Obx(
-                                            () {
-                                          return Visibility(
-                                            visible: create_bulk_controller
-                                                . bulk_indent_header_create_list[
-                                            0]
-                                                .indentStatus ==
-                                                "Ready For Consumption"
-                                                ? true
-                                                : false,
-                                            child: Container(
-                                              width: size.width * 0.4,
-                                              child: ElevatedButton(
-                                                style:
-                                                ElevatedButton.styleFrom(
-                                                    foregroundColor:
-                                                    AllColors
-                                                        .lightgreyColor,
-                                                    backgroundColor:
-                                                    AllColors
-                                                        .whiteColor,
-                                                    shape:
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          15),
-                                                      side: BorderSide(
-                                                          color: AllColors
-                                                              .primaryDark,
-                                                          width: 1),
-                                                    )),
-                                                onPressed: () {
-
-                                                 /* create_bulk_controller
-                                                      .IndentConsumerHeaderMarkApi(
-                                                      create_bulk_controller
-                                                          . bulk_indent_header_create_list[
-                                                      0]
-                                                          .indentNo!);*/
-                                                },
-                                                child: Text(
-                                                  'Consume',
-                                                  style: GoogleFonts.poppins(
-                                                      color: AllColors
-                                                          .primaryDark1,
-                                                      fontSize: AllFontSize
-                                                          .sisxteen,
-                                                      fontWeight:
-                                                      FontWeight.w700),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                      Obx(
-                                            () {
-                                          return Visibility(
-                                            visible:
-                                            create_bulk_controller
-                                                . bulk_indent_header_create_list[
-                                            0]
-                                                .indentStatus ==
-                                                "Pending"
-                                                ? true
-                                                : false,
-                                            child: Container(
-                                              width: size.width * 0.4,
-                                              child: ElevatedButton(
-                                                style:
-                                                ElevatedButton.styleFrom(
-                                                    foregroundColor:
-                                                    AllColors
-                                                        .lightgreyColor,
-                                                    backgroundColor:
-                                                    AllColors
-                                                        .whiteColor,
-                                                    shape:
-                                                    RoundedRectangleBorder(
-                                                      borderRadius:
-                                                      BorderRadius
-                                                          .circular(
-                                                          15),
-                                                      side: BorderSide(
-                                                          color: AllColors
-                                                              .primaryDark,
-                                                          width: 1),
-                                                    )),
-                                                onPressed: () {
-
-                                                  RescheduleDateDialog(context);
-
-
-
-
-                                                },
-                                                child: Text(
-                                                  'Complete',
-                                                  style: GoogleFonts.poppins(
-                                                      color: AllColors
-                                                          .primaryDark1,
-                                                      fontSize: AllFontSize
-                                                          .sisxteen,
-                                                      fontWeight:
-                                                      FontWeight.w700),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                            bindIndentDropDropDown(context),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  foregroundColor: AllColors.lightgreyColor,
+                                  backgroundColor: AllColors.whiteColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(15),
+                                    side: BorderSide(
+                                        color: AllColors.primaryDark, width: 1),
+                                  )),
+                              onPressed: () {
+                                create_bulk_controller.BulkHeaderCreateApi("");
+                              },
+                              child: Text(
+                                'Create',
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700),
                               ),
                             ),
-
-                            //todo lines... details.....
-
-                            Container(
-                              decoration:
-                              BoxDecoration(boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  offset: Offset(0.0, 0.55),
-                                  color: Colors.black54,
-                                  blurRadius: 0.5,
-                                )
-                              ], color: Colors.white),
-                              padding: EdgeInsets.only(
-                                  left: 10, top: 10, right: 10),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Line Details",
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  Spacer(
-                                    flex: 8,
-                                  ),
-                                  Obx(
-                                        () {
-                                      final lines =
+                          ],
+                        )),
+                  );
+                },
+              ),
+              Obx(
+                    () {
+                  if (create_bulk_controller
+                      . bulk_indent_header_create_list !=
+                      null &&
+                      create_bulk_controller
+                          . bulk_indent_header_create_list.isNotEmpty &&
+                      create_bulk_controller
+                          . bulk_indent_header_create_list.length >
+                          0) {
+                    return Visibility(
+                      visible:
+                      create_bulk_controller.is_Showindent.value,
+                      child: Container(
+                        child: Expanded(
+                          child: Column(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                //    height: size.height * .16,
+                                decoration:
+                                BoxDecoration(boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    color: Colors.black54,
+                                    blurRadius: 1.0,
+                                    offset: Offset(0.0, 0.55),
+                                  )
+                                ], color: Colors.white),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Indent Type ",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(
                                           create_bulk_controller
                                               . bulk_indent_header_create_list[
                                           0]
-                                              .lines;
-
-                                      // Check if lines is not null and has at least one element
-                                      if (lines != null &&
-                                          lines.isNotEmpty &&
-                                          lines[0].lineNo == null) {
-                                        return Visibility(
-                                          visible: lines[0].lineNo == null,
-                                          child: Obx(
-                                                () {
-                                              return Visibility(
-                                                visible: create_bulk_controller
-                                                    . bulk_indent_header_create_list[
-                                                0]
-                                                    .indentStatus ==
-                                                    "Pending"
-                                                    ? true
-                                                    : false,
-                                                child: Tooltip(
-                                                  message: "Header Delete",
-                                                  child: IconButton(
-                                                    icon: Icon(Icons.delete,
-                                                        color: AllColors
-                                                            .redColor),
-                                                    onPressed: () {
-                                                      Get.defaultDialog(
-                                                        title:
-                                                        "Header Delete",
-                                                        titleStyle: TextStyle(
-                                                          color: AllColors
-                                                              .primaryDark1,
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                          FontWeight.bold,
-                                                        ),
-                                                        content: Padding(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                              vertical:
-                                                              15.0),
-                                                          child: Text(
-                                                            "Do you want to Delete?",
-                                                            style: TextStyle(
-                                                              color: AllColors
-                                                                  .primaryDark1,
-                                                              fontWeight:
-                                                              FontWeight
-                                                                  .w600,
-                                                              fontSize:
-                                                              AllFontSize
-                                                                  .fourtine,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        confirm:
-                                                        OutlinedButton(
-                                                          onPressed: () {
-                                                            Get.back();
-                                                         /*
-                                                            create_bulk_controller
-                                                                .IndentHeaderLineDelete(
-                                                              create_bulk_controller
-                                                                  . bulk_indent_header_create_list[
-                                                              0]
-                                                                  .indentNo!,
-                                                              lines[0]
-                                                                  .lineNo
-                                                                  .toString(),
-                                                              "HeaderDiscard",
-                                                            );*/
-
-                                                          },
-                                                          child: Text("Yes",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .red)),
-                                                        ),
-                                                        cancel:
-                                                        OutlinedButton(
-                                                          onPressed: () =>
-                                                              Get.back(),
-                                                          child: Text(
-                                                            "No",
-                                                            style: TextStyle(
-                                                                color: AllColors
-                                                                    .primaryDark1),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  ),
-                                                ),
-                                              );
-                                            },
+                                              .indentType ??
+                                              ''!,
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
                                           ),
-                                        );
-                                      } else {
-                                        return SizedBox(); // Return an empty widget if conditions are not met
-                                      }
-                                    },
-                                  ),
-                                  Spacer(),
-                                  Obx(
-                                        () {
-                                      return Visibility(
-                                        visible: create_bulk_controller
-                                            . bulk_indent_header_create_list[
-                                        0]
-                                            .indentStatus ==
-                                            "Pending"
-                                            ? true
-                                            : false,
-                                        child: Tooltip(
-                                          message: "Add Line",
-                                          child: IconButton(
-                                            icon: Icon(Icons.add,
-                                                color:
-                                                AllColors.primaryDark1),
-                                            onPressed: () {
-                                              create_bulk_controller
-                                                  .isCheckBox.value = false;
-                                           //   create_bulk_controller.getItemNo();
-                                              create_bulk_controller
-                                                  .item_no_controller
-                                                  .clear();
-                                              create_bulk_controller
-                                                  .item_no_description_controller
-                                                  .clear();
-                                              create_bulk_controller
-                                                  .quantity_controller
-                                                  .clear();
-                                              create_bulk_controller
-                                                  .discount_controller
-                                                  .clear();
-                                              create_bulk_controller
-                                                  .unit_price_controller
-                                                  .clear();
-                                              create_bulk_controller.item_price_controller.clear();
-                                              showAddLineBottomSheet(context, null, "");
-
-                                              //addLineDialog(context);
-                                            },
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Indent No. ",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+                                        Spacer(),
+                                        Text(
+                                          create_bulk_controller
+                                              . bulk_indent_header_create_list[
+                                          0]
+                                              .indentNo ??
+                                              ''!,
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
 
-                            //  Divider(height: 0.55,color: AllColors.bluegrayColor,),
-                            SizedBox(
-                              height: 3,
-                            ),
-                         Obx(() => bindList(context),)
-                          ],
+
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Location",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(
+                                          create_bulk_controller
+                                              . bulk_indent_header_create_list
+                                              .isNotEmpty
+                                              ? create_bulk_controller
+                                              . bulk_indent_header_create_list[
+                                          0]
+                                              .locationCode ??
+                                              ""
+                                              : "",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ],
+                                    ),
+
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+                                    Obx(
+                                          () {
+                                        return Row(
+                                          children: [
+                                            Text(
+                                              "Indent Status",
+                                              style: GoogleFonts.poppins(
+                                                color: AllColors.primaryDark1,
+                                                fontSize: AllFontSize.fourtine,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Text(
+                                              create_bulk_controller
+                                                  . bulk_indent_header_create_list![
+                                              0]
+                                                  .indentStatus ??
+                                                  "",
+                                              style: GoogleFonts.poppins(
+                                                color: AllColors.redColor,
+                                                fontSize: AllFontSize.fourtine,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                              textAlign: TextAlign.end,
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    ),
+
+                                    SizedBox(
+                                      height: 8,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Obx(
+                                              () {
+                                            return Visibility(
+                                              visible: create_bulk_controller
+                                                  . bulk_indent_header_create_list[
+                                              0]
+                                                  .indentStatus ==
+                                                  "Ready For Consumption"
+                                                  ? true
+                                                  : false,
+                                              child: Container(
+                                                width: size.width * 0.4,
+                                                child: ElevatedButton(
+                                                  style:
+                                                  ElevatedButton.styleFrom(
+                                                      foregroundColor:
+                                                      AllColors
+                                                          .lightgreyColor,
+                                                      backgroundColor:
+                                                      AllColors
+                                                          .whiteColor,
+                                                      shape:
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            15),
+                                                        side: BorderSide(
+                                                            color: AllColors
+                                                                .primaryDark,
+                                                            width: 1),
+                                                      )),
+                                                  onPressed: () {
+
+                                                    create_bulk_controller
+                                                        .bulkIndentConsumerHeaderMarkApi(
+                                                        create_bulk_controller
+                                                            . bulk_indent_header_create_list[
+                                                        0]
+                                                            .indentNo!);
+                                                  },
+                                                  child: Text(
+                                                    'Consume',
+                                                    style: GoogleFonts.poppins(
+                                                        color: AllColors
+                                                            .primaryDark1,
+                                                        fontSize: AllFontSize
+                                                            .sisxteen,
+                                                        fontWeight:
+                                                        FontWeight.w700),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        Obx(
+                                              () {
+                                            return Visibility(
+                                              visible:
+                                              create_bulk_controller
+                                                  . bulk_indent_header_create_list[
+                                              0]
+                                                  .indentStatus ==
+                                                  "Pending"
+                                                  ? true
+                                                  : false,
+                                              child: Container(
+                                                width: size.width * 0.4,
+                                                child: ElevatedButton(
+                                                  style:
+                                                  ElevatedButton.styleFrom(
+                                                      foregroundColor:
+                                                      AllColors
+                                                          .lightgreyColor,
+                                                      backgroundColor:
+                                                      AllColors
+                                                          .whiteColor,
+                                                      shape:
+                                                      RoundedRectangleBorder(
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            15),
+                                                        side: BorderSide(
+                                                            color: AllColors
+                                                                .primaryDark,
+                                                            width: 1),
+                                                      )),
+                                                  onPressed: () {
+
+                                                    RescheduleDateDialog(context);
+
+                                                  },
+                                                  child: Text(
+                                                    'Complete',
+                                                    style: GoogleFonts.poppins(
+                                                        color: AllColors
+                                                            .primaryDark1,
+                                                        fontSize: AllFontSize
+                                                            .sisxteen,
+                                                        fontWeight:
+                                                        FontWeight.w700),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              //todo lines... details.....
+
+                              Container(
+                                decoration:
+                                BoxDecoration(boxShadow: <BoxShadow>[
+                                  BoxShadow(
+                                    offset: Offset(0.0, 0.55),
+                                    color: Colors.black54,
+                                    blurRadius: 0.5,
+                                  )
+                                ], color: Colors.white),
+                                padding: EdgeInsets.only(
+                                    left: 10, top: 10, right: 10),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Line Details",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.sisxteen,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Spacer(
+                                      flex: 8,
+                                    ),
+                                    Obx(
+                                          () {
+                                        final lines =
+                                            create_bulk_controller
+                                                . bulk_indent_header_create_list[
+                                            0]
+                                                .lines;
+
+                                        // Check if lines is not null and has at least one element
+                                        if (lines != null &&
+                                            lines.isNotEmpty &&
+                                            lines[0].lineNo == null) {
+                                          return Visibility(
+                                            visible: lines[0].lineNo == null,
+                                            child: Obx(
+                                                  () {
+                                                return Visibility(
+                                                  visible: create_bulk_controller
+                                                      . bulk_indent_header_create_list[
+                                                  0]
+                                                      .indentStatus ==
+                                                      "Pending"
+                                                      ? true
+                                                      : false,
+                                                  child: Tooltip(
+                                                    message: "Header Delete",
+                                                    child: IconButton(
+                                                      icon: Icon(Icons.delete,
+                                                          color: AllColors
+                                                              .redColor),
+                                                      onPressed: () {
+                                                        Get.defaultDialog(
+                                                          title:
+                                                          "Header Delete",
+                                                          titleStyle: TextStyle(
+                                                            color: AllColors
+                                                                .primaryDark1,
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                            FontWeight.bold,
+                                                          ),
+                                                          content: Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                vertical:
+                                                                15.0),
+                                                            child: Text(
+                                                              "Do you want to Delete?",
+                                                              style: TextStyle(
+                                                                color: AllColors
+                                                                    .primaryDark1,
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w600,
+                                                                fontSize:
+                                                                AllFontSize
+                                                                    .fourtine,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          confirm:
+                                                          OutlinedButton(
+                                                            onPressed: () {
+                                                              Get.back();
+
+                                                              create_bulk_controller
+                                                                  .IndentHeaderLineDelete(
+                                                                create_bulk_controller
+                                                                    . bulk_indent_header_create_list[
+                                                                0]
+                                                                    .indentNo!,
+                                                                lines[0]
+                                                                    .lineNo
+                                                                    .toString(),
+                                                                "HeaderDiscard",
+                                                              );
+
+                                                            },
+                                                            child: Text("Yes",
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .red)),
+                                                          ),
+                                                          cancel:
+                                                          OutlinedButton(
+                                                            onPressed: () =>
+                                                                Get.back(),
+                                                            child: Text(
+                                                              "No",
+                                                              style: TextStyle(
+                                                                  color: AllColors
+                                                                      .primaryDark1),
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        } else {
+                                          return SizedBox(); // Return an empty widget if conditions are not met
+                                        }
+                                      },
+                                    ),
+                                    Spacer(),
+                                    Obx(
+                                          () {
+                                        return Visibility(
+                                          visible: create_bulk_controller
+                                              . bulk_indent_header_create_list[0].indentStatus == "Pending"
+                                              ? true
+                                              : false,
+                                          child: Tooltip(
+                                            message: "Add Line",
+                                            child: IconButton(
+                                              icon: Icon(Icons.add,
+                                                  color:
+                                                  AllColors.primaryDark1),
+                                              onPressed: () {
+                                                create_bulk_controller
+                                                    .isCheckBox.value = false;
+                                             //   create_bulk_controller.getItemNo();
+                                                create_bulk_controller
+                                                    .item_no_controller
+                                                    .clear();
+                                                create_bulk_controller
+                                                    .item_no_description_controller
+                                                    .clear();
+                                                create_bulk_controller
+                                                    .quantity_controller
+                                                    .clear();
+                                                create_bulk_controller
+                                                    .discount_controller
+                                                    .clear();
+                                                create_bulk_controller
+                                                    .unit_price_controller
+                                                    .clear();
+                                                create_bulk_controller.item_price_controller.clear();
+                                                showAddLineBottomSheet(context, null, "");
+
+                                                //addLineDialog(context);
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              //  Divider(height: 0.55,color: AllColors.bluegrayColor,),
+                              SizedBox(
+                                height: 3,
+                              ),
+                           Obx(() => bindList(context),)
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                } else {
-                  return Container();
-                }
-              },
-            )
-            
-            
-            
-          ],
+                    );
+                  } else {
+                    return Container();
+                  }
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -806,7 +687,6 @@ class CreateBulkIndentScreen extends StatelessWidget{
           lines!.qty!.toString();
       create_bulk_controller.discount_controller.text =
           lines!.discountPer!.toString();
-      ;
       create_bulk_controller.unit_price_controller.text =
           lines!.unitPrice!.toString();
       sub_total.value = lines!.subTotal!;
@@ -1557,8 +1437,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
   bindIntentListView(BuildContext context, int index) {
     return InkWell(
       onTap: () {
-        showAddLineBottomSheet(context, create_bulk_controller
-            . bulk_indent_header_create_list[0].lines![index], "View");
+        showAddLineBottomSheet(context, create_bulk_controller.bulk_indent_header_create_list[0].lines![index], "View");
       },
       child: ListTile(
         title: Row(
@@ -1635,17 +1514,14 @@ class CreateBulkIndentScreen extends StatelessWidget{
                                   create_bulk_controller
                                       .IndentHeaderLineDelete(
                                       create_bulk_controller
-                                          . bulk_indent_header_create_list[
-                                      0]
+                                          . bulk_indent_header_create_list[0]
                                           .indentNo!,
                                       create_bulk_controller
-                                          . bulk_indent_header_create_list[
-                                      0]
+                                          . bulk_indent_header_create_list[0]
                                           .lines![index]
                                           .lineNo
                                           .toString(),
                                       "LineDiscard");
-
                                 },
                                 child: const Text("Yes",
                                     style: TextStyle(color: Colors.red)),
@@ -1676,9 +1552,10 @@ class CreateBulkIndentScreen extends StatelessWidget{
                           : false,
                       child: InkWell(
                           onTap: () {
-                            //  indent_deatils_page_controller.consumer_quantity_controller.clear();
-                            // indent_deatils_page_controller.bad_quantity_controller.clear();
-                          /*  create_bulk_controller
+
+                          create_bulk_controller.consumer_quantity_controller.clear();
+                            create_bulk_controller.bad_quantity_controller.clear();
+                            create_bulk_controller
                                 .bad_quantity_controller.text =
                                 create_bulk_controller
                                     . bulk_indent_header_create_list[0]
@@ -1686,26 +1563,19 @@ class CreateBulkIndentScreen extends StatelessWidget{
                                     .badQty!
                                     .toString();
                             create_bulk_controller
-                                .consumer_quantity_controller.text ==
+                                .consumer_quantity_controller.text =
                                 create_bulk_controller
                                     . bulk_indent_header_create_list[0]
                                     .lines![index]
                                     .consumeQty
                                     .toString();
-                            addConsumeDialog(context, index);*/
-
-
+                            addConsumeDialog(context, index);
                           },
                           child: Image.asset(
                             "assests/images/view.png",
                             width: 23,
                             height: 23,
                           )
-/*
-                        Icon(
-                        Icons.remove_red_eye,
-                        //color: AllColors.bluegrayColor,
-                      )*/
                       ),
                     ),
                   )
@@ -2009,5 +1879,170 @@ class CreateBulkIndentScreen extends StatelessWidget{
       },
     );
   }
+
+
+  void addConsumeDialog(BuildContext context, int index) {
+    double remaining_qty =create_bulk_controller
+        . bulk_indent_header_create_list[0].lines![index].qtyIssueFromNav!
+        .toDouble();
+    create_bulk_controller.remain_quantity_controller.text =
+        remaining_qty.toString();
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          // Set the shape to make it full-screen
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Fill Details',
+                style: GoogleFonts.poppins(
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700,
+                  color: AllColors.primaryDark1,
+                ),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                'Total Appr Qty.  (  ${create_bulk_controller
+                    . bulk_indent_header_create_list[0].lines![index].qtyIssueFromNav}  ) ',
+                style: GoogleFonts.poppins(
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700,
+                  color: AllColors.redColor,
+                ),
+              ),
+            ],
+          ),
+
+          content: Container(
+            height: size.height * .35,
+            child: Column(
+              children: [
+                TextFormField(
+                  onChanged: (value) {
+                    double consume_qty =
+                    double.parse((value == "") ? "0" : value);
+                    double bad_qty = double.parse(create_bulk_controller
+                        .bad_quantity_controller.text ==
+                        ""
+                        ? '0'
+                        : create_bulk_controller
+                        .bad_quantity_controller.text);
+                    double remaining_qty =create_bulk_controller
+                        . bulk_indent_header_create_list[0]
+                        .lines![index]
+                        .qtyIssueFromNav! -
+                        (consume_qty + bad_qty);
+                    create_bulk_controller.remain_quantity_controller
+                        .text = remaining_qty.toString();
+                  },
+                  controller: create_bulk_controller
+                      .consumer_quantity_controller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Consumer Qty ",
+                    labelStyle: TextStyle(color: AllColors.primaryDark1),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                  ),
+                ),
+                TextFormField(
+                  onChanged: (value) {
+                    double bad_qty = double.parse((value == "") ? "0" : value);
+                    double consume_qty = double.parse(
+                        create_bulk_controller
+                            .consumer_quantity_controller.text ==
+                            ""
+                            ? '0'
+                            : create_bulk_controller
+                            .consumer_quantity_controller.text);
+                    double remaining_qty = create_bulk_controller
+                        . bulk_indent_header_create_list[0]
+                        .lines![index]
+                        .qtyIssueFromNav! -
+                        (consume_qty + bad_qty);
+                    create_bulk_controller.remain_quantity_controller
+                        .text = remaining_qty.toString();
+                  },
+                  controller:
+                  create_bulk_controller.bad_quantity_controller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Bad Qty",
+                    labelStyle: TextStyle(color: AllColors.primaryDark1),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                  ),
+                ),
+                TextFormField(
+                  controller:
+                  create_bulk_controller.remain_quantity_controller,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(
+                    labelText: "Remain Qty ",
+                    labelStyle: TextStyle(color: AllColors.primaryDark1),
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: AllColors.primaryDark1),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 13,
+                ),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      AllColors.primaryDark1,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    create_bulk_controller.bulkIndentConsumerLineApi(
+                        create_bulk_controller
+                            .bulk_indent_header_create_list[0].indentNo!,
+                        create_bulk_controller
+                            .bulk_indent_header_create_list[0]
+                            .lines![index]
+                            .lineNo!);
+                  },
+                  child: Container(
+                    width: 80,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Save',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.customDarkerWhite,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 
 }

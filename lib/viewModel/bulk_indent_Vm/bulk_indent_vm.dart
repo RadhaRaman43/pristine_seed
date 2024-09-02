@@ -58,15 +58,18 @@ class BulkIndentViewModel extends GetxController{
 
   var paybal_amount_controller=TextEditingController();
 
-
-
   var indent_date_controller=TextEditingController();
+
+  var bad_quantity_controller=TextEditingController();
+  var consumer_quantity_controller=TextEditingController();
+  var remain_quantity_controller=TextEditingController();
 
 
 
   RxList<String> indent_status_list = <String>["Completed","Approved","Rejected","Ready For Consumption","Received"].obs;
-  RxList<String> service_type_list = <String>["Installation","Corrective","Preventive"].obs;
+  RxList<String> service_type_list = <String>["Self","WereHouse","Bulk Inventory"].obs;
    RxString status="Pending".obs;
+
 
   RxList<BulkIndentListModel> bulk_indent_list=<BulkIndentListModel>[].obs;
   RxList<BulkHeaderCreateResponse> bulk_indent_header_create_list = <BulkHeaderCreateResponse>[].obs;
@@ -89,8 +92,8 @@ class BulkIndentViewModel extends GetxController{
         "indent_type": "Bulk_Inventory",
         "indent_status": "",
         "service_type": "",
-        "filter_item_no_or_cust_no_or_service_no": global_search,
-        "indent_no": "",
+        "filter_item_no_or_cust_no_or_service_no": "",
+        "indent_no": global_search,
         "service_no": "",
         "indent_date": "",
         "email_id":email,
@@ -185,6 +188,10 @@ class BulkIndentViewModel extends GetxController{
                 is_Showindent.value=true;
                 is_indent_type_dropDown.value=false;
               }
+              if(indent_no!=""){
+                Get.toNamed(RoutesName.create_bulk_indent_screen);
+              }
+
               /*else{
                 is_Showindent.value=true;
                 is_indent_type_dropDown.value=false;
@@ -421,6 +428,99 @@ class BulkIndentViewModel extends GetxController{
     } catch (e) {
       loading.value = false;
 
+      print(e);
+    }
+  }
+
+  bulkIndentConsumerHeaderMarkApi(String indent_no) {
+    Map data = {
+      "indent_no": indent_no,
+      "email_id": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.bulkIndentConsumerHeaderMarkApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<BulkHeaderCreateResponse> response =
+            JsonResponse.map((e) => BulkHeaderCreateResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              bulk_indent_header_create_list.value=response;
+
+              Utils.showToastification("Success!", response[0].message!);
+            } else {
+              loading.value = false;
+              print(response);
+              Utils.showErrorToastification("Error!", response[0].message!);
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          bulk_indent_header_create_list.value=[];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+
+  bulkIndentConsumerLineApi(String indent_no,int line_no,) {
+    Map data = {
+      "indent_no": indent_no,
+      "line_no":line_no ,
+      "consume_qty":consumer_quantity_controller.text,
+      "bad_qty":bad_quantity_controller.text,
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.bulkIndentConsumerLineMarkApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<BulkHeaderCreateResponse> response =
+            JsonResponse.map((e) => BulkHeaderCreateResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              bulk_indent_header_create_list.value=response;
+              consumer_quantity_controller.clear();
+              bad_quantity_controller.clear();
+
+              Utils.showToastification("Success!", response[0].message!);
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification("Error!", response[0].message!);
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          bulk_indent_header_create_list.value=[];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
       print(e);
     }
   }

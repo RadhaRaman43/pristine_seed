@@ -103,6 +103,8 @@ class InstallationScreen extends StatelessWidget {
                               IconButton(
                                 icon: Icon(Icons.search),
                                 onPressed: () async {
+                                  installation_page_controller.pageNumber=0;
+
                                   installation_page_controller
                                       .getServiceInstallationList(
                                       installation_page_controller

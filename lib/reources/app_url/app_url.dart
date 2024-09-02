@@ -161,4 +161,6 @@ class AppUrl {
      static const String bulkIndentLineCreate = "$BASE_URL/api/ServiceIndent/IndentLineAdd";
      static const String bulkIndentLineAndHeader = "$BASE_URL/api/ServiceIndent/IndentHeaderLineDiscard";
      static const String bulkIndentHeadercomplete = "$BASE_URL/api/ServiceIndent/IndentHeaderComplete";
+     static const String bulkIndentConsumerHeaderMark = "$BASE_URL/api/ServiceIndent/IndentHeaderConsumeMark";
+     static const String bulkIndentConsumerLineMark = "$BASE_URL/api/ServiceIndent/IndentLineConsumeMark";
 }

@@ -30,5 +30,15 @@ class BulkIndentRepository{
     return _apiServices.postApi(data, AppUrl.bulkIndentHeadercomplete,sessionManagement);
   }
 
+  Future<String>bulkIndentConsumerHeaderMarkApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data, AppUrl.bulkIndentConsumerHeaderMark,sessionManagement);
+  }
+
+  Future<String>bulkIndentConsumerLineMarkApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiServices.postApi(data, AppUrl.bulkIndentConsumerLineMark,sessionManagement);
+  }
+
+
+
 
 }

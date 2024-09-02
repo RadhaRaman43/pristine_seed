@@ -102,17 +102,17 @@ class BulkIndentListScreen extends StatelessWidget{
                         IconButton(
                           icon: Icon(Icons.search),
                           onPressed: () async {
+                            bulkIndentController.pageNumber=0;
                             bulkIndentController.getBulkIndentList(
                                 bulkIndentController.pageNumber,bulkIndentController.status.value, global_search: bulkIndentController.globle_search_controller.text);
-
                           },
                         ),
                         IconButton(
                           icon: Icon(Icons.clear),
                           onPressed: () {
                             bulkIndentController.pageNumber=0;
-                            bulkIndentController
-                                .globle_search_controller.text = "";
+                            bulkIndentController.globle_search_controller.text = "";
+
                             bulkIndentController.getBulkIndentList(
                                 bulkIndentController.pageNumber ,bulkIndentController.status.value,global_search: bulkIndentController.globle_search_controller.text);
 
@@ -129,8 +129,7 @@ class BulkIndentListScreen extends StatelessWidget{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Obx(
-                          () {
+                    Obx(() {
                         return ActionChip(
                           elevation: 2,
                           padding: EdgeInsets.all(2),
@@ -154,6 +153,7 @@ class BulkIndentListScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               )),
                           onPressed: () {
+                            bulkIndentController.pageNumber=0;
                             bulkIndentController.status.value="Pending";
                             bulkIndentController.getBulkIndentList(bulkIndentController.pageNumber, bulkIndentController.status.value);
 
@@ -167,8 +167,7 @@ class BulkIndentListScreen extends StatelessWidget{
                         return ActionChip(
                           elevation: 2,
                           padding: EdgeInsets.all(2),
-                          backgroundColor:
-                          bulkIndentController.status.value == "Complete"
+                          backgroundColor: bulkIndentController.status.value == "Completed"
                               ? AllColors.primaryDark1
                               : AllColors.grayColor,
                           shadowColor: Colors.black,
@@ -180,14 +179,15 @@ class BulkIndentListScreen extends StatelessWidget{
                               style: GoogleFonts.poppins(
                                 color: bulkIndentController
                                     .status.value ==
-                                    "Complete"
+                                    "Completed"
                                     ? AllColors.whiteColor
                                     : AllColors.primaryDark1,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                               )),
                           onPressed: () {
-                            bulkIndentController.status.value = "Complete";
+                            bulkIndentController.pageNumber=0;
+                            bulkIndentController.status.value = "Completed";
                             bulkIndentController.getBulkIndentList(bulkIndentController.pageNumber, bulkIndentController.status.value);
 
                           }, //Text
@@ -271,9 +271,8 @@ class BulkIndentListScreen extends StatelessWidget{
     return InkWell(
       child: ListTile(
           onTap: () {
-           /* bulkIndentController.IndentHeaderCreateApi(bulkIndentController
-                .bulk_indent_list[position].indentNo!,bulkIndentController
-                .bulk_indent_list[position].serviceNo!,);*/
+
+            bulkIndentController.BulkHeaderCreateApi(bulkIndentController.bulk_indent_list[position].indentNo!);
 
           },
           subtitle: Column(
@@ -282,26 +281,18 @@ class BulkIndentListScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Service No.:",
+                    "Indent No. :",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   SizedBox(
-                    width: size.width * .03,
+                    width: size.width * .1,
                   ),
-                  Text(
-                    bulkIndentController
-                        .bulk_indent_list[position].serviceNo!,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w300),
-                    textAlign: TextAlign.end,
-                  ),
-                  Spacer(),
-                  Text(update_on.toString(),
+                  Text( bulkIndentController
+                      .bulk_indent_list[position]
+                      .indentNo!,
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -316,19 +307,18 @@ class BulkIndentListScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Indent No. :",
+                    "Location :",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   SizedBox(
-                    width: size.width * .1,
+                    width: size.width * .13,
                   ),
                   Text(
                     bulkIndentController
-                        .bulk_indent_list[position]
-                        .indentNo!,
+                        .bulk_indent_list[position].locationCode ?? "",
                     overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
@@ -345,53 +335,18 @@ class BulkIndentListScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Service Type :",
+                    "Date :",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(
-                    width: size.width * .06,
-                  ),
-                  Text(
-                    bulkIndentController
-                        .bulk_indent_list[position]
-                        .serviceType??"",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w300),
-                    overflow:  TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Location :",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  SizedBox(width: size.width * .15),
-                  Text(
-                    bulkIndentController
-                        .bulk_indent_list[position].locationCode ?? "",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w300),
                   ),
                   Spacer(),
-                  Text(
-                    "",
+                  Text(update_on.toString(),
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w300),
                   ),
                 ],
               ),
@@ -608,6 +563,8 @@ class BulkIndentListScreen extends StatelessWidget{
                                   bulkIndentController.indent_serviceType_controller.clear();
                                   bulkIndentController.date_controller.clear();
                                   bulkIndentController.indent_status_controller.clear();
+                                  bulkIndentController.getBulkIndentList(
+                                  bulkIndentController.pageNumber,bulkIndentController.status.value,);
                                 },
                                 child: Text(
                                   'Reset',
@@ -745,8 +702,8 @@ class BulkIndentListScreen extends StatelessWidget{
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.one),
-            hintText: 'Service Type',
-            labelText: 'Service Type',
+            hintText: 'Indent Type',
+            labelText: 'Indent Type',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,
