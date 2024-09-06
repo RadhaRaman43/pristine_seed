@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -46,12 +47,21 @@ class BulkIndentListScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {
-                bulkIndentController.is_indent_type_dropDown.value=true;
-                bulkIndentController.is_Showindent.value=false;
-                bulkIndentController.indent_type_controller.text="Bulk_Inventory";
-                Get.toNamed(RoutesName.create_bulk_indent_screen);
-              }, icon: Icon(Icons.add)),
+              Obx(() {
+                print(bulkIndentController.status);
+                return  Visibility(
+                  visible:bulkIndentController.status=="Completed"?false:true,
+                  child: IconButton(onPressed: () {
+                    bulkIndentController.is_indent_type_dropDown.value=true;
+                    bulkIndentController.is_Showindent.value=false;
+                    bulkIndentController.indent_type_controller.text="Bulk_Inventory";
+                    bulkIndentController.BulkHeaderCreateApi("");
+                    //Get.toNamed(RoutesName.create_bulk_indent_screen);
+                  }, icon: Icon(Icons.add)),
+                );
+              },
+               // child:
+              ),
 
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
@@ -346,7 +356,8 @@ class BulkIndentListScreen extends StatelessWidget{
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w300),
+                        fontWeight: FontWeight.w700),
+                    textAlign: TextAlign.end,
                   ),
                 ],
               ),
@@ -439,14 +450,10 @@ class BulkIndentListScreen extends StatelessWidget{
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        bindIndentStatusDropDropDown(context),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        bindServiceTypeDropDropDown(context),
+                        //SizedBox(height: 5,),
+                        //bindIndentStatusDropDropDown(context),
+                      //  SizedBox(height: 5,),
+                      //  bindServiceTypeDropDropDown(context),
                         SizedBox(
                           height: 5,
                         ),
@@ -476,9 +483,7 @@ class BulkIndentListScreen extends StatelessWidget{
                           },
                         ),
 
-                        SizedBox(
-                          height: 5,
-                        ),
+                        /*SizedBox(height: 5,),
                         TextField(
                           controller: bulkIndentController.service_controller,
                           decoration: InputDecoration(
@@ -503,7 +508,7 @@ class BulkIndentListScreen extends StatelessWidget{
                           onChanged: (value) {
                             // Handle the text field value changes if needed
                           },
-                        ),
+                        ),*/
                         SizedBox(
                           height: 10,
                         ),
@@ -529,6 +534,13 @@ class BulkIndentListScreen extends StatelessWidget{
                                   bulkIndentController
                                       .getBulkIndentList(
                                     bulkIndentController.pageNumber,bulkIndentController.status.value,);
+                               /*     if(bulkIndentController.indent_status_controller.text=='Pending'){
+                                      bulkIndentController.status.value="Pending";
+                                    }if(bulkIndentController.indent_status_controller.text=="Completed"){
+                                    bulkIndentController.status.value="Completed";
+                                  }*/
+
+
                                  // bulkIndentController.indent_no_controller.clear();
                                  // bulkIndentController.service_controller.clear();
                                  // bulkIndentController.indent_serviceType_controller.clear();

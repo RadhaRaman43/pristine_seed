@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
@@ -59,6 +60,458 @@ class CreateBulkIndentScreen extends StatelessWidget{
         body: Container(
           child: Column(
             children: [
+              Container(
+                padding: EdgeInsets.all(10),
+                //    height: size.height * .16,
+                decoration:
+                BoxDecoration(boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    color: Colors.black54,
+                    blurRadius: 1.0,
+                    offset: Offset(0.0, 0.55),
+                  )
+                ], color: Colors.white),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "Indent Type ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          create_bulk_controller
+                              . bulk_indent_header_create_list[0].indentType ?? '',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "Indent No. ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          create_bulk_controller
+                              . bulk_indent_header_create_list[
+                          0]
+                              .indentNo ??
+                              ''!,
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
+                    ),
+
+
+                    SizedBox(
+                      height: 3,
+                    ),
+
+                    Row(
+                      children: [
+                        Text(
+                          "Location",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          create_bulk_controller
+                              . bulk_indent_header_create_list
+                              .isNotEmpty
+                              ? create_bulk_controller
+                              . bulk_indent_header_create_list[
+                          0]
+                              .locationCode ??
+                              ""
+                              : "",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          textAlign: TextAlign.end,
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(
+                      height: 3,
+                    ),
+                    Obx(
+                          () {
+                        return Row(
+                          children: [
+                            Text(
+                              "Indent Status",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Spacer(),
+                            Text(
+                              create_bulk_controller
+                                  . bulk_indent_header_create_list![
+                              0]
+                                  .indentStatus ??
+                                  "",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.redColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              textAlign: TextAlign.end,
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          "",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Spacer(),
+                        Obx(
+                              () {
+                            return Visibility(
+                              visible: create_bulk_controller
+                                  . bulk_indent_header_create_list[
+                              0]
+                                  .indentStatus ==
+                                  "Ready For Consumption"
+                                  ? true
+                                  : false,
+                              child: Container(
+                                width: size.width * 0.4,
+                                child: ElevatedButton(
+                                  style:
+                                  ElevatedButton.styleFrom(
+                                      foregroundColor:
+                                      AllColors
+                                          .lightgreyColor,
+                                      backgroundColor:
+                                      AllColors
+                                          .whiteColor,
+                                      shape:
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius
+                                            .circular(
+                                            15),
+                                        side: BorderSide(
+                                            color: AllColors
+                                                .primaryDark,
+                                            width: 1),
+                                      )),
+                                  onPressed: () {
+
+                                    create_bulk_controller
+                                        .bulkIndentConsumerHeaderMarkApi(
+                                        create_bulk_controller
+                                            . bulk_indent_header_create_list[
+                                        0]
+                                            .indentNo!);
+                                  },
+                                  child: Text(
+                                    'Consume',
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors
+                                            .primaryDark1,
+                                        fontSize: AllFontSize
+                                            .sisxteen,
+                                        fontWeight:
+                                        FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                        Obx(
+                              () {
+                            return Visibility(
+                              visible:
+                              create_bulk_controller
+                                  . bulk_indent_header_create_list[
+                              0]
+                                  .indentStatus ==
+                                  "Pending"
+                                  ? true
+                                  : false,
+                              child: Container(
+                                width: size.width * 0.4,
+                                child: ElevatedButton(
+                                  style:
+                                  ElevatedButton.styleFrom(
+                                      foregroundColor:
+                                      AllColors
+                                          .lightgreyColor,
+                                      backgroundColor:
+                                      AllColors
+                                          .whiteColor,
+                                      shape:
+                                      RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius
+                                            .circular(
+                                            15),
+                                        side: BorderSide(
+                                            color: AllColors
+                                                .primaryDark,
+                                            width: 1),
+                                      )),
+                                  onPressed: () {
+                                    create_bulk_controller.IndentComplete(
+                                        create_bulk_controller
+                                            .bulk_indent_header_create_list[0]
+                                            .indentNo!);
+
+                                  },
+                                  child: Text(
+                                    'Complete',
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors
+                                            .primaryDark1,
+                                        fontSize: AllFontSize
+                                            .sisxteen,
+                                        fontWeight:
+                                        FontWeight.w700),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              Container(
+                decoration:
+                BoxDecoration(boxShadow: <BoxShadow>[
+                  BoxShadow(
+                    offset: Offset(0.0, 0.55),
+                    color: Colors.black54,
+                    blurRadius: 0.5,
+                  )
+                ], color: Colors.white),
+                padding: EdgeInsets.only(
+                    left: 10, top: 10, right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Line Details",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.sisxteen,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Spacer(
+                      flex: 8,
+                    ),
+                    Obx(
+                          () {
+                        final lines =
+                            create_bulk_controller
+                                . bulk_indent_header_create_list[
+                            0]
+                                .lines;
+
+                        // Check if lines is not null and has at least one element
+                        if (lines != null &&
+                            lines.isNotEmpty &&
+                            lines[0].lineNo == null) {
+                          return Visibility(
+                            visible: lines[0].lineNo == null,
+                            child: Obx(
+                                  () {
+                                return Visibility(
+                                  visible: create_bulk_controller
+                                      . bulk_indent_header_create_list[
+                                  0]
+                                      .indentStatus ==
+                                      "Pending"
+                                      ? true
+                                      : false,
+                                  child: Tooltip(
+                                    message: "Header Delete",
+                                    child: IconButton(
+                                      icon: Icon(Icons.delete,
+                                          color: AllColors
+                                              .redColor),
+                                      onPressed: () {
+                                        Get.defaultDialog(
+                                          title:
+                                          "Header Delete",
+                                          titleStyle: TextStyle(
+                                            color: AllColors
+                                                .primaryDark1,
+                                            fontSize: 18,
+                                            fontWeight:
+                                            FontWeight.bold,
+                                          ),
+                                          content: Padding(
+                                            padding: EdgeInsets
+                                                .symmetric(
+                                                vertical:
+                                                15.0),
+                                            child: Text(
+                                              "Do you want to Delete?",
+                                              style: TextStyle(
+                                                color: AllColors
+                                                    .primaryDark1,
+                                                fontWeight:
+                                                FontWeight
+                                                    .w600,
+                                                fontSize:
+                                                AllFontSize
+                                                    .fourtine,
+                                              ),
+                                            ),
+                                          ),
+                                          confirm:
+                                          OutlinedButton(
+                                            onPressed: () {
+                                              Get.back();
+
+                                              create_bulk_controller
+                                                  .IndentHeaderLineDelete(
+                                                create_bulk_controller
+                                                    . bulk_indent_header_create_list[
+                                                0]
+                                                    .indentNo!,
+                                                lines[0]
+                                                    .lineNo
+                                                    .toString(),
+                                                "HeaderDiscard",
+                                              );
+
+                                            },
+                                            child: Text("Yes",
+                                                style: TextStyle(
+                                                    color: Colors
+                                                        .red)),
+                                          ),
+                                          cancel:
+                                          OutlinedButton(
+                                            onPressed: () =>
+                                                Get.back(),
+                                            child: Text(
+                                              "No",
+                                              style: TextStyle(
+                                                  color: AllColors
+                                                      .primaryDark1),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          return SizedBox(); // Return an empty widget if conditions are not met
+                        }
+                      },
+                    ),
+                    Spacer(),
+                    Obx(
+                          () {
+                        return Visibility(
+                          visible: create_bulk_controller
+                              . bulk_indent_header_create_list[0].indentStatus == "Pending"
+                              ? true
+                              : false,
+                          child: Tooltip(
+                            message: "Add Line",
+                            child: IconButton(
+                              icon: Icon(Icons.add,
+                                  color:
+                                  AllColors.primaryDark1),
+                              onPressed: () {
+                                create_bulk_controller
+                                    .isCheckBox.value = false;
+                                //   create_bulk_controller.getItemNo();
+                                create_bulk_controller
+                                    .item_no_controller
+                                    .clear();
+                                create_bulk_controller
+                                    .item_no_description_controller
+                                    .clear();
+                                create_bulk_controller
+                                    .quantity_controller
+                                    .clear();
+                                create_bulk_controller
+                                    .discount_controller
+                                    .clear();
+                                create_bulk_controller
+                                    .unit_price_controller
+                                    .clear();
+                                create_bulk_controller.item_price_controller.clear();
+                                showAddLineBottomSheet(context, null, "");
+
+                                //addLineDialog(context);
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+
+              //  Divider(height: 0.55,color: AllColors.bluegrayColor,),
+              SizedBox(
+                height: 3,
+              ),
+              Obx(() => bindList(context),)
+             /*
               Obx(
                     () {
                   return Visibility(
@@ -97,8 +550,14 @@ class CreateBulkIndentScreen extends StatelessWidget{
                         )),
                   );
                 },
-              ),
-              Obx(
+              ),*/
+
+
+
+
+
+
+              /*Obx(
                     () {
                   if (create_bulk_controller
                       . bulk_indent_header_create_list !=
@@ -578,7 +1037,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
                     return Container();
                   }
                 },
-              )
+              )*/
             ],
           ),
         ),
@@ -674,7 +1133,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
     RxDouble sub_total = 0.0.obs;
     RxDouble discount_amount = 0.0.obs;
     RxDouble total_amount = 0.0.obs;
-    create_bulk_controller.discount_controller.text = "100";
+    create_bulk_controller.discount_controller.text = "0";
     create_bulk_controller.paybal_amount_controller.text =
         total_amount.value.toString();
     if (flag == "View") {
@@ -751,60 +1210,50 @@ class CreateBulkIndentScreen extends StatelessWidget{
                     child: Column(
                       children: [
                       bindItemNoDropDown(context, flag),
-                        TextFormField(
-                          readOnly: true,
-                          controller: create_bulk_controller
-                              .item_no_description_controller,
-                          // keyboardType: TextInputType.number,
-                          decoration: InputDecoration(
-                            labelText: "Item Name",
-                            labelStyle:
-                            TextStyle(color: AllColors.primaryDark1),
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide:
-                              BorderSide(color: AllColors.primaryDark1),
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide:
-                              BorderSide(color: AllColors.primaryDark1),
+                        Tooltip(
+                          message: create_bulk_controller
+                              .item_no_description_controller.text ,
+                          child: TextFormField(
+                            readOnly: true,
+                            controller: create_bulk_controller
+                                .item_no_description_controller,
+                            // keyboardType: TextInputType.number,
+                            decoration: InputDecoration(
+                              labelText: "Item Name",
+                              labelStyle:
+                              TextStyle(color: AllColors.primaryDark1),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide:
+                                BorderSide(color: AllColors.primaryDark1),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide:
+                                BorderSide(color: AllColors.primaryDark1),
+                              ),
                             ),
                           ),
                         ),
 
                         TextFormField(
-                          readOnly: flag == "View" ? true : false,
+                         readOnly: flag == "View" ? true : false,
+                         // readOnly:true,
                           onChanged: (value) {
-                            double currentQty = double.parse(
-                                (create_bulk_controller
-                                    .quantity_controller.text.isEmpty)
-                                    ? "0"
-                                    : create_bulk_controller
-                                    .quantity_controller.text);
-                            double current_unitPrice = double.parse(
-                                (create_bulk_controller
-                                    .unit_price_controller.text.isEmpty)
-                                    ? "0"
-                                    : create_bulk_controller
-                                    .unit_price_controller.text);
-                            double current_discount_per = double.parse(
-                                (create_bulk_controller
-                                    .discount_controller.text.isEmpty)
-                                    ? "0"
-                                    : create_bulk_controller
-                                    .discount_controller.text);
+                            double currentQty =  double.parse((create_bulk_controller.quantity_controller.text.isEmpty) ? "0" : create_bulk_controller.quantity_controller.text);
+                            double current_unitPrice = double.parse((create_bulk_controller.unit_price_controller.text.isEmpty) ? "0" : create_bulk_controller.unit_price_controller.text);
+                            double current_discount_per = double.parse((create_bulk_controller.discount_controller.text.isEmpty) ? "0" : create_bulk_controller.discount_controller.text);
+
+
 
                             create_bulk_controller.unit_price_controller.text= (create_bulk_controller.unit_price-(create_bulk_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
                             current_unitPrice = double.parse((create_bulk_controller.unit_price_controller.text.isEmpty) ? "0" : create_bulk_controller.unit_price_controller.text);
 
                             sub_total.value = currentQty * create_bulk_controller.unit_price;
 
-                            discount_amount.value =( currentQty *
+                            discount_amount.value = (currentQty *
                                 create_bulk_controller.unit_price *
                                 current_discount_per /
                                 100).abs();
-
                             total_amount.value =(currentQty * current_unitPrice);
-
                             create_bulk_controller
                                 .paybal_amount_controller
                                 .text = total_amount.value.toString();
@@ -813,6 +1262,9 @@ class CreateBulkIndentScreen extends StatelessWidget{
                           controller: create_bulk_controller
                               .quantity_controller,
                           keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')), // Only positive integers
+                          ],
                           decoration: InputDecoration(
                             labelText: "Enter Quantity",
                             labelStyle:
@@ -839,9 +1291,11 @@ class CreateBulkIndentScreen extends StatelessWidget{
                               value: create_bulk_controller
                                   .isCheckBox.value,
                               onChanged: (value) {
-                                if (flag == "View") {
                                   return null;
-                                }
+
+                              /*  if (flag == "View") {
+                                  return null;
+                                }*/
 
                                 create_bulk_controller
                                     .isCheckBox.value = value ?? false;
@@ -1009,9 +1463,6 @@ class CreateBulkIndentScreen extends StatelessWidget{
                                         current_discount_per /
                                         100);
 
-
-
-
                             create_bulk_controller
                                 .paybal_amount_controller
                                 .text = total_amount.value.toString();
@@ -1022,7 +1473,9 @@ class CreateBulkIndentScreen extends StatelessWidget{
                           readOnly: /*indent_deatils_page_controller
                                               .isCheckBox.value ==
                                           true ||*/
-                          flag == "View" ? true : false,
+                          //flag == "View" ? true : false,
+                           true ,
+
                           controller: create_bulk_controller
                               .discount_controller,
                           keyboardType: TextInputType.number,
@@ -1044,7 +1497,8 @@ class CreateBulkIndentScreen extends StatelessWidget{
                         //  ),
 
                         TextFormField(
-                          readOnly: flag == "View" ? true : false,
+                           //readOnly: flag == "View" ? true : false,
+                           readOnly: true,
                           // enabled: false,
                           onChanged: (value) {
                             double currentQty = double.parse(
@@ -1284,7 +1738,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
        // create_bulk_controller.item_Qty = selection.componentQuantity!;
        // create_bulk_controller.is_warrenty = selection.isWarranty!;
         create_bulk_controller.unit_price = selection.costPerUnit!;
-        //  indent_deatils_page_controller.unit_price = selection.costPerUnit!;
+        create_bulk_controller.unit_price_controller.text=selection.costPerUnit.toString()!;
         create_bulk_controller.item_price_controller.text=selection.costPerUnit!.toStringAsFixed(2);
         selection.costPerUnit.toString()!;
         create_bulk_controller.item_no_description_controller.text =
@@ -1304,7 +1758,8 @@ class CreateBulkIndentScreen extends StatelessWidget{
             if(value.isEmpty){
               FocusScope.of(context).unfocus();
             }
-            create_bulk_controller.item_no_controller.text  = value;
+            create_bulk_controller.item_no_controller.text= value;
+            create_bulk_controller.unit_price_controller.text="";
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
@@ -1314,8 +1769,8 @@ class CreateBulkIndentScreen extends StatelessWidget{
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.one),
-            hintText: 'Enter Reason Code.',
-            labelText: 'Enter Reason Code',
+            hintText: 'Enter Item No.',
+            labelText: 'Enter Item No.',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontWeight: FontWeight.w300,

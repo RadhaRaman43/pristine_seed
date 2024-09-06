@@ -15,6 +15,7 @@ import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_man
 import 'dart:io';
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
+import '../../constants/static_methods.dart';
 import '../../models/reasonModel/reason_master_response.dart';
 import '../../models/serviceCorrectiveModel/corrective_details_model.dart';
 import '../../models/serviceCorrectiveModel/corrective_item_no_model.dart';
@@ -140,6 +141,7 @@ class CorrectiveViewModel extends GetxController{
 
 
 getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String globle_search_value=""}) {
+  var date=StaticMethod.convertDateFormat(invoice_date_search_controller.text);
   Map data;
     if(globle_search_value!=null && globle_search_value.isNotEmpty && globle_search_value!=""){
        data = {
@@ -163,7 +165,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
         "is_done": is_done<0?0:is_done,
         "email_id": email,
         "customer_no_name": customer_no_search_controller.value.text.isEmpty?"":customer_no_search_controller.value.text,
-        "invoice_date":invoice_date_search_controller.value.text.isEmpty?"":invoice_date_search_controller.value.text,
+       // "invoice_date":invoice_date_search_controller.value.text.isEmpty?"":invoice_date_search_controller.value.text,
+        "invoice_date":date!.isEmpty?"":date,
         "item_no_name": item_no_search_controller.value.text.isEmpty?"":item_no_search_controller.text,
         "serial_no": serial_no_search_controller.value.text.isEmpty?"":serial_no_search_controller.text,
         "row_per_page": rowsPerPage.toString(),

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import 'package:navigation_drawer_flutter/repository/bulk_indent_repository/bulk_indent_repo.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 
@@ -67,7 +68,7 @@ class BulkIndentViewModel extends GetxController{
 
 
   RxList<String> indent_status_list = <String>["Completed","Approved","Rejected","Ready For Consumption","Received"].obs;
-  RxList<String> service_type_list = <String>["Self","WereHouse","Bulk Inventory"].obs;
+  RxList<String> service_type_list = <String>["Self","WareHouse","Bulk Inventory"].obs;
    RxString status="Pending".obs;
 
 
@@ -86,6 +87,7 @@ class BulkIndentViewModel extends GetxController{
   }
 
   getBulkIndentList(int page_no,String status,{String global_search=""}) {
+   var date= StaticMethod.convertDateFormat(date_controller.text);
     Map data;
     if(global_search!=null && global_search.isNotEmpty && global_search!=""){
       data = {
@@ -104,11 +106,12 @@ class BulkIndentViewModel extends GetxController{
       data = {
         "indent_type": "Bulk_Inventory",
         "indent_status": indent_status_controller.text.isEmpty?status:indent_status_controller.text,
-        "service_type": indent_serviceType_controller.text,
+        "service_type":"",
         "filter_item_no_or_cust_no_or_service_no": "",
         "indent_no":indent_no_controller.text,
-        "service_no": service_controller.text,
-        "indent_date": date_controller.text,
+        "service_no":"",
+       // "indent_date": date_controller.text,
+        "indent_date": date,
         "email_id":email,
         "row_per_page": rowsPerPage,
         "page_number": page_no
@@ -135,6 +138,11 @@ class BulkIndentViewModel extends GetxController{
               }
               bulk_indent_list.addAll(response);
               total_rows=bulk_indent_list[0].totalCount!;
+              indent_no_controller.clear();
+              service_controller.clear();
+              indent_serviceType_controller.clear();
+              date_controller.clear();
+              indent_status_controller.clear();
             } else {
               bulk_indent_list.value=[];
             }
@@ -162,7 +170,8 @@ class BulkIndentViewModel extends GetxController{
     Map data = {
       "service_id": "",
       "indent_no": indent_no,
-      "indent_type": indent_type_controller.text,
+     //"indent_type": indent_type_controller.text,
+      "indent_type":"Bulk_Inventory",
       "email_id": email
     };
     print(data);
@@ -171,6 +180,7 @@ class BulkIndentViewModel extends GetxController{
       _api.bulkIndentHeaderCreateApiHit(data, sessionManagement).then(
             (value) {
           print(value);
+          print("Value...");
           final JsonResponse = json.decode(value);
           if (JsonResponse is List) {
             List<BulkHeaderCreateResponse> response =
@@ -181,16 +191,17 @@ class BulkIndentViewModel extends GetxController{
                 response[0].condition == "True") {
               loading.value = false;
               bulk_indent_header_create_list.value = response;
-              indent_type_controller.clear();
-              is_Showindent.value=true;
-              is_indent_type_dropDown.value=false;
-              if(indent_no!="" ){
-                is_Showindent.value=true;
-                is_indent_type_dropDown.value=false;
-              }
-              if(indent_no!=""){
+              Get.toNamed(RoutesName.create_bulk_indent_screen);
+              // indent_type_controller.clear();
+              // is_Showindent.value=true;
+              // is_indent_type_dropDown.value=false;
+              // if(indent_no!="" ){
+              //   is_Showindent.value=true;
+              //   is_indent_type_dropDown.value=false;
+              // }
+              /*if(indent_no!=""){
                 Get.toNamed(RoutesName.create_bulk_indent_screen);
-              }
+              }*/
 
               /*else{
                 is_Showindent.value=true;
@@ -274,6 +285,10 @@ class BulkIndentViewModel extends GetxController{
     }
     if(quantity_controller.text.isEmpty){
       Utils.showErrorToastification("Message!", "Please Enter Quantity ");
+      return;
+    }
+    if( quantity_controller.text=="0"){
+      Utils.showErrorToastification("Message!", "Your Quantity Cannot be Zero");
       return;
     }
     if(discount_controller.text.isEmpty){

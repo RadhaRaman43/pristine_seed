@@ -13,6 +13,8 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:signalr_netcore/hub_connection.dart';
+import 'package:signalr_netcore/hub_connection_builder.dart';
 import '../../current_location/background_task.dart';
 import '../../models/checkInModel/employee_master_model.dart';
 import '../../models/location/LocationData.dart';
@@ -72,7 +74,7 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
 
   RxString current_status = 'Fetching'.obs;
   RxList<EmployeeDetailsGetResponse> employeeList = <EmployeeDetailsGetResponse>[].obs;
-
+  HubConnection? hubConnection;
   @override
   void onInit() async {
     email=await sessionManagement.getEmail() ?? '';
@@ -86,6 +88,7 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
     name.value=await sessionManagement.getName() ?? '';
     imageUrl.value = await sessionManagement.getProfile() ?? '';
     WidgetsBinding.instance?.addObserver(this);
+
 
     if (imageUrl.value.isNotEmpty) {
       imageUrl.value = AppUrl.BASE_URL + '/' + imageUrl.value.toString();

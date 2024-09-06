@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
 import 'package:navigation_drawer_flutter/viewModel/CheckIn_vm/check_in_vm.dart';
 import 'dart:io';
@@ -30,351 +31,357 @@ class CheckInScreen extends StatelessWidget{
       option.vehicleNumber!;
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        appBar:AppBar(
-            backgroundColor: AllColors.primaryDark1,
-            iconTheme: IconThemeData(
-              color: AllColors.whiteColor,
-            ),
-            title:Text(
-              'Check In',
-              style: GoogleFonts.poppins(
+      return WillPopScope(
+        onWillPop: () async  {
+          Get.offAllNamed(RoutesName.homeScreen);
+          return false;
+        },
+        child: Scaffold(
+          appBar:AppBar(
+              backgroundColor: AllColors.primaryDark1,
+              iconTheme: IconThemeData(
                 color: AllColors.whiteColor,
-                fontSize: AllFontSize.twentee,
-                fontWeight: FontWeight.w700,
               ),
-            ),
-        ),
-        drawer: CustomDrawer(),
-        body: Container(
-          width: double.infinity,
-          height: size.height,
-          child: Obx(() {
-            if (check_in_page_controller.loading.value) {
-              // Show a progress indicator while loading
-              return Center(
-                child:CircularProgressIndicator(color: AllColors.primaryDark1,), // You can use any progress indicator here
-              /*  BlurryModalProgressHUD(
-                  inAsyncCall: check_in_page_controller.loading.value,
-                  blurEffectIntensity: 4,
-                  progressIndicator: SpinKitFadingCircle(color: AllColors.primaryDark1,),
-                  dismissible: false,
-                  opacity: 0.4,
-                  color: Colors.black54,
-                  child: Scaffold(),
-                ),*/
+              title:Text(
+                'Check In',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+          ),
+          drawer: CustomDrawer(),
+          body: Container(
+            width: double.infinity,
+            height: size.height,
+            child: Obx(() {
+              if (check_in_page_controller.loading.value) {
+                // Show a progress indicator while loading
+                return Center(
+                  child:CircularProgressIndicator(color: AllColors.primaryDark1,), // You can use any progress indicator here
+                /*  BlurryModalProgressHUD(
+                    inAsyncCall: check_in_page_controller.loading.value,
+                    blurEffectIntensity: 4,
+                    progressIndicator: SpinKitFadingCircle(color: AllColors.primaryDark1,),
+                    dismissible: false,
+                    opacity: 0.4,
+                    color: Colors.black54,
+                    child: Scaffold(),
+                  ),*/
 
-              );
-            } else {
-              // Show the UI when not loading
-              return Column(
-                children: [
-                  //todo header section
+                );
+              } else {
+                // Show the UI when not loading
+                return Column(
+                  children: [
+                    //todo header section
 
-                  Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.only(left: 10, right: 10, top: 12),
-                      shrinkWrap: true,
-                      children: [
-                        Container(
-                          // padding: EdgeInsets.only(top: 15, left: 10, right: 10),
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              children: [
-                                Obx((){
-                                  return Visibility(visible: check_in_page_controller.isVehicle.value,
-                                    child: bindVehicleTypeDropDown(context), );
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.only(left: 10, right: 10, top: 12),
+                        shrinkWrap: true,
+                        children: [
+                          Container(
+                            // padding: EdgeInsets.only(top: 15, left: 10, right: 10),
+                            child: Form(
+                              key: _formKey,
+                              child: Column(
+                                children: [
+                                  Obx((){
+                                    return Visibility(visible: check_in_page_controller.isVehicle.value,
+                                      child: bindVehicleTypeDropDown(context), );
 
-                                }),
-                                //todo Dropdown Widget
+                                  }),
+                                  //todo Dropdown Widget
 
 
-                                SizedBox(height: size.height * 0.02),
-                                //todo place TextFormField
-                                TextFormField(
-                                  controller:
-                                  check_in_page_controller.place_edit_controller.value,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Place can't be blank";
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    // Clear the error when the user enters a value
-                                    if (value.isNotEmpty) {
-                                      _formKey.currentState?.validate();
-                                    }
-                                  },
-                                  maxLength: 100,
-                                  decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.two,
-                                        horizontal: AllFontSize.one),
-                                    hintText: "Enter Place Name",
-                                    labelText: 'Place',
-                                    hintStyle: GoogleFonts.poppins(
-                                      color: AllColors.lightblackColor,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: AllFontSize.ten,
-                                    ),
-                                    labelStyle: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: AllFontSize.sisxteen,
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AllColors
-                                              .primaryDark1), // Change the color to green
-                                    ),
-                                  ),
-                                  cursorColor: AllColors.primaryDark1,
-                                ),
-                                SizedBox(height: size.height * 0.02),
-
-                                //todo working with Checkbox
-                                Row(
-                                  children: [
-                                    Obx(() {
-                                      return Checkbox(
-                                        value: check_in_page_controller
-                                            .isCheckBoxChecked.value,
-                                        activeColor: AllColors.primaryDark1,
-                                        onChanged: (value) {
-                                          check_in_page_controller.checkin_opening_km_controller.value.text='';
-                                          check_in_page_controller.vehicle_no_controller.text='';
-                                          check_in_page_controller.isCheckBoxChecked.value = value ?? false;
-                                        },
-                                      );
-                                    }),
-                                    Text(
-                                      'Working With',
-                                      style: GoogleFonts.poppins(
+                                  SizedBox(height: size.height * 0.02),
+                                  //todo place TextFormField
+                                  TextFormField(
+                                    controller:
+                                    check_in_page_controller.place_edit_controller.value,
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return "Place can't be blank";
+                                      }
+                                      return null;
+                                    },
+                                    onChanged: (value) {
+                                      // Clear the error when the user enters a value
+                                      if (value.isNotEmpty) {
+                                        _formKey.currentState?.validate();
+                                      }
+                                    },
+                                    maxLength: 100,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(
+                                          vertical: AllFontSize.two,
+                                          horizontal: AllFontSize.one),
+                                      hintText: "Enter Place Name",
+                                      labelText: 'Place',
+                                      hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten,
+                                      ),
+                                      labelStyle: GoogleFonts.poppins(
                                         color: AllColors.primaryDark1,
                                         fontWeight: FontWeight.w700,
-                                        fontSize: AllFontSize.fourtine,
+                                        fontSize: AllFontSize.sisxteen,
+                                      ),
+                                      focusedBorder: UnderlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: AllColors
+                                                .primaryDark1), // Change the color to green
                                       ),
                                     ),
-                                  ],
-                                ),
-                                //todo working with employess Dropdown Widget
-                                Obx(
-                                      () => Visibility(
-                                    visible: check_in_page_controller.isCheckBoxChecked.value,
-                                    child: bindemployeeDropDown(context),
+                                    cursorColor: AllColors.primaryDark1,
                                   ),
-                                ),
-                                //todo vehivle number......
-                                Obx(
-                                      () => Visibility(
-                                    visible: (check_in_page_controller.selected_vehicle_type!.value.isMaintainKm!=null && check_in_page_controller.selected_vehicle_type!.value.isMaintainKm!>0 && check_in_page_controller.isCheckBoxChecked==false)
-                                        && check_in_page_controller.isVehicleHiding.value==true,
-                                    child:Column(
-                                      children: [
-                                        Obx(() {
-                                          return Visibility(
-                                              visible:check_in_page_controller.isvehicleNo.value,
-                                              child: bindVehicleNoDropDown(context));
-                                        },
-                                        ),
+                                  SizedBox(height: size.height * 0.02),
 
-                                        //child: bindVehicleNoDropDown(context)),
-                                        SizedBox(height: size.height * 0.02),
-                                        bindOpeningkm(context),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-
-                                SizedBox(height: size.height * 0.04),
-                                //todo Image Uploader Pickers
-                                Obx(() {
-                                  return Row(
-                                    mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                  //todo working with Checkbox
+                                  Row(
                                     children: [
-                                      Visibility(
-                                        visible: true,
-                                        child: Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                check_in_page_controller.getFrontImage('CheckIn','');
-                                                print('hjgh');
-                                              },
-                                              child: DottedBorder(
-                                                color: Colors.grey,
-                                                strokeWidth: 2,
-                                                borderType: BorderType.RRect,
-                                                radius: Radius.circular(20),
-                                                dashPattern: [10, 5, 10, 5],
-                                                child: Container(
-                                                  width: size.width * 0.40,
-                                                  height: size.height * 0.22,
-                                                  child: check_in_page_controller
-                                                      .inFront_image_path
-                                                      .isNotEmpty
-                                                      ? ClipRRect(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(20.0),
-                                                    child: kIsWeb
-                                                        ? Image.network(
-                                                      check_in_page_controller
-                                                          .inFront_image_path
-                                                          .toString(),
-                                                      fit: BoxFit
-                                                          .cover, // Use BoxFit.cover to make the image fit
-                                                    )
-                                                        : Image.file(
-                                                      File(check_in_page_controller
-                                                          .inFront_image_path
-                                                          .toString()),
-                                                      fit: BoxFit
-                                                          .cover, // Use BoxFit.cover to make the image fit
-                                                    ),
-                                                  )
-                                                      : Icon(
-                                                    Icons.camera,
-                                                    size: 60,
-                                                    color: AllColors
-                                                        .primaryDark1,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              'Front Image',
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: AllFontSize.fourtine,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      Visibility(
-                                        visible: !check_in_page_controller
-                                            .isCheckBoxChecked.value && check_in_page_controller.isManiTainKm.value>0,
-                                        child: Column(
-                                          children: [
-                                            GestureDetector(
-                                              onTap: () async {
-                                                check_in_page_controller
-                                                    .getBackImage('CheckIn');
-                                              },
-                                              child: DottedBorder(
-                                                color: Colors.grey,
-                                                strokeWidth: 2,
-                                                borderType: BorderType.RRect,
-                                                radius: Radius.circular(20),
-                                                dashPattern: [10, 5, 10, 5],
-                                                child: Container(
-                                                  width: size.width * 0.40,
-                                                  height: size.height * 0.22,
-                                                  child: check_in_page_controller
-                                                      .inBack_image_path
-                                                      .isNotEmpty
-                                                      ? ClipRRect(
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(20.0),
-                                                    child: kIsWeb
-                                                        ? Image.network(
-                                                      check_in_page_controller
-                                                          .inBack_image_path
-                                                          .toString(),
-                                                      fit: BoxFit
-                                                          .cover, // Use BoxFit.cover to make the image fit
-                                                    )
-                                                        : Image.file(
-                                                      File(check_in_page_controller
-                                                          .inBack_image_path
-                                                          .toString()),
-                                                      fit: BoxFit
-                                                          .cover, // Use BoxFit.cover to make the image fit
-                                                    ),
-                                                  )
-                                                      : Icon(
-                                                    Icons.camera,
-                                                    size: 60,
-                                                    color: AllColors
-                                                        .primaryDark1,
-                                                  ), // Placeholder icon
-                                                ),
-                                              ),
-                                            ),
-                                            SizedBox(height: 6),
-                                            Text(
-                                              'Back Image',
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontWeight: FontWeight.w700,
-                                                fontSize: AllFontSize.fourtine,
-                                              ),
-                                            ),
-                                          ],
+                                      Obx(() {
+                                        return Checkbox(
+                                          value: check_in_page_controller
+                                              .isCheckBoxChecked.value,
+                                          activeColor: AllColors.primaryDark1,
+                                          onChanged: (value) {
+                                            check_in_page_controller.checkin_opening_km_controller.value.text='';
+                                            check_in_page_controller.vehicle_no_controller.text='';
+                                            check_in_page_controller.isCheckBoxChecked.value = value ?? false;
+                                          },
+                                        );
+                                      }),
+                                      Text(
+                                        'Working With',
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: AllFontSize.fourtine,
                                         ),
                                       ),
                                     ],
-                                  );
-                                }),
-                                SizedBox(height: size.height * 0.04),
-                                //todo submit button ui
-                                Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  // Space between the buttons
-                                  children: [
-                                    Expanded(
-                                      child: DefaultButton(
-                                        text: "Submit",
-                                        press: () {
-                                          check_in_page_controller.submitCheckInDataApi1(
-                                              check_in_page_controller.place_edit_controller.value);
-                                        },
-                                        loading: check_in_page_controller.loading.value,
+                                  ),
+                                  //todo working with employess Dropdown Widget
+                                  Obx(
+                                        () => Visibility(
+                                      visible: check_in_page_controller.isCheckBoxChecked.value,
+                                      child: bindemployeeDropDown(context),
+                                    ),
+                                  ),
+                                  //todo vehivle number......
+                                  Obx(
+                                        () => Visibility(
+                                      visible: (check_in_page_controller.selected_vehicle_type!.value.isMaintainKm!=null && check_in_page_controller.selected_vehicle_type!.value.isMaintainKm!>0 && check_in_page_controller.isCheckBoxChecked==false)
+                                          && check_in_page_controller.isVehicleHiding.value==true,
+                                      child:Column(
+                                        children: [
+                                          Obx(() {
+                                            return Visibility(
+                                                visible:check_in_page_controller.isvehicleNo.value,
+                                                child: bindVehicleNoDropDown(context));
+                                          },
+                                          ),
+
+                                          //child: bindVehicleNoDropDown(context)),
+                                          SizedBox(height: size.height * 0.02),
+                                          bindOpeningkm(context),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(width: 16),
-                                    // Adjust the spacing as needed
-                                    Expanded(
-                                      child: DefaultButton(
-                                        text: "Reset",
-                                        press: () {
-                                          _formKey.currentState?.reset();
-                                          check_in_page_controller.typeAheadControllerVehicle.clear();
-                                          check_in_page_controller.place_edit_controller.value.clear();
-                                          check_in_page_controller.typeAheadControllerEmployee.clear();
-                                          check_in_page_controller.isCheckBoxChecked.value = false;
-                                          check_in_page_controller.inFront_image_path.value = '';
-                                          check_in_page_controller.inBack_image_path.value = '';
-                                          // check_in_page_controller.resetField();
-                                          check_in_page_controller.vehicleNoList.value=[] ;
-                                          check_in_page_controller.vehicle_no_controller.clear();
-                                          check_in_page_controller.isVehicleHiding.value=false;
-                                          check_in_page_controller.isVehicle.value=true;
-                                        },
-                                        loading: check_in_page_controller.loading.value = false,
+                                  ),
+
+                                  SizedBox(height: size.height * 0.04),
+                                  //todo Image Uploader Pickers
+                                  Obx(() {
+                                    return Row(
+                                      mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Visibility(
+                                          visible: true,
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  check_in_page_controller.getFrontImage('CheckIn','');
+                                                  print('hjgh');
+                                                },
+                                                child: DottedBorder(
+                                                  color: Colors.grey,
+                                                  strokeWidth: 2,
+                                                  borderType: BorderType.RRect,
+                                                  radius: Radius.circular(20),
+                                                  dashPattern: [10, 5, 10, 5],
+                                                  child: Container(
+                                                    width: size.width * 0.40,
+                                                    height: size.height * 0.22,
+                                                    child: check_in_page_controller
+                                                        .inFront_image_path
+                                                        .isNotEmpty
+                                                        ? ClipRRect(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(20.0),
+                                                      child: kIsWeb
+                                                          ? Image.network(
+                                                        check_in_page_controller
+                                                            .inFront_image_path
+                                                            .toString(),
+                                                        fit: BoxFit
+                                                            .cover, // Use BoxFit.cover to make the image fit
+                                                      )
+                                                          : Image.file(
+                                                        File(check_in_page_controller
+                                                            .inFront_image_path
+                                                            .toString()),
+                                                        fit: BoxFit
+                                                            .cover, // Use BoxFit.cover to make the image fit
+                                                      ),
+                                                    )
+                                                        : Icon(
+                                                      Icons.camera,
+                                                      size: 60,
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                'Front Image',
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: AllFontSize.fourtine,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        Visibility(
+                                          visible: !check_in_page_controller
+                                              .isCheckBoxChecked.value && check_in_page_controller.isManiTainKm.value>0,
+                                          child: Column(
+                                            children: [
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  check_in_page_controller
+                                                      .getBackImage('CheckIn');
+                                                },
+                                                child: DottedBorder(
+                                                  color: Colors.grey,
+                                                  strokeWidth: 2,
+                                                  borderType: BorderType.RRect,
+                                                  radius: Radius.circular(20),
+                                                  dashPattern: [10, 5, 10, 5],
+                                                  child: Container(
+                                                    width: size.width * 0.40,
+                                                    height: size.height * 0.22,
+                                                    child: check_in_page_controller
+                                                        .inBack_image_path
+                                                        .isNotEmpty
+                                                        ? ClipRRect(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(20.0),
+                                                      child: kIsWeb
+                                                          ? Image.network(
+                                                        check_in_page_controller
+                                                            .inBack_image_path
+                                                            .toString(),
+                                                        fit: BoxFit
+                                                            .cover, // Use BoxFit.cover to make the image fit
+                                                      )
+                                                          : Image.file(
+                                                        File(check_in_page_controller
+                                                            .inBack_image_path
+                                                            .toString()),
+                                                        fit: BoxFit
+                                                            .cover, // Use BoxFit.cover to make the image fit
+                                                      ),
+                                                    )
+                                                        : Icon(
+                                                      Icons.camera,
+                                                      size: 60,
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                    ), // Placeholder icon
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 6),
+                                              Text(
+                                                'Back Image',
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontWeight: FontWeight.w700,
+                                                  fontSize: AllFontSize.fourtine,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }),
+                                  SizedBox(height: size.height * 0.04),
+                                  //todo submit button ui
+                                  Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                    // Space between the buttons
+                                    children: [
+                                      Expanded(
+                                        child: DefaultButton(
+                                          text: "Submit",
+                                          press: () {
+                                            check_in_page_controller.submitCheckInDataApi1(
+                                                check_in_page_controller.place_edit_controller.value);
+                                          },
+                                          loading: check_in_page_controller.loading.value,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                )
-                              ],
+                                      SizedBox(width: 16),
+                                      // Adjust the spacing as needed
+                                      Expanded(
+                                        child: DefaultButton(
+                                          text: "Reset",
+                                          press: () {
+                                            _formKey.currentState?.reset();
+                                            check_in_page_controller.typeAheadControllerVehicle.clear();
+                                            check_in_page_controller.place_edit_controller.value.clear();
+                                            check_in_page_controller.typeAheadControllerEmployee.clear();
+                                            check_in_page_controller.isCheckBoxChecked.value = false;
+                                            check_in_page_controller.inFront_image_path.value = '';
+                                            check_in_page_controller.inBack_image_path.value = '';
+                                            // check_in_page_controller.resetField();
+                                            check_in_page_controller.vehicleNoList.value=[] ;
+                                            check_in_page_controller.vehicle_no_controller.clear();
+                                            check_in_page_controller.isVehicleHiding.value=false;
+                                            check_in_page_controller.isVehicle.value=true;
+                                          },
+                                          loading: check_in_page_controller.loading.value = false,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              );
-            }
-          }),
+                  ],
+                );
+              }
+            }),
+          ),
         ),
       );
   }

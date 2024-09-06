@@ -15,6 +15,7 @@ import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_man
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
+import '../../constants/static_methods.dart';
 import '../../models/reasonModel/reason_master_response.dart';
 import '../../models/servicePreventiveModel/createPreventiveCalenderModel.dart';
 import '../../models/servicePreventiveModel/indent_header_line_create_model.dart';
@@ -144,6 +145,7 @@ class PreventiveViewModel extends GetxController {
 
   getServicePreventiveList(int is_done, int page_no, String date_filter,
       {String globle_search_value = ""}) {
+    var date=StaticMethod.convertDateFormat(invoice_date_search_controller.text);
     Map data;
     if (globle_search_value != null &&
         globle_search_value!.isNotEmpty &&
@@ -170,9 +172,8 @@ class PreventiveViewModel extends GetxController {
         "service_status": "",
         "is_done": is_done,
         "email_id": email,
-        "invoice_date": invoice_date_search_controller.value.text.isEmpty
-            ? ""
-            : invoice_date_search_controller.value.text,
+       // "invoice_date": invoice_date_search_controller.value.text.isEmpty ? "" : invoice_date_search_controller.value.text,
+        "invoice_date":date!.isEmpty ? "" : date,
         "customer_no_name": customer_no_search_controller.value.text.isEmpty
             ? ""
             : customer_no_search_controller.value.text,

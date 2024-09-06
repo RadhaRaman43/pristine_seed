@@ -12,6 +12,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 //import 'package:marquee/marquee.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/repository/installation_repositiory/service_installation_repository.dart';
@@ -160,6 +161,7 @@ class InstallationViewModel extends GetxController {
   }
 
   getServiceInstallationList(int is_done, int page_no,String date_filter,{String globle_search_value=""}) {
+    var date=StaticMethod.convertDateFormat(invoice_date_search_controller.text);
     Map data;
     if(globle_search_value!=null && globle_search_value.isNotEmpty && globle_search_value!=""){
       print("fjdbfgjdb");
@@ -187,7 +189,8 @@ class InstallationViewModel extends GetxController {
         "service_status": "",
         "is_done": is_done,
         "email_id": email,
-        "invoice_date":invoice_date_search_controller.value.text.isEmpty?"":invoice_date_search_controller.value.text,
+       // "invoice_date":invoice_date_search_controller.value.text.isEmpty?"":invoice_date_search_controller.value.text,
+        "invoice_date":date!.isEmpty?"":date,
         "customer_no_name": customer_no_search_controller.value.text.isEmpty?"":customer_no_search_controller.value.text,
         "item_no_name": item_no_search_controller.value.text.isEmpty?"":item_no_search_controller.text,
         "serial_no": serial_no_search_controller.value.text.isEmpty?"":serial_no_search_controller.text,

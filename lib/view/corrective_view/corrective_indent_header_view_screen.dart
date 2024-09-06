@@ -1984,8 +1984,6 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                             double current_unitPrice = double.parse((indent_deatils_page_controller.unit_price_controller.text.isEmpty) ? "0" : indent_deatils_page_controller.unit_price_controller.text);
                             double current_discount_per = double.parse((indent_deatils_page_controller.discount_controller.text.isEmpty) ? "0" : indent_deatils_page_controller.discount_controller.text);
 
-
-
                             indent_deatils_page_controller.unit_price_controller.text= (indent_deatils_page_controller.unit_price-(indent_deatils_page_controller.unit_price*current_discount_per/100)).toStringAsFixed(2);
                             current_unitPrice = double.parse((indent_deatils_page_controller.unit_price_controller.text.isEmpty) ? "0" : indent_deatils_page_controller.unit_price_controller.text);
 

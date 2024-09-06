@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
@@ -20,136 +21,142 @@ class CheckInApprovalScreen extends StatelessWidget{
      Size size=Get.size;
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-     appBar: AppBar(
-       title: Row(
-         children: [
-           Text(
-             'Check In Approval List',
-             style: GoogleFonts.poppins(
-               color: AllColors.whiteColor,
-               fontSize: AllFontSize.twentee,
-               fontWeight: FontWeight.w700,
+   return WillPopScope(
+     onWillPop: () async {
+       Get.offAllNamed(RoutesName.homeScreen);
+       return false;
+     },
+     child: Scaffold(
+       appBar: AppBar(
+         title: Row(
+           children: [
+             Text(
+               'Check In Approval List',
+               style: GoogleFonts.poppins(
+                 color: AllColors.whiteColor,
+                 fontSize: AllFontSize.twentee,
+                 fontWeight: FontWeight.w700,
+               ),
              ),
-           ),
-         ],
+           ],
+         ),
+         iconTheme: IconThemeData(
+           color: AllColors.whiteColor, // Change this to the desired color
+         ),
+         backgroundColor: AllColors.primaryDark1,
        ),
-       iconTheme: IconThemeData(
-         color: AllColors.whiteColor, // Change this to the desired color
-       ),
-       backgroundColor: AllColors.primaryDark1,
-     ),
-     drawer: CustomDrawer(),
-     backgroundColor: Colors.white,
-     body: Container(
-       width: double.infinity,
-       height: size.height,
-       child: Obx(() {
-         if (checkApproval_page_controller.loading.value) {
-           // Show a progress indicator while loading
-           return Center(
-             child:
-             CircularProgressIndicator(color: AllColors.primaryDark1), // You can use any progress indicator here
-           );
-         } else {
-           // Show the UI when not loading
-           return Column(
-             children: [
+       drawer: CustomDrawer(),
+       backgroundColor: Colors.white,
+       body: Container(
+         width: double.infinity,
+         height: size.height,
+         child: Obx(() {
+           if (checkApproval_page_controller.loading.value) {
+             // Show a progress indicator while loading
+             return Center(
+               child:
+               CircularProgressIndicator(color: AllColors.primaryDark1), // You can use any progress indicator here
+             );
+           } else {
+             // Show the UI when not loading
+             return Column(
+               children: [
 
-               Expanded(
-                 child: SingleChildScrollView(
-                   child: Container(
-                     padding: EdgeInsets.only(top: 15, left: 10, right: 10),
-                     child: Column(
-                       children: [
-                         Container(
-                           child: Row(
-                             children: [
-                               Container(
-                                   width: (size.width - 20) * 0.40,
-                                   child: bindDatePicker(context)),
-                               Container(
-                                 width: (size.width - 20) * 0.60,
-                                 padding: EdgeInsets.only(left: 10),
-                                 //child: bindEmployeeDropDown(context),
-                                 child: bindemployeeDropDown(context),
-                               )
-                             ],
-                           ),
-                         ),
-                         //todo like dislike button section
-                         Container(
-                           padding: EdgeInsets.only(top: 10),
-                           child: Row(
-                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 Expanded(
+                   child: SingleChildScrollView(
+                     child: Container(
+                       padding: EdgeInsets.only(top: 15, left: 10, right: 10),
+                       child: Column(
+                         children: [
+                           Container(
+                             child: Row(
                                children: [
-                                 Flexible(
-                                   child: TextButton.icon(
-                                     label: Text(
-                                       "Pending : ${checkApproval_page_controller.pending_count}",
-                                       style: GoogleFonts.poppins(
-                                           fontSize: AllFontSize.twelve, color: Colors.blue,fontWeight: FontWeight.w700),
-                                     ),
-                                     icon: SizedBox.shrink(),//Icon(Icons.pending,),
-                                     onPressed: () async {
-                                       checkApproval_page_controller.selection_type = "";
-                                       checkApproval_page_controller.getApprovalList();
-                                     },
-                                     style: TextButton.styleFrom(
-                                       shadowColor: checkApproval_page_controller.selection_type == "" ? AllColors.ripple_green : null,
-                                       backgroundColor:  checkApproval_page_controller.selection_type == "" ? AllColors.ripple_green : null,
-                                     ),
-                                   ),
-                                 ),
-                                 Flexible(
-                                   child: TextButton.icon(
-                                     label: Text(
-                                       "Approved : ${checkApproval_page_controller.like_count}",
-                                       style: GoogleFonts.poppins(
-                                           fontSize: AllFontSize.twelve, color: AllColors.primaryDark1,fontWeight: FontWeight.w700),
-                                     ),
-                                     icon: SizedBox.shrink(),//Icon(Icons.thumb_up, color: Colors.green,),
-                                     onPressed: () async {
-                                       checkApproval_page_controller.selection_type = "Like";
-                                       checkApproval_page_controller.getApprovalList();
-                                     },
-                                     style: TextButton.styleFrom(
-                                       shadowColor: checkApproval_page_controller.selection_type == "Like"? AllColors.ripple_green : null,
-                                       backgroundColor: checkApproval_page_controller.selection_type == "Like" ? AllColors.ripple_green : null,
-                                     ),
-                                   ),
-                                 ),
-                                 Flexible(
-                                   child: TextButton.icon(
-                                     label: Text(
-                                       "Rejected : ${checkApproval_page_controller.dislike_count}",
-                                       style: GoogleFonts.poppins(
-                                           fontSize: AllFontSize.twelve, color: AllColors.redColor,fontWeight: FontWeight.w700),
-                                     ),
-                                     icon:SizedBox.shrink(), //Icon(Icons.thumb_down, color: Colors.red),
-                                     onPressed: () async {
-                                       checkApproval_page_controller.selection_type =
-                                       "Dislike";
-                                       checkApproval_page_controller.getApprovalList();
-                                     },
-                                     style: TextButton.styleFrom(
-                                       shadowColor: checkApproval_page_controller.selection_type == "Dislike" ? AllColors.ripple_green : null,
-                                       backgroundColor:  checkApproval_page_controller.selection_type == "Dislike" ? AllColors.ripple_green : null,
+                                 Container(
+                                     width: (size.width - 20) * 0.40,
+                                     child: bindDatePicker(context)),
+                                 Container(
+                                   width: (size.width - 20) * 0.60,
+                                   padding: EdgeInsets.only(left: 10),
+                                   //child: bindEmployeeDropDown(context),
+                                   child: bindemployeeDropDown(context),
+                                 )
+                               ],
+                             ),
+                           ),
+                           //todo like dislike button section
+                           Container(
+                             padding: EdgeInsets.only(top: 10),
+                             child: Row(
+                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                 children: [
+                                   Flexible(
+                                     child: TextButton.icon(
+                                       label: Text(
+                                         "Pending : ${checkApproval_page_controller.pending_count}",
+                                         style: GoogleFonts.poppins(
+                                             fontSize: AllFontSize.twelve, color: Colors.blue,fontWeight: FontWeight.w700),
+                                       ),
+                                       icon: SizedBox.shrink(),//Icon(Icons.pending,),
+                                       onPressed: () async {
+                                         checkApproval_page_controller.selection_type = "";
+                                         checkApproval_page_controller.getApprovalList();
+                                       },
+                                       style: TextButton.styleFrom(
+                                         shadowColor: checkApproval_page_controller.selection_type == "" ? AllColors.ripple_green : null,
+                                         backgroundColor:  checkApproval_page_controller.selection_type == "" ? AllColors.ripple_green : null,
+                                       ),
                                      ),
                                    ),
-                                 ),
-                               ]),
-                         ),
-                         bindListLayout(),
-                       ],
+                                   Flexible(
+                                     child: TextButton.icon(
+                                       label: Text(
+                                         "Approved : ${checkApproval_page_controller.like_count}",
+                                         style: GoogleFonts.poppins(
+                                             fontSize: AllFontSize.twelve, color: AllColors.primaryDark1,fontWeight: FontWeight.w700),
+                                       ),
+                                       icon: SizedBox.shrink(),//Icon(Icons.thumb_up, color: Colors.green,),
+                                       onPressed: () async {
+                                         checkApproval_page_controller.selection_type = "Like";
+                                         checkApproval_page_controller.getApprovalList();
+                                       },
+                                       style: TextButton.styleFrom(
+                                         shadowColor: checkApproval_page_controller.selection_type == "Like"? AllColors.ripple_green : null,
+                                         backgroundColor: checkApproval_page_controller.selection_type == "Like" ? AllColors.ripple_green : null,
+                                       ),
+                                     ),
+                                   ),
+                                   Flexible(
+                                     child: TextButton.icon(
+                                       label: Text(
+                                         "Rejected : ${checkApproval_page_controller.dislike_count}",
+                                         style: GoogleFonts.poppins(
+                                             fontSize: AllFontSize.twelve, color: AllColors.redColor,fontWeight: FontWeight.w700),
+                                       ),
+                                       icon:SizedBox.shrink(), //Icon(Icons.thumb_down, color: Colors.red),
+                                       onPressed: () async {
+                                         checkApproval_page_controller.selection_type =
+                                         "Dislike";
+                                         checkApproval_page_controller.getApprovalList();
+                                       },
+                                       style: TextButton.styleFrom(
+                                         shadowColor: checkApproval_page_controller.selection_type == "Dislike" ? AllColors.ripple_green : null,
+                                         backgroundColor:  checkApproval_page_controller.selection_type == "Dislike" ? AllColors.ripple_green : null,
+                                       ),
+                                     ),
+                                   ),
+                                 ]),
+                           ),
+                           bindListLayout(),
+                         ],
+                       ),
                      ),
                    ),
                  ),
-               ),
-             ],
-           );
-         }
-       }),
+               ],
+             );
+           }
+         }),
+       ),
      ),
    );
   }
