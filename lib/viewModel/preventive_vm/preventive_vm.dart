@@ -632,7 +632,13 @@ class PreventiveViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
+              item_no = "";
+              is_warrenty=0 ;
+              unit_price=0;
+              unit_price_controller.clear();
+              item_price_controller.clear();
               service_indent_header_create_list.value = response;
+
               Navigator.pop(context);
               /*IndentHeaderCreateApi(
                   service_indent_header_create_list[0].indentNo!);*/

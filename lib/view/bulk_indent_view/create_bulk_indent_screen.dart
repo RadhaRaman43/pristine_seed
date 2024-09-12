@@ -510,7 +510,9 @@ class CreateBulkIndentScreen extends StatelessWidget{
               SizedBox(
                 height: 3,
               ),
-              Obx(() => bindList(context),)
+              Obx(() =>Container(child: Expanded(child:   bindList(context),)))
+
+
              /*
               Obx(
                     () {
@@ -1757,7 +1759,13 @@ class CreateBulkIndentScreen extends StatelessWidget{
           onChanged: (value) {
             if(value.isEmpty){
               FocusScope.of(context).unfocus();
+              create_bulk_controller.item_no_controller.clear();
+              create_bulk_controller.item_no ="";
+              create_bulk_controller.item_Qty = 0;
+              create_bulk_controller. is_warrenty =0;
+              create_bulk_controller.unit_price = 0;
             }
+
             create_bulk_controller.item_no_controller.text= value;
             create_bulk_controller.unit_price_controller.text="";
           },
@@ -2042,10 +2050,16 @@ class CreateBulkIndentScreen extends StatelessWidget{
         subtitle: Container(
           child: Table(
             columnWidths: {
-              0: FlexColumnWidth(1.9),
+           /*   0: FlexColumnWidth(1.9),
               1: FlexColumnWidth(1.3),
               2: FlexColumnWidth(1.5),
-              3: FlexColumnWidth(1.1),
+              3: FlexColumnWidth(1.1),*/
+
+              0: FlexColumnWidth(2.2),
+              1: FlexColumnWidth(1.5),
+              2: FlexColumnWidth(1.5),
+              3: FlexColumnWidth(1.3),
+
               //3: FlexColumnWidth(0.8),
             },
             children: [

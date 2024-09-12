@@ -281,9 +281,7 @@ class BulkIndentListScreen extends StatelessWidget{
     return InkWell(
       child: ListTile(
           onTap: () {
-
             bulkIndentController.BulkHeaderCreateApi(bulkIndentController.bulk_indent_list[position].indentNo!);
-
           },
           subtitle: Column(
             children: [
@@ -530,10 +528,11 @@ class BulkIndentListScreen extends StatelessWidget{
                                 )),
                                 onPressed: () {
                                   Get.back();
-
+                                  bulkIndentController.pageNumber=0;
                                   bulkIndentController
                                       .getBulkIndentList(
                                     bulkIndentController.pageNumber,bulkIndentController.status.value,);
+
                                /*     if(bulkIndentController.indent_status_controller.text=='Pending'){
                                       bulkIndentController.status.value="Pending";
                                     }if(bulkIndentController.indent_status_controller.text=="Completed"){
@@ -589,8 +588,6 @@ class BulkIndentListScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-
-
                       ],
                     ),
                   ),

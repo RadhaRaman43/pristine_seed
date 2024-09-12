@@ -1568,6 +1568,11 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
             if (value.isEmpty) {
               preventive_indent_detils_page_controller.item_no_description_controller
                   .clear();
+              preventive_indent_detils_page_controller.item_no = "";
+              preventive_indent_detils_page_controller.is_warrenty=0 ;
+              preventive_indent_detils_page_controller. unit_price=0;
+              preventive_indent_detils_page_controller. unit_price_controller.clear();
+              preventive_indent_detils_page_controller. item_price_controller.clear();
             }
           },
           cursorColor: AllColors.primaryDark1,

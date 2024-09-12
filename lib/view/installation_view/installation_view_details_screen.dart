@@ -2280,12 +2280,6 @@ class InstallationViewDetailsScreen extends StatelessWidget {
       },
     );
   }
-
-
-  void scrollToEnd() {
-
-}
-
   bindListView(BuildContext context) {
     ScrollController scrollController=ScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {

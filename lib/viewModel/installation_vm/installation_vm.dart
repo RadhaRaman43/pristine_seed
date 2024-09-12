@@ -778,6 +778,11 @@ class InstallationViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
+             item_no_controller.clear();
+              item_no ="";
+              item_Qty = 0;
+              is_warrenty =0;
+              unit_price = 0;
               service_indent_header_create_list.value = response;
               Navigator.pop(context);
               /*IndentHeaderCreateApi(
