@@ -33,7 +33,6 @@ class ProfileViewModel extends GetxController{
 
 
 
-
     print(email);
 
 

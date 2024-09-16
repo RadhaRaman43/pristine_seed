@@ -270,6 +270,14 @@ class _Drawer extends State<CustomDrawer> {
                                             Navigator.of(context);
                                             break;
 
+
+                                          case 'User Inventory':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            Get.toNamed(RoutesName.service_inventory_screen,preventDuplicates: false);
+                                            Navigator.of(context);
+                                            break;
+
                                         }
                                       },
                                       leading: Icon(

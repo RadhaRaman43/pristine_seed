@@ -775,7 +775,8 @@ class InstallationScreen extends StatelessWidget {
                 ],
               ),
             ],
-          )),
+          )
+      ),
     );
   }
 

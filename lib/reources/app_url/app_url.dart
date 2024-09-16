@@ -163,4 +163,12 @@ class AppUrl {
      static const String bulkIndentHeadercomplete = "$BASE_URL/api/ServiceIndent/IndentHeaderComplete";
      static const String bulkIndentConsumerHeaderMark = "$BASE_URL/api/ServiceIndent/IndentHeaderConsumeMark";
      static const String bulkIndentConsumerLineMark = "$BASE_URL/api/ServiceIndent/IndentLineConsumeMark";
+
+
+
+     //todo service Inventory.....
+     static const String serviceInventoryList= "$BASE_URL/api/ItemMaster/ServiceEngineerInventoryGet";
+     static const String serviceInventoryListview= "$BASE_URL/api/ItemMaster/ServiceEngineerIndentWiseInventoryGet";
+
+
 }

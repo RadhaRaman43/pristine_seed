@@ -77,6 +77,14 @@ class RoutesName{
   static const create_bulk_indent_screen="/create_bulk_indent_screen.dart";
 
 
+  //todo service Inventory....
+
+  static const service_inventory_screen="/service_inventory_screen.dart";
+  static const service_inventory_view_screen="/service_inventory_view_details_screen.dart";
+
+
+
+
 
 
 

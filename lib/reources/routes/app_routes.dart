@@ -47,6 +47,8 @@ import '../../view/profile_view/profile_screen.dart';
 import '../../view/return_indent/return_header_details_view_screen.dart';
 import '../../view/return_indent/return_indent_screen.dart';
 import '../../view/return_indent/return_ndent_add_line.dart';
+import '../../view/service_inventory/service_inventory_screen.dart';
+import '../../view/service_inventory/service_inventory_view_details_screen.dart';
 import '../../view/user_expense/expense_approver_header_view_screen.dart';
 
 class AppRoutes{
@@ -364,6 +366,19 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
      ),
+
+    GetPage(name: RoutesName.service_inventory_screen,
+        page: ()=>ServiceInventoryListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.service_inventory_view_screen,
+        page: ()=>ServiceInventoryViewDetailsScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
 
 
