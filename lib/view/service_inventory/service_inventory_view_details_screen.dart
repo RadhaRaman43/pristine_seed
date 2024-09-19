@@ -187,8 +187,7 @@ class ServiceInventoryViewDetailsScreen extends StatelessWidget{
                     ),
 
                     Tooltip(
-                      message:service_details_page_controller.service_inventory_details_list[index]
-                          .goodQty.toString() ,
+                      message:service_details_page_controller.service_inventory_details_list[index].goodQty.toString(),
                       child: Text(
                         service_details_page_controller.service_inventory_details_list[index]
                             .goodQty.toString(),
