@@ -4,10 +4,11 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
-import '../../models/service_inventory_model/service_inventory_get_model.dart';
-import '../../models/service_inventory_model/service_inventory_view_model.dart';
-import '../../repository/service_inventory_repository/service_inventory_repo.dart';
 
+import '../../../models/service_managment_model_directory/service_inventory_model/service_inventory_get_model.dart';
+import '../../../models/service_managment_model_directory/service_inventory_model/service_inventory_view_model.dart';
+
+import '../../../repository/service_managment_repository_directory/service_inventory_repository/service_inventory_repo.dart';
 class  ServiceInventoryViewModel extends GetxController{
   final _api=ServiceInventoryRepository();
 

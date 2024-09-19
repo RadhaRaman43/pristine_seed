@@ -4,51 +4,51 @@ import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/check_in_approval/check_in_approval_screen.dart';
 import 'package:navigation_drawer_flutter/view/forget_password/forget_password_screen.dart';
 import 'package:navigation_drawer_flutter/view/home_view/home_screen.dart';
-import 'package:navigation_drawer_flutter/view/installation_view/installation_screen.dart';
-import 'package:navigation_drawer_flutter/view/installation_view/installation_view_details_screen.dart';
 import 'package:navigation_drawer_flutter/view/notification_view/notification_screen.dart';
-import 'package:navigation_drawer_flutter/view/order_view/new_order_screen.dart';
-import 'package:navigation_drawer_flutter/view/order_view/order_approval_screen.dart';
-import 'package:navigation_drawer_flutter/view/order_view/order_item_category_screen.dart';
-import 'package:navigation_drawer_flutter/view/order_view/order_item_veriety_screen.dart';
-import 'package:navigation_drawer_flutter/view/order_view/order_screen.dart';
-import 'package:navigation_drawer_flutter/view/preventive_view/preventive_mark_visit.dart';
-import 'package:navigation_drawer_flutter/view/preventive_view/preventive_screen.dart';
-import 'package:navigation_drawer_flutter/view/preventive_view/preventive_view_detail_screen.dart';
-import 'package:navigation_drawer_flutter/view/return_indent/new_return_indent.dart';
 import 'package:navigation_drawer_flutter/view/show_route/show_route.dart';
 import 'package:navigation_drawer_flutter/view/splash_view/splash_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/create_expense_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/expense_approver_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/expense_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/my_expense_screen.dart';
-import '../../view/bulk_indent_view/bulk_indent_screen.dart';
-import '../../view/bulk_indent_view/create_bulk_indent_screen.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
 import '../../view/check_out_view/add_expense_screen.dart';
 import '../../view/check_out_view/check_out.dart';
-import '../../view/corrective_view/corrective_indent_header_view_screen.dart';
-import '../../view/corrective_view/corrective_mark_visit_screen.dart';
-import '../../view/corrective_view/corrective_screen.dart';
-import '../../view/corrective_view/corrective_view_details_screen.dart';
-import '../../view/customer_complain/complain_customer_page.dart';
-import '../../view/customer_complain/customer_complain_screen.dart';
-import '../../view/indent_list/indent_header_details_screen.dart';
-import '../../view/indent_list/indent_list.dart';
-import '../../view/installation_view/indent_header_view_screen.dart';
-import '../../view/installation_view/mark_visit_screen.dart';
 import '../../view/login_view/login_screen.dart';
-import '../../view/order_view/approval_view_cart.dart';
-import '../../view/order_view/view_cart_screen.dart';
-import '../../view/preventive_view/CreatePreventiveCalenderScreen.dart';
-import '../../view/preventive_view/preventive_indent_header_view_screen.dart';
 import '../../view/profile_view/profile_screen.dart';
-import '../../view/return_indent/return_header_details_view_screen.dart';
-import '../../view/return_indent/return_indent_screen.dart';
-import '../../view/return_indent/return_ndent_add_line.dart';
-import '../../view/service_inventory/service_inventory_screen.dart';
-import '../../view/service_inventory/service_inventory_view_details_screen.dart';
+import '../../view/service_managment_view_directory/bulk_indent_view/bulk_indent_screen.dart';
+import '../../view/service_managment_view_directory/bulk_indent_view/create_bulk_indent_screen.dart';
+import '../../view/service_managment_view_directory/corrective_view/corrective_indent_header_view_screen.dart';
+import '../../view/service_managment_view_directory/corrective_view/corrective_mark_visit_screen.dart';
+import '../../view/service_managment_view_directory/corrective_view/corrective_screen.dart';
+import '../../view/service_managment_view_directory/corrective_view/corrective_view_details_screen.dart';
+import '../../view/service_managment_view_directory/customer_complain/complain_customer_page.dart';
+import '../../view/service_managment_view_directory/customer_complain/customer_complain_screen.dart';
+import '../../view/service_managment_view_directory/indent_list/indent_header_details_screen.dart';
+import '../../view/service_managment_view_directory/indent_list/indent_list.dart';
+import '../../view/service_managment_view_directory/installation_view/indent_header_view_screen.dart';
+import '../../view/service_managment_view_directory/installation_view/installation_screen.dart';
+import '../../view/service_managment_view_directory/installation_view/installation_view_details_screen.dart';
+import '../../view/service_managment_view_directory/installation_view/mark_visit_screen.dart';
+import '../../view/service_managment_view_directory/order_view/approval_view_cart.dart';
+import '../../view/service_managment_view_directory/order_view/new_order_screen.dart';
+import '../../view/service_managment_view_directory/order_view/order_approval_screen.dart';
+import '../../view/service_managment_view_directory/order_view/order_item_category_screen.dart';
+import '../../view/service_managment_view_directory/order_view/order_item_veriety_screen.dart';
+import '../../view/service_managment_view_directory/order_view/order_screen.dart';
+import '../../view/service_managment_view_directory/order_view/view_cart_screen.dart';
+import '../../view/service_managment_view_directory/preventive_view/CreatePreventiveCalenderScreen.dart';
+import '../../view/service_managment_view_directory/preventive_view/preventive_indent_header_view_screen.dart';
+import '../../view/service_managment_view_directory/preventive_view/preventive_mark_visit.dart';
+import '../../view/service_managment_view_directory/preventive_view/preventive_screen.dart';
+import '../../view/service_managment_view_directory/preventive_view/preventive_view_detail_screen.dart';
+import '../../view/service_managment_view_directory/return_indent/new_return_indent.dart';
+import '../../view/service_managment_view_directory/return_indent/return_header_details_view_screen.dart';
+import '../../view/service_managment_view_directory/return_indent/return_indent_screen.dart';
+import '../../view/service_managment_view_directory/return_indent/return_ndent_add_line.dart';
+import '../../view/service_managment_view_directory/service_inventory/service_inventory_screen.dart';
+import '../../view/service_managment_view_directory/service_inventory/service_inventory_view_details_screen.dart';
 import '../../view/user_expense/expense_approver_header_view_screen.dart';
 
 class AppRoutes{
@@ -165,7 +165,7 @@ class AppRoutes{
     ),
 
     GetPage(name: RoutesName.create_preventive_calender_view_screen,
-        page: ()=>CreatePreventiveCalender(),
+        page: ()=>CreatePreventiveCalenderScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

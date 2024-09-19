@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
-import '../custom_drawer.dart';
+
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/service_managment_vm_directory/order_vm/order_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class OrderItemVarietyScreen extends StatelessWidget{
   OrderItemVarietyScreen({super.key});
@@ -48,8 +50,7 @@ class OrderItemVarietyScreen extends StatelessWidget{
              ],
 
            ), // You can change the icon as needed
-           backgroundColor: AllColors
-               .primaryDark1, // Customize the button's background color
+           backgroundColor: AllColors.primaryDark1, // Customize the button's background color
 
          ),
          appBar: AppBar(

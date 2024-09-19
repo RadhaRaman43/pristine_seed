@@ -5,14 +5,16 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
-import 'package:navigation_drawer_flutter/repository/bulk_indent_repository/bulk_indent_repo.dart';
+
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 
-import '../../models/bulk_indent_model/bulk_header_create_model.dart';
-import '../../models/bulk_indent_model/bulk_indent_list_model.dart';
-import '../../models/bulk_indent_model/bulk_item_master_model.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
+import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_header_create_model.dart';
+import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_indent_list_model.dart';
+import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../repository/service_managment_repository_directory/bulk_indent_repository/bulk_indent_repo.dart';
+import '../../../utils/app_utils.dart';
+
 
 class BulkIndentViewModel extends GetxController{
 

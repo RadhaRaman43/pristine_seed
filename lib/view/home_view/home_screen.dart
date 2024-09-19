@@ -17,11 +17,10 @@ import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import '../../constants/app_font_size.dart';
 import '../../models/loginModel/login_model.dart';
 import '../../viewModel/SessionManagment/session_managment.dart';
-import '../dashboard_view/crm_dashBorad_screen.dart';
-import '../dashboard_view/dashboard_screen.dart';
 import '../custom_drawer.dart';
 import '../profile_view/profile_screen.dart';
 import '../search_view/search_view.dart';
+import '../service_managment_view_directory/dashboard_view/dashboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -116,7 +115,8 @@ class _HomeStateScreen extends State<HomeScreen> {
       body: RefreshIndicator(
         onRefresh:refreshData ,
         child: Scaffold(
-          body: isCrm==0?DashBoard():CrmDashBoard(),
+         // body: isCrm==0?DashBoard():CrmDashBoard(),
+          body:DashBoard()
 
           /*PageView(
             controller: controller,

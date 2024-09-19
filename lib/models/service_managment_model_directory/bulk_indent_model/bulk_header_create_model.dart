@@ -15,7 +15,7 @@ class BulkHeaderCreateResponse {
   String? approveBy;
   String? locationCode;
   String? rejectReason;
-  List<Lines>? lines;
+  List<BulkLines>? lines;
   BulkHeaderCreateResponse(
       {this.condition,
         this.indentNo,
@@ -45,9 +45,9 @@ class BulkHeaderCreateResponse {
     locationCode = json['location_code'];
     updatedOn = json['updated_on'];
     if (json['lines'] != null) {
-      lines = <Lines>[];
+      lines = <BulkLines>[];
       json['lines'].forEach((v) {
-        lines!.add(new Lines.fromJson(v));
+        lines!.add(new BulkLines.fromJson(v));
       });
     }
   }
@@ -73,7 +73,7 @@ class BulkHeaderCreateResponse {
   }
 }
 
-class Lines {
+class BulkLines {
   String? indentNo;
   int? lineNo;
   String? itemNo;
@@ -95,7 +95,7 @@ class Lines {
   double? returnQty;
   double? actualUnitPrice;
 
-  Lines(
+  BulkLines(
       {this.indentNo,
         this.lineNo,
         this.itemNo,
@@ -117,7 +117,7 @@ class Lines {
         this.returnQty,
         this.actualUnitPrice,});
 
-  Lines.fromJson(Map<String, dynamic> json) {
+  BulkLines.fromJson(Map<String, dynamic> json) {
     indentNo = json['indent_no'];
     lineNo = json['line_no'];
     itemNo = json['item_no'];

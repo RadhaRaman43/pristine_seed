@@ -5,10 +5,10 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../viewModel/indent_list_vm/indent_list_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../viewModel/service_managment_vm_directory/indent_list_vm/indent_list_vm.dart';
+import '../../custom_drawer.dart';
 
 class IndentHeaderDetailsScreen extends StatelessWidget{
   IndentHeaderDetailsScreen({super.key});

@@ -5,11 +5,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
-import 'package:navigation_drawer_flutter/viewModel/return_indent_vm/return_indent_vm.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../viewModel/service_managment_vm_directory/return_indent_vm/return_indent_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class ReturnIndentScreen extends StatelessWidget {
   ReturnIndentScreen({super.key});

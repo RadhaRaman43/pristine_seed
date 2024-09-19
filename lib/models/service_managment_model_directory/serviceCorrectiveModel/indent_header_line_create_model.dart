@@ -11,7 +11,7 @@ class CorrectiveIndentHeaderCreateResponse {
   String? indentStatus;
   String? locationCode;
   String? updatedOn;
-  List<Lines>? lines;
+  List<CorrectiveLines>? lines;
 
   CorrectiveIndentHeaderCreateResponse(
       {this.condition,
@@ -42,9 +42,9 @@ class CorrectiveIndentHeaderCreateResponse {
     indentStatus = json['indent_status'];
     updatedOn = json['updated_on'];
     if (json['lines'] != null) {
-      lines = <Lines>[];
+      lines = <CorrectiveLines>[];
       json['lines'].forEach((v) {
-        lines!.add(new Lines.fromJson(v));
+        lines!.add(new CorrectiveLines.fromJson(v));
       });
     }
   }
@@ -70,7 +70,7 @@ class CorrectiveIndentHeaderCreateResponse {
   }
 }
 
-class Lines {
+class CorrectiveLines {
   String? indentNo;
   int? lineNo;
   String? itemNo;
@@ -92,7 +92,7 @@ class Lines {
   double? returnQty;
   double? actualUnitPrice;
 
-  Lines(
+  CorrectiveLines(
       {this.indentNo,
         this.lineNo,
         this.itemNo,
@@ -114,7 +114,7 @@ class Lines {
         this.returnQty,
         this.actualUnitPrice,});
 
-  Lines.fromJson(Map<String, dynamic> json) {
+  CorrectiveLines.fromJson(Map<String, dynamic> json) {
     indentNo = json['indent_no'];
     lineNo = json['line_no'];
     itemNo = json['item_no'];

@@ -5,20 +5,19 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:navigation_drawer_flutter/models/order_model/order_item_category_model.dart';
-import 'package:navigation_drawer_flutter/repository/order_repository/order_repository.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../models/order_model/consignee_Model.dart';
-import '../../models/order_model/customer_model.dart';
 
-
-import '../../models/order_model/order_header_create_model.dart';
-import '../../models/order_model/order_item_get_model.dart';
-import '../../models/order_model/order_list_screen.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../models/service_managment_model_directory/order_model/consignee_Model.dart';
+import '../../../models/service_managment_model_directory/order_model/customer_model.dart';
+import '../../../models/service_managment_model_directory/order_model/order_header_create_model.dart';
+import '../../../models/service_managment_model_directory/order_model/order_item_category_model.dart';
+import '../../../models/service_managment_model_directory/order_model/order_item_get_model.dart';
+import '../../../models/service_managment_model_directory/order_model/order_list_screen.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../repository/service_managment_repository_directory/order_repository/order_repository.dart';
+import '../../../utils/app_utils.dart';
 
 class OrderViewModel extends GetxController{
   final _api=OrderRepository();

@@ -6,13 +6,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../models/reasonModel/reason_master_response.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
-import '../../viewModel/corrective_vm/corrective_vm.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/service_managment_vm_directory/corrective_vm/corrective_vm.dart';
+
 
 class CorrectiveViewDetailsScreen extends StatelessWidget {
   CorrectiveViewDetailsScreen({super.key});

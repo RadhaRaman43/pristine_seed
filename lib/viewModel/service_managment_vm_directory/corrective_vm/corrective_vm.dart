@@ -9,27 +9,27 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 //import 'package:marquee/marquee.dart';
-import 'package:navigation_drawer_flutter/models/serviceCorrectiveModel/service_corrective_list_model.dart';
-import 'package:navigation_drawer_flutter/repository/corrective_repository/service_corrective_repository.dart';
+
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 import 'dart:io';
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../models/reasonModel/reason_master_response.dart';
-import '../../models/serviceCorrectiveModel/corrective_details_model.dart';
-import '../../models/serviceCorrectiveModel/corrective_item_no_model.dart';
-import '../../models/serviceCorrectiveModel/indent_header_line_create_model.dart';
-import '../../models/serviceCorrectiveModel/item_details_model.dart';
-import '../../models/serviceCorrectiveModel/service_corrective_indent_model.dart';
-import '../../models/serviceIndentModel/Item_no_model.dart';
-import '../../models/serviceInstallationModel/item_details_model.dart';
-import '../../reources/app_url/app_url.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/serviceInstallationModel/service_offsite_closure_model.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/corrective_details_model.dart';
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/corrective_item_no_model.dart';
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/indent_header_line_create_model.dart';
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/item_details_model.dart';
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/service_corrective_indent_model.dart';
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/service_corrective_list_model.dart';
+import '../../../models/service_managment_model_directory/serviceInstallationModel/service_offsite_closure_model.dart';
+import '../../../reources/app_url/app_url.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../repository/service_managment_repository_directory/corrective_repository/service_corrective_repository.dart';
+import '../../../utils/app_utils.dart';
+
 class CorrectiveViewModel extends GetxController{
   final _api=ServiceCorrectiveRepository();
   SessionManagement sessionManagement = SessionManagement();

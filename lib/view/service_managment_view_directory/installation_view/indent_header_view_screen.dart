@@ -8,16 +8,15 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:navigation_drawer_flutter/models/serviceIndentModel/Item_no_model.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../models/serviceIndentModel/service_indent_header_create_model.dart';
-import '../../viewModel/installation_vm/installation_vm.dart';
-
+import '../../../models/service_managment_model_directory/serviceIndentModel/Item_no_model.dart';
+import '../../../models/service_managment_model_directory/serviceIndentModel/service_indent_header_create_model.dart';
+import '../../../viewModel/service_managment_vm_directory/installation_vm/installation_vm.dart';
 class IndentHeaderViewScreen extends StatelessWidget {
   IndentHeaderViewScreen({super.key});
 
@@ -28,7 +27,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
 
   static String _displayIndentTypeForOption(String option) => option!;
   Size size = Get.size;
-  List<Lines> lines = [];
+  List<ServiceLines> lines = [];
 
   @override
   Widget build(BuildContext context) {
@@ -1603,7 +1602,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
     );
   }
 
-  void showAddLineBottomSheet(BuildContext context, Lines? lines, String flag) {
+  void showAddLineBottomSheet(BuildContext context, ServiceLines? lines, String flag) {
     RxDouble sub_total = 0.0.obs;
     RxDouble discount_amount = 0.0.obs;
     RxDouble total_amount = 0.0.obs;

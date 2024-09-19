@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../reources/routes/routes_name.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../viewModel/service_managment_vm_directory/order_vm/order_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class OrderItemCategoryScreen extends StatelessWidget{
   OrderItemCategoryScreen({super.key});

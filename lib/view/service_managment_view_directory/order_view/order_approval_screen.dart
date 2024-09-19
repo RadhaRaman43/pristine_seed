@@ -4,14 +4,13 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:navigation_drawer_flutter/models/order_model/order_approval_model.dart';
-import 'package:navigation_drawer_flutter/viewModel/order_approval_vm/order_approval_vm.dart';
-import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../models/checkInModel/employee_master_model.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../models/checkInModel/employee_master_model.dart';
+import '../../../models/service_managment_model_directory/order_model/order_approval_model.dart';
+import '../../../viewModel/service_managment_vm_directory/order_approval_vm/order_approval_vm.dart';
+import '../../custom_drawer.dart';
 
 class  OrderApprovalScreen extends StatelessWidget{
   OrderApprovalScreen({super.key});

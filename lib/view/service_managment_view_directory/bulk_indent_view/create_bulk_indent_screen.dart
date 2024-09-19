@@ -8,24 +8,18 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../models/bulk_indent_model/bulk_header_create_model.dart';
-import '../../models/bulk_indent_model/bulk_item_master_model.dart';
-import '../../models/serviceIndentModel/Item_no_model.dart';
-import '../../utils/app_utils.dart';
-import '../../viewModel/bulk_indent_Vm/bulk_indent_vm.dart';
-import '../custom_drawer.dart';
-
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_header_create_model.dart';
+import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
+import '../../../viewModel/service_managment_vm_directory/bulk_indent_Vm/bulk_indent_vm.dart';
+import '../../custom_drawer.dart';
 class CreateBulkIndentScreen extends StatelessWidget{
   CreateBulkIndentScreen({super.key});
   
   final create_bulk_controller=Get.put(BulkIndentViewModel());
 
   Size size= Get.size;
-
-
   static String _displayItemNoForOption(BulkItemMasterGetModel option) =>
       option.itemCode!;
 
@@ -1131,7 +1125,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
     );
   }
 
-  void showAddLineBottomSheet(BuildContext context, Lines? lines, String flag) {
+  void showAddLineBottomSheet(BuildContext context, BulkLines? lines, String flag) {
     RxDouble sub_total = 0.0.obs;
     RxDouble discount_amount = 0.0.obs;
     RxDouble total_amount = 0.0.obs;

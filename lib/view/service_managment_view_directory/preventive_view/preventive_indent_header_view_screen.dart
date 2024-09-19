@@ -6,15 +6,16 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:navigation_drawer_flutter/models/servicePreventiveModel/indent_header_line_create_model.dart';
+
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../models/servicePreventiveModel/preventive_item_no_moel.dart';
-import '../../utils/app_utils.dart';
-import '../../viewModel/preventive_vm/preventive_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/indent_header_line_create_model.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/preventive_item_no_moel.dart';
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/service_managment_vm_directory/preventive_vm/preventive_vm.dart';
+import '../../custom_drawer.dart';
 
 class PreventiveIndentHeaderViewScreen extends StatelessWidget{
   PreventiveIndentHeaderViewScreen({super.key});
@@ -1815,7 +1816,9 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
   }
 
 
-  void showAddLineBottomSheet(BuildContext context, Lines? lines, String flag) {
+
+
+  void showAddLineBottomSheet(BuildContext context, PreventiveLines? lines, String flag) {
     RxDouble sub_total=0.0.obs;
     RxDouble discount_amount=0.0.obs;
     RxDouble total_amount=0.0.obs;

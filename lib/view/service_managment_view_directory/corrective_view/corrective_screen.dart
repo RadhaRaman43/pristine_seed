@@ -9,11 +9,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
-import 'package:navigation_drawer_flutter/viewModel/corrective_vm/corrective_vm.dart';
-
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../reources/routes/routes_name.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../viewModel/service_managment_vm_directory/corrective_vm/corrective_vm.dart';
 
 class CorrectiveScreen extends StatelessWidget{
   CorrectiveScreen({super.key});

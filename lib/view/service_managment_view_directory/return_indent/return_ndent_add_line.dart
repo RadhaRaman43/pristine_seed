@@ -5,12 +5,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/component/custome_confirm_dialog.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../models/return_indent_model/return_indent_name_item_model.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../viewModel/return_indent_vm/return_indent_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../models/service_managment_model_directory/return_indent_model/return_indent_name_item_model.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../viewModel/service_managment_vm_directory/return_indent_vm/return_indent_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class ReturnIndentAddLine extends StatelessWidget {
   ReturnIndentAddLine({super.key});

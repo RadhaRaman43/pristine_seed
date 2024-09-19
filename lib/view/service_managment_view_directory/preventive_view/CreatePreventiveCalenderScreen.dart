@@ -7,15 +7,16 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
-import 'package:navigation_drawer_flutter/models/servicePreventiveModel/createPreventiveCalenderModel.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../viewModel/preventive_vm/preventive_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/createPreventiveCalenderModel.dart';
+import '../../../viewModel/service_managment_vm_directory/preventive_vm/preventive_vm.dart';
+import '../../custom_drawer.dart';
 
-class CreatePreventiveCalender extends StatelessWidget{
-  CreatePreventiveCalender({super.key});
+
+class CreatePreventiveCalenderScreen extends StatelessWidget{
+  CreatePreventiveCalenderScreen({super.key});
   final create_preventive_page_controller=Get.put(PreventiveViewModel());
   Size size= Get.size;
   @override

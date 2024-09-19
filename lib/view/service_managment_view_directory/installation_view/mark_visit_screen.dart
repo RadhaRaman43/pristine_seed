@@ -10,11 +10,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../viewModel/installation_vm/installation_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../viewModel/service_managment_vm_directory/installation_vm/installation_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class MarkVisit extends StatelessWidget {
   MarkVisit({super.key});

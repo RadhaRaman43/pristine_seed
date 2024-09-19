@@ -4,19 +4,17 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../models/Customer_complain_modal/complain_address_modal.dart';
-import '../../models/Customer_complain_modal/complain_item_modal.dart';
-import '../../models/Customer_complain_modal/complain_serial_modal.dart';
-import '../../models/Customer_complain_modal/filter_modal.dart';
-import '../../models/Customer_complain_modal/select_customer_complain_modal.dart';
-import '../../models/reasonModel/reason_master_response.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../viewModel/customer_complain_vm/customer_complain_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/complain_address_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/complain_item_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/complain_serial_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/select_customer_complain_modal.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../viewModel/service_managment_vm_directory/customer_complain_vm/customer_complain_vm.dart';
+import '../../custom_drawer.dart';
 
 class CustomerComplainScreen extends StatelessWidget{
 

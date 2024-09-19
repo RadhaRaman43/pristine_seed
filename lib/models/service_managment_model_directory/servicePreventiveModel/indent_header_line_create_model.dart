@@ -11,7 +11,7 @@ class PreventiveIndentHeaderCreateResponse {
   String? indentStatus;
   String? updatedOn;
   String? locationCode;
-  List<Lines>? lines;
+  List<PreventiveLines>? lines;
 
   PreventiveIndentHeaderCreateResponse(
       {this.condition,
@@ -42,9 +42,9 @@ class PreventiveIndentHeaderCreateResponse {
     updatedOn = json['updated_on'];
     locationCode = json['location_code'];
     if (json['lines'] != null) {
-      lines = <Lines>[];
+      lines = <PreventiveLines>[];
       json['lines'].forEach((v) {
-        lines!.add(new Lines.fromJson(v));
+        lines!.add(new PreventiveLines.fromJson(v));
       });
     }
   }
@@ -71,7 +71,7 @@ class PreventiveIndentHeaderCreateResponse {
   }
 }
 
-class Lines {
+class PreventiveLines {
   String? indentNo;
   int? lineNo;
   String? itemNo;
@@ -93,7 +93,7 @@ class Lines {
   double? returnQty;
   double? actualUnitPrice;
 
-  Lines(
+  PreventiveLines(
       {this.indentNo,
         this.lineNo,
         this.itemNo,
@@ -115,7 +115,7 @@ class Lines {
         this.returnQty,
         this.actualUnitPrice,});
 
-  Lines.fromJson(Map<String, dynamic> json) {
+  PreventiveLines.fromJson(Map<String, dynamic> json) {
     indentNo = json['indent_no'];
     lineNo = json['line_no'];
     itemNo = json['item_no'];

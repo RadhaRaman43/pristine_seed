@@ -5,14 +5,15 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
-import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
 
-import '../../component/default_button.dart';
-import '../../component/default_button_red.dart';
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../utils/app_utils.dart';
-import '../custom_drawer.dart';
+import '../../../component/default_button.dart';
+import '../../../component/default_button_red.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/service_managment_vm_directory/order_vm/order_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class ViewCartScreen extends StatelessWidget{
   ViewCartScreen({super.key});

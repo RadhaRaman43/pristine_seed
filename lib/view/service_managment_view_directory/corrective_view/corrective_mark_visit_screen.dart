@@ -5,14 +5,13 @@ import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
-import '../../viewModel/corrective_vm/corrective_vm.dart';
-import '../custom_drawer.dart';
-import '../../models/serviceCorrectiveModel/corrective_details_model.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/service_managment_vm_directory/corrective_vm/corrective_vm.dart';
+import '../../custom_drawer.dart';
 
 class CorrectiveMarkVisitScreen extends StatelessWidget{
   CorrectiveMarkVisitScreen({super.key});

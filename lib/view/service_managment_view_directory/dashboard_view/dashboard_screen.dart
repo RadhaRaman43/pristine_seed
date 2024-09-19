@@ -8,16 +8,12 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/constants/app_colors.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
-import 'package:navigation_drawer_flutter/viewModel/dashboard_vm/dashboard_vm.dart';
-
-import '../../component/default_button.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../viewModel/corrective_vm/corrective_vm.dart';
-import '../../viewModel/home_vm/HomeViewModel.dart';
-import '../../viewModel/notification_vm/notification_vm.dart';
-import '../custom_drawer.dart';
-
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../viewModel/home_vm/HomeViewModel.dart';
+import '../../../viewModel/notification_vm/notification_vm.dart';
+import '../../../viewModel/service_managment_vm_directory/corrective_vm/corrective_vm.dart';
+import '../../../viewModel/service_managment_vm_directory/dashboard_vm/dashboard_vm.dart';
 class DashBoard extends StatelessWidget {
   DashBoard({super.key});
 

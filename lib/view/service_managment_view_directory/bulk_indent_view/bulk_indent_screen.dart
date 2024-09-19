@@ -7,12 +7,13 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../viewModel/bulk_indent_Vm/bulk_indent_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../viewModel/service_managment_vm_directory/bulk_indent_Vm/bulk_indent_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class BulkIndentListScreen extends StatelessWidget{
   BulkIndentListScreen({super.key});

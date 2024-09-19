@@ -4,16 +4,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:navigation_drawer_flutter/models/return_indent_model/return_indent_header_create_model.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
-import 'package:navigation_drawer_flutter/repository/return_indent_repository/return_indent_repository.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 
-import '../../models/return_indent_model/location_model.dart';
-import '../../models/return_indent_model/return_indent_add_line_model.dart';
-import '../../models/return_indent_model/return_indent_list_model.dart';
-import '../../models/return_indent_model/return_indent_name_item_model.dart';
+import '../../../models/service_managment_model_directory/return_indent_model/location_model.dart';
+import '../../../models/service_managment_model_directory/return_indent_model/return_indent_add_line_model.dart';
+import '../../../models/service_managment_model_directory/return_indent_model/return_indent_header_create_model.dart';
+import '../../../models/service_managment_model_directory/return_indent_model/return_indent_list_model.dart';
+import '../../../models/service_managment_model_directory/return_indent_model/return_indent_name_item_model.dart';
+import '../../../repository/service_managment_repository_directory/return_indent_repository/return_indent_repository.dart';
+
 
 class ReturnIndentViewModel extends GetxController {
 

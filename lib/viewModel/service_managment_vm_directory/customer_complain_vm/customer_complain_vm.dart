@@ -3,19 +3,19 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import '../../models/Customer_complain_modal/complain_address_modal.dart';
-import '../../models/Customer_complain_modal/complain_item_modal.dart';
-import '../../models/Customer_complain_modal/complain_raise_modal.dart';
-import '../../models/Customer_complain_modal/complain_serial_modal.dart';
-import '../../models/Customer_complain_modal/customer_complain_modal.dart';
-import '../../models/Customer_complain_modal/filter_modal.dart';
-import '../../models/Customer_complain_modal/select_customer_complain_modal.dart';
-import '../../models/Customer_complain_modal/show_all_complain_modal.dart';
-import '../../models/reasonModel/reason_master_response.dart';
-import '../../models/serviceCorrectiveModel/service_corrective_list_model.dart';
-import '../../repository/customer_complain_repository/customer_complain_repository.dart';
-import '../../utils/app_utils.dart';
-import '../SessionManagment/session_managment.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/complain_address_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/complain_item_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/complain_raise_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/complain_serial_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/filter_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/select_customer_complain_modal.dart';
+import '../../../models/service_managment_model_directory/Customer_complain_modal/show_all_complain_modal.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/service_corrective_list_model.dart';
+import '../../../repository/service_managment_repository_directory/customer_complain_repository/customer_complain_repository.dart';
+import '../../../utils/app_utils.dart';
+import '../../SessionManagment/session_managment.dart';
+
 
 class CustomerComplainVm extends GetxController {
  final _api = CustomerComplainRepository();

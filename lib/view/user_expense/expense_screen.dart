@@ -10,7 +10,7 @@ import 'dart:io';
 import '../../component/default_button.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/app_font_size.dart';
-import '../../models/regionModel/region_model.dart';
+import '../../models/service_managment_model_directory/regionModel/region_model.dart';
 import '../../models/user_expense_model/category_response.dart';
 import '../custom_drawer.dart';
 

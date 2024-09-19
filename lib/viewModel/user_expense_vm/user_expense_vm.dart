@@ -9,7 +9,7 @@ import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_man
 
 import '../../constants/static_methods.dart';
 import '../../models/common_response/common_response.dart';
-import '../../models/regionModel/region_model.dart';
+import '../../models/service_managment_model_directory/regionModel/region_model.dart';
 import '../../models/user_expense_model/category_response.dart';
 import '../../models/user_expense_model/expense_Line_Submit_model.dart';
 import '../../models/user_expense_model/user_expense_model.dart';

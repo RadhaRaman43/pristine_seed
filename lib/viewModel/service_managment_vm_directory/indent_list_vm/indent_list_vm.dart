@@ -4,14 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
+import '../../../models/service_managment_model_directory/indent_list_model/indent-list_model.dart';
+import '../../../models/service_managment_model_directory/indent_list_model/indent_list_details_model.dart';
+import '../../../repository/service_managment_repository_directory/indent_list_repository/indent_list_repository.dart';
+import '../../../utils/app_utils.dart';
 
-import '../../models/indent_list_model/indent-list_model.dart';
-import '../../models/indent_list_model/indent_list_details_model.dart';
-import '../../repository/indent_list_repository/indent_list_repository.dart';
-import '../../utils/app_utils.dart';
 
 class IndentListViewModel extends GetxController{
-
   final _api=IndentListRepository();
   RxBool loading=false.obs;
   SessionManagement sessionManagement= SessionManagement();

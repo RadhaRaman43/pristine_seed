@@ -6,12 +6,13 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../utils/app_utils.dart';
-import '../../viewModel/preventive_vm/preventive_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/service_managment_vm_directory/preventive_vm/preventive_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class PreventiveMarkVisitScreen extends StatelessWidget {
   PreventiveMarkVisitScreen({super.key});

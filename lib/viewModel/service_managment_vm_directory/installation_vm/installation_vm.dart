@@ -15,25 +15,24 @@ import 'package:image_picker/image_picker.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 //import 'package:marquee/marquee.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
-import 'package:navigation_drawer_flutter/repository/installation_repositiory/service_installation_repository.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
-
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../models/reasonModel/reason_master_response.dart';
-import '../../models/serviceCorrectiveModel/indent_header_line_create_model.dart';
-import '../../models/serviceCorrectiveModel/indent_header_line_create_model.dart';
-import '../../models/serviceIndentModel/Item_no_model.dart';
-import '../../models/serviceIndentModel/service_indent_header_create_model.dart';
-import '../../models/serviceIndentModel/service_indent_header_model.dart';
-import '../../models/serviceInstallationModel/item_details_model.dart';
-import '../../models/serviceInstallationModel/service_installation_details_model.dart';
-import '../../models/serviceInstallationModel/service_installation_list_model.dart';
-import '../../reources/app_url/app_url.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/serviceInstallationModel/service_offsite_closure_model.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+
+
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
+import '../../../models/service_managment_model_directory/serviceIndentModel/Item_no_model.dart';
+import '../../../models/service_managment_model_directory/serviceIndentModel/service_indent_header_create_model.dart';
+import '../../../models/service_managment_model_directory/serviceIndentModel/service_indent_header_model.dart';
+import '../../../models/service_managment_model_directory/serviceInstallationModel/item_details_model.dart';
+import '../../../models/service_managment_model_directory/serviceInstallationModel/service_installation_details_model.dart';
+import '../../../models/service_managment_model_directory/serviceInstallationModel/service_installation_list_model.dart';
+import '../../../models/service_managment_model_directory/serviceInstallationModel/service_offsite_closure_model.dart';
+import '../../../reources/app_url/app_url.dart';
+import '../../../repository/service_managment_repository_directory/installation_repositiory/service_installation_repository.dart';
 
 class InstallationViewModel extends GetxController {
   final _api = ServiceInstallationRepository();

@@ -8,16 +8,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/component/back_button.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
-
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../viewModel/home_vm/HomeViewModel.dart';
-import '../../viewModel/installation_vm/installation_vm.dart';
+import '../../../constants/app_colors.dart';
 import 'package:excel/excel.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../viewModel/service_managment_vm_directory/installation_vm/installation_vm.dart';
 
 class InstallationScreen extends StatelessWidget {
   InstallationScreen({super.key});

@@ -4,12 +4,12 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../viewModel/customer_complain_vm/customer_complain_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../viewModel/service_managment_vm_directory/customer_complain_vm/customer_complain_vm.dart';
+import '../../custom_drawer.dart';
 
 class ComplainCustomerPage extends StatelessWidget{
   ComplainCustomerPage({super.key});

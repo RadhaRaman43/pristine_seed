@@ -6,11 +6,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../viewModel/indent_list_vm/indent_list_vm.dart';
-import '../custom_drawer.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../viewModel/service_managment_vm_directory/indent_list_vm/indent_list_vm.dart';
+import '../../custom_drawer.dart';
+
 
 class IndentListScreen extends StatelessWidget{
   IndentListScreen({super.key});

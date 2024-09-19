@@ -8,26 +8,26 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:navigation_drawer_flutter/constants/app_colors.dart';
-import 'package:navigation_drawer_flutter/repository/dashboard_repository/dashboard_repository.dart';
+
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 import 'package:flutter/foundation.dart' show Uint8List, kIsWeb;
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:signalr_netcore/hub_connection.dart';
-import 'package:signalr_netcore/hub_connection_builder.dart';
-import '../../current_location/background_task.dart';
-import '../../models/checkInModel/employee_master_model.dart';
-import '../../models/location/LocationData.dart';
-import '../../locat_database/databaseHelper.dart';
-import '../../main.dart';
-import '../../models/employeeDetail/employee_details_model.dart';
-import '../../models/profile_upload_model/profile_upload_model.dart';
-import '../../models/serviceInstallationModel/service_installation_model.dart';
-import '../../reources/app_url/app_url.dart';
-import 'package:http/http.dart' as http;
 
-import '../../reources/routes/routes_name.dart';
-import '../../repository/profile_repository/profile_repository.dart';
+import 'package:http/http.dart' as http;
+import '../../../current_location/background_task.dart';
+
+import '../../../locat_database/databaseHelper.dart';
+import '../../../main.dart';
+import '../../../models/employeeDetail/employee_details_model.dart';
+import '../../../models/location/LocationData.dart';
+import '../../../models/profile_upload_model/profile_upload_model.dart';
+import '../../../models/service_managment_model_directory/serviceInstallationModel/service_installation_model.dart';
+import '../../../reources/app_url/app_url.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../repository/profile_repository/profile_repository.dart';
+import '../../../repository/service_managment_repository_directory/dashboard_repository/dashboard_repository.dart';
 class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
   final _api=DashBoardRepository();
   final _apiProfile=ProfileRepository();
@@ -195,8 +195,8 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
       print("Permission Granted");
       if (!hasPermission) return;
       final LocationSettings locationSettings = LocationSettings(
-          accuracy: LocationAccuracy.high,
-          //distanceFilter: 10,
+        accuracy: LocationAccuracy.high,
+        //distanceFilter: 10,
         //  timeLimit: Duration(seconds: 10)
       );
       if (positionStream == null) {

@@ -6,13 +6,14 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
-import 'package:navigation_drawer_flutter/viewModel/order_vm/order_vm.dart';
 
-import '../../component/default_button.dart';
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../models/order_model/consignee_Model.dart';
-import '../../models/order_model/customer_model.dart';
+import '../../../component/default_button.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../models/service_managment_model_directory/order_model/consignee_Model.dart';
+import '../../../models/service_managment_model_directory/order_model/customer_model.dart';
+import '../../../viewModel/service_managment_vm_directory/order_vm/order_vm.dart';
+
 
 class NewOrderScreen extends StatelessWidget {
   NewOrderScreen({super.key});

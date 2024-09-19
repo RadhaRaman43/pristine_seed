@@ -13,8 +13,9 @@ import 'package:image_network/image_network.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../constants/app_font_size.dart';
-import '../../viewModel/dashboard_vm/dashboard_vm.dart';
+
 import '../../viewModel/profile_vm/profile_vm.dart';
+import '../../viewModel/service_managment_vm_directory/dashboard_vm/dashboard_vm.dart';
 import '../custom_drawer.dart';
 
 class ProfileScreen extends StatelessWidget{

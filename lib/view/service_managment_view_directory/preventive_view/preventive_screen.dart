@@ -11,8 +11,9 @@ import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
 
-import '../../constants/app_font_size.dart';
-import '../../viewModel/preventive_vm/preventive_vm.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../viewModel/service_managment_vm_directory/preventive_vm/preventive_vm.dart';
+
 
 class PreventiveScreen extends StatelessWidget{
   PreventiveScreen({super.key});

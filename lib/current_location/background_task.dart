@@ -19,7 +19,8 @@ import '../models/common_response/common_response.dart';
 import '../models/location/LocationData.dart';
 import '../repository/background_service_repository/backGroundService_repository.dart';
 import '../viewModel/SessionManagment/session_managment.dart';
-import '../viewModel/dashboard_vm/dashboard_vm.dart';
+import '../viewModel/service_managment_vm_directory/dashboard_vm/dashboard_vm.dart';
+
 class BackgroundService {
   static SessionManagement sessionManagement=SessionManagement();
 

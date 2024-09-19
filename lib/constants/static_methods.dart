@@ -6,7 +6,9 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
-import 'package:navigation_drawer_flutter/viewModel/dashboard_vm/dashboard_vm.dart';
+
+import '../viewModel/service_managment_vm_directory/dashboard_vm/dashboard_vm.dart';
+
 
 class StaticMethod{
 

@@ -9,26 +9,24 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 
 //import 'package:marquee/marquee.dart';
-import 'package:navigation_drawer_flutter/models/servicePreventiveModel/service_preventive_list_model.dart';
-import 'package:navigation_drawer_flutter/repository/preventive_repository/preventive_repository.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
-
-import '../../constants/app_colors.dart';
-import '../../constants/app_font_size.dart';
-import '../../constants/static_methods.dart';
-import '../../models/reasonModel/reason_master_response.dart';
-import '../../models/servicePreventiveModel/createPreventiveCalenderModel.dart';
-import '../../models/servicePreventiveModel/indent_header_line_create_model.dart';
-import '../../models/servicePreventiveModel/item_details_model.dart';
-import '../../models/servicePreventiveModel/preventive_indent_header_create_model.dart';
-import '../../models/servicePreventiveModel/preventive_item_no_moel.dart';
-import '../../models/servicePreventiveModel/service_preventive_details_model.dart';
-import '../../reources/app_url/app_url.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
 import 'package:http/http.dart' as http;
 
-import '../../models/serviceInstallationModel/service_offsite_closure_model.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
+import '../../../models/service_managment_model_directory/reasonModel/reason_master_response.dart';
+import '../../../models/service_managment_model_directory/serviceInstallationModel/service_offsite_closure_model.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/createPreventiveCalenderModel.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/indent_header_line_create_model.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/item_details_model.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/preventive_item_no_moel.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/service_preventive_details_model.dart';
+import '../../../models/service_managment_model_directory/servicePreventiveModel/service_preventive_list_model.dart';
+import '../../../reources/app_url/app_url.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../repository/service_managment_repository_directory/preventive_repository/preventive_repository.dart';
+import '../../../utils/app_utils.dart';
 
 class PreventiveViewModel extends GetxController {
   final _api = PreventiveRepository();

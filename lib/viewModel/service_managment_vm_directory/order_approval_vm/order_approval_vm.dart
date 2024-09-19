@@ -2,15 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:navigation_drawer_flutter/repository/order_approval_repository/order_approval_repository.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 
-import '../../models/api_default_entity.dart';
-import '../../models/checkInModel/employee_master_model.dart';
-import '../../models/order_model/order_approval_model.dart';
-import '../../models/order_model/order_header_create_model.dart';
-import '../../reources/routes/routes_name.dart';
-import '../../utils/app_utils.dart';
+import '../../../models/api_default_entity.dart';
+import '../../../models/checkInModel/employee_master_model.dart';
+import '../../../models/service_managment_model_directory/order_model/order_approval_model.dart';
+import '../../../models/service_managment_model_directory/order_model/order_header_create_model.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../repository/service_managment_repository_directory/order_approval_repository/order_approval_repository.dart';
+import '../../../utils/app_utils.dart';
+
 
 class OrderApprovalViewModel extends GetxController{
   final _api=OrderApprovalRepository();
