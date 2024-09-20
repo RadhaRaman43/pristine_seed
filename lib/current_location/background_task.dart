@@ -282,6 +282,7 @@ class BackgroundService {
      if (connectivityResult == ConnectivityResult.none) {
         print('No internet connection available.');
        _databaseHelper.insertLocationData(locationData);
+       print("location data....${locationData.latitude}");
      }
      else{
        print('internet connection available.');

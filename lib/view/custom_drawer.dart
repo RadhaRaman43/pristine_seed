@@ -475,7 +475,12 @@ class _Drawer extends State<CustomDrawer> {
                       fontWeight: FontWeight.w600,fontSize: AllFontSize.fourtine),),
               ),
               confirm: OutlinedButton(
-                  onPressed: () => home_vm.logOut(), child: const Text("Yes",
+                  onPressed:() {
+                    home_vm.logOut();
+                    crmDatabase.deleteMyLocalDatabase();
+                  },
+
+                  child: const Text("Yes",
                 style: TextStyle(color: AllColors.primaryDark1),)
 
               ),

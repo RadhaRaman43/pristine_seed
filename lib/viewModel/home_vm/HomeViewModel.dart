@@ -20,6 +20,8 @@ class HomeViewModel extends GetxController{
   RxBool isDrawerOpen = false.obs;
 
 
+
+
   var selectedIndex = 0.obs;
 
   void changePage(int index) {
@@ -75,6 +77,7 @@ class HomeViewModel extends GetxController{
         if (loginResponse[0].condition.toString() == "True") {
           Utils.showToastification('Message', loginResponse[0].action.toString());
           sessionManagement.clearSession();
+
           Get.offAllNamed(RoutesName.splashscreen);
           print("Success");
 

@@ -11,120 +11,7 @@ class DatabaseHelper {
   static const accountTable = 'Account_DataBase';
   //static const initScript = []; // Initialization script split into seperate statements
   //static const migrationScripts = [];
-
-  //todo crm database initlize....
-
-  /*Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
-  }
-*/
-
-
-  /*Future<Database> _initDatabase() async {
-    final databasePath = await getDatabasesPath();
-    final path = '$databasePath/ServiceManagement.db';
-    return await openDatabase(
-      path,
-      version: 1,
-      onCreate: _createDatabase,
-    );
-  }*/
-
-
-
   //TODO  this opens the database (and creates it if it doesn't exist)......
-  /*Future<Database?> initializeDatabase() async {
-    if (_database == null) {
-      _database = await openDatabase(join(await getDatabasesPath(), _databaseName),
-        version: _databaseVersion,
-        onCreate: (db, version) {
-          //initScript.forEach((script) async => await db.execute(script));//todo for migration new data if change table
-          // Create your table
-          db.execute('''
-            CREATE TABLE $table(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            latitude REAL,
-            longitude REAL,
-            area TEXT,
-            locality TEXT,
-            postal_code TEXT,
-            country TEXT,
-            battery_level TEXT,
-            device_id TEXT
-            )
-          ''');
-
-        },
-
-      );
-    }
-    return _database; // Return the initialized database
-  }
-
-
-  Future<Database?> initializeDatabaseCRM() async {
-    if (_database == null) {
-      _database = await openDatabase(join(await getDatabasesPath(), _databaseName),
-        version: _databaseVersion,
-        onCreate: (db, version) {
-          db.execute('''
-            CREATE TABLE $table2(
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            account_code TEXT,
-            account_name TEXT NOT NULL,
-            account_owner TEXT,
-            account_title TEXT,
-            account_type TEXT,
-            referral_by TEXT,
-            phone_no TEXT,
-            email_id TEXT,
-            account_category_type TEXT,
-            company_profile_type TEXT,
-            company_profile_sub_type TEXT,
-            company_profile_remark TEXT,
-            no_of_employees INTEGER,
-            annual_revenue REAL,
-            tat_response_type TEXT,
-            tat_response_time INTEGER,
-            sales_representative TEXT,
-            regional_service_head TEXT,
-            profile TEXT,
-            is_active INTEGER,
-            created_by TEXT,
-            created_on TEXT,
-            updated_by TEXT,
-            updated_on TEXT,
-            is_manager INTEGER,
-            gst_type TEXT,
-            gst_no TEXT,
-            pan_no TEXT,
-            ifsc_code TEXT,
-            address TEXT,
-            address2 TEXT,
-            post_code TEXT,
-            state_code TEXT,
-            state_name TEXT,
-            country_code TEXT,
-            country_name TEXT,
-            city TEXT,
-            district TEXT,
-            shipping_address TEXT,
-            shipping_address2 TEXT,
-            shipping_post_code TEXT,
-            shipping_state_code TEXT,
-            shipping_city TEXT,
-            shipping_district TEXT
-            )
-          ''');
-
-        },
-
-      );
-    }
-    return _database; // Return the initialized database
-  }*/
 
   // Initialize the database with both tables
   Future<Database?> initializeDatabase() async {
@@ -198,60 +85,6 @@ class DatabaseHelper {
             shipping_district TEXT
             )
           ''');
-        },
-        onUpgrade: (db, oldVersion, newVersion) async {
-          // Handle migrations here if necessary
-          if (oldVersion < 2) {
-            await db.execute('''
-              CREATE TABLE IF NOT EXISTS $accountTable(
-              id INTEGER PRIMARY KEY AUTOINCREMENT,
-              account_code TEXT,
-              account_name TEXT NOT NULL,
-              account_owner TEXT,
-              account_title TEXT,
-              account_type TEXT,
-              referral_by TEXT,
-              phone_no TEXT,
-              email_id TEXT,
-              account_category_type TEXT,
-              company_profile_type TEXT,
-              company_profile_sub_type TEXT,
-              company_profile_remark TEXT,
-              no_of_employees INTEGER,
-              annual_revenue REAL,
-              tat_response_type TEXT,
-              tat_response_time INTEGER,
-              sales_representative TEXT,
-              regional_service_head TEXT,
-              profile TEXT,
-              is_active INTEGER,
-              created_by TEXT,
-              created_on TEXT,
-              updated_by TEXT,
-              updated_on TEXT,
-              is_manager INTEGER,
-              gst_type TEXT,
-              gst_no TEXT,
-              pan_no TEXT,
-              ifsc_code TEXT,
-              address TEXT,
-              address2 TEXT,
-              post_code TEXT,
-              state_code TEXT,
-              state_name TEXT,
-              country_code TEXT,
-              country_name TEXT,
-              city TEXT,
-              district TEXT,
-              shipping_address TEXT,
-              shipping_address2 TEXT,
-              shipping_post_code TEXT,
-              shipping_state_code TEXT,
-              shipping_city TEXT,
-              shipping_district TEXT
-              )
-            ''');
-          }
         },
       );
     }
@@ -361,59 +194,15 @@ class DatabaseHelper {
     db!.close();
   }
 
-
- /* Future<void> _createDatabase(Database db, int version) async {
-    await db.execute('''
-    CREATE TABLE Account_DataBase (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      account_code TEXT,
-      account_name TEXT NOT NULL,
-      account_owner TEXT,
-      account_title TEXT,
-      account_type TEXT,
-      referral_by TEXT,
-      phone_no TEXT,
-      email_id TEXT,
-      account_category_type TEXT,
-      company_profile_type TEXT,
-      company_profile_sub_type TEXT,
-      company_profile_remark TEXT,
-      no_of_employees INTEGER,
-      annual_revenue REAL,
-      tat_response_type TEXT,
-      tat_response_time INTEGER,
-      sales_representative TEXT,
-      regional_service_head TEXT,
-      profile TEXT,
-      is_active INTEGER,
-      created_by TEXT,
-      created_on TEXT,
-      updated_by TEXT,
-      updated_on TEXT,
-      is_manager INTEGER,
-      gst_type TEXT,
-      gst_no TEXT,
-      pan_no TEXT,
-      ifsc_code TEXT,
-      address TEXT,
-      address2 TEXT,
-      post_code TEXT,
-      state_code TEXT,
-      state_name TEXT,
-      country_code TEXT,
-      country_name TEXT,
-      city TEXT,
-      district TEXT,
-      shipping_address TEXT,
-      shipping_address2 TEXT,
-      shipping_post_code TEXT,
-      shipping_state_code TEXT,
-      shipping_city TEXT,
-      shipping_district TEXT
-    )
-  ''');
-  }*/
-
+  Future<void> deleteMyLocalDatabase() async {
+    final path = join(await getDatabasesPath(), _databaseName);
+    try{
+      await deleteDatabase(path);
+      _database = null; // Reset the database instance
+    }catch(e){
+      print(e);
+    }
+  }
 
 
 }
