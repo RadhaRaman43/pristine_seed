@@ -410,8 +410,8 @@ class ContactMasterScreen extends StatelessWidget{
           print("last index ${contact_vm_controller.pageNumber} ${contact_vm_controller.total_rows} ${contact_vm_controller.rowsPerPage} ${total_page}");
 
           if (contact_vm_controller.pageNumber + 1 < total_page) {
-            this.contact_vm_controller.pageNumber += 1;
             contact_vm_controller.getContactMasterList(contact_vm_controller.pageNumber+1, '', '', '');
+            this.contact_vm_controller.pageNumber += 1;
 
           }
         }
@@ -449,7 +449,7 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Cont. Code : ",
+                  "Contact Code : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -481,7 +481,7 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Cont. Name : ",
+                  "Contact Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -514,7 +514,7 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Acc. Name : ",
+                  "Account. Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,

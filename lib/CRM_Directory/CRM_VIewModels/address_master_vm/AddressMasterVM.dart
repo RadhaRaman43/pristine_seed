@@ -77,7 +77,7 @@ class Addressmastervm extends GetxController{
       return ;
     }
     if(contact_name_controller.text.isEmpty){
-      Utils.sanckBarError('Contact Name!', "Please Fill Contact Name");
+      Utils.sanckBarError('Address Name!', "Please Fill Address Name");
       return ;
     }
     if(phone_no_controller.text.isNotEmpty ){
@@ -229,7 +229,7 @@ class Addressmastervm extends GetxController{
             loading.value = false;
             address_master_list.value=[];
             Get.toNamed(RoutesName.viewAddress_screen);
-            Utils.showToastification('No date', 'No Data Found');
+            Utils.showToastification('No Data Found', 'No Data Found');
 
           }
         } else {
