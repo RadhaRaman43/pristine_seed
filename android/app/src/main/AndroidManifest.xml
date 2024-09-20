@@ -53,5 +53,14 @@
             android:value="2" />
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDc0zPF85yzYbZeor4c5EZGqC9vg7f73RQ"/>
+
+        <service
+            android:name="id.flutter.flutter_background_service.BackgroundService"
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:foregroundServiceType="location">
+            <intent-filter>
+                <action android:name="com.pristine.service_managment.SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 </manifest>
