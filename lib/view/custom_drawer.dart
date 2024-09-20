@@ -6,9 +6,15 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 
+import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
+import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
+import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_font_size.dart';
 import '../constants/static_methods.dart';
+import '../locat_database/databaseHelper.dart';
 import '../models/loginModel/login_model.dart';
 import '../reources/routes/routes_name.dart';
 import '../viewModel/SessionManagment/session_managment.dart';
@@ -33,6 +39,20 @@ class _Drawer extends State<CustomDrawer> {
   String title2 = '';
   Size size = Get.size;
 
+
+
+  int IsCRM =0;
+
+
+
+  //todo crm....
+
+  final accountMaster_page_controller=Get.put(Accountmastervm());
+  final contact_vm_controller = Get.put(ContactMasterVM());
+  final TaskMaster_page_controller=Get.put(Taskmastervm());
+  final saleCycleController=Get.put(SalesCycleVm());
+  final quoteApprovalController=Get.put(QuoteApprovalListVm());
+  DatabaseHelper crmDatabase = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +185,7 @@ class _Drawer extends State<CustomDrawer> {
 
                                   return SingleChildScrollView(
                                     child: ListTile(
-                                      onTap: () {
+                                      onTap: () async {
                                         sessionManagement.setCountry(cTitle);
                                         switch (cTitle) {
                                           case 'Installation Request':
@@ -278,6 +298,71 @@ class _Drawer extends State<CustomDrawer> {
                                             Navigator.of(context);
                                             break;
 
+
+                                            //todo crm routing.....
+
+
+                                          case 'Accounts Master':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            //Get.offAllNamed(RoutesName.accountMaster_screen,);
+                                            Get.toNamed(RoutesName.accountMaster_screen,);
+                                            accountMaster_page_controller.clearController();
+                                            accountMaster_page_controller.getAccountMaster(0 ,accountMaster_page_controller.is_Active.toString());
+                                            Navigator.of(context);
+                                            break;
+
+                                          case 'Contacts Master':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            //Get.offAllNamed(RoutesName.contactMaster_screen);
+                                            Get.toNamed(RoutesName.contactMaster_screen);
+                                            contact_vm_controller.getContactMasterList(0,"","","");
+                                            Navigator.of(context);
+                                            break;
+
+                                          case 'Account Draft':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
+                                            // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
+                                            Get.toNamed(RoutesName.Draft_item_list);
+                                            Navigator.of(context);
+                                            break;
+
+                                          case 'Tasks':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            //Get.offAllNamed(RoutesName.taskMaster_screen);
+                                            accountMaster_page_controller.FromPage.value = '';
+                                            contact_vm_controller.FromPage.value ='';
+                                            Get.toNamed(RoutesName.taskMaster_screen);
+                                            TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                                            Navigator.of(context);
+                                            break;
+                                          case 'Sales Cycle':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            //Get.offAllNamed(RoutesName.salesCycleScreen,);
+                                            accountMaster_page_controller.FromPage.value = '';
+                                            contact_vm_controller.FromPage.value ='';
+                                            saleCycleController.accountNameController.value.clear();
+                                            saleCycleController.contactNameController.value.clear();
+                                            saleCycleController.ApprovalStatusController.value.clear();
+                                            saleCycleController.pageNumber = 0;
+                                            Get.toNamed(RoutesName.salesCycleScreen,);
+                                            saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
+                                            Navigator.of(context);
+                                            break;
+                                          case 'Quote Approval List':
+                                            IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                            home_vm.openMenu(cTitle, iconData);
+                                            quoteApprovalController.getQuoteHeaderData(0);
+                                            Get.toNamed(RoutesName.quoteApprovalListScreen,);
+                                            Navigator.of(context);
+                                            break;
+
+
                                         }
                                       },
                                       leading: Icon(
@@ -345,6 +430,8 @@ class _Drawer extends State<CustomDrawer> {
   Future<void> getMenuList() async {
     name = await sessionManagement.getName() ?? '';
     email = await sessionManagement.getEmail() ?? '';
+
+    IsCRM= int.parse( await sessionManagement.getIsCrm() ?? '0');
     await sessionManagement.getMenuList().then((menuList) {
       // Use setState to update the UI with the fetched menu list
       setState(() {
@@ -373,24 +460,29 @@ class _Drawer extends State<CustomDrawer> {
       offset: Offset(0, 30),
       onSelected: (value) {
         if (value == 'Logout') {
-          Get.defaultDialog(
-            title: "LogOut",
-            titleStyle: const TextStyle(
-                color: AllColors.primaryDark1, fontSize: 18, fontWeight: FontWeight.bold),
-            content: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 15.0),
-              child: Text("Do you want to Logout?",
-                style: TextStyle(color: AllColors.primaryDark1,
-                    fontWeight: FontWeight.w600,fontSize: AllFontSize.fourtine),),
-            ),
-            confirm: OutlinedButton(
-                onPressed: () => home_vm.logOut(), child: const Text("Yes",
-              style: TextStyle(color: AllColors.primaryDark1),)
 
-            ),
-            cancel: OutlinedButton(onPressed: () => Get.back(),
-              child: const Text("No", style: TextStyle(color: Colors.red)),),
-          );
+          if(IsCRM==1){
+            ConfirmationDialog(context);
+          }else{
+            Get.defaultDialog(
+              title: "LogOut",
+              titleStyle: const TextStyle(
+                  color: AllColors.primaryDark1, fontSize: 18, fontWeight: FontWeight.bold),
+              content: const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15.0),
+                child: Text("Do you want to Logout?",
+                  style: TextStyle(color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w600,fontSize: AllFontSize.fourtine),),
+              ),
+              confirm: OutlinedButton(
+                  onPressed: () => home_vm.logOut(), child: const Text("Yes",
+                style: TextStyle(color: AllColors.primaryDark1),)
+
+              ),
+              cancel: OutlinedButton(onPressed: () => Get.back(),
+                child: const Text("No", style: TextStyle(color: Colors.red)),),
+            );
+          }
         }else if(value=="Profile"){
           Get.toNamed(RoutesName.profile_screen);
         }
@@ -420,6 +512,98 @@ class _Drawer extends State<CustomDrawer> {
   }
 
 
+
+
+  ConfirmationDialog(context){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.check_circle, color: AllColors.lightredColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Logout!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          'Do you want to logout? You have ${accountMaster_page_controller.Account_Master_Draft_list.length} data in draft!',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+
+                      SizedBox(height: 20),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              Get.back();
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Cancel',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: ()  async {
+                              home_vm.logOut();
+                              await crmDatabase.deleteAllItems();
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Confirm',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ]),
+          );
+
+        });
+  }
 
 
 }

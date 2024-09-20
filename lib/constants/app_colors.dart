@@ -10,6 +10,7 @@ class AllColors{
   static const green=Color(0xFF193A21);
   static const secondaryColor=Color(0xFFDAE5DD);
   static const blackColor=Color(0xf5000000);
+  static const greenblue=Color(0xFF6BF5AA);
   static const lightblackColor=Color(0xff646262);
   static const bluegrayColor=Color(0xffaeb6bf);
   static const grayColor=Color(0x4dd3d7d3);

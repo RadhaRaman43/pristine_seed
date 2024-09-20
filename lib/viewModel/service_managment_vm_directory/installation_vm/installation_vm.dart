@@ -156,6 +156,7 @@ class InstallationViewModel extends GetxController {
     email = await sessionManagement.getEmail() ?? '';
     getServiceInstallationList(is_done.value, pageNumber,date_filter.value);
    // getReasonMaster();
+
     initCurrentLocationLatLant();
   }
 

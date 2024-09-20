@@ -171,4 +171,72 @@ class AppUrl {
      static const String serviceInventoryListview= "$BASE_URL/api/ItemMaster/ServiceEngineerIndentWiseInventoryGet";
 
 
+
+     //todo crm url.....
+
+
+
+     //todo account Master repo....
+     static const String AccountMstGet = "$BASE_URL/api/CRM/Account/AccountMstGet";
+     static const String getMasterType = "$BASE_URL/api/CRM/Master/GetMasterType";
+     static const String employeeMemberGet = "$BASE_URL/api/Employee/EmployeeTeamMemberGet";
+     static const String CompanyProfileMstGet = "$BASE_URL/api/CRM/Master/CompanyProfileMstGet";
+     static const String GetStateList = "$BASE_URL/api/Master/GetStateList";
+     static const String GetTatResponseList = "$BASE_URL/api/CRM/Master/TatMstGet";
+     static const String AccountMstUploader = "$BASE_URL/api/CRM/Account/AccountMstUploader";
+     static const String AccountMstGetBuyCode = "$BASE_URL/api/CRM/Account/AccountMstGetByCode";
+     static const String AccountMstImageUpload = "$BASE_URL/api/CRM/Account/AccountMstImageUpload";
+     static const String CompanyProfileMstUploader = "$BASE_URL/api/CRM/Master/CompanyProfileMstUploader";
+     static const String AccountDashboardDataGet = "$BASE_URL/api/CRM/Account/AccountDashboardDataGet";
+     static const String AccountTaskHistoryGet = "$BASE_URL/api/CRM/Account/AccountTaskHistoryGet";
+     static const String AccountDashboardCountGet = "$BASE_URL/api/CRM/Account/AccountDashboardCountGet";
+
+     //todo contact master repo.....
+     static const String ContactMstGet = "$BASE_URL/api/CRM/Contact/ContactMstGet";
+     static const String DepartmentGetInsert = "$BASE_URL/api/Master/DepartmentGetInsert";
+     static const String ContactMstUploader = "$BASE_URL/api/CRM/Contact/ContactMstUploader";
+     static const String DesignationGet = "$BASE_URL/api/Master/DesignationGet";
+
+     //todo Address or Consignee master repo.....
+     static const String ConsigneeMstUploader = "$BASE_URL/api/CRM/Account/ConsigneeMstUploader";
+     static const String ConsigneeMstGet = "$BASE_URL/api/CRM/Account/ConsigneeMstGet";
+
+     //todo Task Master repo....
+     static const String TaskMstGet = "$BASE_URL/api/CRM/Task/TaskMstGet";
+     static const String CallStatusMstGet = "$BASE_URL/api/CRM/Master/CallStatusMstGet";
+     static const String TaskMstCreate = "$BASE_URL/api/CRM/Task/TaskMstCreate";
+     static const String TaskMstApproveReject = "$BASE_URL/api/CRM/Task/TaskMstApproveReject";
+     static const String TaskDSARMstGet = "$BASE_URL/api/CRM/Task/TaskDSARMstGet";
+     static const String TaskDSARMstCreate = "$BASE_URL/api/CRM/Task/TaskDSARMstCreate";
+     static const String ItemCategoryMstGetByTaskId = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByTaskId";
+     static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/TaskSalesProductCategoryCreate";
+     static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
+
+
+     //todo sales cycle
+     static const String salesCycleMstGet = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGet";
+     static const String salesCycleMstUpdate = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdate";
+     static const String salesCycleMstApproveReject = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstApproveReject";
+     static const String quoteHeaderGet = "$BASE_URL/api/CRM/Quote/QuoteHeaderGet";
+     static const String quoteHeaderCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderCreate";
+     static const String quoteHeaderDuplicateCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderDuplicate";
+     static const String quoteHeaderGetByQuoteId = "$BASE_URL/api/CRM/Quote/QuoteHeaderGetByQuoteId";
+     static const String itemMstGetByQuoteId = "$BASE_URL/api/CRM/Quote/ItemMstGetByQuoteId";
+     static const String quoteLineCreate = "$BASE_URL/api/CRM/Quote/QuoteLineCreate";
+     static const String quoteLineDuplicate = "$BASE_URL/api/CRM/Quote/QuoteLineDuplicate";
+     static const String quoteLineMarkRegret = "$BASE_URL/api/CRM/Quote/QuoteLineMarkRegret";
+     static const String quoteLineDelete = "$BASE_URL/api/CRM/Quote/QuoteLineDelete";
+     static const String quoteHeaderUpdate = "$BASE_URL/api/CRM/Quote/QuoteHeaderUpdate";
+     static const String quoteHeaderMarkRegret = "$BASE_URL/api/CRM/Quote/QuoteHeaderMarkRegret";
+     static const String quoteSendForApproval = "$BASE_URL/api/CRM/Quote/QuoteSendForApproval";
+     static const String quoteApproveReject = "$BASE_URL/api/CRM/Quote/QuoteApproveReject";
+     static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
+     static const String QuoteSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/QuoteSalesProductCategoryCreate";
+     static const String QuoteHeaderUpdateBusinessTerms = "$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateBusinessTerms";
+     static const String quotationReport = "$BASE_URL/api/CRM/Quote/QuotationReport";
+     static const String specialPriceRequestReport = "$BASE_URL/api/CRM/Quote/SpecialPriceRequestReport";
+
+
+
+
 }

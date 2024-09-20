@@ -39,6 +39,7 @@ class EmployeeDetailsGetResponse {
   String? shiftStartTime;
   String? shiftEndTime;
   int? navSync;
+  List<UserGeoHierarchy>? userGeoHierarchy;
 
   EmployeeDetailsGetResponse(
       {this.condition,
@@ -80,7 +81,8 @@ class EmployeeDetailsGetResponse {
         this.checkIn,
         this.shiftStartTime,
         this.shiftEndTime,
-        this.navSync});
+        this.navSync,
+        this.userGeoHierarchy});
 
   EmployeeDetailsGetResponse.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -123,6 +125,12 @@ class EmployeeDetailsGetResponse {
     shiftStartTime = json['shift_start_time'];
     shiftEndTime = json['shift_end_time'];
     navSync = json['nav_sync'];
+    if (json['user_geo_hierarchy'] != null) {
+      userGeoHierarchy = <UserGeoHierarchy>[];
+      json['user_geo_hierarchy'].forEach((v) {
+        userGeoHierarchy!.add(new UserGeoHierarchy.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -167,6 +175,49 @@ class EmployeeDetailsGetResponse {
     data['shift_start_time'] = this.shiftStartTime;
     data['shift_end_time'] = this.shiftEndTime;
     data['nav_sync'] = this.navSync;
+    if (this.userGeoHierarchy != null) {
+      data['user_geo_hierarchy'] =
+          this.userGeoHierarchy!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+
+}
+
+
+class UserGeoHierarchy {
+  String? approverEmail;
+  int? levelSeq;
+  String? levelName;
+  String? geoName;
+  String? geoValue;
+  int? myLevel;
+
+  UserGeoHierarchy(
+      {this.approverEmail,
+        this.levelSeq,
+        this.levelName,
+        this.geoName,
+        this.geoValue,
+        this.myLevel});
+
+  UserGeoHierarchy.fromJson(Map<String, dynamic> json) {
+    approverEmail = json['approver_email'];
+    levelSeq = json['level_seq'];
+    levelName = json['level_name'];
+    geoName = json['geo_name'];
+    geoValue = json['geo_value'];
+    myLevel = json['my_level'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['approver_email'] = this.approverEmail;
+    data['level_seq'] = this.levelSeq;
+    data['level_name'] = this.levelName;
+    data['geo_name'] = this.geoName;
+    data['geo_value'] = this.geoValue;
+    data['my_level'] = this.myLevel;
     return data;
   }
 }

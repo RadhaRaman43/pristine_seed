@@ -1,0 +1,1578 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import '../../../locat_database/databaseHelper.dart';
+import '../../../reources/app_url/app_url.dart';
+import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
+import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/AccoundDashboardData_Model.dart';
+import '../../CRM_Models/AccountMaster_model/AccountDashboardCountModel.dart';
+import '../../CRM_Models/AccountMaster_model/AccountDashboardDataSale_models.dart';
+import '../../CRM_Models/AccountMaster_model/AccountMstrGet_Model.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Draft_model.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/AccountMaster_model/Company_Prof_Mst_Model.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
+import '../../CRM_Models/AccountMaster_model/Tat_Response_model.dart';
+import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
+import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
+import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
+import '../../CRM_Repository/AccountMaster_Repository/account_master_repo.dart';
+import '../../CRM_View/Account_Master_view/AccountTaskHistoryModel.dart';
+import '../Task_master_vm/TaskMasterVM.dart';
+import '../sales_cycle_vm/sales_cycle_vm.dart';
+
+class Accountmastervm extends GetxController{
+
+  final _api=AccountMasterRepo();
+  final salesCycleController=Get.put(SalesCycleVm());
+  final TaskMaster_page_controller=Get.put(Taskmastervm());
+  DatabaseHelper crmDatabase = DatabaseHelper();
+  SessionManagement sessionManagement = SessionManagement();
+  RxBool loading=false.obs;
+  RxBool UploadImage=false.obs;
+  RxBool compProfileRemrk=false.obs;
+  RxBool GstRegistration=false.obs;
+  RxString ButtonText = 'Choose files'.obs;
+  int is_Active = -1;
+
+  int pageNumber = 0;
+  int rowsPerPage = 10;
+  int total_rows = 0;
+  RxString FromPage="".obs;
+  String email="";
+  String UserName="";
+  String accountName='';
+  String AccountOwner = '';
+  String tatResponseType = '';
+  String AccountCode = '';
+  RxString GstStateCode = ''.obs;
+  RxString GovtStateCode = ''.obs;
+  RxString GstPanNo = ''.obs;
+  String no_of_employees_min = '';
+  String no_of_employees_max = '';
+  String annual_revenue_min = '';
+  String annual_revenue_max = '';
+  String flag = '';
+  String day_flag = '';
+  String WonLoss = '';
+  String DraftId = '';
+  RxBool isExpandDetails = true.obs;
+  RxBool isExpandSales = true.obs;
+  RxBool isExpandQuotation = true.obs;
+  RxBool isExpandDSARHistory = true.obs;
+
+  Rx<CustomList> custome_selection=new CustomList().obs;
+
+  //String view ="";
+  String view ="Account";
+
+  RxString upLoadLocalImages="".obs;
+  RxString ImageString=''.obs;
+  final ImagePicker _picker = ImagePicker();
+  //RxString flag="Update".obs;
+
+  var account_name_controller = TextEditingController();
+  var account_code_controller = TextEditingController();
+  var account_type_controller = TextEditingController();
+  var account_cat_type_controller = TextEditingController();
+  var gst_registration_type_controller = TextEditingController().obs;
+  var comp_prof_type_controller = TextEditingController();
+  var comp_prof_sub_type_controller = TextEditingController().obs;
+  var comp_prof_remarks_controller = TextEditingController();
+  var Address_controller = TextEditingController();
+  var Shipping_Address_controller = TextEditingController();
+  var IsActive_controller = TextEditingController();
+  var UploadImageType_controller = TextEditingController();
+  var stateName_controller = TextEditingController();
+  var ImageUrl_Controller = TextEditingController();
+  var CompProfileDescription_Controller = TextEditingController();
+  var EmployeeMember_Controller = TextEditingController();
+  var AccountTitle_Controller = TextEditingController();
+  var PhoneNo_Controller = TextEditingController();
+  var Alternate_PhoneNo_Controller = TextEditingController();
+  var EmailId_Controller = TextEditingController();
+  var Website_Controller = TextEditingController();
+  var GstNo_Controller = TextEditingController();
+  var PanNo_Controller = TextEditingController();
+  var IfscCode_Controller = TextEditingController();
+  var No_Of_Emp_Controller = TextEditingController();
+  var Address2_Controller = TextEditingController();
+  var Shipping_Address2_Controller = TextEditingController();
+  var PostCode_Controller = TextEditingController();
+  var Shipping_PostCode_Controller = TextEditingController();
+  var State_Controller = TextEditingController();
+  var Shipping_State_Controller = TextEditingController();
+  var City_Controller = TextEditingController();
+  var Shipping_City_Controller = TextEditingController();
+  var District_Controller = TextEditingController();
+  var Shipping_District_Controller = TextEditingController();
+  var Annual_Revenue_Controller = TextEditingController();
+  var Sale_Representative_Controller = TextEditingController();
+  var Regional_service_head_Controller = TextEditingController();
+  var TatResponse_Controller = TextEditingController();
+
+   int InActive=0;
+
+
+  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  List<AccountDraftModel> Account_Master_Draft_list=<AccountDraftModel>[];
+  RxList<CustomList> get_Acc_category_list=<CustomList>[].obs;
+  RxList<CustomList> get_Acc_type_list=<CustomList>[].obs;
+  RxList<CustomList> get_Comp_Profile_type_list=<CustomList>[].obs;
+  RxList<CustomList> get_Gst_Registration_list=<CustomList>[].obs;
+  RxList<String> IsActiveTypeList = <String>[].obs;
+  RxList<String> NoOfEmpListFilter = <String>[].obs;
+  RxList<String> AnnualRevenueListFilter = <String>[].obs;
+  RxList<String> UploadImageTypeList = <String>[].obs;
+  RxList<String> IsActiveTypeAllList = <String>[].obs;
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<CompanyProfileMstModel> CompanyProfileMst_list = <CompanyProfileMstModel>[].obs;
+  RxList<AddressMasterModel> AddressMst_list = <AddressMasterModel>[].obs;
+  RxList<StateMasterListModel> StateMaster_list = <StateMasterListModel>[].obs;
+  RxList<StateMasterListModel> GstStateList = <StateMasterListModel>[].obs;
+  RxList<TatResponseModel> TatResponseMaster_list = <TatResponseModel>[].obs;
+  RxList<AccountMasterGetByCodeModel> AccountMasterGetCode_list = <AccountMasterGetByCodeModel>[].obs;
+  RxList<ContactMstGetListModal> view_contract_list = <ContactMstGetListModal>[].obs;
+  RxList<AccountDashboardCountModel> accountDashBoardCount = <AccountDashboardCountModel>[].obs;
+  RxList<Task> accountDashBoardTaskCount = <Task>[].obs;
+  RxList<Sales> accountDashBoardSalesCount = <Sales>[].obs;
+  RxList<Quotation> accountDashBoardQuotationCount = <Quotation>[].obs;
+  RxList<AccountTaskHistoryModel> AccountTaskHistoryList = <AccountTaskHistoryModel>[].obs;
+  RxList<AccountDashboardDataModel> AccountDashboardDataList = <AccountDashboardDataModel>[].obs;
+  RxList<AccountdashboarddatasaleModelsModel> AccountDashboardDataSalesList = <AccountdashboarddatasaleModelsModel>[].obs;
+  RxList<SalesCycleQuoteHeaderModal> AccountDashboardDataQuotationList = <SalesCycleQuoteHeaderModal>[].obs;
+
+  @override
+  void onInit() async {
+    super.onInit();
+
+    email=await sessionManagement.getEmail() ?? '';
+    UserName=await sessionManagement.getName() ?? '';
+    getAccountMaster(pageNumber ,is_Active.toString());
+    getAccCategoryApi();
+    getAccountTypeApi();
+    getCompanyProfileTypeApi();
+    //getCompanyProfileSubTypeApi();
+    getGstRegistrationTypeApi();
+    //IsActive_controller.text = 'All';
+    IsActiveTypeList.value = ['Yes', 'No'];
+    AnnualRevenueListFilter.value = ['0-500000', '500000-1000000', '1000000-25000000' ,'2500000-Above'];
+    NoOfEmpListFilter.value = ['0-25', '25-50', '50-100' ,'100-Above'];
+    IsActiveTypeAllList.value = ['All','Yes', 'No'];
+    UploadImageTypeList.value = ['Upload Image','Url'];
+    getEmployeeMemberApi();
+    getSateListApi();
+    getTatResponseMasterApi();
+
+
+
+  }
+
+  void toggle() {
+    isExpandDetails.value = !isExpandDetails.value;
+  }
+
+  void toggleSales() {
+    isExpandSales.value = !isExpandSales.value;
+  }
+
+  void toggleQuotation() {
+    isExpandQuotation.value = !isExpandQuotation.value;
+  }
+  void toggleDSARHistory() {
+    isExpandDSARHistory.value = !isExpandDSARHistory.value;
+  }
+
+  void clearAccoundController(){
+    account_name_controller.text = '';
+    account_type_controller.text = '';
+    account_cat_type_controller.text = '';
+    PhoneNo_Controller.text = '';
+    EmailId_Controller.text = '';
+    comp_prof_type_controller.text = '';
+    Address_controller.text = '';
+    stateName_controller.text = '';
+  }
+  void clearAccountCreateController(){
+    account_name_controller.text = '';
+    account_type_controller.text = '';
+    account_cat_type_controller.text = '';
+    EmailId_Controller.text="";
+    AccountTitle_Controller.text="";
+    ImageUrl_Controller.text="";
+    comp_prof_type_controller.text = '';
+    Website_Controller.text="";
+    Address_controller.text = '';
+    stateName_controller.text = '';
+    PhoneNo_Controller.text="";
+    comp_prof_sub_type_controller.value.text="";
+    Address2_Controller.text="";
+    PostCode_Controller.text="";
+    State_Controller.text="";
+    City_Controller.text="";
+    District_Controller.text="";
+    No_Of_Emp_Controller.text="";
+    Annual_Revenue_Controller.text="";
+    TatResponse_Controller.text="";
+    Sale_Representative_Controller.text = "";
+    Regional_service_head_Controller.text ="";
+
+  }
+
+  Future<void>refreshList() async{
+    clearAccoundController();
+    getAccountMaster(pageNumber ,is_Active.toString());
+  }
+
+   getAccountMaster(int page_no, String IsActive){
+    if(IsActive == 'All'){
+      is_Active = -1;
+    }else if( IsActive == 'Yes'){
+      is_Active = 1;
+    }else if(IsActive == 'No'){
+      is_Active = 0;
+    }
+    print('isActiveInAPi...${is_Active}');
+    try{
+      Map<String, String> data={
+        "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
+        "filter_account_owner": "",
+        "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
+        "filter_account_category_type": account_cat_type_controller.value.text.isEmpty?"":account_cat_type_controller.value.text,
+        "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
+        "filter_address": Address_controller.value.text.isEmpty?"":Address_controller.value.text,
+        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
+        "filter_is_active": is_Active.toString(),
+        "filter_created_by": email,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString(),
+        "no_of_employees_min": no_of_employees_min.isEmpty?"":no_of_employees_min,
+        "no_of_employees_max": no_of_employees_max.isEmpty?"":no_of_employees_max,
+        "annual_revenue_min": annual_revenue_min.isEmpty?"":annual_revenue_min,
+        "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
+        "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
+        "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
+      };
+      loading.value=true;
+      _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
+         final jsonResponse = json.decode(onValue);
+         if(jsonResponse is List){
+           List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+           if(response!= null && response.length>0 && response[0].condition=="True"){
+             loading.value = false;
+              if(page_no==0){
+                Account_Master_list.clear();
+              }
+             Account_Master_list.addAll(response);
+             total_rows=int.parse(Account_Master_list[0].totalRows!);
+
+           }else {
+             loading.value = false;
+             Account_Master_list.value=[];
+
+           }
+         } else {
+           loading.value = false;
+
+         }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+   }
+
+  getAccCategoryApi() {
+    this.loading.value = true;
+    Map<String, String> data = {'flag': "account_category"};
+
+    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          get_Acc_category_list.value = emp_masterResponse[0].list!;
+          print('master list....${get_Acc_category_list.length.toString()}');
+        } else {
+          get_Acc_category_list.value = [];
+          print('master listelsse....${get_Acc_category_list.length.toString()}');
+        }
+      } catch (e) {
+        get_Acc_category_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      get_Acc_category_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  getAccountTypeApi() {
+    this.loading.value = true;
+    Map<String, String> data = {'flag': "account_type"};
+
+    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          get_Acc_type_list.value = emp_masterResponse[0].list!;
+          print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          get_Acc_type_list.value = [];
+          print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        get_Acc_type_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      get_Acc_type_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  getCompanyProfileTypeApi(){
+    this.loading.value = true;
+    Map<String, String> data = {'flag': "company"};
+
+    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          get_Comp_Profile_type_list.value = emp_masterResponse[0].list!;
+          print('master list....${get_Comp_Profile_type_list.length.toString()}');
+        } else {
+          get_Comp_Profile_type_list.value = [];
+          print('master listelsse....${get_Comp_Profile_type_list.length.toString()}');
+        }
+      } catch (e) {
+        get_Comp_Profile_type_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      get_Comp_Profile_type_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  getGstRegistrationTypeApi() {
+    this.loading.value = true;
+    Map<String, String> data = {'flag': "gst_type"};
+
+    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          get_Gst_Registration_list.value = emp_masterResponse[0].list!;
+          //print('master list....${get_Acc_category_list.length.toString()}');
+        } else {
+          get_Gst_Registration_list.value = [];
+          //print('master listelsse....${get_Acc_category_list.length.toString()}');
+        }
+      } catch (e) {
+        get_Gst_Registration_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      get_Gst_Registration_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  getEmployeeMemberApi() {
+    Map data = {
+      "email_id": email,
+      "flag": ""
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+
+  getCompanyProfileSubTypeApi(String? companyProfileType) {
+    Map data = {
+      "filter_company_type":comp_prof_type_controller.value.text.isEmpty ? companyProfileType : comp_prof_type_controller.value.text,
+      "filter_description": "",
+      "row_per_page": 1000,
+      "page_number": 0
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.CompanyProfileMsGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<CompanyProfileMstModel> response =
+            JsonResponse.map((e) => CompanyProfileMstModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              CompanyProfileMst_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              CompanyProfileMst_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            CompanyProfileMst_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+
+  Future<void> upLoadImage(BuildContext context) async {
+    var image;
+    try {
+      image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 60);
+      if (image != null) {
+        upLoadLocalImages.value = image.path.toString();
+        await upLoadImageApi(context);
+        Navigator.of(context).pop();
+        UploadImageType_controller.clear();
+        UploadImage.value = false;
+        await getAccMasterBuyCodeApi(AccountCode);
+        Get.toNamed(RoutesName.update_AccountMaster_screen);
+      }
+    } catch (e) {
+      Utils.sanckBarError("Image Exception!", e.toString());
+    }
+  }
+
+  Future<void> upLoadImageApi(BuildContext context) async {
+    final Uri imageUrl = Uri.parse(ImageUrl_Controller.text.toString());
+    final Uri serverUri = Uri.parse(AppUrl.AccountMstImageUpload);
+    final http.MultipartRequest clientRequest = http.MultipartRequest('POST', serverUri);
+
+    var fields = <String, String>{
+      "account_code": AccountMasterGetCode_list[0].accountCode!,
+      "Url": imageUrl.toString(),
+    };
+    clientRequest.fields.addAll(fields);
+
+    try {
+      if (ImageUrl_Controller.text.isEmpty) {
+        // Uploading image from gallery
+        clientRequest.files.add(await http.MultipartFile.fromPath('imageUrl', upLoadLocalImages.value));
+      } else {
+        // Uploading image from URL
+        final http.Response response = await http.get(imageUrl);
+        if (response.statusCode == 200) {
+          clientRequest.files.add(http.MultipartFile.fromBytes(
+            'Url',
+            response.bodyBytes,
+            filename: 'image.jpg',
+          ));
+        } else {
+          throw Exception('Failed to load image from URL');
+        }
+      }
+    } catch (e) {
+      print("Failed to load image from URL: $e");
+      loading.value = false;
+      Utils.sanckBarError('Error!', "Failed to load image from URL");
+      return;
+    }
+
+    loading.value = true;
+
+    try {
+      final response = await _api.AccountMstImageUploadApiHit(clientRequest, sessionManagement);
+      final jsonResponse = json.decode(response);
+
+      if (jsonResponse is List) {
+        List<AccountMasterGetByCodeModel> responseData =
+        jsonResponse.map((data) => AccountMasterGetByCodeModel.fromJson(data)).toList();
+
+        if (responseData.isNotEmpty && responseData[0].condition == 'True') {
+          loading.value = false;
+          Navigator.of(context).pop();
+          UploadImageType_controller.clear();
+          UploadImage.value = false;
+          Utils.showToastification('Success!', responseData[0].message.toString());
+          await getAccMasterBuyCodeApi(AccountCode);
+          Get.toNamed(RoutesName.update_AccountMaster_screen);
+        } else {
+          loading.value = false;
+          Utils.showErrorToastification('Failed!', responseData[0].message.toString());
+        }
+      } else {
+        loading.value = false;
+        Utils.sanckBarError('API Error', jsonResponse["message"] ?? 'Invalid response format');
+      }
+    } catch (error) {
+      print("API Error: $error");
+      loading.value = false;
+      Utils.sanckBarError('Error!', "API Response Error");
+    }
+  }
+
+
+
+  getSateListApi() {
+    this.loading.value = true;
+    Map<String, String> data = {};
+
+    _api.getStateMasterApiHit(data, sessionManagement).then((value) {
+      try {
+        List<StateMasterListModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => StateMasterListModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          StateMaster_list.value = emp_masterResponse!;
+          print('master list....${StateMaster_list.length.toString()}');
+        } else {
+          StateMaster_list.value = [];
+          print('master listelsse....${StateMaster_list.length.toString()}');
+        }
+      } catch (e) {
+        StateMaster_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      StateMaster_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  getTatResponseMasterApi() {
+    Map data = {};
+    print(data);
+    loading.value = true;
+    try {
+      _api.getTatResponseMasterApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<TatResponseModel> response =
+            JsonResponse.map((e) => TatResponseModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              TatResponseMaster_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              TatResponseMaster_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Calender Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      TatResponseMaster_list.value = [];
+      print(e);
+    }
+  }
+
+   getAccMasterBuyCodeApi(String? accountCode) {
+    AccountCode = accountCode!;
+    Map<String , String> data = {
+      "account_code": accountCode.toString()
+    };
+    print(data);
+    loading.value = true;
+      _api.getAccountMasterGetByCodeApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          try{
+            if (JsonResponse is List) {
+              List<AccountMasterGetByCodeModel> response =
+              JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e))
+                  .toList();
+              if (response != null &&
+                  response.length > 0 &&
+                  response[0].condition == "True") {
+                AccountMasterGetCode_list.value=response;
+                accountName=AccountMasterGetCode_list[0].accountName.toString();
+                print('Api Hit Mster....${AccountMasterGetCode_list[0].profile.toString()}');
+                Get.toNamed(RoutesName.update_AccountMaster_screen);
+                viewRequestDetails(response);
+
+              } else {
+                AccountMasterGetCode_list.value=[];
+                Utils.showErrorToastification(
+                    "Error!", "No Data Found");
+                //service_installation_details_list.value=[];
+              }
+            } else {
+
+              // service_indent_header_list.value = [];
+              Utils.showExceptionToastification("Api Error!", JsonResponse);
+            }
+          }catch(e){
+            print(e);
+          }finally{
+            loading.value = false;
+
+          }
+
+
+
+
+        },
+      ).onError(
+            (error, stackTrace) {
+              loading.value = false;
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      ).whenComplete(() {
+        loading.value = false;
+      },);
+  }
+
+
+
+  AccountMstUploaderApiHit(String flag, String AccountCode) async {
+    if(IsActive_controller.text=="Yes"){
+      InActive=1;
+    }else if(IsActive_controller.text=="No"){
+      InActive=0;
+      //print(accountMaster_page_controller.InActive);
+    }
+    Map<String, dynamic> data = {
+      "created_by": email,
+      "flag": flag,
+      "lines": [
+        {
+          "account_code": AccountCode!,
+          "account_name": account_name_controller.text.isEmpty?'':account_name_controller.text ,
+          "account_owner": AccountOwner,
+          "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
+          "account_type": account_type_controller.text.isEmpty?'':account_type_controller.text,
+          "referral_by": '',
+          "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
+          "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
+          "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
+          "company_profile_type": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text,
+          "company_profile_sub_type": comp_prof_sub_type_controller.value.text.isEmpty?'':comp_prof_sub_type_controller.value.text,
+          "company_profile_remark": comp_prof_remarks_controller.text.isEmpty?'':comp_prof_remarks_controller.text,
+          "address": Address_controller.text.isEmpty?'':Address_controller.text,
+          "address2": Address2_Controller.text.isEmpty?'':Address2_Controller.text,
+          "post_code": PostCode_Controller.text.isEmpty?'':PostCode_Controller.text,
+          "state_name": State_Controller.text.isEmpty?'':State_Controller.text,
+          "city": City_Controller.text.isEmpty?'':City_Controller.text,
+          "district": District_Controller.text.isEmpty?'':District_Controller.text,
+          "shipping_address": Shipping_Address_controller.text.isEmpty?"":Shipping_Address_controller.text,
+          "shipping_address2": Shipping_Address2_Controller.text.isEmpty?"":Shipping_Address2_Controller.text,
+          "shipping_post_code": Shipping_PostCode_Controller.text.isEmpty?"":Shipping_PostCode_Controller.text,
+          "shipping_state_code": Shipping_State_Controller.text.isEmpty?"":Shipping_State_Controller.text,
+          "shipping_city": Shipping_City_Controller.text.isEmpty?"":Shipping_City_Controller.text,
+          "shipping_district": Shipping_District_Controller.text.isEmpty?"":Shipping_District_Controller.text,
+          "no_of_employees": No_Of_Emp_Controller.text.isEmpty?0:No_Of_Emp_Controller.text,
+          "annual_revenue": Annual_Revenue_Controller.text.isEmpty?0:Annual_Revenue_Controller.text,
+          "tat_response_type": tatResponseType.isEmpty?'':tatResponseType,
+          "sales_representative": Sale_Representative_Controller.text.isEmpty?'':Sale_Representative_Controller.text,
+          "regional_service_head": Regional_service_head_Controller.text.isEmpty?'':Regional_service_head_Controller.text,
+          "profile": ImageUrl_Controller.text.isEmpty?'':ImageUrl_Controller.text,
+          "is_active": InActive,
+          "website": Website_Controller.text.isEmpty?'':Website_Controller.text,
+          "gst_type": gst_registration_type_controller.value.text.isEmpty?'':gst_registration_type_controller.value.text,
+          "gst_no": GstNo_Controller.text.isEmpty?'':GstNo_Controller.text,
+          "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
+          "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
+          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text
+        }
+      ]
+    };
+    print(data);
+    loading.value = true;
+    try {
+      final value = await _api.AccountMstUploaderApiHit(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AccountMasterGetByCodeModel> response =
+        JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          loading.value = false;
+          //AccountMasterGetCode_list.value=response;
+
+     //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
+          if(flag == 'Create'){
+            print("ttttttttttt");
+            Utils.showToastification("Success!", "Account Create Successful");
+            clearAccoundController();
+            deleteAccountData(DraftId);
+            pageNumber=0;
+            getAccountMaster(pageNumber ,is_Active.toString());
+            Get.toNamed(RoutesName.accountMaster_screen);
+          }else if(flag == 'Update'){
+            print("Update....");
+            Utils.showToastification("Success!", "Account Update Successful");
+            viewRequestDetails(response);
+            clearAccoundController();
+            pageNumber=0;
+            getAccountMaster(pageNumber ,is_Active.toString());
+            Get.toNamed(RoutesName.accountMaster_screen);
+          }
+          //Get.toNamed(RoutesName.update_AccountMaster_screen);
+          //viewRequestDetails(response);
+        } else {
+          loading.value = false;
+         // AccountMasterGetCode_list.value = [];
+          Utils.showErrorToastification("Error!", response[0].message??"");
+          //service_installation_details_list.value=[];
+        }
+      } else {
+        loading.value = false;
+        // service_indent_header_list.value = [];
+        Utils.showExceptionToastification("Api Error!", JsonResponse);
+      }
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      print("Exce3ption....");
+      //service_indent_header_list.value = [];
+    }
+  }
+
+
+
+
+  CompanyProfileMasterUploaderApiHit(String flag, String page) async {
+    Map<String, dynamic> data = {
+      "created_by": email,
+      "flag": flag,
+      "lines": [
+        {
+          "description": CompProfileDescription_Controller.text.isEmpty?'':CompProfileDescription_Controller.text,
+          "type_of_company": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text ,
+        }
+      ]
+    };
+    print(data);
+    loading.value = true;
+    try {
+      final value = await _api.CompanyProfileMstUploaderApiHit(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AccountMasterGetByCodeModel> response =
+        JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          loading.value = false;
+          //AccountMasterGetCode_list.value=response;
+
+          //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
+          if(flag == 'Create') {
+            if(page == 'New'){
+              print("ttttttttttt");
+              Utils.showToastification("Success!", "Add Successful");
+              getCompanyProfileSubTypeApi(comp_prof_type_controller.value.text);
+              compProfileRemrk.value = true;
+              compProfileRemrk.value = false;
+              comp_prof_sub_type_controller.value.text = CompProfileDescription_Controller.value.text;
+              print('compSubType.....${comp_prof_sub_type_controller.value.text}');
+              CompProfileDescription_Controller.clear();
+            }else if(page == 'Update'){
+              Utils.showToastification("Success!", "Add Successful");
+              getAccMasterBuyCodeApi(AccountCode);
+              getCompanyProfileSubTypeApi(comp_prof_type_controller.value.text);
+              compProfileRemrk.value = true;
+              compProfileRemrk.value = false;
+              comp_prof_sub_type_controller.value.text = CompProfileDescription_Controller.value.text;
+              print('compSubType.....${comp_prof_sub_type_controller.value.text}');
+              CompProfileDescription_Controller.clear();
+            }
+
+            //viewRequestDetails(response);
+          }
+        } else {
+          loading.value = false;
+          //AccountMasterGetCode_list.value = [];
+          Utils.showErrorToastification("Error!", "Unsuccessful");
+          //service_installation_details_list.value=[];
+        }
+      } else {
+        loading.value = false;
+        // service_indent_header_list.value = [];
+        Utils.showExceptionToastification("Api Error!", JsonResponse);
+      }
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      print("Exce3ption....");
+      //service_indent_header_list.value = [];
+    }
+  }
+
+
+  viewRequestDetails(List<AccountMasterGetByCodeModel> response){
+    try{
+      print('valuein...${compProfileRemrk.value}');
+
+      ImageString.value = response[0].profile??"";
+      account_code_controller.text = response[0].accountCode??"";
+      account_name_controller.text = response[0].accountName??"";
+      EmployeeMember_Controller.text = response[0].accountOwnerFullName??"";
+      AccountOwner = employee_Member_list[0].loginEmailId??"";
+      AccountTitle_Controller.text = response[0].accountTitle??"";
+      account_type_controller.text = response[0].accountType??"";
+      PhoneNo_Controller.text= response[0].phoneNo??"";
+      EmailId_Controller.text = response[0].emailId??"";
+      account_cat_type_controller.text = response[0].accountCategoryType??"";
+      comp_prof_type_controller.text = response[0].companyProfileType??"";
+      comp_prof_sub_type_controller.value.text = response[0].companyProfileSubType??"";
+      if(comp_prof_type_controller.value.text == 'Others'){
+        print('value...${compProfileRemrk.value}');
+        compProfileRemrk.value = true;
+      }
+      comp_prof_remarks_controller.text = response[0].companyProfileRemark??"";
+      if(response[0].isActive == 1){
+        IsActive_controller.text = 'Yes';
+      }else if(response[0].isActive == 0){
+        IsActive_controller.text = 'No';
+      }else if(response[0].isActive == -1){
+        IsActive_controller.text = 'All';
+      }
+      gst_registration_type_controller.value.text = response[0].gstType??"";
+      if(gst_registration_type_controller.value.text == 'Registered'){
+        GstRegistration.value = true;
+      }else{
+        GstRegistration.value = false;
+      }
+      GstNo_Controller.text = response[0].gstNo??"";
+      PanNo_Controller.text = response[0].panNo??'';
+      GstPanNo.value = response[0].panNo??'';
+      IfscCode_Controller.text = response[0].ifscCode??'';
+
+      //IsActive_controller.text = response[0].isActive.toString();
+      Address_controller.text = response[0].permanentAddress!.address??"";
+      print('Adresss....${response[0].permanentAddress!.address??""}');
+      Address2_Controller.text = response[0].permanentAddress!.address2??"";
+      PostCode_Controller.text = response[0].permanentAddress!.postCode??"";
+      State_Controller.text = response[0].permanentAddress!.stateName??"";
+      GstStateCode.value = response[0].permanentAddress!.stateCode??"";
+      GovtStateCode.value = response[0].permanentAddress!.stateCode??"";
+      City_Controller.text = response[0].permanentAddress!.city??"";
+      District_Controller.text = response[0].permanentAddress!.district??"";
+      Shipping_Address_controller.text = response[0].shippingAddress??"";
+      Shipping_Address2_Controller.text = response[0].shippingAddress2??"";
+      Shipping_PostCode_Controller.text = response[0].shippingPostCode??"";
+      Shipping_City_Controller.text = response[0].shippingCity??"";
+      Shipping_District_Controller.text = response[0].shippingDistrict??"";
+      Shipping_State_Controller.text = response[0].shippingStateName??"";
+      No_Of_Emp_Controller.text = response[0].noOfEmployees.toString();
+      Annual_Revenue_Controller.text = response[0].annualRevenue.toString();
+      TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
+      tatResponseType = response[0].tatResponseType??"";
+      Sale_Representative_Controller.text = response[0].salesRepresentative??"";
+      Regional_service_head_Controller.text = response[0].regionalServiceHead??"";
+
+    }catch(e){
+
+    }
+  }
+
+  clearController(){
+    try{
+      compProfileRemrk.value = false;
+      GstRegistration.value = false;
+      CompanyProfileMst_list.value=[];
+      ImageString.value == '';
+      account_code_controller.clear();
+      account_name_controller.clear();
+      EmployeeMember_Controller.clear();
+      AccountOwner = '';
+      AccountTitle_Controller.clear();
+      account_type_controller.clear();
+      PhoneNo_Controller.clear();
+      Alternate_PhoneNo_Controller.clear();
+      EmailId_Controller.clear();
+      account_cat_type_controller.clear();
+      comp_prof_type_controller.clear();
+      comp_prof_sub_type_controller.value.clear();
+      comp_prof_remarks_controller.clear();
+      gst_registration_type_controller.value.clear();
+      GstNo_Controller.clear();
+      PanNo_Controller.clear();
+      IfscCode_Controller.clear();
+      IsActive_controller.text = '-1';
+      Address_controller.clear();
+      Address2_Controller.clear();
+      PostCode_Controller.clear();
+      State_Controller.clear();
+      City_Controller.clear();
+      District_Controller.clear();
+      Shipping_Address_controller.clear();
+      Shipping_Address2_Controller.clear();
+      Shipping_PostCode_Controller.clear();
+      Shipping_City_Controller.clear();
+      Shipping_District_Controller.clear();
+      Shipping_State_Controller.clear();
+      No_Of_Emp_Controller.clear();
+      Annual_Revenue_Controller.clear();
+      TatResponse_Controller.clear();
+      tatResponseType  = '';
+      Sale_Representative_Controller.clear();
+      Regional_service_head_Controller.clear();
+
+    }catch(e){
+
+    }
+  }
+
+  void getContactMasterList(int pageNumber, String account_name, String contName, String account_Code) {
+    try{
+      Map<String, String> data={
+        "filter_contact_name": contName,
+        "filter_account_code": account_Code,
+        "filter_account_name": account_name,
+        "filter_department_name": '',
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": pageNumber.toString()
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.contactMstGetList(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            view_contract_list.value=[];
+            view_contract_list.value=response;
+            Get.toNamed(RoutesName.viewContacts_screen);
+
+          }else {
+            loading.value = false;
+            view_contract_list.value=[];
+            Get.toNamed(RoutesName.viewContacts_screen);
+            Utils.showToastification('No Data Found', 'No Data Found');
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  /*void getAddressMasterList(int pageNumber, String account_Code) {
+    try{
+      Map<String, String> data={
+        "consignee_id": '',
+        "account_code":account_Code,
+        "account_name": '',
+        "contact_name": '',
+        "email_id": '',
+        "phone_no": '',
+        "rowsPerPage": rowsPerPage.toString(),
+        "pageNumber": pageNumber.toString()
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.ConsigneeAddMstGet(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AddressMasterModel> response = jsonResponse.map((e) => AddressMasterModel.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            AddressMst_list.value=[];
+            AddressMst_list.value=response;
+            Get.toNamed(RoutesName.viewAddress_screen);
+
+          }else {
+            loading.value = false;
+            AddressMst_list.value=[];
+            Get.toNamed(RoutesName.viewAddress_screen);
+            Utils.showToastification('No date', 'No Data Found');
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }*/
+
+
+
+  void getAccountDashboardCount(int pageNumber, String account_Code) {
+    try{
+      Map<String, String> data={
+        "account_code": account_Code,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": pageNumber.toString()
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.AccountDashboardCount(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountDashboardCountModel> response = jsonResponse.map((e) => AccountDashboardCountModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            accountDashBoardCount.value=[];
+            accountDashBoardCount.value=response;
+            accountDashBoardTaskCount.value=[];
+            accountDashBoardSalesCount.value=[];
+            accountDashBoardQuotationCount.value=[];
+            accountDashBoardTaskCount.add(accountDashBoardCount[0].task!) ;
+            accountDashBoardSalesCount.add(accountDashBoardCount[0].sales!) ;
+            accountDashBoardQuotationCount.add(accountDashBoardCount[0].quotation!) ;
+            getAccountTaskHistory(pageNumber, account_Code);
+            ClearSalesFilter();
+            Get.toNamed(RoutesName.AccountDashboardCount_Screen);
+
+          }else {
+            loading.value = false;
+            view_contract_list.value=[];
+            Get.toNamed(RoutesName.AccountDashboardCount_Screen);
+            Utils.showToastification('No date', 'No Data Found');
+
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+  getAccountTaskHistory(int page_no, String accountCode){
+    try{
+      Map<String, String> data={
+        "account_code": accountCode,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString()
+      };
+      loading.value=true;
+      _api.AccountTaskHistory(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountTaskHistoryModel> response = jsonResponse.map((e) => AccountTaskHistoryModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              AccountTaskHistoryList.clear();
+            }
+            AccountTaskHistoryList.addAll(response);
+            total_rows=int.parse(AccountTaskHistoryList[0].totalRows!);
+
+          }else {
+            loading.value = false;
+            AccountTaskHistoryList.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getAccountDashboardData(int page_no,String IsActive, String accountCode, String flag, String day_flag){
+    if(TaskMaster_page_controller.isInfraLeadFilterController.text=="All"){
+      TaskMaster_page_controller.infraLeadValue.value=-1;
+    }
+    else if(TaskMaster_page_controller.isInfraLeadFilterController.text=="Yes"){
+      TaskMaster_page_controller.infraLeadValue.value=1;
+    }
+    else if(TaskMaster_page_controller.isInfraLeadFilterController.text=="No"){
+      TaskMaster_page_controller.infraLeadValue.value=0;
+    }
+    else{
+      TaskMaster_page_controller.infraLeadValue.value=-1;
+    }
+
+    if(IsActive == 'All'){
+      is_Active = -1;
+    }else if( IsActive == 'Yes'){
+      is_Active = 1;
+    }else if(IsActive == 'No'){
+      is_Active = 0;
+    }
+    try{
+      Map<String, String> data={
+          "filter_flag": flag,
+          "filter_task_id": "",
+          "filter_contact_name": TaskMaster_page_controller.Contact_Name_controller.value.text.isEmpty?"":TaskMaster_page_controller.Contact_Name_controller.value.text,
+          "filter_type_of_call": TaskMaster_page_controller.Type_of_call_controller.value.text.isEmpty?"":TaskMaster_page_controller.Type_of_call_controller.value.text,
+          "filter_is_infra_lead": TaskMaster_page_controller.infraLeadValue.value.toString(),
+          "filter_is_sales_cycle_active": is_Active.toString(),
+          "filter_sales_cycle_id": TaskMaster_page_controller.Sale_cycle_Id_controller.value.text.isEmpty?"":TaskMaster_page_controller.Sale_cycle_Id_controller.value.text,
+          "filter_is_closed_completed": "0",
+          "filter_sales_cycle_status": "",
+          "filter_sales_cycle_approval_status": "",
+          "filter_created_by": email,
+          "filter_account_code": accountCode,
+          "filter_day_flag": day_flag,
+          "quote_status": "",
+          "filter_quote_id": "",
+          "filter_quote_validity": "",
+          "filter_exp_closure_date": "",
+          "rowsPerPage": rowsPerPage.toString(),
+          "pageNumber": page_no.toString()
+      };
+      loading.value=true;
+      _api.AccountDashboardDataGet(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountDashboardDataModel> response = jsonResponse.map((e) => AccountDashboardDataModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              AccountDashboardDataList.clear();
+            }
+            AccountDashboardDataList.addAll(response);
+            total_rows=int.parse(AccountDashboardDataList[0].totalRows!);
+            print('list..Size...${AccountDashboardDataList.length}');
+            Get.toNamed(RoutesName.AccountDashboardData_Screen);
+
+          }else {
+            loading.value = false;
+            AccountDashboardDataList.value=[];
+            print('Nodatafound');
+            Utils.showToastification('No date', 'No Data Found');
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getAccountDashboardDataSales(int page_no,String IsActive, String accountCode, String flag, String day_flag, String WonLoss){
+    /*if(isInfraLeadFilterController.text=="All"){
+      infraLeadValue.value=-1;
+    }
+    else if( isInfraLeadFilterController.text=="Yes"){
+      infraLeadValue.value=1;
+    }
+    else if( isInfraLeadFilterController.text=="No"){
+      infraLeadValue.value=0;
+    }
+    else{
+      infraLeadValue.value=-1;
+    }
+    if(IsActive == 'All'){
+      is_Active = -1;
+    }else if( IsActive == 'Yes'){
+      is_Active = 1;
+    }else if(IsActive == 'No'){
+      is_Active = 0;
+    }*/
+    try{
+      Map<String, String> data={
+        "filter_flag": flag,
+        "filter_task_id": "",
+        "filter_contact_name": salesCycleController.contactNameController.value.text.isEmpty?"":salesCycleController.contactNameController.value.text,
+        "filter_type_of_call": "",
+        "filter_is_infra_lead": "-1",
+        "filter_is_sales_cycle_active": "-1",
+        "filter_sales_cycle_id": salesCycleController.saleCycleController.value.text.isEmpty?"":salesCycleController.saleCycleController.value.text,
+        "filter_is_closed_completed": "0",
+        "filter_sales_cycle_status": day_flag,
+        "filter_sales_cycle_approval_status": salesCycleController.ApprovalStatusController.value.text.isEmpty?"":salesCycleController.ApprovalStatusController.value.text,
+        "filter_created_by": email,
+        "filter_account_code": accountCode,
+        "filter_day_flag": "",
+        "quote_status": WonLoss,
+        "filter_quote_id": "",
+        "filter_quote_validity": "",
+        "filter_exp_closure_date": "",
+        "rowsPerPage": rowsPerPage.toString(),
+        "pageNumber": page_no.toString()
+      };
+      loading.value=true;
+      _api.AccountDashboardDataGet(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountdashboarddatasaleModelsModel> response = jsonResponse.map((e) => AccountdashboarddatasaleModelsModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              AccountDashboardDataSalesList.clear();
+            }
+            AccountDashboardDataSalesList.addAll(response);
+            total_rows=int.parse(AccountDashboardDataSalesList[0].totalRows!);
+            print('list..Size.Sales..${AccountDashboardDataSalesList.length}');
+            Get.toNamed(RoutesName.AccountDashboardDataSales_Screen);
+
+          }else {
+            loading.value = false;
+            AccountDashboardDataSalesList.value=[];
+            print('NodatafoundSales');
+            Utils.showToastification('No date', 'No Data Found');
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+  getAccountDashboardDataQuotation(int page_no,String IsActive, String accountCode, String flag, String day_flag){
+    /*if(isInfraLeadFilterController.text=="All"){
+      infraLeadValue.value=-1;
+    }
+    else if( isInfraLeadFilterController.text=="Yes"){
+      infraLeadValue.value=1;
+    }
+    else if( isInfraLeadFilterController.text=="No"){
+      infraLeadValue.value=0;
+    }
+    else{
+      infraLeadValue.value=-1;
+    }
+    if(IsActive == 'All'){
+      is_Active = -1;
+    }else if( IsActive == 'Yes'){
+      is_Active = 1;
+    }else if(IsActive == 'No'){
+      is_Active = 0;
+    }*/
+    try{
+      Map<String, String> data={
+        "filter_flag": flag,
+        "filter_task_id": "",
+        "filter_contact_name": "",
+        "filter_type_of_call": "",
+        "filter_is_infra_lead": "-1",
+        "filter_is_sales_cycle_active": "-1",
+        "filter_sales_cycle_id": "",
+        "filter_is_closed_completed": "0",
+        "filter_sales_cycle_status": "",
+        "filter_sales_cycle_approval_status": "",
+        "filter_created_by": email,
+        "filter_account_code": accountCode,
+        "filter_day_flag": "",
+        "quote_status": day_flag,
+        "filter_quote_id": salesCycleController.filterQuoteIdController.value.text.isEmpty?"":salesCycleController.filterQuoteIdController.value.text,
+        "filter_quote_validity": salesCycleController.filterQuoteValidityController.value.text.isEmpty?"":salesCycleController.filterQuoteValidityController.value.text,
+        "filter_exp_closure_date": salesCycleController.filterExpectedClosuredateController.value.text.isEmpty?"":salesCycleController.filterExpectedClosuredateController.value.text,
+        "rowsPerPage": rowsPerPage.toString(),
+        "pageNumber": page_no.toString()
+      };
+      loading.value=true;
+      _api.AccountDashboardDataGet(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleQuoteHeaderModal> response = jsonResponse.map((e) => SalesCycleQuoteHeaderModal.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              AccountDashboardDataQuotationList.clear();
+            }
+            AccountDashboardDataQuotationList.addAll(response);
+            total_rows=int.parse(AccountDashboardDataQuotationList[0].totalRows!);
+            print('list..Size.Sales..${AccountDashboardDataQuotationList.length}');
+            Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
+
+          }else {
+            loading.value = false;
+            AccountDashboardDataQuotationList.value=[];
+            print('NodatafoundSales');
+            Utils.showToastification('No date', 'No Data Found');
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  void ClearSalesFilter(){
+    salesCycleController.accountNameController.value.clear();
+    salesCycleController.contactNameController.value.clear();
+    salesCycleController.SaleCycleStatusController.value.clear();
+    salesCycleController.ApprovalStatusController.value.clear();
+    salesCycleController.saleCycleController.value.clear();
+    salesCycleController.filterQuoteIdController.value.clear();
+    salesCycleController.filterExpectedClosuredateController.value.clear();
+    salesCycleController.filterQuoteValidityController.value.clear();
+    TaskMaster_page_controller.Contact_Name_controller.clear();
+    TaskMaster_page_controller.Type_of_call_controller.clear();
+    TaskMaster_page_controller.SaleCycleActive_Controller.clear();
+    TaskMaster_page_controller.Sale_cycle_Id_controller.clear();
+    TaskMaster_page_controller.isInfraLeadFilterController.clear();
+  }
+
+
+  fillDraftDetails(List<AccountDraftModel> response, int position){
+    try{
+      DraftId = response[position].id.toString();
+      ImageString.value = response[position].profile??"";
+      account_code_controller.text = response[position].accountCode??"";
+      account_name_controller.text = response[position].accountName??"";
+      EmployeeMember_Controller.text = response[position].accountOwner??"";
+      AccountOwner = employee_Member_list[0].loginEmailId??"";
+      print('Onwer...${EmployeeMember_Controller.text}');
+     // AccountOwner = employee_Member_list[position].loginEmailId??"";
+      AccountTitle_Controller.text = response[position].accountTitle??"";
+      account_type_controller.text = response[position].accountType??"";
+      PhoneNo_Controller.text= response[position].phoneNo??"";
+      EmailId_Controller.text = response[position].emailId??"";
+      account_cat_type_controller.text = response[position].accountCategoryType??"";
+      comp_prof_type_controller.text = response[position].companyProfileType??"";
+      comp_prof_sub_type_controller.value.text = response[position].companyProfileSubType??"";
+      if(comp_prof_type_controller.value.text == 'Others'){
+        print('value...${compProfileRemrk.value}');
+        compProfileRemrk.value = true;
+      }
+      comp_prof_remarks_controller.text = response[position].companyProfileRemark??"";
+      if(response[position].isActive == 1){
+        IsActive_controller.text = 'Yes';
+      }else if(response[position].isActive == 0){
+        IsActive_controller.text = 'No';
+      }else if(response[position].isActive == -1){
+        IsActive_controller.text = 'All';
+      }
+      gst_registration_type_controller.value.text = response[position].gstType??"";
+      if(gst_registration_type_controller.value.text == 'Registered'){
+        GstRegistration.value = true;
+      }else{
+        GstRegistration.value = false;
+      }
+      GstNo_Controller.text = response[position].gstNo??"";
+      if(GstNo_Controller.value.text.isNotEmpty){
+        GstPanNo.value = GstNo_Controller.value.text.substring(2, 12);
+        print('Next ten digits: ${GstPanNo.value}');
+      }
+      PanNo_Controller.text = response[position].panNo??'';
+      IfscCode_Controller.text = response[position].ifscCode??'';
+      Address_controller.text = response[position].address??"";
+      print('Adresss....${response[position].address??""}');
+      Address2_Controller.text = response[position].address2??"";
+      PostCode_Controller.text = response[position].postCode??"";
+      State_Controller.text = response[position].stateName??"";
+      City_Controller.text = response[position].city??"";
+      District_Controller.text = response[position].district??"";
+      Shipping_Address_controller.text = response[position].shippingAddress??"";
+      Shipping_Address2_Controller.text = response[position].shippingAddress2??"";
+      Shipping_PostCode_Controller.text = response[position].shippingPostCode??"";
+      Shipping_State_Controller.text = response[position].shippingStateCode??"";
+      Shipping_City_Controller.text = response[position].shippingCity??"";
+      Shipping_District_Controller.text = response[position].shippingDistrict??"";
+      No_Of_Emp_Controller.text = response[position].noOfEmployees.toString();
+      Annual_Revenue_Controller.text = response[position].annualRevenue.toString();
+      TatResponse_Controller.text = response[position].tatResponseType??"" + ' (${response[position].tatResponseTime} Hours)';
+      tatResponseType = response[position].tatResponseType??"";
+      Sale_Representative_Controller.text = response[position].salesRepresentative??"";
+      Regional_service_head_Controller.text = response[position].regionalServiceHead??"";
+
+    }catch(e){
+
+    }
+  }
+
+  Future<void> deleteAccountData(String draftId) async {
+    try {
+      // Convert the draftId to an integer
+      int? id = int.tryParse(draftId);
+
+      if (id != null) {
+        // Assuming `crmDatabase` has a method called `deleteItem`
+        // Replace `deleteItem` with the actual method name for deletion in your database helper class
+        await crmDatabase.deleteItem(id);
+        //Utils.showToastification('Account', 'Data deleted successfully');
+        print('Data deleted successfully.');
+      } else {
+        print('Invalid draft ID: $draftId');
+      }
+    } catch (e) {
+      print('Failed to delete data: $e');
+    }
+  }
+
+
+}

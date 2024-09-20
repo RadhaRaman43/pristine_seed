@@ -1,8 +1,10 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:navigation_drawer_flutter/constants/theme.dart';
 import 'package:navigation_drawer_flutter/reources/routes/app_routes.dart';
+import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 
@@ -10,6 +12,42 @@ import 'dart:io';
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
 void main() {
+
+  AwesomeNotifications().initialize(
+    null,
+    [
+      NotificationChannel(
+        channelKey: 'basic_channel',
+        channelName: 'Basic notifications',
+        channelDescription: 'Notification channel for basic tests',
+        playSound: true,
+        importance: NotificationImportance.High,
+
+      )
+    ],
+    //debug: true
+  );
+
+  AwesomeNotifications().setListeners(
+      onActionReceivedMethod: (receivedNotification) async {
+        print("Received Notification Action: ${receivedNotification.buttonKeyPressed}");
+        if (receivedNotification.buttonKeyPressed == 'OPEN_FILE') {
+          final filePath = receivedNotification.payload?['filePath'];
+          if (filePath != null) {
+            await OpenFile.open(filePath);
+          }
+        }
+        return;
+      }
+  );
+
+
+
+
+
+
+
+
   runApp(const MyApp());
 // todo for Trust all certificates for network requests (for testing only).
   WidgetsFlutterBinding.ensureInitialized();

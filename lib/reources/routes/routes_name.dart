@@ -84,6 +84,44 @@ class RoutesName{
 
 
 
+   //todo crm routes Name....
+
+  //todo Account Master Screen.....
+  static const accountMaster_screen="/AccountMaster_screen";
+  static const add_New_AccountMaster_screen="/Add_new_Account_master";
+  static const update_AccountMaster_screen="/update_account_master";
+  static const AccountDashboardCount_Screen="/AccountDashboardCount_Screen.dart";
+  static const AccountDashboardData_Screen="/AccountDashboardDataTask_Screen.dart";
+  static const AccountDashboardDataSales_Screen="/AccountDashBoardDataSales_Screen.dart";
+  static const AccountDashboardDataQuotation_Screen="/AccountDashboardDataQuotation_Screen.dart";
+  static const Draft_item_list="/Draft_item_list.dart";
+
+  //todo Contact Master Screen
+  static const contactMaster_screen="/Contact_Master_Screen";
+  static const addNewContactMaster_screen="/Add_newContact_Master";
+  static const viewContacts_screen="/View_contacts_screen";
+  static const viewAddress_screen="/View_address_screen";
+  static const addNewAddress_screen="/Add_New_ConsigneeAdd";
+
+
+  //todo Task Master Screen....
+  static const taskMaster_screen="/Task_master_screen";
+  static const addNewTaskMaster_screen="/Add_new_Task_Screen";
+  static const taskMasterDetails_screen="/Task_Master_Details";
+  static const addNewDSARTask_screen="/Add_new_DSAR_screen";
+
+  //todo Sales cycle Screen....
+  static const salesCycleScreen="/sales_cycle_screen";
+  static const viewSalesCycleHeaderScreen="/view_sale_header_screen";
+  static const salesCycleCreateQuoteScreen="/sales_cycle_create_quote_screen";
+  static const quoteInformationScreen="/sales_cycle_quote_information_screen.dart";
+  static const quoteItemList="/quote_item_list";
+  static const updatequoteLineData="/update_quote_line_data_screen";
+  static const approvalPersonList="/approval_person_list.dart";
+  static const UpdateBussinessTermPage="/update_bussiness_term_page.dart";
+  static const updateTaskMstInfraScreen="/update_task_mst_infra_screen";
+  static const quoteApprovalListScreen="/quote_approval_list_screen";
+  static const approvedQuotationListScreen="/approved_quotation_list.dart";
 
 
 

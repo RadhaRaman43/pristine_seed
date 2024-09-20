@@ -11,6 +11,34 @@ import 'package:navigation_drawer_flutter/view/user_expense/create_expense_scree
 import 'package:navigation_drawer_flutter/view/user_expense/expense_approver_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/expense_screen.dart';
 import 'package:navigation_drawer_flutter/view/user_expense/my_expense_screen.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/AccountDashBoardDataSales_Screen.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/AccountDashboardCount_Screen.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/AccountDashboardDataQuotation_Screen.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/AccountDashboardDataTask_Screen.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/AccountMaster_screen.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/Add_new_Account_master.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/Draft_item_list.dart';
+import '../../CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
+import '../../CRM_Directory/CRM_View/Address_Master_view/Add_New_ConsigneeAdd.dart';
+import '../../CRM_Directory/CRM_View/Address_Master_view/View_address_screen.dart';
+import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
+import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
+import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
+import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_DSAR_screen.dart';
+import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_Task_Screen.dart';
+import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
+import '../../CRM_Directory/CRM_View/Task_Master_view/Task_master_screen.dart';
+import '../../CRM_Directory/CRM_View/Task_Master_view/update_task_mst_infra_screen.dart';
+import '../../CRM_Directory/CRM_View/quote_approval_list/quote_approval_list_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/approval_person_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_item_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_create_quote_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_quote_information_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/update_bussiness_term_page.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/update_quote_line_data_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/view_sale_header_screen.dart';
 import '../../view/check_in_approval/check_in_approval_header_view_screen.dart';
 import '../../view/check_in_view/check_in_screen.dart';
 import '../../view/check_out_view/add_expense_screen.dart';
@@ -381,7 +409,181 @@ class AppRoutes{
     ),
 
 
+//todo crm routes...
 
+
+    //todo Account Master Screen....
+    GetPage(name: RoutesName.accountMaster_screen,
+        page: ()=>AccountmasterScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.add_New_AccountMaster_screen,
+        page: ()=>AddNewAccountMaster(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.update_AccountMaster_screen,
+        page: ()=>UpdateAccountMaster(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.Draft_item_list,
+        page: ()=>DraftItemList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    //todo Task Master Screen....
+    GetPage(name: RoutesName.taskMaster_screen,
+        page: ()=>TaskMasterScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.addNewTaskMaster_screen,
+        page: ()=>AddNewTaskScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.addNewDSARTask_screen,
+        page: ()=>AddNewDsarScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.taskMasterDetails_screen,
+        page: ()=>TaskMasterDetails(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    //todo Contact master Screen
+    GetPage(name: RoutesName.contactMaster_screen,
+        page: ()=>ContactMasterScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.addNewContactMaster_screen,
+        page: ()=>AddNewcontactMasterContact(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.viewContacts_screen,
+        page: ()=>ViewContactsScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.viewAddress_screen,
+        page: ()=>ViewAddressScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.addNewAddress_screen,
+        page: ()=>AddNewConsigneeadd(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.AccountDashboardCount_Screen,
+        page: ()=>AccountdashboardcountScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.AccountDashboardData_Screen,
+        page: ()=>AccountdashboarddatalistScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.AccountDashboardDataSales_Screen,
+        page: ()=>AccountdashboarddatasalesScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.AccountDashboardDataQuotation_Screen,
+        page: ()=>AccountdashboarddataquotationScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+//todo Sale Cycle Screen
+    GetPage(name: RoutesName.salesCycleScreen,
+        page: ()=>SalesCycleScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.viewSalesCycleHeaderScreen,
+        page: ()=>ViewSaleHeaderScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.salesCycleCreateQuoteScreen,
+        page: ()=>SalesCycleCreateQuoteScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.quoteInformationScreen,
+        page: ()=>QuoteInformationScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.quoteItemList,
+        page: ()=>QuoteItemList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.updatequoteLineData,
+        page: ()=>UpdateQuoteLineDataScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.approvalPersonList,
+        page: ()=>ApprovalPersonList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.UpdateBussinessTermPage,
+        page: ()=>UpdateBussinessTermPage(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.updateTaskMstInfraScreen,
+        page: ()=>UpdateTaskMstInfraScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.quoteApprovalListScreen,
+        page: ()=>QuoteApprovalListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.approvedQuotationListScreen,
+        page: ()=>ApprovedQuotationList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
 
 

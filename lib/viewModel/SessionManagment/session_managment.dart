@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../models/employeeDetail/employee_details_model.dart';
 import '../../models/loginModel/login_model.dart';
 
 class SessionManagement {
@@ -278,6 +279,31 @@ class SessionManagement {
       return null;
     }
   }
+  //todo crm....
+
+  Future<void> setUserGeoHierarchy(List<UserGeoHierarchy> geoHierarchyList) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final menuJsonList = geoHierarchyList.map((userGeoHierarchy) => userGeoHierarchy.toJson()).toList();
+    await prefs.setString('UserGeoHierarchy', json.encode(menuJsonList));
+  }
+
+  Future<List<UserGeoHierarchy>> getUserGeoHierarchy() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final menuJson = prefs.getString('UserGeoHierarchy');
+    if (menuJson != null) {
+      final List<dynamic> userGeoHierarchyJsonList = json.decode(menuJson);
+      final List<UserGeoHierarchy> userGeoHierarchyList =
+      userGeoHierarchyJsonList.map((json) => UserGeoHierarchy.fromJson(json)).toList();
+
+      return userGeoHierarchyList;
+
+    }
+    return [];
+  }
+
+
+
+
 
   Future<void> setMenuList(List<Menu> menuList) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -363,19 +389,13 @@ class SessionManagement {
 
 
 
-  Future<void> setCrm(String crm) async {
+  Future<void> setIsCrm(String IsCrm) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('crm', crm);
+    await prefs.setString('IsCrm', IsCrm);
   }
-  Future<String?> getCrm() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      var profile = prefs.getString('crm');
-      if (profile == null || profile == "") return null;
-      return profile;
-    } catch (e) {
-      return null;
-    }
+  Future<String?> getIsCrm() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('IsCrm');
   }
 
 

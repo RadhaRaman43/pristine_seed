@@ -14,6 +14,7 @@ import 'package:navigation_drawer_flutter/viewModel/notification_vm/notification
 import 'package:stylish_bottom_bar/helpers/enums.dart';
 import 'package:stylish_bottom_bar/model/options.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
+import '../../CRM_Directory/CRM_View/DashboardCRM_Screen.dart';
 import '../../constants/app_font_size.dart';
 import '../../models/loginModel/login_model.dart';
 import '../../viewModel/SessionManagment/session_managment.dart';
@@ -37,10 +38,10 @@ class _HomeStateScreen extends State<HomeScreen> {
   List<Children> globalchildList = [];
   String name = '';
   String email = '';
-  int  isCrm=0;
   Size size = Get.size;
   PageController controller = PageController(initialPage: 0);
   var selected = 0;
+  int IsCRM =0;
 
   @override
   void initState() {
@@ -115,8 +116,9 @@ class _HomeStateScreen extends State<HomeScreen> {
       body: RefreshIndicator(
         onRefresh:refreshData ,
         child: Scaffold(
-         // body: isCrm==0?DashBoard():CrmDashBoard(),
-          body:DashBoard()
+            body:   IsCRM==0 ?DashBoard():DashboardcrmScreen()
+            // body: isCrm==0?DashBoard():CrmDashBoard(),
+          //body:DashBoard()
 
           /*PageView(
             controller: controller,
@@ -184,8 +186,8 @@ class _HomeStateScreen extends State<HomeScreen> {
   Future<void> getMenuList() async {
     name = await sessionManagement.getName() ?? '';
     email = await sessionManagement.getEmail() ?? '';
-    isCrm= int.parse(await   sessionManagement.getCrm() ?? '0');
-    print("crm..........${isCrm}");
+    IsCRM= int.parse( await sessionManagement.getIsCrm() ?? '0');
+
 
     await sessionManagement.getMenuList().then((menuList) {
       // Use setState to update the UI with the fetched menu list

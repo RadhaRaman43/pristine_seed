@@ -55,7 +55,7 @@ class LoginViewModel extends GetxController{
           sessionManagement.setIsHo(loginResponse[0].isHo.toString());
           sessionManagement.setRoleName(loginResponse[0].roleName.toString());
           sessionManagement.setProfile(loginResponse[0].profile.toString());
-          sessionManagement.setCrm(loginResponse[0].isCrm.toString());
+          sessionManagement.setIsCrm(loginResponse[0].isCrm.toString());
           sessionManagement.setMenuList(loginResponse[0].menu ?? []);
          // Get.toNamed(RoutesName.homeScreen);
           Get.offAllNamed(RoutesName.homeScreen);
