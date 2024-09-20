@@ -155,7 +155,6 @@ class BackgroundService {
               ),
             ),
           );
-          print("nhjfgjhkfndjkhndfgjknhk");
 
           // if you don't using custom notification, uncomment this
           // service.setForegroundNotificationInfo(
@@ -289,6 +288,8 @@ class BackgroundService {
        locationDataList = await _databaseHelper.getAllLocationData();
        if (locationDataList != null && locationDataList.length > 0) {
          insertLocationCoordinates(locationDataList, 'OFFLINE');
+         print("ttthhthythy${locationDataList[0].latitude}");
+
        }
        else{
 
