@@ -204,7 +204,7 @@ class ViewContactsScreen extends StatelessWidget{
 
               children: [
                 Text(
-                  "Cont. Code : ",
+                  "Contact Code : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -236,7 +236,7 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Cont. Name : ",
+                  "Contact Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -269,7 +269,7 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Acc. Name : ",
+                  "Account Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -366,14 +366,14 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Depart. Name : ",
+                  "Department Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .5,
+                  width: size.width * .46,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
@@ -397,14 +397,14 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Desig. Name : ",
+                  "Designation Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .55,
+                  width: size.width * .46,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]

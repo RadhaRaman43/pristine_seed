@@ -48,8 +48,10 @@ class ContactMasterVM extends GetxController{
   var contact_title_controller = TextEditingController();
   var designation_name_controller = TextEditingController();
   var contact_code_controller = TextEditingController();
+  var IsHeDecisionMakerController = TextEditingController().obs;
 
 
+  RxList<String> isHeDecisionMakerList =["Yes", "No"].obs;
   RxList<ContactMstGetListModal> contact_master_list = <ContactMstGetListModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<DepartNameModal> department_name_list=<DepartNameModal>[].obs;

@@ -180,14 +180,14 @@ class AccountmasterScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Acc. Name : ",
+                    "Account Name : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twelve,
+                        fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width * .2,
+                    width: size.width * .4,
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
@@ -199,7 +199,7 @@ class AccountmasterScreen extends StatelessWidget{
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -213,14 +213,14 @@ class AccountmasterScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Acc. Type : ",
+                    "Account Type : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twelve,
+                        fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width * .3,
+                    width: size.width * .4,
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
@@ -232,7 +232,7 @@ class AccountmasterScreen extends StatelessWidget{
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -246,10 +246,10 @@ class AccountmasterScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Comp. Type : ",
+                    "Company Type : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twelve,
+                        fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
@@ -258,7 +258,7 @@ class AccountmasterScreen extends StatelessWidget{
                         .companyProfileType!,
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
-                        fontSize: AllFontSize.twelve,
+                        fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                 ],
@@ -267,14 +267,14 @@ class AccountmasterScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Comp. Sub Type : ",
+                    "Company Sub Type : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twelve,
+                        fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width * .16,
+                    width: size.width * .3,
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
@@ -286,7 +286,7 @@ class AccountmasterScreen extends StatelessWidget{
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -301,11 +301,11 @@ class AccountmasterScreen extends StatelessWidget{
                     "Address : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twelve,
+                        fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width * .3,
+                    width: size.width * .4,
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
@@ -317,7 +317,7 @@ class AccountmasterScreen extends StatelessWidget{
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -329,14 +329,14 @@ class AccountmasterScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Acc. Cat. Type : ",
+                    "Account Category Type : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twelve,
+                        fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width * .05,
+                    width: size.width * .2,
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
@@ -348,7 +348,7 @@ class AccountmasterScreen extends StatelessWidget{
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
-                            fontSize: AllFontSize.twelve,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
                     ),
@@ -371,13 +371,13 @@ class AccountmasterScreen extends StatelessWidget{
               ),
             ],
           ),
-        leading: Row(
+        /*leading: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             bindAvatar(accountMaster_page_controller.Account_Master_list[position].profile),
             VerticalDivider(color: Colors.grey),
           ],
-        ),
+        ),*/
          trailing: InkWell(
            child: Icon(Icons.update),
          ),

@@ -514,14 +514,14 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Account. Name : ",
+                  "Account Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .45,
+                  width: size.width * .4,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -564,7 +564,7 @@ class ContactMasterScreen extends StatelessWidget{
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .5,
+                  width: size.width * .4,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -611,14 +611,14 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Depart. Name : ",
+                  "Department. Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .4,
+                  width: size.width * .35,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -642,14 +642,14 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Desig. Name : ",
+                  "Designation. Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .4,
+                  width: size.width * .35,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]

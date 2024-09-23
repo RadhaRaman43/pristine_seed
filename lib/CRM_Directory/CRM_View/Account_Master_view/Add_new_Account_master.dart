@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
+import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../locat_database/databaseHelper.dart';
@@ -64,21 +65,6 @@ class AddNewAccountMaster extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-         /* if(accountMaster_page_controller.DraftId.isEmpty || accountMaster_page_controller.DraftId == ''){
-            await insertAccountData();
-            accountMaster_page_controller.clearController();
-            Get.toNamed(RoutesName.accountMaster_screen);
-          }else{
-            await updateAccountData(accountMaster_page_controller.DraftId);
-            accountMaster_page_controller.clearController();
-            Get.toNamed(RoutesName.accountMaster_screen);
-          }
-          try {
-            accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-            print('Retrieved items: ${accountMaster_page_controller.Account_Master_Draft_list[0].accountName}');
-          } catch (e) {
-            print('Failed to retrieve items: $e');
-          }*/
           if(accountMaster_page_controller.view == 'FromDraft'){
             accountMaster_page_controller.clearController();
             Get.toNamed(RoutesName.Draft_item_list);
@@ -100,7 +86,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 'Create Account',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
-                  fontSize: 20.0,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -111,117 +97,20 @@ class AddNewAccountMaster extends StatelessWidget{
                 backgroundColor: AllColors.primaryDark1,
                 shadowColor: Colors.black,
                 shape: StadiumBorder(
-                    side: BorderSide(color: AllColors.grayColor)),
+                    side: BorderSide(color: AllColors.whiteColor)),
                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                 //CircleAvatar
                 label: Tooltip(
                   message: "Create Account ",
-                  child: Text('Create',
+                  child: Text('Save Draft',
                       style: GoogleFonts.poppins(
                         color: AllColors.whiteColor,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500,
                       )),
                 ),
-                onPressed: () {
+                onPressed: () async {
 
-                  if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
-                    Utils.sanckBarError('Account Name!', "Please Enter Account Name");
-                    return  ;
-                  }
-                  if(defaultFullName == "" && accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty){
-                    Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
-                    Utils.sanckBarError('Account Type!', "Please Enter Account Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
-                    if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
-                      Utils.sanckBarError('Account Type!', "Please Enter 10 Digit Phone No");
-                      return  ;
-                    }
-                  }
-
-                  if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
-                    Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
-                    Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
-                    Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
-                    Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
-                    Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstNo_Controller.text.isEmpty){
-                    Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
-                    Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
-                    Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
-                    Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.Account_Master_list != null &&
-                      accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
-                    Utils.sanckBarError('Active!', "Please Enter Active Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
-                    Utils.sanckBarError('State!', "Please Enter State");
-                    return  ;
-                  }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
-                    Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
-                    Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
-                    return  ;
-                  }
-
-                  accountMaster_page_controller.AccountMstUploaderApiHit('Create', "");
-
-
-                }, //Text
-              ),
-
-            ],
-          ),
-        actions: [
-          PopupMenuButton(itemBuilder: (BuildContext context){
-            return [
-              PopupMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.file_copy_sharp, color: AllColors.primaryDark1,),
-                    Text('Save as Draft'),
-                  ],
-                ),
-                onTap: () async {
                   if(accountMaster_page_controller.account_name_controller.value.text.isNotEmpty || accountMaster_page_controller.account_name_controller.value.text != ''){
                     if(accountMaster_page_controller.DraftId.isEmpty || accountMaster_page_controller.DraftId == ''){
                       await insertAccountData();
@@ -232,7 +121,6 @@ class AddNewAccountMaster extends StatelessWidget{
                       accountMaster_page_controller.clearController();
                       Get.toNamed(RoutesName.accountMaster_screen);
                     }
-
                     try {
                       accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
                       print('Retrieved items: ${accountMaster_page_controller.Account_Master_Draft_list[0].accountName}');
@@ -243,28 +131,105 @@ class AddNewAccountMaster extends StatelessWidget{
                     Utils.showErrorToastification('Error!', "Please Enter Account Name!");
                   }
 
-                },
+                }, //Text
               ),
-              /*PopupMenuItem(
-                child: Text('View Draft List'),
-                onTap: () async {
-                  accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                 // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
-                  Get.toNamed(RoutesName.Draft_item_list);
-                  //accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.value.text);
 
-                },
-              ),*/
-            ];
-          })
-        ],
+            ],
+          ),
 
       ),
       drawer: CustomDrawer(),
+      floatingActionButton:  Container(
+        margin: EdgeInsets.only(left: 30),
+        child: DefaultButton(
+          press: (){
+            if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
+              Utils.sanckBarError('Account Name!', "Please Enter Account Name");
+              return  ;
+            }
+            if(defaultFullName == "" && accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty){
+              Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
+              return  ;
+            }
+            if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
+              Utils.sanckBarError('Account Type!', "Please Enter Account Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
+              if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
+                Utils.sanckBarError('Account Type!', "Please Enter 10 Digit Phone No");
+                return  ;
+              }
+            }
+
+            if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
+              Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+              Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
+              Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
+              Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
+              Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstNo_Controller.text.isEmpty){
+              Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
+              Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
+              Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
+              Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.Account_Master_list != null &&
+                accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
+              Utils.sanckBarError('Active!', "Please Enter Active Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
+              Utils.sanckBarError('State!', "Please Enter State");
+              return  ;
+            }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
+              Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
+              return  ;
+            }
+            if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
+              Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
+              return  ;
+            }
+
+            accountMaster_page_controller.AccountMstUploaderApiHit('Create', "");
+          },
+          text: "Create Account",
+        ),
+      ),
       body: Obx(() {
         return
           Container(
-            padding: EdgeInsets.only(bottom: 15),
+            padding: EdgeInsets.only(bottom: 70),
             width: double.infinity,
             height: double.infinity,
             child: SingleChildScrollView(
