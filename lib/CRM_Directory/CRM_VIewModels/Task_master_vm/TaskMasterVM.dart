@@ -17,6 +17,7 @@ import '../../CRM_Models/TaskMaster_model/Task_DSAR_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_update_infra_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
 
 class Taskmastervm extends GetxController{
@@ -32,6 +33,7 @@ class Taskmastervm extends GetxController{
     RxBool typeOfCall=false.obs;
     RxBool ItemCateDropDown=false.obs;
     RxBool PurposeOfVisit=false.obs;
+    RxBool PaymentCall=false.obs;
     int pageNumber = 0;
     int rowsPerPage = 10;
     int total_rows = 0;
@@ -70,6 +72,8 @@ class Taskmastervm extends GetxController{
     var ExpectedAmt_controller = TextEditingController();
     var isInfraLead = TextEditingController();
     var isInfraLeadFilterController=TextEditingController();
+    var filterTaskDuedateController=TextEditingController().obs;
+    var filterTaskCreationOnController=TextEditingController().obs;
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -95,6 +99,7 @@ class Taskmastervm extends GetxController{
     RxList<String> SaleCycleActiveTypeList = <String>[].obs;
     RxList<String> approveRejectList = <String>[].obs;
     RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+    RxList<SalesCycleModal> Sales_Id_list=<SalesCycleModal>[].obs;
     RxList<CallStatusMasterModel> CallStatus_Master_list=<CallStatusMasterModel>[].obs;
     RxList<CallStatusMasterModel> MethodOfCall_Master_list=<CallStatusMasterModel>[].obs;
     RxList<CallStatusMasterModel> DSARStatus_Master_list=<CallStatusMasterModel>[].obs;
@@ -248,7 +253,9 @@ class Taskmastervm extends GetxController{
                 "method_of_call": Method_of_call_controller.text.isEmpty?'':Method_of_call_controller.text,
                 "task_remarks": Task_Remarks_controller.text.isEmpty?'':Task_Remarks_controller.text,
                 "purpose_of_visit": PusposeOfVisit_controller.text.isEmpty?'':PusposeOfVisit_controller.text,
-                "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text
+                "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
+                "payment_sale_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
+                "date_of_visit": ""
             };
             print('Jason Date....${data}');
             loading.value=true;
@@ -744,6 +751,48 @@ class Taskmastervm extends GetxController{
                 print("Ghdf ${userGeoHierarchy.length}");
 
         });
+    }
+
+    getSaleIDByAccountCode(int page_no){
+        try{
+            Map<String, String> data={
+                "sales_cycle_id": "",
+                "account_code": account_code.value,
+                "row_per_page": rowsPerPage.toString(),
+                "page_number": page_no.toString()
+            };
+            loading.value=true;
+            _api.SalesCycleMstGetByAccountCodeApiHit(data, sessionManagement).then((onValue){
+                final jsonResponse = json.decode(onValue);
+                if(jsonResponse is List){
+                    List<SalesCycleModal> response = jsonResponse.map((e) => SalesCycleModal.fromJson(e)).toList();
+                    if(response!= null && response.length>0 && response[0].condition=="True"){
+                        loading.value = false;
+                        if(page_no==0){
+                            Sales_Id_list.clear();
+                        }
+                        Sales_Id_list.addAll(response);
+                        total_rows=int.parse(Sales_Id_list[0].totalRows!);
+
+                    }else {
+                        loading.value = false;
+                        Sales_Id_list.value=[];
+
+                    }
+                } else {
+                    loading.value = false;
+
+                }
+            },
+            ).onError(
+                    (error, stackTrace) {
+                    print(error);
+                },
+            );
+        }catch(e){
+            loading.value = false;
+            print(e);
+        }
     }
 
 

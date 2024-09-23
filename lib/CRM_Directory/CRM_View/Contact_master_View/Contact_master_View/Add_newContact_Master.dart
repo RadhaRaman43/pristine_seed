@@ -30,7 +30,6 @@ class AddNewcontactMasterContact extends StatelessWidget{
       option.deptName!;
   static String _displayDesignationNameForOption(DesignationModal option) =>
       option.designationname!;
-
   static String _displayIsHeDecisionMakerForOption(String option) =>
       option;
 
@@ -331,7 +330,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 ),
               ),
               SizedBox(height: 15,),
-              bindQuoteCommitName(context),
+              bindIsDecisionDropDown(context),
               SizedBox(height: 15,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -669,7 +668,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
     );
   }
 
-  Widget bindQuoteCommitName(BuildContext context) {
+  Widget bindIsDecisionDropDown(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(left: 15.0),
       width: double.infinity,
@@ -718,5 +717,6 @@ class AddNewcontactMasterContact extends StatelessWidget{
     );
 
   }
+
 
 }

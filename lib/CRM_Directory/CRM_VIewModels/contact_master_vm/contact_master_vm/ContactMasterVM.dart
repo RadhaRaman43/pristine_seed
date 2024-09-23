@@ -276,7 +276,8 @@ class ContactMasterVM extends GetxController{
             "alternate_no": alternate_no_controller.text,
             "department_name": depart_name_controller.text,
             "desingation_name": designation_name_controller.text,
-            "reporting_person": reporting_person_controller.text
+            "reporting_person": reporting_person_controller.text,
+            "is_decision_maker": IsHeDecisionMakerController.value.text=="Yes"?1:0
           }
         ]
       };

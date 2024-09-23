@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 
+import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
@@ -33,6 +35,11 @@ class AddNewTaskScreen extends StatelessWidget{
 
   static String _displayMethodOfCallForOption(CallStatusMasterModel option) =>
       option.taskStatus!;
+  static String _displaySalesIdForOption(SalesCycleModal option) =>
+      option.salesCycleId!;
+
+  static String _displayIsInfraLeadForOption(String option) =>
+      option;
 
   @override
   Widget build(BuildContext context) {
@@ -57,10 +64,7 @@ class AddNewTaskScreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Spacer(),
-              /*IconButton(onPressed: () {
-                //showFilterBottomSheet(context);
-              }, icon: Icon(Icons.add)),*/
+              /*Spacer(),
               ActionChip(
                 elevation: 2,
                 padding: EdgeInsets.all(5),
@@ -107,13 +111,14 @@ class AddNewTaskScreen extends StatelessWidget{
 
 
                 }, //Text
-              ),
+              ),*/
             ],
           )
 
       ),
       drawer: CustomDrawer(),
       body: Container(
+        padding: EdgeInsets.only(bottom: 15),
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
@@ -145,6 +150,23 @@ class AddNewTaskScreen extends StatelessWidget{
                 child: bindTypeOfCallDropDown(context),
               ),
 
+              Obx(() {
+                return
+                  Visibility(
+                    visible: taskMaster_page_controller.PaymentCall.value,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 15,),
+                        Container(
+                          padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                          child: bindSalesIdDropDown(context),
+
+                        ),
+                      ],
+                    ),
+                  );
+              }),
+
               SizedBox(height: 15,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -152,8 +174,35 @@ class AddNewTaskScreen extends StatelessWidget{
 
               ),
 
+              SizedBox(
+                height: 15,
+              ),
+              bindIsInfraLeadDropDown(context),
 
+              SizedBox(height: 15,),
 
+               Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: TextFormField(
+                      maxLength: 500,
+                      maxLines: 2,
+                      controller: taskMaster_page_controller.Task_Remarks_controller,
+                      decoration: InputDecoration(
+                          hintText: 'Task Remarks',
+                          labelText: 'Task Remarks',
+                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          )
+                      ),
+
+                    ),
+
+                ),
 
               Obx(() {
                 return
@@ -194,31 +243,43 @@ class AddNewTaskScreen extends StatelessWidget{
 
               SizedBox(height: 15,),
 
+              Container(
+                padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                child: DefaultButton(
+                  press: (){
+                    if(taskMaster_page_controller.account_Name_controller.text.isEmpty || taskMaster_page_controller.account_Name_controller == null){
+                      Utils.sanckBarError('Account Name!', "Please Enter Account Name");
+                      return  ;
+                    }
+                    if(taskMaster_page_controller.Contact_Name_controller.text.isEmpty || taskMaster_page_controller.Contact_Name_controller == null){
+                      Utils.sanckBarError('Contact NAme!', "Please Enter Contact Name");
+                      return  ;
+                    }
+                    if(taskMaster_page_controller.Type_of_call_controller.text.isEmpty || taskMaster_page_controller.Type_of_call_controller == null){
+                      Utils.sanckBarError('Type of Call!', "Please Enter Type Of Call");
+                      return  ;
+                    }
 
-               Container(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: TextFormField(
-                      maxLength: 500,
-                      maxLines: 2,
-                      controller: taskMaster_page_controller.Task_Remarks_controller,
-                      decoration: InputDecoration(
-                          hintText: 'Task Remarks',
-                          labelText: 'Task Remarks',
-                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+                    if(taskMaster_page_controller.Type_of_call_controller.text == "Payment Call" && taskMaster_page_controller.Sale_cycle_Id_controller.text.isEmpty){
+                      Utils.sanckBarError('Sales Id!', "Please Enter Sales Id");
+                      return  ;
+                    }
 
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          )
-                      ),
+                    if(taskMaster_page_controller.Method_of_call_controller.text.isEmpty || taskMaster_page_controller.Method_of_call_controller == null){
+                      Utils.sanckBarError('Method of Call!', "Please Enter Method of Call");
+                      return  ;
+                    }
 
-                    ),
+                    if(taskMaster_page_controller.Method_of_call_controller.text == 'Physical Meeting' && taskMaster_page_controller.PusposeOfVisit_controller.text.isEmpty){
+                      Utils.sanckBarError('Purpose Of Visit!', "Please Enter Purpose of Visit");
+                      return  ;
+                    }
 
-                )
-
-
+                    taskMaster_page_controller.TaskMasterCreate();
+                  },
+                  text: "Create Task",
+                ),
+              ),
 
             ],
           ),
@@ -253,6 +314,8 @@ class AddNewTaskScreen extends StatelessWidget{
         taskMaster_page_controller.account_code.value=selection.accountCode!;
         taskMaster_page_controller.account_name.value=selection.accountName!;
             taskMaster_page_controller.getContactMasterList();
+            taskMaster_page_controller.pageNumber = 0;
+            taskMaster_page_controller.getSaleIDByAccountCode(taskMaster_page_controller.pageNumber);
         //taskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
@@ -438,11 +501,13 @@ class AddNewTaskScreen extends StatelessWidget{
         }).toList();
       },
       onSelected: (CallStatusMasterModel selection) {
-        //print(selection.loginEmailId);
-        // Update the TextField with the selected
         taskMaster_page_controller.Type_of_call_controller.text =
             _displayTypeOfCallForOption(selection).toString();
-        //taskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+        if( taskMaster_page_controller.Type_of_call_controller.text == 'Payment Call'){
+          taskMaster_page_controller.PaymentCall.value = true;
+        }else{
+          taskMaster_page_controller.PaymentCall.value = false;
+        }
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -457,8 +522,8 @@ class AddNewTaskScreen extends StatelessWidget{
             suffixIcon: Icon(Icons.arrow_drop_down),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Type Of Call',
-            labelText: 'Type Of Call',
+            hintText: 'Type Of Call*',
+            labelText: 'Type Of Call*',
             /*hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
             ),*/
@@ -560,8 +625,8 @@ class AddNewTaskScreen extends StatelessWidget{
             suffixIcon: Icon(Icons.arrow_drop_down),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Method Of Call',
-            labelText: 'Method of Call',
+            hintText: 'Method Of Call*',
+            labelText: 'Method of Call*',
             /*hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
             ),*/
@@ -615,6 +680,167 @@ class AddNewTaskScreen extends StatelessWidget{
           ),
         );
       },
+    );
+  }
+
+  Widget bindSalesIdDropDown(context){
+    ScrollController scrollController = ScrollController();
+    scrollController.addListener(() {
+      print('woring...');
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        // You have reached the end of the list
+        int totalPage = (taskMaster_page_controller.total_rows /
+            taskMaster_page_controller.rowsPerPage)
+            .toInt();
+        if ((taskMaster_page_controller.total_rows %
+            taskMaster_page_controller.rowsPerPage) >
+            0) totalPage += 1;
+
+        print(
+            "last index ${taskMaster_page_controller.pageNumber} ${taskMaster_page_controller.total_rows} ${taskMaster_page_controller.rowsPerPage} ${totalPage}");
+
+        // Fetch the next page if there are more pages
+        if (taskMaster_page_controller.pageNumber + 1 < totalPage) {
+          taskMaster_page_controller.getSaleIDByAccountCode(
+              taskMaster_page_controller.pageNumber + 1).then((_) {
+            taskMaster_page_controller.pageNumber += 1;
+          });
+        }
+      }
+    });
+    return Autocomplete<SalesCycleModal>(
+      displayStringForOption: _displaySalesIdForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return taskMaster_page_controller.Sales_Id_list;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return taskMaster_page_controller.Sales_Id_list
+            .where((SalesCycleModal option) {
+          return option.accountName
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (SalesCycleModal selection) {
+        print(selection.salesCycleId);
+        // Update the TextField with the selected
+        taskMaster_page_controller.Sale_cycle_Id_controller.text =
+            _displaySalesIdForOption(selection).toString();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = taskMaster_page_controller.Sale_cycle_Id_controller.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: Icon(Icons.arrow_drop_down),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            hintText: 'Sales Id*',
+            labelText: 'Sales Id*',
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<SalesCycleModal> onSelected,
+          Iterable<SalesCycleModal> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final SalesCycleModal option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        // option.accountName!+"(${option.accountCode!})",
+                        option.salesCycleId!,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindIsInfraLeadDropDown(BuildContext context) {
+    return Container(
+        margin: const EdgeInsets.only(left: 15.0),
+        width: double.infinity,
+        child: DropdownMenu<String>(
+          width: size.width-30,
+        controller: taskMaster_page_controller.isInfraLeadFilterController,
+        label: Text(
+          "Is Infra Lead",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          taskMaster_page_controller.isInfraLeadFilterController.text =
+              _displayIsInfraLeadForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: taskMaster_page_controller.isInfraLeadList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

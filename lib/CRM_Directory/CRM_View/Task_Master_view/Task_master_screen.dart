@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../component/back_button.dart';
@@ -1438,9 +1439,13 @@ class TaskMasterScreen extends StatelessWidget{
                           },
                         ),
 
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10,),
+
+                        filterWithTaskCreationOn( context),
+
+                        SizedBox(height: 10,),
+                        filterWithTaskDueDate( context),
+                        SizedBox(height: 10,),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1719,7 +1724,7 @@ class TaskMasterScreen extends StatelessWidget{
        "Is Infra Lead",
        style: GoogleFonts.poppins(
            color: AllColors.primaryDark1,
-           fontSize: AllFontSize.fourtine,
+           fontSize: AllFontSize.sisxteen,
            fontWeight: FontWeight.w500),
      ),
 
@@ -2173,6 +2178,124 @@ class TaskMasterScreen extends StatelessWidget{
           ),
         );
       },
+    );
+  }
+
+  filterWithTaskCreationOn(BuildContext context) {
+    return TextField(
+        cursorColor:AllColors.primaryDark1 ,
+        controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Task Created On',
+            labelText: 'Task Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime ending_date = new DateTime(2200);
+          DateTime start_date = new DateTime(1900);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1, // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text= outputFormat.format(date);
+          else
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text = "";
+        }
+
+    );
+  }
+
+  filterWithTaskDueDate(BuildContext context) {
+    return TextField(
+        cursorColor:AllColors.primaryDark1 ,
+        controller: TaskMaster_page_controller.filterTaskDuedateController.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Task Due Date',
+            labelText: 'Task Due Date',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1, // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            TaskMaster_page_controller.filterTaskDuedateController.value.text= outputFormat.format(date);
+          else
+            TaskMaster_page_controller.filterTaskDuedateController.value.text = "";
+        }
+
+
+
     );
   }
 
