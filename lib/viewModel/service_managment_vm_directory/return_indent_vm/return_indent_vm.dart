@@ -23,6 +23,7 @@ class ReturnIndentViewModel extends GetxController {
   RxBool loading = false.obs;
   RxList<LocationResponse> location_list = <LocationResponse>[].obs;
   RxList<IndentItemResponse> indent_name_list = <IndentItemResponse>[].obs;
+  RxList<IndentItemResponse> indent_item_name_list = <IndentItemResponse>[].obs;
   RxList<ReturnIndentAddLineReponse> indent_return_add_line_list = <
       ReturnIndentAddLineReponse>[].obs;
 
@@ -55,6 +56,9 @@ class ReturnIndentViewModel extends GetxController {
 
   String return_no = "";
   String list_location_code = "";
+
+
+  String return_item="";
 
   IndentItemResponse? selected_indent_data = null;
 
@@ -238,7 +242,8 @@ class ReturnIndentViewModel extends GetxController {
     Map data = {
       "return_no": return_no,
       "item_no": item_no,
-      "email_id": email
+      "email_id": email,
+      "filter_indent_no":""
     };
     print(data);
 
@@ -277,6 +282,45 @@ class ReturnIndentViewModel extends GetxController {
       },);
 
   }
+  Future<Iterable<IndentItemResponse>> searchIndentItemNo(String return_no, String item_no,{String text=""}) async {
+    if (text == '') {
+      return const Iterable<IndentItemResponse>.empty();
+    }
+    Map data = {
+      "return_no": return_no,
+      "item_no": item_no,
+      "email_id": email,
+      "filter_indent_no":text
+    };
+
+    String itemdropdownresp =
+    await _api.returnIndentItemApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(itemdropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<IndentItemResponse> response = jsonResponse
+            .map((data) => IndentItemResponse.fromJson(data))
+            .toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          indent_item_name_list.value = response;
+        } else {
+          //Utils.sanckBarException('False!', response[0].message!);
+          indent_item_name_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        indent_item_name_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      indent_item_name_list.value= [];
+    }
+    return   indent_item_name_list.value;
+  }
+
+
   returnIndentAddLineApiHit(String return_no, String item_no, String flag) {
     loading.value = true;
     Map data;

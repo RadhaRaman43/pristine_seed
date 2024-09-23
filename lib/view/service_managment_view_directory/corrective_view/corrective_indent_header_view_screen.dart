@@ -543,7 +543,7 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
                                                 color: AllColors.primaryDark1),
                                             onPressed: () {
                                               indent_deatils_page_controller.isCheckBox.value=false;
-                                              indent_deatils_page_controller.getItemNo();
+                                             // indent_deatils_page_controller.getItemNo();
                                               indent_deatils_page_controller
                                                   .item_no_controller
                                                   .clear();
@@ -1606,21 +1606,14 @@ class CorrectiveIndentHeaderViewScreen extends StatelessWidget{
   Widget bindItemNoDropDown(context, String flag) {
     return Autocomplete<CorrectiveItemNoResponse>(
       displayStringForOption: _displayItemNoForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue)  async{
         if (textEditingValue.text.isEmpty) {
-          return indent_deatils_page_controller.item_no_list.value;
+         // return indent_deatils_page_controller.item_no_list.value;
+          return [];
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return indent_deatils_page_controller.item_no_list.value
-            .where((CorrectiveItemNoResponse option) {
-          return option.itemCode
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase()) ||  option.displayName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+
+        return await indent_deatils_page_controller.getItemNo(textEditingValue.text);
       },
       onSelected: (CorrectiveItemNoResponse selection) {
         print(selection.itemCode);

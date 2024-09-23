@@ -376,15 +376,22 @@ class ReturnIndentAddLine extends StatelessWidget {
       displayStringForOption: _displayLocationNameForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
-          return return_indent_add_line_controller.indent_name_list.value;
+         // return return_indent_add_line_controller.indent_item_name_list.value;
+          return [];
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return return_indent_add_line_controller.indent_name_list.value
+
+          return return_indent_add_line_controller.searchIndentItemNo(return_indent_add_line_controller
+              .return_create_header_list[0].returnNo.toString(),return_indent_add_line_controller.return_item,text: textEditingValue.text);
+       /* return return_indent_add_line_controller.indent_name_list.value
             .where((IndentItemResponse option) {
           return option.indentNo!
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        }).toList();*/
+
+
+
       },
       onSelected: (IndentItemResponse selection) {
         print(selection.indentNo);
@@ -462,7 +469,8 @@ class ReturnIndentAddLine extends StatelessWidget {
                               Tooltip(
                                 message:option.customerName.toString(),
                                 child: Text(
-                                  "${option.indentNo.toString() + " ( " + option.customerName.toString()} )",
+                                 // "${option.indentNo.toString() +  " ( " + option.customerName!} )",
+                                  "${option.indentNo.toString()}",
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.poppins(
                                       color: AllColors.blackColor,
@@ -474,7 +482,7 @@ class ReturnIndentAddLine extends StatelessWidget {
                               ),
 
                           Text(
-                            "${option.displayName.toString() + " ( " + option.itemNo.toString()} ) Qty: ${option.totalQty.toString()}",
+                            "${option.displayName??"" + " ( " + option.itemNo.toString()} ) Qty: ${option.totalQty.toString()}",
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                                 color: AllColors.blackColor,

@@ -540,7 +540,7 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
                                                 color: AllColors.primaryDark1),
                                             onPressed: () {
                                               preventive_indent_detils_page_controller.isCheckBox.value=false;
-                                              preventive_indent_detils_page_controller.getItemNo();
+                                             /// preventive_indent_detils_page_controller.getItemNo();
                                               preventive_indent_detils_page_controller.item_no_controller.clear();
                                               preventive_indent_detils_page_controller.item_no_description_controller.clear();
                                               preventive_indent_detils_page_controller.quantity_controller.clear();
@@ -1527,12 +1527,14 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
   Widget bindItemNoDropDown(context, String flag) {
     return Autocomplete<PreventiveItemNoResponse>(
       displayStringForOption: _displayItemNoForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue)  async{
         if (textEditingValue.text.isEmpty) {
-          return preventive_indent_detils_page_controller.item_no_list.value;
+       //   return preventive_indent_detils_page_controller.item_no_list.value;
+            return [];
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return preventive_indent_detils_page_controller.item_no_list.value
+
+     /*   return preventive_indent_detils_page_controller.item_no_list.value
             .where((PreventiveItemNoResponse option) {
           return option.itemCode
               .toString()
@@ -1541,7 +1543,8 @@ class PreventiveIndentHeaderViewScreen extends StatelessWidget{
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        }).toList();*/
+        return await preventive_indent_detils_page_controller.getItemNo(textEditingValue.text);
       },
       onSelected: (PreventiveItemNoResponse selection) {
         print(selection.itemCode);

@@ -662,8 +662,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
                                               onPressed: () {
                                                 indent_deatils_page_controller
                                                     .isCheckBox.value = false;
-                                                indent_deatils_page_controller
-                                                    .getItemNo();
+                                               // indent_deatils_page_controller.getItemNo();
                                                 indent_deatils_page_controller
                                                     .item_no_controller
                                                     .clear();
@@ -1209,12 +1208,15 @@ class IndentHeaderViewScreen extends StatelessWidget {
   Widget bindItemNoDropDown(context, String flag) {
     return Autocomplete<ItemNoResponse>(
       displayStringForOption: _displayItemNoForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
-          return indent_deatils_page_controller.item_no_list.value;
+         // return indent_deatils_page_controller.item_no_list.value;
           // return const Iterable<VehicleTypeResponse>.empty();
+          return [];
         }
-        return indent_deatils_page_controller.item_no_list.value
+
+        return await indent_deatils_page_controller.getItemNo(textEditingValue.text);
+       /* return indent_deatils_page_controller.item_no_list.value
             .where((ItemNoResponse option) {
           return option.itemCode
               .toString()
@@ -1223,7 +1225,7 @@ class IndentHeaderViewScreen extends StatelessWidget {
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        }).toList();*/
       },
       onSelected: (ItemNoResponse selection) {
         print(selection.itemCode);

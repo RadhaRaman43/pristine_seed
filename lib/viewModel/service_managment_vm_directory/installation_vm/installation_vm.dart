@@ -973,11 +973,14 @@ class InstallationViewModel extends GetxController {
     }
   }
 
+  //todo search api....
 
+/*
   getItemNo() {
     Map data = {
       "indent_no": service_indent_header_create_list[0].indentNo,
-      "email_id": email
+      "email_id": email,
+
     };
     print(data);
     loading.value = true;
@@ -1016,7 +1019,49 @@ class InstallationViewModel extends GetxController {
       item_no_list.value = [];
       print(e);
     }
+  }*/
+
+
+
+
+  Future<Iterable<ItemNoResponse>> getItemNo(String text) async {
+    if (text == '') {
+      return const Iterable<ItemNoResponse>.empty();
+    }
+    Map data = {
+      "indent_no": service_indent_header_create_list[0].indentNo,
+      "email_id": email,
+      "filter_item_no": text
+    };
+
+    String itemdropdownresp =
+    await _api.item_noApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(itemdropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<ItemNoResponse> response = jsonResponse
+            .map((data) => ItemNoResponse.fromJson(data))
+            .toList();
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          item_no_list.value = response;
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          item_no_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        item_no_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      item_no_list.value= [];
+    }
+    return   item_no_list.value;
   }
+
+
 
   Future<void> upLoadImageApi(BuildContext context) async {
     try {
