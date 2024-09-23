@@ -1167,7 +1167,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             view_contract_list.value=[];
             Get.toNamed(RoutesName.AccountDashboardCount_Screen);
-            Utils.showToastification('No date', 'No Data Found');
+            Utils.showToastification('No Data Found', 'No Data Found');
 
 
           }

@@ -161,7 +161,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 child: TextFormField(
                   controller: contact_vm_controller.contact_name_controller,
                   decoration: InputDecoration(
-                      //hintText: "Contact Name*",
+                      hintText: "Contact Name*",
                       labelText: "Contact Name*",
                       //suffixIcon: Icon(Icons.email),
                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
@@ -182,6 +182,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 child: Container(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   child: TextFormField(
+                    maxLength: 10,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return null; // No error when the field is empty
@@ -197,8 +198,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
                     keyboardType: TextInputType.number,
                     controller: contact_vm_controller.phone_no_controller,
                     decoration: InputDecoration(
-                        //hintText: "Phone No",
-                        labelText: "Phone No",
+                        hintText: "Phone No.",
+                        labelText: "Phone No.",
                         //suffixIcon: Icon(Icons.email),
                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -220,8 +221,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
                   keyboardType: TextInputType.number,
                   controller: contact_vm_controller.alternate_no_controller,
                   decoration: InputDecoration(
-                      //hintText: "Alternate No",
-                      labelText: "Alternate No",
+                      hintText: "Alternate Phone No.",
+                      labelText: "Alternate Phone No.",
                       //suffixIcon: Icon(Icons.email),
                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
           
@@ -258,7 +259,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                     },
                     controller: contact_vm_controller.emailId_controller,
                     decoration: InputDecoration(
-                        //hintText: "Email Id",
+                        hintText: "Email Id",
                         labelText: "Email Id",
                         //suffixIcon: Icon(Icons.email),
                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
@@ -291,7 +292,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 child: TextFormField(
                   controller: contact_vm_controller.reporting_person_controller,
                   decoration: InputDecoration(
-                      //hintText: "Reporting Person",
+                      hintText: "Reporting Person",
                       labelText: "Reporting Person",
                       //suffixIcon: Icon(Icons.email),
                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
@@ -314,7 +315,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                   maxLines: 2,
                   controller: contact_vm_controller.contact_title_controller,
                   decoration: InputDecoration(
-                      //hintText: "Contact Title",
+                      hintText: "Contact Title",
                       labelText: "Contact Title",
                       //suffixIcon: Icon(Icons.email),
                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
@@ -407,8 +408,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
             suffixIcon: Icon(Icons.arrow_drop_down),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Name*',
-            labelText: 'Account Name*',
+            hintText: 'Account Name',
+            labelText: 'Account Name',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -504,8 +505,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
             suffixIcon: Icon(Icons.arrow_drop_down),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Department Name*',
-            labelText: 'Department Name*',
+            hintText: 'Department Name',
+            labelText: 'Department Name',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -588,8 +589,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
             suffixIcon: Icon(Icons.arrow_drop_down),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            //hintText: 'Department Name*',
-            labelText: 'Designation Name*',
+            hintText: 'Designation Name',
+            labelText: 'Designation Name',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
