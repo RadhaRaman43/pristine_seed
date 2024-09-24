@@ -27,6 +27,7 @@ import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
 import '../../CRM_Models/sale_cycle_modal/Item_qoute_with_report_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/approval_person_model.dart';
 import '../../CRM_Models/sale_cycle_modal/item_quote_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/productCategoryWiseAmtModel.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_approve_reject_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
@@ -48,6 +49,7 @@ class SalesCycleVm extends GetxController{
   var selectedItem = (-1).obs;
   RxString accountCode="".obs;
   RxString contactCode="".obs;
+  RxString ProductCategoryCode="".obs;
   RxBool loading=false.obs;
   String email="";
   String consigneeId="";
@@ -68,6 +70,7 @@ class SalesCycleVm extends GetxController{
   var isCheck = (-1).obs;
   RxBool BusinessTerm=false.obs;
   RxList<SalesCycleModal> saleCycleList=<SalesCycleModal>[].obs;
+  RxList<ProductCategoryWiseAmtModel> budgetAmountList=<ProductCategoryWiseAmtModel>[].obs;
   RxList<SalesCycleQuoteHeaderModal> quoteList=<SalesCycleQuoteHeaderModal>[].obs;
   RxList<getApprovalPersonMadol> approvalPersonList=<getApprovalPersonMadol>[].obs;
   RxList<SalesCycleQuoteInformationModal> quoteHeaderdata=<SalesCycleQuoteInformationModal>[].obs;
@@ -249,8 +252,9 @@ class SalesCycleVm extends GetxController{
                 proposedSolutionController.value.text=saleCycleList[0].proposedSolution==null?"":saleCycleList[0].proposedSolution.toString();
                 solutionRejectedRemarkController.value.text=saleCycleList[0].rejectReason.toString().isNotEmpty?saleCycleList[0].rejectReason.toString():"";
                 closureDateController.value.text=saleCycleList[0].estClosureDate.toString();
-                budgetAmountController.value.text=saleCycleList[0].budgetAmount.toString();
-                expectedAmountController.value.text=saleCycleList[0].estBudgetAmount.toString();
+                budgetAmountController.value.clear();
+                expectedAmountController.value.clear();
+                productCategoryController.value.clear();
 
                 if(customerNeedIdetityController.value.text=="Yes"){
                   ischangeNeedIdentity.value=true;
@@ -294,6 +298,55 @@ class SalesCycleVm extends GetxController{
           loading.value = false;
 
             },
+      );
+    }catch(e){
+      print('nhi chala3....');
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  ProductCategoryWiseAmtGet(int page_no, String saleCycleId){
+    try{
+      Map data={
+        "sale_cycle_id": saleCycleId.isNotEmpty?saleCycleId:saleCycleController.value.text,
+        "rowperpage": rowsPerPage,
+        "page_number": page_no
+      };
+      loading.value=true;
+      _api.SaleCycleProductCategoryWiseAmtGet(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<ProductCategoryWiseAmtModel> response = jsonResponse.map((e) => ProductCategoryWiseAmtModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            print('listSize.....${budgetAmountList.length}');
+            loading.value = false;
+            if(page_no==0){
+              budgetAmountList.clear();
+            }
+            budgetAmountList.addAll(response);
+            print('listSize.....${budgetAmountList.length}');
+            total_rows_sales=int.parse(budgetAmountList[0].totalRows!);
+          }else {
+            print('nhi chala....');
+            loading.value = false;
+            budgetAmountList.value=[];
+
+          }
+        } else {
+          print('nhi chala1....');
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print('nhi chalaErr....');
+          print(error);
+          loading.value = false;
+
+        },
       );
     }catch(e){
       print('nhi chala3....');
@@ -825,26 +878,26 @@ class SalesCycleVm extends GetxController{
       print(e);
     }
   }
- /* void quoteLineMarkRegretApiHit(int lineNo) {
+
+  void ProductCategoryWiseAmtCreateApiHit() {
     try{
       Map data= {
-        "quote_id": quoteId.toString(),
-        "line_no": lineNo,
-        "regret_reason": regretReasonLineController.value.text,
+        "id": 0,
+        "sale_cycle_id": salesCycleId.toString(),
+        "product_category": ProductCategoryCode.value,
+        "estimated_amount": expectedAmountController.value.text,
+        "budget_amount": budgetAmountController.value.text,
         "created_by": email
       };
       loading.value=true;
-      _api.quoteLineMarkRegretApiHit(data, sessionManagement).then((onValue){
+      _api.SaleCycleProductCategoryWiseAmtCreate(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
         if(jsonResponse is List){
-          List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
-          if(response[0].condition=="True"){
+          List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+          if( response[0].condition=="True"){
             Utils.sanckBarSuccess("Message !", response[0].message.toString());
             loading.value = false;
-            getQuoteHeaderInformation(quoteId.value, "");
-            //itemMstGetByQuoteIdList.value=response;
-            //Get.toNamed(RoutesName.quoteItemList);
           }else {
             Utils.sanckBarError("False Message !", response[0].message.toString());
             loading.value = false;
@@ -862,7 +915,8 @@ class SalesCycleVm extends GetxController{
       loading.value = false;
       print(e);
     }
-  }*/
+  }
+
   void quoteLineCreateDuplicateApiHit(int lineNo) {
     try{
       Map data= {

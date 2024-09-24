@@ -235,6 +235,7 @@ class ContactMasterVM extends GetxController{
     reporting_person_controller.clear();
     contact_title_controller.clear();
     designation_name_controller.clear();
+    IsHeDecisionMakerController.value.clear();
   }
 
   createNewContactMstApi(String flag){
@@ -293,7 +294,7 @@ class ContactMasterVM extends GetxController{
             loading.value = false;
             contact_master_list.value=response;
 
-
+            resetAllContactCreativeField('Icon');
             if(insideOut == true){
               print('insideOut1...${insideOut}');
               Get.toNamed(RoutesName.contactMaster_screen);
@@ -304,7 +305,7 @@ class ContactMasterVM extends GetxController{
               Get.toNamed(RoutesName.viewContacts_screen);
               account_vm_controller.getContactMasterList(0, account_name_controller.text.toString(), '', accountCode.value.toString());
             }
-            resetAllContactCreativeField('Icon');
+
             Utils.showToastification('Error', response[0].message!);
             //Get.offAllNamed(RoutesName.contactMaster_screen);
 
@@ -351,6 +352,7 @@ class ContactMasterVM extends GetxController{
     contact_title_controller.text=contact_master_list[index].contactTitle?? "";
     designation_name_controller.text=contact_master_list[index].designationname ?? "";
     contact_code_controller.text=contact_master_list[index].contactCode ?? "";
+      IsHeDecisionMakerController.value.text=contact_master_list[index].isDecisionMaker==1?'Yes':'No';
     }else if(flag == 'Inside'){
       contact_code=account_vm_controller.view_contract_list[index].contactCode?? "";
       account_name_controller.text=account_vm_controller.view_contract_list[index].accountName?? "";
@@ -363,6 +365,7 @@ class ContactMasterVM extends GetxController{
       contact_title_controller.text=account_vm_controller.view_contract_list[index].contactTitle?? "";
       designation_name_controller.text=account_vm_controller.view_contract_list[index].designationname ?? "";
       contact_code_controller.text=account_vm_controller.view_contract_list[index].contactCode ?? "";
+      IsHeDecisionMakerController.value.text=account_vm_controller.view_contract_list[index].isDecisionMaker==1?'Yes':"No";
     }
 
     getAccountMaster(pageNumber);

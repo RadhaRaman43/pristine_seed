@@ -105,8 +105,8 @@ class ViewContactsScreen extends StatelessWidget{
                         Center(
                           child: IconButton(onPressed: () {
                             contact_vm_controller.insideOut = false;
-                            contact_vm_controller.IsHeDecisionMakerController.value.text == "No";
                             contact_vm_controller.resetAllContactCreativeField('Card');
+                            contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
                             contact_vm_controller.getAccountMaster(contact_vm_controller.pageNumber);
                             contact_vm_controller.getDepartNameList();
                             Get.toNamed(RoutesName.addNewContactMaster_screen);

@@ -64,9 +64,11 @@ class TaskMasterScreen extends StatelessWidget{
                Spacer(),
                IconButton(onPressed: () {
                  TaskMaster_page_controller.clearCreateTaskController();
+                 TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
                  Get.toNamed(RoutesName.addNewTaskMaster_screen);
                }, icon: Icon(Icons.add)),
                IconButton(onPressed: () {
+                 TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
                  showFilterBottomSheet(context);
                }, icon: Icon(Icons.filter_alt_sharp))
              ],
@@ -1493,10 +1495,9 @@ class TaskMasterScreen extends StatelessWidget{
                                   TaskMaster_page_controller.SaleCycleActive_Controller.clear();
                                   TaskMaster_page_controller.Sale_cycle_Id_controller.clear();
                                   TaskMaster_page_controller.isInfraLeadFilterController.clear();
-
+                                  TaskMaster_page_controller.filterTaskCreationOnController.value.clear();
+                                  TaskMaster_page_controller.filterTaskDuedateController.value.clear();
                                   TaskMaster_page_controller.getTaskMaster(0, 'All', '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-
-
 
                                 },
                                 child: Text(

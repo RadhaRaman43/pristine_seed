@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 
 import '../../../component/default_button.dart';
@@ -15,6 +16,7 @@ import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 
 class AddNewTaskScreen extends StatelessWidget{
@@ -40,6 +42,9 @@ class AddNewTaskScreen extends StatelessWidget{
 
   static String _displayIsInfraLeadForOption(String option) =>
       option;
+
+  static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
+      option.categoryName!;
 
   @override
   Widget build(BuildContext context) {
@@ -180,6 +185,29 @@ class AddNewTaskScreen extends StatelessWidget{
               bindIsInfraLeadDropDown(context),
 
               SizedBox(height: 15,),
+
+              bindDateOfVisit( context),
+
+              SizedBox(height: 15,),
+
+              bindProductCategoryDropDown(context),
+              SizedBox(height: 10,),
+              Obx(() {
+                return
+                  Wrap(
+                    spacing: 8.0,
+                    children: taskMaster_page_controller.Item_Category_Selected_list.map((category) {
+                      return Chip(
+                        label: Text(category.categoryName!),
+                        onDeleted: () {
+                          taskMaster_page_controller.Item_Category_Selected_list.remove(category);
+                        },
+                      );
+                    }).toList(),
+                  );
+
+              }),
+              SizedBox(height: 10,),
 
                Container(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -840,6 +868,180 @@ class AddNewTaskScreen extends StatelessWidget{
           return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
             foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
         }).toList(),
+      ),
+    );
+  }
+
+  Widget bindDateOfVisit(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      child: TextField(
+          cursorColor:AllColors.primaryDark1 ,
+          controller: taskMaster_page_controller.DataOFVisitController.value,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten
+              ),
+              suffixIcon: Icon(Icons.calendar_month),
+              hintText: 'Date Of Visit',
+              labelText: 'Date Of Visit',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.sisxteen),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )
+          ),
+          onTap: () async {
+            DateTime? initialDate;
+            if (taskMaster_page_controller.DataOFVisitController.value.text.isNotEmpty) {
+              initialDate = DateFormat('yyyy-MM-dd').parse(
+                taskMaster_page_controller.DataOFVisitController.value.text,
+              );
+            } else {
+              initialDate = DateTime.now();
+            }
+            DateTime ending_date = new DateTime(2200);
+            FocusScope.of(context).requestFocus(new FocusNode());
+            DateTime? date = await showDatePicker(
+              context: context,
+              initialDate: initialDate,
+              firstDate: DateTime.now(),
+              lastDate: ending_date,
+              builder: (BuildContext context, Widget? child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor: AllColors.primaryDark1, // Header background color
+                    //accentColor: AllColors.primaryDark1, // Color of the buttons
+                    colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                    buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                  ),
+                  child: child!,
+                );
+              },
+
+            );
+            var outputFormat = DateFormat('yyyy-MM-dd');
+            if (date != null && date != "")
+              taskMaster_page_controller.DataOFVisitController.value.text= outputFormat.format(date);
+            else
+              taskMaster_page_controller.DataOFVisitController.value.text = "";
+          }
+
+      ),
+    );
+  }
+
+  Widget bindProductCategoryDropDown(context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: Autocomplete<ItemCategoryMstModel>(
+        displayStringForOption: _displayItemCatMasterForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
+            return taskMaster_page_controller.Item_Category_master_list_without_task;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return taskMaster_page_controller.Item_Category_master_list_without_task
+              .where((ItemCategoryMstModel option) {
+            return option.categoryName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (ItemCategoryMstModel selection) {
+          // Update the TextField with the selected
+          taskMaster_page_controller.ItemCat_type_controller.text =
+              _displayItemCatMasterForOption(selection).toString();
+
+          if (!taskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
+            taskMaster_page_controller.Item_Category_Selected_list.add(selection);
+            Utils.showToastification('Success', 'Add Successfully');
+          }else{
+            Utils.showErrorToastification('Error', 'Already Selected');
+          }
+
+          // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextField(
+            onTap: (){
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = taskMaster_page_controller.ItemCat_type_controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                  onTap: (){
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Product Category',
+              labelText: 'Product Category',
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
+            Iterable<ItemCategoryMstModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.7,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final ItemCategoryMstModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.categoryName.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

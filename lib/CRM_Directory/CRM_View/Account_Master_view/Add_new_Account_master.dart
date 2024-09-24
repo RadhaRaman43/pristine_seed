@@ -102,7 +102,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 //CircleAvatar
                 label: Tooltip(
                   message: "Create Account ",
-                  child: Text('Save Draft',
+                  child: Text('Save as Draft',
                       style: GoogleFonts.poppins(
                         color: AllColors.whiteColor,
                         fontSize: AllFontSize.fourtine,
@@ -113,11 +113,13 @@ class AddNewAccountMaster extends StatelessWidget{
 
                   if(accountMaster_page_controller.account_name_controller.value.text.isNotEmpty || accountMaster_page_controller.account_name_controller.value.text != ''){
                     if(accountMaster_page_controller.DraftId.isEmpty || accountMaster_page_controller.DraftId == ''){
-                      await insertAccountData();
+                     // await insertAccountData();
+                      accountMaster_page_controller.DraftAccountMstUploaderApiHit('Create');
                       accountMaster_page_controller.clearController();
                       Get.toNamed(RoutesName.accountMaster_screen);
                     }else{
-                      await updateAccountData(accountMaster_page_controller.DraftId);
+                      //await updateAccountData(accountMaster_page_controller.DraftId);
+                      accountMaster_page_controller.DraftAccountMstUploaderApiHit('Update');
                       accountMaster_page_controller.clearController();
                       Get.toNamed(RoutesName.accountMaster_screen);
                     }

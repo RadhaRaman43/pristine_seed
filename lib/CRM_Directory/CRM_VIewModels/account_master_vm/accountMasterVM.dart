@@ -122,6 +122,7 @@ class Accountmastervm extends GetxController{
 
 
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<AccountMasterGetByCodeModel> Account_Master_Draft_list1=<AccountMasterGetByCodeModel>[].obs;
   List<AccountDraftModel> Account_Master_Draft_list=<AccountDraftModel>[];
   RxList<CustomList> get_Acc_category_list=<CustomList>[].obs;
   RxList<CustomList> get_Acc_type_list=<CustomList>[].obs;
@@ -156,6 +157,7 @@ class Accountmastervm extends GetxController{
     email=await sessionManagement.getEmail() ?? '';
     UserName=await sessionManagement.getName() ?? '';
     getAccountMaster(pageNumber ,is_Active.toString());
+    getDraftAccountMaster(pageNumber ,is_Active.toString());
     getAccCategoryApi();
     getAccountTypeApi();
     getCompanyProfileTypeApi();
@@ -231,6 +233,11 @@ class Accountmastervm extends GetxController{
     getAccountMaster(pageNumber ,is_Active.toString());
   }
 
+  Future<void>refreshDraftList() async{
+    clearAccoundController();
+    getDraftAccountMaster(pageNumber ,is_Active.toString());
+  }
+
    getAccountMaster(int page_no, String IsActive){
     if(IsActive == 'All'){
       is_Active = -1;
@@ -293,6 +300,70 @@ class Accountmastervm extends GetxController{
       print(e);
     }
    }
+
+  getDraftAccountMaster(int page_no, String IsActive){
+    if(IsActive == 'All'){
+      is_Active = -1;
+    }else if( IsActive == 'Yes'){
+      is_Active = 1;
+    }else if(IsActive == 'No'){
+      is_Active = 0;
+    }
+    print('isActiveInAPi...${is_Active}');
+    try{
+      Map<String, String> data={
+        "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
+        "filter_account_owner": "",
+        "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
+        "filter_account_category_type": account_cat_type_controller.value.text.isEmpty?"":account_cat_type_controller.value.text,
+        "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
+        "filter_address": Address_controller.value.text.isEmpty?"":Address_controller.value.text,
+        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
+        "filter_is_active": is_Active.toString(),
+        "filter_created_by": email,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString(),
+        "no_of_employees_min": no_of_employees_min.isEmpty?"":no_of_employees_min,
+        "no_of_employees_max": no_of_employees_max.isEmpty?"":no_of_employees_max,
+        "annual_revenue_min": annual_revenue_min.isEmpty?"":annual_revenue_min,
+        "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
+        "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
+        "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
+      };
+      loading.value=true;
+      _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountMasterGetByCodeModel> response = jsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              Account_Master_Draft_list1.clear();
+            }
+            Account_Master_Draft_list1.addAll(response);
+            print('DraftList...${Account_Master_Draft_list1.length}');
+            total_rows=int.parse(Account_Master_Draft_list1[0].totalRows!);
+
+          }else {
+            loading.value = false;
+            Account_Master_Draft_list1.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
 
   getAccCategoryApi() {
     this.loading.value = true;
@@ -851,6 +922,109 @@ class Accountmastervm extends GetxController{
     }
   }
 
+  DraftAccountMstUploaderApiHit(String flag) async {
+    if(IsActive_controller.text=="Yes"){
+      InActive=1;
+    }else if(IsActive_controller.text=="No"){
+      InActive=0;
+      //print(accountMaster_page_controller.InActive);
+    }
+    Map<String, dynamic> data = {
+      "created_by": email,
+      "flag": flag,
+      "lines": [
+        {
+          "account_code": '',
+          "account_name": account_name_controller.text.isEmpty?'':account_name_controller.text ,
+          "account_owner": AccountOwner,
+          "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
+          "account_type": account_type_controller.text.isEmpty?'':account_type_controller.text,
+          "referral_by": '',
+          "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
+          "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
+          "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
+          "company_profile_type": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text,
+          "company_profile_sub_type": comp_prof_sub_type_controller.value.text.isEmpty?'':comp_prof_sub_type_controller.value.text,
+          "company_profile_remark": comp_prof_remarks_controller.text.isEmpty?'':comp_prof_remarks_controller.text,
+          "address": Address_controller.text.isEmpty?'':Address_controller.text,
+          "address2": Address2_Controller.text.isEmpty?'':Address2_Controller.text,
+          "post_code": PostCode_Controller.text.isEmpty?'':PostCode_Controller.text,
+          "state_name": State_Controller.text.isEmpty?'':State_Controller.text,
+          "city": City_Controller.text.isEmpty?'':City_Controller.text,
+          "district": District_Controller.text.isEmpty?'':District_Controller.text,
+          "shipping_address": Shipping_Address_controller.text.isEmpty?"":Shipping_Address_controller.text,
+          "shipping_address2": Shipping_Address2_Controller.text.isEmpty?"":Shipping_Address2_Controller.text,
+          "shipping_post_code": Shipping_PostCode_Controller.text.isEmpty?"":Shipping_PostCode_Controller.text,
+          "shipping_state_code": Shipping_State_Controller.text.isEmpty?"":Shipping_State_Controller.text,
+          "shipping_city": Shipping_City_Controller.text.isEmpty?"":Shipping_City_Controller.text,
+          "shipping_district": Shipping_District_Controller.text.isEmpty?"":Shipping_District_Controller.text,
+          "no_of_employees": No_Of_Emp_Controller.text.isEmpty?0:No_Of_Emp_Controller.text,
+          "annual_revenue": Annual_Revenue_Controller.text.isEmpty?0:Annual_Revenue_Controller.text,
+          "tat_response_type": tatResponseType.isEmpty?'':tatResponseType,
+          "sales_representative": Sale_Representative_Controller.text.isEmpty?'':Sale_Representative_Controller.text,
+          "regional_service_head": Regional_service_head_Controller.text.isEmpty?'':Regional_service_head_Controller.text,
+          "profile": ImageUrl_Controller.text.isEmpty?'':ImageUrl_Controller.text,
+          "is_active": InActive,
+          "website": Website_Controller.text.isEmpty?'':Website_Controller.text,
+          "gst_type": gst_registration_type_controller.value.text.isEmpty?'':gst_registration_type_controller.value.text,
+          "gst_no": GstNo_Controller.text.isEmpty?'':GstNo_Controller.text,
+          "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
+          "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
+          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text
+        }
+      ]
+    };
+    print(data);
+    loading.value = true;
+    try {
+      final value = await _api.DraftAccountMstUploaderApiHit(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AccountMasterGetByCodeModel> response =
+        JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          loading.value = false;
+          if(flag == 'Create'){
+            print("ttttttttttt");
+            Utils.showToastification("Success!", "Account Create Successful");
+            clearAccoundController();
+            //deleteAccountData(DraftId);
+            pageNumber=0;
+            getAccountMaster(pageNumber ,is_Active.toString());
+            Get.toNamed(RoutesName.accountMaster_screen);
+          }else if(flag == 'Update'){
+            print("Update....");
+            Utils.showToastification("Success!", "Account Update Successful");
+            viewRequestDetails(response);
+            clearAccoundController();
+            pageNumber=0;
+            getAccountMaster(pageNumber ,is_Active.toString());
+            Get.toNamed(RoutesName.accountMaster_screen);
+          }
+          //Get.toNamed(RoutesName.update_AccountMaster_screen);
+          //viewRequestDetails(response);
+        } else {
+          loading.value = false;
+          // AccountMasterGetCode_list.value = [];
+          Utils.showErrorToastification("Error!", response[0].message??"");
+          //service_installation_details_list.value=[];
+        }
+      } else {
+        loading.value = false;
+        // service_indent_header_list.value = [];
+        Utils.showExceptionToastification("Api Error!", JsonResponse);
+      }
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      print("Exce3ption....");
+      //service_indent_header_list.value = [];
+    }
+  }
+
 
 
 
@@ -1392,25 +1566,6 @@ class Accountmastervm extends GetxController{
 
 
   getAccountDashboardDataQuotation(int page_no,String IsActive, String accountCode, String flag, String day_flag){
-    /*if(isInfraLeadFilterController.text=="All"){
-      infraLeadValue.value=-1;
-    }
-    else if( isInfraLeadFilterController.text=="Yes"){
-      infraLeadValue.value=1;
-    }
-    else if( isInfraLeadFilterController.text=="No"){
-      infraLeadValue.value=0;
-    }
-    else{
-      infraLeadValue.value=-1;
-    }
-    if(IsActive == 'All'){
-      is_Active = -1;
-    }else if( IsActive == 'Yes'){
-      is_Active = 1;
-    }else if(IsActive == 'No'){
-      is_Active = 0;
-    }*/
     try{
       Map<String, String> data={
         "filter_flag": flag,
@@ -1488,9 +1643,9 @@ class Accountmastervm extends GetxController{
   }
 
 
-  fillDraftDetails(List<AccountDraftModel> response, int position){
+  fillDraftDetails(List<AccountMasterGetByCodeModel> response, int position){
     try{
-      DraftId = response[position].id.toString();
+      //DraftId = response[position].id.toString();
       ImageString.value = response[position].profile??"";
       account_code_controller.text = response[position].accountCode??"";
       account_name_controller.text = response[position].accountName??"";
@@ -1530,13 +1685,13 @@ class Accountmastervm extends GetxController{
       }
       PanNo_Controller.text = response[position].panNo??'';
       IfscCode_Controller.text = response[position].ifscCode??'';
-      Address_controller.text = response[position].address??"";
-      print('Adresss....${response[position].address??""}');
-      Address2_Controller.text = response[position].address2??"";
-      PostCode_Controller.text = response[position].postCode??"";
+      Address_controller.text = response[position].permanentAddress!.address??"";
+     // print('Adresss....${response[position].address??""}');
+      Address2_Controller.text = response[position].permanentAddress!.address2??"";
+      PostCode_Controller.text = response[position].permanentAddress!.postCode??"";
       State_Controller.text = response[position].stateName??"";
-      City_Controller.text = response[position].city??"";
-      District_Controller.text = response[position].district??"";
+      City_Controller.text = response[position].permanentAddress!.city??"";
+      District_Controller.text = response[position].permanentAddress!.district??"";
       Shipping_Address_controller.text = response[position].shippingAddress??"";
       Shipping_Address2_Controller.text = response[position].shippingAddress2??"";
       Shipping_PostCode_Controller.text = response[position].shippingPostCode??"";

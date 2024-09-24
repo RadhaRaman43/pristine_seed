@@ -38,6 +38,14 @@ class AccountMasterRepo {
     return _apiService.postApi(data, AppUrl.AccountMstUploader,sessionManagement);
   }
 
+  Future<String> DraftAccountMstGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.DraftAccountMstGet,sessionManagement);
+  }
+
+  Future<String> DraftAccountMstUploaderApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.DraftAccountMstUploader,sessionManagement);
+  }
+
   Future<String> CompanyProfileMstUploaderApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.CompanyProfileMstUploader,sessionManagement);
   }

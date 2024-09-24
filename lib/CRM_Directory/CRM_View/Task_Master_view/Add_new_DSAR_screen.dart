@@ -378,7 +378,7 @@ class AddNewDsarScreen extends StatelessWidget{
               SizedBox(height: 15,),
              Obx((){
                return  Visibility(
-                 visible: TaskMaster_page_controller.isInfraLeadValue.value,
+                 visible: TaskMaster_page_controller.isInfraLeadValue.value && TaskMaster_page_controller.DSAR_Status_type_controller.value.text == 'Sales Cycle',
                  child: Padding(
                    padding: const EdgeInsets.only(left:10, right: 10, top: 10),
                    child: DefaultButton(

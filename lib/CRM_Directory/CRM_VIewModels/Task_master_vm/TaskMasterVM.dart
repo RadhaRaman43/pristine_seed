@@ -74,6 +74,7 @@ class Taskmastervm extends GetxController{
     var isInfraLeadFilterController=TextEditingController();
     var filterTaskDuedateController=TextEditingController().obs;
     var filterTaskCreationOnController=TextEditingController().obs;
+    var DataOFVisitController=TextEditingController().obs;
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -106,6 +107,7 @@ class Taskmastervm extends GetxController{
     RxList<ContactMstGetListModal> contact_master_list = <ContactMstGetListModal>[].obs;
     RxList<TaskDSARModel> TaskDSAR_Master_list = <TaskDSARModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_master_list = <ItemCategoryMstModel>[].obs;
+    RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_list = <ItemCategoryMstModel>[].obs;
     RxList<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
     RxList<String> Item_Category_code_list = <String>[].obs;
@@ -184,6 +186,8 @@ class Taskmastervm extends GetxController{
                 "filter_approved_by": "",
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
+                "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
+                "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
             };
@@ -243,8 +247,11 @@ class Taskmastervm extends GetxController{
     }
 
     TaskMasterCreate(){
+
+        List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
+
         try{
-            Map<String, String> data={
+            Map<String, dynamic> data={
                 "account_name": account_name.value.isNotEmpty?account_name.value:"",
                 "account_code": account_code.value.isNotEmpty?account_code.value:"",
                 "contact_name": Contact_Name_controller.text.isEmpty?'':Contact_Name_controller.text,
@@ -255,7 +262,9 @@ class Taskmastervm extends GetxController{
                 "purpose_of_visit": PusposeOfVisit_controller.text.isEmpty?'':PusposeOfVisit_controller.text,
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "payment_sale_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
-                "date_of_visit": ""
+                "date_of_visit": DataOFVisitController.value.text.isEmpty?"":DataOFVisitController.value.text,
+                "is_infra_lead": isInfraLeadFilterController.text =='Yes'?1:0,
+                "lines": lines.map((line) => line.toJson()).toList(),
             };
             print('Jason Date....${data}');
             loading.value=true;
@@ -691,6 +700,40 @@ class Taskmastervm extends GetxController{
         });
     }
 
+    getItemCategoryMstWithoutTaskIdApi() {
+        this.loading.value = true;
+        Map<String, String> data = {
+
+        };
+
+        _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+            try {
+                List<ItemCategoryMstModel> Response =
+                (json.decode(value) as List<dynamic>)
+                    .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+                    .toList();
+
+                if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+                    Item_Category_master_list_without_task.value = Response!;
+
+                    // print('master list....${get_Acc_type_list.length.toString()}');
+                } else {
+                    Item_Category_master_list_without_task.value = [];
+                    //print('master listelsse....${get_Acc_type_list.length.toString()}');
+                }
+            } catch (e) {
+                Item_Category_master_list_without_task.value = [];
+                print('catch....${e.toString()}');
+            }
+        }).onError((error, stackTrace) {
+            Item_Category_master_list_without_task.value = [];
+            Utils.sanckBarError('Api Exception onError', error.toString());
+            print('catchEx....${error.toString()}');
+        }).whenComplete(() {
+            this.loading.value = false;
+        });
+    }
+
     TaskSaleCatCreateApiHit(String flag) async {
 
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
@@ -897,12 +940,19 @@ class Taskmastervm extends GetxController{
     }
 
     void clearCreateTaskController(){
+        Item_Category_Selected_list.value=[];
         account_name.value = '';
+        isInfraLeadFilterController.text = "No";
         account_Name_controller.clear();
         Contact_Name_controller.clear();
         Type_of_call_controller.clear();
         Method_of_call_controller.clear();
         Task_Remarks_controller.clear();
+        Sale_cycle_Id_controller.clear();
+        isInfraLeadFilterController.clear();
+        DataOFVisitController.value.clear();
+        ItemCat_type_controller.clear();
+
 
     }
 

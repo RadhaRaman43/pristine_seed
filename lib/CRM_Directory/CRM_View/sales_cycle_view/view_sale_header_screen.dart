@@ -10,7 +10,9 @@ import '../../../component/back_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
@@ -28,6 +30,9 @@ class ViewSaleHeaderScreen extends StatelessWidget{
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
+
+  static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
+      option.categoryName!;
 
   static String _displayUpdateSalesCycleForOption(String option) =>
       option;
@@ -173,10 +178,53 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                       visible: saleCycleController.saleCycleList[0].salesCycleStatus=="Suspect" ?true:false,
                       child: Container(
                         child:Column(
-                          children: [
-                            bindClosureDate(context),
-                            bindBudgetAmount(context),
-                            bindExpectedAmount(context),
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  bindProductCategoryDropDown(context),
+                                  Container(
+                                    padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+                                    width: size.width/2,
+                                    child: DefaultButton(
+                                      press: (){
+                                        saleCycleController.ProductCategoryWiseAmtCreateApiHit();
+                                        saleCycleController.pageNumber = 0;
+                                        saleCycleController.ProductCategoryWiseAmtGet(saleCycleController.pageNumber, saleCycleController.salesCycleId.value);
+
+                                      },
+                                      text: "Save",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            SizedBox(height: 10,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                bindBudgetAmount(context),
+                                bindExpectedAmount(context)
+
+                              ],
+                            ),
+                            /*SizedBox(height: 5,),
+                            Text(
+                              "Amount Table",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.sisxteen,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),*/
+
+                            SizedBox(height: 10,),
+
+                            Container(
+                              width: double.infinity,
+                              //height: size.height*.6,
+                              child: BindAmmountTable(context),
+                            )
+
                           ],
                         ),
                       ),
@@ -658,8 +706,9 @@ class ViewSaleHeaderScreen extends StatelessWidget{
 
   bindBudgetAmount(BuildContext context) {
     print("fgdsgh ${ saleCycleController.saleCycleList[0].isReadySendForApproval} ${saleCycleController.FromPage.value}");
-      return Padding(
-        padding: const EdgeInsets.all(15.0),
+      return Container(
+        padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+        width: size.width/2,
         child: TextField(
           readOnly:  (saleCycleController.saleCycleList[0].isReadySendForApproval==0   &&
               (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
@@ -678,8 +727,8 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                 fontSize: AllFontSize.ten),
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w700,
-                fontSize: AllFontSize.sisxteen),
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.fourtine),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
@@ -3133,13 +3182,130 @@ Widget bindQuoteData(BuildContext context) {
     );
   }
 
+  Widget bindProductCategoryDropDown(context){
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+      width: size.width/2,
+      child: Autocomplete<ItemCategoryMstModel>(
+        displayStringForOption: _displayItemCatMasterForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
+            return saleCycleController.productCategoryList.value;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return saleCycleController.productCategoryList
+              .where((ItemCategoryMstModel option) {
+            return option.categoryName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (ItemCategoryMstModel selection) {
+          saleCycleController.productCategoryController.value.text =
+              _displayItemCatMasterForOption(selection).toString();
+          saleCycleController.ProductCategoryCode.value = selection.categoryCode??"";
+
+          /*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+            saleCycleController.itemCategorySelectedlist.add(selection);
+            Utils.showToastification('Success', 'Add Successfully');
+          }else{
+            Utils.showErrorToastification('Error', 'Already Selected');
+          }
+          print("list${saleCycleController.itemCategorySelectedlist.length}");*/
+
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextField(
+            onTap: (){
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = saleCycleController.productCategoryController.value.text,
+            focusNode: focusNode,
+            decoration: InputDecoration(
+                suffixIcon: InkWell(
+                    onTap: (){
+                      focusNode.requestFocus();
+                      controller.clear();
+                    },
+                    child: Icon(Icons.arrow_drop_down)),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Product Category',
+                labelText: 'Product Category',
+
+                hintStyle: GoogleFonts.poppins(
+                    color: AllColors.lightblackColor,
+                    fontWeight: FontWeight.w300,
+                    fontSize: AllFontSize.ten),
+                labelStyle: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontWeight: FontWeight.w500,
+                    fontSize: AllFontSize.fourtine),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                )
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
+            Iterable<ItemCategoryMstModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.7,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final ItemCategoryMstModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option.categoryName.toString(),
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
  Widget bindExpectedAmount(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 15),
+    return Container(
+      padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+      width: size.width/2,
       child: TextField(
         readOnly:  (saleCycleController.saleCycleList[0].isReadySendForApproval==0 &&
             (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
-   || saleCycleController.FromPage.value == 'Task' )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
+         || saleCycleController.FromPage.value == 'Task' )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
         cursorColor:AllColors.primaryDark1 ,
         controller: saleCycleController.expectedAmountController.value,
         keyboardType: TextInputType.number,
@@ -3154,8 +3320,8 @@ Widget bindQuoteData(BuildContext context) {
                 fontSize: AllFontSize.ten),
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w700,
-                fontSize: AllFontSize.sisxteen),
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.fourtine),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
             ),
@@ -3165,6 +3331,110 @@ Widget bindQuoteData(BuildContext context) {
         ),
       ),
     );
+  }
+
+  Widget BindAmmountTable(BuildContext context){
+    if(saleCycleController.budgetAmountList.length > 0 ){
+      return
+        /* Expanded(child: ListView.separated(
+          shrinkWrap: true,
+          itemBuilder: (BuildContext context, int index) {
+            return BindListView(context, index);
+          },
+          separatorBuilder: (context, index) => Divider(height: .05, color: AllColors.grayColor,),
+          itemCount: GoodReceiptsLineList!.length)
+      );*/
+        Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: BindTableDate(context),
+            ));
+    }else{
+      return Container(
+        decoration: BoxDecoration(color: Colors.white),
+        child: Column(
+          children: [
+            //Image(image: AssetImage("assets/images/no_results_found.jpg"), height: 450,width: 350,),
+            Text(
+              'No Record Found.',
+              style: GoogleFonts.poppins(
+                  color: AllColors.bluegrayColor,
+                  fontSize: AllFontSize.twentee,
+                  fontWeight: FontWeight.w700),
+            ),
+          ],
+        ),
+
+      );
+  }
+
+  }
+
+
+  Widget BindTableDate(BuildContext context){
+    return Container(
+     // padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+     child: DataTable(
+       headingRowColor: WidgetStateProperty.all(Colors.blue[100]),
+       columnSpacing: 50,
+       decoration: BoxDecoration(
+         border: Border(
+           right: BorderSide(
+             color: Colors.grey,
+             width: 0.5,
+           ),
+         ),
+       ),
+       columns: [
+         DataColumn(label: Text('Product\nCategory')),
+         DataColumn(label: Text('Budget\nAmount')),
+         DataColumn(label: Text('Estimate\nAmount'),),
+       ],
+       rows: [
+         ...saleCycleController.budgetAmountList.map((e) => DataRow(cells: [
+            DataCell(
+              Container(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(
+                e.productCategoryName.toString(),
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w300,)))),
+            DataCell(
+              Container(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(e.budgetAmount.toString(),
+                     style: GoogleFonts.poppins(
+                     color: AllColors.primaryDark1,
+                     fontWeight: FontWeight.w300,)))),
+
+            DataCell(
+              Container(
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(e.estimatedAmount.toString(),
+                style:GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w300,) ,
+              ))),
+          ])),
+         DataRow(cells: [
+           DataCell(Container(
+               alignment: AlignmentDirectional.centerStart,
+               child: Text('Total:', style: TextStyle(fontWeight: FontWeight.bold, color: AllColors.blackColor)))), // Empty cells for the total row
+           DataCell(Container(
+               alignment: AlignmentDirectional.centerStart,
+               child: Text('${saleCycleController.budgetAmountList[0].totalBudgetAmount}', style: TextStyle(fontWeight: FontWeight.bold, color: AllColors.blackColor)))),
+           DataCell(
+               Container(
+                   alignment: AlignmentDirectional.centerStart,
+                   child: Text('${saleCycleController.budgetAmountList[0].totalEstimatedAmount}', style: TextStyle(fontWeight: FontWeight.bold, color: AllColors.blackColor)))),
+         ]),
+       ],
+
+
+     ),
+    );
+
   }
 
   bindSolutionRejectedRemarks(BuildContext context) {

@@ -1,6 +1,7 @@
 class AccountMasterGetByCodeModel {
   String? condition;
   String? message;
+  String? totalRows;
   String? accountCode;
   String? accountName;
   String? accountOwner;
@@ -44,6 +45,7 @@ class AccountMasterGetByCodeModel {
   AccountMasterGetByCodeModel(
       {this.condition,
         this.message,
+        this.totalRows,
         this.accountCode,
         this.accountName,
         this.accountOwner,
@@ -87,6 +89,7 @@ class AccountMasterGetByCodeModel {
   AccountMasterGetByCodeModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
     message = json['message'];
+    totalRows = json['total_rows'];
     accountCode = json['account_code'];
     accountName = json['account_name'];
     accountOwner = json['account_owner'];
@@ -134,6 +137,7 @@ class AccountMasterGetByCodeModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
     data['message'] = this.message;
+    data['total_rows'] = this.totalRows;
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;
     data['account_owner'] = this.accountOwner;
