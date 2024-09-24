@@ -31,7 +31,7 @@ class HomeViewModel extends GetxController{
 
   var recentlyOpenedMenus_list = <String>[].obs;
 
-
+  var expandedTileIndex = (-1).obs;
   @override
   Future<void> onInit() async {
     email= await sessionManagement.getEmail() ?? '';
@@ -60,6 +60,15 @@ class HomeViewModel extends GetxController{
     isDrawerOpen.value = !isDrawerOpen.value;
   }
 
+
+
+  void toggleTile(int index) {
+    if (expandedTileIndex.value == index) {
+      expandedTileIndex.value = -1;  // Close if the same tile is clicked again
+    } else {
+      expandedTileIndex.value = index;  // Open a new tile
+    }
+  }
 
 
 

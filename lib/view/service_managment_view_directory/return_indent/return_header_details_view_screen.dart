@@ -352,6 +352,8 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 8.0),
                   child: InkWell(
                       onTap: () {
+                        return_header_details_controller.return_item=return_header_details_controller
+                            .return_create_header_list[0].lines![index].itemNo.toString();
 
                         return_header_details_controller.item_no= return_header_details_controller
                             .return_create_header_list[0].lines![index].itemNo.toString();
@@ -359,6 +361,7 @@ class ReturnHeaderDetailsScreen extends StatelessWidget {
                         return_header_details_controller.getIndentItemName(return_header_details_controller
                             .return_create_header_list[0].returnNo.toString(),return_header_details_controller
                             .return_create_header_list[0].lines![index].itemNo.toString(),"InIt");
+
 
                         return_header_details_controller. indent_return_add_line_list.value=[];
 

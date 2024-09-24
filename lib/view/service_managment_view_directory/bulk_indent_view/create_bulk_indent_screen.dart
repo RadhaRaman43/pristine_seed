@@ -1426,14 +1426,7 @@ class CreateBulkIndentScreen extends StatelessWidget{
         return await create_bulk_controller.getItemNo(textEditingValue.text);
       },
       onSelected: (BulkItemMasterGetModel selection) {
-       // print(selection.reasonCode);
-        /*create_bulk_controller.item_no_controller.text =
-            _displayItemNoForOption(selection).toString();
 
-        create_bulk_controller.item_no_description_controller.text=selection.name!;
-
-
-        FocusScope.of(context).unfocus();*/
         create_bulk_controller.item_no_controller.text =
             _displayItemNoForOption(selection).toString();
         create_bulk_controller.item_no = selection.itemCode!;
