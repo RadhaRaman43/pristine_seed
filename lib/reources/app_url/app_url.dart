@@ -222,6 +222,7 @@ class AppUrl {
      static const String salesCycleMstApproveReject = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstApproveReject";
      static const String SalesCycleMstGetByAccountCode = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGetByAccountCode";
      static const String quoteHeaderGet = "$BASE_URL/api/CRM/Quote/QuoteHeaderGet";
+     static const String QuoteWonDataGet = "$BASE_URL/api/CRM/Quote/QuoteWonDataGet";
      static const String quoteHeaderCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderCreate";
      static const String quoteHeaderDuplicateCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderDuplicate";
      static const String quoteHeaderGetByQuoteId = "$BASE_URL/api/CRM/Quote/QuoteHeaderGetByQuoteId";

@@ -118,7 +118,7 @@ class AddNewAccountMaster extends StatelessWidget{
                       accountMaster_page_controller.clearController();
                       Get.toNamed(RoutesName.accountMaster_screen);
                     }else{
-                      //await updateAccountData(accountMaster_page_controller.DraftId);
+                     // await updateAccountData(accountMaster_page_controller.DraftId);
                       accountMaster_page_controller.DraftAccountMstUploaderApiHit('Update');
                       accountMaster_page_controller.clearController();
                       Get.toNamed(RoutesName.accountMaster_screen);

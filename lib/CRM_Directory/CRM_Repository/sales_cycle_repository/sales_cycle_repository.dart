@@ -23,6 +23,10 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.quoteHeaderGet,sessionManagement);
   }
 
+  Future<String> quoteWonDataGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteWonDataGet,sessionManagement);
+  }
+
   Future<String> quoteHeaderCreateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.quoteHeaderCreate,sessionManagement);
   }

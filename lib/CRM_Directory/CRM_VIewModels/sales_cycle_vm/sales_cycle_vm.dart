@@ -28,6 +28,7 @@ import '../../CRM_Models/sale_cycle_modal/Item_qoute_with_report_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/approval_person_model.dart';
 import '../../CRM_Models/sale_cycle_modal/item_quote_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/productCategoryWiseAmtModel.dart';
+import '../../CRM_Models/sale_cycle_modal/quoteWonModel.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_approve_reject_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
@@ -50,6 +51,8 @@ class SalesCycleVm extends GetxController{
   RxString accountCode="".obs;
   RxString contactCode="".obs;
   RxString ProductCategoryCode="".obs;
+  RxString Total_Budget_Amount="".obs;
+  RxString Total_Expected_Amount="".obs;
   RxBool loading=false.obs;
   String email="";
   String consigneeId="";
@@ -72,11 +75,13 @@ class SalesCycleVm extends GetxController{
   RxList<SalesCycleModal> saleCycleList=<SalesCycleModal>[].obs;
   RxList<ProductCategoryWiseAmtModel> budgetAmountList=<ProductCategoryWiseAmtModel>[].obs;
   RxList<SalesCycleQuoteHeaderModal> quoteList=<SalesCycleQuoteHeaderModal>[].obs;
+  RxList<QuoteWonModel> quoteWonList=<QuoteWonModel>[].obs;
   RxList<getApprovalPersonMadol> approvalPersonList=<getApprovalPersonMadol>[].obs;
   RxList<SalesCycleQuoteInformationModal> quoteHeaderdata=<SalesCycleQuoteInformationModal>[].obs;
   RxList<QuoteItems> quoteLinedata=<QuoteItems>[].obs;
   RxList<ItemQuoteModal> itemMstGetByQuoteIdList=<ItemQuoteModal>[].obs;
   RxList<SalesCycleUpdateStatusModal> quoteLineCreate=<SalesCycleUpdateStatusModal>[].obs;
+  RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list=<SalesCycleQuoteHeaderModal>[].obs;
   RxList<ItemCategoryMstModel> productCategoryList=<ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> itemCategorySelectedlist = <ItemCategoryMstModel>[].obs;
   RxList<ItemQouteWithReportModal> itemQuoteReportList = <ItemQouteWithReportModal>[].obs;
@@ -140,6 +145,7 @@ class SalesCycleVm extends GetxController{
   var quoteTotAmountController=TextEditingController().obs;
   var advncPaymentAmountController=TextEditingController().obs;
   var finalAmountController=TextEditingController().obs;
+  var pendingAmountController=TextEditingController().obs;
   var quoteRemarkController=TextEditingController().obs;
 
   //todo Item list
@@ -205,12 +211,13 @@ class SalesCycleVm extends GetxController{
 
   }
 
-  void selectCheckbox(int index) {
+  /*void selectCheckbox(int index) {
     isCheck.value = index;
     selectedQuotationIdController.value.text = quoteList[index].quoteId ?? "";
     isChooseQuote.value = false;
     isApprove.value = true;
-  }
+  }*/
+
 
 
   getsalesCycleData(int page_no, String saleCycleId, String flag, String fromPage){
@@ -275,6 +282,7 @@ class SalesCycleVm extends GetxController{
             if(saleCycleList[0].salesCycleStatus=="Propose") {
               print("Sales cycle status..${saleCycleList[0].salesCycleId}");
               getQuoteHeaderData(pageNumberForQuote,saleCycleList[0].salesCycleId!, '');
+              getQuoteWonData(pageNumberForQuote,saleCycleList[0].salesCycleId!);
             }
            /* accountNameController.value.text=saleCycleList[0].accountName??"";
             contactNameController.value.text=saleCycleList[0].contactName??"";
@@ -326,30 +334,28 @@ class SalesCycleVm extends GetxController{
               budgetAmountList.clear();
             }
             budgetAmountList.addAll(response);
+            Total_Budget_Amount.value=response[0].totalBudgetAmount??"";
+            Total_Expected_Amount.value=response[0].totalEstimatedAmount??"";
             print('listSize.....${budgetAmountList.length}');
             total_rows_sales=int.parse(budgetAmountList[0].totalRows!);
           }else {
-            print('nhi chala....');
             loading.value = false;
             budgetAmountList.value=[];
 
           }
         } else {
-          print('nhi chala1....');
           loading.value = false;
 
         }
       },
       ).onError(
             (error, stackTrace) {
-          print('nhi chalaErr....');
           print(error);
           loading.value = false;
 
         },
       );
     }catch(e){
-      print('nhi chala3....');
       loading.value = false;
       print(e);
     }
@@ -360,12 +366,14 @@ class SalesCycleVm extends GetxController{
   salesCycleMstUpdateApiHit(SalesCycleModal saleCycleList, String proposedSolution,
       String quote_accepted, String competitor_name, String quote_rejected_reason, String flag ){
     print('reject....${quote_rejected_reason}');
+    List<SalesCycleUpdateStatusModal> lines = Quote_Selected_list.map((item) => SalesCycleUpdateStatusModal(quoteId: item.quoteId!)).toList();
+
     loading.value = true;
       Map data={
         "sales_cycle_id": saleCycleList.salesCycleId,
         "est_closure_date": closureDateController.value.text.isEmpty?saleCycleList.estClosureDate:closureDateController.value.text,
-        "budget_amount": budgetAmountController.value.text.isEmpty?saleCycleList.budgetAmount:budgetAmountController.value.text,
-        "est_budget_amount": expectedAmountController.value.text.isEmpty?saleCycleList.estBudgetAmount:expectedAmountController.value.text,
+        "budget_amount": Total_Budget_Amount.value,
+        "est_budget_amount": Total_Expected_Amount.value,
         "is_customer_need_identify": customerNeedIdetityController.value.text=="No"?0:1,
         "proposed_solution": proposedSolution.isNotEmpty?proposedSolution:"",
         "is_solution_accepted": solutionAcceptedController.value.text=="No"?0:1,
@@ -373,11 +381,11 @@ class SalesCycleVm extends GetxController{
         "quote_accepted": quote_accepted.isEmpty?"":quote_accepted,
         "competitor_name": competitor_name.isEmpty?"":competitor_name,
         "quote_rejected_reason": quote_rejected_reason.isEmpty?"":quote_rejected_reason,
-        "quote_id": selectedQuotationIdController.value.text.isNotEmpty?selectedQuotationIdController.value.text:"",
+        "lines": lines.map((line) => line.toJson()).toList(),
         "created_by": email
       };
       try{
-        _api.salesCycleMstUpdateApiHit(data, sessionManagement).then((onValue){
+        _api. salesCycleMstUpdateApiHit(data, sessionManagement).then((onValue){
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if(jsonResponse is List){
@@ -493,6 +501,46 @@ class SalesCycleVm extends GetxController{
             total_rows=int.parse(quoteList[0].totalRows!);
           }else {
             quoteList.value=[];
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getQuoteWonData(int pageNumberForQuote, String saleCycleId){
+    try{
+      Map data= {
+        "sale_cycle_id":saleCycleId.isNotEmpty?saleCycleId:"" ,
+        "quote_id":  "",
+        "rowsPerPage": rowsPerPage,
+        "pageNumber": pageNumberForQuote
+      };
+      loading.value=true;
+      _api.quoteWonDataGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<QuoteWonModel> response = jsonResponse.map((e) => QuoteWonModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(pageNumberForQuote==0){
+              quoteWonList.clear();
+            }
+            quoteWonList.addAll(response);
+            total_rows=int.parse(quoteWonList[0].totalRows!);
+          }else {
+            quoteWonList.value=[];
             loading.value = false;
           }
         } else {
@@ -879,12 +927,22 @@ class SalesCycleVm extends GetxController{
     }
   }
 
-  void ProductCategoryWiseAmtCreateApiHit() {
+  void ProductCategoryWiseAmtCreateApiHit(int id) {
     try{
+      print('Ander aya.....');
+      // Parse the estimated amount to double, or set to null if the input is empty
+      /*double? estimatedAmount = expectedAmountController.value.text.isEmpty
+          ? budgetAmountList[id].estimatedAmount
+          : double.tryParse(expectedAmountController.value.text);
+
+      // Parse the budget amount to double, or set to null if the input is empty
+      double? budgetAmount = budgetAmountController.value.text.isEmpty
+          ? budgetAmountList[id].budgetAmount
+          : double.tryParse(budgetAmountController.value.text);*/
       Map data= {
-        "id": 0,
+        "id": id,
         "sale_cycle_id": salesCycleId.toString(),
-        "product_category": ProductCategoryCode.value,
+        "product_category": ProductCategoryCode.value.isEmpty?"":ProductCategoryCode.value,
         "estimated_amount": expectedAmountController.value.text,
         "budget_amount": budgetAmountController.value.text,
         "created_by": email
@@ -896,10 +954,15 @@ class SalesCycleVm extends GetxController{
         if(jsonResponse is List){
           List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
           if( response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
+            Utils.showToastification("Message !", response[0].message.toString());
+            pageNumber = 0;
+            ProductCategoryWiseAmtGet(pageNumber, salesCycleId.value);
+            productCategoryController.value.clear();
+            budgetAmountController.value.clear();
+            expectedAmountController.value.clear();
             loading.value = false;
           }else {
-            Utils.sanckBarError("False Message !", response[0].message.toString());
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
             loading.value = false;
           }
         } else {
@@ -1646,6 +1709,14 @@ class SalesCycleVm extends GetxController{
 
     finalAmountController.value.text = finalQuoteAmt.toString();
 
+    double? advcAmount = double.tryParse(advncPaymentAmountController.value.text);
+    double? finalAmount = double.tryParse(finalAmountController.value.text);
+    if (advcAmount == null) {
+      advcAmount = 0.0;
+    }
+    double totAmount = finalAmount! - advcAmount;
+    pendingAmountController.value.text = totAmount.toString();
+
 
   }
 
@@ -1680,12 +1751,31 @@ class SalesCycleVm extends GetxController{
 
                     SizedBox(height: 10,),
 
-                    Obx(() {
+                    /*Obx(() {
                       return Visibility(
 
                         //visible: saleCycleController.selectedQuotationIdController.value.text.isNotEmpty,
                           visible: isApprove.value,
                           child: selectedQuotation(context));
+
+                    }),*/
+
+                    Obx(() {
+                      return
+                        Visibility(
+                          visible: isApprove.value,
+                          child: Wrap(
+                            spacing: 8.0,
+                            children: Quote_Selected_list.map((category) {
+                              return Chip(
+                                label: Text(category.quoteId!),
+                                onDeleted: () {
+                                  Quote_Selected_list.remove(category);
+                                },
+                              );
+                            }).toList(),
+                          ),
+                        );
 
                     }),
                     SizedBox(height: 10,),
@@ -1705,12 +1795,6 @@ class SalesCycleVm extends GetxController{
                               onPressed: ()  {
                                 pageNumberForQuote = 0;
                                 getQuoteHeaderData(pageNumberForQuote,salesCycleId.value, "Approved");
-                                /*Get.toNamed(RoutesName.approvedQuotationListScreen)?.then((_) {
-                                  print('Reopen Dialog');
-                                  // Reopen the dialog when coming back from the other page
-                                  showDialogForsalescycleUpdate(context, saleCycleList);
-                                });*/
-                                // navigateAndShowDialog(context, saleCycleList);
                                 Get.toNamed(RoutesName.approvedQuotationListScreen);
 
 
@@ -2424,63 +2508,6 @@ class SalesCycleVm extends GetxController{
 
 
   Widget bindUpdateSalesCycle(BuildContext context) {
-    /*return DropdownMenu<String>(
-      width: size.width-195,
-      controller: saleCycleController.updateQuoteAccetedCycleController.value,
-      label: Text(
-        "Quote Accepted",
-        style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
-            fontWeight: FontWeight.w700),
-      ),
-
-      inputDecorationTheme: const InputDecorationTheme(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: AllColors.primaryDark1,),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-        filled: false,
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-      ),
-      enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-      onSelected: (String? selection) {
-        print(selection);
-        saleCycleController.updateQuoteAccetedCycleController.value.text =
-            _displayCustomerNeedIdentityStatusForOption(selection!).toString();
-        print('IsActive.....${saleCycleController.updateQuoteAccetedCycleController.value.text}');
-        if(saleCycleController.updateQuoteAccetedCycleController.value.text=="WON"){
-          saleCycleController.isApprove.value=true;
-          saleCycleController.isReject.value=false;
-        }
-        else if(saleCycleController.updateQuoteAccetedCycleController.value.text=="LOSS"){
-          saleCycleController.competitorNameController.value.clear();
-          saleCycleController.quoteRejectReasonController.value.clear();
-          saleCycleController.isReject.value=true;
-          saleCycleController.isApprove.value=false;
-        }
-        else{
-          saleCycleController.isApprove.value=false;
-          saleCycleController.isReject.value=false;
-        }
-      },
-
-      dropdownMenuEntries: saleCycleController.quoteAcceptedList.map<DropdownMenuEntry<String>>((String e) {
-        return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
-      }).toList(),
-    );*/
 
     return Autocomplete<String>(
       displayStringForOption: _displayCustomerNeedIdentityStatusForOption,
@@ -2526,6 +2553,26 @@ class SalesCycleVm extends GetxController{
         return TextField(
           onTap: (){
             updateQuoteAccetedCycleController.value.clear();
+          },
+          onChanged: (value){
+            if(updateQuoteAccetedCycleController.value.text=="WON"){
+              selectedQuotationIdController.value.clear();
+              isChooseQuote.value = true;
+              isApprove.value=false;
+              isReject.value=false;
+            }
+            else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
+              competitorNameController.value.clear();
+              quoteRejectReasonController.value.clear();
+              isReject.value=true;
+              isApprove.value=false;
+              isChooseQuote.value = false;
+            }
+            else{
+              isApprove.value=false;
+              isReject.value=false;
+              isChooseQuote.value = false;
+            }
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
@@ -2647,6 +2694,28 @@ class SalesCycleVm extends GetxController{
       print(e);
     }
   }
+
+  //todo checkbox indexex select variable...
+  var checkBoxValues = <int, bool>{}.obs;
+//todo chip button visible function...
+  get isAnyCheckboxSelected {
+    return checkBoxValues.values.any((value) => value == true);
+  }
+
+
+  void toggleMultiCheckbox(int index) {
+    final bool isChecked = checkBoxValues[index] ?? false;
+    if (isChecked) {
+      Quote_Selected_list.remove(quoteList[index]);
+      checkBoxValues[index] = false;
+    } else {
+      if (!Quote_Selected_list.contains(quoteList[index])) {
+        Quote_Selected_list.add(quoteList[index]);
+        checkBoxValues[index] = true;
+      }
+    }
+  }
+
 
 
 }

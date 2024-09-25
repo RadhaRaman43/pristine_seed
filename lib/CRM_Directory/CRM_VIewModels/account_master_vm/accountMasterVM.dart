@@ -934,7 +934,7 @@ class Accountmastervm extends GetxController{
       "flag": flag,
       "lines": [
         {
-          "account_code": '',
+          "account_code": DraftId.isEmpty?"":DraftId,
           "account_name": account_name_controller.text.isEmpty?'':account_name_controller.text ,
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
@@ -989,7 +989,7 @@ class Accountmastervm extends GetxController{
           loading.value = false;
           if(flag == 'Create'){
             print("ttttttttttt");
-            Utils.showToastification("Success!", "Account Create Successful");
+            Utils.showToastification("Success!", "Item Save In Successful");
             clearAccoundController();
             //deleteAccountData(DraftId);
             pageNumber=0;
@@ -997,7 +997,7 @@ class Accountmastervm extends GetxController{
             Get.toNamed(RoutesName.accountMaster_screen);
           }else if(flag == 'Update'){
             print("Update....");
-            Utils.showToastification("Success!", "Account Update Successful");
+            Utils.showToastification("Success!", "Draft Item Update Successful");
             viewRequestDetails(response);
             clearAccoundController();
             pageNumber=0;
@@ -1645,7 +1645,7 @@ class Accountmastervm extends GetxController{
 
   fillDraftDetails(List<AccountMasterGetByCodeModel> response, int position){
     try{
-      //DraftId = response[position].id.toString();
+      DraftId = response[position].accountCode.toString();
       ImageString.value = response[position].profile??"";
       account_code_controller.text = response[position].accountCode??"";
       account_name_controller.text = response[position].accountName??"";

@@ -162,6 +162,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                           ),),
 
                                           onPressed: (){
+                                            saleCycleController.quoteId.value= saleCycleController.quoteHeaderdata[0].quoteId??"";
                                             //showdialogForApproval(context);
                                             openConfirmationDialog(context, "Do you want to Update this Sales Cycle?", "Approved");
                                             saleCycleController.quoteStatusController.value.clear();
