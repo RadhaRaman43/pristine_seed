@@ -59,7 +59,54 @@ class ServiceInventoryViewDetailsScreen extends StatelessWidget{
             },
             ),
 
-              bindListView(context),
+            Container(
+              padding: EdgeInsets.all(8.0),
+              child: TextFormField(
+                controller: service_details_page_controller.inventory_search_controller,
+                decoration: InputDecoration(
+                  hintText: "Search Indent",
+                  contentPadding: EdgeInsets.all(10),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                        color: AllColors.primaryDark1), // Customize the border color
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                        color: Colors.grey), // Customize the border color
+                  ),
+                  suffixIcon: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.search),
+                        onPressed: () async {
+                          service_details_page_controller.getServiceInventoryListView(service_details_page_controller.item_no,
+                               global_search: service_details_page_controller.inventory_search_controller.text);
+
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.clear),
+                        onPressed: () {
+                          service_details_page_controller
+                              .inventory_search_controller.text = "";
+                          service_details_page_controller.getServiceInventoryListView(service_details_page_controller.item_no,
+                              global_search: service_details_page_controller.inventory_search_controller.text);
+
+                          // Add clear functionality here
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+
+
+                 Obx(() =>   bindListView(context),)
+
           ],
         ),
         ),
