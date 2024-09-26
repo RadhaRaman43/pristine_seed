@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
@@ -24,6 +25,12 @@ class  ServiceInventoryViewModel extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
 
+  String item_no="";
+
+
+  var globle_search_controller = TextEditingController();
+  var inventory_search_controller = TextEditingController();
+
 
   @override
   void onInit() async {
@@ -31,12 +38,24 @@ class  ServiceInventoryViewModel extends GetxController{
     print("ritik");
     getServiceInventoryGetList(pageNumber);
   }
-  getServiceInventoryGetList(int page_no){
-    Map data={
-      "created_by":email,
-      "rowsPerPage":rowsPerPage,
-      "pageNumber": page_no
-    };
+  getServiceInventoryGetList(int page_no,{String global_search=""}){
+    Map data;
+
+    if(global_search!=null && global_search.isNotEmpty && global_search!=""){
+      data={
+        "created_by":email,
+        "rowsPerPage":rowsPerPage,
+        "pageNumber": page_no,
+        "filter_item": global_search
+      };
+    }else{
+      data={
+        "created_by":email,
+        "rowsPerPage":rowsPerPage,
+        "pageNumber": page_no,
+        "filter_item": ""
+      };
+    }
     loading.value=true;
     _api.serviceInventoryGetApiHit(data, sessionManagement).then((value) {
       print(value);
@@ -74,11 +93,24 @@ class  ServiceInventoryViewModel extends GetxController{
   }
 
 
-  getServiceInventoryListView(String item_no){
-    Map data={
-      "created_by":email,
-      "item_no":item_no
-    };
+  getServiceInventoryListView(String item_no,{String global_search="" }){
+    Map data;
+    if(global_search!=null && global_search.isNotEmpty && global_search!=""){
+      data={
+        "created_by":email,
+        "item_no":item_no,
+        "filter_indent": global_search
+      };
+    }else{
+      data={
+        "created_by":email,
+        "item_no":item_no,
+        "filter_indent": ""
+      };
+    }
+
+
+
 
     loading.value=true;
     _api.serviceInventoryListViewApiHit(data, sessionManagement).then((value) {
@@ -90,6 +122,7 @@ class  ServiceInventoryViewModel extends GetxController{
               ServiceInventoryViewListModel.fromJson(e)).toList();
           if(response !=null && response.length>0 && response[0].condition=="True"){
             service_inventory_details_list.value=response;
+            item_no="";
             Get.toNamed(RoutesName.service_inventory_view_screen);
 
           }else{

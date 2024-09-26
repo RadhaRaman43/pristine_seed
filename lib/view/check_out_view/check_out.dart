@@ -54,130 +54,121 @@ class CheckOutScreen extends StatelessWidget{
       verify=true;
     }
     checkOut_page_controller.isvisible.value = verify;
-    return Scaffold(
-      appBar:AppBar(
-        backgroundColor: AllColors.primaryDark1,
-        iconTheme: IconThemeData(
-          color: AllColors.whiteColor,
-        ),
-        title:Text(
-          'Check Out',
-          style: GoogleFonts.poppins(
+    return WillPopScope(
+      onWillPop: () async  {
+        Get.offAllNamed(RoutesName.homeScreen);
+        return false;
+      },
+      child: Scaffold(
+        appBar:AppBar(
+          backgroundColor: AllColors.primaryDark1,
+          iconTheme: IconThemeData(
             color: AllColors.whiteColor,
-            fontSize: AllFontSize.twentee,
-            fontWeight: FontWeight.w700,
+          ),
+          title:Text(
+            'Check Out',
+            style: GoogleFonts.poppins(
+              color: AllColors.whiteColor,
+              fontSize: AllFontSize.twentee,
+              fontWeight: FontWeight.w700,
+            ),
           ),
         ),
-      ),
-      drawer: CustomDrawer(),
-      body: Container(
-    width: double.infinity,
-    height: size.height,
-    child: Column(
-      children: [
-        //todo header container
+        drawer: CustomDrawer(),
+        body: Container(
+      width: double.infinity,
+      height: size.height,
+      child: Column(
+        children: [
+          //todo header container
 
-        Expanded(
-          child: ListView(
-            padding: EdgeInsets.only(top: 3),
-            shrinkWrap: true,
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 0, right: 0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Colors.white,
-                        border: Border.all(
-                            color: Colors.white70, width: .5),
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                "Vehicle Type :",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.sisxteen,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: Text(
-                                  checkOut_page_controller
-                                      .current_checkIn_response[0]
-                                      .vehileType
-                                      .toString(),
+          Expanded(
+            child: ListView(
+              padding: EdgeInsets.only(top: 3),
+              shrinkWrap: true,
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                  child: Column(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(left: 0, right: 0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: Colors.white,
+                          border: Border.all(
+                              color: Colors.white70, width: .5),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "Vehicle Type :",
                                   style: GoogleFonts.poppins(
                                       color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w300
-                                  ),
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Place To Visit :",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.sisxteen,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Spacer(),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 8),
-                                child: Text(
-                                  checkOut_page_controller
-                                      .current_checkIn_response[0]
-                                      .placeToVisit
-                                      .toString(),
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w300
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Working With :",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.sisxteen,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Spacer(),
-                              Container(
-                                width: size.width*.5,
-                                child: Padding(
+                                Spacer(),
+                                Padding(
                                   padding: const EdgeInsets.only(right: 8),
-                                  child: Tooltip(
-                                    message:checkOut_page_controller
+                                  child: Text(
+                                    checkOut_page_controller
                                         .current_checkIn_response[0]
-                                        .workingWithEmail
-                                        .toString()
-                                        .isNotEmpty
-                                        ? checkOut_page_controller
+                                        .vehileType
+                                        .toString(),
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w300
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Place To Visit :",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8),
+                                  child: Text(
+                                    checkOut_page_controller
                                         .current_checkIn_response[0]
-                                        .workingWithEmail
-                                        .toString()
-                                        : 'No',
-                                    child: Text(
-                                      textAlign: TextAlign.end,
-                                      overflow: TextOverflow.ellipsis, // Truncate long text with an ellipsis
-                                      maxLines: 1, // Display text in a single line
-                                      checkOut_page_controller
+                                        .placeToVisit
+                                        .toString(),
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w300
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Working With :",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                Spacer(),
+                                Container(
+                                  width: size.width*.5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(right: 8),
+                                    child: Tooltip(
+                                      message:checkOut_page_controller
                                           .current_checkIn_response[0]
                                           .workingWithEmail
                                           .toString()
@@ -187,237 +178,283 @@ class CheckOutScreen extends StatelessWidget{
                                           .workingWithEmail
                                           .toString()
                                           : 'No',
-                                      style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w300
-                                      ),
+                                      child: Text(
+                                        textAlign: TextAlign.end,
+                                        overflow: TextOverflow.ellipsis, // Truncate long text with an ellipsis
+                                        maxLines: 1, // Display text in a single line
+                                        checkOut_page_controller
+                                            .current_checkIn_response[0]
+                                            .workingWithEmail
+                                            .toString()
+                                            .isNotEmpty
+                                            ? checkOut_page_controller
+                                            .current_checkIn_response[0]
+                                            .workingWithEmail
+                                            .toString()
+                                            : 'No',
+                                        style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w300
+                                        ),
 
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Check In :",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.sisxteen,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Spacer(),
-                              Text(
-                                formattedDate1,
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Padding(
-                                padding:
-                                const EdgeInsets.only(right: 8.0),
-                                child: Text(
-                                  fomatedTime,
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Check In :",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                Spacer(),
+                                Text(
+                                  formattedDate1,
                                   style: GoogleFonts.poppins(
                                       color: AllColors.primaryDark1,
                                       fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w300
-                                  ),
+                                      fontWeight: FontWeight.w300),
                                 ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Current Time: ",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.sisxteen,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Spacer(),
-                              Text(formattedDate,
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.redColor,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w300),
-                              ),
-                              SizedBox(
-                                width: 3,
-                              ),
-                              Obx(() {
-                                return Padding(
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Padding(
                                   padding:
                                   const EdgeInsets.only(right: 8.0),
                                   child: Text(
-                                    checkOut_page_controller
-                                        .curretn_time.value,
+                                    fomatedTime,
                                     style: GoogleFonts.poppins(
-                                        color: AllColors.redColor,
+                                        color: AllColors.primaryDark1,
                                         fontSize: AllFontSize.fourtine,
                                         fontWeight: FontWeight.w300
                                     ),
                                   ),
-                                );
-                              }),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Total Time Worked: ",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.sisxteen,
-                                    fontWeight: FontWeight.w700),
-                              ),
-                              Spacer(),
-                              Obx((){
-                                return Text(checkOut_page_controller.total_work_time.value,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Current Time: ",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                Spacer(),
+                                Text(formattedDate,
                                   style: GoogleFonts.poppins(
                                       color: AllColors.redColor,
                                       fontSize: AllFontSize.fourtine,
                                       fontWeight: FontWeight.w300),
-                                );
-                              }),
-                              SizedBox(
-                                width: 3,
-                              ),
+                                ),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Obx(() {
+                                  return Padding(
+                                    padding:
+                                    const EdgeInsets.only(right: 8.0),
+                                    child: Text(
+                                      checkOut_page_controller
+                                          .curretn_time.value,
+                                      style: GoogleFonts.poppins(
+                                          color: AllColors.redColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w300
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  "Total Time Worked: ",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700),
+                                ),
+                                Spacer(),
+                                Obx((){
+                                  return Text(checkOut_page_controller.total_work_time.value,
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors.redColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w300),
+                                  );
+                                }),
+                                SizedBox(
+                                  width: 3,
+                                ),
 
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.001),
-                    Divider(
-                      color: AllColors.primaryDark1,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, top: 0),
-                      child: Align(
-                        child: Text(
-                          'Check Out',
-                          style: TextStyle(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: AllFontWeight.bodyeight),
+                              ],
+                            ),
+                          ],
                         ),
-                        alignment: Alignment.topLeft,
                       ),
-                    ),
-                    //SizedBox(height: size.height * 0.001),
-                    Divider(
-                      color: AllColors.primaryDark1,
-                    ),
-                    SizedBox(height: size.height * 0.001),
-                    Obx(() {
-                      return Visibility(
-                        visible: !checkOut_page_controller.isvisible.value,
+                      SizedBox(height: size.height * 0.001),
+                      Divider(
+                        color: AllColors.primaryDark1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8, top: 0),
+                        child: Align(
+                          child: Text(
+                            'Check Out',
+                            style: TextStyle(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: AllFontWeight.bodyeight),
+                          ),
+                          alignment: Alignment.topLeft,
+                        ),
+                      ),
+                      //SizedBox(height: size.height * 0.001),
+                      Divider(
+                        color: AllColors.primaryDark1,
+                      ),
+                      SizedBox(height: size.height * 0.001),
+                      Obx(() {
+                        return Visibility(
+                          visible: !checkOut_page_controller.isvisible.value,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 15.0,right: 15),
+                            child: Column(
+                              children: [
+                                bindVehicleNoDropDown(context),
+                                SizedBox(height: size.height * 0.02),
+                                Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Container(
+                                      width: size.width * 0.36,
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        readOnly: true,
+                                        controller: checkOut_page_controller
+                                            .opening_km_controller,
+                                        onChanged: (value) {
+                                          checkOut_page_controller
+                                              .opening_km_controller.value;
+                                        },
+                                        //maxLength: 100,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
+                                          hintText: "Opening Km",
+                                          labelText: 'Opening Km',
+                                          hintStyle: GoogleFonts.poppins(
+                                              color: AllColors.lightblackColor,
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: AllFontSize.ten
+                                          ),
+                                          labelStyle: GoogleFonts.poppins(
+                                              color: AllColors.primaryDark1,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: AllFontSize.sisxteen),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: AllColors.primaryDark1), // Change the color to green
+                                          ),
+                                        ),
+                                        cursorColor: AllColors.primaryDark1,
+                                      ),
+                                    ),
+                                    SizedBox(width: size.width * 0.02),
+                                    Container(
+                                      width: size.width * 0.36,
+                                      child: TextFormField(
+                                        keyboardType: TextInputType.number,
+                                        controller: checkOut_page_controller
+                                            .closing_km_controller,
+                                        onChanged: (value) {
+                                          checkOut_page_controller
+                                              .closing_km_controller.value;
+                                        },
+                                        //maxLength: 100,
+                                        decoration: InputDecoration(
+                                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
+                                          hintText: "Closing Km",
+                                          labelText: 'Closing Km',
+                                          hintStyle: GoogleFonts.poppins(
+                                              color: AllColors.lightblackColor,
+                                              fontWeight: FontWeight.w300,
+                                              fontSize: AllFontSize.ten
+                                          ),
+                                          labelStyle: GoogleFonts.poppins(
+                                              color: AllColors.primaryDark1,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: AllFontSize.sisxteen),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(color: AllColors.primaryDark1), // Change the color to green
+                                          ),
+                                        ),
+                                        cursorColor: AllColors.primaryDark1,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                      SizedBox(height: size.height * 0.02),
+
+                      Visibility(
+                        visible: false,
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15.0,right: 15),
-                          child: Column(
-                            children: [
-                              bindVehicleNoDropDown(context),
-                              SizedBox(height: size.height * 0.02),
-                              Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                    width: size.width * 0.36,
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      readOnly: true,
-                                      controller: checkOut_page_controller
-                                          .opening_km_controller,
-                                      onChanged: (value) {
-                                        checkOut_page_controller
-                                            .opening_km_controller.value;
-                                      },
-                                      //maxLength: 100,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
-                                        hintText: "Opening Km",
-                                        labelText: 'Opening Km',
-                                        hintStyle: GoogleFonts.poppins(
-                                            color: AllColors.lightblackColor,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: AllFontSize.ten
-                                        ),
-                                        labelStyle: GoogleFonts.poppins(
-                                            color: AllColors.primaryDark1,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: AllFontSize.sisxteen),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(color: AllColors.primaryDark1), // Change the color to green
-                                        ),
-                                      ),
-                                      cursorColor: AllColors.primaryDark1,
-                                    ),
-                                  ),
-                                  SizedBox(width: size.width * 0.02),
-                                  Container(
-                                    width: size.width * 0.36,
-                                    child: TextFormField(
-                                      keyboardType: TextInputType.number,
-                                      controller: checkOut_page_controller
-                                          .closing_km_controller,
-                                      onChanged: (value) {
-                                        checkOut_page_controller
-                                            .closing_km_controller.value;
-                                      },
-                                      //maxLength: 100,
-                                      decoration: InputDecoration(
-                                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
-                                        hintText: "Closing Km",
-                                        labelText: 'Closing Km',
-                                        hintStyle: GoogleFonts.poppins(
-                                            color: AllColors.lightblackColor,
-                                            fontWeight: FontWeight.w300,
-                                            fontSize: AllFontSize.ten
-                                        ),
-                                        labelStyle: GoogleFonts.poppins(
-                                            color: AllColors.primaryDark1,
-                                            fontWeight: FontWeight.w700,
-                                            fontSize: AllFontSize.sisxteen),
-                                        focusedBorder: UnderlineInputBorder(
-                                          borderSide: BorderSide(color: AllColors.primaryDark1), // Change the color to green
-                                        ),
-                                      ),
-                                      cursorColor: AllColors.primaryDark1,
-                                    ),
-                                  ),
-                                ],
+                          child: TextFormField(
+                            controller: checkOut_page_controller.da_controller,
+                            onChanged: (value) {
+                              checkOut_page_controller.da_controller.value;
+                            },
+                            //maxLength: 100,
+                            decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
+                              hintText: "AT HQ (DA)",
+                              labelText: "AT HQ (DA)",
+                              hintStyle: GoogleFonts.poppins(
+                                  color: AllColors.lightblackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize.ten
                               ),
-                            ],
+                              labelStyle: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: AllFontSize.sisxteen),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: AllColors.primaryDark1), // Change the color to green
+                              ),
+                            ),
+                            cursorColor: AllColors.primaryDark1,
                           ),
                         ),
-                      );
-                    }),
-                    SizedBox(height: size.height * 0.02),
+                      ),
+                      //SizedBox(height: size.height * 0.02),
 
-                    Visibility(
-                      visible: false,
-                      child: Padding(
+                      Padding(
                         padding: const EdgeInsets.only(left: 15.0,right: 15),
                         child: TextFormField(
-                          controller: checkOut_page_controller.da_controller,
+                          controller:
+                          checkOut_page_controller.remarks_controller,
                           onChanged: (value) {
-                            checkOut_page_controller.da_controller.value;
+                            checkOut_page_controller.remarks_controller.value;
                           },
                           //maxLength: 100,
                           decoration: InputDecoration(
                             contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
-                            hintText: "AT HQ (DA)",
-                            labelText: "AT HQ (DA)",
+                            hintText: "Remarks",
+                            labelText: "Remarks",
                             hintStyle: GoogleFonts.poppins(
                                 color: AllColors.lightblackColor,
                                 fontWeight: FontWeight.w300,
@@ -434,188 +471,157 @@ class CheckOutScreen extends StatelessWidget{
                           cursorColor: AllColors.primaryDark1,
                         ),
                       ),
-                    ),
-                    //SizedBox(height: size.height * 0.02),
-
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0,right: 15),
-                      child: TextFormField(
-                        controller:
-                        checkOut_page_controller.remarks_controller,
-                        onChanged: (value) {
-                          checkOut_page_controller.remarks_controller.value;
-                        },
-                        //maxLength: 100,
-                        decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.two, horizontal: AllFontSize.one),
-                          hintText: "Remarks",
-                          labelText: "Remarks",
-                          hintStyle: GoogleFonts.poppins(
-                              color: AllColors.lightblackColor,
-                              fontWeight: FontWeight.w300,
-                              fontSize: AllFontSize.ten
+                      SizedBox(height: size.height * 0.02),
+                      //todo Image Uploader Pickers
+                      Obx(() {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 15.0,right: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Visibility(
+                                visible: true,
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        checkOut_page_controller
+                                            .getFrontImage('CheckOut','');
+                                      },
+                                      child: DottedBorder(
+                                        color: Colors.grey,
+                                        strokeWidth: 2,
+                                        borderType: BorderType.RRect,
+                                        radius: Radius.circular(20),
+                                        dashPattern: [10, 5, 10, 5],
+                                        child: Container(
+                                          width: size.width * 0.40,
+                                          height: size.height * 0.22,
+                                          child: GetImageFrontSection(),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 6),
+                                    Text(
+                                      'Front Image',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1, fontWeight: FontWeight.w700, fontSize: AllFontSize.fourtine,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Visibility(
+                                visible:
+                                !checkOut_page_controller.isvisible.value,
+                                child: Column(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () async {
+                                        checkOut_page_controller
+                                            .getBackImage('CheckOut');
+                                      },
+                                      child: DottedBorder(
+                                        color: Colors.grey,
+                                        strokeWidth: 2,
+                                        borderType: BorderType.RRect,
+                                        radius: Radius.circular(20),
+                                        dashPattern: [10, 5, 10, 5],
+                                        child: Container(
+                                            width: size.width * 0.40,
+                                            height: size.height * 0.22,
+                                            child: GetImageBackSection()),
+                                      ),
+                                    ),
+                                    SizedBox(height: 6),
+                                    Text(
+                                      'Back Image',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1, fontWeight: FontWeight.w700, fontSize: AllFontSize.fourtine,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
                           ),
-                          labelStyle: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontWeight: FontWeight.w700,
-                              fontSize: AllFontSize.sisxteen),
-                          focusedBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: AllColors.primaryDark1), // Change the color to green
-                          ),
-                        ),
-                        cursorColor: AllColors.primaryDark1,
-                      ),
-                    ),
-                    SizedBox(height: size.height * 0.02),
-                    //todo Image Uploader Pickers
-                    Obx(() {
-                      return Padding(
+                        );
+                      }),
+                      SizedBox(height: size.height * 0.02),
+                      Padding(
                         padding: const EdgeInsets.only(left: 15.0,right: 15),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Visibility(
-                              visible: true,
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
+                            //todo obx comment code when we loading close(Ritik)......
+                            /* Obx(() {
+                                    return */Expanded(
+                              child: DefaultButton(
+                                text: "CheckOut",
+                                press: () {
+                                  checkOut_page_controller.loading.value =
+                                  true;
+                                  checkOut_page_controller
+                                      .SubmitCheckOutDataApi(
                                       checkOut_page_controller
-                                          .getFrontImage('CheckOut','');
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.grey,
-                                      strokeWidth: 2,
-                                      borderType: BorderType.RRect,
-                                      radius: Radius.circular(20),
-                                      dashPattern: [10, 5, 10, 5],
-                                      child: Container(
-                                        width: size.width * 0.40,
-                                        height: size.height * 0.22,
-                                        child: GetImageFrontSection(),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 6),
-                                  Text(
-                                    'Front Image',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1, fontWeight: FontWeight.w700, fontSize: AllFontSize.fourtine,
-                                    ),
-                                  ),
-                                ],
+                                          .vehicle_no_controller.value,
+                                      checkOut_page_controller
+                                          .opening_km_controller.value,
+                                      checkOut_page_controller
+                                          .remarks_controller.value);
+
+                                },
+                                loading:checkOut_page_controller.loading.value,
                               ),
                             ),
+                            //   }),
+
+                            // SizedBox(width: 16),
+
                             Visibility(
-                              visible:
-                              !checkOut_page_controller.isvisible.value,
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                    onTap: () async {
-                                      checkOut_page_controller
-                                          .getBackImage('CheckOut');
-                                    },
-                                    child: DottedBorder(
-                                      color: Colors.grey,
-                                      strokeWidth: 2,
-                                      borderType: BorderType.RRect,
-                                      radius: Radius.circular(20),
-                                      dashPattern: [10, 5, 10, 5],
-                                      child: Container(
-                                          width: size.width * 0.40,
-                                          height: size.height * 0.22,
-                                          child: GetImageBackSection()),
-                                    ),
+                              visible: false,
+                              child: Expanded(
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        AllColors.primaryDark1),
                                   ),
-                                  SizedBox(height: 6),
-                                  Text(
-                                    'Back Image',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1, fontWeight: FontWeight.w700, fontSize: AllFontSize.fourtine,
-                                    ),
-                                  ),
-                                ],
+                                  onPressed: () {
+                                    checkOut_page_controller
+                                        .vehicle_no_controller
+                                        .clear();
+                                    checkOut_page_controller
+                                        .opening_km_controller
+                                        .clear();
+                                    checkOut_page_controller
+                                        .closing_km_controller
+                                        .clear();
+                                    checkOut_page_controller.da_controller
+                                        .clear();
+                                    checkOut_page_controller.remarks_controller
+                                        .clear();
+                                    Get.toNamed(RoutesName.addExpanseScreen);
+                                  },
+                                  child: Text("Reset"),
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      );
-                    }),
-                    SizedBox(height: size.height * 0.02),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 15.0,right: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          //todo obx comment code when we loading close(Ritik)......
-                          /* Obx(() {
-                                  return */Expanded(
-                            child: DefaultButton(
-                              text: "CheckOut",
-                              press: () {
-                                checkOut_page_controller.loading.value =
-                                true;
-                                checkOut_page_controller
-                                    .SubmitCheckOutDataApi(
-                                    checkOut_page_controller
-                                        .vehicle_no_controller.value,
-                                    checkOut_page_controller
-                                        .opening_km_controller.value,
-                                    checkOut_page_controller
-                                        .remarks_controller.value);
-
-                              },
-                              loading:checkOut_page_controller.loading.value,
-                            ),
-                          ),
-                          //   }),
-
-                          // SizedBox(width: 16),
-
-                          Visibility(
-                            visible: false,
-                            child: Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                  MaterialStateProperty.all<Color>(
-                                      AllColors.primaryDark1),
-                                ),
-                                onPressed: () {
-                                  checkOut_page_controller
-                                      .vehicle_no_controller
-                                      .clear();
-                                  checkOut_page_controller
-                                      .opening_km_controller
-                                      .clear();
-                                  checkOut_page_controller
-                                      .closing_km_controller
-                                      .clear();
-                                  checkOut_page_controller.da_controller
-                                      .clear();
-                                  checkOut_page_controller.remarks_controller
-                                      .clear();
-                                  Get.toNamed(RoutesName.addExpanseScreen);
-                                },
-                                child: Text("Reset"),
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
-                    ),
-                    SizedBox(height: size.height * 0.01),
-                  ],
+                      SizedBox(height: size.height * 0.01),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
+        ],
+      ),
         ),
-      ],
-    ),
-  ),
 
+      ),
     );
   }
 

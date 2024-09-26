@@ -8,10 +8,6 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../viewModel/service_managment_vm_directory/service_inventory_vm/service_inventory_vm.dart';
 import '../../custom_drawer.dart';
-
-
-
-
 class ServiceInventoryListScreen extends StatelessWidget{
   ServiceInventoryListScreen({super.key});
   Size size= Get.size;
@@ -62,8 +58,58 @@ class ServiceInventoryListScreen extends StatelessWidget{
                     ),
                   ),
                 );
-              },
+              },),
+
+
+
+              Container(
+                padding: EdgeInsets.all(8.0),
+                child: TextFormField(
+                  controller: service_inventory_page_controller.globle_search_controller,
+                  decoration: InputDecoration(
+                    hintText: "Search Item",
+                    contentPadding: EdgeInsets.all(10),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                          color: AllColors.primaryDark1), // Customize the border color
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide(
+                          color: Colors.grey), // Customize the border color
+                    ),
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.search),
+                          onPressed: () async {
+                            service_inventory_page_controller.getServiceInventoryGetList(
+                                service_inventory_page_controller.pageNumber, global_search: service_inventory_page_controller.globle_search_controller.text);
+
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.clear),
+                          onPressed: () {
+                            service_inventory_page_controller.pageNumber=0;
+                            service_inventory_page_controller
+                                .globle_search_controller.text = "";
+                            service_inventory_page_controller.getServiceInventoryGetList(
+                                service_inventory_page_controller.pageNumber, global_search: service_inventory_page_controller.globle_search_controller.text);
+
+                            // Add clear functionality here
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
+
+
+
               Container(
                   child: Obx(() => binListView(context),)
               ),
@@ -169,7 +215,7 @@ class ServiceInventoryListScreen extends StatelessWidget{
               Spacer(),
               InkWell(
                   onTap: () {
-
+                    service_inventory_page_controller.item_no= service_inventory_page_controller. get_service_inventory_list[index].itemNo.toString();
                     service_inventory_page_controller. getServiceInventoryListView(service_inventory_page_controller. get_service_inventory_list[index].itemNo.toString());
 
               },
