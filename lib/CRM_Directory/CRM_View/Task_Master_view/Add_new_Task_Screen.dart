@@ -6,6 +6,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
@@ -186,7 +187,7 @@ class AddNewTaskScreen extends StatelessWidget{
 
               SizedBox(height: 15,),
 
-              bindDateOfVisit( context),
+              bindDateOfVisit(context),
 
               SizedBox(height: 15,),
 
@@ -295,6 +296,16 @@ class AddNewTaskScreen extends StatelessWidget{
 
                     if(taskMaster_page_controller.Method_of_call_controller.text.isEmpty || taskMaster_page_controller.Method_of_call_controller == null){
                       Utils.sanckBarError('Method of Call!', "Please Enter Method of Call");
+                      return  ;
+                    }
+
+                    if(taskMaster_page_controller.isInfraLeadFilterController.text.isEmpty || taskMaster_page_controller.isInfraLeadFilterController == null){
+                      Utils.sanckBarError('Is Infra Lead!', "Please Enter Is Infra Lead");
+                      return  ;
+                    }
+
+                    if(taskMaster_page_controller.DataOFVisitController.value.text.isEmpty || taskMaster_page_controller.DataOFVisitController == null){
+                      Utils.sanckBarError('Date Of Visit!', "Please Enter Date Of Visit");
                       return  ;
                     }
 

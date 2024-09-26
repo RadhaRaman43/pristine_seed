@@ -92,6 +92,7 @@ class TaskMasterDetails extends StatelessWidget{
                     }
                     print('value2...${TaskMaster_page_controller.isInfraLeadValue.value}');
                     //TaskMaster_page_controller.isInfraLead.text="No";
+                    TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
                     TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
                   }, icon: Visibility(
                       visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? true : false,

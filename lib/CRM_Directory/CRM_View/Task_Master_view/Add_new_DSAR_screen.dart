@@ -77,7 +77,7 @@ class AddNewDsarScreen extends StatelessWidget{
                   backgroundColor: AllColors.primaryDark1,
                   shadowColor: Colors.black,
                   shape: StadiumBorder(
-                      side: BorderSide(color: AllColors.grayColor)),
+                      side: BorderSide(color: AllColors.whiteColor)),
                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                   //CircleAvatar
                   label: Tooltip(
@@ -92,16 +92,28 @@ class AddNewDsarScreen extends StatelessWidget{
                   onPressed: () {
                     print('infra lead...${TaskMaster_page_controller.Task_Master_list[0].isInfraLead}');
                     print('infra lead2...${TaskMaster_page_controller.isInfraLead.value.text}');
-                    if( TaskMaster_page_controller
+                    /*if( TaskMaster_page_controller
                         .Task_Master_list[0].isInfraLead==0 && TaskMaster_page_controller.isInfraLead.value.text == 'Yes' ){
                       Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
                     }
                     else{
                       TaskMaster_page_controller.TaskDSARMasterCreate();
                     }
+*/
 
+                    if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
+                      //Utils.sanckBarError("Message", "Created");
+                      TaskMaster_page_controller.TaskDSARMasterCreate();
+                    }
+                    else if(TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value){
 
-                  }, //Text
+                      Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
+
+                    }else{
+                      //Utils.sanckBarError("Message", "Created2");
+                      TaskMaster_page_controller.TaskDSARMasterCreate();
+                    }
+                    }, //Text
                 ),
 
 

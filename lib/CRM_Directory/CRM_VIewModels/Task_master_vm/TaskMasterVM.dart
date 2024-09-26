@@ -45,6 +45,7 @@ class Taskmastervm extends GetxController{
     RxBool isExpandCrtd = true.obs;
     RxBool isExpandDSAR = true.obs;
     RxBool isInfraLeadValue=false.obs;
+    RxBool isInfraLeadValueSubmit=false.obs;
     RxString date_filter="Today".obs;
     RxInt is_done = 0.obs;
 
@@ -876,6 +877,7 @@ class Taskmastervm extends GetxController{
                                 is_Active.toString(),
                                Task_Master_list[0].taskId,
                                 '', 'GET FROM TASK ID', date_filter, is_done.value);
+                            isInfraLeadValueSubmit.value = true;
                             Get.toNamed(RoutesName.addNewDSARTask_screen);
                             clearUpdateController();
                             loading.value = false;
@@ -950,7 +952,8 @@ class Taskmastervm extends GetxController{
         Task_Remarks_controller.clear();
         Sale_cycle_Id_controller.clear();
         isInfraLeadFilterController.clear();
-        DataOFVisitController.value.clear();
+        String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+        DataOFVisitController.value.text = todayDate;
         ItemCat_type_controller.clear();
 
 

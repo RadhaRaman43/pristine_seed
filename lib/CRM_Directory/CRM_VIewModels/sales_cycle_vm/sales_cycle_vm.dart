@@ -318,8 +318,8 @@ class SalesCycleVm extends GetxController{
     try{
       Map data={
         "sale_cycle_id": saleCycleId.isNotEmpty?saleCycleId:saleCycleController.value.text,
-        "rowperpage": rowsPerPage,
-        "page_number": page_no
+       /* "rowperpage": rowsPerPage,
+        "page_number": page_no*/
       };
       loading.value=true;
       _api.SaleCycleProductCategoryWiseAmtGet(data, sessionManagement).then((onValue){
@@ -330,10 +330,11 @@ class SalesCycleVm extends GetxController{
           if(response!= null && response.length>0 && response[0].condition=="True"){
             print('listSize.....${budgetAmountList.length}');
             loading.value = false;
-            if(page_no==0){
+            /*if(page_no==0){
               budgetAmountList.clear();
-            }
-            budgetAmountList.addAll(response);
+            }*/
+           // budgetAmountList.addAll(response);
+            budgetAmountList.value = response;
             Total_Budget_Amount.value=response[0].totalBudgetAmount??"";
             Total_Expected_Amount.value=response[0].totalEstimatedAmount??"";
             print('listSize.....${budgetAmountList.length}');
