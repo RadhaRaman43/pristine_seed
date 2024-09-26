@@ -282,7 +282,7 @@ class SalesCycleVm extends GetxController{
             if(saleCycleList[0].salesCycleStatus=="Propose") {
               print("Sales cycle status..${saleCycleList[0].salesCycleId}");
               getQuoteHeaderData(pageNumberForQuote,saleCycleList[0].salesCycleId!, '');
-              getQuoteWonData(pageNumberForQuote,saleCycleList[0].salesCycleId!);
+              getQuoteWonData(saleCycleList[0].salesCycleId!);
             }
            /* accountNameController.value.text=saleCycleList[0].accountName??"";
             contactNameController.value.text=saleCycleList[0].contactName??"";
@@ -518,13 +518,13 @@ class SalesCycleVm extends GetxController{
     }
   }
 
-  getQuoteWonData(int pageNumberForQuote, String saleCycleId){
+  getQuoteWonData(String saleCycleId){
     try{
       Map data= {
         "sale_cycle_id":saleCycleId.isNotEmpty?saleCycleId:"" ,
         "quote_id":  "",
-        "rowsPerPage": rowsPerPage,
-        "pageNumber": pageNumberForQuote
+        //"rowsPerPage": rowsPerPage,
+        //"pageNumber": pageNumberForQuote
       };
       loading.value=true;
       _api.quoteWonDataGetApiHit(data, sessionManagement).then((onValue){
@@ -1233,7 +1233,7 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition=="True"){
             Utils.sanckBarSuccess("Message !", response[0].message.toString());
             loading.value = false;
-            getQuoteHeaderInformation(quoteId.value, "");
+            getQuoteHeaderInformation(quoteId.value, "quoteApprovalScreen");
           }else {
             Utils.sanckBarError("False Message !", response[0].message.toString());
             loading.value = false;
@@ -1781,8 +1781,8 @@ class SalesCycleVm extends GetxController{
                     SizedBox(height: 10,),
 
                     Obx((){
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                      return Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Visibility(
                             visible: isChooseQuote.value,
@@ -1796,12 +1796,9 @@ class SalesCycleVm extends GetxController{
                                 pageNumberForQuote = 0;
                                 getQuoteHeaderData(pageNumberForQuote,salesCycleId.value, "Approved");
                                 Get.toNamed(RoutesName.approvedQuotationListScreen);
-
-
-
                               },
                               child: Container(
-                                child: Text('Choose Quotation',
+                                child: Text('Select Quotation',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.blackColor,
                                     fontSize: AllFontSize.fourtine,
@@ -1811,43 +1808,38 @@ class SalesCycleVm extends GetxController{
                               ),
                             ),
                           ),
-
-                        ],
-                      );
-                    }),
-                    Obx((){
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Visibility(
-                            visible: isApprove.value,
-                            // visible: saleCycleController.selectedQuotationIdController.value.text == '' ? false:true,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                  AllColors.greenblue,
+                          Obx((){
+                            return Visibility(
+                              visible: isApprove.value && Quote_Selected_list.isNotEmpty?true:false,
+                              // visible: saleCycleController.selectedQuotationIdController.value.text == '' ? false:true,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<Color>(
+                                    AllColors.greenblue,
+                                  ),
                                 ),
-                              ),
-                              onPressed: ()  {
-                                navigator?.pop(context);
-                                showWonLossConfirmationDialog(context, saleCycleList);
+                                onPressed: ()  {
+                                  navigator?.pop(context);
+                                  showWonLossConfirmationDialog(context, saleCycleList);
 
-                              },
-                              child: Container(
-                                child: Text('Approve',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
+                                },
+                                child: Container(
+                                  child: Text('Approve Quotation',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
+                            );
+                          }),
 
                         ],
                       );
                     }),
+
                     Obx((){
                       return   Visibility(
                         visible: isReject.value,
@@ -2532,7 +2524,7 @@ class SalesCycleVm extends GetxController{
         if(updateQuoteAccetedCycleController.value.text=="WON"){
          selectedQuotationIdController.value.clear();
           isChooseQuote.value = true;
-          isApprove.value=false;
+          isApprove.value=true;
           isReject.value=false;
         }
         else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
@@ -2558,7 +2550,7 @@ class SalesCycleVm extends GetxController{
             if(updateQuoteAccetedCycleController.value.text=="WON"){
               selectedQuotationIdController.value.clear();
               isChooseQuote.value = true;
-              isApprove.value=false;
+              isApprove.value=true;
               isReject.value=false;
             }
             else if(updateQuoteAccetedCycleController.value.text=="LOSS"){

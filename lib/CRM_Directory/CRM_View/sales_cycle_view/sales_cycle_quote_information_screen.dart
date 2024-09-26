@@ -1020,7 +1020,8 @@ class QuoteInformationScreen extends StatelessWidget{
               SizedBox(height: 6,),
               Obx((){
                 return Visibility(
-                  visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                  //visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                  visible:saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

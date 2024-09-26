@@ -63,14 +63,14 @@ class Taskmastervm extends GetxController{
     var ApproveReject_Controller = TextEditingController();
     var RejectReason_Controller = TextEditingController();
     var Sale_cycle_Id_controller = TextEditingController();
-    var DSAR_Status_type_controller = TextEditingController();
+    var DSAR_Status_type_controller = TextEditingController().obs;
     var ItemCat_type_controller = TextEditingController();
     var NextInterdate_controller = TextEditingController();
     var EstClosuredate_controller = TextEditingController();
     var NextInterTime_controller = TextEditingController();
     var BudgetAmt_controller = TextEditingController();
     var ExpectedAmt_controller = TextEditingController();
-    var isInfraLead = TextEditingController();
+    var isInfraLead = TextEditingController().obs;
     var isInfraLeadFilterController=TextEditingController();
     var filterTaskDuedateController=TextEditingController().obs;
     var filterTaskCreationOnController=TextEditingController().obs;
@@ -312,8 +312,8 @@ class Taskmastervm extends GetxController{
         try{
             Map data={
                 "task_id": TaskID,
-                "is_infra_lead": isInfraLead.text=="Yes"?1:0,
-                "dsar_status": DSAR_Status_type_controller.text.isEmpty?'':DSAR_Status_type_controller.text,
+                "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
+                "dsar_status": DSAR_Status_type_controller.value.text.isEmpty?'':DSAR_Status_type_controller.value.text,
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "next_interaction_date": NextInterdate_controller.text.isEmpty?'':NextInterdate_controller.text,
                 "next_interaction_time": NextInterTime_controller.text.isEmpty?'':NextInterTime_controller.text,
@@ -341,7 +341,7 @@ class Taskmastervm extends GetxController{
                         typeOfCall.value = false;
                         ItemCateDropDown.value = false;
                         Type_of_call_controller.clear();
-                        DSAR_Status_type_controller.clear();
+                        DSAR_Status_type_controller.value.clear();
                         ItemCat_type_controller.clear();
                         NextInterdate_controller.clear();
                         NextInterTime_controller.clear();

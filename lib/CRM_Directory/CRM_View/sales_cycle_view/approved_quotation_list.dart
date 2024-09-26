@@ -251,7 +251,7 @@ class ApprovedQuotationList extends StatelessWidget{
                 ),
 
                 Container(
-                  width: size.width*.4,
+                  width: size.width*.3,
                   child: Tooltip(
                     message:  saleCycleController
                         .quoteList[index]

@@ -77,7 +77,8 @@ class TaskMasterDetails extends StatelessWidget{
                   //visible: account_vm_controller.view=='Sales'?false:true,
                   child: IconButton(onPressed: () {
                     //createDSARDialog(context);
-                    TaskMaster_page_controller.DSAR_Status_type_controller.clear();
+                    TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
+                    TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
                     TaskMaster_page_controller.NextInterdate_controller.clear();
                     TaskMaster_page_controller.NextInterTime_controller.clear();
                     TaskMaster_page_controller.DSAR_Remarks_controller.clear();
@@ -85,9 +86,13 @@ class TaskMasterDetails extends StatelessWidget{
                     TaskMaster_page_controller.BudgetAmt_controller.clear();
                     TaskMaster_page_controller.ExpectedAmt_controller.clear();
                     TaskMaster_page_controller.DSARStatus.value = false;
+                    if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1){
+                      TaskMaster_page_controller.isInfraLeadValue.value = true;
+                      print('value...${TaskMaster_page_controller.isInfraLeadValue.value}');
+                    }
+                    print('value2...${TaskMaster_page_controller.isInfraLeadValue.value}');
                     //TaskMaster_page_controller.isInfraLead.text="No";
-                    TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ?
-                    Get.toNamed(RoutesName.addNewDSARTask_screen): "";
+                    TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
                   }, icon: Visibility(
                       visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? true : false,
                       child: Icon(Icons.add))),
@@ -928,7 +933,7 @@ class TaskMasterDetails extends StatelessWidget{
       },
       onSelected: (CallStatusMasterModel selection) {
         // Update the TextField with the selected
-        TaskMaster_page_controller.DSAR_Status_type_controller.text =
+        TaskMaster_page_controller.DSAR_Status_type_controller.value.text =
             _displayDSARTypeForOption(selection).toString();
        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
@@ -937,7 +942,7 @@ class TaskMasterDetails extends StatelessWidget{
         return TextField(
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = TaskMaster_page_controller.DSAR_Status_type_controller
+            ..text = TaskMaster_page_controller.DSAR_Status_type_controller.value
                 .text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,

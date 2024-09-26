@@ -127,6 +127,8 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                      saleCycleController.isApprove.value=false;
                      saleCycleController.isReject.value=false;
                      saleCycleController.isCheck.value = -1;
+                     saleCycleController.checkBoxValues.updateAll((key, value) => false);
+                     saleCycleController.Quote_Selected_list.clear();
                      saleCycleController.showDialogForsalescycleUpdate(context, saleCycleController.saleCycleList[0]);
 
                      //showDialogForHeaderUpdate(context);
@@ -1838,38 +1840,51 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Product Category",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      InkWell(
-                        onTap: (){
-                          ShowProductCategoryTable(context, saleCycleController.budgetAmountList);
-                          //showInfraLeadDetails(context, saleCycleController.saleCycleList);
-                        },
-                        child: Text('View',
-                          style: GoogleFonts.poppins(
-                            color: Colors.blueAccent,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,),
-                          textAlign: TextAlign.end,
 
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
+                  Obx((){
+                    return Visibility(
+                        visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROSPECT" || saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROPOSE"?true:false,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Product Category Table",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Spacer(),
+                            InkWell(
+                              onTap: (){
+                                ShowProductCategoryTable(context, saleCycleController.budgetAmountList);
+                                //showInfraLeadDetails(context, saleCycleController.saleCycleList);
+                              },
+                              child: Text('View',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.blueAccent,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.underline,
+                                  decorationStyle: TextDecorationStyle.wavy,),
+                                textAlign: TextAlign.end,
+
+                              ),
+                            ),
+                          ],
+                        ),);
+                  }),
+
+                  Obx((){
+                    return Visibility(
+                      visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROSPECT" || saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROPOSE"?true:false,
+                        child:
+                        SizedBox(
+                          height: 3,
+                        ),);
+                  }),
+
+
                   Row(
                     children: [
                       Text(
@@ -1981,6 +1996,8 @@ Widget bindQuoteData(BuildContext context) {
         case 'REGRET':
           return Colors.red;
         case 'Approved':
+          return Colors.green;
+        case 'WON':
           return Colors.green;
         case 'PENDING FOR APPROVAL':
           return Colors.yellow[700]!;
@@ -2511,7 +2528,7 @@ Widget bindQuoteData(BuildContext context) {
     print("Lengh${saleCycleController.quoteWonList.value.length}");
     if (saleCycleController.quoteWonList.value.isNotEmpty && saleCycleController.quoteWonList.value.length > 0) {
       ScrollController scrollController = ScrollController();
-      scrollController.addListener(() {
+      /*scrollController.addListener(() {
         print("ghdjhgf");
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
@@ -2531,7 +2548,7 @@ Widget bindQuoteData(BuildContext context) {
             saleCycleController.pageNumberForQuote += 1;
           }
         }
-      });
+      });*/
       return Obx(() {
         return  Container(
           height: size.height/2,
@@ -2587,6 +2604,10 @@ Widget bindQuoteData(BuildContext context) {
     return Card(
       //margin: EdgeInsets.all(5),
       child: ListTile(
+        onTap: (){
+          saleCycleController.quoteId.value=saleCycleController.quoteList[index].quoteId!;
+          saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteList[index].quoteId, "");
+        },
         contentPadding: EdgeInsets.only(left: 5, right: 10),
         title:Row(
           children: [
@@ -2713,7 +2734,7 @@ Widget bindQuoteData(BuildContext context) {
                 ),
               ],
             ),
-            *//* Row(
+             Row(
 
                    children: [
                      Text(
@@ -2736,7 +2757,7 @@ Widget bindQuoteData(BuildContext context) {
                        ),
                      ),
                    ],
-                 ),*//*
+                 ),
             Row(
               children: [
                 Text(
@@ -2899,30 +2920,13 @@ Widget bindQuoteData(BuildContext context) {
               ],
             ),
           ],
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Visibility(
-              //visible: true,
-              visible: saleCycleController.saleCycleList[0].createdBy==saleCycleController.email && saleCycleController.FromPage == 'Sales'?true:false,
-              child: InkWell(
-                  onTap: (){
-                    showConfirmationDialog(context, saleCycleController
-                        .quoteList[index]
-                        .quoteId??"");
-                  },
-                  child: Icon(Icons.add_chart ,color: Colors.blueAccent,)),
-            ),
-            SizedBox(width: 8,),
-            InkWell(
-                onTap: (){
-                  saleCycleController.quoteId.value=saleCycleController.quoteList[index].quoteId!;
-                  saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteList[index].quoteId, "");
-                },
-                child: Icon(Icons.remove_red_eye, color: Colors.blueAccent,)),
-          ],
         ),*/
+        trailing: InkWell(
+            onTap: (){
+              saleCycleController.quoteId.value=saleCycleController.quoteList[index].quoteId!;
+              saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteList[index].quoteId, "");
+            },
+            child: Icon(Icons.remove_red_eye, color: Colors.blueAccent,)),
       ),
     );
   }
@@ -3858,6 +3862,7 @@ Widget bindQuoteData(BuildContext context) {
                 onTap: (){
                   saleCycleController.ProductCategoryCode.value = e.productCategory!;
                   saleCycleController.expectedAmountController.value.text = e.estimatedAmount.toString();
+                  saleCycleController.budgetAmountController.value.text = e.budgetAmount.toString();
                   UpdateBudgetAmountDailog(context, e.id);
                   print('id....Selected...${e.id}');
                 },
@@ -3874,6 +3879,7 @@ Widget bindQuoteData(BuildContext context) {
                 onTap: (){
                   saleCycleController.ProductCategoryCode.value = e.productCategory!;
                   saleCycleController.budgetAmountController.value.text = e.budgetAmount.toString();
+                  saleCycleController.expectedAmountController.value.text = e.estimatedAmount.toString();
                   UpdateEstimatedAmountDailog(context, e.id);
                   print('id....Selected...${e.id}');
                 },
@@ -4410,9 +4416,10 @@ Widget bindQuoteData(BuildContext context) {
     showModalBottomSheet(context: context,
       builder: (BuildContext context) {
         return  Container(
-          width: double.infinity,
-          height: size.height/2,
+         /* width: double.infinity,
+          height: size.height/2,*/
           child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -4464,7 +4471,7 @@ Widget bindQuoteData(BuildContext context) {
   }
 
   UpdateBudgetAmountDailog(context, int? id){
-    saleCycleController.budgetAmountController.value.clear();
+   // saleCycleController.budgetAmountController.value.clear();
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -4576,7 +4583,7 @@ Widget bindQuoteData(BuildContext context) {
   }
 
   UpdateEstimatedAmountDailog(context, int? id){
-    saleCycleController.expectedAmountController.value.clear();
+    //saleCycleController.expectedAmountController.value.clear();
     showDialog(
        barrierDismissible: false,
         context: context,

@@ -48,7 +48,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                   backgroundColor: AllColors.primaryDark1,
                   shadowColor: Colors.black,
                   shape: StadiumBorder(
-                      side: BorderSide(color: AllColors.grayColor)),
+                      side: BorderSide(color: AllColors.whiteColor)),
                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                   //CircleAvatar
                   label: Tooltip(
@@ -153,14 +153,14 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
         ),
         onSelected: (String? selection) {
           print(selection);
-          TaskMaster_page_controller.isInfraLead.text =
+          TaskMaster_page_controller.isInfraLead.value.text =
               _displayCustomerNeedIdentityStatusForOption(selection!).toString();
-          if(TaskMaster_page_controller.isInfraLead.text=="Yes"){
+          if(TaskMaster_page_controller.isInfraLead.value.text=="Yes"){
             TaskMaster_page_controller.isInfraLeadValue.value=false;
           }else{
             TaskMaster_page_controller.isInfraLeadValue.value=true;
           }
-          print("Is Lead ${TaskMaster_page_controller.isInfraLead.text}");
+          print("Is Lead ${TaskMaster_page_controller.isInfraLead.value.text}");
 
         },
         dropdownMenuEntries:

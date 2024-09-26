@@ -13,11 +13,11 @@ class QuoteWonModel {
   int? quoteCommit;
   String? quoteStatus;
   int? isActive;
-  int? installationCharges;
-  int? otherCharges;
+  double? installationCharges;
+  double? otherCharges;
   String? warrantyPeriod;
   String? deliveryInWeeks;
-  int? advancePaymentPer;
+  double? advancePaymentPer;
   double? advancePaymentAmt;
   String? otherRemarks;
   int? isSpr;
