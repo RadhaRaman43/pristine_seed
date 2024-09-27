@@ -954,6 +954,8 @@ class InstallationViewModel extends GetxController {
                 response.length > 0 &&
                 response[0].condition == "True") {
               loading.value = false;
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
               indent_remark_controller.clear();
               getServiceInstallationList(is_done.value, pageNumber,date_filter.value);
               Get.toNamed(RoutesName.installation_screen);
