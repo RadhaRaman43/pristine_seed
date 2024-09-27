@@ -124,8 +124,8 @@ class AddNewAccountMaster extends StatelessWidget{
                       Get.toNamed(RoutesName.accountMaster_screen);
                     }
                     try {
-                      accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                      print('Retrieved items: ${accountMaster_page_controller.Account_Master_Draft_list[0].accountName}');
+                     // accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
+                      print('Retrieved items: ${accountMaster_page_controller.Account_Master_Draft_list1[0].accountName}');
                     } catch (e) {
                       print('Failed to retrieve items: $e');
                     }

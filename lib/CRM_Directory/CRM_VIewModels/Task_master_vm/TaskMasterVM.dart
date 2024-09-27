@@ -951,7 +951,7 @@ class Taskmastervm extends GetxController{
         Method_of_call_controller.clear();
         Task_Remarks_controller.clear();
         Sale_cycle_Id_controller.clear();
-        isInfraLeadFilterController.clear();
+        //isInfraLeadFilterController.clear();
         String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
         DataOFVisitController.value.text = todayDate;
         ItemCat_type_controller.clear();

@@ -279,6 +279,12 @@ class SalesCycleVm extends GetxController{
               print("change .... ${ischangeNeedIdentity.value} && ${ischangesolutionAccepted.value}");
 
             }
+            if(saleCycleList[0].salesCycleStatus=="Suspect") {
+              itemCategorySelectedlist.value = [];
+              getItemCategoryMstApi(saleCycleList[0].salesCycleId! ,saleCycleList[0].taskId! );
+              ProductCategoryWiseAmtGet(0, saleCycleList[0].salesCycleId!);
+
+            }
             if(saleCycleList[0].salesCycleStatus=="Propose") {
               print("Sales cycle status..${saleCycleList[0].salesCycleId}");
               getQuoteHeaderData(pageNumberForQuote,saleCycleList[0].salesCycleId!, '');
@@ -668,6 +674,54 @@ class SalesCycleVm extends GetxController{
     }
   }
 
+  TaskSaleCatCreateApiHit(String SalesId, String TaskID) async {
+
+    List<TaskSalesProductCategoryLinesModel> lines = itemCategorySelectedlist.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
+
+
+    Map<String, dynamic> data = {
+      "created_by": email,
+      "task_id": TaskID,
+      "lines": lines.map((line) => line.toJson()).toList(),
+    };
+
+    print(data);
+    loading.value = true;
+
+    try {
+      final value = await _api.TaskSaleCatCreateApiHit(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+
+      if (JsonResponse is List) {
+        List<SalesCycleQuoteInformationModal> response =
+        JsonResponse.map((e) => SalesCycleQuoteInformationModal.fromJson(e)).toList();
+
+        if (response != null && response.isNotEmpty && response[0].condition == "True") {
+          loading.value = false;
+          Utils.showToastification("Success!", response[0].message.toString());
+          getItemCategoryMstApi(SalesId,TaskID);
+          pageNumber = 0;
+          getsalesCycleData(pageNumber, SalesId, "ViewHeader", 'Sales');
+
+
+            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+
+        } else {
+          loading.value = false;
+          Utils.showErrorToastification("Error!", "Unsuccessful");
+        }
+      } else {
+        loading.value = false;
+        Utils.showExceptionToastification("Api Error!", JsonResponse.toString());
+      }
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      print("Exception....");
+    }
+  }
+
   QuoteHeaderDupicateCreate(String quoteId){
     try{
       Map data={
@@ -930,16 +984,6 @@ class SalesCycleVm extends GetxController{
 
   void ProductCategoryWiseAmtCreateApiHit(int id) {
     try{
-      print('Ander aya.....');
-      // Parse the estimated amount to double, or set to null if the input is empty
-      /*double? estimatedAmount = expectedAmountController.value.text.isEmpty
-          ? budgetAmountList[id].estimatedAmount
-          : double.tryParse(expectedAmountController.value.text);
-
-      // Parse the budget amount to double, or set to null if the input is empty
-      double? budgetAmount = budgetAmountController.value.text.isEmpty
-          ? budgetAmountList[id].budgetAmount
-          : double.tryParse(budgetAmountController.value.text);*/
       Map data= {
         "id": id,
         "sale_cycle_id": salesCycleId.toString(),
@@ -1253,12 +1297,12 @@ class SalesCycleVm extends GetxController{
       print(e);
     }
   }
-  getItemCategoryMstApi() {
+  getItemCategoryMstApi(String salesId, String taskID) {
     this.loading.value = true;
     Map<String, String> data = {
-      'task_id': saleCycleList[0].taskId.toString() ,
+      'task_id': taskID ,
       'filter_category': "",
-      'sales_cycle_id':  saleCycleList[0].salesCycleId.toString(),
+      'sales_cycle_id':  salesId,
       'quote_id':''
     };
     print(data);
@@ -1273,6 +1317,7 @@ class SalesCycleVm extends GetxController{
 
         if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
           productCategoryList.value = Response!;
+          itemCategorySelectedlist.value = [];
           for(int i = 0; i < Response.length; i++){
             if(Response[i].isSelected == 1){
               itemCategorySelectedlist.add(Response[i]);

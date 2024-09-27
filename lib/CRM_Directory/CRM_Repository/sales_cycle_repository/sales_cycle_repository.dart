@@ -74,6 +74,9 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.quoteApproveReject,sessionManagement);
   }
 
+  Future<String> TaskSaleCatCreateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.TaskSalesProductCategoryCreate, sessionManagement);
+  }
 
 
   Future<String> getItemCategoryMstApiHit(var data,SessionManagement sessionManagement) async{

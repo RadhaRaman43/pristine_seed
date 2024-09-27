@@ -994,6 +994,7 @@ class Accountmastervm extends GetxController{
             //deleteAccountData(DraftId);
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
             Get.toNamed(RoutesName.accountMaster_screen);
           }else if(flag == 'Update'){
             print("Update....");

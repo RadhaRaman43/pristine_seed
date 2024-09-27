@@ -166,7 +166,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
             salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];
-          salesCycleController.getItemCategoryMstApi();
+          salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId! );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
 
           },
