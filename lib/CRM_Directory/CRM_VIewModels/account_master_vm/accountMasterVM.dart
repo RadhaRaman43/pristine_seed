@@ -828,7 +828,7 @@ class Accountmastervm extends GetxController{
       "flag": flag,
       "lines": [
         {
-          "account_code": AccountCode!,
+          "account_code": AccountCode.isEmpty?DraftId:AccountCode,
           "account_name": account_name_controller.text.isEmpty?'':account_name_controller.text ,
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
@@ -888,9 +888,10 @@ class Accountmastervm extends GetxController{
             print("ttttttttttt");
             Utils.showToastification("Success!", "Account Create Successful");
             clearAccoundController();
-            deleteAccountData(DraftId);
+            //deleteAccountData(DraftId);
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
             Get.toNamed(RoutesName.accountMaster_screen);
           }else if(flag == 'Update'){
             print("Update....");
@@ -899,6 +900,7 @@ class Accountmastervm extends GetxController{
             clearAccoundController();
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
             Get.toNamed(RoutesName.accountMaster_screen);
           }
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
@@ -1003,6 +1005,7 @@ class Accountmastervm extends GetxController{
             clearAccoundController();
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
             Get.toNamed(RoutesName.accountMaster_screen);
           }
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
