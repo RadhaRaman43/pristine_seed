@@ -125,5 +125,13 @@ class RoutesName{
 
 
 
+  //todo image not found...
+
+
+  static const image_not_found_screen="/error_404.dart";
+
+
+
+
 
 }

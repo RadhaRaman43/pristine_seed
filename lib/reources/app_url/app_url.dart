@@ -27,6 +27,7 @@ class AppUrl {
   static const String serviceMarkVisit = "$BASE_URL/api/ServiceActivity/ServiceMarkVisit";
   static const String installationCertificateImage = "$BASE_URL/api/ServiceActivity/ServiceUploadDocument";
   static const String installationMarkCompleted = "$BASE_URL/api/ServiceActivity/ServiceMarkCompleted";
+  static const String installationDeleteDocument = "$BASE_URL/api/ServiceActivity/ServiceUploadDocumentDelete";
 
 
   //todo for service indent....
@@ -76,6 +77,7 @@ class AppUrl {
   static const String correctiveReSchedule = "$BASE_URL/api/ServiceActivity/ServiceMarkRescheduled";
   static const String correctiveReAssignment = "$BASE_URL/api/ServiceActivity/ServiceMarkReassignment";
   static const String correctiveOffSiteMarkClosure = "$BASE_URL/api/ServiceActivity/ServiceMarkOffsiteClosure";
+     static const String correctiveDeleteDocument = "$BASE_URL/api/ServiceActivity/ServiceUploadDocumentDelete";
 
   //todo preventive for........
   static const String PreventiveitemDetailsGet = "$BASE_URL/api/ItemMaster/ItemComponentMstGet";
@@ -98,7 +100,7 @@ class AppUrl {
   static const String createPreventiveCalender = "$BASE_URL/api/ServiceActivity/ServiceWarrantyCalanderGet";
   static const String createPreventiveCall = "$BASE_URL/api/ServiceActivity/ServiceWarrantyPreventiveCreate";
   static const String preventiveOffSiteMarkClosure = "$BASE_URL/api/ServiceActivity/ServiceMarkOffsiteClosure";
-
+     static const String priventiveDeleteDocument = "$BASE_URL/api/ServiceActivity/ServiceUploadDocumentDelete";
   //todo for user expenses..................
 
   static const String getExpenseHeader="$BASE_URL/api/Expense/GetExpenseHeader";

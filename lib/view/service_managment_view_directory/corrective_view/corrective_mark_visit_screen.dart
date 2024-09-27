@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -12,7 +13,7 @@ import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/service_managment_vm_directory/corrective_vm/corrective_vm.dart';
 import '../../custom_drawer.dart';
-
+import '../../../models/service_managment_model_directory/serviceCorrectiveModel/corrective_details_model.dart';
 class CorrectiveMarkVisitScreen extends StatelessWidget{
   CorrectiveMarkVisitScreen({super.key});
   final corrective_indent_page_controller = Get.put(CorrectiveViewModel());
@@ -178,16 +179,25 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                  ),
                                ),
                                Spacer(),
-                               Text(
-                                 corrective_indent_page_controller
-                                     .service_corrective_details_list[0]
-                                     .customerPhoneNo!,
-                                 style: GoogleFonts.poppins(
-                                   color: AllColors.textColor,
-                                   fontSize: AllFontSize.fourtine,
-                                   fontWeight: FontWeight.w500,
+                               InkWell(
+                                 onTap: () {
+                                   openDialPad(corrective_indent_page_controller
+                                       .service_corrective_details_list[0]
+                                       .customerPhoneNo!);
+                                 },
+                                 child: Text(
+                                   corrective_indent_page_controller
+                                       .service_corrective_details_list[0]
+                                       .customerPhoneNo!,
+                                   style: GoogleFonts.poppins(
+                                     color: AllColors.textColor,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w500,
+                                     decoration: TextDecoration.underline,
+                                     decorationColor: AllColors.textColor,
+                                   ),
+                                   textAlign: TextAlign.end,
                                  ),
-                                 textAlign: TextAlign.end,
                                ),
                              ],
                            ),
@@ -549,6 +559,32 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                        )
                                      ],
                                    ),
+
+                                   Row(
+                                     children: [
+                                       Text(
+                                         "Qty",
+                                         style: GoogleFonts.poppins(
+                                           color: AllColors.primaryDark1,
+                                           fontSize: AllFontSize.fourtine,
+                                           fontWeight: FontWeight.w500,
+                                         ),
+                                       ),
+                                       Spacer(),
+                                       Text(corrective_indent_page_controller.service_corrective_details_list[0].qty.toString(),
+                                         style: GoogleFonts.poppins(
+                                           color: AllColors.textColor,
+                                           fontSize: AllFontSize.fourtine,
+                                           fontWeight: FontWeight.w500,
+                                         ),
+                                         overflow: TextOverflow.ellipsis,
+                                         textAlign: TextAlign.end,
+                                       )
+                                     ],
+                                   ),
+                                   SizedBox(
+                                     height: 3,
+                                   ),
                                  ],
                                ),
                              ),
@@ -689,87 +725,199 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                          mainAxisAlignment:
                                          MainAxisAlignment.spaceBetween,
                                          children: [
-                                           ElevatedButton.icon(
-                                             style: ElevatedButton.styleFrom(
-                                               backgroundColor: AllColors.textColor2,
-                                               side: BorderSide(
-                                                 color: AllColors.primaryDark1,
-                                                 width: 1,
-                                               ),
-                                             ),
-                                             onPressed: () {
-                                               corrective_indent_page_controller. image_description_flag.value="";
 
-                                               corrective_indent_page_controller
-                                                   .image_description_controller
-                                                   .clear();
-                                               corrective_indent_page_controller
-                                                   .image_flag
-                                                   .value = "Corrective_Product";
-                                               showConfirmationImageDialog(context);
-                                               // Your onPressed logic here
-                                             },
-                                             icon: Icon(
-                                               Icons.upload,
-                                               // Replace with your desired icon
-                                               color: AllColors
-                                                   .primaryDark1, // Icon color
-                                             ),
-                                             label: Container(
-                                               width: size.width * .15 ,
-                                               child: Tooltip(
-                                                 message: "Upload Product",
-                                                 child: Text(
-                                                   "Product",
-                                                   overflow: TextOverflow.ellipsis,
-                                                   style: GoogleFonts.poppins(
+                                           Stack(
+                                             clipBehavior: Clip.none,
+                                             // Allows overflow for the badge
+                                             children: [
+                                               ElevatedButton.icon(
+                                                 style: ElevatedButton.styleFrom(
+                                                   backgroundColor:
+                                                   AllColors.textColor2,
+                                                   side: BorderSide(
                                                      color: AllColors.primaryDark1,
-                                                     fontSize: AllFontSize.fourtine,
-                                                     fontWeight: FontWeight.w500,
+                                                     width: 1,
+                                                   ),
+                                                 ),
+                                                 onPressed: () {
+                                                   corrective_indent_page_controller
+                                                       .image_description_flag
+                                                       .value = "";
+                                                   corrective_indent_page_controller
+                                                       .image_description_controller
+                                                       .clear();
+                                                   corrective_indent_page_controller
+                                                       .image_flag.value =
+                                                   "Corrective_Product";
+                                                   showConfirmationImageDialog(
+                                                       context);
+                                                 },
+                                                 icon: Icon(
+                                                   Icons.upload,
+                                                   color: AllColors
+                                                       .primaryDark1, // Icon color
+                                                 ),
+                                                 label: Container(
+                                                   width: size.width * .15,
+                                                   child: Tooltip(
+                                                     message: "Upload Product",
+                                                     child: Text(
+                                                       "Product",
+                                                       overflow:
+                                                       TextOverflow.ellipsis,
+                                                       style: GoogleFonts.poppins(
+                                                         color: AllColors
+                                                             .primaryDark1,
+                                                         fontSize:
+                                                         AllFontSize.fourtine,
+                                                         fontWeight:
+                                                         FontWeight.w500,
+                                                       ),
+                                                     ),
+
                                                    ),
                                                  ),
                                                ),
-                                             ),
+                                               // Notification Badge
+                                               Positioned(
+                                                 top: 0,
+                                                 // Adjust the position of the badge
+                                                 right: 2,
+                                                 // Adjust the position of the badge
+                                                 child: Obx(() {
+                                                   int imageCount =
+                                                       corrective_indent_page_controller.service_corrective_details_list[
+                                                       0]
+                                                           .fileList!
+                                                           .where((element) =>
+                                                       element.documentType!
+                                                           .toLowerCase() ==
+                                                           'Corrective_Product'
+                                                               .toLowerCase())
+                                                           .toList()
+                                                           .length;
+                                                   return Visibility(
+                                                     visible: imageCount > 0,
+                                                     child: Container(
+                                                       width: 18,
+                                                       height: 18,
+                                                       padding: EdgeInsets.only(left: 7),
+                                                       decoration: BoxDecoration(
+                                                         color: Colors.red,
+                                                         // Badge background color
+                                                         shape: BoxShape.circle,
+                                                       ),
+                                                       child: Text(
+                                                         '$imageCount',
+                                                         style:GoogleFonts.poppins(
+                                                             color: AllColors.blackColor,
+                                                             fontSize: AllFontSize.twelve,
+                                                             fontWeight:
+                                                             FontWeight.w600
+                                                         ),
+                                                       ),
+                                                     ),
+                                                   );
+                                                 }),
+                                               ),
+                                             ],
                                            ),
-                                           ElevatedButton.icon(
-                                             style: ElevatedButton.styleFrom(
-                                               backgroundColor: AllColors.textColor2,
-                                               side: BorderSide(
-                                                 color: AllColors.primaryDark1,
-                                                 width: 1,
-                                               ),
-                                             ),
-                                             onPressed: () {
-                                               corrective_indent_page_controller.image_description_flag.value="Certificate";
-                                               corrective_indent_page_controller
-                                                   .image_description_controller
-                                                   .clear();
-                                               corrective_indent_page_controller
-                                                   .image_flag.value =
-                                               "Corrective_Certificate";
-                                               showConfirmationImageDialog(context);
-                                             },
-                                             icon: Icon(
-                                               Icons.list_alt,
-                                               // Replace with your desired icon
-                                               color: AllColors
-                                                   .primaryDark1, // Icon color
-                                             ),
-                                             label: Container(
-                                               width: size.width * .2,
-                                               child: Tooltip(
-                                                 message: "Upload Certificate",
-                                                 child: Text(
-                                                   "Certificate",
-                                                   overflow: TextOverflow.ellipsis,
-                                                   style: GoogleFonts.poppins(
+                                           Stack(
+                                             clipBehavior: Clip.none,
+                                             children: [
+                                               ElevatedButton.icon(
+                                                 style: ElevatedButton.styleFrom(
+                                                   backgroundColor:
+                                                   AllColors.textColor2,
+                                                   side: BorderSide(
                                                      color: AllColors.primaryDark1,
-                                                     fontSize: AllFontSize.fourtine,
-                                                     fontWeight: FontWeight.w500,
+                                                     width: 1,
+                                                   ),
+                                                 ),
+                                                 onPressed: () {
+                                                   corrective_indent_page_controller
+                                                       .image_description_flag
+                                                       .value = "Certificate";
+                                                   corrective_indent_page_controller
+                                                       .image_description_controller
+                                                       .clear();
+                                                   corrective_indent_page_controller
+                                                       .image_flag.value =
+                                                   "Corrective_Certificate";
+                                                   showConfirmationImageDialog(
+                                                       context);
+                                                 },
+                                                 icon: Icon(
+                                                   Icons.list_alt,
+                                                   // Replace with your desired icon
+                                                   color: AllColors
+                                                       .primaryDark1, // Icon color
+                                                 ),
+                                                 label: Container(
+                                                   width: size.width * .2,
+                                                   child: Tooltip(
+                                                     message: "Upload Certificate",
+                                                     child: Text(
+                                                       "Certificate",
+                                                       overflow:
+                                                       TextOverflow.ellipsis,
+                                                       style:
+                                                       GoogleFonts.poppins(
+                                                         color: AllColors
+                                                             .primaryDark1,
+                                                         fontSize: AllFontSize
+                                                             .fourtine,
+                                                         fontWeight:
+                                                         FontWeight.w500,
+                                                       ),
+                                                     ),
                                                    ),
                                                  ),
                                                ),
-                                             ),
+
+                                               Positioned(
+                                                 top: -5,
+                                                 left: 4,
+                                                 child: Obx(() {
+                                                   int imageCount =
+                                                       corrective_indent_page_controller.service_corrective_details_list[
+                                                       0]
+                                                           .fileList!
+                                                           .where((element) =>
+                                                       element.documentType!
+                                                           .toLowerCase() ==
+                                                           'Corrective_Certificate'
+                                                               .toLowerCase())
+                                                           .toList()
+                                                           .length;
+                                                   return Visibility(
+                                                     visible: imageCount > 0,
+                                                     child: Container(
+                                                       width: 16,
+                                                       height: 16,
+                                                       decoration: BoxDecoration(
+                                                           color: Colors.red,
+                                                           shape: BoxShape.circle
+                                                       ),
+                                                       child:Center(
+                                                         child: Text(
+                                                           '$imageCount',
+                                                           style:  GoogleFonts.poppins(
+                                                             color: AllColors.blackColor,
+                                                             fontSize: AllFontSize.twelve,
+                                                             fontWeight: FontWeight.w500,
+                                                           ),
+
+                                                         ),
+                                                       ),
+
+                                                     ),
+                                                   );
+                                                 },
+
+                                                 ),
+                                               )
+                                             ],
                                            ),
                                          ],
                                        )),
@@ -789,47 +937,70 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                                  "Completed"
                                                  ? false
                                                  : true,
-                                             child: ElevatedButton.icon(
-
-                                                 style: ElevatedButton.styleFrom(
-                                                     backgroundColor:
-                                                     AllColors.textColor2,
-                                                     side: BorderSide(
-                                                         color: AllColors
-                                                             .primaryDark1,
-                                                         width: 1)),
-                                                 onPressed: () {
-                                                   corrective_indent_page_controller.is_indent_type_dropDown.value=true;
-                                                   corrective_indent_page_controller.is_Showindent.value=false;
-                                                   Get.toNamed(RoutesName.corrective_indent_screen);
-
-                                                  /* corrective_indent_page_controller
-                                                       .IndentHeaderCreateApi(
-                                                       "");*/
-
-                                                 },
-
-
-                                                 icon: Icon(Icons.add_shopping_cart, color: AllColors
-                                                     .primaryDark1, ),
-
-                                                 label: Container(
-                                                   child:  Tooltip(
+                                             child: Stack(
+                                               children: [
+                                                 ElevatedButton.icon(
+                                                   style: ElevatedButton.styleFrom(
+                                                     backgroundColor: AllColors.textColor2,
+                                                     side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                                   ),
+                                                   onPressed: () {
+                                                     corrective_indent_page_controller.is_indent_type_dropDown.value = true;
+                                                     corrective_indent_page_controller.is_Showindent.value = false;
+                                                     Get.toNamed(RoutesName.corrective_indent_screen);
+                                                   },
+                                                   icon: Icon(Icons.add_shopping_cart, color: AllColors.primaryDark1),
+                                                   label: Tooltip(
                                                      message: "Stock Indent",
                                                      child: Text(
                                                        "Stock Indent",
                                                        style: GoogleFonts.poppins(
-                                                         color: AllColors
-                                                             .primaryDark1,
-                                                         fontSize:
-                                                         AllFontSize.fourtine,
-                                                         fontWeight:
-                                                         FontWeight.w500,
+                                                         color: AllColors.primaryDark1,
+                                                         fontSize: AllFontSize.fourtine,
+                                                         fontWeight: FontWeight.w500,
                                                        ),
                                                      ),
                                                    ),
                                                  ),
-                                                 //child:
+                                                 // Badge for notification
+
+                                                 Obx(() {
+                                                   return   Visibility(
+                                                     visible:    corrective_indent_page_controller
+                                                         .service_indent_header_list.length>0,
+                                                     child: Positioned(
+                                                       right: 0,  // Adjust the position of the badge
+                                                       top: 0,
+                                                       child: Container(
+                                                         width: 18,
+                                                         height: 18,
+                                                         //padding: EdgeInsets.only(left: 5),
+                                                         decoration: BoxDecoration(
+                                                             color: Colors.red,
+                                                             shape: BoxShape.circle// Badge color
+                                                           //borderRadius: BorderRadius.circular(20),
+                                                         ),
+                                                         constraints: BoxConstraints(
+                                                           minWidth: 16,
+                                                           minHeight: 16,
+                                                         ),
+                                                         child: Center(
+                                                           child: Text(
+                                                             corrective_indent_page_controller
+                                                                 .service_indent_header_list.length.toString(),  // Dynamic notification count can be placed here
+                                                             style: GoogleFonts.poppins(
+                                                               color: AllColors.primaryDark1,
+                                                               fontSize: AllFontSize.twelve,
+                                                               fontWeight: FontWeight.w500,
+                                                             ),
+                                                             textAlign: TextAlign.center,
+                                                           ),
+                                                         ),
+                                                       ),
+                                                     ),
+                                                   );
+                                                 },)
+                                               ],
                                              ),
                                            );
                                          },
@@ -1615,5 +1786,13 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
   }
 
 
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri(scheme: "tel", path: phoneNumber);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      print("Can't open dial pad.");
+    }
+  }
 
 }

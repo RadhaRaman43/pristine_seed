@@ -93,4 +93,11 @@ class ServiceCorrectiveRepository{
   }
 
 
+
+
+  Future<String>serviceCorrectiveImageDeleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.correctiveDeleteDocument,sessionManagement);
+  }
+
+
 }

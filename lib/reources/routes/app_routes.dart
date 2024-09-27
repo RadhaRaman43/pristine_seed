@@ -1,5 +1,6 @@
 import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'package:navigation_drawer_flutter/component/error_404.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/check_in_approval/check_in_approval_screen.dart';
 import 'package:navigation_drawer_flutter/view/forget_password/forget_password_screen.dart';
@@ -585,6 +586,18 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
+
+
+//todo image not found....
+
+
+
+
+    GetPage(name: RoutesName.image_not_found_screen,
+        page: ()=>ImageNotFound(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
 
 

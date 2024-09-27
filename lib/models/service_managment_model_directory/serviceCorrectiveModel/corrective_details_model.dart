@@ -56,6 +56,7 @@ class ServiceCorrectiveDetails {
   String? completeApprovalStatus;
   String? completeApprovalRemark;
   String? recheduleApprovalRemark;
+  double? qty;
   String? recheduleApprovalStatus;
   List<ServiceHistory>? serviceHistory;
   List<FileList>? fileList;
@@ -116,6 +117,7 @@ class ServiceCorrectiveDetails {
         this.serviceHistory,
         this.categoryName,
         this.isUnderApproval,
+        this.qty,
         this.completeApprovalRemark,
         this.completeApprovalStatus,
         this.recheduleApprovalRemark,
@@ -179,6 +181,7 @@ class ServiceCorrectiveDetails {
     categoryName = json['category_name'];
     recheduleApprovalStatus = json['rechedule_approval_status'];
     recheduleApprovalRemark = json['rechedule_approval_remark'];
+    qty = json['qty'];
     completeApprovalRemark = json['complete_approval_remark'];
     completeApprovalStatus = json['complete_approval_status'];
     if (json['service_history'] != null) {
@@ -254,6 +257,7 @@ class ServiceCorrectiveDetails {
     data['rechedule_approval_status'] = this.recheduleApprovalStatus;
     data['rechedule_approval_remark'] = this.recheduleApprovalRemark;
     data['complete_approval_remark'] = this.completeApprovalRemark;
+    data['qty'] = this.qty;
     data['complete_approval_status'] = this.completeApprovalStatus;
     if (this.serviceHistory != null) {
       data['service_history'] =

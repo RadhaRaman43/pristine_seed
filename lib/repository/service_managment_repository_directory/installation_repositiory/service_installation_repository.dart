@@ -66,4 +66,8 @@ class ServiceInstallationRepository{
     return _apiService.postApi(data, AppUrl.installationMarkCompleted,sessionManagement);
   }
 
+  Future<String>serviceInstallationImageDeleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.installationDeleteDocument,sessionManagement);
+  }
+
 }

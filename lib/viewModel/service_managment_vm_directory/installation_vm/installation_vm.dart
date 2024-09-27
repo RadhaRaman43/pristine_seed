@@ -19,6 +19,7 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_managment.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../component/custome_confirm_dialog.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 
@@ -61,6 +62,7 @@ class InstallationViewModel extends GetxController {
   RxList<ItemNoResponse> item_no_list = <ItemNoResponse>[].obs;
 
   RxList<String> indent_type_list = <String>["Self","Warehouse"].obs;
+
 
 
 
@@ -154,6 +156,11 @@ class InstallationViewModel extends GetxController {
   @override
   void onInit() async {
     email = await sessionManagement.getEmail() ?? '';
+
+
+
+
+
     getServiceInstallationList(is_done.value, pageNumber,date_filter.value);
    // getReasonMaster();
 
@@ -1250,6 +1257,53 @@ class InstallationViewModel extends GetxController {
       print(e);
     }
   }
+  imageDeleteApiHit(String image_id, BuildContext context ) {
+    Map data = {
+      "service_id": id,
+      "email_id": email,
+      "image_id": image_id
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceInstallationImageDeleteApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<IndentHeaderCreateResponse> response =
+            JsonResponse.map((e) => IndentHeaderCreateResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification("Success!", response[0].message!);
+              getServiceInstallationDetails(id,"Refresh");
+              Navigator.of(context).pop();
+
+
+            } else {
+              loading.value = false;
+              print(response);
+              Utils.showErrorToastification("Error!", response[0].message!);
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          service_indent_header_create_list.value=[];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
 
 
   void showLineImagesPopup(BuildContext context) {
@@ -1266,6 +1320,8 @@ class InstallationViewModel extends GetxController {
       print("image Blank......");
       upLoadLocalImagesList.value="";
       description.value="";
+      Get.toNamed(RoutesName.image_not_found_screen);
+      return;
     }
     Size size = Get.size;
     showDialog(
@@ -1375,8 +1431,7 @@ class InstallationViewModel extends GetxController {
                         ),
                         SizedBox(height: 10),
                         // Check if imageUrls is empty, display a message, else display images
-                        dialog_file_list ==null && dialog_file_list!.length<=0
-                            ? Center(
+                        if (dialog_file_list ==null && dialog_file_list!.length<=0) Center(
                           child:Text( 'No Images found',
                             style:GoogleFonts.poppins(
                                 fontSize: AllFontSize.eighteen,
@@ -1384,8 +1439,7 @@ class InstallationViewModel extends GetxController {
                                 color: AllColors.primaryDark1
                             ),
                           ),
-                        )
-                            : Container(
+                        ) else Container(
                           height: 100,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
@@ -1396,17 +1450,46 @@ class InstallationViewModel extends GetxController {
                                   upLoadLocalImagesList.value=dialog_file_list![index].fileUrl!;
                                   description.value=dialog_file_list![index].fileDesc!;
                                 },
-                                child: Container(
-                                  width: 100,
-                                  margin: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: Colors.blueGrey, width: 0.5),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(3.0),
-                                    child: upLoadImageSection(dialog_file_list![index]),
-                                  ),
+                                child:
+                                //todo small section close...
+                                Stack(
+                                  children: [
+                                    Container(
+
+
+                                      width: 100,
+                                      margin: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.blueGrey, width: 0.5),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: upLoadImageSection(dialog_file_list![index]),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 5,
+                                      child: InkWell(
+                                        onTap: () {
+                                          CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
+                                            Navigator.of(context).pop();
+                                            imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
+                                          }, isLoading: loading);
+                                        },
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: AllColors.primaryDark1
+                                          ),
+                                          child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                 // child:
                                 ),
                               );
                             },
@@ -1498,6 +1581,8 @@ class InstallationViewModel extends GetxController {
 
 
   Widget upLoadBigImageSection() {
+
+
     return Stack(
       children: [
         Positioned(

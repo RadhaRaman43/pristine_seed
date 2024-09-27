@@ -92,4 +92,8 @@ class PreventiveRepository {
     return _apiService.postApi(data, AppUrl.preventiveOffSiteMarkClosure,sessionManagement);
   }
 
+  Future<String>serviceCorrectiveImageDeleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.priventiveDeleteDocument,sessionManagement);
+  }
+
 }

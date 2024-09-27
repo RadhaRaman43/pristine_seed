@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -12,7 +13,7 @@ import '../../../constants/static_methods.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/service_managment_vm_directory/preventive_vm/preventive_vm.dart';
 import '../../custom_drawer.dart';
-
+import '../../../models/service_managment_model_directory/servicePreventiveModel/service_preventive_details_model.dart';
 
 class PreventiveMarkVisitScreen extends StatelessWidget {
   PreventiveMarkVisitScreen({super.key});
@@ -183,16 +184,25 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                 ),
                               ),
                               Spacer(),
-                              Text(
-                                preventive_indent_page_controller
-                                    .service_preventive_details_list[0]
-                                    .customerPhoneNo!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: () {
+                                  openDialPad(preventive_indent_page_controller
+                                      .service_preventive_details_list[0]
+                                      .customerPhoneNo!);
+                                },
+                                child: Text(
+                                  preventive_indent_page_controller
+                                      .service_preventive_details_list[0]
+                                      .customerPhoneNo!,
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AllColors.textColor,
+                                  ),
+                                  textAlign: TextAlign.end,
                                 ),
-                                textAlign: TextAlign.end,
                               ),
                             ],
                           ),
@@ -367,30 +377,6 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                           },
                             // child:
                           ),
-                        /*  SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Date",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Spacer(),
-                              *//*Text(
-                                  orderDate!,
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),*//*
-                            ],
-                          ),*/
                         ],
                       ),
                     ),
@@ -550,6 +536,34 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                         textAlign: TextAlign.end,
                                       )
                                     ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Qty",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        preventive_indent_page_controller
+                                            .service_preventive_details_list[0]
+                                            .qty.toString(),
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ],
+                                  ),
+
+                                  SizedBox(
+                                    height: 3,
                                   ),
                                 ],
                               ),
@@ -713,7 +727,104 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      ElevatedButton.icon(
+
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        // Allows overflow for the badge
+                                        children: [
+                                          ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                              AllColors.textColor2,
+                                              side: BorderSide(
+                                                color: AllColors.primaryDark1,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              preventive_indent_page_controller
+                                                  .image_description_flag
+                                                  .value = "";
+                                              preventive_indent_page_controller
+                                                  .image_description_controller
+                                                  .clear();
+                                              preventive_indent_page_controller
+                                                  .image_flag.value =
+                                              "Preventive_Product";
+                                              showConfirmationImageDialog(
+                                                  context);
+                                            },
+                                            icon: Icon(
+                                              Icons.upload,
+                                              color: AllColors
+                                                  .primaryDark1, // Icon color
+                                            ),
+                                            label: Container(
+                                              width: size.width * .15,
+                                              child: Tooltip(
+                                                message: "Upload Product",
+                                                child: Text(
+                                                  "Product",
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                  style: GoogleFonts.poppins(
+                                                    color: AllColors
+                                                        .primaryDark1,
+                                                    fontSize:
+                                                    AllFontSize.fourtine,
+                                                    fontWeight:
+                                                    FontWeight.w500,
+                                                  ),
+                                                ),
+
+                                              ),
+                                            ),
+                                          ),
+                                          // Notification Badge
+                                          Positioned(
+                                            top: 0,
+                                            // Adjust the position of the badge
+                                            right: 2,
+                                            // Adjust the position of the badge
+                                            child: Obx(() {
+                                              int imageCount =
+                                                  preventive_indent_page_controller. service_preventive_details_list[
+                                                  0]
+                                                      .fileList!
+                                                      .where((element) =>
+                                                  element.documentType!
+                                                      .toLowerCase() ==
+                                                      'Preventive_Product'
+                                                          .toLowerCase())
+                                                      .toList()
+                                                      .length;
+                                              return Visibility(
+                                                visible: imageCount > 0,
+                                                child: Container(
+                                                  width: 18,
+                                                  height: 18,
+                                                  padding: EdgeInsets.only(left: 7),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    // Badge background color
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Text(
+                                                    '$imageCount',
+                                                    style:GoogleFonts.poppins(
+                                                        color: AllColors.blackColor,
+                                                        fontSize: AllFontSize.twelve,
+                                                        fontWeight:
+                                                        FontWeight.w600
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ],
+                                      ),
+                                     /* ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: AllColors.textColor2,
                                           side: BorderSide(
@@ -739,60 +850,129 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                               .primaryDark1, // Icon color
                                         ),
                                         label: Container(
-                                          width: size.width * .15,
+                                          width: size.width * .25,
                                           child: Tooltip(
                                             message: "Upload Product",
-                                            child: Text(
-                                              "Product",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                            child: Obx(() {
+                                              List<FileList> image_count_list = [];
+                                              image_count_list=  preventive_indent_page_controller. service_preventive_details_list[0]
+                                                  .fileList!
+                                                  .where((element) =>
+                                              element.documentType!.toLowerCase() ==
+                                                  'Preventive_Product'.toLowerCase())
+                                                  .toList();
+                                              return Text(
+                                                "Product ( ${image_count_list.length.toString()} )",
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              );
+                                            },
+
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      ElevatedButton.icon(
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: AllColors.textColor2,
-                                          side: BorderSide(
-                                            color: AllColors.primaryDark1,
-                                            width: 1,
-                                          ),
-                                        ),
-                                        onPressed: () {
-                                          preventive_indent_page_controller.image_description_flag.value="Certificate";
-                                          preventive_indent_page_controller
-                                              .image_description_controller
-                                              .clear();
-                                          preventive_indent_page_controller
-                                              .image_flag
-                                              .value = "Preventive_Certificate";
-                                          showConfirmationImageDialog(context);
-                                        },
-                                        icon: Icon(
-                                          Icons.list_alt,
-                                          // Replace with your desired icon
-                                          color: AllColors
-                                              .primaryDark1, // Icon color
-                                        ),
-                                        label: Container(
-                                          width: size.width * .2,
-                                          child: Tooltip(
-                                            message: "Upload Certificate",
-                                            child: Text(
-                                              "Certificate",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.poppins(
+                                      ),*/
+
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                              AllColors.textColor2,
+                                              side: BorderSide(
                                                 color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              preventive_indent_page_controller
+                                                  .image_description_flag
+                                                  .value = "Certificate";
+                                              preventive_indent_page_controller
+                                                  .image_description_controller
+                                                  .clear();
+                                              preventive_indent_page_controller
+                                                  .image_flag.value =
+                                              "Preventive_Certificate";
+                                              showConfirmationImageDialog(
+                                                  context);
+                                            },
+                                            icon: Icon(
+                                              Icons.list_alt,
+                                              // Replace with your desired icon
+                                              color: AllColors
+                                                  .primaryDark1, // Icon color
+                                            ),
+                                            label: Container(
+                                              width: size.width * .2,
+                                              child: Tooltip(
+                                                message: "Upload Certificate",
+                                                child: Text(
+                                                  "Certificate",
+                                                  overflow:
+                                                  TextOverflow.ellipsis,
+                                                  style:
+                                                  GoogleFonts.poppins(
+                                                    color: AllColors
+                                                        .primaryDark1,
+                                                    fontSize: AllFontSize
+                                                        .fourtine,
+                                                    fontWeight:
+                                                    FontWeight.w500,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
+
+                                          Positioned(
+                                            top: -5,
+                                            left: 4,
+                                            child: Obx(() {
+                                              int imageCount =
+                                                  preventive_indent_page_controller. service_preventive_details_list[
+                                                  0]
+                                                      .fileList!
+                                                      .where((element) =>
+                                                  element.documentType!
+                                                      .toLowerCase() ==
+                                                      'Preventive_Certificate'
+                                                          .toLowerCase())
+                                                      .toList()
+                                                      .length;
+                                              return Visibility(
+                                                visible: imageCount > 0,
+                                                child: Container(
+                                                  width: 16,
+                                                  height: 16,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      shape: BoxShape.circle
+                                                  ),
+                                                  child:Center(
+                                                    child: Text(
+                                                      '$imageCount',
+                                                      style:  GoogleFonts.poppins(
+                                                        color: AllColors.blackColor,
+                                                        fontSize: AllFontSize.twelve,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+
+                                                    ),
+                                                  ),
+
+                                                ),
+                                              );
+                                            },
+
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ],
                                   )),
@@ -813,7 +993,74 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                                         "Completed"
                                                     ? false
                                                     : true,
-                                            child: ElevatedButton.icon(
+                                            child:Stack(
+                                              children: [
+                                                ElevatedButton.icon(
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor: AllColors.textColor2,
+                                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                                  ),
+                                                  onPressed: () {
+                                                    preventive_indent_page_controller.is_indent_type_dropDown.value=true;
+                                                    preventive_indent_page_controller.is_Showindent.value=false;
+                                                    Get.toNamed(RoutesName.preventive_Indent_header_view_screen);
+                                                  },
+                                                  icon: Icon(Icons.add_shopping_cart, color: AllColors.primaryDark1),
+                                                  label: Tooltip(
+                                                    message: "Stock Indent",
+                                                    child: Text(
+                                                      "Stock Indent",
+                                                      style: GoogleFonts.poppins(
+                                                        color: AllColors.primaryDark1,
+                                                        fontSize: AllFontSize.fourtine,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                // Badge for notification
+
+                                                Obx(() {
+                                                  return   Visibility(
+                                                    visible:     preventive_indent_page_controller
+                                                        .service_indent_header_list.length>0,
+                                                    child: Positioned(
+                                                      right: 0,  // Adjust the position of the badge
+                                                      top: 0,
+                                                      child: Container(
+                                                        width: 18,
+                                                        height: 18,
+                                                        //padding: EdgeInsets.only(left: 5),
+                                                        decoration: BoxDecoration(
+                                                            color: Colors.red,
+                                                            shape: BoxShape.circle// Badge color
+                                                          //borderRadius: BorderRadius.circular(20),
+                                                        ),
+                                                        constraints: BoxConstraints(
+                                                          minWidth: 16,
+                                                          minHeight: 16,
+                                                        ),
+                                                        child: Center(
+                                                          child: Text(
+                                                            preventive_indent_page_controller
+                                                                .service_indent_header_list.length.toString(),  // Dynamic notification count can be placed here
+                                                            style: GoogleFonts.poppins(
+                                                              color: AllColors.primaryDark1,
+                                                              fontSize: AllFontSize.twelve,
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
+                                                            textAlign: TextAlign.center,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },)
+                                              ],
+                                            ),
+
+                                            /*
+                                            ElevatedButton.icon(
                                                 style: ElevatedButton.styleFrom(
                                                     backgroundColor:
                                                         AllColors.textColor2,
@@ -846,7 +1093,7 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
                                                    ),
                                                 ),
                                               //  child:
-                                            ),
+                                            ),*/
                                           );
                                         },
                                       ),
@@ -1645,6 +1892,15 @@ class PreventiveMarkVisitScreen extends StatelessWidget {
         );
       },
     );
+  }
+
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri(scheme: "tel", path: phoneNumber);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      print("Can't open dial pad.");
+    }
   }
 
 }
