@@ -30,7 +30,7 @@ class DraftItemList extends StatelessWidget{
           title:Row(
             children: [
               Text(
-                'Draft Items',
+                'Draft Accounts',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20.0,

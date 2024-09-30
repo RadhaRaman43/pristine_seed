@@ -109,6 +109,8 @@ class TaskMasterScreen extends StatelessWidget{
                        onPressed: () {
                          TaskMaster_page_controller.pageNumber=0;
                          TaskMaster_page_controller
+                             .date_filter.value = "Today";
+                         TaskMaster_page_controller
                              .is_done.value = 0;
                          TaskMaster_page_controller
                              .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
@@ -689,6 +691,37 @@ class TaskMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
+                  "Product Category : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[position]
+                        .productCategory??"",
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[position]
+                          .productCategory??"",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
                   "Created By : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
@@ -1173,6 +1206,10 @@ class TaskMasterScreen extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextField(
+            onTap: (){
+              focusNode.requestFocus();
+              controller.clear();
+            },
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = TaskMaster_page_controller.ApproveReject_Controller
@@ -1180,7 +1217,12 @@ class TaskMasterScreen extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: InkWell(
+                  onTap: (){
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Task Status',
@@ -1214,7 +1256,7 @@ class TaskMasterScreen extends StatelessWidget{
           child: Material(
             elevation: 4.0,
             child: Container(
-              width: size.width*.6,
+              width: size.width*.5,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,

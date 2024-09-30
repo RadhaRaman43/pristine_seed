@@ -159,7 +159,7 @@ class AddNewAccountMaster extends StatelessWidget{
             }
             if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
               if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
-                Utils.sanckBarError('Account Type!', "Please Enter 10 Digit Phone No");
+                Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
                 return  ;
               }
             }
@@ -204,6 +204,13 @@ class AddNewAccountMaster extends StatelessWidget{
             if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
               Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
               return  ;
+            }
+
+            if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
+              if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
+                Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+                return  ;
+              }
             }
 
             if(accountMaster_page_controller.Account_Master_list != null &&

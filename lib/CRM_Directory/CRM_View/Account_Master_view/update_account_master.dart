@@ -149,7 +149,7 @@ class UpdateAccountMaster extends StatelessWidget{
                  backgroundColor: AllColors.primaryDark1,
                  shadowColor: Colors.black,
                  shape: StadiumBorder(
-                     side: BorderSide(color: AllColors.grayColor)),
+                     side: BorderSide(color: AllColors.whiteColor)),
                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                  //CircleAvatar
                  label: Tooltip(
@@ -176,7 +176,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    }
                    if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
                      if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
-                       Utils.sanckBarError('Account Type!', "Please Enter 10 Digit Phone No");
+                       Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
                        return  ;
                      }
                    }
@@ -215,6 +215,14 @@ class UpdateAccountMaster extends StatelessWidget{
                      Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
                      return  ;
                    }
+
+                   if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
+                     if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
+                       Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+                       return  ;
+                     }
+                   }
+
                    if(accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
                      Utils.sanckBarError('Active!', "Please Enter Active Type");
                      return  ;
@@ -908,7 +916,7 @@ class UpdateAccountMaster extends StatelessWidget{
                  ),
                  child: InputDecorator(
                    decoration: InputDecoration(
-                     labelText: 'Bill Address',
+                     labelText: 'Billing Address',
                      labelStyle: GoogleFonts.poppins(
                          color: AllColors.primaryDark1,
                          fontWeight: FontWeight.w700,
@@ -1497,6 +1505,7 @@ class UpdateAccountMaster extends StatelessWidget{
          child: Center(
              child: InkWell(
                  onTap: (){
+                    accountMaster_page_controller.UploadImageType_controller.text= "Upload Image";
                     accountMaster_page_controller.view=='Account'?UploadImageDailog(context):"";
                  },
                  child: Obx((){
@@ -1518,9 +1527,10 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   UploadImageDailog(BuildContext context){
-    accountMaster_page_controller.UploadImageType_controller.clear();
+    //accountMaster_page_controller.UploadImageType_controller.clear();
     accountMaster_page_controller.ImageUrl_Controller.clear();
     accountMaster_page_controller.UploadImage.value = false;
+    accountMaster_page_controller.ButtonText.value = 'Choose files';
    showDialog(
        context: context,
        builder: (context){
@@ -1604,7 +1614,7 @@ class UpdateAccountMaster extends StatelessWidget{
                            ),
                            onPressed: ()  {
                              if(accountMaster_page_controller.UploadImageType_controller.text.isEmpty || accountMaster_page_controller.UploadImageType_controller == null){
-                               Utils.sanckBarError('Error : ', 'Please Upload Image Type.');
+                               Utils.sanckBarError('Error : Image', 'Please Upload Image Type.');
                                return;
 
                              }
@@ -1614,7 +1624,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                accountMaster_page_controller.upLoadImage(context);
                              }else if(accountMaster_page_controller.UploadImageType_controller.text== "Url"){
                                if(accountMaster_page_controller.ImageUrl_Controller.text.isEmpty || accountMaster_page_controller.ImageUrl_Controller == null){
-                                 Utils.sanckBarError('Error : ', 'Please Enter Image Url.');
+                                 Utils.sanckBarError('Error : Image', 'Please Enter Image Url.');
                                }else{
                                  accountMaster_page_controller.upLoadImageApi(context);
                                }

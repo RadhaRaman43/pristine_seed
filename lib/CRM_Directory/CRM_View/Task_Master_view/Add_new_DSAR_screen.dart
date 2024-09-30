@@ -68,7 +68,7 @@ class AddNewDsarScreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Spacer(),
+             /* Spacer(),
 
 
                  ActionChip(
@@ -92,14 +92,14 @@ class AddNewDsarScreen extends StatelessWidget{
                   onPressed: () {
                     print('infra lead...${TaskMaster_page_controller.Task_Master_list[0].isInfraLead}');
                     print('infra lead2...${TaskMaster_page_controller.isInfraLead.value.text}');
-                    /*if( TaskMaster_page_controller
+                    *//*if( TaskMaster_page_controller
                         .Task_Master_list[0].isInfraLead==0 && TaskMaster_page_controller.isInfraLead.value.text == 'Yes' ){
                       Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
                     }
                     else{
                       TaskMaster_page_controller.TaskDSARMasterCreate();
                     }
-*/
+*//*
 
                     if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
                       //Utils.sanckBarError("Message", "Created");
@@ -115,7 +115,7 @@ class AddNewDsarScreen extends StatelessWidget{
                     }
                     }, //Text
                 ),
-
+*/
 
              /* Obx((){
                 return Visibility(
@@ -152,8 +152,32 @@ class AddNewDsarScreen extends StatelessWidget{
           )
       ),
       drawer: CustomDrawer(),
+      floatingActionButton:  Padding(
+        padding: const EdgeInsets.only(left:30),
+        child: DefaultButton(
+          //text: "${TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?"Update":"Add"} Infra Details",
+          text: "Create DSAR",
+          press: (){
+            if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == ""){
+              Utils.sanckBarError("Message", "Please select DSAR Status");
+            }
+            else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
+              //Utils.sanckBarError("Message", "Created");
+              TaskMaster_page_controller.TaskDSARMasterCreate();
+            }
+            else if(TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value){
+
+              Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
+
+            }else{
+              //Utils.sanckBarError("Message", "Created2");
+              TaskMaster_page_controller.TaskDSARMasterCreate();
+            }
+          },
+        ),
+      ),
       body: Container(
-        padding: EdgeInsets.only(bottom: 15),
+        padding: EdgeInsets.only(bottom: 70),
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
@@ -412,7 +436,13 @@ class AddNewDsarScreen extends StatelessWidget{
                    ),
                  ),
                );
-             })
+             }),
+
+              SizedBox(height: 15,),
+
+
+
+
 
 
             ],

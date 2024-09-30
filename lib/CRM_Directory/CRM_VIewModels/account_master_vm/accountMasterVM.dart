@@ -991,7 +991,7 @@ class Accountmastervm extends GetxController{
           loading.value = false;
           if(flag == 'Create'){
             print("ttttttttttt");
-            Utils.showToastification("Success!", "Item Save In Successful");
+            Utils.showToastification("Success!", "Account is Save In Draft Successful");
             clearAccoundController();
             //deleteAccountData(DraftId);
             pageNumber=0;
@@ -1000,7 +1000,7 @@ class Accountmastervm extends GetxController{
             Get.toNamed(RoutesName.accountMaster_screen);
           }else if(flag == 'Update'){
             print("Update....");
-            Utils.showToastification("Success!", "Draft Item Update Successful");
+            Utils.showToastification("Success!", "Draft Account is Update Successful");
             viewRequestDetails(response);
             clearAccoundController();
             pageNumber=0;

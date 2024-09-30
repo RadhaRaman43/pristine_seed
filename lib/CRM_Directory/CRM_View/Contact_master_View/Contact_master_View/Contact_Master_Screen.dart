@@ -221,8 +221,8 @@ class ContactMasterScreen extends StatelessWidget{
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Depart Name',
-                            hintText: 'Depart Name',
+                            labelText: 'Department Name',
+                            hintText: 'Department Name',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -612,7 +612,7 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Department. Name : ",
+                  "Department Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -643,7 +643,7 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Designation. Name : ",
+                  "Designation Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,

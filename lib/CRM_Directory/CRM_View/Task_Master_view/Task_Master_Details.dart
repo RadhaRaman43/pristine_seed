@@ -204,7 +204,7 @@ class TaskMasterDetails extends StatelessWidget{
                           child: Icon(Icons.person, color: AllColors.whiteColor,),
                         ),
                         Text(
-                          "Manager Info",
+                          "Created Manager Info",
                           style: GoogleFonts.poppins(
                             color: AllColors.whiteColor,
                             fontSize: AllFontSize.twentee,
@@ -1344,7 +1344,7 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Sale Cycle Acti. By",
+                  "Sale Cycle Activated By",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1388,7 +1388,7 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Sale Cycle Acti. on",
+                  "Sale Cycle Activated on",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1798,7 +1798,7 @@ class TaskMasterDetails extends StatelessWidget{
                   StaticMethod.onlyDate(
                       TaskMaster_page_controller
                           .TaskDSAR_Master_list[0]
-                          .nextInteractionDate??"") ?? "",
+                          .nextInteractionTime??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,
@@ -1854,14 +1854,25 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                 ),
                 Spacer(),
-                Text(
-                  TaskMaster_page_controller
-                      .TaskDSAR_Master_list[0]
-                      .remarks?? "",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
+                Container(
+                  width: size.width*.4,
+                  child: Tooltip(
+                    message:
+                        TaskMaster_page_controller
+                            .TaskDSAR_Master_list[0]
+                            .remarks?? "",
+                    child: Text(
+                      TaskMaster_page_controller
+                          .TaskDSAR_Master_list[0]
+                          .remarks?? "",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ],

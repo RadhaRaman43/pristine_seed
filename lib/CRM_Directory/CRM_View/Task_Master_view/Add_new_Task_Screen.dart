@@ -551,6 +551,9 @@ class AddNewTaskScreen extends StatelessWidget{
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
+          onTap: (){
+            controller.clear();
+          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = taskMaster_page_controller.Type_of_call_controller
@@ -558,7 +561,12 @@ class AddNewTaskScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: InkWell(
+                onTap: (){
+                  focusNode.requestFocus();
+                  controller.clear();
+                },
+                child: Icon(Icons.arrow_drop_down)),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Type Of Call*',
@@ -654,6 +662,10 @@ class AddNewTaskScreen extends StatelessWidget{
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
+          onTap: (){
+            focusNode.requestFocus();
+            controller.clear();
+          },
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = taskMaster_page_controller.Method_of_call_controller
@@ -661,7 +673,12 @@ class AddNewTaskScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: InkWell(
+                onTap: (){
+                  focusNode.requestFocus();
+                  controller.clear();
+                },
+                child: Icon(Icons.arrow_drop_down)),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Method Of Call*',

@@ -458,7 +458,7 @@ class ViewContactsScreen extends StatelessWidget{
   }
 
   FilterDialog(context){
-    contact_vm_controller.contact_name_controller.clear();
+    //contact_vm_controller.contact_name_controller.clear();
     showDialog(
         context: context,
         builder: (context){
@@ -554,7 +554,7 @@ class ViewContactsScreen extends StatelessWidget{
                               Navigator.pop(context, true);
                               accountMaster_page_controller.getContactMasterList(
                                 contact_vm_controller.pageNumber, accountMaster_page_controller.accountName, contact_vm_controller.contact_name_controller.text,contact_vm_controller.accountCode.value.toString());
-                              contact_vm_controller.contact_name_controller.clear();
+                             // contact_vm_controller.contact_name_controller.clear();
 
                             }
 

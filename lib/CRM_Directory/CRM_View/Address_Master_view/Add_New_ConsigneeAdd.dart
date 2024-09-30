@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../utils/app_utils.dart';
@@ -56,7 +57,7 @@ class AddNewConsigneeadd extends StatelessWidget{
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Spacer(),
+               /* Spacer(),
                 ActionChip(
                   elevation: 2,
                   padding: EdgeInsets.all(5),
@@ -88,14 +89,31 @@ class AddNewConsigneeadd extends StatelessWidget{
                     //preventive_page_controller.createPreventiveCalenderCallApi();
 
                   }, //Text
-                ),
+                ),*/
               ],
             )
 
         ),
         drawer: CustomDrawer(),
+        floatingActionButton:  Container(
+          margin: EdgeInsets.only(left: 30),
+          child: DefaultButton(
+            press: (){
+              if(address_vm_controller.updateContact){
+                address_vm_controller.createNewAddressMstApi("Update");
+              }
+              else{
+                address_vm_controller.consignee_code="";
+                address_vm_controller.createNewAddressMstApi("Create");
+
+              }
+
+            },
+            text: address_vm_controller.updateContact?'Update Contact':'Create Contact',
+          ),
+        ),
         body: Container(
-          padding: EdgeInsets.only(bottom: 15),
+          padding: EdgeInsets.only(bottom: 70),
           width: double.infinity,
           height: double.infinity,
           child: SingleChildScrollView(
@@ -245,6 +263,7 @@ class AddNewConsigneeadd extends StatelessWidget{
                             ),
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
+                              maxLength: 10,
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return null; // No error when the field is empty
@@ -500,6 +519,7 @@ class AddNewConsigneeadd extends StatelessWidget{
                           ),
                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                           child: TextFormField(
+                            maxLength: 11,
                             controller: address_vm_controller
                                 .IfscCode_Controller,
                             decoration: InputDecoration(

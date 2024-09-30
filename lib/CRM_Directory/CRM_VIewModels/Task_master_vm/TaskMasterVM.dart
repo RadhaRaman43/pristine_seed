@@ -280,6 +280,8 @@ class Taskmastervm extends GetxController{
                        // Get.offAllNamed(RoutesName.taskMaster_screen);
                         pageNumber=0;
                         clearCreateTaskController();
+                        date_filter.value = "Today";
+                        is_done.value = 0;
                         getTaskMaster(pageNumber, is_Active.toString(), '', '', '',date_filter, is_done.value);
                         Get.toNamed(RoutesName.taskMaster_screen);
 
