@@ -57,6 +57,7 @@ class ServiceInstallationDetails {
   String? completeApprovalStatus;
   String? recheduleApprovalRemark;
   String? recheduleApprovalStatus;
+  double? qty;
   List<ServiceHistory>? serviceHistory;
   List<FileList>? fileList;
 
@@ -119,6 +120,7 @@ class ServiceInstallationDetails {
         this.completeApprovalRemark,
         this.completeApprovalStatus,
         this.recheduleApprovalRemark,
+        this.qty,
         this.recheduleApprovalStatus,
         this.fileList});
 
@@ -179,6 +181,7 @@ class ServiceInstallationDetails {
     categoryName = json['category_name'];
     recheduleApprovalStatus = json['rechedule_approval_status'];
     recheduleApprovalRemark = json['rechedule_approval_remark'];
+    qty = json['qty'];
     completeApprovalRemark = json['complete_approval_remark'];
     completeApprovalStatus = json['complete_approval_status'];
     if (json['service_history'] != null) {
@@ -253,6 +256,7 @@ class ServiceInstallationDetails {
     data['is_under_approval'] = this.isUnderApproval;
     data['rechedule_approval_status'] = this.recheduleApprovalStatus;
     data['rechedule_approval_remark'] = this.recheduleApprovalRemark;
+    data['qty'] = this.qty;
     data['complete_approval_status'] = this.completeApprovalStatus;
     data['complete_approval_remark'] = this.completeApprovalRemark;
     if (this.serviceHistory != null) {

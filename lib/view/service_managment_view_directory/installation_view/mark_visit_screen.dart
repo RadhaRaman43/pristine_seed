@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -9,13 +10,14 @@ import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../viewModel/service_managment_vm_directory/installation_vm/installation_vm.dart';
 import '../../custom_drawer.dart';
-
+import '../../../models/service_managment_model_directory/serviceInstallationModel/service_installation_details_model.dart';
 
 class MarkVisit extends StatelessWidget {
   MarkVisit({super.key});
@@ -26,12 +28,14 @@ class MarkVisit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var serViceTatDate = StaticMethod.onlyDate(installation_indent_page_controller
-        .service_installation_details_list[0].serviceTatDatetime!);
+    var serViceTatDate = StaticMethod.onlyDate(
+        installation_indent_page_controller
+            .service_installation_details_list[0].serviceTatDatetime!);
 
     return WillPopScope(
       onWillPop: () async {
-        installation_indent_page_controller.getServiceInstallationDetails(installation_indent_page_controller.id,"Refresh");
+        installation_indent_page_controller.getServiceInstallationDetails(
+            installation_indent_page_controller.id, "Refresh");
         Get.toNamed(RoutesName.installation_details_screen);
 
         return false;
@@ -78,7 +82,7 @@ class MarkVisit extends StatelessWidget {
                     ),
                     Container(
                       padding: EdgeInsets.all(10),
-                     // / height: size.height * .22,
+                      // / height: size.height * .22,
                       decoration: BoxDecoration(boxShadow: <BoxShadow>[
                         BoxShadow(
                             offset: Offset(0.0, 1.0),
@@ -141,7 +145,6 @@ class MarkVisit extends StatelessWidget {
                           SizedBox(
                             height: 3,
                           ),
-
                           Row(
                             children: [
                               Text(
@@ -154,7 +157,7 @@ class MarkVisit extends StatelessWidget {
                               ),
                               Spacer(),
                               Container(
-                                width: size.width*.55,
+                                width: size.width * .55,
                                 child: Tooltip(
                                   message: installation_indent_page_controller
                                       .service_installation_details_list[0]
@@ -175,7 +178,9 @@ class MarkVisit extends StatelessWidget {
                               ),
                             ],
                           ),
-                          SizedBox(height: 3,),
+                          SizedBox(
+                            height: 3,
+                          ),
                           Row(
                             children: [
                               Text(
@@ -187,14 +192,24 @@ class MarkVisit extends StatelessWidget {
                                 ),
                               ),
                               Spacer(),
-                              Text(
-                                installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .customerPhoneNo!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: () {
+                                  openDialPad(
+                                      installation_indent_page_controller
+                                          .service_installation_details_list[0]
+                                          .customerPhoneNo!);
+                                },
+                                child: Text(
+                                  installation_indent_page_controller
+                                      .service_installation_details_list[0]
+                                      .customerPhoneNo!,
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AllColors.textColor,
+                                  ),
                                 ),
                               ),
                             ],
@@ -202,7 +217,6 @@ class MarkVisit extends StatelessWidget {
                           SizedBox(
                             height: 3,
                           ),
-
                           Row(
                             children: [
                               Text(
@@ -215,11 +229,11 @@ class MarkVisit extends StatelessWidget {
                               ),
                               Spacer(),
                               Container(
-                                width: size.width*.55,
+                                width: size.width * .55,
                                 child: Tooltip(
                                   message: installation_indent_page_controller
                                       .service_installation_details_list[0]
-                                      .customerAddress! ,
+                                      .customerAddress!,
                                   child: Text(
                                     installation_indent_page_controller
                                         .service_installation_details_list[0]
@@ -236,7 +250,6 @@ class MarkVisit extends StatelessWidget {
                               ),
                             ],
                           ),
-
                           SizedBox(
                             height: 3,
                           ),
@@ -264,13 +277,21 @@ class MarkVisit extends StatelessWidget {
                               ),
                             ],
                           ),
-
                           Obx(
-                                () {
+                            () {
                               return Visibility(
-                                visible:installation_indent_page_controller
-                                    .service_installation_details_list[0].isUnderApproval==1 && installation_indent_page_controller
-                                    .service_installation_details_list[0].serviceStatus=="Completed"? true:false ,
+                                visible: installation_indent_page_controller
+                                                .service_installation_details_list[
+                                                    0]
+                                                .isUnderApproval ==
+                                            1 &&
+                                        installation_indent_page_controller
+                                                .service_installation_details_list[
+                                                    0]
+                                                .serviceStatus ==
+                                            "Completed"
+                                    ? true
+                                    : false,
                                 child: Row(
                                   children: [
                                     Text(
@@ -282,7 +303,8 @@ class MarkVisit extends StatelessWidget {
                                       ),
                                     ),
                                     Spacer(),
-                                    Text("Under Approval",
+                                    Text(
+                                      "Under Approval",
                                       style: GoogleFonts.poppins(
                                         color: AllColors.redColor,
                                         fontSize: AllFontSize.fourtine,
@@ -294,19 +316,25 @@ class MarkVisit extends StatelessWidget {
                                 ),
                               );
                             },
-
                           ),
-
                           SizedBox(
                             height: 3,
                           ),
                           Obx(
-                                () {
-                              return  Visibility(
-                                visible:  installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .isUnderApproval==0 &&  installation_indent_page_controller
-                                    .service_installation_details_list[0].serviceStatus=="Rescheduled"?true:false,
+                            () {
+                              return Visibility(
+                                visible: installation_indent_page_controller
+                                                .service_installation_details_list[
+                                                    0]
+                                                .isUnderApproval ==
+                                            0 &&
+                                        installation_indent_page_controller
+                                                .service_installation_details_list[
+                                                    0]
+                                                .serviceStatus ==
+                                            "Rescheduled"
+                                    ? true
+                                    : false,
                                 child: Row(
                                   children: [
                                     Text(
@@ -319,10 +347,17 @@ class MarkVisit extends StatelessWidget {
                                     ),
                                     Spacer(),
                                     Tooltip(
-                                      message:installation_indent_page_controller
-                                          .service_installation_details_list[0].recheduleApprovalRemark?? "" ,
-                                      child: Text(installation_indent_page_controller
-                                          .service_installation_details_list[0].recheduleApprovalStatus?? "",
+                                      message: installation_indent_page_controller
+                                              .service_installation_details_list[
+                                                  0]
+                                              .recheduleApprovalRemark ??
+                                          "",
+                                      child: Text(
+                                        installation_indent_page_controller
+                                                .service_installation_details_list[
+                                                    0]
+                                                .recheduleApprovalStatus ??
+                                            "",
                                         style: GoogleFonts.poppins(
                                           color: AllColors.redColor,
                                           fontSize: AllFontSize.fourtine,
@@ -340,12 +375,21 @@ class MarkVisit extends StatelessWidget {
                           SizedBox(
                             height: 3,
                           ),
-                          Obx(() {
-                              return  Visibility(
+                          Obx(
+                            () {
+                              return Visibility(
                                 visible: installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .isUnderApproval==1 && installation_indent_page_controller
-                                  .service_installation_details_list[0].serviceStatus=="Rescheduled"?true:false,
+                                                .service_installation_details_list[
+                                                    0]
+                                                .isUnderApproval ==
+                                            1 &&
+                                        installation_indent_page_controller
+                                                .service_installation_details_list[
+                                                    0]
+                                                .serviceStatus ==
+                                            "Rescheduled"
+                                    ? true
+                                    : false,
                                 child: Row(
                                   children: [
                                     Text(
@@ -357,7 +401,8 @@ class MarkVisit extends StatelessWidget {
                                       ),
                                     ),
                                     Spacer(),
-                                    Text("Under Approval",
+                                    Text(
+                                      "Under Approval",
                                       style: GoogleFonts.poppins(
                                         color: AllColors.redColor,
                                         fontSize: AllFontSize.fourtine,
@@ -371,117 +416,11 @@ class MarkVisit extends StatelessWidget {
                             },
                             // child:
                           ),
-
-                          /*SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Customer No",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .customerPhoneNo!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Customer Address",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .customerAddress!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Customer No",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Spacer(),
-                              Text(
-                                installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .customerNo!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 3,
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Date",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Spacer(),
-                              *//*Text(
-                                orderDate!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),*//*
-                            ],
-                          ),*/
                         ],
                       ),
                     ),
                     Container(
                         margin: EdgeInsets.only(top: 2),
-                       // padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
-                        //height: 200,
-                        // width: double.infinity,
                         decoration: BoxDecoration(boxShadow: <BoxShadow>[
                           BoxShadow(
                               offset: Offset(0.0, 1.0),
@@ -492,7 +431,8 @@ class MarkVisit extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
+                              padding: EdgeInsets.only(
+                                  left: 10.0, top: 5, right: 10, bottom: 10),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -509,9 +449,9 @@ class MarkVisit extends StatelessWidget {
                                   ),
                                   GestureDetector(
                                     onTap: () {
-                                      installation_indent_page_controller.getItemDetails();
+                                      installation_indent_page_controller
+                                          .getItemDetails();
                                       ShowItemDetailsDialog(context);
-
                                     },
                                     child: Row(
                                       children: [
@@ -525,19 +465,12 @@ class MarkVisit extends StatelessWidget {
                                         ),
                                         Spacer(),
                                         Container(
-                                          width: size.width*.55,
+                                          width: size.width * .55,
                                           child: Tooltip(
-                                            message:"${installation_indent_page_controller
-                                                .service_installation_details_list[0]
-                                                .itemName} (${installation_indent_page_controller
-                                                .service_installation_details_list[0]
-                                                .itemNo??""} )",
-                                            child: Text("${installation_indent_page_controller
-                                                .service_installation_details_list[0]
-                                                .itemName} (${installation_indent_page_controller
-                                                .service_installation_details_list[0]
-                                                .itemNo!})"
-                                              ,
+                                            message:
+                                                "${installation_indent_page_controller.service_installation_details_list[0].itemName} (${installation_indent_page_controller.service_installation_details_list[0].itemNo ?? ""} )",
+                                            child: Text(
+                                              "${installation_indent_page_controller.service_installation_details_list[0].itemName} (${installation_indent_page_controller.service_installation_details_list[0].itemNo!})",
                                               style: GoogleFonts.poppins(
                                                 color: AllColors.textColor,
                                                 fontSize: AllFontSize.fourtine,
@@ -554,7 +487,6 @@ class MarkVisit extends StatelessWidget {
                                   SizedBox(
                                     height: 3,
                                   ),
-
                                   Row(
                                     children: [
                                       Text(
@@ -567,15 +499,16 @@ class MarkVisit extends StatelessWidget {
                                       ),
                                       Spacer(),
                                       Container(
-                                        width: size.width*.55,
+                                        width: size.width * .55,
                                         child: Tooltip(
-                                          message:installation_indent_page_controller
-                                              .service_installation_details_list[0]
-                                              .categoryName?? "" ,
-                                          child: Text("${installation_indent_page_controller
-                                              .service_installation_details_list[0]
-                                              .categoryName?? ""} "
-                                            ,
+                                          message:
+                                              installation_indent_page_controller
+                                                      .service_installation_details_list[
+                                                          0]
+                                                      .categoryName ??
+                                                  "",
+                                          child: Text(
+                                            "${installation_indent_page_controller.service_installation_details_list[0].categoryName ?? ""} ",
                                             style: GoogleFonts.poppins(
                                               color: AllColors.textColor,
                                               fontSize: AllFontSize.fourtine,
@@ -591,8 +524,6 @@ class MarkVisit extends StatelessWidget {
                                   SizedBox(
                                     height: 3,
                                   ),
-
-
                                   Row(
                                     children: [
                                       Text(
@@ -606,7 +537,8 @@ class MarkVisit extends StatelessWidget {
                                       Spacer(),
                                       Text(
                                         installation_indent_page_controller
-                                            .service_installation_details_list[0]
+                                            .service_installation_details_list[
+                                                0]
                                             .serialNo!,
                                         style: GoogleFonts.poppins(
                                           color: AllColors.textColor,
@@ -632,7 +564,7 @@ class MarkVisit extends StatelessWidget {
                                       ),
                                       Spacer(),
                                       Text(
-                                        serViceTatDate! ,
+                                        serViceTatDate!,
                                         style: GoogleFonts.poppins(
                                           color: AllColors.textColor,
                                           fontSize: AllFontSize.fourtine,
@@ -642,142 +574,202 @@ class MarkVisit extends StatelessWidget {
                                       )
                                     ],
                                   ),
-
                                   SizedBox(
                                     height: 3,
                                   ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Qty",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        installation_indent_page_controller
+                                            .service_installation_details_list[
+                                                0]
+                                            .qty
+                                            .toString(),
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  )
                                 ],
                               ),
                             ),
-                            Obx(() {
-                              return Visibility(
-                                visible:  installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .complainReasonCode!=null &&  installation_indent_page_controller
-                                    .service_installation_details_list[0]
-                                    .complainReasonCode!=""  ?true:false,
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 2),
-                                  decoration: BoxDecoration(boxShadow: <BoxShadow>[
-                                    BoxShadow(
-                                        offset: Offset(0.0, 1.0),
-                                        color: Colors.black54,
-                                        blurRadius: 1.0)
-                                  ], color: Colors.white),
-                                  padding: EdgeInsets.only(left: 10.0, top: 5, right: 10, bottom: 10),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Complain Details ",
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.primaryDark1,
-                                          fontSize: AllFontSize.sisxteen,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 3,
-                                      ),
-
-                                             Row(
-                                            children: [
-                                              Text(
-                                                "Complain Code",
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.primaryDark1,
-                                                  fontSize: AllFontSize.fourtine,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Spacer(),
-                                              Container(
-                                                width: size.width*.55,
-                                                child: Tooltip(
-                                                  message:"${installation_indent_page_controller
-                                                      .service_installation_details_list[0]
-                                                      .complainReasonDesc?? ""}( ${installation_indent_page_controller
-                                                      .service_installation_details_list[0]
-                                                      .complainReasonCode?? ""} )",
-                                                  child: Text("${installation_indent_page_controller
-                                                      .service_installation_details_list[0]
-                                                      .complainReasonDesc?? ""}( ${installation_indent_page_controller
-                                                      .service_installation_details_list[0]
-                                                      .complainReasonCode?? ""} )",
-                                                    style: GoogleFonts.poppins(
-                                                      color: AllColors.textColor,
-                                                      fontSize: AllFontSize.fourtine,
-                                                      fontWeight: FontWeight.w500,
-                                                    ),
-                                                    overflow: TextOverflow.ellipsis,
-                                                    textAlign: TextAlign.end,
-                                                  ),
-                                                ),
-                                              )
-                                            ],
+                            Obx(
+                              () {
+                                return Visibility(
+                                  visible: installation_indent_page_controller
+                                                  .service_installation_details_list[
+                                                      0]
+                                                  .complainReasonCode !=
+                                              null &&
+                                          installation_indent_page_controller
+                                                  .service_installation_details_list[
+                                                      0]
+                                                  .complainReasonCode !=
+                                              ""
+                                      ? true
+                                      : false,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 2),
+                                    decoration: BoxDecoration(
+                                        boxShadow: <BoxShadow>[
+                                          BoxShadow(
+                                              offset: Offset(0.0, 1.0),
+                                              color: Colors.black54,
+                                              blurRadius: 1.0)
+                                        ],
+                                        color: Colors.white),
+                                    padding: EdgeInsets.only(
+                                        left: 10.0,
+                                        top: 5,
+                                        right: 10,
+                                        bottom: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Complain Details ",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.sisxteen,
+                                            fontWeight: FontWeight.w700,
                                           ),
-                                      SizedBox(
-                                        height: 3,
-                                      ),
-                                      Obx(
-                                            () {
-                                          return Visibility(
-                                            visible: installation_indent_page_controller
-                                                .service_installation_details_list[0]
-                                                .complainRemark!=null &&  installation_indent_page_controller
-                                                .service_installation_details_list[0]
-                                                .complainRemark!="" &&  installation_indent_page_controller
-                                                .service_installation_details_list[0]
-                                                .complainRemark!.isNotEmpty?true:false ,
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  "Complain Remark",
+                                        ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              "Complain Code",
+                                              style: GoogleFonts.poppins(
+                                                color: AllColors.primaryDark1,
+                                                fontSize: AllFontSize.fourtine,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Container(
+                                              width: size.width * .55,
+                                              child: Tooltip(
+                                                message:
+                                                    "${installation_indent_page_controller.service_installation_details_list[0].complainReasonDesc ?? ""}( ${installation_indent_page_controller.service_installation_details_list[0].complainReasonCode ?? ""} )",
+                                                child: Text(
+                                                  "${installation_indent_page_controller.service_installation_details_list[0].complainReasonDesc ?? ""}( ${installation_indent_page_controller.service_installation_details_list[0].complainReasonCode ?? ""} )",
                                                   style: GoogleFonts.poppins(
-                                                    color: AllColors.primaryDark1,
-                                                    fontSize: AllFontSize.fourtine,
+                                                    color: AllColors.textColor,
+                                                    fontSize:
+                                                        AllFontSize.fourtine,
                                                     fontWeight: FontWeight.w500,
                                                   ),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.end,
                                                 ),
-                                                Spacer(),
-                                                Container(
-                                                  width: size.width*.55,
-                                                  child: Tooltip(
-                                                    message:installation_indent_page_controller
-                                                        .service_installation_details_list[0]
-                                                        .complainRemark?? "" ,
-                                                    child: Text(
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        Obx(
+                                          () {
+                                            return Visibility(
+                                              visible: installation_indent_page_controller
+                                                              .service_installation_details_list[
+                                                                  0]
+                                                              .complainRemark !=
+                                                          null &&
                                                       installation_indent_page_controller
-                                                          .service_installation_details_list[0]
-                                                          .complainRemark?? "",
-                                                      style: GoogleFonts.poppins(
-                                                        color: AllColors.textColor,
-                                                        fontSize: AllFontSize.fourtine,
-                                                        fontWeight: FontWeight.w500,
-                                                      ),
-                                                      overflow: TextOverflow.ellipsis,
-                                                      textAlign: TextAlign.end,
+                                                              .service_installation_details_list[
+                                                                  0]
+                                                              .complainRemark !=
+                                                          "" &&
+                                                      installation_indent_page_controller
+                                                          .service_installation_details_list[
+                                                              0]
+                                                          .complainRemark!
+                                                          .isNotEmpty
+                                                  ? true
+                                                  : false,
+                                              child: Row(
+                                                children: [
+                                                  Text(
+                                                    "Complain Remark",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      fontSize:
+                                                          AllFontSize.fourtine,
+                                                      fontWeight:
+                                                          FontWeight.w500,
                                                     ),
                                                   ),
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        },
-
-                                      ),
-                                    ],
+                                                  Spacer(),
+                                                  Container(
+                                                    width: size.width * .55,
+                                                    child: Tooltip(
+                                                      message: installation_indent_page_controller
+                                                              .service_installation_details_list[
+                                                                  0]
+                                                              .complainRemark ??
+                                                          "",
+                                                      child: Text(
+                                                        installation_indent_page_controller
+                                                                .service_installation_details_list[
+                                                                    0]
+                                                                .complainRemark ??
+                                                            "",
+                                                        style:
+                                                            GoogleFonts.poppins(
+                                                          color: AllColors
+                                                              .textColor,
+                                                          fontSize: AllFontSize
+                                                              .fourtine,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                        ),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        textAlign:
+                                                            TextAlign.end,
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              );
-
-                            },
-                             // child:
+                                );
+                              },
+                              // child:
                             ),
                             Container(
                               //height: size.height*.13,
-                              margin: EdgeInsets.only(top: 5,bottom: 5),
-                              padding: EdgeInsets.only(left: 5.0, top: 0, right: 5),
+                              margin: EdgeInsets.only(top: 5, bottom: 5),
+                              padding:
+                                  EdgeInsets.only(left: 5.0, top: 0, right: 5),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -786,7 +778,8 @@ class MarkVisit extends StatelessWidget {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      ElevatedButton.icon(
+                                      //todo producat button commentted...
+                                      /*ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: AllColors.textColor2,
                                           side: BorderSide(
@@ -812,22 +805,228 @@ class MarkVisit extends StatelessWidget {
                                               .primaryDark1, // Icon color
                                         ),
                                         label: Container(
-                                          width: size.width * .15,
+                                          width: size.width * .25,
                                           child: Tooltip(
                                             message: "Upload Product",
-                                            child: Text(
-                                              "Product",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                            child: Obx( () {
+                                              List<FileList> image_count_file_list=[];
+                                              if(installation_indent_page_controller.service_installation_details_list.length>0)
+                                                image_count_file_list=installation_indent_page_controller.service_installation_details_list[0].fileList!.where((element) => element.documentType!.toLowerCase()=='Installation_Product'.toLowerCase()).toList();
+                                              return Text(
+                                                "Product ( ${image_count_file_list.length.toString()} )",
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              );
+                                            },
                                             ),
                                           ),
                                         ),
+                                      ),*/
+
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        // Allows overflow for the badge
+                                        children: [
+                                          ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  AllColors.textColor2,
+                                              side: BorderSide(
+                                                color: AllColors.primaryDark1,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              installation_indent_page_controller
+                                                  .image_description_flag
+                                                  .value = "";
+                                              installation_indent_page_controller
+                                                  .image_description_controller
+                                                  .clear();
+                                              installation_indent_page_controller
+                                                      .image_flag.value =
+                                                  "Installation_Product";
+                                              showConfirmationImageDialog(
+                                                  context);
+                                            },
+                                            icon: Icon(
+                                              Icons.upload,
+                                              color: AllColors
+                                                  .primaryDark1, // Icon color
+                                            ),
+                                            label: Container(
+                                              width: size.width * .15,
+                                              child: Tooltip(
+                                                message: "Upload Product",
+                                                child: Text(
+                                                    "Product",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      fontSize:
+                                                          AllFontSize.fourtine,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
+                                                  ),
+
+                                              ),
+                                            ),
+                                          ),
+                                          // Notification Badge
+                                          Positioned(
+                                            top: 0,
+                                            // Adjust the position of the badge
+                                            right: 2,
+                                            // Adjust the position of the badge
+                                            child: Obx(() {
+                                              int imageCount =
+                                                  installation_indent_page_controller
+                                                      .service_installation_details_list[
+                                                          0]
+                                                      .fileList!
+                                                      .where((element) =>
+                                                          element.documentType!
+                                                              .toLowerCase() ==
+                                                          'Installation_Product'
+                                                              .toLowerCase())
+                                                      .toList()
+                                                      .length;
+                                              return Visibility(
+                                                visible: imageCount > 0,
+                                                child: Container(
+                                                  width: 18,
+                                                  height: 18,
+                                                 padding: EdgeInsets.only(left: 7),
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.red,
+                                                    // Badge background color
+                                                    shape: BoxShape.circle,
+                                                  ),
+                                                  child: Text(
+                                                    '$imageCount',
+                                                    style:GoogleFonts.poppins(
+                                                      color: AllColors.blackColor,
+                                                      fontSize: AllFontSize.twelve,
+                                                        fontWeight:
+                                                        FontWeight.w600
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            }),
+                                          ),
+                                        ],
                                       ),
-                                      ElevatedButton.icon(
+
+                                      Stack(
+                                        clipBehavior: Clip.none,
+                                        children: [
+                                          ElevatedButton.icon(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  AllColors.textColor2,
+                                              side: BorderSide(
+                                                color: AllColors.primaryDark1,
+                                                width: 1,
+                                              ),
+                                            ),
+                                            onPressed: () {
+                                              installation_indent_page_controller
+                                                  .image_description_flag
+                                                  .value = "Certificate";
+                                              installation_indent_page_controller
+                                                  .image_description_controller
+                                                  .clear();
+                                              installation_indent_page_controller
+                                                      .image_flag.value =
+                                                  "Installation_Certificate";
+                                              showConfirmationImageDialog(
+                                                  context);
+                                            },
+                                            icon: Icon(
+                                              Icons.list_alt,
+                                              // Replace with your desired icon
+                                              color: AllColors
+                                                  .primaryDark1, // Icon color
+                                            ),
+                                            label: Container(
+                                              width: size.width * .2,
+                                              child: Tooltip(
+                                                message: "Upload Certificate",
+                                                child: Text(
+                                                      "Certificate",
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color: AllColors
+                                                            .primaryDark1,
+                                                        fontSize: AllFontSize
+                                                            .fourtine,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                      ),
+                                                    ),
+                                              ),
+                                            ),
+                                          ),
+
+                                          Positioned(
+                                            top: -5,
+                                            left: 4,
+                                            child: Obx(() {
+                                              int imageCount =
+                                                  installation_indent_page_controller
+                                                      .service_installation_details_list[
+                                                  0]
+                                                      .fileList!
+                                                      .where((element) =>
+                                                  element.documentType!
+                                                      .toLowerCase() ==
+                                                      'Installation_Certificate'
+                                                          .toLowerCase())
+                                                      .toList()
+                                                      .length;
+                                              return Visibility(
+                                                visible: imageCount > 0,
+                                                child: Container(
+                                                  width: 16,
+                                                  height: 16,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.red,
+                                                      shape: BoxShape.circle
+                                                  ),
+                                                  child:Center(
+                                                    child: Text(
+                                                      '$imageCount',
+                                                      style:  GoogleFonts.poppins(
+                                                        color: AllColors.blackColor,
+                                                        fontSize: AllFontSize.twelve,
+                                                        fontWeight: FontWeight.w500,
+                                                      ),
+
+                                                    ),
+                                                  ),
+
+                                                ),
+                                              );
+                                            },
+
+                                            ),
+                                          )
+                                        ],
+                                      ),
+
+                                      //todo certificate button....
+
+                                      /*ElevatedButton.icon(
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: AllColors.textColor2,
                                           side: BorderSide(
@@ -852,123 +1051,235 @@ class MarkVisit extends StatelessWidget {
                                               .primaryDark1, // Icon color
                                         ),
                                         label: Container(
-                                          width: size.width * .2,
+                                          width: size.width * .28,
                                           child: Tooltip(
                                             message: "Upload Certificate",
-                                            child: Text(
-                                              "Certificate",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: GoogleFonts.poppins(
-                                                color: AllColors.primaryDark1,
-                                                fontSize: AllFontSize.fourtine,
-                                                fontWeight: FontWeight.w500,
-                                              ),
+                                            child: Obx(() {
+                                              List<FileList> image_count_file_list=[];
+                                              if(installation_indent_page_controller.service_installation_details_list.length>0)
+                                                image_count_file_list=installation_indent_page_controller.service_installation_details_list[0].fileList!.where((element) => element.documentType!.toLowerCase()=='Installation_Certificate'.toLowerCase()).toList();
+                                              return Text(
+                                                "Certificate ( ${image_count_file_list.length.toString()} )",
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.primaryDark1,
+                                                  fontSize: AllFontSize.fourtine,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              );
+                                            },
+
                                             ),
                                           ),
                                         ),
-                                      ),
+                                      ),*/
                                     ],
                                   )),
-                                  SizedBox(height: 3,),
+                                  SizedBox(
+                                    height: 2,
+                                  ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Obx(
-                                          () {
-                                          return Visibility(
-                                            visible:
-                                            installation_indent_page_controller
-                                                .  service_installation_details_list[0].serviceStatus ==
-                                                "Completed"
-                                                ? false
-                                                : true,
-                                            child: ElevatedButton.icon(
-                                                style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                    AllColors.textColor2,
-                                                    side: BorderSide(
-                                                        color: AllColors
-                                                            .primaryDark1,
-                                                        width: 1)),
-                                                onPressed: () {
-                                                  installation_indent_page_controller.is_indent_type_dropDown.value=true;
-                                                  installation_indent_page_controller.is_Showindent.value=false;
-                                                  Get.toNamed(RoutesName.installation_Indent_view);
 
-
-                                                 /* installation_indent_page_controller
-                                                      .IndentHeaderCreateApi(
-                                                      "");*/
-                                                },
-                                                icon: Icon(Icons.add_shopping_cart,color: AllColors.primaryDark1,),
-                                                label: Container(
-                                                  child:Tooltip(
-                                                    message: "Stock Indent",
-                                                    child: Text(
-                                                      "Stock Indent",
-                                                      style: GoogleFonts.poppins(
-                                                        color: AllColors
-                                                            .primaryDark1,
-                                                        fontSize:
-                                                        AllFontSize.fourtine,
-                                                        fontWeight:
-                                                        FontWeight.w500,
-                                                      ),
-                                                    ),
-                                                  ) ,
-                                                ),
-                                               // child:
-                                            ),
-                                          );
-                                        },
-                                      ),
                                       Obx(() {
                                         return Visibility(
-                                          visible: installation_indent_page_controller.  service_installation_details_list[0].serviceStatus =="Completed"?false:true,
-                                          child: ElevatedButton.icon(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: AllColors.textColor2,
-                                              side: BorderSide(
-                                                color: AllColors.primaryDark1,
-                                                width: 1,
+                                          visible: installation_indent_page_controller
+                                              .service_installation_details_list[0]
+                                              .serviceStatus != "Completed",
+                                          child: Stack(
+                                            children: [
+                                              ElevatedButton.icon(
+                                                style: ElevatedButton.styleFrom(
+                                                  backgroundColor: AllColors.textColor2,
+                                                  side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                                ),
+                                                onPressed: () {
+                                                  installation_indent_page_controller.is_indent_type_dropDown.value = true;
+                                                  installation_indent_page_controller.is_Showindent.value = false;
+                                                  Get.toNamed(RoutesName.installation_Indent_view);
+                                                },
+                                                icon: Icon(Icons.add_shopping_cart, color: AllColors.primaryDark1),
+                                                label: Tooltip(
+                                                  message: "Stock Indent",
+                                                  child: Text(
+                                                    "Stock Indent",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.primaryDark1,
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            onPressed: () {
-                                              installation_indent_page_controller
-                                                  .indent_remark_controller
-                                                  .clear();
-                                              remarkDialog(context);
+                                              // Badge for notification
 
-                                              // Your onPressed logic here
-                                            },
-                                            icon: Icon(
-                                              Icons.check,
-                                              // Replace with your desired icon
-                                              color: AllColors
-                                                  .primaryDark1, // Icon color
-                                            ),
-                                            label: Container(
-                                            //  margin: EdgeInsets.only(right: size.width*.1),
-                                             // width: size.width * .1,
-                                              child: Tooltip(
-                                                message: "Mark Complete",
-                                                child: Text(
-                                                  "Complete",
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: GoogleFonts.poppins(
+                                              Obx(() {
+                                                return   Visibility(
+                                                  visible:   installation_indent_page_controller.service_indent_header_list.length>0,
+                                                  child: Positioned(
+                                                    right: 0,  // Adjust the position of the badge
+                                                    top: 0,
+                                                    child: Container(
+                                                      width: 18,
+                                                      height: 18,
+                                                      //padding: EdgeInsets.only(left: 5),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors.red,
+                                                          shape: BoxShape.circle// Badge color
+                                                        //borderRadius: BorderRadius.circular(20),
+                                                      ),
+                                                      constraints: BoxConstraints(
+                                                        minWidth: 16,
+                                                        minHeight: 16,
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          installation_indent_page_controller.service_indent_header_list.length.toString(),  // Dynamic notification count can be placed here
+                                                          style: GoogleFonts.poppins(
+                                                            color: AllColors.primaryDark1,
+                                                            fontSize: AllFontSize.twelve,
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                          textAlign: TextAlign.center,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              },)
+                                            ],
+                                          ),
+                                        );
+                                      }),
+
+
+
+                                      /* Obx(
+                                                () {
+                                              return Visibility(
+                                                visible:
+                                                installation_indent_page_controller
+                                                    .service_installation_details_list[
+                                                0]
+                                                    .serviceStatus ==
+                                                    "Completed"
+                                                    ? false
+                                                    : true,
+                                                child: ElevatedButton.icon(
+                                                  style: ElevatedButton.styleFrom(
+                                                      backgroundColor:
+                                                      AllColors.textColor2,
+                                                      side: BorderSide(
+                                                          color: AllColors
+                                                              .primaryDark1,
+                                                          width: 1)),
+                                                  onPressed: () {
+                                                    installation_indent_page_controller
+                                                        .is_indent_type_dropDown
+                                                        .value = true;
+                                                    installation_indent_page_controller
+                                                        .is_Showindent
+                                                        .value = false;
+                                                    Get.toNamed(RoutesName
+                                                        .installation_Indent_view);
+                                                  },
+                                                  icon: Icon(
+                                                    Icons.add_shopping_cart,
                                                     color: AllColors.primaryDark1,
-                                                    fontSize: AllFontSize.fourtine,
-                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  label: Container(
+                                                    child: Tooltip(
+                                                      message: "Stock Indent",
+                                                      child: Text(
+                                                        "Stock Indent",
+                                                        style: GoogleFonts.poppins(
+                                                          color: AllColors
+                                                              .primaryDark1,
+                                                          fontSize:
+                                                          AllFontSize.fourtine,
+                                                          fontWeight:
+                                                          FontWeight.w500,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  // child:
+                                                ),
+                                              );
+                                            },
+                                          ),*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      Obx(
+                                        () {
+                                          return Visibility(
+                                            visible:
+                                                installation_indent_page_controller
+                                                            .service_installation_details_list[
+                                                                0]
+                                                            .serviceStatus ==
+                                                        "Completed"
+                                                    ? false
+                                                    : true,
+                                            child: ElevatedButton.icon(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    AllColors.textColor2,
+                                                side: BorderSide(
+                                                  color: AllColors.primaryDark1,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              onPressed: () {
+                                                installation_indent_page_controller
+                                                    .indent_remark_controller
+                                                    .clear();
+                                                remarkDialog(context);
+
+                                                // Your onPressed logic here
+                                              },
+                                              icon: Icon(
+                                                Icons.check,
+                                                // Replace with your desired icon
+                                                color: AllColors
+                                                    .primaryDark1, // Icon color
+                                              ),
+                                              label: Container(
+                                                child: Tooltip(
+                                                  message: "Mark Complete",
+                                                  child: Text(
+                                                    "Complete",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors
+                                                          .primaryDark1,
+                                                      fontSize:
+                                                          AllFontSize.fourtine,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          ),
-                                        );
-                                      },
+                                          );
+                                        },
                                       ),
-
                                     ],
                                   )
                                 ],
@@ -982,9 +1293,10 @@ class MarkVisit extends StatelessWidget {
                     //SizedBox(height: 5,),
                     Obx(
                       () {
-                        return  Visibility(
-                          visible:installation_indent_page_controller.service_indent_header_list.length >
-                              0 &&
+                        return Visibility(
+                          visible: installation_indent_page_controller
+                                      .service_indent_header_list.length >
+                                  0 &&
                               installation_indent_page_controller
                                   .service_indent_header_list.isNotEmpty,
                           child: Divider(
@@ -993,7 +1305,7 @@ class MarkVisit extends StatelessWidget {
                           ),
                         );
                       },
-                     // child:
+                      // child:
                     ),
                   ],
                 ),
@@ -1027,7 +1339,7 @@ class MarkVisit extends StatelessWidget {
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-               /* SizedBox(
+                /* SizedBox(
                   width: size.width * .02,
                 ),*/
                 Spacer(),
@@ -1054,7 +1366,7 @@ class MarkVisit extends StatelessWidget {
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-               /* SizedBox(
+                /* SizedBox(
                   width: size.width * .01,
                 ),*/
                 Spacer(),
@@ -1112,7 +1424,7 @@ class MarkVisit extends StatelessWidget {
                 ),
                 Spacer(),
                 Container(
-                 // width: size.width * .25,
+                  // width: size.width * .25,
                   child: Text(
                     installation_indent_page_controller
                         .service_indent_header_list[index].indentStatus!,
@@ -1137,16 +1449,14 @@ class MarkVisit extends StatelessWidget {
         installation_indent_page_controller
             .service_indent_header_list.isNotEmpty) {
       return Container(
-        margin: EdgeInsets.only(top: 2,bottom: 2),
-         height: size.height * .12,
+        margin: EdgeInsets.only(top: 2, bottom: 2),
+        height: size.height * .12,
         child: ListView.separated(
           shrinkWrap: true,
           separatorBuilder: (context, index) {
             return VerticalDivider(
-
               color: AllColors.bluegrayColor,
               width: 1.0,
-
             );
           },
           scrollDirection: Axis.horizontal,
@@ -1161,8 +1471,6 @@ class MarkVisit extends StatelessWidget {
     } else {
       return Center(
         child: Text(""),
-        /*Image.asset(
-          "assests/images/no_data_remove.png", width: 300, height: 180,),*/
       );
     }
   }
@@ -1177,7 +1485,7 @@ class MarkVisit extends StatelessWidget {
                   color: AllColors.primaryDark1,
                 )),
             content: Container(
-             // height: 180,
+              // height: 180,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -1220,9 +1528,6 @@ class MarkVisit extends StatelessWidget {
                       installation_indent_page_controller.capture_flag.value =
                           "Capture";
                       installation_indent_page_controller.upLoadImage(context);
-
-                      // installation_indent_page_controller.upLoadImage(context);
-                      //Navigator.of(context).pop();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -1230,7 +1535,8 @@ class MarkVisit extends StatelessWidget {
                         () {
                           return Visibility(
                             visible: installation_indent_page_controller
-                                        .  service_installation_details_list[0].serviceStatus  ==
+                                        .service_installation_details_list[0]
+                                        .serviceStatus ==
                                     "Completed"
                                 ? false
                                 : true,
@@ -1259,9 +1565,10 @@ class MarkVisit extends StatelessWidget {
                   Obx(
                     () {
                       return Visibility(
-                        visible:installation_indent_page_controller
-                            .  service_installation_details_list[0].serviceStatus  ==
-                            "Completed"
+                        visible: installation_indent_page_controller
+                                    .service_installation_details_list[0]
+                                    .serviceStatus ==
+                                "Completed"
                             ? false
                             : true,
                         child: Divider(
@@ -1270,25 +1577,24 @@ class MarkVisit extends StatelessWidget {
                         ),
                       );
                     },
-                   // child:
+                    // child:
                   ),
                   InkWell(
                     onTap: () async {
                       installation_indent_page_controller.capture_flag.value =
-                      "Gallery";
-                      installation_indent_page_controller.upLoadGalleryImage(context);
-
-                      // installation_indent_page_controller.upLoadImage(context);
-                      //Navigator.of(context).pop();
+                          "Gallery";
+                      installation_indent_page_controller
+                          .upLoadGalleryImage(context);
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Obx(
-                            () {
+                        () {
                           return Visibility(
                             visible: installation_indent_page_controller
-                                .  service_installation_details_list[0].serviceStatus  ==
-                                "Completed"
+                                        .service_installation_details_list[0]
+                                        .serviceStatus ==
+                                    "Completed"
                                 ? false
                                 : true,
                             child: Row(
@@ -1304,7 +1610,7 @@ class MarkVisit extends StatelessWidget {
                                 Text(
                                   'Gallery',
                                   style:
-                                  TextStyle(color: AllColors.primaryDark1),
+                                      TextStyle(color: AllColors.primaryDark1),
                                 ),
                               ],
                             ),
@@ -1313,12 +1619,12 @@ class MarkVisit extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   Obx(
                     () {
                       return Visibility(
                           visible: installation_indent_page_controller
-                                      .  service_installation_details_list[0].serviceStatus  ==
+                                      .service_installation_details_list[0]
+                                      .serviceStatus ==
                                   "Completed"
                               ? false
                               : true,
@@ -1356,7 +1662,7 @@ class MarkVisit extends StatelessWidget {
                 ),
               ),
 
-             /* SizedBox(
+              /* SizedBox(
                 height: 8.0,
               ),*/
             ],
@@ -1391,11 +1697,6 @@ class MarkVisit extends StatelessWidget {
                   onPressed: () {
                     Navigator.pop(context);
                     GeoTaggingMarkDialog(context);
-                 /*   installation_indent_page_controller
-                        .InstallationMarkComplete(
-                            installation_indent_page_controller
-                                .service_installation_details_list[0].id
-                                .toString());*/
                   },
                   child: Container(
                     width: 80,
@@ -1418,105 +1719,123 @@ class MarkVisit extends StatelessWidget {
     );
   }
 
-
   Widget setupAlertDialoadContainer() {
-    if(installation_indent_page_controller.item_details_list.length>0
-       && installation_indent_page_controller.item_details_list.isNotEmpty
-    && installation_indent_page_controller.item_details_list!=null){
-      return
-        Obx(
-          () {
-          return   Container(
-              height: 300.0, // Change as per your requirement
-              width: 300.0, // Change as per your requirement
-              child: ListView.separated(
-                separatorBuilder: (context, index) {
-                  return Divider(height: 1,color: AllColors.lightgreyColor,);
-                },
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount:installation_indent_page_controller.item_details_list.length ,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    title:Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-
-                        Row(
-                          children: [
-                            Text("Item :",
-                              style:  GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.fourtine),),
-                            Spacer(),
-                            Container(
-                              width: size.width*.2,
-                              child: Tooltip(
-                                message:"${installation_indent_page_controller.item_details_list[index].displayName?? ""}${installation_indent_page_controller.item_details_list[index].componentProductCode.toString()})" ,
-                                child: Text("${installation_indent_page_controller.item_details_list[index].displayName?? ""}""(${installation_indent_page_controller.item_details_list[index].componentProductCode.toString()})",
-                                  style:  GoogleFonts.poppins(
-                                      color: AllColors.textColor,
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: AllFontSize.fourtine),
-                                  overflow: TextOverflow.ellipsis,
-
-                                ),
+    if (installation_indent_page_controller.item_details_list.length > 0 &&
+        installation_indent_page_controller.item_details_list.isNotEmpty &&
+        installation_indent_page_controller.item_details_list != null) {
+      return Obx(
+        () {
+          return Container(
+            height: 300.0, // Change as per your requirement
+            width: 300.0, // Change as per your requirement
+            child: ListView.separated(
+              separatorBuilder: (context, index) {
+                return Divider(
+                  height: 1,
+                  color: AllColors.lightgreyColor,
+                );
+              },
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              itemCount:
+                  installation_indent_page_controller.item_details_list.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  title: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            "Item :",
+                            style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AllFontSize.fourtine),
+                          ),
+                          Spacer(),
+                          Container(
+                            width: size.width * .2,
+                            child: Tooltip(
+                              message:
+                                  "${installation_indent_page_controller.item_details_list[index].displayName ?? ""}${installation_indent_page_controller.item_details_list[index].componentProductCode.toString()})",
+                              child: Text(
+                                "${installation_indent_page_controller.item_details_list[index].displayName ?? ""}"
+                                "(${installation_indent_page_controller.item_details_list[index].componentProductCode.toString()})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: AllFontSize.fourtine),
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            )
-
-                          ],
-                        ),
-                        SizedBox(height: 4,),
-                        Row(
-                          children: [
-                            Text("Quality :",
-                              style:  GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.fourtine),),
-                            Spacer(),
-                            Text(installation_indent_page_controller.item_details_list[index].componentQuantity.toString(),
-                              style:  GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.fourtine),)
-
-                          ],
-                        ),
-                        SizedBox(height: 4,),
-                        Row(
-                          children: [
-                            Text("Price :",
-                              style:  GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.fourtine),),
-                            Spacer(),
-                            Text(installation_indent_page_controller.item_details_list[index].componentPrice.toString(),
-                              style:  GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.fourtine),)
-
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-         // child:
-        );
-    }else{
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Quality :",
+                            style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AllFontSize.fourtine),
+                          ),
+                          Spacer(),
+                          Text(
+                            installation_indent_page_controller
+                                .item_details_list[index].componentQuantity
+                                .toString(),
+                            style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AllFontSize.fourtine),
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "Price :",
+                            style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AllFontSize.fourtine),
+                          ),
+                          Spacer(),
+                          Text(
+                            installation_indent_page_controller
+                                .item_details_list[index].componentPrice
+                                .toString(),
+                            style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontWeight: FontWeight.w500,
+                                fontSize: AllFontSize.fourtine),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
+        // child:
+      );
+    } else {
       return Container(
         height: 300.0, // Change as per your requirement
         width: 300.0,
-        child:Center(
-          child:  Image.asset(
+        child: Center(
+          child: Image.asset(
             "assests/images/no_data_remove.png",
             width: 300,
             height: 180,
@@ -1524,13 +1843,9 @@ class MarkVisit extends StatelessWidget {
         ),
       );
     }
-
-
-
-
-
   }
-  void ShowItemDetailsDialog(BuildContext context){
+
+  void ShowItemDetailsDialog(BuildContext context) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1539,28 +1854,36 @@ class MarkVisit extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text('Item  Details',style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontWeight: FontWeight.w500,
-                        fontSize: AllFontSize.sisxteen),),
+                    Text(
+                      'Item  Details',
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontWeight: FontWeight.w500,
+                          fontSize: AllFontSize.sisxteen),
+                    ),
                     Spacer(),
-                    IconButton(onPressed: () {
-                      Get.back();
-                    }, icon: Icon(Icons.cancel,color: AllColors.primaryDark1,size: 20,
-                    ))
+                    IconButton(
+                        onPressed: () {
+                          Get.back();
+                        },
+                        icon: Icon(
+                          Icons.cancel,
+                          color: AllColors.primaryDark1,
+                          size: 20,
+                        ))
                   ],
                 ),
-                Divider(color: AllColors.lightgreyColor,height: 1,)
+                Divider(
+                  color: AllColors.lightgreyColor,
+                  height: 1,
+                )
               ],
             ),
-
-
-
-            content: Obx(() {
-              return setupAlertDialoadContainer();
-            },
-
-               // child:
+            content: Obx(
+              () {
+                return setupAlertDialoadContainer();
+              },
+              // child:
             ),
           );
         });
@@ -1586,7 +1909,9 @@ class MarkVisit extends StatelessWidget {
                   color: AllColors.primaryDark1,
                 ),
               ),
-              SizedBox(height: 5,),
+              SizedBox(
+                height: 5,
+              ),
               Text(
                 ' Do you want to geo-Tagged for this Service?',
                 style: GoogleFonts.poppins(
@@ -1598,11 +1923,11 @@ class MarkVisit extends StatelessWidget {
             ],
           ),
           content: Container(
-          // height: size.height * 0.1,
+            // height: size.height * 0.1,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-              //  SizedBox(height: size.height*.01,),
+                //  SizedBox(height: size.height*.01,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -1613,12 +1938,12 @@ class MarkVisit extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                          Navigator.pop(context);
-                          installation_indent_page_controller
-                              .InstallationMarkComplete(
-                              installation_indent_page_controller
-                                  .service_installation_details_list[0].id
-                                  .toString());
+                        Navigator.pop(context);
+                        installation_indent_page_controller
+                            .InstallationMarkComplete(
+                                installation_indent_page_controller
+                                    .service_installation_details_list[0].id
+                                    .toString());
                         // Your installation mark complete logic here
                       },
                       child: Container(
@@ -1641,17 +1966,20 @@ class MarkVisit extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        if(installation_indent_page_controller
-                            .service_installation_details_list[0].isGeoTag==1){
-                          Utils.showErrorToastification("Message", "Geo Tag is Mandatory So You Can Not Skip This Process ");
+                        if (installation_indent_page_controller
+                                .service_installation_details_list[0]
+                                .isGeoTag ==
+                            1) {
+                          Utils.showErrorToastification("Message",
+                              "Geo Tag is Mandatory So You Can Not Skip This Process ");
                           return;
-                        }else{
+                        } else {
                           Navigator.pop(context);
                           installation_indent_page_controller
                               .InstallationMarkComplete(
-                              installation_indent_page_controller
-                                  .service_installation_details_list[0].id
-                                  .toString());
+                                  installation_indent_page_controller
+                                      .service_installation_details_list[0].id
+                                      .toString());
                         }
                       },
                       child: Container(
@@ -1669,7 +1997,6 @@ class MarkVisit extends StatelessWidget {
                     ),
                   ],
                 ),
-                //Spacer(),
               ],
             ),
           ),
@@ -1678,6 +2005,12 @@ class MarkVisit extends StatelessWidget {
     );
   }
 
-
-
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri(scheme: "tel", path: phoneNumber);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      print("Can't open dial pad.");
+    }
+  }
 }

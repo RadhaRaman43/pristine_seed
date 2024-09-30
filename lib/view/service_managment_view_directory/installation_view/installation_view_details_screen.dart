@@ -8,6 +8,7 @@ import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -191,16 +192,27 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                                 ),
                               ),
                               Spacer(),
-                              Text(
-                                installation_deatils_page_controller
-                                    .service_installation_details_list[0]
-                                    .customerPhoneNo!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: () {
+
+                                  openDialPad(installation_deatils_page_controller
+                                      .service_installation_details_list[0]
+                                      .customerPhoneNo!);
+
+                                },
+                                child: Text(
+                                  installation_deatils_page_controller
+                                      .service_installation_details_list[0]
+                                      .customerPhoneNo!,
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AllColors.textColor,
+                                  ),
+                                  textAlign: TextAlign.end,
                                 ),
-                                  textAlign: TextAlign.end
                               ),
                             ],
                           ),
@@ -489,6 +501,33 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                                       Spacer(),
                                       Text(
                                         serViceTatDate!,
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Qty",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        installation_deatils_page_controller
+                                            .service_installation_details_list[
+                                        0].qty.toString(),
                                         style: GoogleFonts.poppins(
                                           color: AllColors.textColor,
                                           fontSize: AllFontSize.fourtine,
@@ -1218,6 +1257,7 @@ class InstallationViewDetailsScreen extends StatelessWidget {
                                               onPressed: () {
                                                 installation_deatils_page_controller
                                                     .InstallationMarkVisitApi();
+
                                                 //  markVisitDialog(context);
                                               },
                                               child: Text(
@@ -2645,6 +2685,14 @@ class InstallationViewDetailsScreen extends StatelessWidget {
     )
         : Text("");
 
+  }
 
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri(scheme: "tel", path: phoneNumber);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      print("Can't open dial pad.");
+    }
   }
   }

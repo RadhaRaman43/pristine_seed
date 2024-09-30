@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -193,16 +194,25 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Spacer(),
-                                Text(
-                                  corrective_deatils_page_controller
-                                      .service_corrective_details_list[0]
-                                      .customerPhoneNo!,
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w500,
+                                InkWell(
+                                  onTap: () {
+                                    openDialPad( corrective_deatils_page_controller
+                                        .service_corrective_details_list[0]
+                                        .customerPhoneNo!);
+                                  },
+                                  child: Text(
+                                    corrective_deatils_page_controller
+                                        .service_corrective_details_list[0]
+                                        .customerPhoneNo!,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AllColors.textColor,
+                                    ),
+                                    textAlign: TextAlign.end,
                                   ),
-                                  textAlign: TextAlign.end,
                                 ),
                               ],
                             ),
@@ -494,6 +504,35 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                           textAlign: TextAlign.end,
                                         )
                                       ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
+                                    ),
+
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "Qty",
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.primaryDark1,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Text(corrective_deatils_page_controller.service_corrective_details_list[0].qty.toString(),
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.end,
+                                        )
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 3,
                                     ),
                                   ],
                                 ),
@@ -873,11 +912,7 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                 );
                               },),
 
-
-
-
-                              Obx(
-                                    () {
+                              Obx(() {
                                   return Visibility(
                                     visible: corrective_deatils_page_controller
                                         .service_corrective_details_list[
@@ -1044,9 +1079,6 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
                                alignment: Alignment.bottomLeft,
                                 padding: EdgeInsets.all(5),
                                 child: Wrap(
-                               //   crossAxisAlignment: WrapCrossAlignment.center,
-                                 //crossAxisAlignment: WrapCrossAlignment.start,
-
                                  spacing: 20.0,
                                  runAlignment: WrapAlignment.spaceBetween,
                                   alignment: WrapAlignment.spaceBetween,
@@ -2667,5 +2699,12 @@ class CorrectiveViewDetailsScreen extends StatelessWidget {
 
 
 
-
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri(scheme: "tel", path: phoneNumber);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      print("Can't open dial pad.");
+    }
+  }
 }

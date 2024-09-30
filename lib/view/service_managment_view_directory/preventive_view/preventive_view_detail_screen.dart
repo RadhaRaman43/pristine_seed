@@ -8,6 +8,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -191,16 +192,25 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                 ),
                               ),
                               Spacer(),
-                              Text(
-                                preventive_deatils_page_controller
-                                    .service_preventive_details_list[0]
-                                    .customerPhoneNo!,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
+                              InkWell(
+                                onTap: () {
+                                  openDialPad(preventive_deatils_page_controller
+                                      .service_preventive_details_list[0]
+                                      .customerPhoneNo!);
+                                },
+                                child: Text(
+                                  preventive_deatils_page_controller
+                                      .service_preventive_details_list[0]
+                                      .customerPhoneNo!,
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                    decoration: TextDecoration.underline,
+                                    decorationColor: AllColors.textColor,
+                                  ),
+                                  textAlign: TextAlign.end,
                                 ),
-                                textAlign: TextAlign.end,
                               ),
                             ],
                           ),
@@ -500,6 +510,7 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                           fontSize: AllFontSize.fourtine,
                                           fontWeight: FontWeight.w500,
                                         ),
+                                        textAlign: TextAlign.end,
                                       )
                                     ],
                                   ),
@@ -527,6 +538,35 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                       ),
                                     ],
                                   ),
+                                  SizedBox(
+                                    height: 3,
+                                  ),
+
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "Qty",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      Text(
+                                        preventive_deatils_page_controller
+                                            .service_preventive_details_list[0]
+                                            .qty.toString(),
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                        textAlign: TextAlign.end,
+                                      ),
+                                    ],
+                                  ),
+
                                   SizedBox(
                                     height: 3,
                                   ),
@@ -2560,42 +2600,6 @@ class PreventiveViewDetailScreen extends StatelessWidget {
                                                             );
                                                           },
                                                         ),
-
-
-                                                       /* Obx(
-                                                              () {
-                                                            return Visibility(
-                                                              visible: preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark != null && preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark!.isNotEmpty,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets.only(left: 1.0),
-                                                                child: RichText(
-                                                                  text: TextSpan(
-                                                                    children: [
-                                                                      TextSpan(
-                                                                        text: "Remark:  ",
-                                                                        style: GoogleFonts.poppins(
-                                                                          color: AllColors.primaryDark1,
-                                                                          fontSize: AllFontSize.fourtine,
-                                                                          fontWeight: FontWeight.w500,
-                                                                        ),
-                                                                      ),
-                                                                      if (preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark != null && preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark!.isNotEmpty)
-                                                                        TextSpan(
-                                                                          text: preventive_deatils_page_controller.service_preventive_details_list[0].serviceHistory![index].remark.toString()!,
-                                                                          style: GoogleFonts.poppins(
-                                                                            color: AllColors.textColor,
-                                                                            fontSize: AllFontSize.fourtine,
-                                                                            fontWeight: FontWeight.w500,
-                                                                          ),
-                                                                        ),
-                                                                    ],
-                                                                  ),
-                                                                  softWrap: true,
-                                                                ),
-                                                              ),
-                                                            );
-                                                          },
-                                                        ),*/
                                                         Row(
                                                           children: [
                                                             Spacer(),
@@ -2680,8 +2684,14 @@ class PreventiveViewDetailScreen extends StatelessWidget {
       ),
     )
         : Text("");
+  }
 
-
-
+  openDialPad(String phoneNumber) async {
+    Uri url = Uri(scheme: "tel", path: phoneNumber);
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      print("Can't open dial pad.");
+    }
   }
 }

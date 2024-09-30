@@ -14,6 +14,7 @@ import 'package:navigation_drawer_flutter/viewModel/SessionManagment/session_man
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
+import '../../../component/custome_confirm_dialog.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -538,6 +539,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                 response[0].condition == "True") {
               loading.value = false;
               indent_remark_controller.clear();
+              Utils.showToastification(
+                  "Success!", response[0].message.toString());
 
               getServiceCorrectiveList(is_done.value, pageNumber,date_filter.value);
 
@@ -1211,6 +1214,55 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
 
 
 
+  imageDeleteApiHit(String image_id, BuildContext context ) {
+    Map data = {
+      "service_id": id,
+      "email_id": email,
+      "image_id": image_id
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.serviceCorrectiveImageDeleteApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<CorrectiveIndentHeaderCreateResponse> response =
+            JsonResponse.map((e) => CorrectiveIndentHeaderCreateResponse.fromJson(e)).toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification("Success!", response[0].message!);
+              getServiceCorrectiveDetailsGet(id,"Refresh");
+              Navigator.of(context).pop();
+
+
+            } else {
+              loading.value = false;
+              print(response);
+              Utils.showErrorToastification("Error!", response[0].message!);
+            }
+          } else {
+            loading.value = false;
+            Utils.sanckBarException("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          service_indent_header_create_list.value=[];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+
 
   void showLineImagesPopup(BuildContext context) {
     List<FileList> dialog_file_list=[];
@@ -1225,6 +1277,8 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
     }else{
       upLoadLocalImagesList.value="";
       description.value="";
+      Get.toNamed(RoutesName.image_not_found_screen);
+      return;
     }
     Size size = Get.size;
     showDialog(
@@ -1356,7 +1410,48 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                                   upLoadLocalImagesList.value=dialog_file_list![index].fileUrl!;
                                   description.value=dialog_file_list![index].fileDesc!;
                                 },
-                                child: Container(
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: 100,
+                                      margin: EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(8),
+                                        border: Border.all(color: Colors.blueGrey, width: 0.5),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(3.0),
+                                        child: upLoadImageSection(dialog_file_list![index]),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 5,
+                                      child: InkWell(
+                                        onTap: () {
+                                          CustomConfirmDialog.showDialog(context: context, title: "Confirm", content: "Do You Want to continue", onPress: () {
+                                            Navigator.of(context).pop();
+                                            imageDeleteApiHit(dialog_file_list[index].id.toString(),context);
+                                          }, isLoading: loading);
+                                        },
+                                        child: Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: AllColors.primaryDark1
+                                          ),
+                                          child: Icon(Icons.delete,size: 18,color: AllColors.customDarkerWhite,),
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                  // child:
+                                ),
+
+
+
+
+                              /*  Container(
                                   width: 100,
                                   margin: EdgeInsets.all(8),
                                   decoration: BoxDecoration(
@@ -1367,7 +1462,7 @@ getServiceCorrectiveList(int is_done, int page_no,String date_filter,{String glo
                                     padding: const EdgeInsets.all(3.0),
                                     child: upLoadImageSection(dialog_file_list![index]),
                                   ),
-                                ),
+                                ),*/
                               );
                             },
                           ),

@@ -103,16 +103,12 @@ class ServiceInventoryViewDetailsScreen extends StatelessWidget{
                 ),
               ),
             ),
-
-
                  Obx(() =>   bindListView(context),)
-
           ],
         ),
         ),
       ),
     );
-
   }
 
   Widget bindListView(BuildContext context) {
@@ -143,7 +139,6 @@ class ServiceInventoryViewDetailsScreen extends StatelessWidget{
 
 
   }
-
   Widget bindviewInventoryList(BuildContext context, int index) {
     return Container(
       child: ListTile(

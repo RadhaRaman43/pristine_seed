@@ -56,6 +56,7 @@ class ServicePreventiveDetailsResponse {
   String? recheduleApprovalRemark;
   String? recheduleApprovalStatus;
   String? completeApprovalRemark;
+  double? qty;
   String? completeApprovalStatus;
   List<ServiceHistory>? serviceHistory;
   List<FileList>? fileList;
@@ -116,6 +117,7 @@ class ServicePreventiveDetailsResponse {
         this.serviceHistory,
         this.categoryName,
         this.isUnderApproval,
+        this.qty,
         this.recheduleApprovalRemark,
         this.recheduleApprovalStatus,
         this.completeApprovalStatus,
@@ -180,6 +182,7 @@ class ServicePreventiveDetailsResponse {
     recheduleApprovalStatus = json['rechedule_approval_status'];
     recheduleApprovalRemark = json['rechedule_approval_remark'];
     completeApprovalRemark = json['complete_approval_remark'];
+    qty = json['qty'];
     completeApprovalStatus = json['complete_approval_status'];
     if (json['service_history'] != null) {
       serviceHistory = <ServiceHistory>[];
@@ -254,6 +257,7 @@ class ServicePreventiveDetailsResponse {
     data['rechedule_approval_status'] = this.recheduleApprovalStatus;
     data['rechedule_approval_remark'] = this.recheduleApprovalRemark;
     data['complete_approval_status'] = this.completeApprovalStatus;
+    data['qty'] = this.qty;
     data['complete_approval_remark'] = this.completeApprovalRemark;
     if (this.serviceHistory != null) {
       data['service_history'] =
