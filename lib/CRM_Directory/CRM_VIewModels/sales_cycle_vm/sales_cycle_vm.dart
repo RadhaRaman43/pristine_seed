@@ -334,7 +334,6 @@ class SalesCycleVm extends GetxController{
         if(jsonResponse is List){
           List<ProductCategoryWiseAmtModel> response = jsonResponse.map((e) => ProductCategoryWiseAmtModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            print('listSize.....${budgetAmountList.length}');
             loading.value = false;
             /*if(page_no==0){
               budgetAmountList.clear();
@@ -343,8 +342,7 @@ class SalesCycleVm extends GetxController{
             budgetAmountList.value = response;
             Total_Budget_Amount.value=response[0].totalBudgetAmount??"";
             Total_Expected_Amount.value=response[0].totalEstimatedAmount??"";
-            print('listSize.....${budgetAmountList.length}');
-            total_rows_sales=int.parse(budgetAmountList[0].totalRows!);
+            //total_rows=int.parse(budgetAmountList[0].totalRows!);
           }else {
             loading.value = false;
             budgetAmountList.value=[];
@@ -703,13 +701,12 @@ class SalesCycleVm extends GetxController{
           getItemCategoryMstApi(SalesId,TaskID);
           pageNumber = 0;
           getsalesCycleData(pageNumber, SalesId, "ViewHeader", 'Sales');
-
-
-            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+          Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
 
         } else {
           loading.value = false;
-          Utils.showErrorToastification("Error!", "Unsuccessful");
+          Utils.showErrorToastification("Error!", "Please select at least single product category");
+          getItemCategoryMstApi(SalesId, TaskID);
         }
       } else {
         loading.value = false;

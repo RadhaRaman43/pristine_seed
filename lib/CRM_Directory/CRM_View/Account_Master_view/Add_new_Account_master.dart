@@ -19,12 +19,15 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Tat_Response_model.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
+import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class AddNewAccountMaster extends StatelessWidget{
   AddNewAccountMaster({super.key});
 
   final accountMaster_page_controller=Get.put(Accountmastervm());
+  final saleCycleController=Get.put(SalesCycleVm());
   DatabaseHelper crmDatabase = DatabaseHelper();
   Size size=Get.size;
   String defaultFullName = '';
@@ -383,9 +386,9 @@ class AddNewAccountMaster extends StatelessWidget{
                       ),
                       child: Column(
                         children: [
-                          bindAccountTypeDropDown(context),
+                         /* bindAccountTypeDropDown(context),
 
-                          SizedBox(height: 15,),
+                          SizedBox(height: 15,),*/
 
                           Form(
                             key: _formKey,
@@ -833,6 +836,37 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                           ),
 
+                          SizedBox(height: 15,),
+
+
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: TextFormField(
+                              controller: accountMaster_page_controller
+                                  .ReferralBy_Controller,
+                              decoration: InputDecoration(
+                                  hintText: "Referral By",
+                                  labelText: "Referral By",
+                                  //suffixIcon: Icon(Icons.email),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: AllFontSize.ten,
+                                      horizontal: AllFontSize.ten),
+
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blue)
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                  )
+                              ),
+
+                            ),
+                          ),
+
 
                         ],
                       ),
@@ -1063,7 +1097,38 @@ class AddNewAccountMaster extends StatelessWidget{
                       ),
                       child: Column(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                child: Icon(Icons.add),
+                                onTap: (){
+                                  accountMaster_page_controller.pageNumber = 0;
+                                  accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,"");
+                                  accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
+                                },
+                              ),
+                              SizedBox(width: 15,),
+                              InkWell(
+                                onTap: (){
+                                  accountMaster_page_controller.selectedItem.value = -1;
+                                  accountMaster_page_controller.Shipping_Address_controller.value.text="";
+                                  accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
+                                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
+                                  accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
+                                  accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                                  accountMaster_page_controller.ShowState.value=false;
+                                  accountMaster_page_controller.ShowState.value=true;
+                                  accountMaster_page_controller.Shipping_District_Controller.value.text="";
+                                  accountMaster_page_controller.consigneeId = '';
+
+                                },
+                                child: Icon(Icons.update),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 15,),
                           Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -1072,7 +1137,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_Address_controller,
+                                  .Shipping_Address_controller.value,
                               decoration: InputDecoration(
                                   hintText: "Address",
                                   labelText: "Address",
@@ -1102,7 +1167,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_Address2_Controller,
+                                  .Shipping_Address2_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "Address2",
                                   labelText: "Address2",
@@ -1133,7 +1198,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               controller: accountMaster_page_controller
-                                  .Shipping_PostCode_Controller,
+                                  .Shipping_PostCode_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "Post Code",
                                   labelText: "Post Code",
@@ -1155,9 +1220,16 @@ class AddNewAccountMaster extends StatelessWidget{
 
                           SizedBox(height: 15,),
 
-                          Container(
-                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                            child: bindShippingStateDropDown(context),
+                          Obx(() {
+                            return Visibility(
+                              visible:accountMaster_page_controller.ShowState.value,
+                              child: Container(
+                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                child: bindShippingStateDropDown(context),
+                              ),
+                            );
+                          }
+
                           ),
 
 
@@ -1171,7 +1243,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_City_Controller,
+                                  .Shipping_City_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "City",
                                   labelText: "City",
@@ -1201,7 +1273,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_District_Controller,
+                                  .Shipping_District_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "District",
                                   labelText: "District",
@@ -2430,67 +2502,38 @@ class AddNewAccountMaster extends StatelessWidget{
       onSelected: (StateMasterListModel selection) {
         print(selection.stateName);
         // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_State_Controller.text =
+        accountMaster_page_controller.Shipping_State_Controller.value.text =
             _displayStateListForOption(selection).toString();
-       // accountMaster_page_controller.GovtStateCode.value = accountMaster_page_controller.State_Controller.text.substring(0, 2);
-       // print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
-       /* if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode.value != selection.governmentStateCode){
-          Utils.sanckBarError("Wrong State", "Please Select Valid State");
-        }*/
-
-        //accountMaster_page_controller.getCompanyProfileTypeApi();
+        FocusNode().unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextFormField(
-            /*validator: (value){
-              if(value == null || value.isEmpty){
-                return null;
-              }
-              else if(value != accountMaster_page_controller.GstStateCode){
-                return 'Please select valid state';
-              }else{
-                return null;
-              }
-            },*/
-            /*onChanged: (value) {
-              for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
-                if(accountMaster_page_controller.GstStateCode == selection.governmentStateCode){
-                  accountMaster_page_controller.GovtStateCode = selection.governmentStateCode!;
-                  //accountMaster_page_controller.GstStateList.clear();
-                  //accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
-                  print('GstStae....${accountMaster_page_controller.GovtStateCode}');
-                }
-              }
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode != selection.governmentStateCode){
-                Utils.sanckBarError("Wrong State", "Please Select Valid State");
-              }
-
-            },*/
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.Shipping_State_Controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon:
-              Icon(Icons.arrow_drop_down),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'State*',
-              labelText: 'State*',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
               ),
-            ),
-          ),
-        );
+              child: TextFormField(
+                cursorColor: AllColors.primaryDark1,
+                controller: controller
+                  ..text = accountMaster_page_controller.Shipping_State_Controller.value
+                      .text,
+                focusNode: focusNode,
+                //onSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  suffixIcon:
+                  Icon(Icons.arrow_drop_down),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'State*',
+                  labelText: 'State*',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                ),
+              )
+          );
+
       },
       optionsViewBuilder: (BuildContext context,
           AutocompleteOnSelected<StateMasterListModel> onSelected,

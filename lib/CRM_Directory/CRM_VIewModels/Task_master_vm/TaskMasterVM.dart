@@ -777,7 +777,7 @@ class Taskmastervm extends GetxController{
 
                 } else {
                     loading.value = false;
-                    Utils.showErrorToastification("Error!", "Unsuccessful");
+                    Utils.showErrorToastification("Error!", "Please select at least single product category");
                 }
             } else {
                 loading.value = false;

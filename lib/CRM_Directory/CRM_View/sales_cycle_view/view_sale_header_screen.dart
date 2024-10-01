@@ -1795,7 +1795,8 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                       Spacer(),
                       InkWell(
                         onTap: (){
-                          ShowQuoteWon(context, saleCycleController.budgetAmountList);
+                          saleCycleController.quoteWonList.length>0?
+                          ShowQuoteWon(context):"";
                         },
                         child: Container(
                           width: size.width*.4,
@@ -2246,7 +2247,7 @@ Widget bindQuoteData(BuildContext context) {
                  Row(
                    children: [
                      Text(
-                       "Quote Total Amt. : ",
+                       "Quote Total Amount : ",
                        style: GoogleFonts.poppins(
                          color: AllColors.primaryDark1,
                          fontSize: AllFontSize.twelve,
@@ -2269,7 +2270,7 @@ Widget bindQuoteData(BuildContext context) {
                  Row(
                    children: [
                      Text(
-                       "Quote Gross Amt. : ",
+                       "Quote Gross Amount : ",
                        style: GoogleFonts.poppins(
                          color: AllColors.primaryDark1,
                          fontSize: AllFontSize.twelve,
@@ -2292,7 +2293,7 @@ Widget bindQuoteData(BuildContext context) {
                  Row(
                    children: [
                      Text(
-                       "Quote Gross Amt. : ",
+                       "Quote Gross Amount : ",
                        style: GoogleFonts.poppins(
                          color: AllColors.primaryDark1,
                          fontSize: AllFontSize.twelve,
@@ -2648,7 +2649,7 @@ Widget bindQuoteData(BuildContext context) {
    // String? expClosureDate=StaticMethod.convertDateFormat1(saleCycleController.quoteList[index].expClosureDate ?? "");
     //String? quoteValidity=StaticMethod.convertDateFormat1(saleCycleController.quoteList[index].quoteValidity ?? "");
     //String saleCycleStatus = saleCycleController.quoteList[index].quoteStatus??"";
-    Color getStatusColor(String status) {
+    /*Color getStatusColor(String status) {
       switch (status) {
         case 'Pending':
           return Colors.yellow[700]!;
@@ -2661,8 +2662,8 @@ Widget bindQuoteData(BuildContext context) {
         default:
           return Colors.black;
       }
-    }
-    String? dateCreatedOn=StaticMethod.dateTimeToDate(saleCycleController.quoteList[index].createdOn??"");
+    }*/
+   // String? dateCreatedOn=StaticMethod.dateTimeToDate(saleCycleController.quoteList[index].createdOn??"");
     return Card(
       //margin: EdgeInsets.all(5),
       child: ListTile(
@@ -3921,6 +3922,10 @@ Widget bindQuoteData(BuildContext context) {
                  color: Colors.grey,
                  width: 0.5,
                ),
+               bottom: BorderSide(
+                 color: Colors.grey,
+                 width: 0.5,
+               ),
              ),
            ),
            columns: [
@@ -4502,8 +4507,8 @@ Widget bindQuoteData(BuildContext context) {
     );
   }
 
-  void ShowQuoteWon(BuildContext context, RxList<ProductCategoryWiseAmtModel> budgetAmountList) {
-    Size size=Get.size;
+  void ShowQuoteWon(BuildContext context) {
+   // Size size=Get.size;
     showModalBottomSheet(context: context,
       builder: (BuildContext context) {
         return  Container(
