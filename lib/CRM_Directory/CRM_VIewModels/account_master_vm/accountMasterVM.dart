@@ -845,7 +845,7 @@ class Accountmastervm extends GetxController{
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
           "account_type": flag=='Create'?'New Account':'Existing Account',
-          "referral_by": ReferralBy_Controller.text.isEmpty?'':ReferralBy_Controller.text,
+          "referral_by": "",
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
           "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
@@ -876,7 +876,8 @@ class Accountmastervm extends GetxController{
           "gst_no": GstNo_Controller.text.isEmpty?'':GstNo_Controller.text,
           "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
           "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
-          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text
+          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text,
+          "is_referral": ReferralBy_Controller.text == "Yes"?1:0
         }
       ]
     };

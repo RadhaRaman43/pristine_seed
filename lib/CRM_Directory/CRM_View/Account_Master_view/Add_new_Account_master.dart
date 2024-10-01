@@ -839,33 +839,7 @@ class AddNewAccountMaster extends StatelessWidget{
                           SizedBox(height: 15,),
 
 
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                            child: TextFormField(
-                              controller: accountMaster_page_controller
-                                  .ReferralBy_Controller,
-                              decoration: InputDecoration(
-                                  hintText: "Referral By",
-                                  labelText: "Referral By",
-                                  //suffixIcon: Icon(Icons.email),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: AllFontSize.ten,
-                                      horizontal: AllFontSize.ten),
-
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue)
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10)
-                                  )
-                              ),
-
-                            ),
-                          ),
+                          bindIsReferralDropDown(context),
 
 
                         ],
@@ -2295,6 +2269,116 @@ class AddNewAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Active',
               labelText: 'Active',
+              /*hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten
+              ),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                  fontSize: AllFontSize.sisxteen),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: AllColors.primaryDark1), // Change the color to green
+              ),*/
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindIsReferralDropDown(context) {
+    return Autocomplete<String>(
+      displayStringForOption: _displayIsActiveForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.IsActiveTypeList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return accountMaster_page_controller.IsActiveTypeList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        accountMaster_page_controller.ReferralBy_Controller.text =
+            _displayIsActiveForOption(selection).toString();
+
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextField(
+            onTap: (){
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = accountMaster_page_controller.ReferralBy_Controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: Icon(Icons.arrow_drop_down),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Is Referral',
+              labelText: 'Is Referral',
               /*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
