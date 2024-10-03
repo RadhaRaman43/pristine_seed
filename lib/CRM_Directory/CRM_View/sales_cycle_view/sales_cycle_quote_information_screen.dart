@@ -736,7 +736,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "War. Period : ",
+                              "Warranty Period : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -789,7 +789,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "Discount Amt:",
+                              "Discount Amount:",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -798,7 +798,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
 
                             Container(
-                              width: size.width*.14,
+                              width: size.width*.1,
                               child: Tooltip(
                                 message: saleCycleController.quoteLinedata[index]
                                     .discountAmt.toString(),
@@ -841,7 +841,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "Tax Amt. :",
+                              "Tax Amount:",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -993,7 +993,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "Del. In Weeks : ",
+                              "Delivery In Weeks : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,

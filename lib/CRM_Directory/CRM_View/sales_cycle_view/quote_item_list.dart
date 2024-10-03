@@ -542,7 +542,7 @@ class QuoteItemList extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "Cat Name : ",
+                          "Category Name : ",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twelve,
@@ -550,7 +550,7 @@ class QuoteItemList extends StatelessWidget{
                           ),
                         ),
                         Container(
-                          width: size.width*.2,
+                          width: size.width*.15,
                           child: Tooltip(
                             message: saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -799,7 +799,7 @@ class QuoteItemList extends StatelessWidget{
 
                       children: [
                         Text(
-                          "Stnd Cost:",
+                          "Standard Cost:",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twelve,
@@ -833,7 +833,7 @@ class QuoteItemList extends StatelessWidget{
 
                       children: [
                         Text(
-                          "Br. Tnsfr. Pr.:",
+                          "Branch Transfer Price:",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twelve,
@@ -842,7 +842,7 @@ class QuoteItemList extends StatelessWidget{
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: size.width*.2,
+                          width: size.width*.1,
                           child: Tooltip(
                             message:  saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -867,7 +867,7 @@ class QuoteItemList extends StatelessWidget{
 
                       children: [
                         Text(
-                          "Min. Acpt. Amt.:",
+                          "Min. Acceptable price:",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twelve,
@@ -876,7 +876,7 @@ class QuoteItemList extends StatelessWidget{
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: size.width*.17,
+                          width: size.width*.05,
                           child: Tooltip(
                             message:saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -901,7 +901,7 @@ class QuoteItemList extends StatelessWidget{
 
                       children: [
                         Text(
-                          "List Selling Pr.:",
+                          "List Selling Price:",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twelve,
@@ -910,7 +910,7 @@ class QuoteItemList extends StatelessWidget{
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: size.width*.2,
+                          width: size.width*.1,
                           child: Tooltip(
                             message:saleCycleController
                                 .itemMstGetByQuoteIdList[index]
