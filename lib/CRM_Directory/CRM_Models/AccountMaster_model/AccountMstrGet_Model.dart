@@ -41,6 +41,7 @@ class AccountMasterGetByCodeModel {
   String? shippingPostCode;
   String? shippingStateCode;
   String? shippingStateName;
+  int? isReferral;
 
   AccountMasterGetByCodeModel(
       {this.condition,
@@ -84,7 +85,8 @@ class AccountMasterGetByCodeModel {
         this.shippingDistrict,
         this.shippingPostCode,
         this.shippingStateCode,
-        this.shippingStateName});
+        this.shippingStateName,
+        this.isReferral});
 
   AccountMasterGetByCodeModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -131,6 +133,7 @@ class AccountMasterGetByCodeModel {
     shippingPostCode = json['shipping_post_code'];
     shippingStateCode = json['shipping_state_code'];
     shippingStateName = json['shipping_state_name'];
+    isReferral = json['is_referral'];
   }
 
   Map<String, dynamic> toJson() {
@@ -179,6 +182,7 @@ class AccountMasterGetByCodeModel {
     data['shipping_post_code'] = this.shippingPostCode;
     data['shipping_state_code'] = this.shippingStateCode;
     data['shipping_state_name'] = this.shippingStateName;
+    data['is_referral'] = this.isReferral;
     return data;
   }
 }

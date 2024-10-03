@@ -954,7 +954,7 @@ class Accountmastervm extends GetxController{
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
           "account_type": account_type_controller.text.isEmpty?'':account_type_controller.text,
-          "referral_by": ReferralBy_Controller.text.isEmpty?'':ReferralBy_Controller.text,
+          "referral_by": '',
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
           "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
@@ -985,7 +985,8 @@ class Accountmastervm extends GetxController{
           "gst_no": GstNo_Controller.text.isEmpty?'':GstNo_Controller.text,
           "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
           "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
-          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text
+          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text,
+          "is_referral": ReferralBy_Controller.text == "Yes"?1:0
         }
       ]
     };
@@ -1126,7 +1127,7 @@ class Accountmastervm extends GetxController{
       AccountOwner = employee_Member_list[0].loginEmailId??"";
       AccountTitle_Controller.text = response[0].accountTitle??"";
       account_type_controller.text = response[0].accountType??"";
-      ReferralBy_Controller.text = response[0].referralBy??"";
+      ReferralBy_Controller.text = response[0].isReferral==1?"Yes":"No";
       PhoneNo_Controller.text= response[0].phoneNo??"";
       EmailId_Controller.text = response[0].emailId??"";
       account_cat_type_controller.text = response[0].accountCategoryType??"";
@@ -1675,6 +1676,8 @@ class Accountmastervm extends GetxController{
       account_type_controller.text = response[position].accountType??"";
       PhoneNo_Controller.text= response[position].phoneNo??"";
       EmailId_Controller.text = response[position].emailId??"";
+      ReferralBy_Controller.text = response[position].isReferral==1?"Yes":"No";
+      print('ISReferral...${ReferralBy_Controller.text}');
       account_cat_type_controller.text = response[position].accountCategoryType??"";
       comp_prof_type_controller.text = response[position].companyProfileType??"";
       comp_prof_sub_type_controller.value.text = response[position].companyProfileSubType??"";
