@@ -122,7 +122,7 @@ class Addressmastervm extends GetxController{
     }
 
     if(IfscCode_Controller.text.isNotEmpty ){
-      if(IfscCode_Controller.text.length>11){
+      if(IfscCode_Controller.text.length>10){
       }
       else{
         Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");

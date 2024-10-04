@@ -25,7 +25,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
   /*static String _displayAccNameForOption(AccountMasterModel option) =>
       option.accountName!+"(${option.accountCode!})";*/
   static String _displayAccNameForOption(AccountMasterModel option) =>
-      option.accountName!;
+      option.accountName! + " (${option.accountCode!})";
   static String _displayDepartNameForOption(DepartNameModal option) =>
       option.deptName!;
   static String _displayDesignationNameForOption(DesignationModal option) =>
@@ -173,10 +173,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
               ),
               SizedBox(height: 15,),
 
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: bindAccountOwnerDropDown(context),
-              ),
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: bindAccountOwnerDropDown(context),
+                ),
+
               SizedBox(height: 15,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -386,13 +387,10 @@ class AddNewcontactMasterContact extends StatelessWidget{
             "last index ${contact_vm_controller.pageNumber} ${contact_vm_controller.total_rows} ${contact_vm_controller.rowsPerPage} ${totalPage}");
 
         // Fetch the next page if there are more pages
-        if (contact_vm_controller.pageNumber + 1 < totalPage &&
-            !contact_vm_controller.isFetching.value) {
-          contact_vm_controller.isFetching.value = true; // prevent multiple calls
+        if (contact_vm_controller.pageNumber + 1 < totalPage ) {
           contact_vm_controller.getAccountMaster(
               contact_vm_controller.pageNumber + 1).then((_) {
             contact_vm_controller.pageNumber += 1;
-            contact_vm_controller.isFetching.value = false;
           });
         }
       }
@@ -425,15 +423,31 @@ class AddNewcontactMasterContact extends StatelessWidget{
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
+        return TextFormField(
           readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = contact_vm_controller.account_name_controller.text,
           focusNode: focusNode,
+          onTapOutside: (value){
+            FocusNode().unfocus();
+          },
+          /*onChanged: (value){
+            contact_vm_controller.account_name_controller.text = value;
+            print('Controller...${contact_vm_controller.account_name_controller.text}');
+            contact_vm_controller.getAccountMaster(
+                contact_vm_controller.pageNumber );
+            if(value.isEmpty){
+              contact_vm_controller.account_name_controller.text = value;
+              contact_vm_controller.getAccountMaster(
+                  contact_vm_controller.pageNumber );
+
+            }
+          },*/
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: InkWell(
+                child: Icon(Icons.arrow_drop_down)),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Name',
@@ -467,16 +481,42 @@ class AddNewcontactMasterContact extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                       // option.accountName!+"(${option.accountCode!})",
-                        option.accountName!,
+                      child:
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.accountName!,
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                              TextSpan(
+                                text: " (${option.accountCode!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
+
+                      /*Text(
+                        option.accountName! + " (${option.accountCode!})",
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
                             fontSize: AllFontSize
                                 .sisxteen // Change the text color here
                         ),
-                      ),
+                      ),*/
                     ),
                   );
                 },

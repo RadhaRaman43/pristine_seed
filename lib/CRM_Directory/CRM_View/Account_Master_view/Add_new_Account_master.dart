@@ -2737,7 +2737,33 @@ class AddNewAccountMaster extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:  option.responseType!,
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                            TextSpan(
+                              text: " (${option.responseDescription!})",
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                          ],
+                        ),
+                        softWrap: true,
+                      )
+
+                     /* Text(
                         option.responseType.toString() + ' (${option.responseDescription.toString()})',
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
@@ -2745,7 +2771,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             fontSize: AllFontSize
                                 .sisxteen // Change the text color here
                         ),
-                      ),
+                      ),*/
                     ),
                   );
                 },
