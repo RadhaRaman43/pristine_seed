@@ -146,14 +146,14 @@ class SalesCycleScreen extends StatelessWidget{
     Color getStatusColor(String status) {
       switch (status) {
         case 'PENDING':
-          return Colors.brown[900]!;
+          return Colors.red[900]!;
         case 'Rejected':
           return Colors.red;
         case 'rejected':
           return Colors.red;
         case 'APPROVED':
           return Colors.green;
-        case 'Pending For Approval':
+        case 'PENDING FOR APPROVAL':
           return Colors.yellow[700]!;
         default:
           return Colors.black;
