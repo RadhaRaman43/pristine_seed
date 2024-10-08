@@ -19,6 +19,7 @@ class ContactMstGetListModal {
   String? createdOn;
   String? updatedBy;
   String? updatedOn;
+  int? isDecisionMaker;
 
   ContactMstGetListModal(
       {this.condition,
@@ -40,7 +41,8 @@ class ContactMstGetListModal {
         this.createdBy,
         this.createdOn,
         this.updatedBy,
-        this.updatedOn});
+        this.updatedOn,
+        this.isDecisionMaker});
 
   ContactMstGetListModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -63,6 +65,7 @@ class ContactMstGetListModal {
     createdOn = json['created_on'];
     updatedBy = json['updated_by'];
     updatedOn = json['updated_on'];
+    isDecisionMaker = json['is_decision_maker'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,6 +90,7 @@ class ContactMstGetListModal {
     data['created_on'] = this.createdOn;
     data['updated_by'] = this.updatedBy;
     data['updated_on'] = this.updatedOn;
+    data['is_decision_maker'] = this.isDecisionMaker;
     return data;
   }
 }

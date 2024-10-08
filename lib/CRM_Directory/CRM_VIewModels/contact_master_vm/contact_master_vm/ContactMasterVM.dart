@@ -22,7 +22,6 @@ class ContactMasterVM extends GetxController{
   SessionManagement sessionManagement = SessionManagement();
   final account_vm_controller = Get.put(Accountmastervm());
   RxBool loading=false.obs;
-  RxBool isFetching =false.obs;
 
   RxString accountName="".obs;
   RxString accountCode="".obs;
@@ -48,8 +47,10 @@ class ContactMasterVM extends GetxController{
   var contact_title_controller = TextEditingController();
   var designation_name_controller = TextEditingController();
   var contact_code_controller = TextEditingController();
+  var IsHeDecisionMakerController = TextEditingController().obs;
 
 
+  RxList<String> isHeDecisionMakerList =["Yes", "No"].obs;
   RxList<ContactMstGetListModal> contact_master_list = <ContactMstGetListModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<DepartNameModal> department_name_list=<DepartNameModal>[].obs;
@@ -125,7 +126,7 @@ class ContactMasterVM extends GetxController{
   getAccountMaster(int page_no){
     try{
       Map<String, String> data={
-        "filter_account_name": "",
+        "filter_account_name": account_name_controller.text.isEmpty?"":account_name_controller.text,
         "filter_account_owner": "",
         "filter_account_type": "",
         "filter_account_category_type": "",
@@ -154,6 +155,7 @@ class ContactMasterVM extends GetxController{
               Account_Master_list.clear();
             }
             Account_Master_list.addAll(response);
+           // Account_Master_list.value = response;
             total_rows=int.parse(Account_Master_list[0].totalRows!);
             print('account list size....${Account_Master_list.length}');
 
@@ -233,6 +235,7 @@ class ContactMasterVM extends GetxController{
     reporting_person_controller.clear();
     contact_title_controller.clear();
     designation_name_controller.clear();
+    IsHeDecisionMakerController.value.clear();
   }
 
   createNewContactMstApi(String flag){
@@ -266,7 +269,6 @@ class ContactMasterVM extends GetxController{
           {
             "contact_code": contact_code,
             "contact_name": contact_name_controller.text,
-            "contact_title": contact_title_controller.text,
             "account_code": accountCode.value.isNotEmpty?accountCode.value:"",
             "account_name": accountName.value.isNotEmpty?accountName.value:account_name_controller.text,
             "phone_no": phone_no_controller.text,
@@ -274,7 +276,9 @@ class ContactMasterVM extends GetxController{
             "alternate_no": alternate_no_controller.text,
             "department_name": depart_name_controller.text,
             "desingation_name": designation_name_controller.text,
-            "reporting_person": reporting_person_controller.text
+            "reporting_person": reporting_person_controller.text,
+            "is_decision_maker": IsHeDecisionMakerController.value.text=="Yes"?1:0,
+            "contact_title": contact_title_controller.text,
           }
         ]
       };
@@ -290,7 +294,7 @@ class ContactMasterVM extends GetxController{
             loading.value = false;
             contact_master_list.value=response;
 
-
+            resetAllContactCreativeField('Icon');
             if(insideOut == true){
               print('insideOut1...${insideOut}');
               Get.toNamed(RoutesName.contactMaster_screen);
@@ -301,8 +305,8 @@ class ContactMasterVM extends GetxController{
               Get.toNamed(RoutesName.viewContacts_screen);
               account_vm_controller.getContactMasterList(0, account_name_controller.text.toString(), '', accountCode.value.toString());
             }
-            resetAllContactCreativeField('Icon');
-            Utils.showToastification('Error', response[0].message!);
+
+            Utils.showToastification('Success!', response[0].message!);
             //Get.offAllNamed(RoutesName.contactMaster_screen);
 
           }else {
@@ -339,6 +343,7 @@ class ContactMasterVM extends GetxController{
       print('Flage...${flag}');
       contact_code=contact_master_list[index].contactCode?? "";
       account_name_controller.text=contact_master_list[index].accountName?? "";
+      accountCode.value=contact_master_list[index].accountCode??"";
     contact_name_controller.text=contact_master_list[index].contactName?? "";
     depart_name_controller.text=contact_master_list[index].departmentName?? "";
     phone_no_controller.text=contact_master_list[index].phoneNo?? "";
@@ -348,6 +353,7 @@ class ContactMasterVM extends GetxController{
     contact_title_controller.text=contact_master_list[index].contactTitle?? "";
     designation_name_controller.text=contact_master_list[index].designationname ?? "";
     contact_code_controller.text=contact_master_list[index].contactCode ?? "";
+      IsHeDecisionMakerController.value.text=contact_master_list[index].isDecisionMaker==1?'Yes':'No';
     }else if(flag == 'Inside'){
       contact_code=account_vm_controller.view_contract_list[index].contactCode?? "";
       account_name_controller.text=account_vm_controller.view_contract_list[index].accountName?? "";
@@ -360,6 +366,7 @@ class ContactMasterVM extends GetxController{
       contact_title_controller.text=account_vm_controller.view_contract_list[index].contactTitle?? "";
       designation_name_controller.text=account_vm_controller.view_contract_list[index].designationname ?? "";
       contact_code_controller.text=account_vm_controller.view_contract_list[index].contactCode ?? "";
+      IsHeDecisionMakerController.value.text=account_vm_controller.view_contract_list[index].isDecisionMaker==1?'Yes':"No";
     }
 
     getAccountMaster(pageNumber);

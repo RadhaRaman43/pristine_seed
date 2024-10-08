@@ -77,7 +77,8 @@ class TaskMasterDetails extends StatelessWidget{
                   //visible: account_vm_controller.view=='Sales'?false:true,
                   child: IconButton(onPressed: () {
                     //createDSARDialog(context);
-                    TaskMaster_page_controller.DSAR_Status_type_controller.clear();
+                    TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
+                    TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
                     TaskMaster_page_controller.NextInterdate_controller.clear();
                     TaskMaster_page_controller.NextInterTime_controller.clear();
                     TaskMaster_page_controller.DSAR_Remarks_controller.clear();
@@ -85,9 +86,14 @@ class TaskMasterDetails extends StatelessWidget{
                     TaskMaster_page_controller.BudgetAmt_controller.clear();
                     TaskMaster_page_controller.ExpectedAmt_controller.clear();
                     TaskMaster_page_controller.DSARStatus.value = false;
+                    if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1){
+                      TaskMaster_page_controller.isInfraLeadValue.value = true;
+                      print('value...${TaskMaster_page_controller.isInfraLeadValue.value}');
+                    }
+                    print('value2...${TaskMaster_page_controller.isInfraLeadValue.value}');
                     //TaskMaster_page_controller.isInfraLead.text="No";
-                    TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ?
-                    Get.toNamed(RoutesName.addNewDSARTask_screen): "";
+                    TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
+                    TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
                   }, icon: Visibility(
                       visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? true : false,
                       child: Icon(Icons.add))),
@@ -198,7 +204,7 @@ class TaskMasterDetails extends StatelessWidget{
                           child: Icon(Icons.person, color: AllColors.whiteColor,),
                         ),
                         Text(
-                          "Manager Info",
+                          "Created Manager Info",
                           style: GoogleFonts.poppins(
                             color: AllColors.whiteColor,
                             fontSize: AllFontSize.twentee,
@@ -309,407 +315,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ],
               ),
             ),
-        
-            /*Container(
-              margin: EdgeInsets.only(left: 15.0, right: 15.0),
-              //color: AllColors.Card1Color,
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              decoration: BoxDecoration(
-                //color: AllColors.Card1Color, // Set the inside color here
-                border: Border.all(
-                  color: AllColors.blackColor, // Set the border color here
-                  //width: 1.0, // Adjust the border width if necessary
-                ),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-        
-              child:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 10.0),
-                    child: Text(
-                      "Task DSAR History",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twentee,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Obx(
-                        () {
-                      return IconButton(
-                        onPressed: () {
-                          TaskMaster_page_controller.toggle();
-                          if (TaskMaster_page_controller
-                              .isExpand.value ==
-                              true) {
-                            print(
-                                "If......${TaskMaster_page_controller.isExpand.value}");
-                          } else {
-                            print(
-                                "else......${TaskMaster_page_controller.isExpand.value}");
-                          }
-                        },
-                        icon: Icon(
-                          TaskMaster_page_controller
-                              .isExpand.value
-                              ? Icons.arrow_drop_down
-                              : Icons.arrow_drop_up,
-                          size: 25,
-                          color: AllColors.primaryDark1,
-                        ),
-                      );
-                    },
-                  )
-        
-                ],
-              ),
-            ),
-        
-            SizedBox(height: 10,),
-            Obx((){
-              return Container(
-                child:
-                TaskMaster_page_controller.TaskDSAR_Master_list.value.length > 0
-              && TaskMaster_page_controller.TaskDSAR_Master_list.value.isNotEmpty ?
-              Flexible(
-                  child: Visibility(
-                  visible: TaskMaster_page_controller
-                      .isExpand.value == true ? true : false,
-                  child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount:
-                      TaskMaster_page_controller
-                          .TaskDSAR_Master_list
-                          .length,
-                      itemBuilder: (context, index) {
-                        var count = index + 1;
-                        var timeLine_date_month =
-                        StaticMethod.dateTimeToDate(
-                            TaskMaster_page_controller
-                                .TaskDSAR_Master_list[index]
-                                .createdOn!);
-                        var timeLine_date = StaticMethod.onlyMonthName(
-                            TaskMaster_page_controller
-                                .TaskDSAR_Master_list[index]
-                                .createdOn??"");
-                        return Container(
-                          child: Column(
-                            children: [
-                              Stack(
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 10,
-                                        //right: 10,
-                                        bottom: 10,
-                                        top: 40),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          child: Tooltip(
-                                            message:
-                                            timeLine_date_month,
-                                            child: Text(
-                                              timeLine_date!,
-                                              style: GoogleFonts
-                                                  .poppins(
-                                                color: AllColors
-                                                    .textColor,
-                                                fontSize:
-                                                AllFontSize
-                                                    .fourtine,
-                                                fontWeight:
-                                                FontWeight
-                                                    .w500,
-                                              ),
-                                            ),
-                                          ),
-                                          width:
-                                          size.width * 0.11,
-                                        ),
-                                        SizedBox(
-                                            width: size.width *
-                                                0.12),
-                                        SizedBox(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment
-                                                .start,
-                                            children: [
-                                              Container(
-                                                padding: EdgeInsets
-                                                    .only(
-                                                    left: 8,
-                                                    right:
-                                                    4),
-                                                width:
-                                                size.width *
-                                                    .71,
-                                                decoration:
-                                                BoxDecoration(
-                                                    borderRadius: BorderRadius.only(
-                                                        topLeft: Radius.circular(
-                                                            10),
-                                                        topRight: Radius.circular(
-                                                            10)),
-                                                    boxShadow: <BoxShadow>[
-                                                      BoxShadow(
-                                                          offset: Offset(0.0, 0.55),
-                                                          blurRadius: 0.7,
-                                                          blurStyle: BlurStyle.solid,
-                                                          color: Colors.black54),
-                                                    ],
-                                                    color: AllColors
-                                                        .whiteColor),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      TaskMaster_page_controller
-                                                          .TaskDSAR_Master_list[index]
-                                                          .dsarStatus??"",
-                                                      style: GoogleFonts
-                                                          .poppins(
-                                                        color: AllColors
-                                                            .textColor,
-                                                        fontSize:
-                                                        AllFontSize.fourtine,
-                                                        fontWeight:
-                                                        FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      TaskMaster_page_controller
-                                                          .TaskDSAR_Master_list[index]
-                                                          .createdFullName??"",
-                                                      style: GoogleFonts
-                                                          .poppins(
-                                                        color: AllColors
-                                                            .textColor,
-                                                        fontSize:
-                                                        AllFontSize.nine,
-                                                        fontWeight:
-                                                        FontWeight.w700,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Container(
-                                                padding: EdgeInsets
-                                                    .only(
-                                                    left:
-                                                    4),
-                                                decoration: BoxDecoration(
-                                                    boxShadow: <BoxShadow>[
-                                                      BoxShadow(
-                                                          offset: Offset(0.0,
-                                                              0.55),
-                                                          blurRadius:
-                                                          0.5,
-                                                          blurStyle: BlurStyle
-                                                              .solid,
-                                                          color:
-                                                          Colors.black54)
-                                                    ],
-                                                    color: Colors
-                                                        .white),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                        margin: EdgeInsets.only(
-                                                            top:
-                                                            3),
-                                                        width: size.width *
-                                                            .7,
-                                                        child: Column(
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment.start,
-                                                            children: [
-                                                              RichText(
-                                                                text: TextSpan(
-                                                                  children: [
-                                                                    TextSpan(
-                                                                      text: "Date:  ",
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.primaryDark1,
-                                                                        // Change this to your desired color for "Message:"
-                                                                        fontSize: AllFontSize.fourtine,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text: TaskMaster_page_controller.TaskDSAR_Master_list[index].nextInteractionDate!,
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.textColor,
-                                                                        // This keeps the rest of the text color unchanged
-                                                                        fontSize: AllFontSize.twelve,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                softWrap: true,
-                                                              ),
-                                                              RichText(
-                                                                text: TextSpan(
-                                                                  children: [
-                                                                    TextSpan(
-                                                                      text: "Time:  ",
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.primaryDark1,
-                                                                        // Change this to your desired color for "Message:"
-                                                                        fontSize: AllFontSize.fourtine,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text: TaskMaster_page_controller.TaskDSAR_Master_list[index].nextInteractionTime!,
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.textColor,
-                                                                        // This keeps the rest of the text color unchanged
-                                                                        fontSize: AllFontSize.twelve,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                softWrap: true,
-                                                              ),
-                                                              RichText(
-                                                                text: TextSpan(
-                                                                  children: [
-                                                                    TextSpan(
-                                                                      text: "Is Infra Lead:  ",
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.primaryDark1,
-                                                                        // Change this to your desired color for "Message:"
-                                                                        fontSize: AllFontSize.fourtine,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text: TaskMaster_page_controller.TaskDSAR_Master_list[index].isInfraLead==1?"Yes":"No",
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.textColor,
-                                                                        // This keeps the rest of the text color unchanged
-                                                                        fontSize: AllFontSize.twelve,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                softWrap: true,
-                                                              ),
-                                                              RichText(
-                                                                text: TextSpan(
-                                                                  children: [
-                                                                    TextSpan(
-                                                                      text: "Remarks:  ",
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.primaryDark1,
-                                                                        // Change this to your desired color for "Message:"
-                                                                        fontSize: AllFontSize.fourtine,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                    TextSpan(
-                                                                      text: TaskMaster_page_controller.TaskDSAR_Master_list[index].remarks??"",
-                                                                      style: GoogleFonts.poppins(
-                                                                        color: AllColors.textColor,
-                                                                        // This keeps the rest of the text color unchanged
-                                                                        fontSize: AllFontSize.twelve,
-                                                                        fontWeight: FontWeight.w500,
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                softWrap: true,
-                                                              ),
-                                                            ])),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    left: 70,
-                                    // left: 10,
-                                    child: new Container(
-                                      height: size.height * 0.7,
-                                      width: 1.0,
-                                      color:
-                                      Colors.grey.shade400,
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 5,
-                                    left: 35,
-                                    child: Padding(
-                                      padding:
-                                      const EdgeInsets.only(
-                                          top: 10,
-                                          left: 20,
-                                          bottom: 70,
-                                          right: 20),
-                                      child: Container(
-                                        height: 30.0,
-                                        width: 30.0,
-                                        decoration:
-                                        new BoxDecoration(
-                                          color:
-                                          Colors.lightBlue,
-                                          borderRadius:
-                                          BorderRadius
-                                              .circular(20),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            count.toString(),
-                                            style: GoogleFonts
-                                                .poppins(
-                                              color: AllColors
-                                                  .whiteColor,
-                                              fontSize:
-                                              AllFontSize
-                                                  .ten,
-                                              fontWeight:
-                                              FontWeight
-                                                  .w500,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      })
-        
-                  )
-              )
-                  : Text("No Task DSAR History Found...",
-              style: GoogleFonts.poppins(
-              color: AllColors.textColor,
-              fontSize: AllFontSize.twenteetwo,
-              fontWeight: FontWeight.w500,
-              ),),
-        
-              );
-            })*/
+
           ],
         ),
       ),
@@ -928,7 +534,7 @@ class TaskMasterDetails extends StatelessWidget{
       },
       onSelected: (CallStatusMasterModel selection) {
         // Update the TextField with the selected
-        TaskMaster_page_controller.DSAR_Status_type_controller.text =
+        TaskMaster_page_controller.DSAR_Status_type_controller.value.text =
             _displayDSARTypeForOption(selection).toString();
        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
@@ -937,7 +543,7 @@ class TaskMasterDetails extends StatelessWidget{
         return TextField(
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = TaskMaster_page_controller.DSAR_Status_type_controller
+            ..text = TaskMaster_page_controller.DSAR_Status_type_controller.value
                 .text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
@@ -1338,7 +944,7 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Sale Cycle Acti. By",
+                  "Sale Cycle Activated By",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1382,7 +988,7 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Sale Cycle Acti. on",
+                  "Sale Cycle Activated on",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1792,7 +1398,7 @@ class TaskMasterDetails extends StatelessWidget{
                   StaticMethod.onlyDate(
                       TaskMaster_page_controller
                           .TaskDSAR_Master_list[0]
-                          .nextInteractionDate??"") ?? "",
+                          .nextInteractionTime??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,
@@ -1848,14 +1454,25 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                 ),
                 Spacer(),
-                Text(
-                  TaskMaster_page_controller
-                      .TaskDSAR_Master_list[0]
-                      .remarks?? "",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
+                Container(
+                  width: size.width*.4,
+                  child: Tooltip(
+                    message:
+                        TaskMaster_page_controller
+                            .TaskDSAR_Master_list[0]
+                            .remarks?? "",
+                    child: Text(
+                      TaskMaster_page_controller
+                          .TaskDSAR_Master_list[0]
+                          .remarks?? "",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.end,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ],

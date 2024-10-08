@@ -162,6 +162,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                           ),),
 
                                           onPressed: (){
+                                            saleCycleController.quoteId.value= saleCycleController.quoteHeaderdata[0].quoteId??"";
                                             //showdialogForApproval(context);
                                             openConfirmationDialog(context, "Do you want to Update this Sales Cycle?", "Approved");
                                             saleCycleController.quoteStatusController.value.clear();
@@ -735,7 +736,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "War. Period : ",
+                              "Warranty Period : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -788,7 +789,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "Discount Amt:",
+                              "Discount Amount:",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -797,7 +798,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
 
                             Container(
-                              width: size.width*.14,
+                              width: size.width*.1,
                               child: Tooltip(
                                 message: saleCycleController.quoteLinedata[index]
                                     .discountAmt.toString(),
@@ -840,7 +841,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "Tax Amt. :",
+                              "Tax Amount:",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -992,7 +993,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "Del. In Weeks : ",
+                              "Delivery In Weeks : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1019,7 +1020,8 @@ class QuoteInformationScreen extends StatelessWidget{
               SizedBox(height: 6,),
               Obx((){
                 return Visibility(
-                  visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                  //visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                  visible:saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

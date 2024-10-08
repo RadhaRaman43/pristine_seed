@@ -41,6 +41,7 @@ class ContactMasterScreen extends StatelessWidget{
               IconButton(onPressed: () {
                 contact_vm_controller.resetAllContactCreativeField('Icon');
                 contact_vm_controller.insideOut = true;
+                contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
                 contact_vm_controller.getAccountMaster(contact_vm_controller.pageNumber);
                 contact_vm_controller.getDepartNameList();
                 Get.toNamed(RoutesName.addNewContactMaster_screen);
@@ -220,8 +221,8 @@ class ContactMasterScreen extends StatelessWidget{
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Depart Name',
-                            hintText: 'Depart Name',
+                            labelText: 'Department Name',
+                            hintText: 'Department Name',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -514,14 +515,14 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Account. Name : ",
+                  "Account Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .45,
+                  width: size.width * .4,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -564,7 +565,7 @@ class ContactMasterScreen extends StatelessWidget{
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .5,
+                  width: size.width * .4,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -611,14 +612,14 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Depart. Name : ",
+                  "Department Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .4,
+                  width: size.width * .35,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -642,14 +643,14 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Desig. Name : ",
+                  "Designation Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .4,
+                  width: size.width * .35,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]

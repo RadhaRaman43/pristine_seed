@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
+import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../locat_database/databaseHelper.dart';
@@ -18,12 +19,15 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Tat_Response_model.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
+import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class AddNewAccountMaster extends StatelessWidget{
   AddNewAccountMaster({super.key});
 
   final accountMaster_page_controller=Get.put(Accountmastervm());
+  final saleCycleController=Get.put(SalesCycleVm());
   DatabaseHelper crmDatabase = DatabaseHelper();
   Size size=Get.size;
   String defaultFullName = '';
@@ -64,21 +68,6 @@ class AddNewAccountMaster extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-         /* if(accountMaster_page_controller.DraftId.isEmpty || accountMaster_page_controller.DraftId == ''){
-            await insertAccountData();
-            accountMaster_page_controller.clearController();
-            Get.toNamed(RoutesName.accountMaster_screen);
-          }else{
-            await updateAccountData(accountMaster_page_controller.DraftId);
-            accountMaster_page_controller.clearController();
-            Get.toNamed(RoutesName.accountMaster_screen);
-          }
-          try {
-            accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-            print('Retrieved items: ${accountMaster_page_controller.Account_Master_Draft_list[0].accountName}');
-          } catch (e) {
-            print('Failed to retrieve items: $e');
-          }*/
           if(accountMaster_page_controller.view == 'FromDraft'){
             accountMaster_page_controller.clearController();
             Get.toNamed(RoutesName.Draft_item_list);
@@ -100,7 +89,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 'Create Account',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
-                  fontSize: 20.0,
+                  fontSize: 20,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -111,131 +100,35 @@ class AddNewAccountMaster extends StatelessWidget{
                 backgroundColor: AllColors.primaryDark1,
                 shadowColor: Colors.black,
                 shape: StadiumBorder(
-                    side: BorderSide(color: AllColors.grayColor)),
+                    side: BorderSide(color: AllColors.whiteColor)),
                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                 //CircleAvatar
                 label: Tooltip(
                   message: "Create Account ",
-                  child: Text('Create',
+                  child: Text('Save as Draft',
                       style: GoogleFonts.poppins(
                         color: AllColors.whiteColor,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500,
                       )),
                 ),
-                onPressed: () {
+                onPressed: () async {
 
-                  if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
-                    Utils.sanckBarError('Account Name!', "Please Enter Account Name");
-                    return  ;
-                  }
-                  if(defaultFullName == "" && accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty){
-                    Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
-                    Utils.sanckBarError('Account Type!', "Please Enter Account Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
-                    if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
-                      Utils.sanckBarError('Account Type!', "Please Enter 10 Digit Phone No");
-                      return  ;
-                    }
-                  }
-
-                  if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
-                    Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
-                    Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
-                    Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
-                    Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
-                    Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstNo_Controller.text.isEmpty){
-                    Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
-                    Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
-                    Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
-                    Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
-                    return  ;
-                  }
-
-                  if(accountMaster_page_controller.Account_Master_list != null &&
-                      accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
-                    Utils.sanckBarError('Active!', "Please Enter Active Type");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
-                    Utils.sanckBarError('State!', "Please Enter State");
-                    return  ;
-                  }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
-                    Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
-                    return  ;
-                  }
-                  if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
-                    Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
-                    return  ;
-                  }
-
-                  accountMaster_page_controller.AccountMstUploaderApiHit('Create', "");
-
-
-                }, //Text
-              ),
-
-            ],
-          ),
-        actions: [
-          PopupMenuButton(itemBuilder: (BuildContext context){
-            return [
-              PopupMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.file_copy_sharp, color: AllColors.primaryDark1,),
-                    Text('Save as Draft'),
-                  ],
-                ),
-                onTap: () async {
                   if(accountMaster_page_controller.account_name_controller.value.text.isNotEmpty || accountMaster_page_controller.account_name_controller.value.text != ''){
                     if(accountMaster_page_controller.DraftId.isEmpty || accountMaster_page_controller.DraftId == ''){
-                      await insertAccountData();
+                     // await insertAccountData();
+                      accountMaster_page_controller.DraftAccountMstUploaderApiHit('Create');
                       accountMaster_page_controller.clearController();
                       Get.toNamed(RoutesName.accountMaster_screen);
                     }else{
-                      await updateAccountData(accountMaster_page_controller.DraftId);
+                     // await updateAccountData(accountMaster_page_controller.DraftId);
+                      accountMaster_page_controller.DraftAccountMstUploaderApiHit('Update');
                       accountMaster_page_controller.clearController();
                       Get.toNamed(RoutesName.accountMaster_screen);
                     }
-
                     try {
-                      accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                      print('Retrieved items: ${accountMaster_page_controller.Account_Master_Draft_list[0].accountName}');
+                     // accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
+                      print('Retrieved items: ${accountMaster_page_controller.Account_Master_Draft_list1[0].accountName}');
                     } catch (e) {
                       print('Failed to retrieve items: $e');
                     }
@@ -243,28 +136,112 @@ class AddNewAccountMaster extends StatelessWidget{
                     Utils.showErrorToastification('Error!', "Please Enter Account Name!");
                   }
 
-                },
+                }, //Text
               ),
-              /*PopupMenuItem(
-                child: Text('View Draft List'),
-                onTap: () async {
-                  accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                 // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
-                  Get.toNamed(RoutesName.Draft_item_list);
-                  //accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.value.text);
 
-                },
-              ),*/
-            ];
-          })
-        ],
+            ],
+          ),
 
       ),
       drawer: CustomDrawer(),
+      floatingActionButton:  Container(
+        margin: EdgeInsets.only(left: 30),
+        child: DefaultButton(
+          press: (){
+            if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
+              Utils.sanckBarError('Account Name!', "Please Enter Account Name");
+              return  ;
+            }
+            if(defaultFullName == "" && accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty){
+              Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
+              return  ;
+            }
+            if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
+              Utils.sanckBarError('Account Type!', "Please Enter Account Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
+              if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
+                Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
+                return  ;
+              }
+            }
+
+            if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
+              Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+              Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
+              Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
+              Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
+              Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstNo_Controller.text.isEmpty){
+              Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
+              Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
+              Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
+              Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
+              return  ;
+            }
+
+            if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
+              if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
+                Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+                return  ;
+              }
+            }
+
+            if(accountMaster_page_controller.Account_Master_list != null &&
+                accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
+              Utils.sanckBarError('Active!', "Please Enter Active Type");
+              return  ;
+            }
+            if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
+              Utils.sanckBarError('State!', "Please Enter State");
+              return  ;
+            }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
+              Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
+              return  ;
+            }
+            if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
+              Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
+              return  ;
+            }
+
+            accountMaster_page_controller.AccountMstUploaderApiHit('Create', "");
+          },
+          text: "Create Account",
+        ),
+      ),
       body: Obx(() {
         return
           Container(
-            padding: EdgeInsets.only(bottom: 15),
+            padding: EdgeInsets.only(bottom: 70),
             width: double.infinity,
             height: double.infinity,
             child: SingleChildScrollView(
@@ -409,9 +386,9 @@ class AddNewAccountMaster extends StatelessWidget{
                       ),
                       child: Column(
                         children: [
-                          bindAccountTypeDropDown(context),
+                         /* bindAccountTypeDropDown(context),
 
-                          SizedBox(height: 15,),
+                          SizedBox(height: 15,),*/
 
                           Form(
                             key: _formKey,
@@ -859,6 +836,11 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                           ),
 
+                          SizedBox(height: 15,),
+
+
+                          bindIsReferralDropDown(context),
+
 
                         ],
                       ),
@@ -1089,7 +1071,38 @@ class AddNewAccountMaster extends StatelessWidget{
                       ),
                       child: Column(
                         children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              InkWell(
+                                child: Icon(Icons.add),
+                                onTap: (){
+                                  accountMaster_page_controller.pageNumber = 0;
+                                  accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,"");
+                                  accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
+                                },
+                              ),
+                              SizedBox(width: 15,),
+                              InkWell(
+                                onTap: (){
+                                  accountMaster_page_controller.selectedItem.value = -1;
+                                  accountMaster_page_controller.Shipping_Address_controller.value.text="";
+                                  accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
+                                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
+                                  accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
+                                  accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                                  accountMaster_page_controller.ShowState.value=false;
+                                  accountMaster_page_controller.ShowState.value=true;
+                                  accountMaster_page_controller.Shipping_District_Controller.value.text="";
+                                  accountMaster_page_controller.consigneeId = '';
+
+                                },
+                                child: Icon(Icons.update),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 15,),
                           Container(
                             decoration: BoxDecoration(
                                 color: Colors.white,
@@ -1098,7 +1111,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_Address_controller,
+                                  .Shipping_Address_controller.value,
                               decoration: InputDecoration(
                                   hintText: "Address",
                                   labelText: "Address",
@@ -1128,7 +1141,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_Address2_Controller,
+                                  .Shipping_Address2_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "Address2",
                                   labelText: "Address2",
@@ -1159,7 +1172,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             child: TextFormField(
                               keyboardType: TextInputType.number,
                               controller: accountMaster_page_controller
-                                  .Shipping_PostCode_Controller,
+                                  .Shipping_PostCode_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "Post Code",
                                   labelText: "Post Code",
@@ -1181,9 +1194,16 @@ class AddNewAccountMaster extends StatelessWidget{
 
                           SizedBox(height: 15,),
 
-                          Container(
-                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                            child: bindShippingStateDropDown(context),
+                          Obx(() {
+                            return Visibility(
+                              visible:accountMaster_page_controller.ShowState.value,
+                              child: Container(
+                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                child: bindShippingStateDropDown(context),
+                              ),
+                            );
+                          }
+
                           ),
 
 
@@ -1197,7 +1217,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_City_Controller,
+                                  .Shipping_City_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "City",
                                   labelText: "City",
@@ -1227,7 +1247,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller
-                                  .Shipping_District_Controller,
+                                  .Shipping_District_Controller.value,
                               decoration: InputDecoration(
                                   hintText: "District",
                                   labelText: "District",
@@ -2313,6 +2333,116 @@ class AddNewAccountMaster extends StatelessWidget{
     );
   }
 
+  Widget bindIsReferralDropDown(context) {
+    return Autocomplete<String>(
+      displayStringForOption: _displayIsActiveForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.IsActiveTypeList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return accountMaster_page_controller.IsActiveTypeList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        accountMaster_page_controller.ReferralBy_Controller.text =
+            _displayIsActiveForOption(selection).toString();
+
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextField(
+            onTap: (){
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = accountMaster_page_controller.ReferralBy_Controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: Icon(Icons.arrow_drop_down),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Is Referral',
+              labelText: 'Is Referral',
+              /*hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten
+              ),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                  fontSize: AllFontSize.sisxteen),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: AllColors.primaryDark1), // Change the color to green
+              ),*/
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget bindStateDropDown(context){
     return Autocomplete<StateMasterListModel>(
       displayStringForOption: _displayStateListForOption,
@@ -2456,67 +2586,38 @@ class AddNewAccountMaster extends StatelessWidget{
       onSelected: (StateMasterListModel selection) {
         print(selection.stateName);
         // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_State_Controller.text =
+        accountMaster_page_controller.Shipping_State_Controller.value.text =
             _displayStateListForOption(selection).toString();
-       // accountMaster_page_controller.GovtStateCode.value = accountMaster_page_controller.State_Controller.text.substring(0, 2);
-       // print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
-       /* if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode.value != selection.governmentStateCode){
-          Utils.sanckBarError("Wrong State", "Please Select Valid State");
-        }*/
-
-        //accountMaster_page_controller.getCompanyProfileTypeApi();
+        FocusNode().unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextFormField(
-            /*validator: (value){
-              if(value == null || value.isEmpty){
-                return null;
-              }
-              else if(value != accountMaster_page_controller.GstStateCode){
-                return 'Please select valid state';
-              }else{
-                return null;
-              }
-            },*/
-            /*onChanged: (value) {
-              for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
-                if(accountMaster_page_controller.GstStateCode == selection.governmentStateCode){
-                  accountMaster_page_controller.GovtStateCode = selection.governmentStateCode!;
-                  //accountMaster_page_controller.GstStateList.clear();
-                  //accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
-                  print('GstStae....${accountMaster_page_controller.GovtStateCode}');
-                }
-              }
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode != selection.governmentStateCode){
-                Utils.sanckBarError("Wrong State", "Please Select Valid State");
-              }
-
-            },*/
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.Shipping_State_Controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon:
-              Icon(Icons.arrow_drop_down),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'State*',
-              labelText: 'State*',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
+          return Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
               ),
-            ),
-          ),
-        );
+              child: TextFormField(
+                cursorColor: AllColors.primaryDark1,
+                controller: controller
+                  ..text = accountMaster_page_controller.Shipping_State_Controller.value
+                      .text,
+                focusNode: focusNode,
+                //onSubmitted: onFieldSubmitted,
+                decoration: InputDecoration(
+                  suffixIcon:
+                  Icon(Icons.arrow_drop_down),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'State*',
+                  labelText: 'State*',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))
+                  ),
+                ),
+              )
+          );
+
       },
       optionsViewBuilder: (BuildContext context,
           AutocompleteOnSelected<StateMasterListModel> onSelected,
@@ -2636,7 +2737,33 @@ class AddNewAccountMaster extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:  option.responseType!,
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                            TextSpan(
+                              text: " (${option.responseDescription!})",
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                          ],
+                        ),
+                        softWrap: true,
+                      )
+
+                     /* Text(
                         option.responseType.toString() + ' (${option.responseDescription.toString()})',
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
@@ -2644,7 +2771,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             fontSize: AllFontSize
                                 .sisxteen // Change the text color here
                         ),
-                      ),
+                      ),*/
                     ),
                   );
                 },

@@ -81,6 +81,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
                 bindTotalPayment(context),
                 bindAdvancPaymentAmt(context),
                 bindFinalAmt(context),
+                bindPendingAmt(context),
                 bindRemarks(context),
             SizedBox(height: 10,),
             Visibility(
@@ -406,6 +407,44 @@ class UpdateBussinessTermPage extends StatelessWidget{
     );
   }
 
+  Widget bindPendingAmt(BuildContext context) {
+    double totAmount = saleCycleController.quoteHeaderdata[0].quoteTotalAmount!;
+    saleCycleController.pendingAmountController.value.text = totAmount.toString();
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
+      child: Obx(() {
+        return TextField(
+          readOnly: true,
+          cursorColor: AllColors.primaryDark1,
+          controller: saleCycleController.pendingAmountController.value,
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+              suffixIcon: Icon(Icons.currency_rupee),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+              hintText: 'Pending Quote Amount',
+              labelText: 'Pending Quote Amount',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.fourtine),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.sisxteen),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )
+          ),
+        );
+
+      }),
+    );
+  }
+
 
   Widget bindRemarks(BuildContext context) {
     return Padding(
@@ -456,6 +495,14 @@ class UpdateBussinessTermPage extends StatelessWidget{
          final advanceAmt = (saleCycleController.quoteHeaderdata[0].quoteTotalAmount! * percentageValue) / 100;
          saleCycleController.advncPaymentAmountController.value.text = advanceAmt.toString();
     }
+
+    double? advcAmount = double.tryParse(saleCycleController.advncPaymentAmountController.value.text);
+    double? finalAmount = double.tryParse(saleCycleController.finalAmountController.value.text);
+    if (advcAmount == null) {
+      advcAmount = 0.0;
+    }
+    double totAmount = finalAmount! - advcAmount;
+    saleCycleController.pendingAmountController.value.text = totAmount.toString();
   }
 
 

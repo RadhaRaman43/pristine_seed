@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../component/back_button.dart';
@@ -63,9 +64,11 @@ class TaskMasterScreen extends StatelessWidget{
                Spacer(),
                IconButton(onPressed: () {
                  TaskMaster_page_controller.clearCreateTaskController();
+                 TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
                  Get.toNamed(RoutesName.addNewTaskMaster_screen);
                }, icon: Icon(Icons.add)),
                IconButton(onPressed: () {
+                 TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
                  showFilterBottomSheet(context);
                }, icon: Icon(Icons.filter_alt_sharp))
              ],
@@ -105,6 +108,8 @@ class TaskMasterScreen extends StatelessWidget{
                            )),
                        onPressed: () {
                          TaskMaster_page_controller.pageNumber=0;
+                         TaskMaster_page_controller
+                             .date_filter.value = "Today";
                          TaskMaster_page_controller
                              .is_done.value = 0;
                          TaskMaster_page_controller
@@ -686,6 +691,37 @@ class TaskMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
+                  "Product Category : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[position]
+                        .productCategory??"",
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[position]
+                          .productCategory??"",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
                   "Created By : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
@@ -1170,6 +1206,10 @@ class TaskMasterScreen extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextField(
+            onTap: (){
+              focusNode.requestFocus();
+              controller.clear();
+            },
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = TaskMaster_page_controller.ApproveReject_Controller
@@ -1177,7 +1217,12 @@ class TaskMasterScreen extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: InkWell(
+                  onTap: (){
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Task Status',
@@ -1211,7 +1256,7 @@ class TaskMasterScreen extends StatelessWidget{
           child: Material(
             elevation: 4.0,
             child: Container(
-              width: size.width*.6,
+              width: size.width*.5,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,
@@ -1438,9 +1483,13 @@ class TaskMasterScreen extends StatelessWidget{
                           },
                         ),
 
-                        SizedBox(
-                          height: 10,
-                        ),
+                        SizedBox(height: 10,),
+
+                        filterWithTaskCreationOn( context),
+
+                        SizedBox(height: 10,),
+                        filterWithTaskDueDate( context),
+                        SizedBox(height: 10,),
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1488,10 +1537,9 @@ class TaskMasterScreen extends StatelessWidget{
                                   TaskMaster_page_controller.SaleCycleActive_Controller.clear();
                                   TaskMaster_page_controller.Sale_cycle_Id_controller.clear();
                                   TaskMaster_page_controller.isInfraLeadFilterController.clear();
-
+                                  TaskMaster_page_controller.filterTaskCreationOnController.value.clear();
+                                  TaskMaster_page_controller.filterTaskDuedateController.value.clear();
                                   TaskMaster_page_controller.getTaskMaster(0, 'All', '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-
-
 
                                 },
                                 child: Text(
@@ -1719,7 +1767,7 @@ class TaskMasterScreen extends StatelessWidget{
        "Is Infra Lead",
        style: GoogleFonts.poppins(
            color: AllColors.primaryDark1,
-           fontSize: AllFontSize.fourtine,
+           fontSize: AllFontSize.sisxteen,
            fontWeight: FontWeight.w500),
      ),
 
@@ -2173,6 +2221,124 @@ class TaskMasterScreen extends StatelessWidget{
           ),
         );
       },
+    );
+  }
+
+  filterWithTaskCreationOn(BuildContext context) {
+    return TextField(
+        cursorColor:AllColors.primaryDark1 ,
+        controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Task Created On',
+            labelText: 'Task Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime ending_date = new DateTime(2200);
+          DateTime start_date = new DateTime(1900);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1, // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text= outputFormat.format(date);
+          else
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text = "";
+        }
+
+    );
+  }
+
+  filterWithTaskDueDate(BuildContext context) {
+    return TextField(
+        cursorColor:AllColors.primaryDark1 ,
+        controller: TaskMaster_page_controller.filterTaskDuedateController.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Task Due Date',
+            labelText: 'Task Due Date',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1, // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            TaskMaster_page_controller.filterTaskDuedateController.value.text= outputFormat.format(date);
+          else
+            TaskMaster_page_controller.filterTaskDuedateController.value.text = "";
+        }
+
+
+
     );
   }
 

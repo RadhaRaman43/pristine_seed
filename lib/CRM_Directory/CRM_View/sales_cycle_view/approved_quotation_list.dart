@@ -251,7 +251,7 @@ class ApprovedQuotationList extends StatelessWidget{
                 ),
 
                 Container(
-                  width: size.width*.4,
+                  width: size.width*.3,
                   child: Tooltip(
                     message:  saleCycleController
                         .quoteList[index]
@@ -482,7 +482,7 @@ class ApprovedQuotationList extends StatelessWidget{
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(() {
+            /*Obx(() {
               return Checkbox(
                   value: saleCycleController.isCheck.value == index,
                   onChanged: (bool? value) {
@@ -491,12 +491,23 @@ class ApprovedQuotationList extends StatelessWidget{
                     } else {
                       saleCycleController.isCheck.value = -1;
                     }
-                   /* saleCycleController.isCheck.value = value!;
+                   *//* saleCycleController.isCheck.value = value!;
                     saleCycleController.selectedQuotationIdController.value.text = saleCycleController
-                        .quoteList[index].quoteId??"";*/
+                        .quoteList[index].quoteId??"";*//*
                     //saleCycleController.CheckBoxApprovedQuotationList(index);
                   });
-                          }),
+                          }),*/
+
+            Obx((){
+              return Checkbox(
+                value: saleCycleController.checkBoxValues[index] ?? false,
+                activeColor: AllColors.primaryDark1,
+                onChanged: (bool? value) {
+                  saleCycleController.toggleMultiCheckbox(index);
+                },
+              );
+            }),
+
             SizedBox(width: 8,),
             InkWell(
                 onTap: (){
@@ -775,5 +786,7 @@ class ApprovedQuotationList extends StatelessWidget{
 
     );
   }
+
+
 
 }

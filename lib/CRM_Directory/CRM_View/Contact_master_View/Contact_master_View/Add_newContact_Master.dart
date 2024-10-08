@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../../component/default_button.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
 import '../../../../reources/routes/routes_name.dart';
@@ -24,11 +25,13 @@ class AddNewcontactMasterContact extends StatelessWidget{
   /*static String _displayAccNameForOption(AccountMasterModel option) =>
       option.accountName!+"(${option.accountCode!})";*/
   static String _displayAccNameForOption(AccountMasterModel option) =>
-      option.accountName!;
+      option.accountName! + " (${option.accountCode!})";
   static String _displayDepartNameForOption(DepartNameModal option) =>
       option.deptName!;
   static String _displayDesignationNameForOption(DesignationModal option) =>
       option.designationname!;
+  static String _displayIsHeDecisionMakerForOption(String option) =>
+      option;
 
   final _formKey = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
@@ -55,7 +58,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
         }
 
         return false;
-      }, child: Scaffold(
+      },
+      child: Scaffold(
       appBar:  AppBar(
           backgroundColor: AllColors.primaryDark1,
           iconTheme: IconThemeData(
@@ -71,7 +75,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Spacer(),
+              /*Spacer(),
               ActionChip(
                 elevation: 2,
                 padding: EdgeInsets.all(5),
@@ -103,13 +107,31 @@ class AddNewcontactMasterContact extends StatelessWidget{
                   //preventive_page_controller.createPreventiveCalenderCallApi();
 
                 }, //Text
-              ),
+              ),*/
             ],
           )
 
       ),
       drawer: CustomDrawer(),
+      floatingActionButton:  Container(
+        margin: EdgeInsets.only(left: 30),
+        child: DefaultButton(
+          press: (){
+            if(contact_vm_controller.updateContact){
+              contact_vm_controller.createNewContactMstApi("Update");
+            }
+            else{
+              contact_vm_controller.contact_code="";
+              contact_vm_controller.createNewContactMstApi("Create");
+
+            }
+
+          },
+          text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
+        ),
+      ),
       body: Container(
+        padding: EdgeInsets.only(bottom: 70),
           height: size.height,
           width: size.width,
         child: SingleChildScrollView(
@@ -151,10 +173,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
               ),
               SizedBox(height: 15,),
 
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: bindAccountOwnerDropDown(context),
-              ),
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: bindAccountOwnerDropDown(context),
+                ),
+
               SizedBox(height: 15,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -308,6 +331,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 ),
               ),
               SizedBox(height: 15,),
+              bindIsDecisionDropDown(context),
+              SizedBox(height: 15,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
                 child: TextFormField(
@@ -330,6 +355,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
           
                 ),
               ),
+              /*SizedBox(height: 10,),*/
+
           
             ],
           ),
@@ -338,6 +365,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
     ),
     );
   }
+
+
   Widget bindAccountOwnerDropDown(context){
     ScrollController scrollController = ScrollController();
 
@@ -358,13 +387,10 @@ class AddNewcontactMasterContact extends StatelessWidget{
             "last index ${contact_vm_controller.pageNumber} ${contact_vm_controller.total_rows} ${contact_vm_controller.rowsPerPage} ${totalPage}");
 
         // Fetch the next page if there are more pages
-        if (contact_vm_controller.pageNumber + 1 < totalPage &&
-            !contact_vm_controller.isFetching.value) {
-          contact_vm_controller.isFetching.value = true; // prevent multiple calls
+        if (contact_vm_controller.pageNumber + 1 < totalPage ) {
           contact_vm_controller.getAccountMaster(
               contact_vm_controller.pageNumber + 1).then((_) {
             contact_vm_controller.pageNumber += 1;
-            contact_vm_controller.isFetching.value = false;
           });
         }
       }
@@ -397,15 +423,31 @@ class AddNewcontactMasterContact extends StatelessWidget{
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
+        return TextFormField(
           readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
           cursorColor: AllColors.primaryDark1,
           controller: controller
             ..text = contact_vm_controller.account_name_controller.text,
           focusNode: focusNode,
+          onTapOutside: (value){
+            FocusNode().unfocus();
+          },
+          /*onChanged: (value){
+            contact_vm_controller.account_name_controller.text = value;
+            print('Controller...${contact_vm_controller.account_name_controller.text}');
+            contact_vm_controller.getAccountMaster(
+                contact_vm_controller.pageNumber );
+            if(value.isEmpty){
+              contact_vm_controller.account_name_controller.text = value;
+              contact_vm_controller.getAccountMaster(
+                  contact_vm_controller.pageNumber );
+
+            }
+          },*/
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: InkWell(
+                child: Icon(Icons.arrow_drop_down)),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Name',
@@ -439,16 +481,42 @@ class AddNewcontactMasterContact extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                       // option.accountName!+"(${option.accountCode!})",
-                        option.accountName!,
+                      child:
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.accountName!,
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                              TextSpan(
+                                text: " (${option.accountCode!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
+
+                      /*Text(
+                        option.accountName! + " (${option.accountCode!})",
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
                             fontSize: AllFontSize
                                 .sisxteen // Change the text color here
                         ),
-                      ),
+                      ),*/
                     ),
                   );
                 },
@@ -639,5 +707,56 @@ class AddNewcontactMasterContact extends StatelessWidget{
       },
     );
   }
+
+  Widget bindIsDecisionDropDown(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        width: size.width-30,
+        controller: contact_vm_controller.IsHeDecisionMakerController.value,
+        label: Text(
+          "Is Decision",
+          style: GoogleFonts.poppins(
+              color: AllColors.blackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize
+                  .sisxteen),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          contact_vm_controller.IsHeDecisionMakerController.value.text =
+              _displayIsHeDecisionMakerForOption(selection!).toString();
+
+        },
+        dropdownMenuEntries:
+        contact_vm_controller.isHeDecisionMakerList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+
+  }
+
 
 }

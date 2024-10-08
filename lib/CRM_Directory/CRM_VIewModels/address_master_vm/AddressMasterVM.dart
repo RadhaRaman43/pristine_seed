@@ -121,6 +121,16 @@ class Addressmastervm extends GetxController{
       return  ;
     }
 
+    if(IfscCode_Controller.text.isNotEmpty ){
+      if(IfscCode_Controller.text.length>10){
+      }
+      else{
+        Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+        return  ;
+      }
+
+    }
+
     if(State_Controller.text.isEmpty || State_Controller == null){
       Utils.sanckBarError('State!', "Please Enter State");
       return  ;

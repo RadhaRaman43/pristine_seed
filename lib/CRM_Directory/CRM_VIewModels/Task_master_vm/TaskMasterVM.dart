@@ -17,6 +17,7 @@ import '../../CRM_Models/TaskMaster_model/Task_DSAR_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_update_infra_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
 
 class Taskmastervm extends GetxController{
@@ -32,6 +33,7 @@ class Taskmastervm extends GetxController{
     RxBool typeOfCall=false.obs;
     RxBool ItemCateDropDown=false.obs;
     RxBool PurposeOfVisit=false.obs;
+    RxBool PaymentCall=false.obs;
     int pageNumber = 0;
     int rowsPerPage = 10;
     int total_rows = 0;
@@ -43,6 +45,7 @@ class Taskmastervm extends GetxController{
     RxBool isExpandCrtd = true.obs;
     RxBool isExpandDSAR = true.obs;
     RxBool isInfraLeadValue=false.obs;
+    RxBool isInfraLeadValueSubmit=false.obs;
     RxString date_filter="Today".obs;
     RxInt is_done = 0.obs;
 
@@ -61,15 +64,18 @@ class Taskmastervm extends GetxController{
     var ApproveReject_Controller = TextEditingController();
     var RejectReason_Controller = TextEditingController();
     var Sale_cycle_Id_controller = TextEditingController();
-    var DSAR_Status_type_controller = TextEditingController();
+    var DSAR_Status_type_controller = TextEditingController().obs;
     var ItemCat_type_controller = TextEditingController();
     var NextInterdate_controller = TextEditingController();
     var EstClosuredate_controller = TextEditingController();
     var NextInterTime_controller = TextEditingController();
     var BudgetAmt_controller = TextEditingController();
     var ExpectedAmt_controller = TextEditingController();
-    var isInfraLead = TextEditingController();
+    var isInfraLead = TextEditingController().obs;
     var isInfraLeadFilterController=TextEditingController();
+    var filterTaskDuedateController=TextEditingController().obs;
+    var filterTaskCreationOnController=TextEditingController().obs;
+    var DataOFVisitController=TextEditingController().obs;
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -95,12 +101,14 @@ class Taskmastervm extends GetxController{
     RxList<String> SaleCycleActiveTypeList = <String>[].obs;
     RxList<String> approveRejectList = <String>[].obs;
     RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+    RxList<SalesCycleModal> Sales_Id_list=<SalesCycleModal>[].obs;
     RxList<CallStatusMasterModel> CallStatus_Master_list=<CallStatusMasterModel>[].obs;
     RxList<CallStatusMasterModel> MethodOfCall_Master_list=<CallStatusMasterModel>[].obs;
     RxList<CallStatusMasterModel> DSARStatus_Master_list=<CallStatusMasterModel>[].obs;
     RxList<ContactMstGetListModal> contact_master_list = <ContactMstGetListModal>[].obs;
     RxList<TaskDSARModel> TaskDSAR_Master_list = <TaskDSARModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_master_list = <ItemCategoryMstModel>[].obs;
+    RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_list = <ItemCategoryMstModel>[].obs;
     RxList<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
     RxList<String> Item_Category_code_list = <String>[].obs;
@@ -179,6 +187,8 @@ class Taskmastervm extends GetxController{
                 "filter_approved_by": "",
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
+                "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
+                "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
             };
@@ -238,8 +248,11 @@ class Taskmastervm extends GetxController{
     }
 
     TaskMasterCreate(){
+
+        List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
+
         try{
-            Map<String, String> data={
+            Map<String, dynamic> data={
                 "account_name": account_name.value.isNotEmpty?account_name.value:"",
                 "account_code": account_code.value.isNotEmpty?account_code.value:"",
                 "contact_name": Contact_Name_controller.text.isEmpty?'':Contact_Name_controller.text,
@@ -248,7 +261,11 @@ class Taskmastervm extends GetxController{
                 "method_of_call": Method_of_call_controller.text.isEmpty?'':Method_of_call_controller.text,
                 "task_remarks": Task_Remarks_controller.text.isEmpty?'':Task_Remarks_controller.text,
                 "purpose_of_visit": PusposeOfVisit_controller.text.isEmpty?'':PusposeOfVisit_controller.text,
-                "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text
+                "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
+                "payment_sale_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
+                "date_of_visit": DataOFVisitController.value.text.isEmpty?"":DataOFVisitController.value.text,
+                "is_infra_lead": isInfraLeadFilterController.text =='Yes'?1:0,
+                "lines": lines.map((line) => line.toJson()).toList(),
             };
             print('Jason Date....${data}');
             loading.value=true;
@@ -263,6 +280,8 @@ class Taskmastervm extends GetxController{
                        // Get.offAllNamed(RoutesName.taskMaster_screen);
                         pageNumber=0;
                         clearCreateTaskController();
+                        date_filter.value = "Today";
+                        is_done.value = 0;
                         getTaskMaster(pageNumber, is_Active.toString(), '', '', '',date_filter, is_done.value);
                         Get.toNamed(RoutesName.taskMaster_screen);
 
@@ -296,8 +315,8 @@ class Taskmastervm extends GetxController{
         try{
             Map data={
                 "task_id": TaskID,
-                "is_infra_lead": isInfraLead.text=="Yes"?1:0,
-                "dsar_status": DSAR_Status_type_controller.text.isEmpty?'':DSAR_Status_type_controller.text,
+                "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
+                "dsar_status": DSAR_Status_type_controller.value.text.isEmpty?'':DSAR_Status_type_controller.value.text,
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "next_interaction_date": NextInterdate_controller.text.isEmpty?'':NextInterdate_controller.text,
                 "next_interaction_time": NextInterTime_controller.text.isEmpty?'':NextInterTime_controller.text,
@@ -325,7 +344,7 @@ class Taskmastervm extends GetxController{
                         typeOfCall.value = false;
                         ItemCateDropDown.value = false;
                         Type_of_call_controller.clear();
-                        DSAR_Status_type_controller.clear();
+                        DSAR_Status_type_controller.value.clear();
                         ItemCat_type_controller.clear();
                         NextInterdate_controller.clear();
                         NextInterTime_controller.clear();
@@ -684,6 +703,40 @@ class Taskmastervm extends GetxController{
         });
     }
 
+    getItemCategoryMstWithoutTaskIdApi() {
+        this.loading.value = true;
+        Map<String, String> data = {
+
+        };
+
+        _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+            try {
+                List<ItemCategoryMstModel> Response =
+                (json.decode(value) as List<dynamic>)
+                    .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+                    .toList();
+
+                if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+                    Item_Category_master_list_without_task.value = Response!;
+
+                    // print('master list....${get_Acc_type_list.length.toString()}');
+                } else {
+                    Item_Category_master_list_without_task.value = [];
+                    //print('master listelsse....${get_Acc_type_list.length.toString()}');
+                }
+            } catch (e) {
+                Item_Category_master_list_without_task.value = [];
+                print('catch....${e.toString()}');
+            }
+        }).onError((error, stackTrace) {
+            Item_Category_master_list_without_task.value = [];
+            Utils.sanckBarError('Api Exception onError', error.toString());
+            print('catchEx....${error.toString()}');
+        }).whenComplete(() {
+            this.loading.value = false;
+        });
+    }
+
     TaskSaleCatCreateApiHit(String flag) async {
 
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
@@ -724,7 +777,7 @@ class Taskmastervm extends GetxController{
 
                 } else {
                     loading.value = false;
-                    Utils.showErrorToastification("Error!", "Unsuccessful");
+                    Utils.showErrorToastification("Error!", "Please select at least single product category");
                 }
             } else {
                 loading.value = false;
@@ -744,6 +797,48 @@ class Taskmastervm extends GetxController{
                 print("Ghdf ${userGeoHierarchy.length}");
 
         });
+    }
+
+    getSaleIDByAccountCode(int page_no){
+        try{
+            Map<String, String> data={
+                "sales_cycle_id": "",
+                "account_code": account_code.value,
+                "row_per_page": rowsPerPage.toString(),
+                "page_number": page_no.toString()
+            };
+            loading.value=true;
+            _api.SalesCycleMstGetByAccountCodeApiHit(data, sessionManagement).then((onValue){
+                final jsonResponse = json.decode(onValue);
+                if(jsonResponse is List){
+                    List<SalesCycleModal> response = jsonResponse.map((e) => SalesCycleModal.fromJson(e)).toList();
+                    if(response!= null && response.length>0 && response[0].condition=="True"){
+                        loading.value = false;
+                        if(page_no==0){
+                            Sales_Id_list.clear();
+                        }
+                        Sales_Id_list.addAll(response);
+                        total_rows=int.parse(Sales_Id_list[0].totalRows!);
+
+                    }else {
+                        loading.value = false;
+                        Sales_Id_list.value=[];
+
+                    }
+                } else {
+                    loading.value = false;
+
+                }
+            },
+            ).onError(
+                    (error, stackTrace) {
+                    print(error);
+                },
+            );
+        }catch(e){
+            loading.value = false;
+            print(e);
+        }
     }
 
 
@@ -784,6 +879,7 @@ class Taskmastervm extends GetxController{
                                 is_Active.toString(),
                                Task_Master_list[0].taskId,
                                 '', 'GET FROM TASK ID', date_filter, is_done.value);
+                            isInfraLeadValueSubmit.value = true;
                             Get.toNamed(RoutesName.addNewDSARTask_screen);
                             clearUpdateController();
                             loading.value = false;
@@ -848,12 +944,20 @@ class Taskmastervm extends GetxController{
     }
 
     void clearCreateTaskController(){
+        Item_Category_Selected_list.value=[];
         account_name.value = '';
+        isInfraLeadFilterController.text = "No";
         account_Name_controller.clear();
         Contact_Name_controller.clear();
         Type_of_call_controller.clear();
         Method_of_call_controller.clear();
         Task_Remarks_controller.clear();
+        Sale_cycle_Id_controller.clear();
+        //isInfraLeadFilterController.clear();
+        String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+        DataOFVisitController.value.text = todayDate;
+        ItemCat_type_controller.clear();
+
 
     }
 

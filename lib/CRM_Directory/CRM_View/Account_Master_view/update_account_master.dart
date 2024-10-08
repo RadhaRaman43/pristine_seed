@@ -149,7 +149,7 @@ class UpdateAccountMaster extends StatelessWidget{
                  backgroundColor: AllColors.primaryDark1,
                  shadowColor: Colors.black,
                  shape: StadiumBorder(
-                     side: BorderSide(color: AllColors.grayColor)),
+                     side: BorderSide(color: AllColors.whiteColor)),
                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                  //CircleAvatar
                  label: Tooltip(
@@ -176,7 +176,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    }
                    if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
                      if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
-                       Utils.sanckBarError('Account Type!', "Please Enter 10 Digit Phone No");
+                       Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
                        return  ;
                      }
                    }
@@ -215,6 +215,14 @@ class UpdateAccountMaster extends StatelessWidget{
                      Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
                      return  ;
                    }
+
+                   if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
+                     if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
+                       Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+                       return  ;
+                     }
+                   }
+
                    if(accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
                      Utils.sanckBarError('Active!', "Please Enter Active Type");
                      return  ;
@@ -435,10 +443,10 @@ class UpdateAccountMaster extends StatelessWidget{
                    ),
                    child: Column(
                      children: [
-                       bindAccountTypeDropDown(context),
+                       /*bindAccountTypeDropDown(context),
 
                        SizedBox(height: 15,),
-
+*/
                        Form(
                          key: _formKey,
                          child: Container(
@@ -887,6 +895,11 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                        ),
 
+                       SizedBox(height: 15,),
+
+
+                       bindIsReferralDropDown(context)
+
                      ],
                    ),
                  ),
@@ -908,7 +921,7 @@ class UpdateAccountMaster extends StatelessWidget{
                  ),
                  child: InputDecorator(
                    decoration: InputDecoration(
-                     labelText: 'Bill Address',
+                     labelText: 'Billing Address',
                      labelStyle: GoogleFonts.poppins(
                          color: AllColors.primaryDark1,
                          fontWeight: FontWeight.w700,
@@ -1137,6 +1150,39 @@ class UpdateAccountMaster extends StatelessWidget{
                    child: Column(
                      children: [
 
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         children: [
+                           InkWell(
+                             child: Icon(Icons.add),
+                             onTap: (){
+                               accountMaster_page_controller.pageNumber = 0;
+                               accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
+                               accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
+
+
+                             },
+                           ),
+                           SizedBox(width: 15,),
+                           InkWell(
+                             onTap: (){
+                               accountMaster_page_controller.selectedItem.value = -1;
+                               accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress??"";
+                               accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress2??"";
+                               accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingPostCode??"";
+                               accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingCity??"" ;
+                               accountMaster_page_controller.Shipping_State_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingStateName??"";
+                               accountMaster_page_controller.ShowState.value=false;
+                               accountMaster_page_controller.ShowState.value=true;
+                               accountMaster_page_controller.Shipping_District_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingDistrict??"";
+                               accountMaster_page_controller.consigneeId = '';
+                             },
+                             child: Icon(Icons.update),
+                           )
+                         ],
+                       ),
+                       SizedBox(height: 15,),
+
                        Container(
                          decoration: BoxDecoration(
                              color: Colors.white,
@@ -1145,7 +1191,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
                            controller: accountMaster_page_controller
-                               .Shipping_Address_controller,
+                               .Shipping_Address_controller.value,
                            decoration: InputDecoration(
                                hintText: "Address",
                                labelText: "Address",
@@ -1175,7 +1221,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
                            controller: accountMaster_page_controller
-                               .Shipping_Address2_Controller,
+                               .Shipping_Address2_Controller.value,
                            decoration: InputDecoration(
                                hintText: "Address2",
                                labelText: "Address2",
@@ -1206,7 +1252,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          child: TextFormField(
                            keyboardType: TextInputType.number,
                            controller: accountMaster_page_controller
-                               .Shipping_PostCode_Controller,
+                               .Shipping_PostCode_Controller.value,
                            decoration: InputDecoration(
                                hintText: "Post Code",
                                labelText: "Post Code",
@@ -1228,11 +1274,17 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: bindShippingStateDropDown(context),
-                       ),
+                       Obx(() {
+                         return Visibility(
+                           visible:accountMaster_page_controller.ShowState.value,
+                           child: Container(
+                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                             child: bindShippingStateDropDown(context),
+                           ),
+                         );
+                       }
 
+                       ),
 
                        SizedBox(height: 15,),
 
@@ -1244,7 +1296,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
                            controller: accountMaster_page_controller
-                               .Shipping_City_Controller,
+                               .Shipping_City_Controller.value,
                            decoration: InputDecoration(
                                hintText: "City",
                                labelText: "City",
@@ -1274,7 +1326,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
                            controller: accountMaster_page_controller
-                               .Shipping_District_Controller,
+                               .Shipping_District_Controller.value,
                            decoration: InputDecoration(
                                hintText: "District",
                                labelText: "District",
@@ -1497,6 +1549,7 @@ class UpdateAccountMaster extends StatelessWidget{
          child: Center(
              child: InkWell(
                  onTap: (){
+                    accountMaster_page_controller.UploadImageType_controller.text= "Upload Image";
                     accountMaster_page_controller.view=='Account'?UploadImageDailog(context):"";
                  },
                  child: Obx((){
@@ -1518,9 +1571,10 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   UploadImageDailog(BuildContext context){
-    accountMaster_page_controller.UploadImageType_controller.clear();
+    //accountMaster_page_controller.UploadImageType_controller.clear();
     accountMaster_page_controller.ImageUrl_Controller.clear();
     accountMaster_page_controller.UploadImage.value = false;
+    accountMaster_page_controller.ButtonText.value = 'Choose files';
    showDialog(
        context: context,
        builder: (context){
@@ -1604,7 +1658,7 @@ class UpdateAccountMaster extends StatelessWidget{
                            ),
                            onPressed: ()  {
                              if(accountMaster_page_controller.UploadImageType_controller.text.isEmpty || accountMaster_page_controller.UploadImageType_controller == null){
-                               Utils.sanckBarError('Error : ', 'Please Upload Image Type.');
+                               Utils.sanckBarError('Error : Image', 'Please Upload Image Type.');
                                return;
 
                              }
@@ -1614,7 +1668,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                accountMaster_page_controller.upLoadImage(context);
                              }else if(accountMaster_page_controller.UploadImageType_controller.text== "Url"){
                                if(accountMaster_page_controller.ImageUrl_Controller.text.isEmpty || accountMaster_page_controller.ImageUrl_Controller == null){
-                                 Utils.sanckBarError('Error : ', 'Please Enter Image Url.');
+                                 Utils.sanckBarError('Error : Image', 'Please Enter Image Url.');
                                }else{
                                  accountMaster_page_controller.upLoadImageApi(context);
                                }
@@ -2586,6 +2640,110 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
+  Widget bindIsReferralDropDown(context) {
+    return Autocomplete<String>(
+      displayStringForOption: _displayIsActiveForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if(accountMaster_page_controller.view=='VIEW'){
+          accountMaster_page_controller.IsActiveTypeList.value=[];
+          return accountMaster_page_controller.IsActiveTypeList;
+        }
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.IsActiveTypeList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return accountMaster_page_controller.IsActiveTypeList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        accountMaster_page_controller.ReferralBy_Controller.text =
+            _displayIsActiveForOption(selection).toString();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextField(
+            readOnly: accountMaster_page_controller.view=='Account'?false:true,
+            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                || accountMaster_page_controller.view=='VIEW' ||
+                accountMaster_page_controller.view=='Task'||
+                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = accountMaster_page_controller.ReferralBy_Controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: Icon(Icons.arrow_drop_down),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Is Referral',
+              labelText: 'Is Referral',
+
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget bindStateDropDown(context){
     return Autocomplete<StateMasterListModel>(
       displayStringForOption: _displayStateListForOption,
@@ -2722,8 +2880,9 @@ class UpdateAccountMaster extends StatelessWidget{
       onSelected: (StateMasterListModel selection) {
         print(selection.stateName);
         // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_State_Controller.text =
+        accountMaster_page_controller.Shipping_State_Controller.value.text =
             _displayStateListForOption(selection).toString();
+        FocusNode().unfocus();
         // accountMaster_page_controller.GovtStateCode.value = accountMaster_page_controller.State_Controller.text.substring(0, 2);
         // print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
         /* if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode.value != selection.governmentStateCode){
@@ -2766,7 +2925,7 @@ class UpdateAccountMaster extends StatelessWidget{
             },*/
             cursorColor: AllColors.primaryDark1,
             controller: controller
-              ..text = accountMaster_page_controller.Shipping_State_Controller
+              ..text = accountMaster_page_controller.Shipping_State_Controller.value
                   .text,
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
@@ -2911,7 +3070,34 @@ class UpdateAccountMaster extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
+                      child:
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:  option.responseType!,
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                            TextSpan(
+                              text: " (${option.responseDescription!})",
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                          ],
+                        ),
+                        softWrap: true,
+                      )
+
+                     /* Text(
                         option.responseType.toString() + ' (${option.responseDescription.toString()})',
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
@@ -2919,7 +3105,7 @@ class UpdateAccountMaster extends StatelessWidget{
                             fontSize: AllFontSize
                                 .sisxteen // Change the text color here
                         ),
-                      ),
+                      ),*/
                     ),
                   );
                 },

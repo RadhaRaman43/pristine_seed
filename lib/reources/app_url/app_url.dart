@@ -192,6 +192,8 @@ class AppUrl {
      static const String AccountDashboardDataGet = "$BASE_URL/api/CRM/Account/AccountDashboardDataGet";
      static const String AccountTaskHistoryGet = "$BASE_URL/api/CRM/Account/AccountTaskHistoryGet";
      static const String AccountDashboardCountGet = "$BASE_URL/api/CRM/Account/AccountDashboardCountGet";
+     static const String DraftAccountMstGet = "$BASE_URL/api/CRM/Account/DraftAccountMstGet";
+     static const String DraftAccountMstUploader = "$BASE_URL/api/CRM/Account/DraftAccountMstUploader";
 
      //todo contact master repo.....
      static const String ContactMstGet = "$BASE_URL/api/CRM/Contact/ContactMstGet";
@@ -213,13 +215,16 @@ class AppUrl {
      static const String ItemCategoryMstGetByTaskId = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByTaskId";
      static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/TaskSalesProductCategoryCreate";
      static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
+     static const String ItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ItemCategoryMstGet";
 
 
      //todo sales cycle
      static const String salesCycleMstGet = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGet";
      static const String salesCycleMstUpdate = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdate";
      static const String salesCycleMstApproveReject = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstApproveReject";
+     static const String SalesCycleMstGetByAccountCode = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGetByAccountCode";
      static const String quoteHeaderGet = "$BASE_URL/api/CRM/Quote/QuoteHeaderGet";
+     static const String QuoteWonDataGet = "$BASE_URL/api/CRM/Quote/QuoteWonDataGet";
      static const String quoteHeaderCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderCreate";
      static const String quoteHeaderDuplicateCreate = "$BASE_URL/api/CRM/Quote/QuoteHeaderDuplicate";
      static const String quoteHeaderGetByQuoteId = "$BASE_URL/api/CRM/Quote/QuoteHeaderGetByQuoteId";
@@ -237,6 +242,8 @@ class AppUrl {
      static const String QuoteHeaderUpdateBusinessTerms = "$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateBusinessTerms";
      static const String quotationReport = "$BASE_URL/api/CRM/Quote/QuotationReport";
      static const String specialPriceRequestReport = "$BASE_URL/api/CRM/Quote/SpecialPriceRequestReport";
+     static const String SaleCycleProductCategoryWiseAmtCreate = "$BASE_URL/api/CRM/SalesCycle/SaleCycleProductCategoryWiseAmtCreate";
+     static const String SaleCycleProductCategoryWiseAmtGet = "$BASE_URL/api/CRM/SalesCycle/SaleCycleProductCategoryWiseAmtGet";
 
 
 

@@ -42,7 +42,7 @@ class AddNewDsarScreen extends StatelessWidget{
       TaskMaster_page_controller.DSARStatus.value = false;
       TaskMaster_page_controller.typeOfCall.value = false;
       TaskMaster_page_controller.ItemCateDropDown.value = false;
-      TaskMaster_page_controller.DSAR_Status_type_controller.clear();
+      TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
       TaskMaster_page_controller.Type_of_call_controller.clear();
       TaskMaster_page_controller.ItemCat_type_controller.clear();
       TaskMaster_page_controller.NextInterdate_controller.clear();
@@ -68,7 +68,7 @@ class AddNewDsarScreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Spacer(),
+             /* Spacer(),
 
 
                  ActionChip(
@@ -77,7 +77,7 @@ class AddNewDsarScreen extends StatelessWidget{
                   backgroundColor: AllColors.primaryDark1,
                   shadowColor: Colors.black,
                   shape: StadiumBorder(
-                      side: BorderSide(color: AllColors.grayColor)),
+                      side: BorderSide(color: AllColors.whiteColor)),
                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                   //CircleAvatar
                   label: Tooltip(
@@ -92,18 +92,30 @@ class AddNewDsarScreen extends StatelessWidget{
                   onPressed: () {
                     print('infra lead...${TaskMaster_page_controller.Task_Master_list[0].isInfraLead}');
                     print('infra lead2...${TaskMaster_page_controller.isInfraLead.value.text}');
-                    if( TaskMaster_page_controller
+                    *//*if( TaskMaster_page_controller
                         .Task_Master_list[0].isInfraLead==0 && TaskMaster_page_controller.isInfraLead.value.text == 'Yes' ){
                       Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
                     }
                     else{
                       TaskMaster_page_controller.TaskDSARMasterCreate();
                     }
+*//*
 
+                    if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
+                      //Utils.sanckBarError("Message", "Created");
+                      TaskMaster_page_controller.TaskDSARMasterCreate();
+                    }
+                    else if(TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value){
 
-                  }, //Text
+                      Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
+
+                    }else{
+                      //Utils.sanckBarError("Message", "Created2");
+                      TaskMaster_page_controller.TaskDSARMasterCreate();
+                    }
+                    }, //Text
                 ),
-
+*/
 
              /* Obx((){
                 return Visibility(
@@ -140,8 +152,32 @@ class AddNewDsarScreen extends StatelessWidget{
           )
       ),
       drawer: CustomDrawer(),
+      floatingActionButton:  Padding(
+        padding: const EdgeInsets.only(left:30),
+        child: DefaultButton(
+          //text: "${TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?"Update":"Add"} Infra Details",
+          text: "Create DSAR",
+          press: (){
+            if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == ""){
+              Utils.sanckBarError("Message", "Please select DSAR Status");
+            }
+            else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
+              //Utils.sanckBarError("Message", "Created");
+              TaskMaster_page_controller.TaskDSARMasterCreate();
+            }
+            else if(TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value){
+
+              Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
+
+            }else{
+              //Utils.sanckBarError("Message", "Created2");
+              TaskMaster_page_controller.TaskDSARMasterCreate();
+            }
+          },
+        ),
+      ),
       body: Container(
-        padding: EdgeInsets.only(bottom: 15),
+        padding: EdgeInsets.only(bottom: 70),
         width: double.infinity,
         height: double.infinity,
         child: SingleChildScrollView(
@@ -373,16 +409,16 @@ class AddNewDsarScreen extends StatelessWidget{
               ),
 
 
-
-
               SizedBox(height: 15,),
              Obx((){
                return  Visibility(
-                 visible: TaskMaster_page_controller.isInfraLeadValue.value,
+                   visible: TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value ? true:false,
+                // visible: TaskMaster_page_controller.DSAR_Status_type_controller.value.text == 'Sales Cycle' && TaskMaster_page_controller.isInfraLead.value.text  == "Yes",
                  child: Padding(
                    padding: const EdgeInsets.only(left:10, right: 10, top: 10),
                    child: DefaultButton(
-                     text: "${TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?"Update":"Add"} Infra Details",
+                     //text: "${TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?"Update":"Add"} Infra Details",
+                     text: "Update Infra Details",
                      press: (){
                        print("Length${TaskMaster_page_controller.userGeoHierarchyy.length}");
                        for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
@@ -394,13 +430,19 @@ class AddNewDsarScreen extends StatelessWidget{
                        if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
                          TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
                        }
-                       TaskMaster_page_controller.isInfraLeadUpdateController.text=TaskMaster_page_controller.isInfraLead.text;
+                       TaskMaster_page_controller.isInfraLeadUpdateController.text=TaskMaster_page_controller.isInfraLead.value.text;
                        Get.toNamed(RoutesName.updateTaskMstInfraScreen);
                      },
                    ),
                  ),
                );
-             })
+             }),
+
+              SizedBox(height: 15,),
+
+
+
+
 
 
             ],
@@ -429,70 +471,36 @@ class AddNewDsarScreen extends StatelessWidget{
       },
       onSelected: (CallStatusMasterModel selection) {
         // Update the TextField with the selected
-        TaskMaster_page_controller.DSAR_Status_type_controller.text =
+        TaskMaster_page_controller.DSAR_Status_type_controller.value.text =
             _displayDSARTypeForOption(selection).toString();
         TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
-        /*if(TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Revisit' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Reschedule' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Repeated'){
-          TaskMaster_page_controller.DSARStatus.value = true;
-          TaskMaster_page_controller.ItemCateDropDown.value = false;
-        }else if(TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Sales Cycle')
-        {
-          TaskMaster_page_controller.DSARStatus.value = true;
-          TaskMaster_page_controller.ItemCateDropDown.value = true;
-          TaskMaster_page_controller.Item_Category_Selected_list.value = [];
-          for(int i = 0; i < TaskMaster_page_controller.Item_Category_master_list.length; i++ ){
-            if(TaskMaster_page_controller.Item_Category_master_list[i].isSelected == 1){
-              TaskMaster_page_controller.Item_Category_Selected_list.add(TaskMaster_page_controller.Item_Category_master_list[i]);
-              print('LIstSIze.....${TaskMaster_page_controller.Item_Category_Selected_list.length}');
-            }
-            else{
-              print('NoLIstSIze.....${TaskMaster_page_controller.Item_Category_Selected_list.length}');
-            }
-          }
-        }
-        else if(TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Completed' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Not Interested' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Cancelled' ){
-          TaskMaster_page_controller.DSARStatus.value = false;
-          TaskMaster_page_controller.ItemCateDropDown.value = false;
+        print('status...${TaskMaster_page_controller.DSAR_Status_type_controller.value.text}');
+        print('ISInfra...${TaskMaster_page_controller.isInfraLead.value.text}');
+        /*if(selection.isInfraLead==1){
+          TaskMaster_page_controller.isInfraLeadValue.value=true;
+          print('ISInfravalue...${TaskMaster_page_controller.isInfraLead.value.text}');
         }*/
-        if(selection.isInfraLead==1){
-          print("jhf1");
-          if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
-            print("jhf2");
-            TaskMaster_page_controller.isInfraLead.text="Yes";
-            if( TaskMaster_page_controller.isInfraLead.text=="Yes"){
-              print("efldmgflmngl");
-              print(TaskMaster_page_controller.isInfraLeadValue.value);
+          /*if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
+            TaskMaster_page_controller.isInfraLead.value.text="Yes";
+            if( TaskMaster_page_controller.isInfraLead.value.text=="Yes"){
               TaskMaster_page_controller.isInfraLeadValue.value=true;
-              print("trrurrururururu${TaskMaster_page_controller.isInfraLeadValue.value}");
-
-
             }
 
           }
           else{
-            print("jhf3");
-            TaskMaster_page_controller.isInfraLead.text="No";
+            TaskMaster_page_controller.isInfraLead.value.text="No";
             TaskMaster_page_controller.isInfraLeadValue.value=false;
           }
-        }
+        }*/
 
         if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 1){
-
           TaskMaster_page_controller.typeOfCall.value = true;
           TaskMaster_page_controller.DSARStatus.value = true;
           TaskMaster_page_controller.ItemCateDropDown.value = false;
-          print('istemdropDown1...${TaskMaster_page_controller.ItemCateDropDown.value}');
         }else if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 0 ){
-          print('istemdropDown...${TaskMaster_page_controller.ItemCateDropDown.value}');
           TaskMaster_page_controller.DSARStatus.value = true;
           TaskMaster_page_controller.typeOfCall.value = false;
           TaskMaster_page_controller.ItemCateDropDown.value = true;
-         // TaskMaster_page_controller.isInfraLeadValue.value=false;
-
           TaskMaster_page_controller.Item_Category_Selected_list.value = [];
           for(int i = 0; i < TaskMaster_page_controller.Item_Category_master_list.length; i++ ){
             if(TaskMaster_page_controller.Item_Category_master_list[i].isSelected == 1){
@@ -519,7 +527,7 @@ class AddNewDsarScreen extends StatelessWidget{
         return TextField(
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = TaskMaster_page_controller.DSAR_Status_type_controller
+            ..text = TaskMaster_page_controller.DSAR_Status_type_controller.value
                 .text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
@@ -986,7 +994,7 @@ class AddNewDsarScreen extends StatelessWidget{
       child: DropdownMenu<String>(
         enabled: TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?false:true,
         width: size.width-30,
-        controller: TaskMaster_page_controller.isInfraLead,
+        controller: TaskMaster_page_controller.isInfraLead.value,
         label: Text(
           "Is Infra Lead",
           style: GoogleFonts.poppins(
@@ -1015,14 +1023,14 @@ class AddNewDsarScreen extends StatelessWidget{
         ),
         onSelected: (String? selection) {
           print(selection);
-          TaskMaster_page_controller.isInfraLead.text =
+          TaskMaster_page_controller.isInfraLead.value.text =
               _displayCustomerNeedIdentityStatusForOption(selection!).toString();
-          if(TaskMaster_page_controller.isInfraLead.text=="Yes"){
+          if(TaskMaster_page_controller.isInfraLead.value.text=="Yes"){
             TaskMaster_page_controller.isInfraLeadValue.value=true;
           }else{
             TaskMaster_page_controller.isInfraLeadValue.value=false;
           }
-          print("Is Lead ${TaskMaster_page_controller.isInfraLead.text}");
+          print("Is Lead ${TaskMaster_page_controller.isInfraLead.value.text}");
 
         },
         dropdownMenuEntries:

@@ -106,6 +106,7 @@ class ViewContactsScreen extends StatelessWidget{
                           child: IconButton(onPressed: () {
                             contact_vm_controller.insideOut = false;
                             contact_vm_controller.resetAllContactCreativeField('Card');
+                            contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
                             contact_vm_controller.getAccountMaster(contact_vm_controller.pageNumber);
                             contact_vm_controller.getDepartNameList();
                             Get.toNamed(RoutesName.addNewContactMaster_screen);
@@ -204,7 +205,7 @@ class ViewContactsScreen extends StatelessWidget{
 
               children: [
                 Text(
-                  "Cont. Code : ",
+                  "Contact Code : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -236,7 +237,7 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Cont. Name : ",
+                  "Contact Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -269,7 +270,7 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Acc. Name : ",
+                  "Account Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -366,14 +367,14 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Depart. Name : ",
+                  "Department Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .5,
+                  width: size.width * .46,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
@@ -397,14 +398,14 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Desig. Name : ",
+                  "Designation Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .55,
+                  width: size.width * .46,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
@@ -457,7 +458,7 @@ class ViewContactsScreen extends StatelessWidget{
   }
 
   FilterDialog(context){
-    contact_vm_controller.contact_name_controller.clear();
+    //contact_vm_controller.contact_name_controller.clear();
     showDialog(
         context: context,
         builder: (context){
@@ -553,7 +554,7 @@ class ViewContactsScreen extends StatelessWidget{
                               Navigator.pop(context, true);
                               accountMaster_page_controller.getContactMasterList(
                                 contact_vm_controller.pageNumber, accountMaster_page_controller.accountName, contact_vm_controller.contact_name_controller.text,contact_vm_controller.accountCode.value.toString());
-                              contact_vm_controller.contact_name_controller.clear();
+                             // contact_vm_controller.contact_name_controller.clear();
 
                             }
 

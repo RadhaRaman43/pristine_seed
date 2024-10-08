@@ -9,6 +9,9 @@ class ItemCategoryMstModel {
   String? createdBy;
   String? createdOn;
   int? isSelected;
+  int? expiryRange;
+  int? tolerance;
+  int? toleranceMrp;
 
   ItemCategoryMstModel(
       {this.condition,
@@ -20,7 +23,10 @@ class ItemCategoryMstModel {
         this.quoteId,
         this.createdBy,
         this.createdOn,
-        this.isSelected});
+        this.isSelected,
+        this.expiryRange,
+        this.tolerance,
+        this.toleranceMrp});
 
   ItemCategoryMstModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -33,6 +39,9 @@ class ItemCategoryMstModel {
     createdBy = json['created_by'];
     createdOn = json['created_on'];
     isSelected = json['is_selected'];
+    expiryRange = json['expiry_range'];
+    tolerance = json['tolerance'];
+    toleranceMrp = json['tolerance_mrp'];
   }
 
   Map<String, dynamic> toJson() {
@@ -47,6 +56,9 @@ class ItemCategoryMstModel {
     data['created_by'] = this.createdBy;
     data['created_on'] = this.createdOn;
     data['is_selected'] = this.isSelected;
+    data['expiry_range'] = this.expiryRange;
+    data['tolerance'] = this.tolerance;
+    data['tolerance_mrp'] = this.toleranceMrp;
     return data;
   }
 }

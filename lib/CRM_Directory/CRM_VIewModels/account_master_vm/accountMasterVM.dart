@@ -1,9 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import '../../../constants/app_colors.dart';
+import '../../../constants/app_font_size.dart';
 import '../../../locat_database/databaseHelper.dart';
 import '../../../reources/app_url/app_url.dart';
 import '../../../reources/routes/routes_name.dart';
@@ -41,7 +45,8 @@ class Accountmastervm extends GetxController{
   RxBool GstRegistration=false.obs;
   RxString ButtonText = 'Choose files'.obs;
   int is_Active = -1;
-
+  var selectedItem = (-1).obs;
+  String consigneeId="";
   int pageNumber = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
@@ -67,8 +72,10 @@ class Accountmastervm extends GetxController{
   RxBool isExpandSales = true.obs;
   RxBool isExpandQuotation = true.obs;
   RxBool isExpandDSARHistory = true.obs;
-
+  Size size=Get.size;
   Rx<CustomList> custome_selection=new CustomList().obs;
+
+  RxBool ShowState=true.obs;
 
   //String view ="";
   String view ="Account";
@@ -87,7 +94,6 @@ class Accountmastervm extends GetxController{
   var comp_prof_sub_type_controller = TextEditingController().obs;
   var comp_prof_remarks_controller = TextEditingController();
   var Address_controller = TextEditingController();
-  var Shipping_Address_controller = TextEditingController();
   var IsActive_controller = TextEditingController();
   var UploadImageType_controller = TextEditingController();
   var stateName_controller = TextEditingController();
@@ -99,29 +105,34 @@ class Accountmastervm extends GetxController{
   var Alternate_PhoneNo_Controller = TextEditingController();
   var EmailId_Controller = TextEditingController();
   var Website_Controller = TextEditingController();
+  var ReferralBy_Controller = TextEditingController();
   var GstNo_Controller = TextEditingController();
   var PanNo_Controller = TextEditingController();
   var IfscCode_Controller = TextEditingController();
   var No_Of_Emp_Controller = TextEditingController();
   var Address2_Controller = TextEditingController();
-  var Shipping_Address2_Controller = TextEditingController();
   var PostCode_Controller = TextEditingController();
-  var Shipping_PostCode_Controller = TextEditingController();
   var State_Controller = TextEditingController();
-  var Shipping_State_Controller = TextEditingController();
   var City_Controller = TextEditingController();
-  var Shipping_City_Controller = TextEditingController();
   var District_Controller = TextEditingController();
-  var Shipping_District_Controller = TextEditingController();
   var Annual_Revenue_Controller = TextEditingController();
   var Sale_Representative_Controller = TextEditingController();
   var Regional_service_head_Controller = TextEditingController();
   var TatResponse_Controller = TextEditingController();
 
+  //todo shipping address
+  var Shipping_Address_controller = TextEditingController().obs;
+  var Shipping_Address2_Controller = TextEditingController().obs;
+  var Shipping_PostCode_Controller = TextEditingController().obs;
+  var Shipping_State_Controller = TextEditingController().obs;
+  var Shipping_City_Controller = TextEditingController().obs;
+  var Shipping_District_Controller = TextEditingController().obs;
+
    int InActive=0;
 
 
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<AccountMasterGetByCodeModel> Account_Master_Draft_list1=<AccountMasterGetByCodeModel>[].obs;
   List<AccountDraftModel> Account_Master_Draft_list=<AccountDraftModel>[];
   RxList<CustomList> get_Acc_category_list=<CustomList>[].obs;
   RxList<CustomList> get_Acc_type_list=<CustomList>[].obs;
@@ -148,6 +159,7 @@ class Accountmastervm extends GetxController{
   RxList<AccountDashboardDataModel> AccountDashboardDataList = <AccountDashboardDataModel>[].obs;
   RxList<AccountdashboarddatasaleModelsModel> AccountDashboardDataSalesList = <AccountdashboarddatasaleModelsModel>[].obs;
   RxList<SalesCycleQuoteHeaderModal> AccountDashboardDataQuotationList = <SalesCycleQuoteHeaderModal>[].obs;
+  RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
 
   @override
   void onInit() async {
@@ -156,6 +168,7 @@ class Accountmastervm extends GetxController{
     email=await sessionManagement.getEmail() ?? '';
     UserName=await sessionManagement.getName() ?? '';
     getAccountMaster(pageNumber ,is_Active.toString());
+    getDraftAccountMaster(pageNumber ,is_Active.toString());
     getAccCategoryApi();
     getAccountTypeApi();
     getCompanyProfileTypeApi();
@@ -209,6 +222,7 @@ class Accountmastervm extends GetxController{
     ImageUrl_Controller.text="";
     comp_prof_type_controller.text = '';
     Website_Controller.text="";
+    ReferralBy_Controller.text="";
     Address_controller.text = '';
     stateName_controller.text = '';
     PhoneNo_Controller.text="";
@@ -229,6 +243,11 @@ class Accountmastervm extends GetxController{
   Future<void>refreshList() async{
     clearAccoundController();
     getAccountMaster(pageNumber ,is_Active.toString());
+  }
+
+  Future<void>refreshDraftList() async{
+    clearAccoundController();
+    getDraftAccountMaster(pageNumber ,is_Active.toString());
   }
 
    getAccountMaster(int page_no, String IsActive){
@@ -293,6 +312,70 @@ class Accountmastervm extends GetxController{
       print(e);
     }
    }
+
+  getDraftAccountMaster(int page_no, String IsActive){
+    if(IsActive == 'All'){
+      is_Active = -1;
+    }else if( IsActive == 'Yes'){
+      is_Active = 1;
+    }else if(IsActive == 'No'){
+      is_Active = 0;
+    }
+    print('isActiveInAPi...${is_Active}');
+    try{
+      Map<String, String> data={
+        "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
+        "filter_account_owner": "",
+        "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
+        "filter_account_category_type": account_cat_type_controller.value.text.isEmpty?"":account_cat_type_controller.value.text,
+        "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
+        "filter_address": Address_controller.value.text.isEmpty?"":Address_controller.value.text,
+        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
+        "filter_is_active": is_Active.toString(),
+        "filter_created_by": email,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString(),
+        "no_of_employees_min": no_of_employees_min.isEmpty?"":no_of_employees_min,
+        "no_of_employees_max": no_of_employees_max.isEmpty?"":no_of_employees_max,
+        "annual_revenue_min": annual_revenue_min.isEmpty?"":annual_revenue_min,
+        "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
+        "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
+        "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
+      };
+      loading.value=true;
+      _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountMasterGetByCodeModel> response = jsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              Account_Master_Draft_list1.clear();
+            }
+            Account_Master_Draft_list1.addAll(response);
+            print('DraftList...${Account_Master_Draft_list1.length}');
+            total_rows=int.parse(Account_Master_Draft_list1[0].totalRows!);
+
+          }else {
+            loading.value = false;
+            Account_Master_Draft_list1.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
 
   getAccCategoryApi() {
     this.loading.value = true;
@@ -757,12 +840,12 @@ class Accountmastervm extends GetxController{
       "flag": flag,
       "lines": [
         {
-          "account_code": AccountCode!,
+          "account_code": AccountCode.isEmpty?DraftId:AccountCode,
           "account_name": account_name_controller.text.isEmpty?'':account_name_controller.text ,
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
-          "account_type": account_type_controller.text.isEmpty?'':account_type_controller.text,
-          "referral_by": '',
+          "account_type": flag=='Create'?'New Account':'Existing Account',
+          "referral_by": "",
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
           "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
@@ -775,12 +858,12 @@ class Accountmastervm extends GetxController{
           "state_name": State_Controller.text.isEmpty?'':State_Controller.text,
           "city": City_Controller.text.isEmpty?'':City_Controller.text,
           "district": District_Controller.text.isEmpty?'':District_Controller.text,
-          "shipping_address": Shipping_Address_controller.text.isEmpty?"":Shipping_Address_controller.text,
-          "shipping_address2": Shipping_Address2_Controller.text.isEmpty?"":Shipping_Address2_Controller.text,
-          "shipping_post_code": Shipping_PostCode_Controller.text.isEmpty?"":Shipping_PostCode_Controller.text,
-          "shipping_state_code": Shipping_State_Controller.text.isEmpty?"":Shipping_State_Controller.text,
-          "shipping_city": Shipping_City_Controller.text.isEmpty?"":Shipping_City_Controller.text,
-          "shipping_district": Shipping_District_Controller.text.isEmpty?"":Shipping_District_Controller.text,
+          "shipping_address": Shipping_Address_controller.value.text.isEmpty?"":Shipping_Address_controller.value.text,
+          "shipping_address2": Shipping_Address2_Controller.value.text.isEmpty?"":Shipping_Address2_Controller.value.text,
+          "shipping_post_code": Shipping_PostCode_Controller.value.text.isEmpty?"":Shipping_PostCode_Controller.value.text,
+          "shipping_state_code": Shipping_State_Controller.value.text.isEmpty?"":Shipping_State_Controller.value.text,
+          "shipping_city": Shipping_City_Controller.value.text.isEmpty?"":Shipping_City_Controller.value.text,
+          "shipping_district": Shipping_District_Controller.value.text.isEmpty?"":Shipping_District_Controller.value.text,
           "no_of_employees": No_Of_Emp_Controller.text.isEmpty?0:No_Of_Emp_Controller.text,
           "annual_revenue": Annual_Revenue_Controller.text.isEmpty?0:Annual_Revenue_Controller.text,
           "tat_response_type": tatResponseType.isEmpty?'':tatResponseType,
@@ -793,7 +876,8 @@ class Accountmastervm extends GetxController{
           "gst_no": GstNo_Controller.text.isEmpty?'':GstNo_Controller.text,
           "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
           "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
-          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text
+          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text,
+          "is_referral": ReferralBy_Controller.text == "Yes"?1:0
         }
       ]
     };
@@ -817,9 +901,10 @@ class Accountmastervm extends GetxController{
             print("ttttttttttt");
             Utils.showToastification("Success!", "Account Create Successful");
             clearAccoundController();
-            deleteAccountData(DraftId);
+            //deleteAccountData(DraftId);
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
             Get.toNamed(RoutesName.accountMaster_screen);
           }else if(flag == 'Update'){
             print("Update....");
@@ -828,6 +913,7 @@ class Accountmastervm extends GetxController{
             clearAccoundController();
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
             Get.toNamed(RoutesName.accountMaster_screen);
           }
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
@@ -835,6 +921,112 @@ class Accountmastervm extends GetxController{
         } else {
           loading.value = false;
          // AccountMasterGetCode_list.value = [];
+          Utils.showErrorToastification("Error!", response[0].message??"");
+          //service_installation_details_list.value=[];
+        }
+      } else {
+        loading.value = false;
+        // service_indent_header_list.value = [];
+        Utils.showExceptionToastification("Api Error!", JsonResponse);
+      }
+    } catch (error, stackTrace) {
+      print(error);
+      print(stackTrace);
+      print("Exce3ption....");
+      //service_indent_header_list.value = [];
+    }
+  }
+
+  DraftAccountMstUploaderApiHit(String flag) async {
+    if(IsActive_controller.text=="Yes"){
+      InActive=1;
+    }else if(IsActive_controller.text=="No"){
+      InActive=0;
+      //print(accountMaster_page_controller.InActive);
+    }
+    Map<String, dynamic> data = {
+      "created_by": email,
+      "flag": flag,
+      "lines": [
+        {
+          "account_code": DraftId.isEmpty?"":DraftId,
+          "account_name": account_name_controller.text.isEmpty?'':account_name_controller.text ,
+          "account_owner": AccountOwner,
+          "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
+          "account_type": account_type_controller.text.isEmpty?'':account_type_controller.text,
+          "referral_by": '',
+          "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
+          "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
+          "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
+          "company_profile_type": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text,
+          "company_profile_sub_type": comp_prof_sub_type_controller.value.text.isEmpty?'':comp_prof_sub_type_controller.value.text,
+          "company_profile_remark": comp_prof_remarks_controller.text.isEmpty?'':comp_prof_remarks_controller.text,
+          "address": Address_controller.text.isEmpty?'':Address_controller.text,
+          "address2": Address2_Controller.text.isEmpty?'':Address2_Controller.text,
+          "post_code": PostCode_Controller.text.isEmpty?'':PostCode_Controller.text,
+          "state_name": State_Controller.text.isEmpty?'':State_Controller.text,
+          "city": City_Controller.text.isEmpty?'':City_Controller.text,
+          "district": District_Controller.text.isEmpty?'':District_Controller.text,
+          "shipping_address": Shipping_Address_controller.value.text.isEmpty?"":Shipping_Address_controller.value.text,
+          "shipping_address2": Shipping_Address2_Controller.value.text.isEmpty?"":Shipping_Address2_Controller.value.text,
+          "shipping_post_code": Shipping_PostCode_Controller.value.text.isEmpty?"":Shipping_PostCode_Controller.value.text,
+          "shipping_state_code": Shipping_State_Controller.value.text.isEmpty?"":Shipping_State_Controller.value.text,
+          "shipping_city": Shipping_City_Controller.value.text.isEmpty?"":Shipping_City_Controller.value.text,
+          "shipping_district": Shipping_District_Controller.value.text.isEmpty?"":Shipping_District_Controller.value.text,
+          "no_of_employees": No_Of_Emp_Controller.text.isEmpty?0:No_Of_Emp_Controller.text,
+          "annual_revenue": Annual_Revenue_Controller.text.isEmpty?0:Annual_Revenue_Controller.text,
+          "tat_response_type": tatResponseType.isEmpty?'':tatResponseType,
+          "sales_representative": Sale_Representative_Controller.text.isEmpty?'':Sale_Representative_Controller.text,
+          "regional_service_head": Regional_service_head_Controller.text.isEmpty?'':Regional_service_head_Controller.text,
+          "profile": ImageUrl_Controller.text.isEmpty?'':ImageUrl_Controller.text,
+          "is_active": InActive,
+          "website": Website_Controller.text.isEmpty?'':Website_Controller.text,
+          "gst_type": gst_registration_type_controller.value.text.isEmpty?'':gst_registration_type_controller.value.text,
+          "gst_no": GstNo_Controller.text.isEmpty?'':GstNo_Controller.text,
+          "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
+          "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
+          "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text,
+          "is_referral": ReferralBy_Controller.text == "Yes"?1:0
+        }
+      ]
+    };
+    print(data);
+    loading.value = true;
+    try {
+      final value = await _api.DraftAccountMstUploaderApiHit(data, sessionManagement);
+      print(value);
+      final JsonResponse = json.decode(value);
+      if (JsonResponse is List) {
+        List<AccountMasterGetByCodeModel> response =
+        JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
+        if (response != null &&
+            response.length > 0 &&
+            response[0].condition == "True") {
+          loading.value = false;
+          if(flag == 'Create'){
+            print("ttttttttttt");
+            Utils.showToastification("Success!", "Account is Save In Draft Successful");
+            clearAccoundController();
+            //deleteAccountData(DraftId);
+            pageNumber=0;
+            getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
+            Get.toNamed(RoutesName.accountMaster_screen);
+          }else if(flag == 'Update'){
+            print("Update....");
+            Utils.showToastification("Success!", "Draft Account is Update Successful");
+            viewRequestDetails(response);
+            clearAccoundController();
+            pageNumber=0;
+            getAccountMaster(pageNumber ,is_Active.toString());
+            getDraftAccountMaster(pageNumber,is_Active.toString());
+            Get.toNamed(RoutesName.accountMaster_screen);
+          }
+          //Get.toNamed(RoutesName.update_AccountMaster_screen);
+          //viewRequestDetails(response);
+        } else {
+          loading.value = false;
+          // AccountMasterGetCode_list.value = [];
           Utils.showErrorToastification("Error!", response[0].message??"");
           //service_installation_details_list.value=[];
         }
@@ -935,6 +1127,7 @@ class Accountmastervm extends GetxController{
       AccountOwner = employee_Member_list[0].loginEmailId??"";
       AccountTitle_Controller.text = response[0].accountTitle??"";
       account_type_controller.text = response[0].accountType??"";
+      ReferralBy_Controller.text = response[0].isReferral==1?"Yes":"No";
       PhoneNo_Controller.text= response[0].phoneNo??"";
       EmailId_Controller.text = response[0].emailId??"";
       account_cat_type_controller.text = response[0].accountCategoryType??"";
@@ -973,12 +1166,12 @@ class Accountmastervm extends GetxController{
       GovtStateCode.value = response[0].permanentAddress!.stateCode??"";
       City_Controller.text = response[0].permanentAddress!.city??"";
       District_Controller.text = response[0].permanentAddress!.district??"";
-      Shipping_Address_controller.text = response[0].shippingAddress??"";
-      Shipping_Address2_Controller.text = response[0].shippingAddress2??"";
-      Shipping_PostCode_Controller.text = response[0].shippingPostCode??"";
-      Shipping_City_Controller.text = response[0].shippingCity??"";
-      Shipping_District_Controller.text = response[0].shippingDistrict??"";
-      Shipping_State_Controller.text = response[0].shippingStateName??"";
+      Shipping_Address_controller.value.text = response[0].shippingAddress??"";
+      Shipping_Address2_Controller.value.text = response[0].shippingAddress2??"";
+      Shipping_PostCode_Controller.value.text = response[0].shippingPostCode??"";
+      Shipping_City_Controller.value.text = response[0].shippingCity??"";
+      Shipping_District_Controller.value.text = response[0].shippingDistrict??"";
+      Shipping_State_Controller.value.text = response[0].shippingStateName??"";
       No_Of_Emp_Controller.text = response[0].noOfEmployees.toString();
       Annual_Revenue_Controller.text = response[0].annualRevenue.toString();
       TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
@@ -1021,12 +1214,12 @@ class Accountmastervm extends GetxController{
       State_Controller.clear();
       City_Controller.clear();
       District_Controller.clear();
-      Shipping_Address_controller.clear();
-      Shipping_Address2_Controller.clear();
-      Shipping_PostCode_Controller.clear();
-      Shipping_City_Controller.clear();
-      Shipping_District_Controller.clear();
-      Shipping_State_Controller.clear();
+      Shipping_Address_controller.value.clear();
+      Shipping_Address2_Controller.value.clear();
+      Shipping_PostCode_Controller.value.clear();
+      Shipping_City_Controller.value.clear();
+      Shipping_District_Controller.value.clear();
+      Shipping_State_Controller.value.clear();
       No_Of_Emp_Controller.clear();
       Annual_Revenue_Controller.clear();
       TatResponse_Controller.clear();
@@ -1392,25 +1585,6 @@ class Accountmastervm extends GetxController{
 
 
   getAccountDashboardDataQuotation(int page_no,String IsActive, String accountCode, String flag, String day_flag){
-    /*if(isInfraLeadFilterController.text=="All"){
-      infraLeadValue.value=-1;
-    }
-    else if( isInfraLeadFilterController.text=="Yes"){
-      infraLeadValue.value=1;
-    }
-    else if( isInfraLeadFilterController.text=="No"){
-      infraLeadValue.value=0;
-    }
-    else{
-      infraLeadValue.value=-1;
-    }
-    if(IsActive == 'All'){
-      is_Active = -1;
-    }else if( IsActive == 'Yes'){
-      is_Active = 1;
-    }else if(IsActive == 'No'){
-      is_Active = 0;
-    }*/
     try{
       Map<String, String> data={
         "filter_flag": flag,
@@ -1488,9 +1662,9 @@ class Accountmastervm extends GetxController{
   }
 
 
-  fillDraftDetails(List<AccountDraftModel> response, int position){
+  fillDraftDetails(List<AccountMasterGetByCodeModel> response, int position){
     try{
-      DraftId = response[position].id.toString();
+      DraftId = response[position].accountCode.toString();
       ImageString.value = response[position].profile??"";
       account_code_controller.text = response[position].accountCode??"";
       account_name_controller.text = response[position].accountName??"";
@@ -1502,6 +1676,8 @@ class Accountmastervm extends GetxController{
       account_type_controller.text = response[position].accountType??"";
       PhoneNo_Controller.text= response[position].phoneNo??"";
       EmailId_Controller.text = response[position].emailId??"";
+      ReferralBy_Controller.text = response[position].isReferral==1?"Yes":"No";
+      print('ISReferral...${ReferralBy_Controller.text}');
       account_cat_type_controller.text = response[position].accountCategoryType??"";
       comp_prof_type_controller.text = response[position].companyProfileType??"";
       comp_prof_sub_type_controller.value.text = response[position].companyProfileSubType??"";
@@ -1530,19 +1706,19 @@ class Accountmastervm extends GetxController{
       }
       PanNo_Controller.text = response[position].panNo??'';
       IfscCode_Controller.text = response[position].ifscCode??'';
-      Address_controller.text = response[position].address??"";
-      print('Adresss....${response[position].address??""}');
-      Address2_Controller.text = response[position].address2??"";
-      PostCode_Controller.text = response[position].postCode??"";
+      Address_controller.text = response[position].permanentAddress!.address??"";
+     // print('Adresss....${response[position].address??""}');
+      Address2_Controller.text = response[position].permanentAddress!.address2??"";
+      PostCode_Controller.text = response[position].permanentAddress!.postCode??"";
       State_Controller.text = response[position].stateName??"";
-      City_Controller.text = response[position].city??"";
-      District_Controller.text = response[position].district??"";
-      Shipping_Address_controller.text = response[position].shippingAddress??"";
-      Shipping_Address2_Controller.text = response[position].shippingAddress2??"";
-      Shipping_PostCode_Controller.text = response[position].shippingPostCode??"";
-      Shipping_State_Controller.text = response[position].shippingStateCode??"";
-      Shipping_City_Controller.text = response[position].shippingCity??"";
-      Shipping_District_Controller.text = response[position].shippingDistrict??"";
+      City_Controller.text = response[position].permanentAddress!.city??"";
+      District_Controller.text = response[position].permanentAddress!.district??"";
+      Shipping_Address_controller.value.text = response[position].shippingAddress??"";
+      Shipping_Address2_Controller.value.text = response[position].shippingAddress2??"";
+      Shipping_PostCode_Controller.value.text = response[position].shippingPostCode??"";
+      Shipping_State_Controller.value.text = response[position].shippingStateCode??"";
+      Shipping_City_Controller.value.text = response[position].shippingCity??"";
+      Shipping_District_Controller.value.text = response[position].shippingDistrict??"";
       No_Of_Emp_Controller.text = response[position].noOfEmployees.toString();
       Annual_Revenue_Controller.text = response[position].annualRevenue.toString();
       TatResponse_Controller.text = response[position].tatResponseType??"" + ' (${response[position].tatResponseTime} Hours)';
@@ -1572,6 +1748,457 @@ class Accountmastervm extends GetxController{
     } catch (e) {
       print('Failed to delete data: $e');
     }
+  }
+
+  void getAddressMasterList(int pageNumber, String account_Code) {
+    try{
+      Map data={
+        "consignee_id": "",
+        "account_code":account_Code,
+        "account_name": "",
+        "contact_name": "",
+        "email_id": "",
+        "phone_no": "",
+        "rowsPerPage": rowsPerPage,
+        "pageNumber": pageNumber
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.ConsigneeAddMstGet(data, sessionManagement).then((onValue){
+        print('value...${onValue}');
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AddressMasterModel> response = jsonResponse.map((e) => AddressMasterModel.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            address_master_list.value=[];
+            address_master_list.value=response;
+
+            // Get.toNamed(RoutesName.viewAddress_screen);
+
+          }else {
+            loading.value = false;
+            address_master_list.value=[];
+            // Get.toNamed(RoutesName.viewAddress_screen);
+            Utils.showToastification('No date Found', 'No Data Found');
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  void showConsigneeAddressList(BuildContext context, RxList<AddressMasterModel> address_master_list) {
+    showDialog(
+      // barrierDismissible: false,
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.check_circle, color: AllColors.lightredColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Select Address',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Container(
+              height: size.height*.6,
+              width: size.width*45,
+              child: Column(
+                children: [
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  SizedBox(height: 15,),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Container(
+                      padding: EdgeInsets.only(left: 2.0, top: 5.0, right: 2.0, bottom: 5.0),
+                      child: Obx(() {
+                        return BindAddressListView(context);
+                      }),
+                    ),
+                  ),
+
+                  Row(
+                    mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                    children: [
+                      Obx((){
+                        return Visibility(
+                          visible: address_master_list.value.length > 0 ?true :false,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              if(account_code_controller.value.text.isEmpty){
+                                selectedItem.value = -1;
+                                Shipping_Address_controller.value.text="";
+                                Shipping_Address2_Controller.value.text="";
+                                Shipping_PostCode_Controller.value.text="";
+                                Shipping_City_Controller.value.text="" ;
+                                Shipping_State_Controller.value.clear();
+                                ShowState.value=false;
+                                ShowState.value=true;
+                                Shipping_District_Controller.value.text="";
+                                consigneeId = '';
+                              } else{
+                                selectedItem.value = -1;
+                                Shipping_Address_controller.value.text=AccountMasterGetCode_list[0].shippingAddress??"";
+                                Shipping_Address2_Controller.value.text=AccountMasterGetCode_list[0].shippingAddress2??"";
+                                Shipping_PostCode_Controller.value.text=AccountMasterGetCode_list[0].shippingPostCode??"";
+                                Shipping_City_Controller.value.text=AccountMasterGetCode_list[0].shippingCity??"" ;
+                                Shipping_State_Controller.value.text=AccountMasterGetCode_list[0].shippingStateName??"";
+                                Shipping_District_Controller.value.text=AccountMasterGetCode_list[0].shippingDistrict??"";
+                                consigneeId = '';
+                              }
+
+
+                              // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
+                              Get.back();
+                            },
+                            child: Container(
+                              width: 80,
+                              alignment: Alignment.center,
+                              child: Text('Discard'
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files'*/,
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.customDarkerWhite,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }),
+
+                      Obx((){
+                        return Visibility(
+                          visible: address_master_list.value.length > 0 ?true :false,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
+                              Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";
+                              Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
+                              Shipping_City_Controller.value.text=address_master_list[selectedItem.value].city??"" ;
+                              Shipping_State_Controller.value.text=address_master_list[selectedItem.value].stateName??"";
+                              print('StatNane...${Shipping_State_Controller.value.text}');
+                               ShowState.value=false;
+                               ShowState.value=true;
+                              Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"";
+                              consigneeId = address_master_list[selectedItem.value].consigneeId??"";
+                              Get.back();
+                            },
+                            child: Container(
+                              width: 80,
+                              alignment: Alignment.center,
+                              child: Text('Save',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.customDarkerWhite,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      })
+
+                    ],)
+                ],
+              ),
+            ),
+          );
+
+        });
+  }
+
+  Widget BindAddressListView(context) {
+    if (address_master_list.value.isNotEmpty && address_master_list.value.length > 0) {
+      ScrollController scrollController = ScrollController();
+
+      scrollController.addListener(() {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          // You have reached the end of the list
+          int total_page = (total_rows /
+              rowsPerPage).toInt();
+          if ((total_rows %
+              rowsPerPage) >
+              0) total_page += 1;
+
+          //print("last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
+
+          if (pageNumber + 1 < total_page) {
+            getAddressMasterList(pageNumber, "");
+            this.pageNumber += 1;
+          }
+        }
+      });
+
+      return ListView.separated(
+          padding: EdgeInsets.zero,
+          separatorBuilder: (context, index) => Divider(height: .05, color: Colors.transparent,),
+          shrinkWrap: true,
+          itemCount: address_master_list.value.length,
+          controller: scrollController,
+          itemBuilder: (BuildContext context, int index) {
+            return BindCustomerRequestListView(context, index);
+          });
+    } else {
+      return Center(
+        //child: Image.asset("assests/images/no_record_found.gif",),
+        child: Image.asset("assests/images/no_data_remove.png",width: 300,height: 180,),
+      );
+    }
+  }
+
+  Widget BindCustomerRequestListView(context, int position) {
+    return Obx((){
+      return  Card(
+        margin: EdgeInsets.all(5),
+        color: selectedItem.value == position ? AllColors.grayColor : Colors.white,
+        child: ListTile(
+          onTap: () {
+            selectedItem.value = position;
+
+          },
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Address Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .25,
+                    child: Tooltip(
+                      message: address_master_list[position]
+                          .contactName?? "",
+                      child: Text(
+                        address_master_list[position]
+                            .contactName?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style:GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Phone No. : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: address_master_list[position]
+                          .phoneNo?? "",
+                      child: Text(
+                        address_master_list[position]
+                            .phoneNo?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Email Id : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: address_master_list[position]
+                          .emailId?? "",
+                      child: Text(
+                        address_master_list[position]
+                            .emailId?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Address : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message:"${address_master_list[position].address ??""}",
+                      child: Text("${address_master_list[position].address ??""} ",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "City : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message:address_master_list[position].city??"",
+                      child: Text(address_master_list[position].city??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "State : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message:address_master_list[position].stateName??"",
+                      child: Text(address_master_list[position].stateName??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Post Code : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .2,
+                    child: Tooltip(
+                      message:address_master_list[position].postCode??"",
+                      child: Text(address_master_list[position].postCode??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+
+            ],
+          ),
+
+
+
+        ),
+      );
+    });
+
+
   }
 
 

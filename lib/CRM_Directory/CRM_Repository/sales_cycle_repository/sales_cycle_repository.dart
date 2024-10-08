@@ -23,6 +23,10 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.quoteHeaderGet,sessionManagement);
   }
 
+  Future<String> quoteWonDataGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteWonDataGet,sessionManagement);
+  }
+
   Future<String> quoteHeaderCreateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.quoteHeaderCreate,sessionManagement);
   }
@@ -70,6 +74,9 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.quoteApproveReject,sessionManagement);
   }
 
+  Future<String> TaskSaleCatCreateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.TaskSalesProductCategoryCreate, sessionManagement);
+  }
 
 
   Future<String> getItemCategoryMstApiHit(var data,SessionManagement sessionManagement) async{
@@ -97,6 +104,14 @@ class SalesCycleRepository{
 
   Future<String> ConsigneeAddMstGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.ConsigneeMstGet,sessionManagement);
+  }
+
+  Future<String> SaleCycleProductCategoryWiseAmtCreate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SaleCycleProductCategoryWiseAmtCreate,sessionManagement);
+  }
+
+  Future<String> SaleCycleProductCategoryWiseAmtGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SaleCycleProductCategoryWiseAmtGet,sessionManagement);
   }
 
 
