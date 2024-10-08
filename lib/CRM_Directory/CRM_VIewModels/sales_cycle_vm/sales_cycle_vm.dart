@@ -1759,8 +1759,38 @@ class SalesCycleVm extends GetxController{
     }
     double totAmount = finalAmount! - advcAmount;
     pendingAmountController.value.text = totAmount.toString();
+    print('Installationchagr..${installationChargesController.value.text}');
+    print('OthersC..${otherChargesController.value.text}');
+    print('quoteAmtInt..${quoteAmtInt}');
+    print('finalAmt..${finalAmount}');
+    print('advcAmt..${advncPaymentAmountController.value.text}');
+    print('advc..${advcAmount}');
+    print('PendingAmt..${pendingAmountController.value.text}');
 
 
+  }
+
+  SetBusinessTerm(){
+    installationChargesController.value.text = quoteHeaderdata[0].installationCharges.toString();
+    otherChargesController.value.text = quoteHeaderdata[0].otherCharges.toString();
+    //saleCycleController.warrentyPeriodController.value.text = saleCycleController.quoteHeaderdata[0].warrantyPeriod.toString();
+    //saleCycleController.deliveryWeeksController.value.text = saleCycleController.quoteHeaderdata[0].deliveryInWeeks.toString();
+    advncPaymentPerController.value.text = quoteHeaderdata[0].advancePaymentPer.toString();
+    quoteTotAmountController.value.text = quoteHeaderdata[0].quoteTotalAmount.toString();
+    advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString();
+    quoteRemarkController.value.text = quoteHeaderdata[0].otherRemarks.toString();
+  }
+
+  clearBusinessTerm(){
+    installationChargesController.value.clear();
+    otherChargesController.value.clear();
+    //saleCycleController.warrentyPeriodController.value.clear();
+    //saleCycleController.deliveryWeeksController.value.clear();
+    advncPaymentPerController.value.clear();
+    advncPaymentAmountController.value.clear();
+    pendingAmountController.value.clear();
+    quoteRemarkController.value.clear();
+    finalAmountController.value.clear();
   }
 
 

@@ -115,7 +115,7 @@ class _Drawer extends State<CustomDrawer> {
                       ),
                       Center(
                         child: Container(
-                            margin: EdgeInsets.only(top: 8.0),
+                           // margin: EdgeInsets.only(top: 8.0),
                             child: Column(
                               children: [
                                 Container(
@@ -141,7 +141,7 @@ class _Drawer extends State<CustomDrawer> {
                                       color: AllColors.whiteColor),
                                 ),
                                 SizedBox(
-                                  height: 10.0,
+                                  height: 8.0,
                                 ),
                                 Container(
                                   width: size.width*.7,

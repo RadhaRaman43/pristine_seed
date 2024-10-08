@@ -212,6 +212,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                           child: DefaultButton(
                                             press: (){
                                               saleCycleController.BusinessTerm.value = false;
+                                              saleCycleController.clearBusinessTerm();
                                               Get.toNamed(RoutesName.UpdateBussinessTermPage);
                                               //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
                                             },
@@ -335,6 +336,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                       ),
                                       child: IconButton(onPressed: (){
                                         saleCycleController.BusinessTerm.value = true;
+                                        saleCycleController.SetBusinessTerm();
                                         saleCycleController.calculateFinalAmt();
                                         Get.toNamed(RoutesName.UpdateBussinessTermPage);
                                         //saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId??"");
@@ -744,13 +746,21 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
 
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .warrantyPeriod.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController.quoteLinedata[index]
+                                    .warrantyPeriod.toString(),
+                                child: Text(
+                                  saleCycleController.quoteLinedata[index]
+                                      .warrantyPeriod.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],
@@ -797,8 +807,8 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
 
-                            Container(
-                              width: size.width*.1,
+                            Flexible(
+                              fit: FlexFit.loose,
                               child: Tooltip(
                                 message: saleCycleController.quoteLinedata[index]
                                     .discountAmt.toString(),
@@ -1001,13 +1011,21 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
 
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .deliveryInWeeks.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController.quoteLinedata[index]
+                                    .deliveryInWeeks.toString(),
+                                child: Text(
+                                  saleCycleController.quoteLinedata[index]
+                                      .deliveryInWeeks.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],
