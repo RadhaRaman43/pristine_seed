@@ -3910,7 +3910,7 @@ Widget bindQuoteData(BuildContext context) {
                (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
                )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
            child: DataTable(
-           headingRowColor: WidgetStateProperty.all(Colors.blue[100]),
+           // headingRowColor: WidgetStateProperty.all(Colors.blue[100]),
            columnSpacing: 30,
            decoration: BoxDecoration(
              border: Border(
