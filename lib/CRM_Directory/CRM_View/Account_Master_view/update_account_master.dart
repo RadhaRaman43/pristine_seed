@@ -1153,31 +1153,37 @@ class UpdateAccountMaster extends StatelessWidget{
                        Row(
                          mainAxisAlignment: MainAxisAlignment.end,
                          children: [
-                           InkWell(
-                             child: Icon(Icons.add),
-                             onTap: (){
-                               accountMaster_page_controller.pageNumber = 0;
-                               accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
-                               accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
+                           Visibility(
+                             child: InkWell(
+                               child: Icon(Icons.add),
+                               onTap: (){
+                                 accountMaster_page_controller.pageNumber = 0;
+                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
+                                 accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
 
-                             },
+                               },
+                             ),
+                             visible:accountMaster_page_controller.view=='Account'?true:false ,
                            ),
                            SizedBox(width: 15,),
-                           InkWell(
-                             onTap: (){
-                               accountMaster_page_controller.selectedItem.value = -1;
-                               accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress??"";
-                               accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress2??"";
-                               accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingPostCode??"";
-                               accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingCity??"" ;
-                               accountMaster_page_controller.Shipping_State_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingStateName??"";
-                               accountMaster_page_controller.ShowState.value=false;
-                               accountMaster_page_controller.ShowState.value=true;
-                               accountMaster_page_controller.Shipping_District_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingDistrict??"";
-                               accountMaster_page_controller.consigneeId = '';
-                             },
-                             child: Icon(Icons.update),
+                           Visibility(
+                             visible:accountMaster_page_controller.view=='Account'?true:false ,
+                             child: InkWell(
+                               onTap: (){
+                                 accountMaster_page_controller.selectedItem.value = -1;
+                                 accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress??"";
+                                 accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress2??"";
+                                 accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingPostCode??"";
+                                 accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingCity??"" ;
+                                 accountMaster_page_controller.Shipping_State_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingStateName??"";
+                                 accountMaster_page_controller.ShowState.value=false;
+                                 accountMaster_page_controller.ShowState.value=true;
+                                 accountMaster_page_controller.Shipping_District_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingDistrict??"";
+                                 accountMaster_page_controller.consigneeId = '';
+                               },
+                               child: Icon(Icons.update),
+                             ),
                            )
                          ],
                        ),
@@ -1190,6 +1196,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
+                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller
                                .Shipping_Address_controller.value,
                            decoration: InputDecoration(
@@ -1220,6 +1227,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
+                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller
                                .Shipping_Address2_Controller.value,
                            decoration: InputDecoration(
@@ -1250,6 +1258,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
+                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            keyboardType: TextInputType.number,
                            controller: accountMaster_page_controller
                                .Shipping_PostCode_Controller.value,
@@ -1295,6 +1304,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
+                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller
                                .Shipping_City_Controller.value,
                            decoration: InputDecoration(
@@ -1325,6 +1335,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
+                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller
                                .Shipping_District_Controller.value,
                            decoration: InputDecoration(
@@ -2899,6 +2910,7 @@ class UpdateAccountMaster extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextFormField(
+            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
             /*validator: (value){
               if(value == null || value.isEmpty){
                 return null;

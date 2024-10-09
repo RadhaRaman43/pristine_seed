@@ -211,13 +211,6 @@ class SalesCycleVm extends GetxController{
 
   }
 
-  /*void selectCheckbox(int index) {
-    isCheck.value = index;
-    selectedQuotationIdController.value.text = quoteList[index].quoteId ?? "";
-    isChooseQuote.value = false;
-    isApprove.value = true;
-  }*/
-
 
 
   getsalesCycleData(int page_no, String saleCycleId, String flag, String fromPage){
@@ -1100,42 +1093,6 @@ class SalesCycleVm extends GetxController{
   }
 
 
-/*  void quoteHeaderMarkRegretApiHit() {
-    try{
-      Map data= {
-        "quote_id": quoteId.value,
-        "regret_reason": regretReasonHeaderController.value.text,
-        "created_by": email
-      };
-      loading.value=true;
-      _api.quoteHeaderMarkRegretApiHit(data, sessionManagement).then((onValue){
-        final jsonResponse = json.decode(onValue);
-        print(onValue);
-        if(jsonResponse is List){
-          List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
-          if(response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
-            loading.value = false;
-            getQuoteHeaderInformation(quoteId.value, "");
-          }else {
-            Utils.sanckBarError("False Message !", response[0].message.toString());
-            loading.value = false;
-          }
-        } else {
-          loading.value = false;
-        }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
-    }catch(e){
-      loading.value = false;
-      print(e);
-    }
-  }*/
-
   void quoteBussinessTermlApiHit() {
     try{
       Map data= {
@@ -1180,41 +1137,6 @@ class SalesCycleVm extends GetxController{
   }
 
 
-  /*void quoteSendForApprovalApiHit() {
-    try{
-      Map data= {
-        "quote_id": quoteId.value,
-        "created_by": email
-      };
-      loading.value=true;
-      _api.quoteSendForApprovalApiHit(data, sessionManagement).then((onValue){
-        final jsonResponse = json.decode(onValue);
-        print(onValue);
-        if(jsonResponse is List){
-          List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
-          if(response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
-            loading.value = false;
-            //getQuoteHeaderInformation(quoteId.value, "");
-          }else {
-            Utils.sanckBarError("False Message !", response[0].message.toString());
-            loading.value = false;
-          }
-        } else {
-          loading.value = false;
-        }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
-    }catch(e){
-      loading.value = false;
-      print(e);
-    }
-  }*/
-
   void quoteSendForApprovalApiHit() {
     try{
       Map data= {
@@ -1239,7 +1161,6 @@ class SalesCycleVm extends GetxController{
               }
             });
             getQuoteHeaderInformation(quoteId.value ,"");
-            //getQuoteHeaderInformation(quoteId.value, "");
           }else {
             Utils.sanckBarError("False Message !", response[0].message.toString());
             loading.value = false;
