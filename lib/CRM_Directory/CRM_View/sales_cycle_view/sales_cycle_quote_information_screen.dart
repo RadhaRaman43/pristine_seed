@@ -1070,8 +1070,13 @@ class QuoteInformationScreen extends StatelessWidget{
                                   .sgstAmt.toString();
                               saleCycleController.updateGrossAmountLineController.value.text=  saleCycleController.quoteLinedata[index]
                                   .grossAmount.toString();
+                              saleCycleController.warrentyPeriodController.value.text= saleCycleController.quoteLinedata[index]
+                                  .warrantyPeriod.toString();
+                              saleCycleController.deliveryWeeksController.value.text= saleCycleController.quoteLinedata[index]
+                                  .deliveryInWeeks.toString();
 
                               saleCycleController.index.value=index;
+
                               Get.toNamed(RoutesName.updatequoteLineData);
 
                             },
