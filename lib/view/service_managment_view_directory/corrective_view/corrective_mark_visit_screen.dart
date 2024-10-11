@@ -1612,7 +1612,6 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
                                 color: AllColors.textColor,
                                 fontWeight: FontWeight.w500,
                                 fontSize: AllFontSize.fourtine),)
-
                         ],
                       )
                     ],
@@ -1637,11 +1636,6 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
         ),
       );
     }
-
-
-
-
-
   }
   void ShowItemDetailsDialog(BuildContext context){
     showDialog(
@@ -1675,7 +1669,6 @@ class CorrectiveMarkVisitScreen extends StatelessWidget{
           );
         });
   }
-
   void GeoTaggingMarkDialog(BuildContext context) {
     showDialog(
       context: context,
