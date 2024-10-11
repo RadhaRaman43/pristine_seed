@@ -211,13 +211,6 @@ class SalesCycleVm extends GetxController{
 
   }
 
-  /*void selectCheckbox(int index) {
-    isCheck.value = index;
-    selectedQuotationIdController.value.text = quoteList[index].quoteId ?? "";
-    isChooseQuote.value = false;
-    isApprove.value = true;
-  }*/
-
 
 
   getsalesCycleData(int page_no, String saleCycleId, String flag, String fromPage){
@@ -401,6 +394,9 @@ class SalesCycleVm extends GetxController{
               if(flag != ''){
                 salesCycleMstApprovereject(saleCycleList, solutionRejectedRemarkController.value.text.isNotEmpty?solutionRejectedRemarkController.value.text:rejectReasonController.value.text, flag);
               }
+              pageNumber = 0;
+              getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
+              Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
 
               loading.value = false;
             }else {
@@ -912,7 +908,7 @@ class SalesCycleVm extends GetxController{
         if(jsonResponse is List){
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
           if(response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
+            Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
             itemMstGetByQuoteIdApiHit(0,quoteId.value, "", '');
             getQuoteHeaderInformation(quoteId.value, "Add");
@@ -922,7 +918,7 @@ class SalesCycleVm extends GetxController{
           }else {
             print("message ${response[0].message.toString()}");
             loading.value = false;
-            Utils.sanckBarError("False Message !", response[0].message.toString());
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
 
           }
         } else {
@@ -1100,42 +1096,6 @@ class SalesCycleVm extends GetxController{
   }
 
 
-/*  void quoteHeaderMarkRegretApiHit() {
-    try{
-      Map data= {
-        "quote_id": quoteId.value,
-        "regret_reason": regretReasonHeaderController.value.text,
-        "created_by": email
-      };
-      loading.value=true;
-      _api.quoteHeaderMarkRegretApiHit(data, sessionManagement).then((onValue){
-        final jsonResponse = json.decode(onValue);
-        print(onValue);
-        if(jsonResponse is List){
-          List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
-          if(response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
-            loading.value = false;
-            getQuoteHeaderInformation(quoteId.value, "");
-          }else {
-            Utils.sanckBarError("False Message !", response[0].message.toString());
-            loading.value = false;
-          }
-        } else {
-          loading.value = false;
-        }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
-    }catch(e){
-      loading.value = false;
-      print(e);
-    }
-  }*/
-
   void quoteBussinessTermlApiHit() {
     try{
       Map data= {
@@ -1156,12 +1116,12 @@ class SalesCycleVm extends GetxController{
         if(jsonResponse is List){
           List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
           if(response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
+            Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
             quoteSendForApprovalApiHit();
             getQuoteHeaderInformation(quoteId.value, "");
           }else {
-            Utils.sanckBarError("False Message !", response[0].message.toString());
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
             loading.value = false;
           }
         } else {
@@ -1179,41 +1139,6 @@ class SalesCycleVm extends GetxController{
     }
   }
 
-
-  /*void quoteSendForApprovalApiHit() {
-    try{
-      Map data= {
-        "quote_id": quoteId.value,
-        "created_by": email
-      };
-      loading.value=true;
-      _api.quoteSendForApprovalApiHit(data, sessionManagement).then((onValue){
-        final jsonResponse = json.decode(onValue);
-        print(onValue);
-        if(jsonResponse is List){
-          List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
-          if(response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
-            loading.value = false;
-            //getQuoteHeaderInformation(quoteId.value, "");
-          }else {
-            Utils.sanckBarError("False Message !", response[0].message.toString());
-            loading.value = false;
-          }
-        } else {
-          loading.value = false;
-        }
-      },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
-    }catch(e){
-      loading.value = false;
-      print(e);
-    }
-  }*/
 
   void quoteSendForApprovalApiHit() {
     try{
@@ -1239,7 +1164,6 @@ class SalesCycleVm extends GetxController{
               }
             });
             getQuoteHeaderInformation(quoteId.value ,"");
-            //getQuoteHeaderInformation(quoteId.value, "");
           }else {
             Utils.sanckBarError("False Message !", response[0].message.toString());
             loading.value = false;
@@ -1273,11 +1197,11 @@ class SalesCycleVm extends GetxController{
         if(jsonResponse is List){
           List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
           if(response[0].condition=="True"){
-            Utils.sanckBarSuccess("Message !", response[0].message.toString());
+            Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
             getQuoteHeaderInformation(quoteId.value, "quoteApprovalScreen");
           }else {
-            Utils.sanckBarError("False Message !", response[0].message.toString());
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
             loading.value = false;
           }
         } else {
@@ -1759,8 +1683,38 @@ class SalesCycleVm extends GetxController{
     }
     double totAmount = finalAmount! - advcAmount;
     pendingAmountController.value.text = totAmount.toString();
+    print('Installationchagr..${installationChargesController.value.text}');
+    print('OthersC..${otherChargesController.value.text}');
+    print('quoteAmtInt..${quoteAmtInt}');
+    print('finalAmt..${finalAmount}');
+    print('advcAmt..${advncPaymentAmountController.value.text}');
+    print('advc..${advcAmount}');
+    print('PendingAmt..${pendingAmountController.value.text}');
 
 
+  }
+
+  SetBusinessTerm(){
+    installationChargesController.value.text = quoteHeaderdata[0].installationCharges.toString();
+    otherChargesController.value.text = quoteHeaderdata[0].otherCharges.toString();
+    //saleCycleController.warrentyPeriodController.value.text = saleCycleController.quoteHeaderdata[0].warrantyPeriod.toString();
+    //saleCycleController.deliveryWeeksController.value.text = saleCycleController.quoteHeaderdata[0].deliveryInWeeks.toString();
+    advncPaymentPerController.value.text = quoteHeaderdata[0].advancePaymentPer.toString();
+    quoteTotAmountController.value.text = quoteHeaderdata[0].quoteTotalAmount.toString();
+    advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString();
+    quoteRemarkController.value.text = quoteHeaderdata[0].otherRemarks.toString();
+  }
+
+  clearBusinessTerm(){
+    installationChargesController.value.clear();
+    otherChargesController.value.clear();
+    //saleCycleController.warrentyPeriodController.value.clear();
+    //saleCycleController.deliveryWeeksController.value.clear();
+    advncPaymentPerController.value.clear();
+    advncPaymentAmountController.value.clear();
+    pendingAmountController.value.clear();
+    quoteRemarkController.value.clear();
+    finalAmountController.value.clear();
   }
 
 
@@ -1795,20 +1749,11 @@ class SalesCycleVm extends GetxController{
                     SizedBox(height: 10,),
 
                     /*Obx(() {
-                      return Visibility(
-
-                        //visible: saleCycleController.selectedQuotationIdController.value.text.isNotEmpty,
-                          visible: isApprove.value,
-                          child: selectedQuotation(context));
-
-                    }),*/
-
-                    Obx(() {
                       return
                         Visibility(
                           visible: isApprove.value,
                           child: Wrap(
-                            spacing: 8.0,
+                            spacing: 3.0,
                             children: Quote_Selected_list.map((category) {
                               return Chip(
                                 label: Text(category.quoteId!),
@@ -1820,8 +1765,41 @@ class SalesCycleVm extends GetxController{
                           ),
                         );
 
+                    }),*/
+
+                    Obx(() {
+                      return Visibility(
+                        visible: isApprove.value && Quote_Selected_list.length>0,
+                        child: Container(
+                          height: 150,
+                         // width: 300,// Fixed height for the container
+                         // padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
+                          /*decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey), // Optional: to make the container visually distinct
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),*/
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.vertical, // Allows vertical scrolling
+                            child: Wrap(
+                              spacing: 3.0,
+                             // runSpacing: 3.0, // Optional: Adds space between rows
+                              children: Quote_Selected_list.map((category) {
+                                return Chip(
+                                  label: Text(category.quoteId!),
+                                  onDeleted: () {
+                                    int index = quoteList.indexWhere((item) => item.quoteId == category.quoteId);
+                                    Quote_Selected_list.remove(category);
+                                    checkBoxValues[index] = false;
+                                  },
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ),
+                      );
                     }),
-                    SizedBox(height: 10,),
+
+                    SizedBox(height: 8,),
 
                     Obx((){
                       return Column(
@@ -2432,7 +2410,7 @@ class SalesCycleVm extends GetxController{
                                   proposedSolutionController.value.text, updateQuoteAccetedCycleController.value.text
                                   ,competitorNameController.value.text, quoteRejectReasonController.value.text, "");
                               Get.back();
-                              Get.back();
+                             // Get.back();
 
                             },
                             child: Container(
@@ -2582,6 +2560,7 @@ class SalesCycleVm extends GetxController{
           isReject.value=false;
           isChooseQuote.value = false;
         }
+        FocusNode().unfocus();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -2738,18 +2717,36 @@ class SalesCycleVm extends GetxController{
   }
 
 
-  void toggleMultiCheckbox(int index) {
+ /* void toggleMultiCheckbox(int index) {
     final bool isChecked = checkBoxValues[index] ?? false;
     if (isChecked) {
       Quote_Selected_list.remove(quoteList[index]);
       checkBoxValues[index] = false;
+      print('Selectedlist1...${Quote_Selected_list.length}');
     } else {
       if (!Quote_Selected_list.contains(quoteList[index])) {
         Quote_Selected_list.add(quoteList[index]);
         checkBoxValues[index] = true;
+        print('Selectedlist2...${Quote_Selected_list.length}');
       }
     }
+    print('Selectedlist...${Quote_Selected_list.length}');
+  }*/
+
+  void toggleMultiCheckbox(int index) {
+    final bool isChecked = checkBoxValues[index] ?? false;
+    if (isChecked) {
+      Quote_Selected_list.removeWhere((item) => item.quoteId == quoteList[index].quoteId);
+      checkBoxValues[index] = false;
+    } else {
+      if (!Quote_Selected_list.any((item) => item.quoteId == quoteList[index].quoteId)) {
+        Quote_Selected_list.add(quoteList[index]);
+      }
+      checkBoxValues[index] = true;
+    }
+
   }
+
 
 
 

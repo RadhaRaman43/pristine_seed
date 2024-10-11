@@ -284,8 +284,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   InkWell(
-                    child: Container(
-                      width: size.width * .4,
+                    child: Flexible(
+                      fit: FlexFit.loose,
                       child: Tooltip(
                         message: quoteApprovalController.quoteApprovalList[position]
                             .accountName  ?? "",

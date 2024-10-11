@@ -2258,7 +2258,30 @@ Widget bindQuoteData(BuildContext context) {
                      Text(
                        saleCycleController
                            .quoteList[index]
-                           .quoteTotalAmount.toString()??"",
+                           .quoteTotalAmount.toString(),
+                       style: GoogleFonts.poppins(
+                         color: AllColors.textColor,
+                         fontSize: AllFontSize.twelve,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+                   ],
+                 ),
+                 Row(
+                   children: [
+                     Text(
+                       "Quote GST Amount : ",
+                       style: GoogleFonts.poppins(
+                         color: AllColors.primaryDark1,
+                         fontSize: AllFontSize.twelve,
+                         fontWeight: FontWeight.w500,
+                       ),
+                     ),
+
+                     Text(
+                       saleCycleController
+                           .quoteList[index]
+                           .quoteGstAmount.toString(),
                        style: GoogleFonts.poppins(
                          color: AllColors.textColor,
                          fontSize: AllFontSize.twelve,
@@ -2281,30 +2304,7 @@ Widget bindQuoteData(BuildContext context) {
                      Text(
                        saleCycleController
                            .quoteList[index]
-                           .quoteGrossAmount.toString()??"",
-                       style: GoogleFonts.poppins(
-                         color: AllColors.textColor,
-                         fontSize: AllFontSize.twelve,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-                   ],
-                 ),
-                 Row(
-                   children: [
-                     Text(
-                       "Quote Gross Amount : ",
-                       style: GoogleFonts.poppins(
-                         color: AllColors.primaryDark1,
-                         fontSize: AllFontSize.twelve,
-                         fontWeight: FontWeight.w500,
-                       ),
-                     ),
-
-                     Text(
-                       saleCycleController
-                           .quoteList[index]
-                           .quoteGrossAmount.toString()??"",
+                           .quoteGrossAmount.toString(),
                        style: GoogleFonts.poppins(
                          color: AllColors.textColor,
                          fontSize: AllFontSize.twelve,
