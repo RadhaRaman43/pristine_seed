@@ -20,7 +20,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    print('term${saleCycleController.BusinessTerm.value}');
+   /* print('term${saleCycleController.BusinessTerm.value}');
     if(saleCycleController.BusinessTerm.value == true){
       saleCycleController.installationChargesController.value.text = saleCycleController.quoteHeaderdata[0].installationCharges.toString();
       saleCycleController.otherChargesController.value.text = saleCycleController.quoteHeaderdata[0].otherCharges.toString();
@@ -29,6 +29,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
       saleCycleController.advncPaymentPerController.value.text = saleCycleController.quoteHeaderdata[0].advancePaymentPer.toString();
       saleCycleController.advncPaymentAmountController.value.text = saleCycleController.quoteHeaderdata[0].advancePaymentAmt.toString();
       saleCycleController.quoteRemarkController.value.text = saleCycleController.quoteHeaderdata[0].otherRemarks.toString();
+
     }else{
       saleCycleController.installationChargesController.value.clear();
       saleCycleController.otherChargesController.value.clear();
@@ -38,7 +39,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
       saleCycleController.advncPaymentAmountController.value.clear();
       saleCycleController.quoteRemarkController.value.clear();
       saleCycleController.finalAmountController.value.clear();
-    }
+    }*/
     return WillPopScope(onWillPop: () async {
       Get.toNamed(RoutesName.quoteInformationScreen);
       return false;
@@ -370,8 +371,8 @@ class UpdateBussinessTermPage extends StatelessWidget{
   }
 
   Widget bindFinalAmt(BuildContext context) {
-    double totAmount = saleCycleController.quoteHeaderdata[0].quoteTotalAmount!;
-    saleCycleController.finalAmountController.value.text = totAmount.toString();
+   // double totAmount = saleCycleController.quoteHeaderdata[0].quoteTotalAmount!;
+   // saleCycleController.finalAmountController.value.text = totAmount.toString();
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Obx(() {
@@ -408,8 +409,8 @@ class UpdateBussinessTermPage extends StatelessWidget{
   }
 
   Widget bindPendingAmt(BuildContext context) {
-    double totAmount = saleCycleController.quoteHeaderdata[0].quoteTotalAmount!;
-    saleCycleController.pendingAmountController.value.text = totAmount.toString();
+    //double totAmount = saleCycleController.quoteHeaderdata[0].quoteTotalAmount!;
+    //saleCycleController.pendingAmountController.value.text = totAmount.toString();
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Obx(() {

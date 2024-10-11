@@ -618,8 +618,8 @@ class ContactMasterScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .35,
+                Flexible(
+                  fit: FlexFit.loose,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -649,8 +649,8 @@ class ContactMasterScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .35,
+                Flexible(
+                  fit: FlexFit.loose,
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
