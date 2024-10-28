@@ -122,6 +122,7 @@ class SalesCycleVm extends GetxController{
   var filterQuoteValidityController=TextEditingController().obs;
   var filterExpectedClosuredateController=TextEditingController().obs;
   var updateQuoteValidityController=TextEditingController().obs;
+  var identifyDecisionMakerController=TextEditingController().obs;
 
   // todo update quote controller
   var updateItemDescriptionController=TextEditingController().obs;
@@ -252,6 +253,7 @@ class SalesCycleVm extends GetxController{
                 proposedSolutionController.value.text=saleCycleList[0].proposedSolution==null?"":saleCycleList[0].proposedSolution.toString();
                 solutionRejectedRemarkController.value.text=saleCycleList[0].rejectReason.toString().isNotEmpty?saleCycleList[0].rejectReason.toString():"";
                 closureDateController.value.text=saleCycleList[0].estClosureDate.toString();
+                saleCycleList[0].isDecisionMaker==0?identifyDecisionMakerController.value.text="No":identifyDecisionMakerController.value.text="Yes";
                 budgetAmountController.value.clear();
                 expectedAmountController.value.clear();
                 productCategoryController.value.clear();

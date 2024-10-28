@@ -47,7 +47,15 @@ class AddNewcontactMasterContact extends StatelessWidget{
           contact_vm_controller.phone_no_controller.clear();
           contact_vm_controller.emailId_controller.clear();
           Get.back();
-        }else{
+        }else if(accountMaster_page_controller.FromPage == "Task"){
+          contact_vm_controller.account_name_controller.clear();
+          contact_vm_controller.contact_name_controller.clear();
+          contact_vm_controller.depart_name_controller.clear();
+          contact_vm_controller.phone_no_controller.clear();
+          contact_vm_controller.emailId_controller.clear();
+          Get.back();
+        }
+        else{
           contact_vm_controller.account_name_controller.clear();
           contact_vm_controller.contact_name_controller.clear();
           contact_vm_controller.depart_name_controller.clear();

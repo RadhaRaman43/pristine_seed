@@ -71,7 +71,12 @@ class AddNewAccountMaster extends StatelessWidget{
           if(accountMaster_page_controller.view == 'FromDraft'){
             accountMaster_page_controller.clearController();
             Get.toNamed(RoutesName.Draft_item_list);
-          }else{
+          }else if(accountMaster_page_controller.FromPage == "Task"){
+            print('FromPage....${accountMaster_page_controller.FromPage == "Task"}');
+            accountMaster_page_controller.clearController();
+            Get.back();
+          }
+          else{
             accountMaster_page_controller.clearController();
             Get.toNamed(RoutesName.accountMaster_screen);
           }

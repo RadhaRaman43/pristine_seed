@@ -17,7 +17,9 @@ import '../../CRM_Models/TaskMaster_model/Task_DSAR_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_update_infra_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/selectedAlongWithPersonNameModel.dart';
 import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
 
 class Taskmastervm extends GetxController{
@@ -66,6 +68,7 @@ class Taskmastervm extends GetxController{
     var Sale_cycle_Id_controller = TextEditingController();
     var DSAR_Status_type_controller = TextEditingController().obs;
     var ItemCat_type_controller = TextEditingController();
+    var AlongPersonWith_controller = TextEditingController();
     var NextInterdate_controller = TextEditingController();
     var EstClosuredate_controller = TextEditingController();
     var NextInterTime_controller = TextEditingController();
@@ -76,6 +79,7 @@ class Taskmastervm extends GetxController{
     var filterTaskDuedateController=TextEditingController().obs;
     var filterTaskCreationOnController=TextEditingController().obs;
     var DataOFVisitController=TextEditingController().obs;
+    var VisitTime_controller=TextEditingController().obs;
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -110,6 +114,8 @@ class Taskmastervm extends GetxController{
     RxList<ItemCategoryMstModel> Item_Category_master_list = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_list = <ItemCategoryMstModel>[].obs;
+    RxList<AlongWithPersonModel> AlongPersonWith_list = <AlongWithPersonModel>[].obs;
+    RxList<AlongWithPersonModel> SelectedAlongPersonWith_list = <AlongWithPersonModel>[].obs;
     RxList<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
     RxList<String> Item_Category_code_list = <String>[].obs;
     RxList<String> isInfraLeadList =["Yes", "No"].obs;
@@ -250,6 +256,7 @@ class Taskmastervm extends GetxController{
     TaskMasterCreate(){
 
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
+        List<Selectedalongwithpersonnamemodel> personName = SelectedAlongPersonWith_list.map((item) => Selectedalongwithpersonnamemodel(empId: item.empId!)).toList();
 
         try{
             Map<String, dynamic> data={
@@ -264,8 +271,10 @@ class Taskmastervm extends GetxController{
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "payment_sale_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
                 "date_of_visit": DataOFVisitController.value.text.isEmpty?"":DataOFVisitController.value.text,
+                "time_of_visit": VisitTime_controller.value.text.isEmpty?"":VisitTime_controller.value.text,
                 "is_infra_lead": isInfraLeadFilterController.text =='Yes'?1:0,
                 "lines": lines.map((line) => line.toJson()).toList(),
+                "person_name": personName.map((line) => line.toJson()).toList(),
             };
             print('Jason Date....${data}');
             loading.value=true;
@@ -907,6 +916,57 @@ class Taskmastervm extends GetxController{
             }
         }
 
+    getEmpMstEmailByApi() {
+        Map<String , String> data = {
+            "email_id": email
+        };
+        print(data);
+        loading.value = true;
+        _api.EmpMstEmailByGet(data, sessionManagement).then(
+                (value) {
+                print(value);
+                final JsonResponse = json.decode(value);
+                try{
+                    if (JsonResponse is List) {
+                        List<AlongWithPersonModel> response =
+                        JsonResponse.map((e) => AlongWithPersonModel.fromJson(e))
+                            .toList();
+                        if (response != null &&
+                            response.length > 0 &&
+                            response[0].condition == "True") {
+                            AlongPersonWith_list.value=response;
+
+
+                        } else {
+                            AlongPersonWith_list.value=[];
+                            Utils.showErrorToastification(
+                                "Error!", "No Data Found");
+                            //service_installation_details_list.value=[];
+                        }
+                    } else {
+
+                        // service_indent_header_list.value = [];
+                        Utils.showExceptionToastification("Api Error!", JsonResponse);
+                    }
+                }catch(e){
+                    print(e);
+                }finally{
+                    loading.value = false;
+
+                }
+
+            },
+        ).onError(
+                (error, stackTrace) {
+                loading.value = false;
+                print(error);
+                //service_indent_header_list.value = [];
+            },
+        ).whenComplete(() {
+            loading.value = false;
+        },);
+    }
+
     void clearUpdateController(){
          projectValueUpdateController.clear();
          expectedDateOfOrderUpdateController.clear();
@@ -945,6 +1005,7 @@ class Taskmastervm extends GetxController{
 
     void clearCreateTaskController(){
         Item_Category_Selected_list.value=[];
+        SelectedAlongPersonWith_list.value=[];
         account_name.value = '';
         isInfraLeadFilterController.text = "No";
         account_Name_controller.clear();
@@ -956,7 +1017,9 @@ class Taskmastervm extends GetxController{
         //isInfraLeadFilterController.clear();
         String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
         DataOFVisitController.value.text = todayDate;
+        VisitTime_controller.value.clear();
         ItemCat_type_controller.clear();
+        AlongPersonWith_controller.clear();
 
 
     }

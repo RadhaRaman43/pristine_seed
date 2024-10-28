@@ -5,6 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
@@ -19,11 +20,15 @@ import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_maste
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
+import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 
 class AddNewTaskScreen extends StatelessWidget{
   AddNewTaskScreen({super.key});
 
   final taskMaster_page_controller=Get.put(Taskmastervm());
+  final accountMaster_page_controller=Get.put(Accountmastervm());
+  final contact_vm_controller = Get.put(ContactMasterVM());
   Size size=Get.size;
 
 
@@ -46,6 +51,14 @@ class AddNewTaskScreen extends StatelessWidget{
 
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;
+
+  static String _displayAlongPersonForOption(AlongWithPersonModel option) =>
+      (option.firstName?.toString() ?? "") +
+          " " +
+          (option.middleName?.toString() ?? "") +
+          " " +
+          (option.lastName?.toString() ?? "");
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,13 +155,82 @@ class AddNewTaskScreen extends StatelessWidget{
               SizedBox(height: 25,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: bindAccountNameDropDown(context),
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        //color: AllColors.whiteColor,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      //height: size.height*10,
+                      width: size.width*.7,
+                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: bindAccountNameDropDown(context),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AllColors.whiteColor,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AllColors.lightblackColor, // Set the border color to black
+                          width: 1.0, // You can adjust the width of the border as needed
+                        ),
+                      ),
+                      child: IconButton(
+                          onPressed: (){
+                            accountMaster_page_controller.FromPage.value = "Task";
+                            accountMaster_page_controller.DraftId = '';
+                            accountMaster_page_controller.clearController();
+                            Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                          }, icon: Icon(Icons.add)),
+                    )
+                  ],
+                ),
               ),
+
               SizedBox(height: 15,),
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: bindContactNameDropDown(context),
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        //color: AllColors.whiteColor,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      //height: size.height*10,
+                      width: size.width*.7,
+                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: bindContactNameDropDown(context),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: AllColors.whiteColor,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: AllColors.lightblackColor, // Set the border color to black
+                          width: 1.0, // You can adjust the width of the border as needed
+                        ),
+                      ),
+                      child: IconButton(
+                          onPressed: (){
+                            contact_vm_controller.resetAllContactCreativeField('Icon');
+                            contact_vm_controller.insideOut = true;
+                            accountMaster_page_controller.FromPage.value = "Task";
+                            contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                            contact_vm_controller.getAccountMaster(contact_vm_controller.pageNumber);
+                            contact_vm_controller.getDepartNameList();
+                            Get.toNamed(RoutesName.addNewContactMaster_screen);
+                          }, icon: Icon(Icons.add)),
+                    )
+                  ],
+                ),
               ),
+
 
               SizedBox(height: 15,),
               Container(
@@ -190,6 +272,34 @@ class AddNewTaskScreen extends StatelessWidget{
               bindDateOfVisit(context),
 
               SizedBox(height: 15,),
+
+              bindVisitTimePicker(context),
+
+              SizedBox(height: 15,),
+
+              bindAlongWithPersonDropDown(context),
+              SizedBox(height: 10,),
+              Obx(() {
+                return
+                  Wrap(
+                    spacing: 8.0,
+                    children: taskMaster_page_controller.SelectedAlongPersonWith_list.map((category) {
+                      return Chip(
+                        label: Text((category.firstName?.toString() ?? "") +
+                            " " +
+                            (category.middleName?.toString() ?? "") +
+                            " " +
+                            (category.lastName?.toString() ?? "")
+                        ),
+                        onDeleted: () {
+                          taskMaster_page_controller.SelectedAlongPersonWith_list.remove(category);
+                        },
+                      );
+                    }).toList(),
+                  );
+
+              }),
+              SizedBox(height: 10,),
 
               bindProductCategoryDropDown(context),
               SizedBox(height: 10,),
@@ -542,7 +652,7 @@ class AddNewTaskScreen extends StatelessWidget{
       onSelected: (CallStatusMasterModel selection) {
         taskMaster_page_controller.Type_of_call_controller.text =
             _displayTypeOfCallForOption(selection).toString();
-        if( taskMaster_page_controller.Type_of_call_controller.text == 'Payment Call'){
+        if( taskMaster_page_controller.Type_of_call_controller.text == 'Payment Call' || taskMaster_page_controller.Type_of_call_controller.text == 'Follow-Up Call'){
           taskMaster_page_controller.PaymentCall.value = true;
         }else{
           taskMaster_page_controller.PaymentCall.value = false;
@@ -882,7 +992,8 @@ class AddNewTaskScreen extends StatelessWidget{
           ),
           filled: false,
           contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
         ),
         onSelected: (String? selection) {
           print(selection);
@@ -964,6 +1075,192 @@ class AddNewTaskScreen extends StatelessWidget{
               taskMaster_page_controller.DataOFVisitController.value.text = "";
           }
 
+      ),
+    );
+  }
+
+  Widget bindVisitTimePicker(context){
+    return Container(
+      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      child: TextField(
+        controller: taskMaster_page_controller.VisitTime_controller.value,
+        readOnly: true,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+          //contentPadding: EdgeInsets.symmetric(vertical:5,horizontal:5),
+          hintText: "Next Interaction Time",
+          labelText: 'Next Interaction Time',
+          hintStyle: TextStyle(color: AllColors.blackColor),
+          labelStyle: TextStyle(color: AllColors.blackColor),
+          suffixIcon: Icon(
+            Icons.watch_later_outlined,
+            color: AllColors.primaryDark,
+            size: 25,
+          ),
+          //floatingLabelBehavior: FloatingLabelBehavior.always,
+          // Add a clear icon if needed
+          filled: true,
+          fillColor: Colors.white,
+          // Light gray background
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10))
+          ),
+        ),
+        cursorColor: AllColors.primaryDark,
+        onTap: () async {
+          FocusScope.of(context).requestFocus(new FocusNode());
+          TimeOfDay? newTime = await showTimePicker(context: context,
+            initialTime: TimeOfDay(hour: 12, minute: 00),
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark, // Change the primary color
+                  //accentColor: AllColors.primaryDark1, // Change the accent color
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          if (newTime != null) {
+            final now = DateTime.now();
+            final selectedTime = DateTime(now.year, now.month, now.day, newTime.hour, newTime.minute);
+            final formattedTime = DateFormat.jm().format(selectedTime); // Format to 12-hour format
+            taskMaster_page_controller.VisitTime_controller.value.text = formattedTime;
+          }
+
+
+        },
+      ),
+    );
+  }
+
+  Widget bindAlongWithPersonDropDown(context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: Autocomplete<AlongWithPersonModel>(
+        displayStringForOption: _displayAlongPersonForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
+            return taskMaster_page_controller.AlongPersonWith_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return taskMaster_page_controller.AlongPersonWith_list
+              .where((AlongWithPersonModel option) {
+            return option.firstName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (AlongWithPersonModel selection) {
+          // Update the TextField with the selected
+          taskMaster_page_controller.AlongPersonWith_controller.text =
+              _displayAlongPersonForOption(selection).toString();
+
+          if (!taskMaster_page_controller.SelectedAlongPersonWith_list.contains(selection)) {
+            taskMaster_page_controller.SelectedAlongPersonWith_list.add(selection);
+            Utils.showToastification('Success', 'Add Successfully');
+          }else{
+            Utils.showErrorToastification('Error', 'Already Selected');
+          }
+
+          // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextField(
+            onTap: (){
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = taskMaster_page_controller.AlongPersonWith_controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                  onTap: (){
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Along With Person Name',
+              labelText: 'Along With Person Name',
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<AlongWithPersonModel> onSelected,
+            Iterable<AlongWithPersonModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: double.infinity,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final AlongWithPersonModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  (option.firstName?.toString() ?? "") +
+                                    " " +
+                                    (option.middleName?.toString() ?? "") +
+                                    " " +
+                                    (option.lastName?.toString() ?? ""),
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                              TextSpan(
+                                text: " (${option.empId!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

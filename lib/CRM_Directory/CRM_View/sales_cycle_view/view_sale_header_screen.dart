@@ -35,8 +35,9 @@ class ViewSaleHeaderScreen extends StatelessWidget{
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;
 
-  static String _displayUpdateSalesCycleForOption(String option) =>
+  static String _displayDecisionMakerForOption(String option) =>
       option;
+
   Size size=Get.size;
 
    int count=1;
@@ -183,6 +184,12 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                         child:Column(
                             children: [
                               bindClosureDate(context),
+                              SizedBox(height: 10,),
+                              bindIdentifyDecisionMaker(context),
+                              SizedBox(height: 10,),
+                              bindPurchaseProcessDropDown(context),
+                              SizedBox(height: 10,),
+                              bindPurchaseTimeFrameDropDown(context),
                               SizedBox(height: 10,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -3707,6 +3714,308 @@ Widget bindQuoteData(BuildContext context) {
 
 
 
+    );
+  }
+
+  Widget bindIdentifyDecisionMaker(BuildContext context) {
+    return IgnorePointer(
+      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval==0 && (saleCycleController.FromPage.value == 'Sales'
+          || saleCycleController.FromPage.value == 'FromTaskScreen' || saleCycleController.FromPage.value == 'Task' ))
+          || saleCycleController.FromPage.value == 'Task' ||
+          saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
+      child: Container(
+        margin: const EdgeInsets.only(left: 15.0),
+        width: double.infinity,
+        child: DropdownMenu<String>(
+          width: size.width-30,
+          controller: saleCycleController.identifyDecisionMakerController.value,
+          label: Text(
+            "Identify Decision Maker",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w300),
+          ),
+
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: AllColors.primaryDark1,),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            filled: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          ),
+          onSelected: (String? selection) {
+            print(selection);
+            saleCycleController.identifyDecisionMakerController.value.text =
+                _displayDecisionMakerForOption(selection!).toString();
+
+
+          },
+
+          dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<DropdownMenuEntry<String>>((String e) {
+            return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget bindPurchaseProcessDropDown(context){
+    return IgnorePointer(
+      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval==0   &&
+          (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
+          )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Autocomplete<ItemCategoryMstModel>(
+          displayStringForOption: _displayItemCatMasterForOption,
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (textEditingValue.text.isEmpty) {
+              return saleCycleController.itemCategorySelectedlist.value;
+              // return const Iterable<VehicleTypeResponse>.empty();
+            }
+            return saleCycleController.itemCategorySelectedlist
+                .where((ItemCategoryMstModel option) {
+              return option.categoryName
+                  .toString()
+                  .toLowerCase()
+                  .contains(textEditingValue.text.toLowerCase());
+            }).toList();
+          },
+          onSelected: (ItemCategoryMstModel selection) {
+            saleCycleController.productCategoryController.value.text =
+                _displayItemCatMasterForOption(selection).toString();
+            saleCycleController.ProductCategoryCode.value = selection.categoryCode??"";
+
+            /*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+              saleCycleController.itemCategorySelectedlist.add(selection);
+              Utils.showToastification('Success', 'Add Successfully');
+            }else{
+              Utils.showErrorToastification('Error', 'Already Selected');
+            }
+            print("list${saleCycleController.itemCategorySelectedlist.length}");*/
+
+          },
+          fieldViewBuilder: (BuildContext context, TextEditingController controller,
+              FocusNode focusNode, VoidCallback onFieldSubmitted) {
+            return TextField(
+              readOnly:  (saleCycleController.saleCycleList[0].isReadySendForApproval==0   &&
+                  (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
+                  )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
+              onTap: (){
+                controller.clear();
+              },
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = saleCycleController.productCategoryController.value.text,
+              focusNode: focusNode,
+              decoration: InputDecoration(
+                  suffixIcon: InkWell(
+                      onTap: (){
+                        focusNode.requestFocus();
+                        controller.clear();
+                      },
+                      child: Icon(Icons.arrow_drop_down)),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'Product Category',
+                  labelText: 'Product Category',
+
+                  hintStyle: GoogleFonts.poppins(
+                      color: AllColors.lightblackColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: AllFontSize.ten),
+                  labelStyle: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.fourtine),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  )
+              ),
+            );
+          },
+          optionsViewBuilder: (BuildContext context,
+              AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
+              Iterable<ItemCategoryMstModel> suggestions) {
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                elevation: 4.0,
+                child: Container(
+                  width: size.width*.5,
+                  constraints: BoxConstraints(maxHeight: 200),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: suggestions.length,
+                    itemBuilder: (context, index) {
+                      final ItemCategoryMstModel option =
+                      suggestions.elementAt(index);
+                      return GestureDetector(
+                        onTap: () {
+                          onSelected(option);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            option.categoryName.toString(),
+                            style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontWeight: FontWeight.w300,
+                                fontSize: AllFontSize
+                                    .sisxteen // Change the text color here
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget bindPurchaseTimeFrameDropDown(context){
+    return IgnorePointer(
+      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval==0   &&
+          (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
+          )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Autocomplete<ItemCategoryMstModel>(
+          displayStringForOption: _displayItemCatMasterForOption,
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (textEditingValue.text.isEmpty) {
+              return saleCycleController.itemCategorySelectedlist.value;
+              // return const Iterable<VehicleTypeResponse>.empty();
+            }
+            return saleCycleController.itemCategorySelectedlist
+                .where((ItemCategoryMstModel option) {
+              return option.categoryName
+                  .toString()
+                  .toLowerCase()
+                  .contains(textEditingValue.text.toLowerCase());
+            }).toList();
+          },
+          onSelected: (ItemCategoryMstModel selection) {
+            saleCycleController.productCategoryController.value.text =
+                _displayItemCatMasterForOption(selection).toString();
+            saleCycleController.ProductCategoryCode.value = selection.categoryCode??"";
+
+            /*if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
+              saleCycleController.itemCategorySelectedlist.add(selection);
+              Utils.showToastification('Success', 'Add Successfully');
+            }else{
+              Utils.showErrorToastification('Error', 'Already Selected');
+            }
+            print("list${saleCycleController.itemCategorySelectedlist.length}");*/
+
+          },
+          fieldViewBuilder: (BuildContext context, TextEditingController controller,
+              FocusNode focusNode, VoidCallback onFieldSubmitted) {
+            return TextField(
+              readOnly:  (saleCycleController.saleCycleList[0].isReadySendForApproval==0   &&
+                  (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
+                  )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
+              onTap: (){
+                controller.clear();
+              },
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = saleCycleController.productCategoryController.value.text,
+              focusNode: focusNode,
+              decoration: InputDecoration(
+                  suffixIcon: InkWell(
+                      onTap: (){
+                        focusNode.requestFocus();
+                        controller.clear();
+                      },
+                      child: Icon(Icons.arrow_drop_down)),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'Product Category',
+                  labelText: 'Product Category',
+
+                  hintStyle: GoogleFonts.poppins(
+                      color: AllColors.lightblackColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: AllFontSize.ten),
+                  labelStyle: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.fourtine),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  )
+              ),
+            );
+          },
+          optionsViewBuilder: (BuildContext context,
+              AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
+              Iterable<ItemCategoryMstModel> suggestions) {
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                elevation: 4.0,
+                child: Container(
+                  width: size.width*.5,
+                  constraints: BoxConstraints(maxHeight: 200),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: suggestions.length,
+                    itemBuilder: (context, index) {
+                      final ItemCategoryMstModel option =
+                      suggestions.elementAt(index);
+                      return GestureDetector(
+                        onTap: () {
+                          onSelected(option);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            option.categoryName.toString(),
+                            style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontWeight: FontWeight.w300,
+                                fontSize: AllFontSize
+                                    .sisxteen // Change the text color here
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
     );
   }
 

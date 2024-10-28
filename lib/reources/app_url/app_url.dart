@@ -244,7 +244,7 @@ class AppUrl {
      static const String specialPriceRequestReport = "$BASE_URL/api/CRM/Quote/SpecialPriceRequestReport";
      static const String SaleCycleProductCategoryWiseAmtCreate = "$BASE_URL/api/CRM/SalesCycle/SaleCycleProductCategoryWiseAmtCreate";
      static const String SaleCycleProductCategoryWiseAmtGet = "$BASE_URL/api/CRM/SalesCycle/SaleCycleProductCategoryWiseAmtGet";
-
+     static const String EmpMstEmailByGet = "$BASE_URL/api/CRM/SalesCycle/EmpMstEmailByGet";
 
 
 

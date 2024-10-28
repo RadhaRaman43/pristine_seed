@@ -60,6 +60,10 @@ class SalesCycleModal {
   String? shippingStateName;
   String? shippingPhoneNo;
   String? shippingEmailId;
+  int? isDecisionMaker;
+  String? purchaseProcess;
+  String? purchaseTimeFrame;
+  int? commit;
 
   SalesCycleModal(
       {this.condition,
@@ -122,7 +126,11 @@ class SalesCycleModal {
         this.shippingStateCode,
         this.shippingStateName,
         this.shippingPhoneNo,
-        this.shippingEmailId});
+        this.shippingEmailId,
+        this.isDecisionMaker,
+        this.purchaseProcess,
+        this.purchaseTimeFrame,
+        this.commit});
 
   SalesCycleModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -186,6 +194,10 @@ class SalesCycleModal {
     shippingStateName = json['shipping_state_name'];
     shippingPhoneNo = json['shipping_phone_no'];
     shippingEmailId = json['shipping_email_id'];
+    isDecisionMaker = json['is_decision_maker'];
+    purchaseProcess = json['purchase_process'];
+    purchaseTimeFrame = json['purchase_time_frame'];
+    commit = json['commit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -251,6 +263,10 @@ class SalesCycleModal {
     data['shipping_state_name'] = this.shippingStateName;
     data['shipping_phone_no'] = this.shippingPhoneNo;
     data['shipping_email_id'] = this.shippingEmailId;
+    data['is_decision_maker'] = this.isDecisionMaker;
+    data['purchase_process'] = this.purchaseProcess;
+    data['purchase_time_frame'] = this.purchaseTimeFrame;
+    data['commit'] = this.commit;
     return data;
   }
 }

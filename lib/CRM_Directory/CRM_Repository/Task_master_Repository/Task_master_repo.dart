@@ -57,5 +57,9 @@ class TaskMasterRepo{
     return _apiService.postApi(data, AppUrl.SalesCycleMstGetByAccountCode, sessionManagement);
   }
 
+  Future<String> EmpMstEmailByGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.EmpMstEmailByGet, sessionManagement, data);
+  }
+
 
 }

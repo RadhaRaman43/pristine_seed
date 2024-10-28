@@ -65,6 +65,7 @@ class TaskMasterScreen extends StatelessWidget{
                IconButton(onPressed: () {
                  TaskMaster_page_controller.clearCreateTaskController();
                  TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
+                 TaskMaster_page_controller.getEmpMstEmailByApi();
                  Get.toNamed(RoutesName.addNewTaskMaster_screen);
                }, icon: Icon(Icons.add)),
                IconButton(onPressed: () {
