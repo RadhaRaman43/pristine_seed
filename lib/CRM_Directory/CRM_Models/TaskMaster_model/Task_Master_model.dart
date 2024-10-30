@@ -16,6 +16,7 @@ class TaskMasterGetModel {
   String? taskRemarks;
   String? previousTaskId;
   String? productCategory;
+  String? alongWithPersonName;
   String? lastActivityStatus;
   String? lastActivityUpdatedBy;
   String? lastActivityUpdatedOn;
@@ -48,6 +49,9 @@ class TaskMasterGetModel {
   String? expectedDateOfCompletion;
   int? isReadyForApprove;
   int? isCreateTaskDsar;
+  String? dateOfVisit;
+  String? paymentSaleCycleId;
+  String? timeOfVisit;
 
   TaskMasterGetModel(
       {this.condition,
@@ -67,6 +71,7 @@ class TaskMasterGetModel {
         this.taskRemarks,
         this.previousTaskId,
         this.productCategory,
+        this.alongWithPersonName,
         this.lastActivityStatus,
         this.lastActivityUpdatedBy,
         this.lastActivityUpdatedOn,
@@ -98,7 +103,10 @@ class TaskMasterGetModel {
         this.valueOfQuote,
         this.expectedDateOfCompletion,
         this.isReadyForApprove,
-        this.isCreateTaskDsar});
+        this.isCreateTaskDsar,
+        this.dateOfVisit,
+        this.paymentSaleCycleId,
+        this.timeOfVisit});
 
   TaskMasterGetModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -118,6 +126,7 @@ class TaskMasterGetModel {
     taskRemarks = json['task_remarks'];
     previousTaskId = json['previous_task_id'];
     productCategory = json['product_category'];
+    alongWithPersonName = json['along_with_person_name'];
     lastActivityStatus = json['last_activity_status'];
     lastActivityUpdatedBy = json['last_activity_updated_by'];
     lastActivityUpdatedOn = json['last_activity_updated_on'];
@@ -150,6 +159,9 @@ class TaskMasterGetModel {
     expectedDateOfCompletion = json['expected_date_of_completion'];
     isReadyForApprove = json['is_ready_for_approve'];
     isCreateTaskDsar = json['is_create_task_dsar'];
+    dateOfVisit = json['date_of_visit'];
+    paymentSaleCycleId = json['payment_sale_cycle_id'];
+    timeOfVisit = json['time_of_visit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -171,6 +183,7 @@ class TaskMasterGetModel {
     data['task_remarks'] = this.taskRemarks;
     data['previous_task_id'] = this.previousTaskId;
     data['product_category'] = this.productCategory;
+    data['along_with_person_name'] = this.alongWithPersonName;
     data['last_activity_status'] = this.lastActivityStatus;
     data['last_activity_updated_by'] = this.lastActivityUpdatedBy;
     data['last_activity_updated_on'] = this.lastActivityUpdatedOn;
@@ -203,6 +216,9 @@ class TaskMasterGetModel {
     data['expected_date_of_completion'] = this.expectedDateOfCompletion;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_create_task_dsar'] = this.isCreateTaskDsar;
+    data['date_of_visit'] = this.dateOfVisit;
+    data['payment_sale_cycle_id'] = this.paymentSaleCycleId;
+    data['time_of_visit'] = this.timeOfVisit;
     return data;
   }
 }

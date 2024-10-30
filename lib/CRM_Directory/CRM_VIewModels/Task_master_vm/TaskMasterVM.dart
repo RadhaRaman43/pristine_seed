@@ -222,6 +222,7 @@ class Taskmastervm extends GetxController{
                             }
                             getTaskMstDSARList(taskId);
                             getItemCategoryMstApi(taskId);
+                            getTaskPersonMstByTaskIdApi(taskId);
                             Get.toNamed(RoutesName.taskMasterDetails_screen);
 
                         }
@@ -850,6 +851,59 @@ class Taskmastervm extends GetxController{
         }
     }
 
+    TaskPersonMstCreateAPI(String flag) async {
+
+        List<Selectedalongwithpersonnamemodel> personName = SelectedAlongPersonWith_list.map((item) => Selectedalongwithpersonnamemodel(empId: item.empId!)).toList();
+
+        Map<String, dynamic> data = {
+            "created_by": email,
+            "task_id": TaskID,
+            "lines": personName.map((line) => line.toJson()).toList(),
+        };
+
+        print(data);
+        loading.value = true;
+
+        try {
+            final value = await _api.TaskPersonMstCreate(data, sessionManagement);
+            print(value);
+            final JsonResponse = json.decode(value);
+
+            if (JsonResponse is List) {
+                List<TaskMasterGetModel> response =
+                JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
+
+                if (response != null && response.isNotEmpty && response[0].condition == "True") {
+                    loading.value = false;
+                    Utils.showToastification("Success!", response[0].message.toString());
+
+                    if(flag == 'Details'){
+                        getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
+                        //todo by raman
+                        getTaskPersonMstByTaskIdApi(TaskID);
+
+                        Get.toNamed(RoutesName.taskMasterDetails_screen);
+                    } else if(flag == 'DSAR'){
+                        getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
+                        getTaskPersonMstByTaskIdApi(TaskID);
+                    }
+
+                } else {
+                    loading.value = false;
+                    Utils.showErrorToastification("Error!", "Please select at least single product category");
+                }
+            } else {
+                loading.value = false;
+                Utils.showExceptionToastification("Api Error!", JsonResponse.toString());
+            }
+        } catch (error, stackTrace) {
+            print(error);
+            print(stackTrace);
+            print("Exception....");
+        }
+    }
+
+
 
     //todo nirupma code
     gettaskMstInfraUpdate() {
@@ -923,6 +977,60 @@ class Taskmastervm extends GetxController{
         print(data);
         loading.value = true;
         _api.EmpMstEmailByGet(data, sessionManagement).then(
+                (value) {
+                print(value);
+                final JsonResponse = json.decode(value);
+                try{
+                    if (JsonResponse is List) {
+                        List<AlongWithPersonModel> response =
+                        JsonResponse.map((e) => AlongWithPersonModel.fromJson(e))
+                            .toList();
+                        if (response != null &&
+                            response.length > 0 &&
+                            response[0].condition == "True") {
+                            AlongPersonWith_list.value=response;
+
+
+                        } else {
+                            AlongPersonWith_list.value=[];
+                            Utils.showErrorToastification(
+                                "Error!", "No Data Found");
+                            //service_installation_details_list.value=[];
+                        }
+                    } else {
+
+                        // service_indent_header_list.value = [];
+                        Utils.showExceptionToastification("Api Error!", JsonResponse);
+                    }
+                }catch(e){
+                    print(e);
+                }finally{
+                    loading.value = false;
+
+                }
+
+            },
+        ).onError(
+                (error, stackTrace) {
+                loading.value = false;
+                print(error);
+                //service_indent_header_list.value = [];
+            },
+        ).whenComplete(() {
+            loading.value = false;
+        },);
+    }
+
+    getTaskPersonMstByTaskIdApi(String TaskID) {
+        Map<String , String> data = {
+            "task_id": TaskID,
+            "along_with_person_name": "",
+            "email_id": email,
+
+        };
+        print(data);
+        loading.value = true;
+        _api.TaskPersonMstGetByTaskId(data, sessionManagement).then(
                 (value) {
                 print(value);
                 final JsonResponse = json.decode(value);

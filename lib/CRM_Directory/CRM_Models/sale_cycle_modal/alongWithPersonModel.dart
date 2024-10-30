@@ -2,6 +2,8 @@ class AlongWithPersonModel {
   String? condition;
   String? totalRows;
   String? empId;
+  String? name;
+  int? isSelected;
   String? loginEmailId;
   String? firstName;
   String? middleName;
@@ -45,6 +47,8 @@ class AlongWithPersonModel {
       {this.condition,
         this.totalRows,
         this.empId,
+        this.name,
+        this.isSelected,
         this.loginEmailId,
         this.firstName,
         this.middleName,
@@ -88,6 +92,8 @@ class AlongWithPersonModel {
     condition = json['condition'];
     totalRows = json['total_rows'];
     empId = json['emp_id'];
+    name = json['name'];
+    isSelected = json['is_selected'];
     loginEmailId = json['login_email_id'];
     firstName = json['first_name'];
     middleName = json['middle_name'];
@@ -133,6 +139,8 @@ class AlongWithPersonModel {
     data['condition'] = this.condition;
     data['total_rows'] = this.totalRows;
     data['emp_id'] = this.empId;
+    data['name'] = this.name;
+    data['is_selected'] = this.isSelected;
     data['login_email_id'] = this.loginEmailId;
     data['first_name'] = this.firstName;
     data['middle_name'] = this.middleName;

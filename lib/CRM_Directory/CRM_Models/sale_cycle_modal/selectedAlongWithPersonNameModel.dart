@@ -4,6 +4,6 @@ class Selectedalongwithpersonnamemodel{
   Selectedalongwithpersonnamemodel({required this.empId});
 
   Map<String, dynamic> toJson() => {
-  'emp_id': empId,
+  'along_with_person_name': empId,
   };
 }

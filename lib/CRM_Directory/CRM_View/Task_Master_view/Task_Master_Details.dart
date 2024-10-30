@@ -14,6 +14,7 @@ import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
+import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
@@ -32,6 +33,13 @@ class TaskMasterDetails extends StatelessWidget{
 
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;
+
+  static String _displayAlongPersonForOption(AlongWithPersonModel option) =>
+      (option.firstName?.toString() ?? "") +
+          " " +
+          (option.middleName?.toString() ?? "") +
+          " " +
+          (option.lastName?.toString() ?? "");
 
   @override
   Widget build(BuildContext context) {
@@ -401,6 +409,204 @@ class TaskMasterDetails extends StatelessWidget{
             ),
           );
         });
+  }
+
+  showAlongPersonDialog(context){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            title: Text(
+              'Along with person name',
+              style: GoogleFonts.poppins(
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w700,
+                color: AllColors.primaryDark1,
+              ),
+            ),
+            content: Container(
+              //height: size.height*.3,
+              width: size.width*4,
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 0.0),
+              child: Wrap(
+                children: [
+                  bindAlongWithPersonDropDown(context),
+                  SizedBox(height: 65,),
+                  Obx((){
+                    return Visibility(
+                      visible: TaskMaster_page_controller.SelectedAlongPersonWith_list.length > 0 ? true : false,
+                      child: Wrap(
+                        spacing: 8.0,
+                        children: TaskMaster_page_controller.SelectedAlongPersonWith_list.map((category) {
+                          return Chip(
+                            label: Text(category.name??""),
+                            onDeleted: () {
+                              TaskMaster_page_controller.SelectedAlongPersonWith_list.remove(category);
+                            },
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 15,),
+
+                  Row(
+                    mainAxisAlignment:MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.primaryDark1,
+                          ),
+                        ),
+                        onPressed: ()  {
+                          TaskMaster_page_controller.TaskPersonMstCreateAPI('Details');
+                          Navigator.pop(context);
+
+                        },
+                        child: Container(
+                          width: 100,
+                          alignment: Alignment.center,
+                          child: Text('Save'
+                            /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files'*/,
+                            style: GoogleFonts.poppins(
+                              color: AllColors.customDarkerWhite,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+
+                    ],)
+
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget bindAlongWithPersonDropDown(context){
+    return Autocomplete<AlongWithPersonModel>(
+      displayStringForOption: _displayAlongPersonForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return TaskMaster_page_controller.AlongPersonWith_list;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return TaskMaster_page_controller.AlongPersonWith_list
+            .where((AlongWithPersonModel option) {
+          return option.firstName
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (AlongWithPersonModel selection) {
+        // Update the TextField with the selected
+        TaskMaster_page_controller.AlongPersonWith_controller.text =
+            _displayAlongPersonForOption(selection).toString();
+
+        if (!TaskMaster_page_controller.SelectedAlongPersonWith_list.contains(selection)) {
+          TaskMaster_page_controller.SelectedAlongPersonWith_list.add(selection);
+          Utils.showToastification('Success', 'Add Successfully');
+        }else{
+          Utils.showErrorToastification('Error', 'Already Selected');
+        }
+
+        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onTap: (){
+            controller.clear();
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = TaskMaster_page_controller.AlongPersonWith_controller
+                .text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: InkWell(
+                onTap: (){
+                  focusNode.requestFocus();
+                  controller.clear();
+                },
+                child: Icon(Icons.arrow_drop_down)),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            hintText: 'Along With Person Name',
+            labelText: 'Along With Person Name',
+
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<AlongWithPersonModel> onSelected,
+          Iterable<AlongWithPersonModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width *.7,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final AlongWithPersonModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: RichText(
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:  (option.name?.toString() ?? ""),
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                            TextSpan(
+                              text: " (${option.empId!})",
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize
+                                      .sisxteen // Change the text color here
+                              ),
+                            ),
+                          ],
+                        ),
+                        softWrap: true,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Widget bindItemCategoryDropDown(context){
@@ -873,14 +1079,14 @@ class TaskMasterDetails extends StatelessWidget{
                 )
               ],
             ),
-            /*SizedBox(
+            SizedBox(
               height: 3,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Tasks Due Date",
+                  "Date of Visit",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -892,17 +1098,11 @@ class TaskMasterDetails extends StatelessWidget{
                   child: Tooltip(
                     message: TaskMaster_page_controller
                         .Task_Master_list[0]
-                        .taskDueDate.toString() +
-                        " | ${TaskMaster_page_controller
-                            .Task_Master_list[0]
-                            .taskDueTime}",
+                        .dateOfVisit.toString(),
                     child: Text(
                       TaskMaster_page_controller
                           .Task_Master_list[0]
-                          .taskDueDate.toString() +
-                          " | ${TaskMaster_page_controller
-                              .Task_Master_list[0]
-                              .taskDueTime}",
+                          .dateOfVisit.toString(),
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
@@ -913,7 +1113,42 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                 ),
               ],
-            ),*/
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Time of Visit",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .timeOfVisit.toString() ,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .timeOfVisit.toString() ,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             SizedBox(
               height: 3,
             ),
@@ -1112,7 +1347,7 @@ class TaskMasterDetails extends StatelessWidget{
                     SizedBox(width: 2,),
                     Visibility(
                       visible: account_vm_controller.view=='Sales' || TaskMaster_page_controller.email==TaskMaster_page_controller
-            .Task_Master_list[0].approvedBy ?false:true,
+                               .Task_Master_list[0].approvedBy ?false:true,
                       child: InkWell(
                           onTap: () {
                             TaskMaster_page_controller
@@ -1145,6 +1380,101 @@ class TaskMasterDetails extends StatelessWidget{
                             TaskMaster_page_controller
                                 .ItemCat_type_controller.clear();
                             showProductCatDialog(context);
+                          },
+                          child: Icon(Icons.add)),
+                    )
+                  ],
+                )
+
+              ],
+            ),
+
+            SizedBox(
+              height: 3,
+            ),
+
+            Row(
+              children: [
+                Text(
+                  "Along With Person Name ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Row(
+                  children: [
+                    Container(
+                      width: size.width * .3,
+                      child: Obx(() {
+                        return Tooltip(
+                          message: TaskMaster_page_controller
+                              .Task_Master_list[0]
+                              .alongWithPersonName == null || TaskMaster_page_controller
+                              .Task_Master_list[0]
+                              .alongWithPersonName == ''
+                              ? ''
+                              : TaskMaster_page_controller
+                              .Task_Master_list[0]
+                              .alongWithPersonName ?? '',
+                          child: Text(
+                            TaskMaster_page_controller
+                                .Task_Master_list[0]
+                                .alongWithPersonName == null || TaskMaster_page_controller
+                                .Task_Master_list[0]
+                                .alongWithPersonName == ''
+                                ? ''
+                                : TaskMaster_page_controller
+                                .Task_Master_list[0]
+                                .alongWithPersonName ?? "",
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                            style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        );
+                      }),
+                    ),
+                    SizedBox(width: 2,),
+                    Visibility(
+                      visible: account_vm_controller.view=='Sales' || TaskMaster_page_controller.email==TaskMaster_page_controller
+                          .Task_Master_list[0].approvedBy ?false:true,
+                      child: InkWell(
+                          onTap: () {
+                            TaskMaster_page_controller
+                                .SelectedAlongPersonWith_list
+                                .value = [];
+                            for (int i = 0; i <
+                                TaskMaster_page_controller
+                                    .AlongPersonWith_list
+                                    .length; i++) {
+                              if (TaskMaster_page_controller
+                                  .AlongPersonWith_list[i]
+                                  .isSelected == 1) {
+                                TaskMaster_page_controller
+                                    .SelectedAlongPersonWith_list
+                                    .add(
+                                    TaskMaster_page_controller
+                                        .AlongPersonWith_list[i]);
+                                //TaskMaster_page_controller.Item_Category_code_list.add(TaskMaster_page_controller.Item_Category_master_list[i].categoryCode!);
+
+
+                                print(
+                                    'LIstSIzeAlong.....${TaskMaster_page_controller
+                                        .SelectedAlongPersonWith_list
+                                        .length}');
+                              }
+                              else {
+                                print('NoLIstSIze.....');
+                              }
+                            }
+                            TaskMaster_page_controller
+                                .AlongPersonWith_controller.clear();
+                            showAlongPersonDialog(context);
                           },
                           child: Icon(Icons.add)),
                     )

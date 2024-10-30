@@ -216,6 +216,8 @@ class AppUrl {
      static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/TaskSalesProductCategoryCreate";
      static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
      static const String ItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ItemCategoryMstGet";
+     static const String TaskPersonMstGetByTaskId = "$BASE_URL/api/CRM/Task/TaskPersonMstGetByTaskId";
+     static const String taskPersonMstCreate = "$BASE_URL/api/CRM/Task/task_person_mst_create";
 
 
      //todo sales cycle
@@ -245,6 +247,7 @@ class AppUrl {
      static const String SaleCycleProductCategoryWiseAmtCreate = "$BASE_URL/api/CRM/SalesCycle/SaleCycleProductCategoryWiseAmtCreate";
      static const String SaleCycleProductCategoryWiseAmtGet = "$BASE_URL/api/CRM/SalesCycle/SaleCycleProductCategoryWiseAmtGet";
      static const String EmpMstEmailByGet = "$BASE_URL/api/CRM/SalesCycle/EmpMstEmailByGet";
+
 
 
 
