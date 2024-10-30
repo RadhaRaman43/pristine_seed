@@ -28,6 +28,9 @@ class AddNewDsarScreen extends StatelessWidget{
   static String _displayTypeOfCallForOption(CallStatusMasterModel option) =>
       option.taskStatus!;
 
+  static String _displayMethodOfCallForOption(CallStatusMasterModel option) =>
+      option.taskStatus!;
+
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
@@ -220,6 +223,21 @@ class AddNewDsarScreen extends StatelessWidget{
 
               Obx((){
                 return Visibility(
+                  visible: TaskMaster_page_controller.typeOfCall.value,
+                  child: Column(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: bindMethodOfCallDropDown(context),
+                      ),
+                      SizedBox(height: 15,),
+                    ],
+                  ),
+                );
+              }),
+
+              Obx((){
+                return Visibility(
                   visible: TaskMaster_page_controller.ItemCateDropDown.value,
                   child: Column(
                     children: [
@@ -384,6 +402,44 @@ class AddNewDsarScreen extends StatelessWidget{
                   ),);
               }),
 
+              Obx(() {
+                return
+                  Visibility(
+                    visible: TaskMaster_page_controller.PurposeOfVisit.value,
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                          child: TextFormField(
+                            maxLength: 500,
+                            maxLines: 2,
+                            controller: TaskMaster_page_controller.PusposeOfVisit_controller,
+                            decoration: InputDecoration(
+                                hintText: 'Purpose Of Visit',
+                                labelText: 'Purpose Of Visit',
+                                //suffixIcon: Icon(Icons.email),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: AllFontSize.ten,
+                                    horizontal: AllFontSize.ten),
+
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.blue)
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10)
+                                )
+                            ),
+
+                          ),
+
+                        ),
+                        SizedBox(height: 15,),
+                      ],
+                    ),
+                  );
+              }),
+
+
 
 
 
@@ -476,22 +532,11 @@ class AddNewDsarScreen extends StatelessWidget{
         TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
         print('status...${TaskMaster_page_controller.DSAR_Status_type_controller.value.text}');
         print('ISInfra...${TaskMaster_page_controller.isInfraLead.value.text}');
-        /*if(selection.isInfraLead==1){
-          TaskMaster_page_controller.isInfraLeadValue.value=true;
-          print('ISInfravalue...${TaskMaster_page_controller.isInfraLead.value.text}');
-        }*/
-          /*if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
-            TaskMaster_page_controller.isInfraLead.value.text="Yes";
-            if( TaskMaster_page_controller.isInfraLead.value.text=="Yes"){
-              TaskMaster_page_controller.isInfraLeadValue.value=true;
-            }
-
-          }
-          else{
-            TaskMaster_page_controller.isInfraLead.value.text="No";
-            TaskMaster_page_controller.isInfraLeadValue.value=false;
-          }
-        }*/
+        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Revisit"){
+          TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR REVISIT');
+        }else{
+          TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR OTHER');
+        }
 
         if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 1){
           TaskMaster_page_controller.typeOfCall.value = true;
@@ -686,6 +731,118 @@ class AddNewDsarScreen extends StatelessWidget{
     );
   }
 
+  Widget bindMethodOfCallDropDown(context){
+    return Autocomplete<CallStatusMasterModel>(
+      displayStringForOption: _displayMethodOfCallForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return TaskMaster_page_controller.MethodOfCall_Master_list;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return TaskMaster_page_controller.MethodOfCall_Master_list
+            .where((CallStatusMasterModel option) {
+          return option.taskStatus
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (CallStatusMasterModel selection) {
+        //print(selection.loginEmailId);
+        // Update the TextField with the selected
+        TaskMaster_page_controller.Method_of_call_controller.text =
+            _displayMethodOfCallForOption(selection).toString();
+
+
+        if( TaskMaster_page_controller.Method_of_call_controller.text == 'Physical Meeting'){
+          // print(taskMaster_page_controller.Method_of_call_controller.text);
+          TaskMaster_page_controller.PurposeOfVisit.value = true;
+        }else{
+          TaskMaster_page_controller.PurposeOfVisit.value = false;
+          // print('else part...${taskMaster_page_controller.Method_of_call_controller.text}');
+        }
+        //taskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onTap: (){
+            focusNode.requestFocus();
+            controller.clear();
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = TaskMaster_page_controller.Method_of_call_controller
+                .text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: InkWell(
+                onTap: (){
+                  focusNode.requestFocus();
+                  controller.clear();
+                },
+                child: Icon(Icons.arrow_drop_down)),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            hintText: 'Method Of Call*',
+            labelText: 'Method of Call*',
+            /*hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+            ),*/
+            /*focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),*/
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<CallStatusMasterModel> onSelected,
+          Iterable<CallStatusMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final CallStatusMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.taskStatus.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget bindItemCategoryDropDown(context){
     return Autocomplete<ItemCategoryMstModel>(
       displayStringForOption: _displayItemCatMasterForOption,
@@ -706,16 +863,6 @@ class AddNewDsarScreen extends StatelessWidget{
         // Update the TextField with the selected
         TaskMaster_page_controller.ItemCat_type_controller.text =
             _displayItemCatMasterForOption(selection).toString();
-        /*if(TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Revisit' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Reschedule' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Repeated' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Sales Cycle'){
-          TaskMaster_page_controller.DSARStatus.value = true;
-        }else if(TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Completed' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Not Interested' ||
-            TaskMaster_page_controller.DSAR_Status_type_controller.text == 'Cancelled' ){
-          TaskMaster_page_controller.DSARStatus.value = false;
-        }*/
 
         if (!TaskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
           TaskMaster_page_controller.Item_Category_Selected_list.add(selection);
