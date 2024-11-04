@@ -785,8 +785,8 @@ class AddNewDsarScreen extends StatelessWidget{
                 child: Icon(Icons.arrow_drop_down)),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Method Of Call*',
-            labelText: 'Method of Call*',
+            hintText: 'Method Of Call',
+            labelText: 'Method of Call',
             /*hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
             ),*/

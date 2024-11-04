@@ -334,7 +334,9 @@ class Taskmastervm extends GetxController{
                 "est_closure_date": EstClosuredate_controller.text.isEmpty?'':EstClosuredate_controller.text,
                 "budget_amount": budgetAmt,
                 "est_budget_amount": estimatedAmt,
-                "created_by": email
+                "created_by": email,
+                "purpose_of_visit": PusposeOfVisit_controller.text.isEmpty?'':PusposeOfVisit_controller.text,
+                "method_of_call": Method_of_call_controller.text.isEmpty?'':Method_of_call_controller.text,
             };
 
             loading.value=true;
@@ -580,6 +582,7 @@ class Taskmastervm extends GetxController{
             };
             loading.value=true;
             _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+                print(onValue);
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();

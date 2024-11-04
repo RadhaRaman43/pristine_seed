@@ -20,6 +20,7 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
@@ -86,6 +87,8 @@ class SalesCycleVm extends GetxController{
   RxList<ItemCategoryMstModel> itemCategorySelectedlist = <ItemCategoryMstModel>[].obs;
   RxList<ItemQouteWithReportModal> itemQuoteReportList = <ItemQouteWithReportModal>[].obs;
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
+  RxList<CustomList> get_PurchaseProcess_list=<CustomList>[].obs;
+  RxList<CustomList> get_PurchaseTimeFrame_list=<CustomList>[].obs;
 
 
   var closureDateController=TextEditingController().obs;
@@ -123,6 +126,9 @@ class SalesCycleVm extends GetxController{
   var filterExpectedClosuredateController=TextEditingController().obs;
   var updateQuoteValidityController=TextEditingController().obs;
   var identifyDecisionMakerController=TextEditingController().obs;
+  var saleCycleCommitController=TextEditingController().obs;
+  var purchaseProcessController=TextEditingController().obs;
+  var purchasTimeFrameController=TextEditingController().obs;
 
   // todo update quote controller
   var updateItemDescriptionController=TextEditingController().obs;
@@ -254,6 +260,9 @@ class SalesCycleVm extends GetxController{
                 solutionRejectedRemarkController.value.text=saleCycleList[0].rejectReason.toString().isNotEmpty?saleCycleList[0].rejectReason.toString():"";
                 closureDateController.value.text=saleCycleList[0].estClosureDate.toString();
                 saleCycleList[0].isDecisionMaker==0?identifyDecisionMakerController.value.text="No":identifyDecisionMakerController.value.text="Yes";
+                saleCycleList[0].commit==0?saleCycleCommitController.value.text="No":saleCycleCommitController.value.text="Yes";
+                purchaseProcessController.value.text=saleCycleList[0].purchaseProcess==null?"":saleCycleList[0].purchaseProcess.toString();
+                purchasTimeFrameController.value.text=saleCycleList[0].purchaseTimeFrame==null?"":saleCycleList[0].purchaseTimeFrame.toString();
                 budgetAmountController.value.clear();
                 expectedAmountController.value.clear();
                 productCategoryController.value.clear();
@@ -382,7 +391,11 @@ class SalesCycleVm extends GetxController{
         "competitor_name": competitor_name.isEmpty?"":competitor_name,
         "quote_rejected_reason": quote_rejected_reason.isEmpty?"":quote_rejected_reason,
         "lines": lines.map((line) => line.toJson()).toList(),
-        "created_by": email
+        "created_by": email,
+        "is_decision_maker": identifyDecisionMakerController.value.text=="No"?0:1,
+        "purchase_process": purchaseProcessController.value.text.isEmpty?'':purchaseProcessController.value.text,
+        "purchase_time_frame": purchasTimeFrameController.value.text.isEmpty?'':purchasTimeFrameController.value.text,
+        "commit": saleCycleCommitController.value.text=="No"?0:1
       };
       try{
         _api. salesCycleMstUpdateApiHit(data, sessionManagement).then((onValue){
@@ -2659,6 +2672,68 @@ class SalesCycleVm extends GetxController{
       },
     );
 
+  }
+
+  getPurchaseProcessApi() {
+    this.loading.value = true;
+    Map<String, String> data = {'flag': "purchase_process"};
+
+    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          get_PurchaseProcess_list.value = emp_masterResponse[0].list!;
+          print('master list....${get_PurchaseProcess_list.length.toString()}');
+        } else {
+          get_PurchaseProcess_list.value = [];
+          print('master listelsse....${get_PurchaseProcess_list.length.toString()}');
+        }
+      } catch (e) {
+        get_PurchaseProcess_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      get_PurchaseProcess_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  getPurchaseTimeFrameApi() {
+    this.loading.value = true;
+    Map<String, String> data = {'flag': "purchase_time_frame"};
+
+    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          get_PurchaseTimeFrame_list.value = emp_masterResponse[0].list!;
+          print('master list....${get_PurchaseTimeFrame_list.length.toString()}');
+        } else {
+          get_PurchaseTimeFrame_list.value = [];
+          print('master listelsse....${get_PurchaseTimeFrame_list.length.toString()}');
+        }
+      } catch (e) {
+        get_PurchaseTimeFrame_list.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      get_PurchaseTimeFrame_list.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
   }
 
 

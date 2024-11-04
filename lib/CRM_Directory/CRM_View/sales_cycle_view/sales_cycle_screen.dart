@@ -145,15 +145,13 @@ class SalesCycleScreen extends StatelessWidget{
     String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'PENDING':
+        case 'PENDING' || 'Pending':
           return Colors.red[900]!;
-        case 'Rejected':
+        case 'Rejected' || 'rejected':
           return Colors.red;
-        case 'rejected':
-          return Colors.red;
-        case 'APPROVED':
+        case 'APPROVED' || 'Approved':
           return Colors.green;
-        case 'PENDING FOR APPROVAL':
+        case 'PENDING FOR APPROVAL' || 'Pending For Approval':
           return Colors.yellow[700]!;
         default:
           return Colors.black;
@@ -166,6 +164,8 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
             salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];
+          salesCycleController.getPurchaseProcessApi();
+          salesCycleController.getPurchaseTimeFrameApi()();
           salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId! );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
 
