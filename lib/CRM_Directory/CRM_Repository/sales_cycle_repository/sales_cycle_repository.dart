@@ -118,5 +118,10 @@ class SalesCycleRepository{
     return _apiService.getApi(AppUrl.getMasterType, sessionManagement, data);
   }
 
+  Future<String> SalesCycleMstPurchaseByUpdate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleMstPurchaseByUpdate,sessionManagement);
+  }
+
+
 
 }

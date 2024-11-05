@@ -1776,6 +1776,58 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
+                  "Method Of Call",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller
+                      .TaskDSAR_Master_list[0]
+                      .methodOfCall?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Purpose Of Visit",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller
+                      .TaskDSAR_Master_list[0]
+                      .purposeOfVisit?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
                   "Remarks",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
@@ -1813,7 +1865,7 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Created By",
+                  "Created Name",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,

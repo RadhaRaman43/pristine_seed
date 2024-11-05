@@ -162,10 +162,10 @@ class SalesCycleScreen extends StatelessWidget{
       child: ListTile(
           onTap: () {
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
-            salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
+          salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];
           salesCycleController.getPurchaseProcessApi();
-          salesCycleController.getPurchaseTimeFrameApi()();
+          salesCycleController.getPurchaseTimeFrameApi();
           salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId! );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
 

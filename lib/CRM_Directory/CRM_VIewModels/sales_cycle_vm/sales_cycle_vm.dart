@@ -11,6 +11,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -39,11 +40,17 @@ import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart'
 
 class SalesCycleVm extends GetxController{
 
-  static String _displayCustomerNeedIdentityStatusForOption(String option) =>
-      option;
+  static String _displayCustomerNeedIdentityStatusForOption(String option) => option;
 
-  static String _displayUpdateSalesCycleForOption(String option) =>
-      option;
+  static String _displayDecisionMakerForOption(String option) => option;
+
+  static String _displayPurchaseProcessForOption(CustomList option) => option.value!;
+
+  static String _displayPurchaseTimeFrameForOption(CustomList option) => option.value!;
+
+
+  static String _displayUpdateSalesCycleForOption(String option) => option;
+
   Size size=Get.size;
 
   final _api = SalesCycleRepository();
@@ -52,8 +59,8 @@ class SalesCycleVm extends GetxController{
   RxString accountCode="".obs;
   RxString contactCode="".obs;
   RxString ProductCategoryCode="".obs;
-  RxString Total_Budget_Amount="".obs;
-  RxString Total_Expected_Amount="".obs;
+  RxString Total_Budget_Amount="0".obs;
+  RxString Total_Expected_Amount="0".obs;
   RxBool loading=false.obs;
   String email="";
   String consigneeId="";
@@ -344,6 +351,7 @@ class SalesCycleVm extends GetxController{
             }*/
            // budgetAmountList.addAll(response);
             budgetAmountList.value = response;
+            print('budgetAmt...${budgetAmountList.value}');
             Total_Budget_Amount.value=response[0].totalBudgetAmount??"";
             Total_Expected_Amount.value=response[0].totalEstimatedAmount??"";
             //total_rows=int.parse(budgetAmountList[0].totalRows!);
@@ -1934,7 +1942,6 @@ class SalesCycleVm extends GetxController{
         });
   }
 
-
   void showConsigneeAddressList(BuildContext context, RxList<AddressMasterModel> address_master_list) {
     showDialog(
       // barrierDismissible: false,
@@ -2823,6 +2830,538 @@ class SalesCycleVm extends GetxController{
     }
 
   }
+
+
+  void showDialogForSalesCyclePurchaseUpdate(BuildContext context, SalesCycleModal saleCycleList, ) {
+    showDialog(
+      // barrierDismissible: false,
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.check_circle, color: AllColors.lightredColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Update Sales Cycles Details',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  bindClosureDate(context),
+                  SizedBox(height: 10,),
+                  bindIdentifyDecisionMaker(context),
+                  SizedBox(height: 10,),
+                  bindSaleCycleCommit(context),
+                  SizedBox(height: 10,),
+                  bindPurchaseProcessDropDown(context),
+                  SizedBox(height: 10,),
+                  bindPurchaseTimeFrameDropDown(context),
+                  SizedBox(height: 10,),
+
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        AllColors.greenblue,
+                      ),
+                    ),
+                    onPressed: ()  {
+                      SalesCycleMstPurchaseByUpdateAPI(saleCycleList);
+                      Get.back();
+                      // pageNumberForQuote = 0;
+                      //getQuoteHeaderData(pageNumberForQuote,salesCycleId.value, "Approved");
+                      // Get.toNamed(RoutesName.approvedQuotationListScreen);
+                    },
+                    child: Container(
+                      child: Text('UPDATE',
+                        style: GoogleFonts.poppins(
+                          color: AllColors.blackColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                  ),
+
+
+
+
+                ],
+              ),
+            ),
+          );
+
+        });
+  }
+
+
+  Widget bindClosureDate(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: TextField(
+        cursorColor:AllColors.primaryDark1 ,
+        readOnly: (saleCycleList[0].isReadySendForApproval==0 && (FromPage.value == 'Sales'
+            || FromPage.value == 'FromTaskScreen' || FromPage.value == 'Task' ))
+            || FromPage.value == 'Task' || FromPage.value == 'FromTaskScreen'?true:false,
+        controller: closureDateController.value,
+        decoration: InputDecoration(
+          suffixIcon: Icon(Icons.calendar_month),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            hintText: 'Select Estimated Closure Date',
+            labelText: 'Estimated Closure Date',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.fourtine),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          if(saleCycleList[0].isReadySendForApproval==1 && FromPage.value == 'Sales'){
+            DateTime? initialDate;
+            if (closureDateController.value.text.isNotEmpty) {
+              initialDate = DateFormat('yyyy-MM-dd').parse(
+                closureDateController.value.text,
+              );
+              // Ensure initialDate is not before firstDate
+              if (initialDate.isBefore(DateTime.now())) {
+                initialDate = DateTime.now();
+              }
+            } else {
+              initialDate = DateTime.now();
+            }
+
+            DateTime ending_date = new DateTime(2200);
+            FocusScope.of(context).requestFocus(new FocusNode());
+            DateTime? date = await showDatePicker(
+              context: context,
+              initialDate: initialDate,
+              firstDate: DateTime.now(),
+              lastDate: ending_date,
+              builder: (BuildContext context, Widget? child) {
+                return Theme(
+                  data: ThemeData.light().copyWith(
+                    primaryColor: AllColors.primaryDark1, // Header background color
+                    //accentColor: AllColors.primaryDark1, // Color of the buttons
+                    colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                    buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                  ),
+                  child: child!,
+                );
+              },
+
+            );
+            var outputFormat = DateFormat('yyyy-MM-dd');
+            if (date != null && date != "")
+              closureDateController.value.text= outputFormat.format(date);
+
+          }
+
+
+
+        },
+      ),
+    );
+  }
+
+  Widget bindIdentifyDecisionMaker(BuildContext context) {
+    return IgnorePointer(
+      ignoring: (saleCycleList[0].isReadySendForApproval==0 && (FromPage.value == 'Sales'
+          || FromPage.value == 'FromTaskScreen' || FromPage.value == 'Task' ))
+          || FromPage.value == 'Task' ||
+          FromPage.value == 'FromTaskScreen'?true:false,
+      child: Container(
+        padding: EdgeInsets.only(left: 15.0, right: 15.0),
+       // margin: const EdgeInsets.only(left: 15.0,),
+       // width: double.infinity,
+        child: DropdownMenu<String>(
+          width: size.width-170,
+          controller: identifyDecisionMakerController.value,
+          label: Text(
+            "Identify Decision Maker",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500),
+          ),
+
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: AllColors.primaryDark1,),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            filled: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          ),
+          onSelected: (String? selection) {
+            print(selection);
+            identifyDecisionMakerController.value.text =
+                _displayDecisionMakerForOption(selection!).toString();
+
+
+          },
+
+          dropdownMenuEntries: customerNeedIdentityList.map<DropdownMenuEntry<String>>((String e) {
+            return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget bindSaleCycleCommit(BuildContext context) {
+    return IgnorePointer(
+      ignoring: (saleCycleList[0].isReadySendForApproval==0 && (FromPage.value == 'Sales'
+          || FromPage.value == 'FromTaskScreen' || FromPage.value == 'Task' ))
+          || FromPage.value == 'Task' ||
+          FromPage.value == 'FromTaskScreen'?true:false,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
+       // width: double.infinity,
+        child: DropdownMenu<String>(
+          width: size.width-170,
+          controller: saleCycleCommitController.value,
+          label: Text(
+            "Sales Cycle Commit",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500),
+          ),
+
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: AllColors.primaryDark1,),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            filled: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          ),
+          onSelected: (String? selection) {
+            print(selection);
+            saleCycleCommitController.value.text =
+                _displayDecisionMakerForOption(selection!).toString();
+
+
+          },
+
+          dropdownMenuEntries: customerNeedIdentityList.map<DropdownMenuEntry<String>>((String e) {
+            return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget bindPurchaseProcessDropDown(context){
+    return IgnorePointer(
+      ignoring: (saleCycleList[0].isReadySendForApproval==0   &&
+          (FromPage.value == 'Sales' || FromPage.value == 'FromTaskScreen'
+          )) || FromPage.value == 'Task' || FromPage.value == 'FromTaskScreen'?true:false,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Autocomplete<CustomList>(
+          displayStringForOption: _displayPurchaseProcessForOption,
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (textEditingValue.text.isEmpty) {
+              return get_PurchaseProcess_list.value;
+              // return const Iterable<VehicleTypeResponse>.empty();
+            }
+            return get_PurchaseProcess_list
+                .where((CustomList option) {
+              return option.value
+                  .toString()
+                  .toLowerCase()
+                  .contains(textEditingValue.text.toLowerCase());
+            }).toList();
+          },
+          onSelected: (CustomList selection) {
+            purchaseProcessController.value.text =
+                _displayPurchaseProcessForOption(selection).toString();
+            purchaseProcessController.value.text = selection.value??"";
+          },
+          fieldViewBuilder: (BuildContext context, TextEditingController controller,
+              FocusNode focusNode, VoidCallback onFieldSubmitted) {
+            return TextField(
+              readOnly:  (saleCycleList[0].isReadySendForApproval==0   &&
+                  (FromPage.value == 'Sales' || FromPage.value == 'FromTaskScreen'
+                  )) || FromPage.value == 'Task' || FromPage.value == 'FromTaskScreen'?true:false,
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = purchaseProcessController.value.text,
+              focusNode: focusNode,
+              decoration: InputDecoration(
+                  suffixIcon: InkWell(
+                    /*onTap: (){
+                        focusNode.requestFocus();
+                        controller.clear();
+                      },*/
+                      child: Icon(Icons.arrow_drop_down)),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'Purchase Process',
+                  labelText: 'Purchase Process',
+
+                  hintStyle: GoogleFonts.poppins(
+                      color: AllColors.lightblackColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: AllFontSize.ten),
+                  labelStyle: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.fourtine),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  )
+              ),
+            );
+          },
+          optionsViewBuilder: (BuildContext context,
+              AutocompleteOnSelected<CustomList> onSelected,
+              Iterable<CustomList> suggestions) {
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                elevation: 4.0,
+                child: Container(
+                  width: size.width*.6,
+                  constraints: BoxConstraints(maxHeight: 200),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: suggestions.length,
+                    itemBuilder: (context, index) {
+                      final CustomList option =
+                      suggestions.elementAt(index);
+                      return GestureDetector(
+                        onTap: () {
+                          onSelected(option);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            option.value.toString(),
+                            style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontWeight: FontWeight.w300,
+                                fontSize: AllFontSize
+                                    .sisxteen // Change the text color here
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+
+  Widget bindPurchaseTimeFrameDropDown(context){
+    return IgnorePointer(
+      ignoring: (saleCycleList[0].isReadySendForApproval==0   &&
+          (FromPage.value == 'Sales' || FromPage.value == 'FromTaskScreen'
+          )) || FromPage.value == 'Task' || FromPage.value == 'FromTaskScreen'?true:false,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, right: 15),
+        child: Autocomplete<CustomList>(
+          displayStringForOption: _displayPurchaseTimeFrameForOption,
+          optionsBuilder: (TextEditingValue textEditingValue) {
+            if (textEditingValue.text.isEmpty) {
+              return get_PurchaseTimeFrame_list.value;
+              // return const Iterable<VehicleTypeResponse>.empty();
+            }
+            return get_PurchaseTimeFrame_list
+                .where((CustomList option) {
+              return option.value
+                  .toString()
+                  .toLowerCase()
+                  .contains(textEditingValue.text.toLowerCase());
+            }).toList();
+          },
+          onSelected: (CustomList selection) {
+            purchasTimeFrameController.value.text =
+                _displayPurchaseTimeFrameForOption(selection).toString();
+            purchasTimeFrameController.value.text = selection.value??"";
+          },
+          fieldViewBuilder: (BuildContext context, TextEditingController controller,
+              FocusNode focusNode, VoidCallback onFieldSubmitted) {
+            return TextField(
+              readOnly:  (saleCycleList[0].isReadySendForApproval==0   &&
+                  (FromPage.value == 'Sales' || FromPage.value == 'FromTaskScreen'
+                  )) || FromPage.value == 'Task' || FromPage.value == 'FromTaskScreen'?true:false,
+
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = purchasTimeFrameController.value.text,
+              focusNode: focusNode,
+              decoration: InputDecoration(
+                  suffixIcon: InkWell(
+                    /* onTap: (){
+                        focusNode.requestFocus();
+                        controller.clear();
+                      },*/
+                      child: Icon(Icons.arrow_drop_down)),
+                  contentPadding: EdgeInsets.symmetric(
+                      vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                  hintText: 'Purchase Time Frame',
+                  labelText: 'Purchase Time Frame',
+
+                  hintStyle: GoogleFonts.poppins(
+                      color: AllColors.lightblackColor,
+                      fontWeight: FontWeight.w300,
+                      fontSize: AllFontSize.ten),
+                  labelStyle: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w500,
+                      fontSize: AllFontSize.fourtine),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  )
+              ),
+            );
+          },
+          optionsViewBuilder: (BuildContext context,
+              AutocompleteOnSelected<CustomList> onSelected,
+              Iterable<CustomList> suggestions) {
+            return Align(
+              alignment: Alignment.topLeft,
+              child: Material(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                elevation: 4.0,
+                child: Container(
+                  width: size.width*.6,
+                  constraints: BoxConstraints(maxHeight: 200),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: suggestions.length,
+                    itemBuilder: (context, index) {
+                      final CustomList option =
+                      suggestions.elementAt(index);
+                      return GestureDetector(
+                        onTap: () {
+                          onSelected(option);
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            option.value.toString(),
+                            style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontWeight: FontWeight.w300,
+                                fontSize: AllFontSize
+                                    .sisxteen // Change the text color here
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  SalesCycleMstPurchaseByUpdateAPI(SalesCycleModal saleCycleList){
+    loading.value = true;
+    Map data={
+      "sales_cycle_id": saleCycleList.salesCycleId,
+      "est_closure_date":  closureDateController.value.text.isEmpty?saleCycleList.estClosureDate:closureDateController.value.text,
+      "commit": saleCycleCommitController.value.text=="No"?0:1,
+      "is_decision_maker": identifyDecisionMakerController.value.text=="No"?0:1,
+      "purchase_process": purchaseProcessController.value.text.isEmpty?'':purchaseProcessController.value.text,
+      "purchase_time_frame": purchasTimeFrameController.value.text.isEmpty?'':purchasTimeFrameController.value.text,
+      "created_by": email
+    };
+    try{
+      _api.SalesCycleMstPurchaseByUpdate(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition=="True"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            getsalesCycleData(0, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            loading.value = false;
+          }else {
+            print("message ${response[0].message.toString()}");
+            loading.value = false;
+            Utils.showToastification("False Message !", response[0].message.toString());
+
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
+
 
 
 

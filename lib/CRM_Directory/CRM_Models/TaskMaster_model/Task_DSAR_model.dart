@@ -10,6 +10,8 @@ class TaskDSARModel {
   String? createdBy;
   String? createdFullName;
   String? createdOn;
+  String? methodOfCall;
+  String? purposeOfVisit;
 
   TaskDSARModel(
       {this.condition,
@@ -22,7 +24,9 @@ class TaskDSARModel {
         this.remarks,
         this.createdBy,
         this.createdFullName,
-        this.createdOn});
+        this.createdOn,
+        this.methodOfCall,
+        this.purposeOfVisit});
 
   TaskDSARModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -36,6 +40,8 @@ class TaskDSARModel {
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
+    methodOfCall = json['method_of_call'];
+    purposeOfVisit = json['purpose_of_visit'];
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +57,8 @@ class TaskDSARModel {
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
+    data['method_of_call'] = this.methodOfCall;
+    data['purpose_of_visit'] = this.purposeOfVisit;
     return data;
   }
 }
