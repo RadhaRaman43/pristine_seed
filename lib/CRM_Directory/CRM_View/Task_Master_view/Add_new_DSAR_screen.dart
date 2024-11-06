@@ -166,7 +166,9 @@ class AddNewDsarScreen extends StatelessWidget{
             }
             else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
               //Utils.sanckBarError("Message", "Created");
+              TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
               TaskMaster_page_controller.TaskDSARMasterCreate();
+
             }
             else if(TaskMaster_page_controller.ItemCateDropDown.value && TaskMaster_page_controller.isInfraLeadValue.value){
 
@@ -174,7 +176,9 @@ class AddNewDsarScreen extends StatelessWidget{
 
             }else{
               //Utils.sanckBarError("Message", "Created2");
+              TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
               TaskMaster_page_controller.TaskDSARMasterCreate();
+
             }
           },
         ),
@@ -245,7 +249,7 @@ class AddNewDsarScreen extends StatelessWidget{
                         padding: EdgeInsets.only(left: 15.0, right: 15.0),
                         height: 50,
                         //width: size.width*7,
-                        child: Row(
+                       /* child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
@@ -274,9 +278,9 @@ class AddNewDsarScreen extends StatelessWidget{
                                   }, icon: Icon(Icons.add)),
                             )
                           ],
-                        ),
+                        ),*/
                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                        //child: bindItemCategoryDropDown(context),
+                        child: bindItemCategoryDropDown(context),
                       ),
                       SizedBox(height: 15,),
                       Wrap(

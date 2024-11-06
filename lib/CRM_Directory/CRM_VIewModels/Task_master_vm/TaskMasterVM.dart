@@ -784,8 +784,8 @@ class Taskmastervm extends GetxController{
 
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
                     } else if(flag == 'DSAR'){
-                        getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
-                        getItemCategoryMstApi(TaskID);
+                       // getTaskMaster(0, 'All', TaskID, "",'', date_filter, is_done.value);
+                       // getItemCategoryMstApi(TaskID);
                     }
 
                 } else {
