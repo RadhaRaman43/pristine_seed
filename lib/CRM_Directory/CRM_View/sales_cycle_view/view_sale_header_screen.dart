@@ -436,8 +436,9 @@ class ViewSaleHeaderScreen extends StatelessWidget{
               Obx((){
                 return Visibility(
                   // visible: saleCycleController.saleCycleList[0].createdBy==saleCycleController.email,
-                  visible:(saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROSPECT") && (saleCycleController.ischangeNeedIdentity.value && saleCycleController.ischangesolutionAccepted.value) &&
-                      (saleCycleController.saleCycleList[0].salesCycleApprovalStatus!="Rejected")?true:false,
+                  visible:((saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus!.toLowerCase()=="pending") && (saleCycleController.saleCycleList[0].salesCycleStatus!.toLowerCase()=="prospect")
+                      && (saleCycleController.saleCycleList[0].isReadySendForApproval == 1)
+                      && (saleCycleController.ischangeNeedIdentity.value && saleCycleController.ischangesolutionAccepted.value) )?true:false,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ElevatedButton(

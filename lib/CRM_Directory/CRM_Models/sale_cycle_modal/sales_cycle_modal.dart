@@ -51,6 +51,7 @@ class SalesCycleModal {
   String? updatedOn;
   int? isReadyForApprove;
   int? isReadySendForApproval;
+  String? actualSalesCycleApprovalStatus;
   String? shippingAddress;
   String? shippingAddress2;
   String? shippingCity;
@@ -118,6 +119,7 @@ class SalesCycleModal {
         this.updatedOn,
         this.isReadyForApprove,
         this.isReadySendForApproval,
+        this.actualSalesCycleApprovalStatus,
         this.shippingAddress,
         this.shippingAddress2,
         this.shippingCity,
@@ -185,6 +187,7 @@ class SalesCycleModal {
     updatedOn = json['updated_on'];
     isReadyForApprove = json['is_ready_for_approve'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
+    actualSalesCycleApprovalStatus = json['actual_sales_cycle_approval_status'];
     shippingAddress = json['shipping_address'];
     shippingAddress2 = json['shipping_address2'];
     shippingCity = json['shipping_city'];
@@ -254,6 +257,8 @@ class SalesCycleModal {
     data['updated_on'] = this.updatedOn;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
+    data['actual_sales_cycle_approval_status'] =
+        this.actualSalesCycleApprovalStatus;
     data['shipping_address'] = this.shippingAddress;
     data['shipping_address2'] = this.shippingAddress2;
     data['shipping_city'] = this.shippingCity;
