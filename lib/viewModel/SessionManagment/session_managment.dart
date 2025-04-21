@@ -220,6 +220,37 @@ class SessionManagement {
     }
   }
 
+  Future<void> setSalesRepresentative(String SalesRepresentative) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('SalesRepresentative', SalesRepresentative);
+  }
+  Future<String?> getSalesRepresentative() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var SalesRepresentative = prefs.getString('SalesRepresentative');
+      if (SalesRepresentative == null || SalesRepresentative == "") return null;
+      return SalesRepresentative;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> setRegionalHead(String RegionalHead) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('RegionalHead', RegionalHead);
+  }
+  Future<String?> getRegionalHead() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var RegionalHead = prefs.getString('RegionalHead');
+      if (RegionalHead == null || RegionalHead == "") return null;
+      return RegionalHead;
+    } catch (e) {
+      return null;
+    }
+  }
+
+
   Future<void> setGrade(String grade) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('grade', grade);

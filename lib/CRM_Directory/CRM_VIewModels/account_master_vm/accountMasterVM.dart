@@ -9,6 +9,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../locat_database/databaseHelper.dart';
+import '../../../models/employeeDetail/employee_details_model.dart';
 import '../../../reources/app_url/app_url.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
@@ -115,6 +116,8 @@ class Accountmastervm extends GetxController{
   var State_Controller = TextEditingController();
   var City_Controller = TextEditingController();
   var District_Controller = TextEditingController();
+  var FullAddress_Controller = TextEditingController();
+  var Shipping_FullAddress_Controller = TextEditingController();
   var Annual_Revenue_Controller = TextEditingController();
   var Sale_Representative_Controller = TextEditingController();
   var Regional_service_head_Controller = TextEditingController();
@@ -160,6 +163,7 @@ class Accountmastervm extends GetxController{
   RxList<AccountdashboarddatasaleModelsModel> AccountDashboardDataSalesList = <AccountdashboarddatasaleModelsModel>[].obs;
   RxList<SalesCycleQuoteHeaderModal> AccountDashboardDataQuotationList = <SalesCycleQuoteHeaderModal>[].obs;
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
+  List<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
 
   @override
   void onInit() async {
@@ -312,6 +316,47 @@ class Accountmastervm extends GetxController{
       print(e);
     }
    }
+
+  getEmployee(String AccOwnerEmail){
+    Map  data=
+    {
+      "email_id":AccOwnerEmail,
+    };
+    loading.value=true;
+    print(data);
+    _api.EmployeeGetDashBoardApiHit(data, sessionManagement).then((value) {
+      print(value);
+      final JsonResponse=json.decode(value);
+      if(JsonResponse is List){
+        List<EmployeeDetailsGetResponse> response=JsonResponse.map((e)
+        =>EmployeeDetailsGetResponse.fromJson(e)).toList();
+        if(response!=null && response.length>0 && response[0].condition=="True"){
+          loading.value=false;
+          userGeoHierarchyy = response[0].userGeoHierarchy!;
+          for(int i = 0; i<userGeoHierarchyy.length; i++){
+            if(AccOwnerEmail == userGeoHierarchyy[i].approverEmail){
+              int pos = i - 1;
+              int pos2 = i - 2;
+              print("RegionalHead ${userGeoHierarchyy[pos].approverEmail}");
+             Sale_Representative_Controller.text = userGeoHierarchyy[pos2].approverEmail.toString();
+              Regional_service_head_Controller.text = userGeoHierarchyy[pos].approverEmail.toString();
+              print("SalesRepre.. ${userGeoHierarchyy[pos2].approverEmail}");
+            }
+          }
+        }else {
+          loading.value=false;
+        }
+      }else{
+        loading.value=false;
+        Utils.sanckBarException("Api Error!", JsonResponse);
+      }
+    },).onError((error, stackTrace) {
+      loading.value=false;
+      print(error);
+    },);
+
+
+  }
 
   getDraftAccountMaster(int page_no, String IsActive){
     if(IsActive == 'All'){
@@ -1166,12 +1211,14 @@ class Accountmastervm extends GetxController{
       GovtStateCode.value = response[0].permanentAddress!.stateCode??"";
       City_Controller.text = response[0].permanentAddress!.city??"";
       District_Controller.text = response[0].permanentAddress!.district??"";
+      FullAddress_Controller.text = Address_controller.text + "," + Address2_Controller.text + "," + City_Controller.text + "," + District_Controller.text + "," + State_Controller.text + "," + PostCode_Controller.text;
       Shipping_Address_controller.value.text = response[0].shippingAddress??"";
       Shipping_Address2_Controller.value.text = response[0].shippingAddress2??"";
       Shipping_PostCode_Controller.value.text = response[0].shippingPostCode??"";
       Shipping_City_Controller.value.text = response[0].shippingCity??"";
       Shipping_District_Controller.value.text = response[0].shippingDistrict??"";
       Shipping_State_Controller.value.text = response[0].shippingStateName??"";
+      Shipping_FullAddress_Controller.text = Shipping_Address_controller.value.text + "," + Address2_Controller.text + "," + Shipping_City_Controller.value.text + "," + Shipping_District_Controller.value.text + "," + Shipping_State_Controller.value.text + "," + Shipping_PostCode_Controller.value.text;
       No_Of_Emp_Controller.text = response[0].noOfEmployees.toString();
       Annual_Revenue_Controller.text = response[0].annualRevenue.toString();
       TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
@@ -1214,6 +1261,8 @@ class Accountmastervm extends GetxController{
       State_Controller.clear();
       City_Controller.clear();
       District_Controller.clear();
+      FullAddress_Controller.clear();
+      Shipping_FullAddress_Controller.clear();
       Shipping_Address_controller.value.clear();
       Shipping_Address2_Controller.value.clear();
       Shipping_PostCode_Controller.value.clear();
@@ -1668,7 +1717,7 @@ class Accountmastervm extends GetxController{
       ImageString.value = response[position].profile??"";
       account_code_controller.text = response[position].accountCode??"";
       account_name_controller.text = response[position].accountName??"";
-      EmployeeMember_Controller.text = response[position].accountOwner??"";
+      EmployeeMember_Controller.text = response[position].accountOwnerFullName??"";
       AccountOwner = employee_Member_list[0].loginEmailId??"";
       print('Onwer...${EmployeeMember_Controller.text}');
      // AccountOwner = employee_Member_list[position].loginEmailId??"";

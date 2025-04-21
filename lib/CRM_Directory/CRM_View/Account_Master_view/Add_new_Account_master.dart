@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
+import 'package:navigation_drawer_flutter/models/employeeDetail/employee_details_model.dart';
 import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -13,6 +14,7 @@ import '../../../locat_database/databaseHelper.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
+import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Draft_model.dart';
 import '../../CRM_Models/AccountMaster_model/Company_Prof_Mst_Model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
@@ -28,6 +30,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
   final accountMaster_page_controller=Get.put(Accountmastervm());
   final saleCycleController=Get.put(SalesCycleVm());
+  SessionManagement sessionManagement= SessionManagement();
   DatabaseHelper crmDatabase = DatabaseHelper();
   Size size=Get.size;
   String defaultFullName = '';
@@ -35,6 +38,7 @@ class AddNewAccountMaster extends StatelessWidget{
   final _formKeyEmail = GlobalKey<FormState>();
   final _formKeyGst = GlobalKey<FormState>();
   final _formKeyPanNo = GlobalKey<FormState>();
+
 
   static String _displayEmpMemberForOption(EmployeeMemberModel option) =>
       option.fullName!;
@@ -177,10 +181,10 @@ class AddNewAccountMaster extends StatelessWidget{
               return  ;
             }
 
-            if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+            /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
               Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
               return  ;
-            }
+            }*/
             if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
               Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
               return  ;
@@ -233,10 +237,10 @@ class AddNewAccountMaster extends StatelessWidget{
               Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
               return  ;
             }
-            if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
+           /* if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
               Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
               return  ;
-            }
+            }*/
 
             accountMaster_page_controller.AccountMstUploaderApiHit('Create', "");
           },
@@ -1040,6 +1044,38 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                           ),
 
+                          SizedBox(height: 15,),
+
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: TextFormField(
+                              maxLength: 500,
+                              maxLines: 3,
+                              controller: accountMaster_page_controller
+                                  .FullAddress_Controller,
+                              decoration: InputDecoration(
+                                  hintText: "Full Address",
+                                  labelText: "Full Address",
+                                  //suffixIcon: Icon(Icons.email),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: AllFontSize.ten,
+                                      horizontal: AllFontSize.ten),
+
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blue)
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                  )
+                              ),
+
+                            ),
+                          ),
+
 
                         ],
                       ),
@@ -1272,6 +1308,39 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                           ),
 
+                          SizedBox(height: 15,),
+
+                          Container(
+                            decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10)
+                            ),
+                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: TextFormField(
+                              maxLength: 500,
+                              maxLines: 3,
+                              controller: accountMaster_page_controller
+                                  .Shipping_FullAddress_Controller,
+                              decoration: InputDecoration(
+                                  hintText: "Full Address",
+                                  labelText: "Full Address",
+                                  //suffixIcon: Icon(Icons.email),
+                                  contentPadding: EdgeInsets.symmetric(
+                                      vertical: AllFontSize.ten,
+                                      horizontal: AllFontSize.ten),
+
+                                  focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(color: Colors.blue)
+                                  ),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                  )
+                              ),
+
+                            ),
+                          ),
+
+
 
                         ],
                       ),
@@ -1387,6 +1456,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
+                              readOnly: true,
                               controller: accountMaster_page_controller
                                   .Sale_Representative_Controller,
                               decoration: InputDecoration(
@@ -1417,6 +1487,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
+                              readOnly: true,
                               controller: accountMaster_page_controller
                                   .Regional_service_head_Controller,
                               decoration: InputDecoration(
@@ -1455,6 +1526,28 @@ class AddNewAccountMaster extends StatelessWidget{
     );
   }
 
+ /* Future<void> getMenuList() async {
+    print("GetList");
+    await sessionManagement.getUserGeoHierarchy().then((userGeoHierarchy) {
+      userGeoHierarchyy.value = userGeoHierarchy;
+      if(userGeoHierarchyy.isNotEmpty){
+        for(int i = 0; i<userGeoHierarchyy.length; i++){
+          if(accountMaster_page_controller.AccountOwner == userGeoHierarchyy[i].approverEmail){
+            int pos = i - 1;
+            int pos2 = i - 2;
+            print("RegionalHead ${userGeoHierarchy[pos].approverEmail}");
+            accountMaster_page_controller.Sale_Representative_Controller.text = userGeoHierarchy[pos2].approverEmail.toString();
+            accountMaster_page_controller.Regional_service_head_Controller.text = userGeoHierarchy[pos].approverEmail.toString();
+            print("SalesRepre.. ${userGeoHierarchy[pos2].approverEmail}");
+          }
+        }
+      }else{
+
+      }
+
+    });
+  }
+*/
   Widget bindAccountOwnerDropDown(context){
     return Autocomplete<EmployeeMemberModel>(
       displayStringForOption: _displayEmpMemberForOption,
@@ -1478,6 +1571,7 @@ class AddNewAccountMaster extends StatelessWidget{
             _displayEmpMemberForOption(selection).toString();
         accountMaster_page_controller.AccountOwner = selection.loginEmailId!;
         print("accountOu...${selection.loginEmailId!}");
+        accountMaster_page_controller.getEmployee(selection.loginEmailId??"");
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1488,6 +1582,8 @@ class AddNewAccountMaster extends StatelessWidget{
             accountMaster_page_controller.AccountOwner = accountMaster_page_controller.employee_Member_list[i].loginEmailId??"";
           }
         }
+        accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
+
         return TextField(
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
               accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?false:true,
@@ -1502,7 +1598,17 @@ class AddNewAccountMaster extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Owner',
@@ -1698,11 +1804,21 @@ class AddNewAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type*',
-              labelText: 'Account Category Type*',
+              hintText: 'Account Category Type',
+              labelText: 'Account Category Type',
               /*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
@@ -1810,7 +1926,17 @@ class AddNewAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Company Profile Type*',
@@ -1920,7 +2046,17 @@ class AddNewAccountMaster extends StatelessWidget{
 
                  //onSubmitted: onFieldSubmitted,
                  decoration: InputDecoration(
-                   suffixIcon: Icon(Icons.arrow_drop_down),
+                   suffixIcon: IconButton(
+                     color: AllColors.primaryDark1,
+                     onPressed: (){
+                       if(focusNode.hasFocus){
+                         focusNode.unfocus();
+                       }else{
+                         focusNode.requestFocus();
+                       }
+                     },
+                     icon: Icon(Icons.arrow_drop_down),
+                   ),
                    contentPadding: EdgeInsets.symmetric(
                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                    hintText: 'Company Profile Sub Type',
@@ -2023,7 +2159,17 @@ class AddNewAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'GST Registration Type*',
@@ -2269,7 +2415,17 @@ class AddNewAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Active',
@@ -2379,7 +2535,17 @@ class AddNewAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Is Referral',
@@ -2516,8 +2682,17 @@ class AddNewAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon:
-                 Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'State*',
@@ -2610,8 +2785,17 @@ class AddNewAccountMaster extends StatelessWidget{
                 focusNode: focusNode,
                 //onSubmitted: onFieldSubmitted,
                 decoration: InputDecoration(
-                  suffixIcon:
-                  Icon(Icons.arrow_drop_down),
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
+                        focusNode.requestFocus();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
                   contentPadding: EdgeInsets.symmetric(
                       vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                   hintText: 'State*',
@@ -2707,11 +2891,21 @@ class AddNewAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Tat Response Type*',
-              labelText: 'Tat Response Type*',
+              hintText: 'Tat Response Type',
+              labelText: 'Tat Response Type',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

@@ -73,4 +73,8 @@ class AccountMasterRepo {
   Future<String> AccountDashboardDataGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.AccountDashboardDataGet,sessionManagement);
   }
+
+  Future<String> EmployeeGetDashBoardApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.employeeGet,sessionManagement);
+  }
 }

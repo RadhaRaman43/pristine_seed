@@ -186,10 +186,10 @@ class UpdateAccountMaster extends StatelessWidget{
                      return  ;
                    }
 
-                   if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+                   /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
                      Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
                      return  ;
-                   }
+                   }*/
                    if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
                      Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
                      return  ;
@@ -234,10 +234,10 @@ class UpdateAccountMaster extends StatelessWidget{
                      Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
                      return  ;
                    }
-                   if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
+                  /* if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
                      Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
                      return  ;
-                   }
+                   }*/
                    accountMaster_page_controller.AccountMstUploaderApiHit('Update',accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode! );
                    //preventive_page_controller.createPreventiveCalenderCallApi();
 
@@ -1108,6 +1108,38 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                        ),
 
+                       SizedBox(height: 15,),
+
+                       Container(
+                         decoration: BoxDecoration(
+                             color: Colors.white,
+                             borderRadius: BorderRadius.circular(10)
+                         ),
+                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                         child: TextFormField(
+                           maxLength: 500,
+                           maxLines: 3,
+                           controller: accountMaster_page_controller
+                               .FullAddress_Controller,
+                           decoration: InputDecoration(
+                               hintText: "Full Address",
+                               labelText: "Full Address",
+                               //suffixIcon: Icon(Icons.email),
+                               contentPadding: EdgeInsets.symmetric(
+                                   vertical: AllFontSize.ten,
+                                   horizontal: AllFontSize.ten),
+
+                               focusedBorder: OutlineInputBorder(
+                                   borderSide: BorderSide(color: Colors.blue)
+                               ),
+                               border: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(10)
+                               )
+                           ),
+
+                         ),
+                       ),
+
 
 
 
@@ -1341,6 +1373,38 @@ class UpdateAccountMaster extends StatelessWidget{
                            decoration: InputDecoration(
                                hintText: "District",
                                labelText: "District",
+                               //suffixIcon: Icon(Icons.email),
+                               contentPadding: EdgeInsets.symmetric(
+                                   vertical: AllFontSize.ten,
+                                   horizontal: AllFontSize.ten),
+
+                               focusedBorder: OutlineInputBorder(
+                                   borderSide: BorderSide(color: Colors.blue)
+                               ),
+                               border: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(10)
+                               )
+                           ),
+
+                         ),
+                       ),
+
+                       SizedBox(height: 15,),
+
+                       Container(
+                         decoration: BoxDecoration(
+                             color: Colors.white,
+                             borderRadius: BorderRadius.circular(10)
+                         ),
+                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                         child: TextFormField(
+                           maxLength: 500,
+                           maxLines: 3,
+                           controller: accountMaster_page_controller
+                               .Shipping_FullAddress_Controller,
+                           decoration: InputDecoration(
+                               hintText: "Full Address",
+                               labelText: "Full Address",
                                //suffixIcon: Icon(Icons.email),
                                contentPadding: EdgeInsets.symmetric(
                                    vertical: AllFontSize.ten,
@@ -1869,12 +1933,17 @@ class UpdateAccountMaster extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-                /*onTap: (){
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
                   focusNode.requestFocus();
-                  accountMaster_page_controller.getEmployeeMemberApi();
-                },*/
-                child: Icon(Icons.arrow_drop_down)),
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Owner',
@@ -2095,11 +2164,21 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type*',
-              labelText: 'Account Category Type*',
+              hintText: 'Account Category Type',
+              labelText: 'Account Category Type',
               /*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
@@ -2218,7 +2297,17 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Company Profile Type*',
@@ -2339,7 +2428,17 @@ class UpdateAccountMaster extends StatelessWidget{
                 focusNode: focusNode,
                 //onSubmitted: onFieldSubmitted,
                 decoration: InputDecoration(
-                  suffixIcon: Icon(Icons.arrow_drop_down),
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
+                        focusNode.requestFocus();
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
                   contentPadding: EdgeInsets.symmetric(
                       vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                   hintText: 'Company Profile Sub Type',
@@ -2459,7 +2558,17 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'GST Registration Type*',
@@ -2582,7 +2691,17 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Active',
@@ -2698,7 +2817,17 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Is Referral',
@@ -2817,7 +2946,17 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'State*',
@@ -2942,8 +3081,17 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon:
-              Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'State*',
@@ -3047,7 +3195,17 @@ class UpdateAccountMaster extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Tat Response Type',
