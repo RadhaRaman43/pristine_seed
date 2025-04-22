@@ -16,6 +16,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/CompanyTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/Company_Prof_Mst_Model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
@@ -51,8 +52,8 @@ class UpdateAccountMaster extends StatelessWidget{
   static String _displayAccCategoryForOption(CustomList option) =>
       option.value!;
 
-  static String _displayCompProfileTypeForOption(CustomList option) =>
-      option.value!;
+  static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
+      option.description!;
 
   static String _displayGstRegisterTypeForOption(CustomList option) =>
       option.value!;
@@ -1547,7 +1548,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
                                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller.Sale_Representative_Controller,
+                           controller: accountMaster_page_controller.Sale_Representative_Controller.value,
                            decoration: InputDecoration(
                                hintText: "Sale Representative",
                                labelText: "Sale Representative",
@@ -1580,7 +1581,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
                                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller.Regional_service_head_Controller,
+                           controller: accountMaster_page_controller.Regional_service_head_Controller.value,
                            decoration: InputDecoration(
                                hintText: "Regional Head",
                                labelText: "Regional Head",
@@ -2243,9 +2244,9 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   Widget bindComProfTypeDropDown(context){
-    return Autocomplete<CustomList>(
+    return Autocomplete<CompanyTypeModel>(
       displayStringForOption: _displayCompProfileTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if(accountMaster_page_controller.view=='VIEW'){
           accountMaster_page_controller.get_Comp_Profile_type_list.value=[];
           return accountMaster_page_controller.get_Comp_Profile_type_list;
@@ -2254,16 +2255,18 @@ class UpdateAccountMaster extends StatelessWidget{
           return accountMaster_page_controller.get_Comp_Profile_type_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return accountMaster_page_controller.get_Comp_Profile_type_list
-            .where((CustomList option) {
-          return option.value
+        /*return accountMaster_page_controller.get_Comp_Profile_type_list
+            .where((CompanyTypeModel option) {
+          return option.description
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        }).toList();*/
+
+        return await accountMaster_page_controller.getCompanyProfileTypeApi(textEditingValue.text);
       },
-      onSelected: (CustomList selection) {
-        print(selection.value);
+      onSelected: (CompanyTypeModel selection) {
+        print(selection.description);
         // Update the TextField with the selected
         accountMaster_page_controller.comp_prof_type_controller.text =
             _displayCompProfileTypeForOption(selection).toString();
@@ -2285,11 +2288,7 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextField(
             readOnly: accountMaster_page_controller.view=='Account'?false:true,
-          /*  readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                || accountMaster_page_controller.view=='VIEW' ||
-                accountMaster_page_controller.view=='Task'||
-                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = accountMaster_page_controller.comp_prof_type_controller
@@ -2310,21 +2309,9 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Company Profile Type*',
-              labelText: 'Company Profile Type*',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen)*/
-              /*focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              hintText: 'Company Profile Type',
+              labelText: 'Company Profile Type',
+
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2333,8 +2320,8 @@ class UpdateAccountMaster extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
+          AutocompleteOnSelected<CompanyTypeModel> onSelected,
+          Iterable<CompanyTypeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -2347,7 +2334,7 @@ class UpdateAccountMaster extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final CustomList option =
+                  final CompanyTypeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -2356,7 +2343,7 @@ class UpdateAccountMaster extends StatelessWidget{
                     child: Container(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        option.value.toString(),
+                        option.description.toString(),
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,

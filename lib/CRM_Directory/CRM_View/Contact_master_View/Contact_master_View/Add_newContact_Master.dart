@@ -307,15 +307,55 @@ class AddNewcontactMasterContact extends StatelessWidget{
                 ),
               ),
               SizedBox(height: 15,),
-              Container(
+             /* Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
                 child: bindDepartNameDropDown(context),
+              ),*/
+              Container(
+                padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                child: TextFormField(
+                  controller: contact_vm_controller.depart_name_controller,
+                  decoration: InputDecoration(
+                      hintText: "Department Name",
+                      labelText: "Department Name",
+                      //suffixIcon: Icon(Icons.email),
+                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      )
+                  ),
+
+                ),
               ),
               SizedBox(height: 15,),
-               Container(
+               /*Container(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   child: bindDesignationDropDown(context),
 
+              ),*/
+              Container(
+                padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                child: TextFormField(
+                  controller: contact_vm_controller.designation_name_controller,
+                  decoration: InputDecoration(
+                      hintText: "Designation Name",
+                      labelText: "Designation Name",
+                      //suffixIcon: Icon(Icons.email),
+                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                      focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue)
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)
+                      )
+                  ),
+
+                ),
               ),
               SizedBox(height: 15,),
               Container(

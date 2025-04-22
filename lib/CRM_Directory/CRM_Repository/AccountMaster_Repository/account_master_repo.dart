@@ -22,6 +22,10 @@ class AccountMasterRepo {
     return _apiService.postApi(data, AppUrl.CompanyProfileMstGet,sessionManagement);
   }
 
+  Future<String> CompanyTypeMsGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.CompanyTypeMstGet,sessionManagement);
+  }
+
   Future<String> getStateMasterApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.GetStateList, sessionManagement, data);
   }

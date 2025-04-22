@@ -8,6 +8,7 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/CompanyTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 
@@ -22,8 +23,8 @@ class AccountmasterScreen extends StatelessWidget{
   static String _displayAccCategoryForOption(CustomList option) =>
       option.value!;
 
-  static String _displayCompProfileTypeForOption(CustomList option) =>
-      option.value!;
+  static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
+      option.description!;
 
   static String _displayIsActiveForOption(String option) =>
       option;
@@ -1256,7 +1257,7 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
   Widget bindCompProfileTypeDropDown(context){
-    return Autocomplete<CustomList>(
+    return Autocomplete<CompanyTypeModel>(
       displayStringForOption: _displayCompProfileTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
@@ -1264,15 +1265,15 @@ class AccountmasterScreen extends StatelessWidget{
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return accountMaster_page_controller.get_Comp_Profile_type_list
-            .where((CustomList option) {
-          return option.value
+            .where((CompanyTypeModel option) {
+          return option.description
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
-      onSelected: (CustomList selection) {
-        print(selection.value);
+      onSelected: (CompanyTypeModel selection) {
+        print(selection.description);
         // Update the TextField with the selected
         accountMaster_page_controller.comp_prof_type_controller.text =
             _displayCompProfileTypeForOption(selection).toString();
@@ -1310,8 +1311,8 @@ class AccountmasterScreen extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
+          AutocompleteOnSelected<CompanyTypeModel> onSelected,
+          Iterable<CompanyTypeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -1322,7 +1323,7 @@ class AccountmasterScreen extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final CustomList option =
+                  final CompanyTypeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -1331,7 +1332,7 @@ class AccountmasterScreen extends StatelessWidget{
                     child: Container(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        option.value.toString(),
+                        option.description.toString(),
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,

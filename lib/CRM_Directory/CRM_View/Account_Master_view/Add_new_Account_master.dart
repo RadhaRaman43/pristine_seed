@@ -16,6 +16,7 @@ import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Draft_model.dart';
+import '../../CRM_Models/AccountMaster_model/CompanyTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/Company_Prof_Mst_Model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
@@ -49,8 +50,8 @@ class AddNewAccountMaster extends StatelessWidget{
   static String _displayAccCategoryForOption(CustomList option) =>
       option.value!;
 
-  static String _displayCompProfileTypeForOption(CustomList option) =>
-      option.value!;
+  static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
+      option.description!;
 
   static String _displayGstRegisterTypeForOption(CustomList option) =>
       option.value!;
@@ -1449,65 +1450,73 @@ class AddNewAccountMaster extends StatelessWidget{
 
                           SizedBox(height: 15,),
 
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                            child: TextFormField(
-                              readOnly: true,
-                              controller: accountMaster_page_controller
-                                  .Sale_Representative_Controller,
-                              decoration: InputDecoration(
-                                  hintText: "Sale Representative",
-                                  labelText: "Sale Representative",
-                                  //suffixIcon: Icon(Icons.email),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: AllFontSize.ten,
-                                      horizontal: AllFontSize.ten),
-
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue)
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10)
-                                  )
+                          Obx((){
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)
                               ),
+                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: accountMaster_page_controller
+                                    .Sale_Representative_Controller.value,
+                                decoration: InputDecoration(
+                                    hintText: "Sale Representative",
+                                    labelText: "Sale Representative",
+                                    //suffixIcon: Icon(Icons.email),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten,
+                                        horizontal: AllFontSize.ten),
 
-                            ),
-                          ),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue)
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    )
+                                ),
+
+                              ),
+                            );
+                          }),
+
+
 
                           SizedBox(height: 15,),
 
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                            child: TextFormField(
-                              readOnly: true,
-                              controller: accountMaster_page_controller
-                                  .Regional_service_head_Controller,
-                              decoration: InputDecoration(
-                                  hintText: "Regional Head",
-                                  labelText: "Regional Head",
-                                  //suffixIcon: Icon(Icons.email),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: AllFontSize.ten,
-                                      horizontal: AllFontSize.ten),
-
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue)
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10)
-                                  )
+                          Obx((){
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)
                               ),
+                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: accountMaster_page_controller
+                                    .Regional_service_head_Controller.value,
+                                decoration: InputDecoration(
+                                    hintText: "Regional Head",
+                                    labelText: "Regional Head",
+                                    //suffixIcon: Icon(Icons.email),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten,
+                                        horizontal: AllFontSize.ten),
 
-                            ),
-                          ),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue)
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    )
+                                ),
+
+                              ),
+                            );
+                          })
+
+
 
 
                         ],
@@ -1571,7 +1580,10 @@ class AddNewAccountMaster extends StatelessWidget{
             _displayEmpMemberForOption(selection).toString();
         accountMaster_page_controller.AccountOwner = selection.loginEmailId!;
         print("accountOu...${selection.loginEmailId!}");
-        accountMaster_page_controller.getEmployee(selection.loginEmailId??"");
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
+        });
+       // accountMaster_page_controller.getEmployee(selection.loginEmailId??"");
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1582,7 +1594,10 @@ class AddNewAccountMaster extends StatelessWidget{
             accountMaster_page_controller.AccountOwner = accountMaster_page_controller.employee_Member_list[i].loginEmailId??"";
           }
         }
-        accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
+        });
+       // accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
 
         return TextField(
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
@@ -1883,23 +1898,24 @@ class AddNewAccountMaster extends StatelessWidget{
   }
 
   Widget bindComProfTypeDropDown(context){
-    return Autocomplete<CustomList>(
+    return Autocomplete<CompanyTypeModel>(
       displayStringForOption: _displayCompProfileTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
           return accountMaster_page_controller.get_Comp_Profile_type_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return accountMaster_page_controller.get_Comp_Profile_type_list
-            .where((CustomList option) {
-          return option.value
+        /*return accountMaster_page_controller.get_Comp_Profile_type_list
+            .where((CompanyTypeModel option) {
+          return option.description
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        }).toList();*/
+        return await accountMaster_page_controller.getCompanyProfileTypeApi(textEditingValue.text);
       },
-      onSelected: (CustomList selection) {
-        print(selection.value);
+      onSelected: (CompanyTypeModel selection) {
+        print(selection.description);
         // Update the TextField with the selected
         accountMaster_page_controller.comp_prof_type_controller.text =
             _displayCompProfileTypeForOption(selection).toString();
@@ -1939,21 +1955,9 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Company Profile Type*',
-              labelText: 'Company Profile Type*',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen)*/
-              /*focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              hintText: 'Company Profile Type',
+              labelText: 'Company Profile Type',
+
              border: OutlineInputBorder(
              borderRadius: BorderRadius.all(Radius.circular(10))
           ),
@@ -1962,8 +1966,8 @@ class AddNewAccountMaster extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
+          AutocompleteOnSelected<CompanyTypeModel> onSelected,
+          Iterable<CompanyTypeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -1976,7 +1980,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final CustomList option =
+                  final CompanyTypeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -1985,7 +1989,7 @@ class AddNewAccountMaster extends StatelessWidget{
                     child: Container(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        option.value.toString(),
+                        option.description.toString(),
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
@@ -2370,6 +2374,7 @@ class AddNewAccountMaster extends StatelessWidget{
   }
 
   Widget bindIsActiveDropDown(context) {
+    accountMaster_page_controller.IsActive_controller.text = 'Yes';
     return Autocomplete<String>(
       displayStringForOption: _displayIsActiveForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -2385,6 +2390,7 @@ class AddNewAccountMaster extends StatelessWidget{
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
+      initialValue: accountMaster_page_controller.IsActive_controller.value,
       onSelected: (String selection) {
         print(selection);
         // Update the TextField with the selected

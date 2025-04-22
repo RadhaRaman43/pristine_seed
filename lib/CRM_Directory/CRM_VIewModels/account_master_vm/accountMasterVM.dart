@@ -20,6 +20,7 @@ import '../../CRM_Models/AccountMaster_model/AccountDashboardDataSale_models.dar
 import '../../CRM_Models/AccountMaster_model/AccountMstrGet_Model.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Draft_model.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/AccountMaster_model/CompanyTypeModel.dart';
 import '../../CRM_Models/AccountMaster_model/Company_Prof_Mst_Model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
@@ -119,8 +120,8 @@ class Accountmastervm extends GetxController{
   var FullAddress_Controller = TextEditingController();
   var Shipping_FullAddress_Controller = TextEditingController();
   var Annual_Revenue_Controller = TextEditingController();
-  var Sale_Representative_Controller = TextEditingController();
-  var Regional_service_head_Controller = TextEditingController();
+  var Sale_Representative_Controller = TextEditingController().obs;
+  var Regional_service_head_Controller = TextEditingController().obs;
   var TatResponse_Controller = TextEditingController();
 
   //todo shipping address
@@ -139,7 +140,7 @@ class Accountmastervm extends GetxController{
   List<AccountDraftModel> Account_Master_Draft_list=<AccountDraftModel>[];
   RxList<CustomList> get_Acc_category_list=<CustomList>[].obs;
   RxList<CustomList> get_Acc_type_list=<CustomList>[].obs;
-  RxList<CustomList> get_Comp_Profile_type_list=<CustomList>[].obs;
+  RxList<CompanyTypeModel > get_Comp_Profile_type_list=<CompanyTypeModel >[].obs;
   RxList<CustomList> get_Gst_Registration_list=<CustomList>[].obs;
   RxList<String> IsActiveTypeList = <String>[].obs;
   RxList<String> NoOfEmpListFilter = <String>[].obs;
@@ -175,7 +176,7 @@ class Accountmastervm extends GetxController{
     getDraftAccountMaster(pageNumber ,is_Active.toString());
     getAccCategoryApi();
     getAccountTypeApi();
-    getCompanyProfileTypeApi();
+    getCompanyProfileTypeApi("");
     //getCompanyProfileSubTypeApi();
     getGstRegistrationTypeApi();
     //IsActive_controller.text = 'All';
@@ -239,8 +240,8 @@ class Accountmastervm extends GetxController{
     No_Of_Emp_Controller.text="";
     Annual_Revenue_Controller.text="";
     TatResponse_Controller.text="";
-    Sale_Representative_Controller.text = "";
-    Regional_service_head_Controller.text ="";
+    Sale_Representative_Controller.value.text = "";
+    Regional_service_head_Controller.value.text ="";
 
   }
 
@@ -332,19 +333,26 @@ class Accountmastervm extends GetxController{
         =>EmployeeDetailsGetResponse.fromJson(e)).toList();
         if(response!=null && response.length>0 && response[0].condition=="True"){
           loading.value=false;
-          userGeoHierarchyy = response[0].userGeoHierarchy!;
-          for(int i = 0; i<userGeoHierarchyy.length; i++){
-            if(AccOwnerEmail == userGeoHierarchyy[i].approverEmail){
-              int pos = i - 1;
-              int pos2 = i - 2;
-              print("RegionalHead ${userGeoHierarchyy[pos].approverEmail}");
-             Sale_Representative_Controller.text = userGeoHierarchyy[pos2].approverEmail.toString();
-              Regional_service_head_Controller.text = userGeoHierarchyy[pos].approverEmail.toString();
-              print("SalesRepre.. ${userGeoHierarchyy[pos2].approverEmail}");
+          if(response[0].userGeoHierarchy != null){
+            userGeoHierarchyy = response[0].userGeoHierarchy!;
+            for(int i = 0; i<userGeoHierarchyy.length; i++){
+              if(AccOwnerEmail == userGeoHierarchyy[i].approverEmail){
+                int pos = i - 1;
+                int pos2 = i - 2;
+                print("RegionalHead ${pos > -1 ? userGeoHierarchyy[pos].approvedFullName : ""}");
+                Regional_service_head_Controller.value.text = pos > -1 ?userGeoHierarchyy[pos].approvedFullName.toString():"";
+                print("SalesRepre.. ${pos2 > -1 ? userGeoHierarchyy[pos2].approvedFullName : ""}");
+                Sale_Representative_Controller.value.text = pos2 > -1 ?userGeoHierarchyy[pos2].approvedFullName.toString():"";
+              }
             }
+          }else{
+            Regional_service_head_Controller.value.text = "";
+            Sale_Representative_Controller.value.text = "";
           }
+
         }else {
           loading.value=false;
+
         }
       }else{
         loading.value=false;
@@ -484,7 +492,7 @@ class Accountmastervm extends GetxController{
     });
   }
 
-  getCompanyProfileTypeApi(){
+  /*getCompanyProfileTypeApi(){
     this.loading.value = true;
     Map<String, String> data = {'flag': "company"};
 
@@ -513,7 +521,7 @@ class Accountmastervm extends GetxController{
     }).whenComplete(() {
       this.loading.value = false;
     });
-  }
+  }*/
 
   getGstRegistrationTypeApi() {
     this.loading.value = true;
@@ -646,6 +654,97 @@ class Accountmastervm extends GetxController{
       print(e);
     }
   }
+
+
+  Future<Iterable<CompanyTypeModel>> getCompanyProfileTypeApi(String text) async {
+    /*if (text == '') {
+      return const Iterable<CompanyTypeModel>.empty();
+    }*/
+    loading.value=true;
+    Map data = {
+     "filter_description": text,
+      "row_per_page":50 ,
+      "page_number": 0
+    };
+    print("Complany Data....${data}");
+    String customer_response =await  _api.CompanyTypeMsGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(customer_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<CompanyTypeModel> response =
+        jsonResponse.map((data) => CompanyTypeModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print("Complany type....${jsonResponse}");
+          get_Comp_Profile_type_list.value = response;
+
+        } else {
+
+          get_Comp_Profile_type_list.value= [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        get_Comp_Profile_type_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      get_Comp_Profile_type_list.value = [];
+    }
+    finally{
+      loading.value=false;
+    }
+    return  get_Comp_Profile_type_list.value;
+  }
+
+  /*getCompanyProfileTypeApi() {
+    Map data = {
+      "filter_description": "",
+      "row_per_page": 1000,
+      "page_number": 0
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.CompanyTypeMsGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<CompanyTypeModel> response =
+            JsonResponse.map((e) => CompanyTypeModel.fromJson(e))
+                .toList();
+            if (response != null && response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              get_Comp_Profile_type_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              get_Comp_Profile_type_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            get_Comp_Profile_type_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      get_Comp_Profile_type_list.value = [];
+      print(e);
+    }
+  }*/
 
 
   Future<void> upLoadImage(BuildContext context) async {
@@ -912,8 +1011,8 @@ class Accountmastervm extends GetxController{
           "no_of_employees": No_Of_Emp_Controller.text.isEmpty?0:No_Of_Emp_Controller.text,
           "annual_revenue": Annual_Revenue_Controller.text.isEmpty?0:Annual_Revenue_Controller.text,
           "tat_response_type": tatResponseType.isEmpty?'':tatResponseType,
-          "sales_representative": Sale_Representative_Controller.text.isEmpty?'':Sale_Representative_Controller.text,
-          "regional_service_head": Regional_service_head_Controller.text.isEmpty?'':Regional_service_head_Controller.text,
+          "sales_representative": Sale_Representative_Controller.value.text.isEmpty?'':Sale_Representative_Controller.value.text,
+          "regional_service_head": Regional_service_head_Controller.value.text.isEmpty?'':Regional_service_head_Controller.value.text,
           "profile": ImageUrl_Controller.text.isEmpty?'':ImageUrl_Controller.text,
           "is_active": InActive,
           "website": Website_Controller.text.isEmpty?'':Website_Controller.text,
@@ -1021,8 +1120,8 @@ class Accountmastervm extends GetxController{
           "no_of_employees": No_Of_Emp_Controller.text.isEmpty?0:No_Of_Emp_Controller.text,
           "annual_revenue": Annual_Revenue_Controller.text.isEmpty?0:Annual_Revenue_Controller.text,
           "tat_response_type": tatResponseType.isEmpty?'':tatResponseType,
-          "sales_representative": Sale_Representative_Controller.text.isEmpty?'':Sale_Representative_Controller.text,
-          "regional_service_head": Regional_service_head_Controller.text.isEmpty?'':Regional_service_head_Controller.text,
+          "sales_representative": Sale_Representative_Controller.value.text.isEmpty?'':Sale_Representative_Controller.value.text,
+          "regional_service_head": Regional_service_head_Controller.value.text.isEmpty?'':Regional_service_head_Controller.value.text,
           "profile": ImageUrl_Controller.text.isEmpty?'':ImageUrl_Controller.text,
           "is_active": InActive,
           "website": Website_Controller.text.isEmpty?'':Website_Controller.text,
@@ -1223,8 +1322,8 @@ class Accountmastervm extends GetxController{
       Annual_Revenue_Controller.text = response[0].annualRevenue.toString();
       TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
       tatResponseType = response[0].tatResponseType??"";
-      Sale_Representative_Controller.text = response[0].salesRepresentative??"";
-      Regional_service_head_Controller.text = response[0].regionalServiceHead??"";
+      Sale_Representative_Controller.value.text = response[0].salesRepresentative??"";
+      Regional_service_head_Controller.value.text = response[0].regionalServiceHead??"";
 
     }catch(e){
 
@@ -1273,8 +1372,8 @@ class Accountmastervm extends GetxController{
       Annual_Revenue_Controller.clear();
       TatResponse_Controller.clear();
       tatResponseType  = '';
-      Sale_Representative_Controller.clear();
-      Regional_service_head_Controller.clear();
+      Sale_Representative_Controller.value.clear();
+      Regional_service_head_Controller.value.clear();
 
     }catch(e){
 
@@ -1772,8 +1871,8 @@ class Accountmastervm extends GetxController{
       Annual_Revenue_Controller.text = response[position].annualRevenue.toString();
       TatResponse_Controller.text = response[position].tatResponseType??"" + ' (${response[position].tatResponseTime} Hours)';
       tatResponseType = response[position].tatResponseType??"";
-      Sale_Representative_Controller.text = response[position].salesRepresentative??"";
-      Regional_service_head_Controller.text = response[position].regionalServiceHead??"";
+      Sale_Representative_Controller.value.text = response[position].salesRepresentative??"";
+      Regional_service_head_Controller.value.text = response[position].regionalServiceHead??"";
 
     }catch(e){
 

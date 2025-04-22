@@ -192,6 +192,7 @@ class UserGeoHierarchy {
   String? geoName;
   String? geoValue;
   int? myLevel;
+  String? approvedFullName;
 
   UserGeoHierarchy(
       {this.approverEmail,
@@ -199,7 +200,8 @@ class UserGeoHierarchy {
         this.levelName,
         this.geoName,
         this.geoValue,
-        this.myLevel});
+        this.myLevel,
+        this.approvedFullName});
 
   UserGeoHierarchy.fromJson(Map<String, dynamic> json) {
     approverEmail = json['approver_email'];
@@ -208,6 +210,7 @@ class UserGeoHierarchy {
     geoName = json['geo_name'];
     geoValue = json['geo_value'];
     myLevel = json['my_level'];
+    approvedFullName = json['approved_full_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -218,6 +221,7 @@ class UserGeoHierarchy {
     data['geo_name'] = this.geoName;
     data['geo_value'] = this.geoValue;
     data['my_level'] = this.myLevel;
+    data['approved_full_name'] = this.approvedFullName;
     return data;
   }
 }
