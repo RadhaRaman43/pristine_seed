@@ -93,6 +93,8 @@ class TaskMasterDetails extends StatelessWidget{
                     TaskMaster_page_controller.EstClosuredate_controller.clear();
                     TaskMaster_page_controller.BudgetAmt_controller.clear();
                     TaskMaster_page_controller.ExpectedAmt_controller.clear();
+                    TaskMaster_page_controller.Method_of_call_controller.clear();
+                    TaskMaster_page_controller.PurposeOfVisit.value = false;
                     TaskMaster_page_controller.DSARStatus.value = false;
                     if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1){
                       TaskMaster_page_controller.isInfraLeadValue.value = true;

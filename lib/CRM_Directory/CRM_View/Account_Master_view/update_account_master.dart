@@ -1111,41 +1111,37 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           maxLength: 500,
-                           maxLines: 3,
-                           controller: accountMaster_page_controller
-                               .FullAddress_Controller,
-                           decoration: InputDecoration(
-                               hintText: "Full Address",
-                               labelText: "Full Address",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
+                       Obx(() {
+                         return Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
                            ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             maxLength: 500,
+                             maxLines: 3,
+                             controller: accountMaster_page_controller
+                                 .FullAddress_Controller.value,
+                             decoration: InputDecoration(
+                                 hintText: "Full Address",
+                                 labelText: "Full Address",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
 
-                         ),
-                       ),
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
 
-
-
-
-
-
+                           ),
+                         );
+                       },)
 
                      ],
                    ),

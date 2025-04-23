@@ -255,7 +255,8 @@ class Taskmastervm extends GetxController{
     }
 
     TaskMasterCreate(){
-
+        DateTime selectDate = DateFormat('yyyy-MM-dd').parseStrict(DataOFVisitController.value.text);
+        String todayDate = DateFormat('yyyy-MM-dd').format(selectDate);
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
         List<Selectedalongwithpersonnamemodel> personName = SelectedAlongPersonWith_list.map((item) => Selectedalongwithpersonnamemodel(empId: item.empId!)).toList();
 
@@ -271,7 +272,7 @@ class Taskmastervm extends GetxController{
                 "purpose_of_visit": PusposeOfVisit_controller.text.isEmpty?'':PusposeOfVisit_controller.text,
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "payment_sale_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
-                "date_of_visit": DataOFVisitController.value.text.isEmpty?"":DataOFVisitController.value.text,
+                "date_of_visit": todayDate.isEmpty?"":todayDate,
                 "time_of_visit": VisitTime_controller.value.text.isEmpty?"":VisitTime_controller.value.text,
                 "is_infra_lead": isInfraLeadFilterController.text =='Yes'?1:0,
                 "lines": lines.map((line) => line.toJson()).toList(),
@@ -320,6 +321,10 @@ class Taskmastervm extends GetxController{
     }
 
     TaskDSARMasterCreate(){
+        DateTime selectNextInterDate = DateFormat('yyyy-MM-dd').parseStrict(NextInterdate_controller.value.text);
+        String NextInterDate = DateFormat('yyyy-MM-dd').format(selectNextInterDate);
+        DateTime selectEstClosureDate = DateFormat('yyyy-MM-dd').parseStrict(EstClosuredate_controller.value.text);
+        String EstClosureDate = DateFormat('yyyy-MM-dd').format(selectEstClosureDate);
         int? budgetAmt = int.tryParse(BudgetAmt_controller.text.toString()) ?? 0;
         int? estimatedAmt = int.tryParse(ExpectedAmt_controller.text.toString()) ?? 0;
         try{
@@ -328,10 +333,10 @@ class Taskmastervm extends GetxController{
                 "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
                 "dsar_status": DSAR_Status_type_controller.value.text.isEmpty?'':DSAR_Status_type_controller.value.text,
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
-                "next_interaction_date": NextInterdate_controller.text.isEmpty?'':NextInterdate_controller.text,
+                "next_interaction_date": NextInterDate.isEmpty?'':NextInterDate,
                 "next_interaction_time": NextInterTime_controller.text.isEmpty?'':NextInterTime_controller.text,
                 "remarks": DSAR_Remarks_controller.text.isEmpty?'':DSAR_Remarks_controller.text,
-                "est_closure_date": EstClosuredate_controller.text.isEmpty?'':EstClosuredate_controller.text,
+                "est_closure_date": EstClosureDate.isEmpty?'':EstClosureDate,
                 "budget_amount": budgetAmt,
                 "est_budget_amount": estimatedAmt,
                 "created_by": email,
@@ -1126,7 +1131,7 @@ class Taskmastervm extends GetxController{
         Task_Remarks_controller.clear();
         Sale_cycle_Id_controller.clear();
         //isInfraLeadFilterController.clear();
-        String todayDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+        String todayDate = DateFormat('dd-MM-yyyy').format(DateTime.now());
         DataOFVisitController.value.text = todayDate;
         VisitTime_controller.value.clear();
         ItemCat_type_controller.clear();

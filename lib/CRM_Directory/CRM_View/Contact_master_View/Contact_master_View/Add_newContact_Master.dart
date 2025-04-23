@@ -11,6 +11,7 @@ import '../../../../constants/app_font_size.dart';
 import '../../../../reources/routes/routes_name.dart';
 import '../../../../view/custom_drawer.dart';
 import '../../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/Department_name_modal.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/Designation_modal.dart';
 import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
@@ -30,8 +31,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
       option.deptName!;
   static String _displayDesignationNameForOption(DesignationModal option) =>
       option.designationname!;
-  static String _displayIsHeDecisionMakerForOption(String option) =>
-      option;
+  static String _displayIsHeDecisionMakerForOption(CustomList option) =>
+      option.value!;
 
   final _formKey = GlobalKey<FormState>();
   final _formKeyEmail = GlobalKey<FormState>();
@@ -480,22 +481,19 @@ class AddNewcontactMasterContact extends StatelessWidget{
           onTapOutside: (value){
             FocusNode().unfocus();
           },
-          /*onChanged: (value){
-            contact_vm_controller.account_name_controller.text = value;
-            print('Controller...${contact_vm_controller.account_name_controller.text}');
-            contact_vm_controller.getAccountMaster(
-                contact_vm_controller.pageNumber );
-            if(value.isEmpty){
-              contact_vm_controller.account_name_controller.text = value;
-              contact_vm_controller.getAccountMaster(
-                  contact_vm_controller.pageNumber );
 
-            }
-          },*/
-          //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-                child: Icon(Icons.arrow_drop_down)),
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Name',
@@ -760,11 +758,13 @@ class AddNewcontactMasterContact extends StatelessWidget{
     return Container(
       margin: const EdgeInsets.only(left: 15.0),
       width: double.infinity,
-      child: DropdownMenu<String>(
+      child: DropdownMenu<CustomList>(
+       // enableFilter: true,
+       // requestFocusOnTap: true,
         width: size.width-30,
         controller: contact_vm_controller.IsHeDecisionMakerController.value,
         label: Text(
-          "Is Decision",
+          "Role",
           style: GoogleFonts.poppins(
               color: AllColors.blackColor,
               fontWeight: FontWeight.w300,
@@ -790,16 +790,16 @@ class AddNewcontactMasterContact extends StatelessWidget{
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         ),
-        onSelected: (String? selection) {
+        onSelected: (CustomList? selection) {
           print(selection);
           contact_vm_controller.IsHeDecisionMakerController.value.text =
               _displayIsHeDecisionMakerForOption(selection!).toString();
 
         },
         dropdownMenuEntries:
-        contact_vm_controller.isHeDecisionMakerList.map<DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(value: e, label: e,style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        contact_vm_controller.isHeDecisionMakerList.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: WidgetStateProperty.all<Color>(AllColors.primaryDark1),));
         }).toList(),
       ),
     );

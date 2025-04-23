@@ -10,6 +10,7 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import '../../../../reources/routes/routes_name.dart';
 import '../../../../viewModel/SessionManagment/session_managment.dart';
 import '../../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/Department_name_modal.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/Designation_modal.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
@@ -50,7 +51,8 @@ class ContactMasterVM extends GetxController{
   var IsHeDecisionMakerController = TextEditingController().obs;
 
 
-  RxList<String> isHeDecisionMakerList =["Yes", "No"].obs;
+ // RxList<String> isHeDecisionMakerList =["Yes", "No"].obs;
+  RxList<CustomList> isHeDecisionMakerList=<CustomList>[].obs;
   RxList<ContactMstGetListModal> contact_master_list = <ContactMstGetListModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<DepartNameModal> department_name_list=<DepartNameModal>[].obs;
@@ -71,6 +73,37 @@ class ContactMasterVM extends GetxController{
     getContactMasterList(pageNumber,"","","");
 
 
+  }
+
+  getDecisionRoleMaster() {
+    this.loading.value = true;
+    Map<String, String> data = {'flag': "decision_role"};
+
+    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+      try {
+        List<GetMasterTypeModel> emp_masterResponse =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
+          isHeDecisionMakerList.value = emp_masterResponse[0].list!;
+          print('RoleList.....${isHeDecisionMakerList.length.toString()}');
+        } else {
+          isHeDecisionMakerList.value = [];
+          print('RoleList2.....${isHeDecisionMakerList.length.toString()}');
+        }
+      } catch (e) {
+        isHeDecisionMakerList.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      isHeDecisionMakerList.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
   }
 
   void getContactMasterList(int pageNumber, String account_name, String contact_name, String depart_name) {
@@ -269,6 +302,7 @@ class ContactMasterVM extends GetxController{
           {
             "contact_code": contact_code,
             "contact_name": contact_name_controller.text,
+            "contact_title": contact_title_controller.text,
             "account_code": accountCode.value.isNotEmpty?accountCode.value:"",
             "account_name": accountName.value.isNotEmpty?accountName.value:account_name_controller.text,
             "phone_no": phone_no_controller.text,
@@ -277,8 +311,7 @@ class ContactMasterVM extends GetxController{
             "department_name": depart_name_controller.text,
             "desingation_name": designation_name_controller.text,
             "reporting_person": reporting_person_controller.text,
-            "is_decision_maker": IsHeDecisionMakerController.value.text=="Yes"?1:0,
-            "contact_title": contact_title_controller.text,
+            "contact_role": IsHeDecisionMakerController.value.text.isEmpty?"":IsHeDecisionMakerController.value.text,
           }
         ]
       };
@@ -289,19 +322,15 @@ class ContactMasterVM extends GetxController{
         if(jsonResponse is List){
           List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            print("created data is ${response}");
-            print('insideOut0...${insideOut}');
             loading.value = false;
             contact_master_list.value=response;
 
             resetAllContactCreativeField('Icon');
             if(insideOut == true){
-              print('insideOut1...${insideOut}');
               Get.toNamed(RoutesName.contactMaster_screen);
               pageNumber=0;
               getContactMasterList(pageNumber,"","","");
             }else if(insideOut == false){
-              print('insideOut2...${insideOut}');
               Get.toNamed(RoutesName.viewContacts_screen);
               account_vm_controller.getContactMasterList(0, account_name_controller.text.toString(), '', accountCode.value.toString());
             }
@@ -353,7 +382,7 @@ class ContactMasterVM extends GetxController{
     contact_title_controller.text=contact_master_list[index].contactTitle?? "";
     designation_name_controller.text=contact_master_list[index].designationname ?? "";
     contact_code_controller.text=contact_master_list[index].contactCode ?? "";
-      IsHeDecisionMakerController.value.text=contact_master_list[index].isDecisionMaker==1?'Yes':'No';
+      IsHeDecisionMakerController.value.text=contact_master_list[index].contactRole??"";
     }else if(flag == 'Inside'){
       contact_code=account_vm_controller.view_contract_list[index].contactCode?? "";
       account_name_controller.text=account_vm_controller.view_contract_list[index].accountName?? "";
@@ -366,12 +395,13 @@ class ContactMasterVM extends GetxController{
       contact_title_controller.text=account_vm_controller.view_contract_list[index].contactTitle?? "";
       designation_name_controller.text=account_vm_controller.view_contract_list[index].designationname ?? "";
       contact_code_controller.text=account_vm_controller.view_contract_list[index].contactCode ?? "";
-      IsHeDecisionMakerController.value.text=account_vm_controller.view_contract_list[index].isDecisionMaker==1?'Yes':"No";
+      IsHeDecisionMakerController.value.text=account_vm_controller.view_contract_list[index].contactRole??"";
     }
 
     getAccountMaster(pageNumber);
-    getDepartNameList();
-    getDesignationList();
+    //getDepartNameList();
+    //getDesignationList();
+    getDecisionRoleMaster();
     Get.toNamed(RoutesName.addNewContactMaster_screen);
   }
 

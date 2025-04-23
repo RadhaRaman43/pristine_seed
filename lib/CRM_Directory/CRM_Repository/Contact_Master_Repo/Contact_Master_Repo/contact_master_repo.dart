@@ -22,4 +22,8 @@ class ContactMasterRepo{
     return _apiService.getApi(AppUrl.DesignationGet, sessionManagement, data);
   }
 
+  Future<String> getMasterTypeApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.getMasterType, sessionManagement, data);
+  }
+
 }

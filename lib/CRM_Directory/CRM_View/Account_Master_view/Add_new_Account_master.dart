@@ -897,6 +897,9 @@ class AddNewAccountMaster extends StatelessWidget{
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .Address_controller,
+                              onChanged: (value){
+                                accountMaster_page_controller.FullAddress_Controller.value.text = value;
+                              },
                               decoration: InputDecoration(
                                   hintText: "Address",
                                   labelText: "Address",
@@ -927,6 +930,9 @@ class AddNewAccountMaster extends StatelessWidget{
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .Address2_Controller,
+                              onChanged: (value){
+                                accountMaster_page_controller.FullAddress_Controller.value.text = value;
+                              },
                               decoration: InputDecoration(
                                   hintText: "Address2",
                                   labelText: "Address2",
@@ -996,6 +1002,9 @@ class AddNewAccountMaster extends StatelessWidget{
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .City_Controller,
+                              onChanged: (value){
+                                accountMaster_page_controller.FullAddress_Controller.value.text = value;
+                              },
                               decoration: InputDecoration(
                                   hintText: "City",
                                   labelText: "City",
@@ -1026,6 +1035,9 @@ class AddNewAccountMaster extends StatelessWidget{
                             child: TextFormField(
                               controller: accountMaster_page_controller
                                   .District_Controller,
+                              onChanged: (value){
+                                accountMaster_page_controller.FullAddress_Controller.value.text = value;
+                              },
                               decoration: InputDecoration(
                                   hintText: "District",
                                   labelText: "District",
@@ -1047,35 +1059,39 @@ class AddNewAccountMaster extends StatelessWidget{
 
                           SizedBox(height: 15,),
 
-                          Container(
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)
-                            ),
-                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                            child: TextFormField(
-                              maxLength: 500,
-                              maxLines: 3,
-                              controller: accountMaster_page_controller
-                                  .FullAddress_Controller,
-                              decoration: InputDecoration(
-                                  hintText: "Full Address",
-                                  labelText: "Full Address",
-                                  //suffixIcon: Icon(Icons.email),
-                                  contentPadding: EdgeInsets.symmetric(
-                                      vertical: AllFontSize.ten,
-                                      horizontal: AllFontSize.ten),
-
-                                  focusedBorder: OutlineInputBorder(
-                                      borderSide: BorderSide(color: Colors.blue)
-                                  ),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10)
-                                  )
+                          Obx((){
+                            return Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)
                               ),
+                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: TextFormField(
+                                maxLength: 500,
+                                maxLines: 3,
+                                controller: accountMaster_page_controller
+                                    .FullAddress_Controller.value,
+                                decoration: InputDecoration(
+                                    hintText: "Full Address",
+                                    labelText: "Full Address",
+                                    //suffixIcon: Icon(Icons.email),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten,
+                                        horizontal: AllFontSize.ten),
 
-                            ),
-                          ),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue)
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    )
+                                ),
+
+                              ),
+                            );
+                          })
+
+
 
 
                         ],

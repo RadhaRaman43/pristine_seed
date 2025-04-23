@@ -221,9 +221,9 @@ class AddNewTaskScreen extends StatelessWidget{
                             contact_vm_controller.resetAllContactCreativeField('Icon');
                             contact_vm_controller.insideOut = true;
                             accountMaster_page_controller.FromPage.value = "Task";
-                            contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                            //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
                             contact_vm_controller.getAccountMaster(contact_vm_controller.pageNumber);
-                            contact_vm_controller.getDepartNameList();
+                            contact_vm_controller.getDecisionRoleMaster();
                             Get.toNamed(RoutesName.addNewContactMaster_screen);
                           }, icon: Icon(Icons.add)),
                     )
@@ -1015,69 +1015,79 @@ class AddNewTaskScreen extends StatelessWidget{
     return Container(
       padding: EdgeInsets.only(left: 15.0, right: 15.0),
       child: TextField(
-          cursorColor:AllColors.primaryDark1 ,
-          controller: taskMaster_page_controller.DataOFVisitController.value,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten
-              ),
-              suffixIcon: Icon(Icons.calendar_month),
-              hintText: 'Date Of Visit',
-              labelText: 'Date Of Visit',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
+        cursorColor: AllColors.primaryDark1,
+        controller: taskMaster_page_controller.DataOFVisitController.value,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two,
+            horizontal: AllFontSize.ten,
           ),
+          suffixIcon: Icon(Icons.calendar_month),
+          hintText: 'Date Of Visit',
+          labelText: 'Date Of Visit',
+          hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten,
+          ),
+          labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.sisxteen,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
           onTap: () async {
             DateTime? initialDate;
-            if (taskMaster_page_controller.DataOFVisitController.value.text.isNotEmpty) {
-              initialDate = DateFormat('yyyy-MM-dd').parse(
-                taskMaster_page_controller.DataOFVisitController.value.text,
-              );
-            } else {
-              initialDate = DateTime.now();
+            String dateString = taskMaster_page_controller.DataOFVisitController.value.text;
+
+            try {
+              if (dateString.isNotEmpty) {
+                initialDate = DateFormat('dd-MM-yyyy').parseStrict(dateString);
+              } else {
+                initialDate = DateTime.now();
+              }
+            } catch (e) {
+              initialDate = DateTime.now(); // Fallback if parsing fails
             }
-            DateTime ending_date = new DateTime(2200);
-            FocusScope.of(context).requestFocus(new FocusNode());
+
+            DateTime endingDate = DateTime(2200);
+            FocusScope.of(context).requestFocus(FocusNode());
+
             DateTime? date = await showDatePicker(
               context: context,
               initialDate: initialDate,
               firstDate: DateTime.now(),
-              lastDate: ending_date,
+              lastDate: endingDate,
               builder: (BuildContext context, Widget? child) {
                 return Theme(
                   data: ThemeData.light().copyWith(
-                    primaryColor: AllColors.primaryDark1, // Header background color
-                    //accentColor: AllColors.primaryDark1, // Color of the buttons
+                    primaryColor: AllColors.primaryDark1,
                     colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
                     buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
                   ),
                   child: child!,
                 );
               },
-
             );
-            var outputFormat = DateFormat('yyyy-MM-dd');
-            if (date != null && date != "")
-              taskMaster_page_controller.DataOFVisitController.value.text= outputFormat.format(date);
-            else
+
+            if (date != null) {
+              taskMaster_page_controller.DataOFVisitController.value.text =
+                  DateFormat('dd-MM-yyyy').format(date);
+            } else {
               taskMaster_page_controller.DataOFVisitController.value.text = "";
+            }
           }
 
       ),
     );
   }
+
 
   Widget bindVisitTimePicker(context){
     return Container(

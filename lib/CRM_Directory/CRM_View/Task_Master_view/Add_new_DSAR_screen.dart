@@ -454,8 +454,8 @@ class AddNewDsarScreen extends StatelessWidget{
                   maxLines: 2,
                   controller: TaskMaster_page_controller.DSAR_Remarks_controller,
                   decoration: InputDecoration(
-                      hintText: "Remarks",
-                      labelText: "Remarks",
+                      hintText: "Call Description",
+                      labelText: "Call Description",
                       //suffixIcon: Icon(Icons.email),
                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -533,6 +533,8 @@ class AddNewDsarScreen extends StatelessWidget{
         // Update the TextField with the selected
         TaskMaster_page_controller.DSAR_Status_type_controller.value.text =
             _displayDSARTypeForOption(selection).toString();
+        TaskMaster_page_controller.Method_of_call_controller.clear();
+        TaskMaster_page_controller.PurposeOfVisit.value = false;
         TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
         print('status...${TaskMaster_page_controller.DSAR_Status_type_controller.value.text}');
         print('ISInfra...${TaskMaster_page_controller.isInfraLead.value.text}');
@@ -581,12 +583,17 @@ class AddNewDsarScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-              /*onTap: (){
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
                   focusNode.requestFocus();
-                  accountMaster_page_controller.getEmployeeMemberApi();
-                },*/
-                child: Icon(Icons.arrow_drop_down)),
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'DSAR Status',
@@ -674,18 +681,22 @@ class AddNewDsarScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Type Of Call',
             labelText: 'Type Of Call',
-            /*hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-            ),*/
-            /*focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AllColors.primaryDark1), // Change the color to green
-            ),*/
+
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -771,8 +782,11 @@ class AddNewDsarScreen extends StatelessWidget{
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onTap: (){
-            focusNode.requestFocus();
-            controller.clear();
+            if(focusNode.hasFocus){
+              focusNode.unfocus();
+            }else{
+              focusNode.requestFocus();
+            }
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
@@ -781,12 +795,17 @@ class AddNewDsarScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-                onTap: (){
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
                   focusNode.requestFocus();
-                  controller.clear();
-                },
-                child: Icon(Icons.arrow_drop_down)),
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Method Of Call',
@@ -979,13 +998,18 @@ class AddNewDsarScreen extends StatelessWidget{
         cursorColor: AllColors.primaryDark,
         onTap: () async {
           DateTime? initialDate;
-          if (TaskMaster_page_controller.NextInterdate_controller.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
-              TaskMaster_page_controller.NextInterdate_controller.text,
-            );
-          } else {
-            initialDate = DateTime.now();
+          String dateString = TaskMaster_page_controller.NextInterdate_controller.value.text;
+
+          try {
+            if (dateString.isNotEmpty) {
+              initialDate = DateFormat('dd-MM-yyyy').parseStrict(dateString);
+            } else {
+              initialDate = DateTime.now();
+            }
+          } catch (e) {
+            initialDate = DateTime.now(); // Fallback if parsing fails
           }
+
           DateTime stating_date = DateTime.now();
           DateTime ending_date = new DateTime(3000);
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -1007,7 +1031,7 @@ class AddNewDsarScreen extends StatelessWidget{
               );
             },
           );
-          var outputFormat = DateFormat('yyyy-MM-dd');
+          var outputFormat = DateFormat('dd-MM-yyyy');
           TaskMaster_page_controller.NextInterdate_controller.text =
               outputFormat.format(date!);
 
@@ -1103,12 +1127,16 @@ class AddNewDsarScreen extends StatelessWidget{
         cursorColor: AllColors.primaryDark,
         onTap: () async {
           DateTime? initialDate;
-          if (TaskMaster_page_controller.EstClosuredate_controller.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
-              TaskMaster_page_controller.EstClosuredate_controller.text,
-            );
-          } else {
-            initialDate = DateTime.now();
+          String dateString = TaskMaster_page_controller.EstClosuredate_controller.value.text;
+
+          try {
+            if (dateString.isNotEmpty) {
+              initialDate = DateFormat('dd-MM-yyyy').parseStrict(dateString);
+            } else {
+              initialDate = DateTime.now();
+            }
+          } catch (e) {
+            initialDate = DateTime.now(); // Fallback if parsing fails
           }
           DateTime stating_date = DateTime.now();
           DateTime ending_date = new DateTime(3000);
@@ -1131,7 +1159,7 @@ class AddNewDsarScreen extends StatelessWidget{
               );
             },
           );
-          var outputFormat = DateFormat('yyyy-MM-dd');
+          var outputFormat = DateFormat('dd-MM-yyyy');
           TaskMaster_page_controller.EstClosuredate_controller.text =
               outputFormat.format(date!);
 

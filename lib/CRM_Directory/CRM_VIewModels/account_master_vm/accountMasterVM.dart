@@ -117,7 +117,7 @@ class Accountmastervm extends GetxController{
   var State_Controller = TextEditingController();
   var City_Controller = TextEditingController();
   var District_Controller = TextEditingController();
-  var FullAddress_Controller = TextEditingController();
+  var FullAddress_Controller = TextEditingController().obs;
   var Shipping_FullAddress_Controller = TextEditingController();
   var Annual_Revenue_Controller = TextEditingController();
   var Sale_Representative_Controller = TextEditingController().obs;
@@ -1310,7 +1310,7 @@ class Accountmastervm extends GetxController{
       GovtStateCode.value = response[0].permanentAddress!.stateCode??"";
       City_Controller.text = response[0].permanentAddress!.city??"";
       District_Controller.text = response[0].permanentAddress!.district??"";
-      FullAddress_Controller.text = Address_controller.text + "," + Address2_Controller.text + "," + City_Controller.text + "," + District_Controller.text + "," + State_Controller.text + "," + PostCode_Controller.text;
+      FullAddress_Controller.value.text = Address_controller.text + "," + Address2_Controller.text + "," + City_Controller.text + "," + District_Controller.text + "," + State_Controller.text + "," + PostCode_Controller.text;
       Shipping_Address_controller.value.text = response[0].shippingAddress??"";
       Shipping_Address2_Controller.value.text = response[0].shippingAddress2??"";
       Shipping_PostCode_Controller.value.text = response[0].shippingPostCode??"";
@@ -1360,7 +1360,7 @@ class Accountmastervm extends GetxController{
       State_Controller.clear();
       City_Controller.clear();
       District_Controller.clear();
-      FullAddress_Controller.clear();
+      FullAddress_Controller.value.clear();
       Shipping_FullAddress_Controller.clear();
       Shipping_Address_controller.value.clear();
       Shipping_Address2_Controller.value.clear();
