@@ -36,6 +36,7 @@ class Taskmastervm extends GetxController{
     RxBool ItemCateDropDown=false.obs;
     RxBool PurposeOfVisit=false.obs;
     RxBool PaymentCall=false.obs;
+    RxBool IsSalesId=false.obs;
     int pageNumber = 0;
     int rowsPerPage = 10;
     int total_rows = 0;
@@ -49,6 +50,7 @@ class Taskmastervm extends GetxController{
     RxBool isInfraLeadValue=false.obs;
     RxBool isInfraLeadValueSubmit=false.obs;
     RxString date_filter="Today".obs;
+    RxString filter="Running".obs;
     RxInt is_done = 0.obs;
 
     int Active = 0;
@@ -76,6 +78,7 @@ class Taskmastervm extends GetxController{
     var ExpectedAmt_controller = TextEditingController();
     var isInfraLead = TextEditingController().obs;
     var isInfraLeadFilterController=TextEditingController();
+    var isSalesNecessaryController=TextEditingController().obs;
     var filterTaskDuedateController=TextEditingController().obs;
     var filterTaskCreationOnController=TextEditingController().obs;
     var DataOFVisitController=TextEditingController().obs;
@@ -198,6 +201,7 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
             };
+            print("Data Json....${data}");
             loading.value=true;
             _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
                 final jsonResponse = json.decode(onValue);
@@ -1136,6 +1140,10 @@ class Taskmastervm extends GetxController{
         VisitTime_controller.value.clear();
         ItemCat_type_controller.clear();
         AlongPersonWith_controller.clear();
+        isSalesNecessaryController.value.clear();
+        PaymentCall.value = false;
+        PurposeOfVisit.value = false;
+        IsSalesId.value = false;
 
 
     }

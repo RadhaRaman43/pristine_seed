@@ -246,6 +246,23 @@ class AddNewTaskScreen extends StatelessWidget{
                       children: [
                         SizedBox(height: 15,),
                         Container(
+                         // padding: EdgeInsets.only(left: 15.0,),
+                          child: bindIsSalesIdNessDropDown(context),
+
+                        ),
+                      ],
+                    ),
+                  );
+              }),
+
+              Obx(() {
+                return
+                  Visibility(
+                    visible: taskMaster_page_controller.IsSalesId.value,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 15,),
+                        Container(
                           padding: EdgeInsets.only(left: 15.0, right: 15.0),
                           child: bindSalesIdDropDown(context),
 
@@ -262,9 +279,7 @@ class AddNewTaskScreen extends StatelessWidget{
 
               ),
 
-              SizedBox(
-                height: 15,
-              ),
+              SizedBox(height: 15,),
               bindIsInfraLeadDropDown(context),
 
               SizedBox(height: 15,),
@@ -477,18 +492,21 @@ class AddNewTaskScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Name',
             labelText: 'Account Name',
-            /*hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-            ),*/
-            /*focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AllColors.primaryDark1), // Change the color to green
-            ),*/
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -572,18 +590,22 @@ class AddNewTaskScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Contact Name',
             labelText: 'Contact Name',
-            /*hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-            ),*/
-            /*focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AllColors.primaryDark1), // Change the color to green
-            ),*/
+
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -652,17 +674,23 @@ class AddNewTaskScreen extends StatelessWidget{
       onSelected: (CallStatusMasterModel selection) {
         taskMaster_page_controller.Type_of_call_controller.text =
             _displayTypeOfCallForOption(selection).toString();
+        taskMaster_page_controller.isSalesNecessaryController.value.clear();
         if( taskMaster_page_controller.Type_of_call_controller.text == 'Payment Call' || taskMaster_page_controller.Type_of_call_controller.text == 'Follow-Up Call'){
           taskMaster_page_controller.PaymentCall.value = true;
         }else{
           taskMaster_page_controller.PaymentCall.value = false;
+          taskMaster_page_controller.IsSalesId.value = false;
         }
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onTap: (){
-            controller.clear();
+            if(focusNode.hasFocus){
+              focusNode.unfocus();
+            }else{
+              focusNode.requestFocus();
+            }
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
@@ -671,12 +699,17 @@ class AddNewTaskScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-                onTap: (){
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
                   focusNode.requestFocus();
-                  controller.clear();
-                },
-                child: Icon(Icons.arrow_drop_down)),
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Type Of Call*',
@@ -773,8 +806,11 @@ class AddNewTaskScreen extends StatelessWidget{
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
           onTap: (){
-            focusNode.requestFocus();
-            controller.clear();
+            if(focusNode.hasFocus){
+              focusNode.unfocus();
+            }else{
+              focusNode.requestFocus();
+            }
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
@@ -783,23 +819,21 @@ class AddNewTaskScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-                onTap: (){
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
                   focusNode.requestFocus();
-                  controller.clear();
-                },
-                child: Icon(Icons.arrow_drop_down)),
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Method Of Call*',
             labelText: 'Method of Call*',
-            /*hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-            ),*/
-            /*focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: AllColors.primaryDark1), // Change the color to green
-            ),*/
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -905,7 +939,17 @@ class AddNewTaskScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down),
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Sales Id*',
@@ -957,6 +1001,63 @@ class AddNewTaskScreen extends StatelessWidget{
           ),
         );
       },
+    );
+  }
+
+  Widget bindIsSalesIdNessDropDown(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        width: size.width-30,
+        controller: taskMaster_page_controller.isSalesNecessaryController.value,
+        label: Text(
+          "Sales Necessary",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          taskMaster_page_controller.isSalesNecessaryController.value.text =
+              _displayIsInfraLeadForOption(selection!).toString();
+
+          if(taskMaster_page_controller.isSalesNecessaryController.value.text == 'Yes'){
+            taskMaster_page_controller.IsSalesId.value = true;
+          }else{
+            taskMaster_page_controller.IsSalesId.value = false;
+          }
+
+
+        },
+
+        dropdownMenuEntries: taskMaster_page_controller.isInfraLeadList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 
@@ -1185,7 +1286,11 @@ class AddNewTaskScreen extends StatelessWidget{
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
             onTap: (){
-              controller.clear();
+              if(focusNode.hasFocus){
+                focusNode.unfocus();
+              }else{
+                focusNode.requestFocus();
+              }
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
@@ -1194,12 +1299,17 @@ class AddNewTaskScreen extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: InkWell(
-                  onTap: (){
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
                     focusNode.requestFocus();
-                    controller.clear();
-                  },
-                  child: Icon(Icons.arrow_drop_down)),
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Along With Person Name',
@@ -1311,7 +1421,11 @@ class AddNewTaskScreen extends StatelessWidget{
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
             onTap: (){
-              controller.clear();
+              if(focusNode.hasFocus){
+                focusNode.unfocus();
+              }else{
+                focusNode.requestFocus();
+              }
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
@@ -1320,12 +1434,17 @@ class AddNewTaskScreen extends StatelessWidget{
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
-              suffixIcon: InkWell(
-                  onTap: (){
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
                     focusNode.requestFocus();
-                    controller.clear();
-                  },
-                  child: Icon(Icons.arrow_drop_down)),
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Product Category',

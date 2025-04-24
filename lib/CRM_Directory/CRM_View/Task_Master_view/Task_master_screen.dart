@@ -83,77 +83,160 @@ class TaskMasterScreen extends StatelessWidget{
            height: double.infinity,
            child: Column(
              children: [
-               Row(
-                 mainAxisAlignment: MainAxisAlignment.start,
-                 children: [
-                   Obx((){
-                     return ActionChip(
-                       elevation: 2,
-                       padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
-                       backgroundColor: TaskMaster_page_controller.is_done.value == 0
-                           ? AllColors.primaryDark1
-                           : AllColors.grayColor,
-                       shadowColor: Colors.black,
-                       shape: StadiumBorder(
-                           side: BorderSide(
-                               color: AllColors.grayColor)),
-                       //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                       //CircleAvatar
-                       label: Text('Running',
-                           style: GoogleFonts.poppins(
-                             color: TaskMaster_page_controller.is_done.value == 0
-                                 ? AllColors.whiteColor
-                                 : AllColors.primaryDark1,
-                             fontSize: AllFontSize.fourtine,
-                             fontWeight: FontWeight.w500,
-                           )),
-                       onPressed: () {
-                         TaskMaster_page_controller.pageNumber=0;
-                         TaskMaster_page_controller
-                             .date_filter.value = "Today";
-                         TaskMaster_page_controller
-                             .is_done.value = 0;
-                         TaskMaster_page_controller
-                             .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-                       }, //Text
-                     );
-                   }),
-                   SizedBox(
-                     width: size.width * 0.02,
+               SingleChildScrollView(
+                 scrollDirection: Axis.horizontal,
+                 child: Container(
+                   child: Row(
+                     mainAxisAlignment: MainAxisAlignment.start,
+                     children: [
+                       Obx((){
+                         return ActionChip(
+                           elevation: 2,
+                           padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
+                           backgroundColor: TaskMaster_page_controller.is_done.value == 0
+                               ? AllColors.primaryDark1
+                               : AllColors.grayColor,
+                           shadowColor: Colors.black,
+                           shape: StadiumBorder(
+                               side: BorderSide(
+                                   color: AllColors.grayColor)),
+                           //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                           //CircleAvatar
+                           label: Text('Running',
+                               style: GoogleFonts.poppins(
+                                 color: TaskMaster_page_controller.is_done.value == 0 && TaskMaster_page_controller.filter.value == 'Running'
+                                     ? AllColors.whiteColor
+                                     : AllColors.primaryDark1,
+                                 fontSize: AllFontSize.fourtine,
+                                 fontWeight: FontWeight.w500,
+                               )),
+                           onPressed: () {
+                             TaskMaster_page_controller.pageNumber=0;
+                             TaskMaster_page_controller
+                                 .date_filter.value = "Today";
+                             TaskMaster_page_controller
+                                 .is_done.value = 0;
+                             TaskMaster_page_controller
+                                 .filter.value = "Running";
+                             TaskMaster_page_controller
+                                 .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                           }, //Text
+                         );
+                       }),
+                       SizedBox(
+                         width: size.width * 0.02,
+                       ),
+                       Obx((){
+                         return ActionChip(
+                           elevation: 2,
+                           padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
+                           backgroundColor: TaskMaster_page_controller.
+                           is_done.value == 1 && TaskMaster_page_controller.filter.value == 'Completed'
+                               ? AllColors.primaryDark1
+                               : AllColors.grayColor,
+                           shadowColor: Colors.black,
+                           shape: StadiumBorder(
+                               side: BorderSide(
+                                   color: AllColors.grayColor)),
+                           //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                           //CircleAvatar
+                           label: Text('Completed',
+                               style: GoogleFonts.poppins(
+                                 color: TaskMaster_page_controller.
+                                 is_done.value == 1 && TaskMaster_page_controller.filter.value == 'Completed'
+                                     ? AllColors.whiteColor
+                                     : AllColors.primaryDark1,
+                                 fontSize: AllFontSize.fourtine,
+                                 fontWeight: FontWeight.w500,
+                               )),
+                           onPressed: () {
+                             TaskMaster_page_controller.pageNumber=0;
+                             TaskMaster_page_controller.is_done.value = 1;
+                             TaskMaster_page_controller.date_filter.value = "";
+                             TaskMaster_page_controller
+                                 .filter.value = "Completed";
+                             TaskMaster_page_controller
+                                 .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                           }, //Text
+                         );
+                       }),
+                       SizedBox(
+                         width: size.width * 0.02,
+                       ),
+                       Obx((){
+                         return ActionChip(
+                           elevation: 2,
+                           padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
+                           backgroundColor: TaskMaster_page_controller.
+                           is_done.value == 1 && TaskMaster_page_controller.filter.value == 'All'
+                               ? AllColors.primaryDark1
+                               : AllColors.grayColor,
+                           shadowColor: Colors.black,
+                           shape: StadiumBorder(
+                               side: BorderSide(
+                                   color: AllColors.grayColor)),
+                           //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                           //CircleAvatar
+                           label: Text('All ',
+                               style: GoogleFonts.poppins(
+                                 color: TaskMaster_page_controller.
+                                 is_done.value == 1 && TaskMaster_page_controller.filter.value == 'All'
+                                     ? AllColors.whiteColor
+                                     : AllColors.primaryDark1,
+                                 fontSize: AllFontSize.fourtine,
+                                 fontWeight: FontWeight.w500,
+                               )),
+                           onPressed: () {
+                             TaskMaster_page_controller.pageNumber=0;
+                             TaskMaster_page_controller.is_done.value = 1;
+                             TaskMaster_page_controller.date_filter.value = "";
+                             TaskMaster_page_controller
+                                 .filter.value = "All";
+                             TaskMaster_page_controller
+                                 .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                           }, //Text
+                         );
+                       }),
+                       SizedBox(
+                         width: size.width * 0.02,
+                       ),
+                       Obx((){
+                         return ActionChip(
+                           elevation: 2,
+                           padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
+                           backgroundColor: TaskMaster_page_controller.
+                           is_done.value == 1 && TaskMaster_page_controller.filter.value == 'Pending DSAR'
+                               ? AllColors.primaryDark1
+                               : AllColors.grayColor,
+                           shadowColor: Colors.black,
+                           shape: StadiumBorder(
+                               side: BorderSide(
+                                   color: AllColors.grayColor)),
+                           //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                           //CircleAvatar
+                           label: Text('Pending DSAR',
+                               style: GoogleFonts.poppins(
+                                 color: TaskMaster_page_controller.
+                                 is_done.value == 1 && TaskMaster_page_controller.filter.value == 'Pending DSAR'
+                                     ? AllColors.whiteColor
+                                     : AllColors.primaryDark1,
+                                 fontSize: AllFontSize.fourtine,
+                                 fontWeight: FontWeight.w500,
+                               )),
+                           onPressed: () {
+                             TaskMaster_page_controller.pageNumber=0;
+                             TaskMaster_page_controller.is_done.value = 1;
+                             TaskMaster_page_controller.date_filter.value = "";
+                             TaskMaster_page_controller
+                                 .filter.value = "Pending DSAR";
+                             TaskMaster_page_controller
+                                 .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                           }, //Text
+                         );
+                       }),
+                     ],
                    ),
-                   Obx((){
-                     return ActionChip(
-                       elevation: 2,
-                       padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
-                       backgroundColor: TaskMaster_page_controller.
-                       is_done.value == 1
-                           ? AllColors.primaryDark1
-                           : AllColors.grayColor,
-                       shadowColor: Colors.black,
-                       shape: StadiumBorder(
-                           side: BorderSide(
-                               color: AllColors.grayColor)),
-                       //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                       //CircleAvatar
-                       label: Text('Completed',
-                           style: GoogleFonts.poppins(
-                             color: TaskMaster_page_controller.
-                             is_done.value == 1
-                                 ? AllColors.whiteColor
-                                 : AllColors.primaryDark1,
-                             fontSize: AllFontSize.fourtine,
-                             fontWeight: FontWeight.w500,
-                           )),
-                       onPressed: () {
-                         TaskMaster_page_controller.pageNumber=0;
-                         TaskMaster_page_controller.is_done.value = 1;
-                         TaskMaster_page_controller.date_filter.value = "";
-                         TaskMaster_page_controller
-                             .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-                       }, //Text
-                     );
-                   }),
-                 ],
+                 ),
                ),
                Obx((){
                  return Visibility(
