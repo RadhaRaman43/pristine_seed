@@ -61,6 +61,8 @@ class AccountmasterScreen extends StatelessWidget{
               IconButton(onPressed: () {
                 accountMaster_page_controller.DraftId = '';
                 accountMaster_page_controller.clearController();
+                accountMaster_page_controller.getCompanyProfileTypeApi("");
+                accountMaster_page_controller.getGeoPostalCodeApi();
                 Get.toNamed(RoutesName.add_New_AccountMaster_screen);
               }, icon: Icon(Icons.add)),
               IconButton(onPressed: () {

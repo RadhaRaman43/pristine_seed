@@ -26,6 +26,8 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Tat_Response_model.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
+import '../../CRM_Models/Address_Master_Model/PincodeMaster_Model.dart';
+import '../../CRM_Models/Address_Master_Model/PostalCode_Model.dart';
 import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
@@ -57,7 +59,7 @@ class Accountmastervm extends GetxController{
   String UserName="";
   String accountName='';
   String AccountOwner = '';
-  String tatResponseType = '';
+  String tatResponseType = '', SalesRepresentativeEmail = '', RegionalHeadEmail = '';
   String AccountCode = '';
   RxString GstStateCode = ''.obs;
   RxString GovtStateCode = ''.obs;
@@ -70,6 +72,7 @@ class Accountmastervm extends GetxController{
   String day_flag = '';
   String WonLoss = '';
   String DraftId = '';
+  RxBool isChecked = false.obs;
   RxBool isExpandDetails = true.obs;
   RxBool isExpandSales = true.obs;
   RxBool isExpandQuotation = true.obs;
@@ -118,7 +121,7 @@ class Accountmastervm extends GetxController{
   var City_Controller = TextEditingController();
   var District_Controller = TextEditingController();
   var FullAddress_Controller = TextEditingController().obs;
-  var Shipping_FullAddress_Controller = TextEditingController();
+  var Shipping_FullAddress_Controller = TextEditingController().obs;
   var Annual_Revenue_Controller = TextEditingController();
   var Sale_Representative_Controller = TextEditingController().obs;
   var Regional_service_head_Controller = TextEditingController().obs;
@@ -148,9 +151,12 @@ class Accountmastervm extends GetxController{
   RxList<String> UploadImageTypeList = <String>[].obs;
   RxList<String> IsActiveTypeAllList = <String>[].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<PostalCodeModel> geoPostal_Code_list = <PostalCodeModel>[].obs;
   RxList<CompanyProfileMstModel> CompanyProfileMst_list = <CompanyProfileMstModel>[].obs;
   RxList<AddressMasterModel> AddressMst_list = <AddressMasterModel>[].obs;
   RxList<StateMasterListModel> StateMaster_list = <StateMasterListModel>[].obs;
+  RxList<PincodeMasterModel> StateMasterPinCode_list = <PincodeMasterModel>[].obs;
+  RxList<PincodeMasterModel> ShippingStateMasterPinCode_list = <PincodeMasterModel>[].obs;
   RxList<StateMasterListModel> GstStateList = <StateMasterListModel>[].obs;
   RxList<TatResponseModel> TatResponseMaster_list = <TatResponseModel>[].obs;
   RxList<AccountMasterGetByCodeModel> AccountMasterGetCode_list = <AccountMasterGetByCodeModel>[].obs;
@@ -186,11 +192,16 @@ class Accountmastervm extends GetxController{
     IsActiveTypeAllList.value = ['All','Yes', 'No'];
     UploadImageTypeList.value = ['Upload Image','Url'];
     getEmployeeMemberApi();
+    getGeoPostalCodeApi();
     getSateListApi();
     getTatResponseMasterApi();
 
 
 
+  }
+
+  void toggleCheckbox() {
+    isChecked.value = !isChecked.value;
   }
 
   void toggle() {
@@ -341,8 +352,10 @@ class Accountmastervm extends GetxController{
                 int pos2 = i - 2;
                 print("RegionalHead ${pos > -1 ? userGeoHierarchyy[pos].approvedFullName : ""}");
                 Regional_service_head_Controller.value.text = pos > -1 ?userGeoHierarchyy[pos].approvedFullName.toString():"";
+                RegionalHeadEmail = pos > -1 ?userGeoHierarchyy[pos].approverEmail.toString():"";
                 print("SalesRepre.. ${pos2 > -1 ? userGeoHierarchyy[pos2].approvedFullName : ""}");
                 Sale_Representative_Controller.value.text = pos2 > -1 ?userGeoHierarchyy[pos2].approvedFullName.toString():"";
+                SalesRepresentativeEmail = pos > -1 ?userGeoHierarchyy[pos].approverEmail.toString():"";
               }
             }
           }else{
@@ -655,6 +668,96 @@ class Accountmastervm extends GetxController{
     }
   }
 
+  Future<Iterable<PincodeMasterModel>> getStateMasterApi(String text, String State, String city, district) async {
+    if (text == '') {
+      return const Iterable<PincodeMasterModel>.empty();
+    }
+    loading.value=true;
+    Map data = {
+      "filter_state": State,
+      "filter_city": city,
+      "filter_district": district,
+      "filter_pincode": text,
+      "row_per_page":50 ,
+      "page_number": 0
+    };
+    print("Complany Data....${data}");
+    String customer_response =await  _api.PincodeMasterGet(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(customer_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<PincodeMasterModel> response =
+        jsonResponse.map((data) => PincodeMasterModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print("Complany type....${jsonResponse}");
+          StateMasterPinCode_list.value = response;
+
+        } else {
+
+          StateMasterPinCode_list.value= [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        StateMasterPinCode_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      StateMasterPinCode_list.value = [];
+    }
+    finally{
+      loading.value=false;
+    }
+    return  StateMasterPinCode_list.value;
+  }
+
+  Future<Iterable<PincodeMasterModel>> getShippingStateMasterApi(String text, String State, String city, String district) async {
+    if (text == '') {
+      return const Iterable<PincodeMasterModel>.empty();
+    }
+    loading.value=true;
+    Map data = {
+      "filter_state": State,
+      "filter_city": city,
+      "filter_district": district,
+      "filter_pincode": text,
+      "row_per_page":50 ,
+      "page_number": 0
+    };
+    print("Complany Data....${data}");
+    String customer_response =await  _api.PincodeMasterGet(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(customer_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<PincodeMasterModel> response =
+        jsonResponse.map((data) => PincodeMasterModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print("Complany type....${jsonResponse}");
+          ShippingStateMasterPinCode_list.value = response;
+
+        } else {
+
+          ShippingStateMasterPinCode_list.value= [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        ShippingStateMasterPinCode_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      ShippingStateMasterPinCode_list.value = [];
+    }
+    finally{
+      loading.value=false;
+    }
+    return  ShippingStateMasterPinCode_list.value;
+  }
+
 
   Future<Iterable<CompanyTypeModel>> getCompanyProfileTypeApi(String text) async {
     /*if (text == '') {
@@ -697,6 +800,7 @@ class Accountmastervm extends GetxController{
     }
     return  get_Comp_Profile_type_list.value;
   }
+
 
   /*getCompanyProfileTypeApi() {
     Map data = {
@@ -746,6 +850,54 @@ class Accountmastervm extends GetxController{
     }
   }*/
 
+  getGeoPostalCodeApi() {
+    Map data = {
+      "email_id": email,
+      "pincode": ""
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.GeoGetPincodeHierarchy(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PostalCodeModel> response =
+            JsonResponse.map((e) => PostalCodeModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              geoPostal_Code_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              geoPostal_Code_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      geoPostal_Code_list.value = [];
+      print(e);
+    }
+  }
 
   Future<void> upLoadImage(BuildContext context) async {
     var image;
@@ -972,7 +1124,7 @@ class Accountmastervm extends GetxController{
 
 
 
-  AccountMstUploaderApiHit(String flag, String AccountCode) async {
+  AccountMstUploaderApiHit(String flag, String AccountCode, String SaleEmailId, String RegionalEmailId) async {
     if(IsActive_controller.text=="Yes"){
       InActive=1;
     }else if(IsActive_controller.text=="No"){
@@ -1011,8 +1163,8 @@ class Accountmastervm extends GetxController{
           "no_of_employees": No_Of_Emp_Controller.text.isEmpty?0:No_Of_Emp_Controller.text,
           "annual_revenue": Annual_Revenue_Controller.text.isEmpty?0:Annual_Revenue_Controller.text,
           "tat_response_type": tatResponseType.isEmpty?'':tatResponseType,
-          "sales_representative": Sale_Representative_Controller.value.text.isEmpty?'':Sale_Representative_Controller.value.text,
-          "regional_service_head": Regional_service_head_Controller.value.text.isEmpty?'':Regional_service_head_Controller.value.text,
+          "sales_representative": SaleEmailId.isEmpty?'':SaleEmailId,
+          "regional_service_head": RegionalEmailId.isEmpty?'':RegionalEmailId,
           "profile": ImageUrl_Controller.text.isEmpty?'':ImageUrl_Controller.text,
           "is_active": InActive,
           "website": Website_Controller.text.isEmpty?'':Website_Controller.text,
@@ -1317,7 +1469,7 @@ class Accountmastervm extends GetxController{
       Shipping_City_Controller.value.text = response[0].shippingCity??"";
       Shipping_District_Controller.value.text = response[0].shippingDistrict??"";
       Shipping_State_Controller.value.text = response[0].shippingStateName??"";
-      Shipping_FullAddress_Controller.text = Shipping_Address_controller.value.text + "," + Address2_Controller.text + "," + Shipping_City_Controller.value.text + "," + Shipping_District_Controller.value.text + "," + Shipping_State_Controller.value.text + "," + Shipping_PostCode_Controller.value.text;
+      Shipping_FullAddress_Controller.value.text = Shipping_Address_controller.value.text + "," + Shipping_Address2_Controller.value.text + "," + Shipping_City_Controller.value.text + "," + Shipping_District_Controller.value.text + "," + Shipping_State_Controller.value.text + "," + Shipping_PostCode_Controller.value.text;
       No_Of_Emp_Controller.text = response[0].noOfEmployees.toString();
       Annual_Revenue_Controller.text = response[0].annualRevenue.toString();
       TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
@@ -1335,6 +1487,10 @@ class Accountmastervm extends GetxController{
       compProfileRemrk.value = false;
       GstRegistration.value = false;
       CompanyProfileMst_list.value=[];
+      get_Comp_Profile_type_list.value=[];
+      geoPostal_Code_list.value=[];
+      StateMasterPinCode_list.value=[];
+      ShippingStateMasterPinCode_list.value=[];
       ImageString.value == '';
       account_code_controller.clear();
       account_name_controller.clear();
@@ -1361,7 +1517,7 @@ class Accountmastervm extends GetxController{
       City_Controller.clear();
       District_Controller.clear();
       FullAddress_Controller.value.clear();
-      Shipping_FullAddress_Controller.clear();
+      Shipping_FullAddress_Controller.value.clear();
       Shipping_Address_controller.value.clear();
       Shipping_Address2_Controller.value.clear();
       Shipping_PostCode_Controller.value.clear();

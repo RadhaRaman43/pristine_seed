@@ -239,7 +239,7 @@ class UpdateAccountMaster extends StatelessWidget{
                      Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
                      return  ;
                    }*/
-                   accountMaster_page_controller.AccountMstUploaderApiHit('Update',accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode! );
+                   accountMaster_page_controller.AccountMstUploaderApiHit('Update',accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode! , accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
                    //preventive_page_controller.createPreventiveCalenderCallApi();
 
                  }, //Text
@@ -1150,6 +1150,38 @@ class UpdateAccountMaster extends StatelessWidget{
 
                SizedBox(height: 15,),
 
+               Obx(() => CheckboxListTile(
+                 controlAffinity: ListTileControlAffinity.leading,
+                 title: Text("Shipping address same as billing address",
+                     style: GoogleFonts.poppins(
+                       color: AllColors.primaryDark1,
+                       fontWeight: FontWeight.w400,
+                       fontSize: AllFontSize.twelve,
+                     )
+                 ),
+                 value: accountMaster_page_controller.isChecked.value,
+                 onChanged: (bool? value) {
+                   accountMaster_page_controller.toggleCheckbox();
+                   if(value == true){
+                     accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
+                     accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
+                     accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
+                     accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
+                     accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
+                     accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
+                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
+                   }else{
+                     accountMaster_page_controller.Shipping_Address_controller.value.clear();
+                     accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
+                     accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
+                     accountMaster_page_controller.Shipping_City_Controller.value.clear();
+                     accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                     accountMaster_page_controller.Shipping_District_Controller.value.clear();
+                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                   }
+                 },
+               )),
+
                Container(
                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
                  //color: AllColors.Card1Color,
@@ -1398,7 +1430,7 @@ class UpdateAccountMaster extends StatelessWidget{
                            maxLength: 500,
                            maxLines: 3,
                            controller: accountMaster_page_controller
-                               .Shipping_FullAddress_Controller,
+                               .Shipping_FullAddress_Controller.value,
                            decoration: InputDecoration(
                                hintText: "Full Address",
                                labelText: "Full Address",
@@ -1916,6 +1948,9 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.EmployeeMember_Controller.text =
             _displayEmpMemberForOption(selection).toString();
         accountMaster_page_controller.AccountOwner = selection.loginEmailId!;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
+        });
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
