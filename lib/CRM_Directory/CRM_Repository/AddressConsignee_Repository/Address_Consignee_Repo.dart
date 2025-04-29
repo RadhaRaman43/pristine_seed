@@ -12,4 +12,12 @@ class AddressConsigneeRepo{
   Future<String> ConsigneeAddMstGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.ConsigneeMstGet,sessionManagement);
   }
+
+  Future<String> GeoGetPincodeHierarchy(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.GeoGetPincodeHierarchy,sessionManagement);
+  }
+
+  Future<String> PincodeMasterGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.PincodeMasterGet,sessionManagement);
+  }
 }

@@ -46,6 +46,7 @@ class Accountmastervm extends GetxController{
   RxBool loading=false.obs;
   RxBool UploadImage=false.obs;
   RxBool compProfileRemrk=false.obs;
+  RxBool isReferral=false.obs;
   RxBool GstRegistration=false.obs;
   RxString ButtonText = 'Choose files'.obs;
   int is_Active = -1;
@@ -111,6 +112,7 @@ class Accountmastervm extends GetxController{
   var EmailId_Controller = TextEditingController();
   var Website_Controller = TextEditingController();
   var ReferralBy_Controller = TextEditingController();
+  var ReferralByName_Controller = TextEditingController();
   var GstNo_Controller = TextEditingController();
   var PanNo_Controller = TextEditingController();
   var IfscCode_Controller = TextEditingController();
@@ -156,7 +158,11 @@ class Accountmastervm extends GetxController{
   RxList<AddressMasterModel> AddressMst_list = <AddressMasterModel>[].obs;
   RxList<StateMasterListModel> StateMaster_list = <StateMasterListModel>[].obs;
   RxList<PincodeMasterModel> StateMasterPinCode_list = <PincodeMasterModel>[].obs;
+  RxList<PincodeMasterModel> CityMasterPinCode_list = <PincodeMasterModel>[].obs;
+  RxList<PincodeMasterModel> DistrictMasterPinCode_list = <PincodeMasterModel>[].obs;
   RxList<PincodeMasterModel> ShippingStateMasterPinCode_list = <PincodeMasterModel>[].obs;
+  RxList<PincodeMasterModel> ShippingCityMasterPinCode_list = <PincodeMasterModel>[].obs;
+  RxList<PincodeMasterModel> ShippingDistrictMasterPinCode_list = <PincodeMasterModel>[].obs;
   RxList<StateMasterListModel> GstStateList = <StateMasterListModel>[].obs;
   RxList<TatResponseModel> TatResponseMaster_list = <TatResponseModel>[].obs;
   RxList<AccountMasterGetByCodeModel> AccountMasterGetCode_list = <AccountMasterGetByCodeModel>[].obs;
@@ -668,94 +674,112 @@ class Accountmastervm extends GetxController{
     }
   }
 
-  Future<Iterable<PincodeMasterModel>> getStateMasterApi(String text, String State, String city, district) async {
-    if (text == '') {
-      return const Iterable<PincodeMasterModel>.empty();
-    }
-    loading.value=true;
+  getStateMasterApi(String text, String flag) {
     Map data = {
-      "filter_state": State,
-      "filter_city": city,
-      "filter_district": district,
       "filter_pincode": text,
-      "row_per_page":50 ,
-      "page_number": 0
+      "filter_search": "",
+      "flag": flag,
     };
-    print("Complany Data....${data}");
-    String customer_response =await  _api.PincodeMasterGet(data, sessionManagement);
+    print(data);
+    loading.value = true;
     try {
-      final jsonResponse = json.decode(customer_response);
+      _api.PincodeMasterGet(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PincodeMasterModel> response =
+            JsonResponse.map((e) => PincodeMasterModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              if(flag == 'state'){
+                StateMasterPinCode_list.value=response;
+              }else if(flag == 'city'){
+                CityMasterPinCode_list.value = response;
+              }else if(flag == 'district'){
+                DistrictMasterPinCode_list.value = response;
+              }
 
-      if (jsonResponse is List) {
-        print(jsonResponse);
-        List<PincodeMasterModel> response =
-        jsonResponse.map((data) => PincodeMasterModel.fromJson(data)).toList();
-        print('condition..'+response[0].condition.toString());
-        if (response[0].condition == 'True') {
-          print("Complany type....${jsonResponse}");
-          StateMasterPinCode_list.value = response;
-
-        } else {
-
-          StateMasterPinCode_list.value= [];
-        }
-      } else {
-        Utils.sanckBarException('False!', jsonResponse.message);
-        StateMasterPinCode_list.value = [];
-      }
+            } else {
+              loading.value = false;
+              StateMasterPinCode_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
     } catch (e) {
-      Utils.sanckBarException('Exception!', e.toString());
+      loading.value = false;
       StateMasterPinCode_list.value = [];
+      print(e);
     }
-    finally{
-      loading.value=false;
-    }
-    return  StateMasterPinCode_list.value;
   }
 
-  Future<Iterable<PincodeMasterModel>> getShippingStateMasterApi(String text, String State, String city, String district) async {
-    if (text == '') {
-      return const Iterable<PincodeMasterModel>.empty();
-    }
-    loading.value=true;
+  getShippingStateMasterApi(String text, String flag) {
     Map data = {
-      "filter_state": State,
-      "filter_city": city,
-      "filter_district": district,
       "filter_pincode": text,
-      "row_per_page":50 ,
-      "page_number": 0
+      "filter_search": "",
+      "flag": flag,
     };
-    print("Complany Data....${data}");
-    String customer_response =await  _api.PincodeMasterGet(data, sessionManagement);
+    print(data);
+    loading.value = true;
     try {
-      final jsonResponse = json.decode(customer_response);
+      _api.PincodeMasterGet(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PincodeMasterModel> response =
+            JsonResponse.map((e) => PincodeMasterModel.fromJson(e))
+                .toList();
+            if (response != null && response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              if(flag == 'state'){
+                ShippingStateMasterPinCode_list.value=response;
+              }else if(flag == 'city'){
+                ShippingCityMasterPinCode_list.value = response;
+              }else if(flag == 'district'){
+                ShippingDistrictMasterPinCode_list.value = response;
+              }
 
-      if (jsonResponse is List) {
-        print(jsonResponse);
-        List<PincodeMasterModel> response =
-        jsonResponse.map((data) => PincodeMasterModel.fromJson(data)).toList();
-        print('condition..'+response[0].condition.toString());
-        if (response[0].condition == 'True') {
-          print("Complany type....${jsonResponse}");
-          ShippingStateMasterPinCode_list.value = response;
-
-        } else {
-
-          ShippingStateMasterPinCode_list.value= [];
-        }
-      } else {
-        Utils.sanckBarException('False!', jsonResponse.message);
-        ShippingStateMasterPinCode_list.value = [];
-      }
+            } else {
+              loading.value = false;
+              ShippingStateMasterPinCode_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
     } catch (e) {
-      Utils.sanckBarException('Exception!', e.toString());
+      loading.value = false;
       ShippingStateMasterPinCode_list.value = [];
+      print(e);
     }
-    finally{
-      loading.value=false;
-    }
-    return  ShippingStateMasterPinCode_list.value;
   }
 
 
@@ -1141,7 +1165,7 @@ class Accountmastervm extends GetxController{
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
           "account_type": flag=='Create'?'New Account':'Existing Account',
-          "referral_by": "",
+          "referral_by": ReferralByName_Controller.text.isEmpty?'':ReferralByName_Controller.text,
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
           "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
@@ -1250,7 +1274,7 @@ class Accountmastervm extends GetxController{
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
           "account_type": account_type_controller.text.isEmpty?'':account_type_controller.text,
-          "referral_by": '',
+          "referral_by": ReferralByName_Controller.text.isEmpty?'':ReferralByName_Controller.text,
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
           "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
@@ -1395,7 +1419,7 @@ class Accountmastervm extends GetxController{
         } else {
           loading.value = false;
           //AccountMasterGetCode_list.value = [];
-          Utils.showErrorToastification("Error!", "Unsuccessful");
+          Utils.showErrorToastification("Error!", response[0].message??"");
           //service_installation_details_list.value=[];
         }
       } else {
@@ -1486,11 +1510,16 @@ class Accountmastervm extends GetxController{
     try{
       compProfileRemrk.value = false;
       GstRegistration.value = false;
+      isChecked.value = false;
       CompanyProfileMst_list.value=[];
       get_Comp_Profile_type_list.value=[];
       geoPostal_Code_list.value=[];
       StateMasterPinCode_list.value=[];
+      CityMasterPinCode_list.value=[];
+      DistrictMasterPinCode_list.value=[];
       ShippingStateMasterPinCode_list.value=[];
+      ShippingCityMasterPinCode_list.value=[];
+      ShippingDistrictMasterPinCode_list.value=[];
       ImageString.value == '';
       account_code_controller.clear();
       account_name_controller.clear();

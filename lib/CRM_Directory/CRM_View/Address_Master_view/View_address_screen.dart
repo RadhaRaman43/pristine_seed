@@ -111,6 +111,7 @@ class ViewAddressScreen extends StatelessWidget{
                             Center(
                               child: IconButton(onPressed: () {
                                 address_vm_controller.clearController();
+                                address_vm_controller.getGeoPostalCodeApi();
                                 Get.toNamed(RoutesName.addNewAddress_screen);
                               },
                                 icon: Icon(Icons.add, size: 40, color: AllColors.textColor,),

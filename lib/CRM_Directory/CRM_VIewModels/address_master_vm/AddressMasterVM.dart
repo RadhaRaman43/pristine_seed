@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/Address_Master_Model/PincodeMaster_Model.dart';
+import '../../CRM_Models/Address_Master_Model/PostalCode_Model.dart';
 import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_Repository/AddressConsignee_Repository/Address_Consignee_Repo.dart';
 import '../../CRM_View/Account_Master_view/update_account_master.dart';
@@ -53,8 +55,13 @@ class Addressmastervm extends GetxController{
   var PostCode_Controller = TextEditingController();
   var City_Controller = TextEditingController();
   var District_Controller = TextEditingController();
+  var FullAddress_Controller = TextEditingController().obs;
 
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
+  RxList<PostalCodeModel> geoPostal_Code_list = <PostalCodeModel>[].obs;
+  RxList<PincodeMasterModel> StateMasterPinCode_list = <PincodeMasterModel>[].obs;
+  RxList<PincodeMasterModel> CityMasterPinCode_list = <PincodeMasterModel>[].obs;
+  RxList<PincodeMasterModel> DistrictMasterPinCode_list = <PincodeMasterModel>[].obs;
 
   @override
   void onInit() async{
@@ -205,6 +212,108 @@ class Addressmastervm extends GetxController{
       );
     }catch(e){
       loading.value = false;
+      print(e);
+    }
+  }
+
+  getGeoPostalCodeApi() {
+    Map data = {
+      "email_id": email,
+      "pincode": ""
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.GeoGetPincodeHierarchy(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PostalCodeModel> response =
+            JsonResponse.map((e) => PostalCodeModel.fromJson(e))
+                .toList();
+            if (response != null && response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              geoPostal_Code_list.value=response;
+              print('jkshjkashk${geoPostal_Code_list.length}');
+
+            } else {
+              loading.value = false;
+              geoPostal_Code_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      geoPostal_Code_list.value = [];
+      print(e);
+    }
+  }
+
+  getStateMasterApi(String text, String flag) {
+    Map data = {
+      "filter_pincode": text,
+      "filter_search": "",
+      "flag": flag,
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.PincodeMasterGet(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<PincodeMasterModel> response =
+            JsonResponse.map((e) => PincodeMasterModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              if(flag == 'state'){
+                StateMasterPinCode_list.value=response;
+              }else if(flag == 'city'){
+                CityMasterPinCode_list.value = response;
+              }else if(flag == 'district'){
+                DistrictMasterPinCode_list.value = response;
+              }
+
+            } else {
+              loading.value = false;
+              StateMasterPinCode_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      StateMasterPinCode_list.value = [];
       print(e);
     }
   }

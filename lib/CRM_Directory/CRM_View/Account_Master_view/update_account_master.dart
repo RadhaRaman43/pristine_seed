@@ -22,6 +22,8 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Tat_Response_model.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
+import '../../CRM_Models/Address_Master_Model/PincodeMaster_Model.dart';
+import '../../CRM_Models/Address_Master_Model/PostalCode_Model.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
@@ -61,8 +63,17 @@ class UpdateAccountMaster extends StatelessWidget{
   static String _displayCompProfSubForOption(CompanyProfileMstModel option) =>
       option.description!;
 
-  static String _displayStateListForOption(StateMasterListModel option) =>
+  static String _displayStateListForOption(PincodeMasterModel option) =>
       option.stateName!;
+
+  static String _displayCityListForOption(PincodeMasterModel option) =>
+      option.city!;
+
+  static String _displayDistrictListForOption(PincodeMasterModel option) =>
+      option.district!;
+
+  static String _displayPostalCodeListForOption(PostalCodeModel option) =>
+      option.pincode!;
 
   static String _displayTatResponseListForOption(TatResponseModel option) =>
       option.responseType! + " (${option.responseDescription!})";
@@ -899,7 +910,51 @@ class UpdateAccountMaster extends StatelessWidget{
                        SizedBox(height: 15,),
 
 
-                       bindIsReferralDropDown(context)
+                       bindIsReferralDropDown(context),
+
+                       Obx(() {
+                         return Visibility(
+                           visible: accountMaster_page_controller
+                               .isReferral.value,
+                           child: Column(
+                             children: [
+                               SizedBox(height: 15,),
+                               Container(
+                                 decoration: BoxDecoration(
+                                     color: Colors.white,
+                                     borderRadius: BorderRadius.circular(10)
+                                 ),
+                                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                 child: TextFormField(
+                                   readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                                   controller: accountMaster_page_controller
+                                       .ReferralByName_Controller,
+                                   decoration: InputDecoration(
+                                       hintText: "Referral By",
+                                       labelText: "Referral By",
+                                       //suffixIcon: Icon(Icons.email),
+                                       contentPadding: EdgeInsets.symmetric(
+                                           vertical: AllFontSize.ten,
+                                           horizontal: AllFontSize.ten),
+
+                                       focusedBorder: OutlineInputBorder(
+                                           borderSide: BorderSide(
+                                               color: Colors.blue)
+                                       ),
+                                       border: OutlineInputBorder(
+                                           borderRadius: BorderRadius
+                                               .circular(10)
+                                       )
+                                   ),
+
+                                 ),
+                               ),
+
+
+                             ],
+                           ),
+                         );
+                       }),
 
                      ],
                    ),
@@ -951,6 +1006,14 @@ class UpdateAccountMaster extends StatelessWidget{
                                accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller.Address_controller,
+                           onChanged: (value){
+                             accountMaster_page_controller.FullAddress_Controller.value.text = value + ", " + accountMaster_page_controller
+                                 .Address2_Controller.text + ", " + accountMaster_page_controller
+                                 .City_Controller.text + ", " + accountMaster_page_controller
+                                 .District_Controller.text + ", " + accountMaster_page_controller
+                                 .State_Controller.text + ", " + accountMaster_page_controller
+                                 .PostCode_Controller.text;
+                           },
                            decoration: InputDecoration(
                                hintText: "Address",
                                labelText: "Address",
@@ -984,6 +1047,14 @@ class UpdateAccountMaster extends StatelessWidget{
                                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller.Address2_Controller,
+                           onChanged: (value){
+                             accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+                                 .Address_controller.text + ", " + value + ", "+ accountMaster_page_controller
+                                 .City_Controller.text + ", " + accountMaster_page_controller
+                                 .District_Controller.text + ", " + accountMaster_page_controller
+                                 .State_Controller.text + ", " + accountMaster_page_controller
+                                 .PostCode_Controller.text;
+                           },
                            decoration: InputDecoration(
                                hintText: "Address2",
                                labelText: "Address2",
@@ -1003,18 +1074,18 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
+                       /*Container(
                          decoration: BoxDecoration(
                              color: Colors.white,
                              borderRadius: BorderRadius.circular(10)
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
-                           /*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                           *//*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
                                || accountMaster_page_controller.view=='VIEW' ||
                                accountMaster_page_controller.view=='Task'||
                                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            keyboardType: TextInputType.number,
                            controller: accountMaster_page_controller.PostCode_Controller,
@@ -1033,6 +1104,11 @@ class UpdateAccountMaster extends StatelessWidget{
                            ),
 
                          ),
+                       ),*/
+
+                       Container(
+
+                           child: bindPostalCodeDropDown(context)
                        ),
 
                        SizedBox(height: 15,),
@@ -1046,67 +1122,14 @@ class UpdateAccountMaster extends StatelessWidget{
                        SizedBox(height: 15,),
 
                        Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                          /* readOnly:accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller.City_Controller,
-                           decoration: InputDecoration(
-                               hintText: "City",
-                               labelText: "City",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
+                           child: bindCityDropDown(context)
                        ),
 
                        SizedBox(height: 15,),
 
                        Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                          /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller.District_Controller,
-                           decoration: InputDecoration(
-                               hintText: "District",
-                               labelText: "District",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
+                           child: bindDistrictDropDown(context)
                        ),
 
                        SizedBox(height: 15,),
@@ -1170,6 +1193,8 @@ class UpdateAccountMaster extends StatelessWidget{
                      accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
                      accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
                      accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
+                     accountMaster_page_controller.ShowState.value=false;
+                     accountMaster_page_controller.ShowState.value=true;
                    }else{
                      accountMaster_page_controller.Shipping_Address_controller.value.clear();
                      accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
@@ -1178,6 +1203,8 @@ class UpdateAccountMaster extends StatelessWidget{
                      accountMaster_page_controller.Shipping_State_Controller.value.clear();
                      accountMaster_page_controller.Shipping_District_Controller.value.clear();
                      accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                     accountMaster_page_controller.ShowState.value=false;
+                     accountMaster_page_controller.ShowState.value=true;
                    }
                  },
                )),
@@ -1260,6 +1287,14 @@ class UpdateAccountMaster extends StatelessWidget{
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller
                                .Shipping_Address_controller.value,
+                           onChanged: (value){
+                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = value + ", " + accountMaster_page_controller
+                                 .Shipping_Address2_Controller.value.text + ", " + accountMaster_page_controller
+                                 .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+                                 .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+                                 .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+                                 .Shipping_PostCode_Controller.value.text;
+                           },
                            decoration: InputDecoration(
                                hintText: "Address",
                                labelText: "Address",
@@ -1291,6 +1326,14 @@ class UpdateAccountMaster extends StatelessWidget{
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller
                                .Shipping_Address2_Controller.value,
+                           onChanged: (value){
+                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+                                 .Shipping_Address_controller.value.text + ", " + value + ", " +  accountMaster_page_controller
+                                 .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+                                 .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+                                 .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+                                 .Shipping_PostCode_Controller.value.text;
+                           },
                            decoration: InputDecoration(
                                hintText: "Address2",
                                labelText: "Address2",
@@ -1312,7 +1355,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
+                       /*Container(
                          decoration: BoxDecoration(
                              color: Colors.white,
                              borderRadius: BorderRadius.circular(10)
@@ -1340,7 +1383,17 @@ class UpdateAccountMaster extends StatelessWidget{
                            ),
 
                          ),
-                       ),
+                       ),*/
+
+                       Obx((){
+                         return Visibility(
+                           visible:accountMaster_page_controller.ShowState.value,
+                           child: Container(
+                               child: bindShippingPostalCodeDropDown(context)
+                           ),
+                         );
+                       }),
+
 
                        SizedBox(height: 15,),
 
@@ -1358,64 +1411,28 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller
-                               .Shipping_City_Controller.value,
-                           decoration: InputDecoration(
-                               hintText: "City",
-                               labelText: "City",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
+                       Obx(() {
+                         return Visibility(
+                           visible:accountMaster_page_controller.ShowState.value,
+                           child: Container(
+                               child: bindShippingCityDropDown(context)
                            ),
+                         );
+                       }
 
-                         ),
                        ),
 
                        SizedBox(height: 15,),
 
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller
-                               .Shipping_District_Controller.value,
-                           decoration: InputDecoration(
-                               hintText: "District",
-                               labelText: "District",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
+                       Obx(() {
+                         return Visibility(
+                           visible:accountMaster_page_controller.ShowState.value,
+                           child: Container(
+                               child: bindShippingDistrictDropDown(context)
                            ),
+                         );
+                       }
 
-                         ),
                        ),
 
                        SizedBox(height: 15,),
@@ -2813,6 +2830,11 @@ class UpdateAccountMaster extends StatelessWidget{
         // Update the TextField with the selected
         accountMaster_page_controller.ReferralBy_Controller.text =
             _displayIsActiveForOption(selection).toString();
+        if(accountMaster_page_controller.ReferralBy_Controller.text == 'Yes'){
+          accountMaster_page_controller.isReferral.value = true;
+        }else{
+          accountMaster_page_controller.isReferral.value = false;
+        }
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -2903,36 +2925,46 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   Widget bindStateDropDown(context){
-    return Autocomplete<StateMasterListModel>(
+    return Autocomplete<PincodeMasterModel>(
       displayStringForOption: _displayStateListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if(accountMaster_page_controller.view=='VIEW'){
           accountMaster_page_controller.StateMaster_list.value=[];
-          return accountMaster_page_controller.StateMaster_list;
+          return accountMaster_page_controller.StateMasterPinCode_list;
         }
         if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.StateMaster_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
+          return accountMaster_page_controller.StateMasterPinCode_list;
+          // return const Iterable<PincodeMasterModel>.empty();
         }
-        return accountMaster_page_controller.StateMaster_list
-            .where((StateMasterListModel option) {
+        return accountMaster_page_controller.StateMasterPinCode_list
+            .where((PincodeMasterModel option) {
           return option.stateName
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
+
       },
-      onSelected: (StateMasterListModel selection) {
+      onSelected: (PincodeMasterModel selection) {
         print(selection.stateName);
         // Update the TextField with the selected
         accountMaster_page_controller.State_Controller.text =
             _displayStateListForOption(selection).toString();
         accountMaster_page_controller.GovtStateCode.value = accountMaster_page_controller.State_Controller.text.substring(0, 2);
-        print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
-        if(accountMaster_page_controller.GstStateCode != selection.governmentStateCode){
+        // print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
+        /* if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode.value != selection.governmentStateCode){
           Utils.sanckBarError("Wrong State", "Please Select Valid State");
-        }
+        }*/
+
         //accountMaster_page_controller.getCompanyProfileTypeApi();
+
+        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+            .Address_controller.text + ", " + accountMaster_page_controller
+            .Address2_Controller.text + ", " + accountMaster_page_controller
+            .City_Controller.text + ", " + accountMaster_page_controller
+            .District_Controller.text + ", " + accountMaster_page_controller
+            .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -2942,7 +2974,7 @@ class UpdateAccountMaster extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextFormField(
-              readOnly: accountMaster_page_controller.view=='Account'?false:true,
+            readOnly: accountMaster_page_controller.view=='Account'?false:true,
             /*validator: (value){
               if(value == null || value.isEmpty){
                 return null;
@@ -2953,10 +2985,26 @@ class UpdateAccountMaster extends StatelessWidget{
                 return null;
               }
             },*/
-           /* onChanged: (value) {
-              // Clear the error when the user enters a value
-                _formKeyState.currentState?.validate();
-            },*/
+            onChanged: (value) {
+              /*for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
+                if(accountMaster_page_controller.GstStateCode == selection.governmentStateCode){
+                  accountMaster_page_controller.GovtStateCode = selection.governmentStateCode!;
+                  //accountMaster_page_controller.GstStateList.clear();
+                  //accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
+                  print('GstStae....${accountMaster_page_controller.GovtStateCode}');
+                }
+              }
+              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode != selection.governmentStateCode){
+                Utils.sanckBarError("Wrong State", "Please Select Valid State");
+              }*/
+
+              accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+                  .Address_controller.text + ", " + accountMaster_page_controller
+                  .Address2_Controller.text + ", " + accountMaster_page_controller
+                  .City_Controller.text + ", " + accountMaster_page_controller
+                  .District_Controller.text + ", " + value+ ", " + accountMaster_page_controller.PostCode_Controller.text;
+
+            },
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = accountMaster_page_controller.State_Controller
@@ -2987,8 +3035,8 @@ class UpdateAccountMaster extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<StateMasterListModel> onSelected,
-          Iterable<StateMasterListModel> suggestions) {
+          AutocompleteOnSelected<PincodeMasterModel> onSelected,
+          Iterable<PincodeMasterModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -3001,7 +3049,7 @@ class UpdateAccountMaster extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final StateMasterListModel option =
+                  final PincodeMasterModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -3029,35 +3077,37 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
-  Widget bindShippingStateDropDown(context){
-    return Autocomplete<StateMasterListModel>(
-      displayStringForOption: _displayStateListForOption,
+  Widget bindPostalCodeDropDown(context){
+    return Autocomplete<PostalCodeModel>(
+      displayStringForOption: _displayPostalCodeListForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.StateMaster_list;
+          return accountMaster_page_controller.geoPostal_Code_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return accountMaster_page_controller.StateMaster_list
-            .where((StateMasterListModel option) {
-          return option.stateName
+        return accountMaster_page_controller.geoPostal_Code_list
+            .where((PostalCodeModel option) {
+          return option.pincode
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
-      onSelected: (StateMasterListModel selection) {
-        print(selection.stateName);
+      onSelected: (PostalCodeModel selection) {
+        print(selection.pincode);
         // Update the TextField with the selected
-        accountMaster_page_controller.Shipping_State_Controller.value.text =
-            _displayStateListForOption(selection).toString();
-        FocusNode().unfocus();
-        // accountMaster_page_controller.GovtStateCode.value = accountMaster_page_controller.State_Controller.text.substring(0, 2);
-        // print('GstCOde...: ${accountMaster_page_controller.GovtStateCode}');
-        /* if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode.value != selection.governmentStateCode){
-          Utils.sanckBarError("Wrong State", "Please Select Valid State");
-        }*/
+        accountMaster_page_controller.PostCode_Controller.text =
+            _displayPostalCodeListForOption(selection).toString();
+        accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'state');
+        accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'city');
+        accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'district');
+        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+            .Address_controller.text + ", " + accountMaster_page_controller
+            .Address2_Controller.text + ", " + accountMaster_page_controller
+            .City_Controller.text + ", " + accountMaster_page_controller
+            .District_Controller.text + ", " + accountMaster_page_controller
+            .stateName_controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
 
-        //accountMaster_page_controller.getCompanyProfileTypeApi();
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -3068,33 +3118,17 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextFormField(
             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-            /*validator: (value){
-              if(value == null || value.isEmpty){
-                return null;
-              }
-              else if(value != accountMaster_page_controller.GstStateCode){
-                return 'Please select valid state';
-              }else{
-                return null;
-              }
-            },*/
-            /*onChanged: (value) {
-              for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
-                if(accountMaster_page_controller.GstStateCode == selection.governmentStateCode){
-                  accountMaster_page_controller.GovtStateCode = selection.governmentStateCode!;
-                  //accountMaster_page_controller.GstStateList.clear();
-                  //accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
-                  print('GstStae....${accountMaster_page_controller.GovtStateCode}');
-                }
-              }
-              if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GstStateCode != selection.governmentStateCode){
-                Utils.sanckBarError("Wrong State", "Please Select Valid State");
-              }
-
-            },*/
+            onChanged: (value){
+              accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+                  .Address_controller.text + ", " + accountMaster_page_controller
+                  .Address2_Controller.text + ", " + accountMaster_page_controller
+                  .City_Controller.text + ", " + accountMaster_page_controller
+                  .District_Controller.text + ", " + accountMaster_page_controller
+                  .stateName_controller.text + ", " + value;
+            },
             cursorColor: AllColors.primaryDark1,
             controller: controller
-              ..text = accountMaster_page_controller.Shipping_State_Controller.value
+              ..text = accountMaster_page_controller.PostCode_Controller
                   .text,
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
@@ -3112,8 +3146,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'State*',
-              labelText: 'State*',
+              hintText: 'Post Code*',
+              labelText: 'Post Code*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -3122,8 +3156,8 @@ class UpdateAccountMaster extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<StateMasterListModel> onSelected,
-          Iterable<StateMasterListModel> suggestions) {
+          AutocompleteOnSelected<PostalCodeModel> onSelected,
+          Iterable<PostalCodeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -3136,7 +3170,7 @@ class UpdateAccountMaster extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final StateMasterListModel option =
+                  final PostalCodeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -3145,7 +3179,726 @@ class UpdateAccountMaster extends StatelessWidget{
                     child: Container(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        option.stateName.toString() + ' (${option.stateCode.toString()})',
+                        option.pincode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindShippingPostalCodeDropDown(context){
+    return Autocomplete<PostalCodeModel>(
+      displayStringForOption: _displayPostalCodeListForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.geoPostal_Code_list;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return accountMaster_page_controller.geoPostal_Code_list
+            .where((PostalCodeModel option) {
+          return option.pincode
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (PostalCodeModel selection) {
+        print(selection.pincode);
+        // Update the TextField with the selected
+        accountMaster_page_controller.Shipping_PostCode_Controller.value.text =
+            _displayPostalCodeListForOption(selection).toString();
+        accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'state');
+        accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'city');
+        accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'district');
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
+            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_PostCode_Controller.value.text;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextFormField(
+            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+            onChanged: (value){
+              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+                  .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+                  .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
+                  .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+                  .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+                  .Shipping_State_Controller.value.text + ", " + value;
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = accountMaster_page_controller.Shipping_PostCode_Controller.value
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Post Code*',
+              labelText: 'Post Code*',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<PostalCodeModel> onSelected,
+          Iterable<PostalCodeModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final PostalCodeModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.pincode.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindShippingStateDropDown(context){
+    return Autocomplete<PincodeMasterModel>(
+      displayStringForOption: _displayStateListForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.ShippingStateMasterPinCode_list;
+          // return const Iterable<PincodeMasterModel>.empty();
+        }
+         return accountMaster_page_controller.ShippingStateMasterPinCode_list
+            .where((PincodeMasterModel option) {
+          return option.stateName
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+
+      },
+      onSelected: (PincodeMasterModel selection) {
+        print(selection.stateName);
+        // Update the TextField with the selected
+        accountMaster_page_controller.Shipping_State_Controller.value.text =
+            _displayStateListForOption(selection).toString();
+        FocusNode().unfocus();
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
+            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_PostCode_Controller.value.text;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextFormField(
+              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              onChanged: (value){
+                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+                    .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+                    .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
+                    .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+                    .Shipping_District_Controller.value.text + ", " + value + ", " + accountMaster_page_controller
+                    .Shipping_PostCode_Controller.value.text;
+              },
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.Shipping_State_Controller.value
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'State*',
+                labelText: 'State*',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+              ),
+            )
+        );
+
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<PincodeMasterModel> onSelected,
+          Iterable<PincodeMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final PincodeMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.stateName.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindCityDropDown(context){
+    return Autocomplete<PincodeMasterModel>(
+      displayStringForOption: _displayCityListForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.CityMasterPinCode_list;
+          // return const Iterable<PincodeMasterModel>.empty();
+        }
+        return accountMaster_page_controller.CityMasterPinCode_list
+            .where((PincodeMasterModel option) {
+          return option.city
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (PincodeMasterModel selection) {
+        print(selection.city);
+        // Update the TextField with the selected
+        accountMaster_page_controller.City_Controller.text =
+            _displayCityListForOption(selection).toString();
+        FocusNode().unfocus();
+        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+            .Address_controller.text + ", " + accountMaster_page_controller
+            .Address2_Controller.text + ", " + accountMaster_page_controller
+            .City_Controller.text + ", " + accountMaster_page_controller
+            .District_Controller.text + ", " + accountMaster_page_controller
+            .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextFormField(
+              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              onChanged: (value){
+                accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+                    .Address_controller.text + ", " + accountMaster_page_controller
+                    .Address2_Controller.text + ", " + value + ", " + accountMaster_page_controller
+                    .District_Controller.text + ", " + accountMaster_page_controller
+                    .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+              },
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.City_Controller
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'City*',
+                labelText: 'City*',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+              ),
+            )
+        );
+
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<PincodeMasterModel> onSelected,
+          Iterable<PincodeMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final PincodeMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.city.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindShippingCityDropDown(context){
+    return Autocomplete<PincodeMasterModel>(
+      displayStringForOption: _displayCityListForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.ShippingCityMasterPinCode_list;
+          // return const Iterable<PincodeMasterModel>.empty();
+        }
+        return accountMaster_page_controller.ShippingCityMasterPinCode_list
+            .where((PincodeMasterModel option) {
+          return option.city
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+
+      },
+      onSelected: (PincodeMasterModel selection) {
+        print(selection.city);
+        // Update the TextField with the selected
+        accountMaster_page_controller.Shipping_City_Controller.value.text =
+            _displayCityListForOption(selection).toString();
+        FocusNode().unfocus();
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
+            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_PostCode_Controller.value.text;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextFormField(
+              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              onChanged: (value){
+                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+                    .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+                    .Shipping_Address2_Controller.value.text + ", " +  value + ", " + accountMaster_page_controller
+                    .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+                    .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+                    .Shipping_PostCode_Controller.value.text;
+              },
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.Shipping_City_Controller.value
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'City*',
+                labelText: 'City*',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+              ),
+            )
+        );
+
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<PincodeMasterModel> onSelected,
+          Iterable<PincodeMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final PincodeMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.city.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindDistrictDropDown(context){
+    return Autocomplete<PincodeMasterModel>(
+      displayStringForOption: _displayDistrictListForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.DistrictMasterPinCode_list;
+          // return const Iterable<PincodeMasterModel>.empty();
+        }
+        return accountMaster_page_controller.DistrictMasterPinCode_list
+            .where((PincodeMasterModel option) {
+          return option.district
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (PincodeMasterModel selection) {
+        print(selection.district);
+        // Update the TextField with the selected
+        accountMaster_page_controller.District_Controller.text =
+            _displayDistrictListForOption(selection).toString();
+        FocusNode().unfocus();
+        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+            .Address_controller.text + ", " + accountMaster_page_controller
+            .Address2_Controller.text + ", " + accountMaster_page_controller
+            .City_Controller.text + ", " + accountMaster_page_controller
+            .District_Controller.text + ", " + accountMaster_page_controller
+            .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextFormField(
+              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              onChanged: (value){
+                accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
+                    .Address_controller.text + ", " + accountMaster_page_controller
+                    .Address2_Controller.text + ", " + accountMaster_page_controller
+                    .City_Controller.text + ", " + value + ", " + accountMaster_page_controller
+                    .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+              },
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.District_Controller
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'District*',
+                labelText: 'District*',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+              ),
+            )
+        );
+
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<PincodeMasterModel> onSelected,
+          Iterable<PincodeMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final PincodeMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.district.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget bindShippingDistrictDropDown(context){
+    return Autocomplete<PincodeMasterModel>(
+      displayStringForOption: _displayDistrictListForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) async {
+        if (textEditingValue.text.isEmpty) {
+          return accountMaster_page_controller.ShippingDistrictMasterPinCode_list;
+          // return const Iterable<PincodeMasterModel>.empty();
+        }
+         return accountMaster_page_controller.ShippingDistrictMasterPinCode_list
+            .where((PincodeMasterModel option) {
+          return option.district
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (PincodeMasterModel selection) {
+        print(selection.district);
+        // Update the TextField with the selected
+        accountMaster_page_controller.Shipping_District_Controller.value.text =
+            _displayDistrictListForOption(selection).toString();
+        FocusNode().unfocus();
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
+            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+            .Shipping_PostCode_Controller.value.text;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextFormField(
+              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              onChanged: (value){
+                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
+                    .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
+                    .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
+                    .Shipping_City_Controller.value.text + ", " + value + ", " + accountMaster_page_controller
+                    .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
+                    .Shipping_PostCode_Controller.value.text;
+              },
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.Shipping_District_Controller.value
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'District*',
+                labelText: 'District*',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
+              ),
+            )
+        );
+
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<PincodeMasterModel> onSelected,
+          Iterable<PincodeMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.85,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final PincodeMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.district.toString(),
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,

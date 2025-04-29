@@ -220,7 +220,7 @@ class AppUrl {
      static const String TaskPersonMstGetByTaskId = "$BASE_URL/api/CRM/Task/TaskPersonMstGetByTaskId";
      static const String taskPersonMstCreate = "$BASE_URL/api/CRM/Task/task_person_mst_create";
      static const String GeoGetPincodeHierarchy = "$BASE_URL/api/GeographicalSetup/GeoGetPincodeHierarchy";
-     static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGet";
+     static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
 
 
      //todo sales cycle
