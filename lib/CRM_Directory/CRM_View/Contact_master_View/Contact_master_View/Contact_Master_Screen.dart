@@ -42,7 +42,7 @@ class ContactMasterScreen extends StatelessWidget{
                 contact_vm_controller.resetAllContactCreativeField('Icon');
                 contact_vm_controller.insideOut = true;
                 //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                contact_vm_controller.getAccountMaster(contact_vm_controller.pageNumber);
+                contact_vm_controller.getAccountMaster("");
                 contact_vm_controller.getDecisionRoleMaster();
                 Get.toNamed(RoutesName.addNewContactMaster_screen);
               }, icon: Icon(Icons.add)),
@@ -324,6 +324,7 @@ class ContactMasterScreen extends StatelessWidget{
                                       width: 1),
                                 )),
                                 onPressed: () {
+                                  contact_vm_controller.pageNumber=0;
                                   Get.back();
                                   contact_vm_controller.getContactMasterList(
                                     contact_vm_controller.pageNumber,
@@ -676,6 +677,9 @@ class ContactMasterScreen extends StatelessWidget{
        // leading: bindAvatar( contact_vm_controller.contact_master_list[position].contactName?[0].toUpperCase()?? ""),
         trailing: InkWell(
           onTap: (){
+            contact_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller
+                .contact_master_list[position]
+                .accountCode?? "");
             contact_vm_controller.insideOut = true;
             contact_vm_controller.upDateContact('OutSide', position);
           },

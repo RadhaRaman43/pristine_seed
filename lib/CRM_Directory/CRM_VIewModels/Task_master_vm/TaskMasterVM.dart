@@ -259,7 +259,7 @@ class Taskmastervm extends GetxController{
     }
 
     TaskMasterCreate(){
-        DateTime selectDate = DateFormat('yyyy-MM-dd').parseStrict(DataOFVisitController.value.text);
+        DateTime selectDate = DateFormat('dd-MM-yyyy').parseStrict(DataOFVisitController.value.text);
         String todayDate = DateFormat('yyyy-MM-dd').format(selectDate);
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
         List<Selectedalongwithpersonnamemodel> personName = SelectedAlongPersonWith_list.map((item) => Selectedalongwithpersonnamemodel(empId: item.empId!)).toList();
@@ -1033,7 +1033,47 @@ class Taskmastervm extends GetxController{
         },);
     }
 
-    getTaskPersonMstByTaskIdApi(String TaskID) {
+    getTaskPersonMstByTaskIdApi(String TaskID){
+        try{
+            Map<String, String> data={
+                "task_id": TaskID,
+                "along_with_person_name": "",
+                "email_id": email,
+
+            };
+            loading.value=true;
+            _api.TaskPersonMstGetByTaskId(data, sessionManagement).then((onValue){
+                print(onValue);
+                final jsonResponse = json.decode(onValue);
+                if(jsonResponse is List){
+                    List<AlongWithPersonModel> response = jsonResponse.map((e) => AlongWithPersonModel.fromJson(e)).toList();
+                    if(response!= null && response.length>0 && response[0].condition=="True"){
+                        loading.value = false;
+                        AlongPersonWith_list.value = response;
+                        print('asjhdgsau1 ${AlongPersonWith_list.length}');
+
+                    }else {
+                        loading.value = false;
+                        AlongPersonWith_list.value=[];
+
+                    }
+                } else {
+                    loading.value = false;
+
+                }
+            },
+            ).onError(
+                    (error, stackTrace) {
+                        print('asjhdgsau5 ${error}');
+                },
+            );
+        }catch(e){
+            loading.value = false;
+            print(e);
+        }
+    }
+
+   /* getTaskPersonMstByTaskIdApi(String TaskID) {
         Map<String , String> data = {
             "task_id": TaskID,
             "along_with_person_name": "",
@@ -1055,10 +1095,12 @@ class Taskmastervm extends GetxController{
                             response.length > 0 &&
                             response[0].condition == "True") {
                             AlongPersonWith_list.value=response;
+                            print('asjhdgsau1${AlongPersonWith_list.length}');
 
 
                         } else {
                             AlongPersonWith_list.value=[];
+                            print('asjhdgsau2${AlongPersonWith_list.length}');
                             Utils.showErrorToastification(
                                 "Error!", "No Data Found");
                             //service_installation_details_list.value=[];
@@ -1066,10 +1108,11 @@ class Taskmastervm extends GetxController{
                     } else {
 
                         // service_indent_header_list.value = [];
+                        print('asjhdgsau3 ${JsonResponse}');
                         Utils.showExceptionToastification("Api Error!", JsonResponse);
                     }
                 }catch(e){
-                    print(e);
+                    print('asjhdgsau4 ${e}');
                 }finally{
                     loading.value = false;
 
@@ -1079,14 +1122,15 @@ class Taskmastervm extends GetxController{
         ).onError(
                 (error, stackTrace) {
                 loading.value = false;
-                print(error);
+                print('asjhdgsau5 ${error}');
                 //service_indent_header_list.value = [];
             },
         ).whenComplete(() {
+            print('asjhdgsau6 when complete');
             loading.value = false;
         },);
     }
-
+*/
     void clearUpdateController(){
          projectValueUpdateController.clear();
          expectedDateOfOrderUpdateController.clear();

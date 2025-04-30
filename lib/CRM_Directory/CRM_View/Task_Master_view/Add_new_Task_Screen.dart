@@ -65,6 +65,7 @@ class AddNewTaskScreen extends StatelessWidget{
     return WillPopScope(
         onWillPop: () async {
       //Get.offAllNamed(RoutesName.taskMaster_screen);
+          taskMaster_page_controller.clearCreateTaskController();
       Get.toNamed(RoutesName.taskMaster_screen);
       return false;
     }, child: Scaffold(
@@ -222,7 +223,7 @@ class AddNewTaskScreen extends StatelessWidget{
                             contact_vm_controller.insideOut = true;
                             accountMaster_page_controller.FromPage.value = "Task";
                             //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                            contact_vm_controller.getAccountMaster(contact_vm_controller.pageNumber);
+                            contact_vm_controller.getAccountMaster("");
                             contact_vm_controller.getDecisionRoleMaster();
                             Get.toNamed(RoutesName.addNewContactMaster_screen);
                           }, icon: Icon(Icons.add)),
@@ -1012,13 +1013,13 @@ class AddNewTaskScreen extends StatelessWidget{
         width: size.width-30,
         controller: taskMaster_page_controller.isSalesNecessaryController.value,
         label: Text(
-          "Sales Necessary",
+          "Is Sales Cycle Required",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w300),
         ),
-
+        initialSelection: "No",
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),

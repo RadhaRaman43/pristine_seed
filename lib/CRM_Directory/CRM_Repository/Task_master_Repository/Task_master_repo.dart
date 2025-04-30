@@ -62,7 +62,7 @@ class TaskMasterRepo{
   }
 
   Future<String> TaskPersonMstGetByTaskId(var data,SessionManagement sessionManagement) async{
-    return _apiService.getApi(AppUrl.TaskPersonMstGetByTaskId, sessionManagement, data);
+    return _apiService.postApi(data,AppUrl.TaskPersonMstGetByTaskId, sessionManagement);
   }
 
   Future<String> TaskPersonMstCreate(var data,SessionManagement sessionManagement) async{

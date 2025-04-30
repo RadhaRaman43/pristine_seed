@@ -34,6 +34,9 @@ class TaskMasterDetails extends StatelessWidget{
   static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
       option.categoryName!;
 
+  static String _displayApproveRejectForOption(String option) =>
+      option;
+
   static String _displayAlongPersonForOption(AlongWithPersonModel option) =>
       (option.firstName?.toString() ?? "") +
           " " +
@@ -79,36 +82,48 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              Obx((){
-                return  Visibility(
-                  visible: TaskMaster_page_controller.TaskDSAR_Master_list.isNotEmpty?false:true,
-                  //visible: account_vm_controller.view=='Sales'?false:true,
-                  child: IconButton(onPressed: () {
-                    //createDSARDialog(context);
-                    TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
-                    TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
-                    TaskMaster_page_controller.NextInterdate_controller.clear();
-                    TaskMaster_page_controller.NextInterTime_controller.clear();
-                    TaskMaster_page_controller.DSAR_Remarks_controller.clear();
-                    TaskMaster_page_controller.EstClosuredate_controller.clear();
-                    TaskMaster_page_controller.BudgetAmt_controller.clear();
-                    TaskMaster_page_controller.ExpectedAmt_controller.clear();
-                    TaskMaster_page_controller.Method_of_call_controller.clear();
-                    TaskMaster_page_controller.PurposeOfVisit.value = false;
-                    TaskMaster_page_controller.DSARStatus.value = false;
-                    if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1){
-                      TaskMaster_page_controller.isInfraLeadValue.value = true;
-                      print('value...${TaskMaster_page_controller.isInfraLeadValue.value}');
-                    }
-                    print('value2...${TaskMaster_page_controller.isInfraLeadValue.value}');
-                    //TaskMaster_page_controller.isInfraLead.text="No";
-                    TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
-                    TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
-                  }, icon: Visibility(
-                      visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? true : false,
-                      child: Icon(Icons.add))),
-                );
-              }),
+              Row(
+                children: [
+                  Obx((){
+                    return  Visibility(
+                      visible: TaskMaster_page_controller.TaskDSAR_Master_list.isNotEmpty?false:true,
+                      //visible: account_vm_controller.view=='Sales'?false:true,
+                      child: IconButton(onPressed: () {
+                        //createDSARDialog(context);
+                        TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
+                        TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
+                        TaskMaster_page_controller.NextInterdate_controller.clear();
+                        TaskMaster_page_controller.NextInterTime_controller.clear();
+                        TaskMaster_page_controller.DSAR_Remarks_controller.clear();
+                        TaskMaster_page_controller.EstClosuredate_controller.clear();
+                        TaskMaster_page_controller.BudgetAmt_controller.clear();
+                        TaskMaster_page_controller.ExpectedAmt_controller.clear();
+                        TaskMaster_page_controller.Method_of_call_controller.clear();
+                        TaskMaster_page_controller.PurposeOfVisit.value = false;
+                        TaskMaster_page_controller.DSARStatus.value = false;
+                        if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1){
+                          TaskMaster_page_controller.isInfraLeadValue.value = true;
+                        }
+                        TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
+                        TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
+                      }, icon: Visibility(
+                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? true : false,
+                          child: Icon(Icons.add))),
+                    );
+                  }),
+                  Obx((){
+                    return  Visibility(
+                      visible: TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .isReadyForApprove.toString()=='1'?true:false,
+                      child: IconButton(onPressed: () {
+                         showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
+                      }, icon: Icon(Icons.update)),
+                    );
+                  }),
+                ],
+              )
+
 
 
             ],
@@ -535,12 +550,17 @@ class TaskMasterDetails extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-                onTap: (){
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
                   focusNode.requestFocus();
-                  controller.clear();
-                },
-                child: Icon(Icons.arrow_drop_down)),
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Along With Person Name',
@@ -1654,6 +1674,9 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget viewDsarDetails(BuildContext context) {
+    print('hcsdgyuifgy${TaskMaster_page_controller
+        .Task_Master_list[0]
+        .isReadyForApprove}');
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDSAR.value == true ? true : false,
       child: TaskMaster_page_controller.TaskDSAR_Master_list.value.length > 0
@@ -2330,6 +2353,358 @@ class TaskMasterDetails extends StatelessWidget{
 
               //  })
             ],
+          ),
+        );
+      },
+    );
+  }
+
+  showApprovRejectDialog(context, String TaskId){
+    TaskMaster_page_controller.ApproveReject_Controller.clear();
+    TaskMaster_page_controller.RejectReason_Controller.clear();
+    TaskMaster_page_controller.ApproveBool.value = false;
+    TaskMaster_page_controller.RejectBool.value = false;
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+              title:  Text(
+                'Update Task',
+                style: GoogleFonts.poppins(
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700,
+                  color: AllColors.primaryDark1,
+                ),
+              ),
+              content: Wrap(
+                children: [
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  SizedBox(height: 15,),
+                  bindApprovRejectDropDown(context),
+                  SizedBox(height: 55,),
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.RejectBool
+                          .value,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          controller: TaskMaster_page_controller
+                              .RejectReason_Controller,
+                          decoration: InputDecoration(
+                              hintText: "Reject Reason",
+                              labelText: "Reject Reason",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+
+                              /*focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),*/
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+                    );
+
+                  }),
+                  SizedBox(height: 55,),
+                  Row(
+                    mainAxisAlignment:MainAxisAlignment.end,
+                    children: [
+                      Obx((){
+                        return Visibility(
+                          visible: TaskMaster_page_controller.ApproveBool.value,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              if(TaskMaster_page_controller.ApproveReject_Controller.text.isEmpty || TaskMaster_page_controller.ApproveReject_Controller == null) {
+                                Utils.sanckBarError(
+                                    'Error : ', 'Please select Type.');
+                                return;
+                              }
+                              Navigator.pop(context);
+                              ConfirmationDialog(context, TaskId);
+
+
+                            },
+                            child: Container(
+                              width: 80,
+                              alignment: Alignment.center,
+                              child: Text('Approve',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      ),
+                      Obx((){
+                        return Visibility(
+                            visible: TaskMaster_page_controller.RejectBool.value,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(
+                                  AllColors.lightredColor,
+                                ),
+                              ),
+                              onPressed: ()  {
+                                if(TaskMaster_page_controller.ApproveReject_Controller.text== "Reject"){
+                                  if(TaskMaster_page_controller.RejectReason_Controller.text.isEmpty || TaskMaster_page_controller.RejectReason_Controller == null){
+                                    Utils.sanckBarError('Error : ', 'Please Enter Reject Reason.');
+                                  }else{
+                                    Navigator.pop(context);
+                                    ConfirmationDialog(context, TaskId);
+                                    //TaskMaster_page_controller.UpdateTaskStatus(context);
+                                  }
+                                }
+
+
+                              },
+                              child: Container(
+                                width: 80,
+                                alignment: Alignment.center,
+                                child: Text('Reject',
+                                  /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ));
+                      })
+                      ,
+                    ],)
+                ],
+              )
+          );
+        });
+  }
+
+  ConfirmationDialog(context, String taskId){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.check_circle, color: AllColors.lightredColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Update!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          'Do you want to Update this Task?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+
+                      SizedBox(height: 20),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              Get.back();
+                              TaskMaster_page_controller.RejectReason_Controller.clear();
+                              //TaskMaster_page_controller.ApproveReject_Controller.clear();
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Cancel',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              TaskMaster_page_controller.ApproveRejectApiHit(taskId);
+                              Navigator.pop(context);
+                              /*TaskMaster_page_controller.pageNumber=0;
+                          TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '');
+                          Get.toNamed(RoutesName.taskMaster_screen);*/
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Confirm',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ]),
+          );
+
+        });
+  }
+
+  Widget bindApprovRejectDropDown(context) {
+    return Autocomplete<String>(
+      displayStringForOption: _displayApproveRejectForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return TaskMaster_page_controller.approveRejectList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return TaskMaster_page_controller.approveRejectList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        TaskMaster_page_controller.ApproveReject_Controller.text =
+            _displayApproveRejectForOption(selection).toString();
+        if(TaskMaster_page_controller.ApproveReject_Controller.text == 'Approve'){
+          TaskMaster_page_controller.ApproveReject = "Approved";
+          TaskMaster_page_controller.RejectBool.value = false;
+          TaskMaster_page_controller.ApproveBool.value = true;
+        }else{
+          TaskMaster_page_controller.ApproveReject = "Rejected";
+          TaskMaster_page_controller.RejectBool.value = true;
+          TaskMaster_page_controller.ApproveBool.value = false;
+        }
+        //print('IsActive.....${accountMaster_page_controller.IsActive_controller.text}');
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextField(
+            onTap: (){
+              focusNode.requestFocus();
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = TaskMaster_page_controller.ApproveReject_Controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                  onTap: (){
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Task Status',
+              labelText: 'Task Status',
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.5,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
           ),
         );
       },

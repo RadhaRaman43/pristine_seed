@@ -26,4 +26,8 @@ class ContactMasterRepo{
     return _apiService.getApi(AppUrl.getMasterType, sessionManagement, data);
   }
 
+  Future<String> getAccountMasterGetByCodeApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.AccountMstGetBuyCode, sessionManagement, data);
+  }
+
 }

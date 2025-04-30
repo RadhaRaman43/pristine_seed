@@ -57,6 +57,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
           Get.back();
         }
         else{
+          contact_vm_controller.filterIconColor.value=false;
           contact_vm_controller.account_name_controller.clear();
           contact_vm_controller.contact_name_controller.clear();
           contact_vm_controller.depart_name_controller.clear();
@@ -186,6 +187,41 @@ class AddNewcontactMasterContact extends StatelessWidget{
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   child: bindAccountOwnerDropDown(context),
                 ),
+
+              SizedBox(height: 15,),
+
+              Obx((){
+                return Container(
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10)
+                  ),
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: TextFormField(
+                    readOnly: true,
+                    maxLength: 500,
+                    maxLines: 3,
+                    controller: contact_vm_controller
+                        .FullAddress_Controller.value,
+                    decoration: InputDecoration(
+                        hintText: "Full Address",
+                        labelText: "Full Address",
+                        //suffixIcon: Icon(Icons.email),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: AllFontSize.ten,
+                            horizontal: AllFontSize.ten),
+
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue)
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        )
+                    ),
+
+                  ),
+                );
+              }),
 
               SizedBox(height: 15,),
               Container(
@@ -417,36 +453,9 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
 
   Widget bindAccountOwnerDropDown(context){
-    ScrollController scrollController = ScrollController();
-
-    // Add listener for pagination on scroll
-    scrollController.addListener(() {
-      print('woring...');
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        // You have reached the end of the list
-        int totalPage = (contact_vm_controller.total_rows /
-            contact_vm_controller.rowsPerPage)
-            .toInt();
-        if ((contact_vm_controller.total_rows %
-            contact_vm_controller.rowsPerPage) >
-            0) totalPage += 1;
-
-        print(
-            "last index ${contact_vm_controller.pageNumber} ${contact_vm_controller.total_rows} ${contact_vm_controller.rowsPerPage} ${totalPage}");
-
-        // Fetch the next page if there are more pages
-        if (contact_vm_controller.pageNumber + 1 < totalPage ) {
-          contact_vm_controller.getAccountMaster(
-              contact_vm_controller.pageNumber + 1).then((_) {
-            contact_vm_controller.pageNumber += 1;
-          });
-        }
-      }
-    });
     return Autocomplete<AccountMasterModel>(
       displayStringForOption: _displayAccNameForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
+      optionsBuilder: (TextEditingValue textEditingValue) async {
         if(contact_vm_controller.updateContact){
           contact_vm_controller.Account_Master_list.value=[];
         }
@@ -454,21 +463,24 @@ class AddNewcontactMasterContact extends StatelessWidget{
           return contact_vm_controller.Account_Master_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return contact_vm_controller.Account_Master_list
+        /*return contact_vm_controller.Account_Master_list
             .where((AccountMasterModel option) {
           return option.accountName
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
-        }).toList();
+        }).toList();*/
+        return await contact_vm_controller.getAccountMaster(textEditingValue.text);
       },
       onSelected: (AccountMasterModel selection) {
         print(selection.accountName);
         // Update the TextField with the selected
         contact_vm_controller.account_name_controller.text =
             _displayAccNameForOption(selection).toString();
-        contact_vm_controller.accountName.value=selection.accountName!;
-        contact_vm_controller.accountCode.value=selection.accountCode!;
+        contact_vm_controller.accountName.value=selection.accountName??"";
+        contact_vm_controller.accountCode.value=selection.accountCode??"";
+        contact_vm_controller.getAccMasterBuyCodeApi(selection.accountCode??"");
+
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {

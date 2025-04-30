@@ -519,10 +519,9 @@ class TaskMasterScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-         /* TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View');
-          TaskMaster_page_controller.getTaskMstDSARList(TaskMaster_page_controller.Task_Master_list[position].taskId);
-        */
-          },
+          TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+
+        },
         subtitle: Column(
           children: [
             Row(
@@ -988,17 +987,47 @@ class TaskMasterScreen extends StatelessWidget{
           ],
         ),
 
-        //leading: bindAvatar(accountMaster_page_controller.Account_Master_list[position].profile),
-        trailing: taskStatus == 'PENDING FOR APPROVAL' && IsReadyForApprove == 1 ? InkWell(
+        /*trailing: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            InkWell(
+              onTap: (){
+                if(IsReadyForApprove == 1){
+                  showApprovRejectDialog(context, TaskMaster_page_controller
+                      .Task_Master_list[position]
+                      .taskId!);
+                }else {
+                  TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                }
+              },
+              child: Icon(Icons.update,  color: Colors.blue,),
+            ),
+            InkWell(
+              onTap: (){
+                TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+
+              },
+              child: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+            )
+          ],
+        ),*/
+        trailing: taskStatus == 'PENDING FOR APPROVAL' ? InkWell(
           onTap: (){
-            showApprovRejectDialog(context, TaskMaster_page_controller
-                .Task_Master_list[position]
-                .taskId!);
+            if(IsReadyForApprove == 1){
+              showApprovRejectDialog(context, TaskMaster_page_controller
+                  .Task_Master_list[position]
+                  .taskId!);
+            }else {
+              TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+
+            }
+
           },
           child: Icon(Icons.update,  color: Colors.blue,),
         ) : (taskStatus.toLowerCase() == 'approved'?InkWell(
           onTap: (){
             TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+
            // TaskMaster_page_controller.getTaskMstDSARList(TaskMaster_page_controller.Task_Master_list[position].taskId);
            // TaskMaster_page_controller.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[position].taskId);
           },

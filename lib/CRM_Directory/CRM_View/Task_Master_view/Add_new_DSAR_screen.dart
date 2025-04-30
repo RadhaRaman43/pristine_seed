@@ -536,12 +536,20 @@ class AddNewDsarScreen extends StatelessWidget{
         TaskMaster_page_controller.Method_of_call_controller.clear();
         TaskMaster_page_controller.PurposeOfVisit.value = false;
         TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
-        print('status...${TaskMaster_page_controller.DSAR_Status_type_controller.value.text}');
-        print('ISInfra...${TaskMaster_page_controller.isInfraLead.value.text}');
         if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Revisit"){
           TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR REVISIT');
         }else{
           TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR OTHER');
+        }
+
+        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Reschedule" && TaskMaster_page_controller.Task_Master_list[0].typeOfCall == "New Call"){
+          TaskMaster_page_controller.Type_of_call_controller.text= "New Call";
+          TaskMaster_page_controller.typeOfCall.value = false;
+          TaskMaster_page_controller.typeOfCall.value = true;
+        }else{
+          TaskMaster_page_controller.Type_of_call_controller.clear();
+          TaskMaster_page_controller.typeOfCall.value = false;
+          TaskMaster_page_controller.typeOfCall.value = true;
         }
 
         if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 1){
@@ -569,9 +577,6 @@ class AddNewDsarScreen extends StatelessWidget{
           TaskMaster_page_controller.isInfraLeadValue.value=false;
         }
 
-
-
-        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {

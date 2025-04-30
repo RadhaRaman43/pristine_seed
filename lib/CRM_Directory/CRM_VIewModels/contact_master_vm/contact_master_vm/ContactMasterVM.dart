@@ -9,6 +9,7 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
 import '../../../../reources/routes/routes_name.dart';
 import '../../../../viewModel/SessionManagment/session_managment.dart';
+import '../../../CRM_Models/AccountMaster_model/AccountMstrGet_Model.dart';
 import '../../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/Department_name_modal.dart';
@@ -39,6 +40,7 @@ class ContactMasterVM extends GetxController{
   String view ="";
 
   var account_name_controller = TextEditingController();
+  var FullAddress_Controller = TextEditingController().obs;
   var contact_name_controller = TextEditingController();
   var depart_name_controller = TextEditingController();
   var phone_no_controller = TextEditingController();
@@ -55,6 +57,7 @@ class ContactMasterVM extends GetxController{
   RxList<CustomList> isHeDecisionMakerList=<CustomList>[].obs;
   RxList<ContactMstGetListModal> contact_master_list = <ContactMstGetListModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<AccountMasterGetByCodeModel> AccountMasterGetCode_list = <AccountMasterGetByCodeModel>[].obs;
   RxList<DepartNameModal> department_name_list=<DepartNameModal>[].obs;
   RxList<DesignationModal> designation_name_list=<DesignationModal>[].obs;
 
@@ -156,62 +159,122 @@ class ContactMasterVM extends GetxController{
       },);
 
   }
-  getAccountMaster(int page_no){
-    try{
-      Map<String, String> data={
-        "filter_account_name": account_name_controller.text.isEmpty?"":account_name_controller.text,
-        "filter_account_owner": "",
-        "filter_account_type": "",
-        "filter_account_category_type": "",
-        "filter_company_profile_type": "",
-        "filter_address": "",
-        "filter_state_name": "",
-        "filter_is_active": "-1",
-        "filter_created_by": email,
-        "row_per_page": rowsPerPage.toString(),
-        "page_number": page_no.toString(),
-        "no_of_employees_min": "",
-        "no_of_employees_max": "",
-        "annual_revenue_min": "",
-        "annual_revenue_max": "",
-        "filter_email_id": "",
-        "filter_phone_no": ""
-      };
-      loading.value=true;
-      _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
-        final jsonResponse = json.decode(onValue);
-        if(jsonResponse is List){
-          List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
-          if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
-            if(page_no==0){
-              Account_Master_list.clear();
-            }
-            Account_Master_list.addAll(response);
-           // Account_Master_list.value = response;
-            total_rows=int.parse(Account_Master_list[0].totalRows!);
-            print('account list size....${Account_Master_list.length}');
 
-          }else {
-            loading.value = false;
-            Account_Master_list.value=[];
+  Future<Iterable<AccountMasterModel>> getAccountMaster(String text) async {
+    /*if (text == '') {
+      return const Iterable<CompanyTypeModel>.empty();
+    }*/
+    loading.value=true;
+    Map data = {
+      "filter_account_name": text,
+      "filter_account_owner": "",
+      "filter_account_type": "",
+      "filter_account_category_type": "",
+      "filter_company_profile_type": "",
+      "filter_address": "",
+      "filter_state_name": "",
+      "filter_is_active": "-1",
+      "filter_created_by": email,
+      "row_per_page": 50,
+      "page_number": 0,
+      "no_of_employees_min": "",
+      "no_of_employees_max": "",
+      "annual_revenue_min": "",
+      "annual_revenue_max": "",
+      "filter_email_id": "",
+      "filter_phone_no": ""
+    };
+    print("Complany Data....${data}");
+    String customer_response =await  _api.AccountMasterGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(customer_response);
 
-          }
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<AccountMasterModel> response =
+        jsonResponse.map((data) => AccountMasterModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print("Complany type....${jsonResponse}");
+          Account_Master_list.value = response;
+
         } else {
+
+          Account_Master_list.value= [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        Account_Master_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      Account_Master_list.value = [];
+    }
+    finally{
+      loading.value=false;
+    }
+    return  Account_Master_list.value;
+  }
+
+  getAccMasterBuyCodeApi(String? accountCode) {
+    Map<String , String> data = {
+      "account_code": accountCode.toString()
+    };
+    print(data);
+    loading.value = true;
+    _api.getAccountMasterGetByCodeApiHit(data, sessionManagement).then(
+          (value) {
+        print(value);
+        final JsonResponse = json.decode(value);
+        try{
+          if (JsonResponse is List) {
+            List<AccountMasterGetByCodeModel> response =
+            JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              AccountMasterGetCode_list.value=response;
+              if(AccountMasterGetCode_list[0].permanentAddress != null){
+                FullAddress_Controller.value.text = AccountMasterGetCode_list[0].permanentAddress!.address! + ", "
+                    + AccountMasterGetCode_list[0].permanentAddress!.address2! + ", "
+                    + AccountMasterGetCode_list[0].permanentAddress!.city! + ", "
+                    + AccountMasterGetCode_list[0].permanentAddress!.district! + ", "
+                    + AccountMasterGetCode_list[0].permanentAddress!.stateName! + ", "
+                    + AccountMasterGetCode_list[0].permanentAddress!.postCode! + ", " ;
+
+              }
+
+            } else {
+              AccountMasterGetCode_list.value=[];
+              Utils.showErrorToastification(
+                  "Error!", "No Data Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        }catch(e){
+          print(e);
+        }finally{
           loading.value = false;
 
         }
       },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-        },
-      );
-    }catch(e){
+    ).onError(
+          (error, stackTrace) {
+        loading.value = false;
+        print(error);
+        //service_indent_header_list.value = [];
+      },
+    ).whenComplete(() {
       loading.value = false;
-      print(e);
-    }
+    },);
   }
+
+
 
   getDepartNameList(){
     try{
@@ -251,7 +314,6 @@ class ContactMasterVM extends GetxController{
 
   resetAllContactCreativeField(String flag){
     updateContact=false;
-    print('updatee...${updateContact}');
     pageNumber=0;
     if(flag == 'Card'){
       //print('Account name....${account_vm_controller.view_contract_list[0].accountName??""}');
@@ -260,6 +322,7 @@ class ContactMasterVM extends GetxController{
       account_name_controller.clear();
     }
     //account_name_controller.clear();
+    FullAddress_Controller.value.clear();
     contact_name_controller.clear();
     depart_name_controller.clear();
     phone_no_controller.clear();
@@ -398,7 +461,7 @@ class ContactMasterVM extends GetxController{
       IsHeDecisionMakerController.value.text=account_vm_controller.view_contract_list[index].contactRole??"";
     }
 
-    getAccountMaster(pageNumber);
+    getAccountMaster("");
     //getDepartNameList();
     //getDesignationList();
     getDecisionRoleMaster();

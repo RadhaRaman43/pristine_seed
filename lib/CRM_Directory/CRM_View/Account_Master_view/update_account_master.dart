@@ -660,7 +660,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          );
                        }),
 
-                       Visibility(
+                       /*Visibility(
                          visible: accountMaster_page_controller.Account_Master_list[0].isManager == 1 ? true:false,
                          child: Column(
                            children: [
@@ -670,7 +670,8 @@ class UpdateAccountMaster extends StatelessWidget{
                            ],
                          ),
                          // child: bindIsActiveDropDown(context)
-                       ),
+                       ),*/
+
                        SizedBox(height: 15,),
 
                        Obx((){
