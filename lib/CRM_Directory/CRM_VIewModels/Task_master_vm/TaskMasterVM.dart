@@ -325,10 +325,13 @@ class Taskmastervm extends GetxController{
     }
 
     TaskDSARMasterCreate(){
-        DateTime selectNextInterDate = DateFormat('yyyy-MM-dd').parseStrict(NextInterdate_controller.value.text);
+        String EstClosureDate = "";
+        DateTime selectNextInterDate = DateFormat('dd-MM-yyyy').parseStrict(NextInterdate_controller.value.text);
         String NextInterDate = DateFormat('yyyy-MM-dd').format(selectNextInterDate);
-        DateTime selectEstClosureDate = DateFormat('yyyy-MM-dd').parseStrict(EstClosuredate_controller.value.text);
-        String EstClosureDate = DateFormat('yyyy-MM-dd').format(selectEstClosureDate);
+        if(EstClosuredate_controller.value.text.isNotEmpty){
+            DateTime selectEstClosureDate = DateFormat('dd-MM-yyyy').parseStrict(EstClosuredate_controller.value.text);
+            EstClosureDate = DateFormat('yyyy-MM-dd').format(selectEstClosureDate);
+        }
         int? budgetAmt = int.tryParse(BudgetAmt_controller.text.toString()) ?? 0;
         int? estimatedAmt = int.tryParse(ExpectedAmt_controller.text.toString()) ?? 0;
         try{
@@ -602,7 +605,6 @@ class Taskmastervm extends GetxController{
                     }else {
                         loading.value = false;
                         CallStatus_Master_list.value=[];
-
                     }
                 } else {
                     loading.value = false;
@@ -611,7 +613,7 @@ class Taskmastervm extends GetxController{
             },
             ).onError(
                     (error, stackTrace) {
-                    print(error);
+                        print('call list...${error}');
                 },
             );
         }catch(e){
@@ -704,13 +706,19 @@ class Taskmastervm extends GetxController{
                     .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
                     .toList();
 
-                if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
-                    Item_Category_master_list.value = Response!;
+                if (Response.isNotEmpty && Response[0].condition.toString() == "True") {
+                    Item_Category_master_list.value = Response;
 
-                   // print('master list....${get_Acc_type_list.length.toString()}');
+                    /*Item_Category_Selected_list.value = [];
+                    for (int i = 0; i < Item_Category_master_list.length; i++) {
+                        if (Item_Category_master_list[i].isSelected == 1) {
+                            Item_Category_Selected_list.add(
+                                Item_Category_master_list[i]);
+                        }}*/
+                    print('master list1....${Item_Category_Selected_list.length.toString()}');
                 } else {
                     Item_Category_master_list.value = [];
-                    //print('master listelsse....${get_Acc_type_list.length.toString()}');
+                    //print('master listelsse1....${Item_Category_Selected_list.length.toString()}');
                 }
             } catch (e) {
                 Item_Category_master_list.value = [];
@@ -760,7 +768,7 @@ class Taskmastervm extends GetxController{
     }
 
     TaskSaleCatCreateApiHit(String flag) async {
-
+        print('selectlist...${Item_Category_Selected_list.length}');
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
 
 

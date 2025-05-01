@@ -166,7 +166,7 @@ class AddNewDsarScreen extends StatelessWidget{
             }
             else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
               //Utils.sanckBarError("Message", "Created");
-              TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
+            //  TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
               TaskMaster_page_controller.TaskDSARMasterCreate();
 
             }
@@ -176,7 +176,7 @@ class AddNewDsarScreen extends StatelessWidget{
 
             }else{
               //Utils.sanckBarError("Message", "Created2");
-              TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
+              //TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
               TaskMaster_page_controller.TaskDSARMasterCreate();
 
             }
@@ -535,7 +535,7 @@ class AddNewDsarScreen extends StatelessWidget{
             _displayDSARTypeForOption(selection).toString();
         TaskMaster_page_controller.Method_of_call_controller.clear();
         TaskMaster_page_controller.PurposeOfVisit.value = false;
-        TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
+        //TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
         if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Revisit"){
           TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR REVISIT');
         }else{
@@ -914,12 +914,17 @@ class AddNewDsarScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: InkWell(
-              onTap: (){
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
                   focusNode.requestFocus();
-                  controller.clear();
-                },
-                child: Icon(Icons.arrow_drop_down)),
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Product Category',

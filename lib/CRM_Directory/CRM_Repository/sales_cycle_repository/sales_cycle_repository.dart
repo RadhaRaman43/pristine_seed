@@ -110,6 +110,11 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.SaleCycleProductCategoryWiseAmtCreate,sessionManagement);
   }
 
+  Future<String> SaleCycleProductCategoryWiseAmtDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SaleCycleProductCategoryWiseAmtDelete,sessionManagement);
+  }
+
+
   Future<String> SaleCycleProductCategoryWiseAmtGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SaleCycleProductCategoryWiseAmtGet,sessionManagement);
   }

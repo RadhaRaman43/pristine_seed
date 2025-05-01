@@ -1005,11 +1005,51 @@ class SalesCycleVm extends GetxController{
         "sale_cycle_id": salesCycleId.toString(),
         "product_category": ProductCategoryCode.value.isEmpty?"":ProductCategoryCode.value,
         "estimated_amount": expectedAmountController.value.text,
-        "budget_amount": budgetAmountController.value.text,
         "created_by": email
       };
       loading.value=true;
       _api.SaleCycleProductCategoryWiseAmtCreate(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+          if( response[0].condition=="True"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            pageNumber = 0;
+            ProductCategoryWiseAmtGet(pageNumber, salesCycleId.value);
+            productCategoryController.value.clear();
+            budgetAmountController.value.clear();
+            expectedAmountController.value.clear();
+            loading.value = false;
+          }else {
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  void ProductCategoryWiseAmtDeleteApiHit(int id) {
+    try{
+      Map data= {
+        "id": id,
+        "sale_cycle_id": salesCycleId.toString(),
+        "product_category": ProductCategoryCode.value.isEmpty?"":ProductCategoryCode.value,
+        "created_by": email
+      };
+      loading.value=true;
+      _api.SaleCycleProductCategoryWiseAmtDelete(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
         if(jsonResponse is List){
@@ -2860,8 +2900,8 @@ class SalesCycleVm extends GetxController{
                   SizedBox(height: 10,),
                   bindIdentifyDecisionMaker(context),
                   SizedBox(height: 10,),
-                  bindSaleCycleCommit(context),
-                  SizedBox(height: 10,),
+                  /* bindSaleCycleCommit(context),
+                  SizedBox(height: 10,),*/
                   bindPurchaseProcessDropDown(context),
                   SizedBox(height: 10,),
                   bindPurchaseTimeFrameDropDown(context),
@@ -2993,7 +3033,7 @@ class SalesCycleVm extends GetxController{
        // margin: const EdgeInsets.only(left: 15.0,),
        // width: double.infinity,
         child: DropdownMenu<String>(
-          width: size.width-170,
+          width: size.width-185,
           controller: identifyDecisionMakerController.value,
           label: Text(
             "Identify Decision Maker",
@@ -3133,12 +3173,17 @@ class SalesCycleVm extends GetxController{
                 ..text = purchaseProcessController.value.text,
               focusNode: focusNode,
               decoration: InputDecoration(
-                  suffixIcon: InkWell(
-                    /*onTap: (){
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
                         focusNode.requestFocus();
-                        controller.clear();
-                      },*/
-                      child: Icon(Icons.arrow_drop_down)),
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
                   contentPadding: EdgeInsets.symmetric(
                       vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                   hintText: 'Purchase Process',
@@ -3246,12 +3291,17 @@ class SalesCycleVm extends GetxController{
                 ..text = purchasTimeFrameController.value.text,
               focusNode: focusNode,
               decoration: InputDecoration(
-                  suffixIcon: InkWell(
-                    /* onTap: (){
+                  suffixIcon: IconButton(
+                    color: AllColors.primaryDark1,
+                    onPressed: (){
+                      if(focusNode.hasFocus){
+                        focusNode.unfocus();
+                      }else{
                         focusNode.requestFocus();
-                        controller.clear();
-                      },*/
-                      child: Icon(Icons.arrow_drop_down)),
+                      }
+                    },
+                    icon: Icon(Icons.arrow_drop_down),
+                  ),
                   contentPadding: EdgeInsets.symmetric(
                       vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                   hintText: 'Purchase Time Frame',
@@ -3324,7 +3374,7 @@ class SalesCycleVm extends GetxController{
     Map data={
       "sales_cycle_id": saleCycleList.salesCycleId,
       "est_closure_date":  closureDateController.value.text.isEmpty?saleCycleList.estClosureDate:closureDateController.value.text,
-      "commit": saleCycleCommitController.value.text=="No"?0:1,
+      "commit": 0,
       "is_decision_maker": identifyDecisionMakerController.value.text=="No"?0:1,
       "purchase_process": purchaseProcessController.value.text.isEmpty?'':purchaseProcessController.value.text,
       "purchase_time_frame": purchasTimeFrameController.value.text.isEmpty?'':purchasTimeFrameController.value.text,
