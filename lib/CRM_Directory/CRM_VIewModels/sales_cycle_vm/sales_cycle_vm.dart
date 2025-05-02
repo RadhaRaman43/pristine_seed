@@ -27,6 +27,7 @@ import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
 import '../../CRM_Models/sale_cycle_modal/Item_qoute_with_report_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/SalesCycleById_Model.dart';
 import '../../CRM_Models/sale_cycle_modal/approval_person_model.dart';
 import '../../CRM_Models/sale_cycle_modal/item_quote_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/productCategoryWiseAmtModel.dart';
@@ -80,6 +81,7 @@ class SalesCycleVm extends GetxController{
   RxBool isReject=false.obs;
   var isCheck = (-1).obs;
   RxBool BusinessTerm=false.obs;
+  RxString filter="Sales cycle".obs;
   RxList<SalesCycleModal> saleCycleList=<SalesCycleModal>[].obs;
   RxList<ProductCategoryWiseAmtModel> budgetAmountList=<ProductCategoryWiseAmtModel>[].obs;
   RxList<SalesCycleQuoteHeaderModal> quoteList=<SalesCycleQuoteHeaderModal>[].obs;
@@ -96,6 +98,7 @@ class SalesCycleVm extends GetxController{
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
   RxList<CustomList> get_PurchaseProcess_list=<CustomList>[].obs;
   RxList<CustomList> get_PurchaseTimeFrame_list=<CustomList>[].obs;
+  RxList<SalesCycleByIdModel> get_SalesCycleProductById_List=<SalesCycleByIdModel>[].obs;
 
 
   var closureDateController=TextEditingController().obs;
@@ -638,6 +641,49 @@ class SalesCycleVm extends GetxController{
       ).whenComplete((){
         this.loading.value = false;
       });
+  }
+
+  getSaleCycleProductByIdList(String SalesId){
+    Map data= {
+      "sales_cycle_id": SalesId,
+      "created_by": email ,
+    };
+    loading.value=true;
+    _api.SalesCycleProductGetBySalesCycleId(data, sessionManagement).then((onValue){
+      try{
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleByIdModel> response = jsonResponse.map((e) => SalesCycleByIdModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            get_SalesCycleProductById_List.value = response;
+            print('SalesProductList${get_SalesCycleProductById_List.length}');
+
+          }else {
+           // Utils.showErrorToastification("Else!", "No Record Found");
+            get_SalesCycleProductById_List.value=[];
+
+          }
+        } else {
+          loading.value = false;
+          // service_indent_header_list.value = [];
+         // Utils.showExceptionToastification("Api Error!", jsonResponse);
+        }
+      }catch(e){
+        print(e);
+      }finally{
+        loading.value = false;
+
+      }
+
+    },
+    ).onError(
+          (error, stackTrace) {
+        print('sjdbbsidbi${error}');
+      },
+    ).whenComplete((){
+      this.loading.value = false;
+    });
   }
 
 

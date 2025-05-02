@@ -161,6 +161,7 @@ class SalesCycleScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
           onTap: () {
+            salesCycleController.filter.value = "Sales cycle";
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
           salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];
@@ -168,6 +169,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.getPurchaseTimeFrameApi();
           salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId! );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
+          salesCycleController.getSaleCycleProductByIdList(salesCycleController.saleCycleList[position].salesCycleId!);
 
           },
           subtitle: Column(

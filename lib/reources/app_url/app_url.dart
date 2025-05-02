@@ -252,6 +252,7 @@ class AppUrl {
      static const String SaleCycleProductCategoryWiseAmtGet = "$BASE_URL/api/CRM/SalesCycle/SaleCycleProductCategoryWiseAmtGet";
      static const String EmpMstEmailByGet = "$BASE_URL/api/CRM/SalesCycle/EmpMstEmailByGet";
      static const String SalesCycleMstPurchaseByUpdate = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstPurchaseByUpdate";
+     static const String SalesCycleProductGetBySalesCycleId = "$BASE_URL/api/CRM/SalesCycle/SalesCycleProductGetBySalesCycleId";
 
 
 

@@ -127,6 +127,10 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.SalesCycleMstPurchaseByUpdate,sessionManagement);
   }
 
+  Future<String> SalesCycleProductGetBySalesCycleId(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleProductGetBySalesCycleId,sessionManagement);
+  }
+
 
 
 }
