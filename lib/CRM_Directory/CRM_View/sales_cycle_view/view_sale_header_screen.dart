@@ -193,51 +193,67 @@ class ViewSaleHeaderScreen extends StatelessWidget{
             ],
           ),
         actions: [
-          PopupMenuButton(itemBuilder: (BuildContext context){
-            return [
-              PopupMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.update, color: Colors.black,),
-                    Text(' Update Sales Cycle'),
-                  ],
-                ),
-                onTap: (){
-                  saleCycleController.updateQuoteAccetedCycleController.value.clear();
-                  saleCycleController.saleCycleController.value.clear();
-                  saleCycleController.isChooseQuote.value = false;
-                  saleCycleController.isApprove.value=false;
-                  saleCycleController.isReject.value=false;
-                  saleCycleController.isCheck.value = -1;
-                  saleCycleController.checkBoxValues.updateAll((key, value) => false);
-                  saleCycleController.Quote_Selected_list.clear();
-                  saleCycleController.showDialogForSalesCyclePurchaseUpdate(context, saleCycleController.saleCycleList[0]);
+          PopupMenuButton(
+            itemBuilder: (BuildContext context) {
+              List<PopupMenuEntry> items = [];
 
-                },
-              ),
-              PopupMenuItem(
-                child: Row(
-                  children: [
-                    Icon(Icons.contacts, color: Colors.black,),
-                    Text(' Mark Loss'),
-                  ],
-                ),
-                onTap: (){
-                  saleCycleController.updateQuoteAccetedCycleController.value.clear();
-                  saleCycleController.saleCycleController.value.clear();
-                  saleCycleController.isChooseQuote.value = false;
-                  saleCycleController.isApprove.value=false;
-                  saleCycleController.isReject.value=false;
-                  saleCycleController.isCheck.value = -1;
-                  saleCycleController.checkBoxValues.updateAll((key, value) => false);
-                  saleCycleController.Quote_Selected_list.clear();
-                  saleCycleController.showDialogForsalescycleUpdate(context, saleCycleController.saleCycleList[0]);
+              // Conditionally add the first item
+              if (saleCycleController.saleCycleList[0].salesCycleStatus == "Prospect") {
+                items.add(
+                  PopupMenuItem(
+                    child: Row(
+                      children: [
+                        Icon(Icons.update, color: Colors.black),
+                        Text(' Update Sales Cycle'),
+                      ],
+                    ),
+                    onTap: () {
+                      saleCycleController.updateQuoteAccetedCycleController.value.clear();
+                      saleCycleController.saleCycleController.value.clear();
+                      saleCycleController.isChooseQuote.value = false;
+                      saleCycleController.isApprove.value = false;
+                      saleCycleController.isReject.value = false;
+                      saleCycleController.isCheck.value = -1;
+                      saleCycleController.checkBoxValues.updateAll((key, value) => false);
+                      saleCycleController.Quote_Selected_list.clear();
+                      saleCycleController.showDialogForSalesCyclePurchaseUpdate(context, saleCycleController.saleCycleList[0]);
+                    },
+                  ),
+                );
+              }
 
-                },
-              ),
-            ];
-          })
+              // Always add the second item
+              items.add(
+                PopupMenuItem(
+                  child: Row(
+                    children: [
+                      Icon(Icons.contacts, color: Colors.black),
+                      Text(' Mark Won / Loss'),
+                    ],
+                  ),
+                  onTap: () {
+                    saleCycleController.updateQuoteAccetedCycleController.value.clear();
+                    saleCycleController.saleCycleController.value.clear();
+                    saleCycleController.isChooseQuote.value = false;
+                    saleCycleController.isApprove.value = false;
+                    saleCycleController.isReject.value = false;
+                    saleCycleController.isCheck.value = -1;
+                    saleCycleController.checkBoxValues.updateAll((key, value) => false);
+                    saleCycleController.Quote_Selected_list.clear();
+                    if (saleCycleController.saleCycleList[0].salesCycleStatus != "Propose") {
+                      saleCycleController.updateQuoteAccetedCycleController.value.text = "LOSS";
+                      saleCycleController.isReject.value = true;
+                    }
+                    saleCycleController.showDialogForsalescycleUpdate(context, saleCycleController.saleCycleList[0]);
+                  },
+                ),
+              );
+
+              return items;
+            },
+          ),
         ],
+
       ),
       drawer: CustomDrawer(),
       body: Column(
@@ -420,8 +436,8 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                                      onTap: (){
                                        String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
                                        String PipeProdCate = ProductCategory.replaceAll(', ', '|');
-                                       int PageNo =0;
-                                       saleCycleController.itemMstGetBySalesIdApiHit(PageNo, saleCycleController.saleCycleList[0].salesCycleId,PipeProdCate);
+                                       saleCycleController.pageNumberForItem =0;
+                                       saleCycleController.itemMstGetBySalesIdApiHit(saleCycleController.pageNumberForItem, saleCycleController.saleCycleList[0].salesCycleId,PipeProdCate);
                                      },
                                      child: Icon(
                                          Icons.add

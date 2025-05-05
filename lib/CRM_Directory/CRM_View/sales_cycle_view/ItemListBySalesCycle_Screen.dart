@@ -50,13 +50,9 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                           padding: const EdgeInsets.all(7.0),
                           child: Icon(Icons.filter_alt_sharp, color: AllColors.whiteColor,),
                         ),
-                        /*decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(30),
-                        border: Border.all(color: AllColors.whiteColor)
-                    ),*/
                       ),
                       onTap: (){
-                       // showDialogForFilter(context);
+                        showDialogForFilter(context);
                       },
                     ),
                   ],
@@ -737,4 +733,309 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
       ),
     );
   }
+
+
+  void showDialogForFilter(BuildContext context) {
+    showModalBottomSheet(context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context){
+          return SingleChildScrollView(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.shield_moon_rounded, color: AllColors.lightredColor,),
+                      SizedBox(width: 5,),
+                      Text(
+                          'Filter',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.twenteetwo,
+                            fontWeight: FontWeight.w700,
+                            color: AllColors.primaryDark1,
+                          )),
+                      Spacer(),
+                      GestureDetector(
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
+                          child: Icon(Icons.cancel, color: AllColors.lightredColor,)
+                      ),
+                    ],
+                  ),
+                ),
+                Divider(height: 1,color: Colors.grey,),
+                SingleChildScrollView(
+                  child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            filterWithItemCode( context),
+                            SizedBox(height: 10),
+                            filterWithName( context),
+                            SizedBox(height: 10),
+                            filterWithCategoryName( context),
+                            SizedBox(height: 10),
+                            filterWithCategoryCode( context),
+                            SizedBox(height: 10),
+                            filterWithGSTGrpCode( context),
+                            SizedBox(height: 10),
+                            filterWithHsnCode( context),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all<Color>(
+                                        AllColors.redColor,
+                                      ),
+                                    ),
+                                    onPressed: ()  {
+                                      String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
+                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                      try{
+                                        saleCycleController.itemSalesCodeController.value.clear();
+                                        saleCycleController.nameSalesController.value.clear();
+                                        saleCycleController.categoryNameSalesController.value.clear();
+                                        saleCycleController.categoryCodeSalesController.value.clear();
+                                        saleCycleController.gstGrpCodeSalesController.value.clear();
+                                        saleCycleController.hsnCodeSalesController.value.clear();
+                                        saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                                        Navigator.pop(context);
+                                      }catch(e){
+                                        print("Exception..${e.toString()}");
+                                      }
+
+                                    },
+                                    child: Container(
+                                      child: Text('Clear',
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.blackColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Expanded(
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                      backgroundColor: MaterialStateProperty.all<Color>(
+                                        AllColors.greenblue,
+                                      ),
+                                    ),
+                                    onPressed: ()  {
+                                      String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
+                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                      saleCycleController.itemMstGetBySalesIdApiHit(0,saleCycleController.saleCycleList[0].salesCycleId, PipeProdCate);
+                                      Navigator.pop(context);
+                                      saleCycleController.itemSalesCodeController.value.clear();
+                                      saleCycleController.nameSalesController.value.clear();
+                                      saleCycleController.categoryNameSalesController.value.clear();
+                                      saleCycleController.categoryCodeSalesController.value.clear();
+                                      saleCycleController.gstGrpCodeSalesController.value.clear();
+                                      saleCycleController.hsnCodeSalesController.value.clear();
+
+                                    },
+                                    child: Container(
+                                      child: Text('Submit',
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.blackColor,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+
+
+
+
+                          ],
+                        ),
+                      )
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget filterWithItemCode(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.itemSalesCodeController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Item Code',
+          labelText: 'Item Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  Widget filterWithName(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.nameSalesController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Item Name',
+          labelText: 'Item Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  filterWithCategoryName(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.categoryNameSalesController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Category Name',
+          labelText: 'Category Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  Widget filterWithCategoryCode(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.categoryCodeSalesController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Category Code',
+          labelText: 'Category Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  Widget filterWithGSTGrpCode(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.gstGrpCodeSalesController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Gst Group Code',
+          labelText: 'Gst Group Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  Widget filterWithHsnCode(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.hsnCodeSalesController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'HSN Code',
+          labelText: 'HSN Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
 }

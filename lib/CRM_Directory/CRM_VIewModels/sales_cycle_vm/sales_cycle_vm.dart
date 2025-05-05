@@ -177,6 +177,14 @@ class SalesCycleVm extends GetxController{
   var gstGrpCodeController=TextEditingController().obs;
   var hsnCodeController=TextEditingController().obs;
 
+  //todo Sales Item list
+  var itemSalesCodeController=TextEditingController().obs;
+  var nameSalesController=TextEditingController().obs;
+  var categoryNameSalesController=TextEditingController().obs;
+  var categoryCodeSalesController=TextEditingController().obs;
+  var gstGrpCodeSalesController=TextEditingController().obs;
+  var hsnCodeSalesController=TextEditingController().obs;
+
   //todo shipping address
   var shippingController=TextEditingController().obs;
   var Shipping_PostCode_Controller=TextEditingController().obs;
@@ -234,16 +242,14 @@ class SalesCycleVm extends GetxController{
 
   void toggleSalesCheckbox(int index) {
     var item = itemMstGetBySalesIdList[index];
-    print("Check1");
     item.isSelected = item.isSelected == 1 ? 0 : 1;
-    print("Check2");
     if(item.isSelected==1)
     {
-      SalesCycleLineCreateApiHit(itemMstGetBySalesIdList[index].itemCode!, itemMstGetBySalesIdList[index].salesCycleId!);
+      SalesCycleLineCreateApiHit(itemMstGetBySalesIdList[index].itemCode!, salesCycleId.value);
       itemMstGetBySalesIdList[index] = item;
     }
     else{
-      SalesCycleLineDeleteApiHit(itemMstGetBySalesIdList[index].lineNo!, itemMstGetBySalesIdList[index].salesCycleId!);
+      SalesCycleLineDeleteApiHit(itemMstGetBySalesIdList[index].lineNo!, salesCycleId.value);
       itemMstGetBySalesIdList[index] = item;
     }
     // itemMstGetByQuoteIdList[index] = item;
@@ -974,13 +980,13 @@ class SalesCycleVm extends GetxController{
     try{
       Map data= {
         "sales_cycle_id": SalesId,
-        "item_code": "",
-        "name": "",
+        "item_code": itemSalesCodeController.value.text.isEmpty?"":itemSalesCodeController.value.text,
+        "name": nameSalesController.value.text.isEmpty?"":nameSalesController.value.text,
         "description": "",
         "category_code": categoryCodeController.value.text.isEmpty?pipeProdCate:categoryCodeController.value.text,
-        "category_name": "",
-        "gst_group_code": "",
-        "hsn_code": "",
+        "category_name": categoryNameSalesController.value.text.isEmpty?"":categoryNameSalesController.value.text,
+        "gst_group_code": gstGrpCodeSalesController.value.text.isEmpty?"":gstGrpCodeSalesController.value.text,
+        "hsn_code": hsnCodeSalesController.value.text.isEmpty?"":hsnCodeSalesController.value.text,
         "location_code": "",
         "active": -1,
         "is_bulky": -1,
@@ -1519,6 +1525,7 @@ class SalesCycleVm extends GetxController{
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
+            getSaleCycleProductByIdList(SalesId);
             loading.value = false;
 
           }else {
@@ -2019,36 +2026,12 @@ class SalesCycleVm extends GetxController{
 
                     SizedBox(height: 10,),
 
-                    /*Obx(() {
-                      return
-                        Visibility(
-                          visible: isApprove.value,
-                          child: Wrap(
-                            spacing: 3.0,
-                            children: Quote_Selected_list.map((category) {
-                              return Chip(
-                                label: Text(category.quoteId!),
-                                onDeleted: () {
-                                  Quote_Selected_list.remove(category);
-                                },
-                              );
-                            }).toList(),
-                          ),
-                        );
-
-                    }),*/
 
                     Obx(() {
                       return Visibility(
                         visible: isApprove.value && Quote_Selected_list.length>0,
                         child: Container(
                           height: 150,
-                         // width: 300,// Fixed height for the container
-                         // padding: const EdgeInsets.only(top: 4.0, bottom: 4.0),
-                          /*decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey), // Optional: to make the container visually distinct
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),*/
                           child: SingleChildScrollView(
                             scrollDirection: Axis.vertical, // Allows vertical scrolling
                             child: Wrap(
@@ -2835,6 +2818,7 @@ class SalesCycleVm extends GetxController{
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
+          readOnly: saleCycleList[0].salesCycleStatus !="Propose"?true:false,
           onTap: (){
             updateQuoteAccetedCycleController.value.clear();
           },
