@@ -26,6 +26,7 @@ import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
+import '../../CRM_Models/sale_cycle_modal/ItemMasterSalesId_Model.dart';
 import '../../CRM_Models/sale_cycle_modal/Item_qoute_with_report_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/SalesCycleById_Model.dart';
 import '../../CRM_Models/sale_cycle_modal/approval_person_model.dart';
@@ -68,9 +69,11 @@ class SalesCycleVm extends GetxController{
   RxString FromPage="Sales".obs;
   RxString quoteApprovalPage="".obs;
   int pageNumber = 0;
+  int pageNumberForItem = 0;
   int pageNumberForQuote = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
+  int total_rows_items = 0;
   int total_rows_sales = 0;
   RxBool isDeleteBtn=true.obs;
   RxBool isApprovalVisible=false.obs;
@@ -90,6 +93,7 @@ class SalesCycleVm extends GetxController{
   RxList<SalesCycleQuoteInformationModal> quoteHeaderdata=<SalesCycleQuoteInformationModal>[].obs;
   RxList<QuoteItems> quoteLinedata=<QuoteItems>[].obs;
   RxList<ItemQuoteModal> itemMstGetByQuoteIdList=<ItemQuoteModal>[].obs;
+  RxList<ItemMasterBySalesId_Model> itemMstGetBySalesIdList=<ItemMasterBySalesId_Model>[].obs;
   RxList<SalesCycleUpdateStatusModal> quoteLineCreate=<SalesCycleUpdateStatusModal>[].obs;
   RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list=<SalesCycleQuoteHeaderModal>[].obs;
   RxList<ItemCategoryMstModel> productCategoryList=<ItemCategoryMstModel>[].obs;
@@ -225,6 +229,24 @@ class SalesCycleVm extends GetxController{
       itemMstGetByQuoteIdList[index] = item;
     }
    // itemMstGetByQuoteIdList[index] = item;
+
+  }
+
+  void toggleSalesCheckbox(int index) {
+    var item = itemMstGetBySalesIdList[index];
+    print("Check1");
+    item.isSelected = item.isSelected == 1 ? 0 : 1;
+    print("Check2");
+    if(item.isSelected==1)
+    {
+      SalesCycleLineCreateApiHit(itemMstGetBySalesIdList[index].itemCode!, itemMstGetBySalesIdList[index].salesCycleId!);
+      itemMstGetBySalesIdList[index] = item;
+    }
+    else{
+      SalesCycleLineDeleteApiHit(itemMstGetBySalesIdList[index].lineNo!, itemMstGetBySalesIdList[index].salesCycleId!);
+      itemMstGetBySalesIdList[index] = item;
+    }
+    // itemMstGetByQuoteIdList[index] = item;
 
   }
 
@@ -948,6 +970,61 @@ class SalesCycleVm extends GetxController{
     }
   }
 
+  void itemMstGetBySalesIdApiHit(int pageNumber,String? SalesId, String pipeProdCate) {
+    try{
+      Map data= {
+        "sales_cycle_id": SalesId,
+        "item_code": "",
+        "name": "",
+        "description": "",
+        "category_code": categoryCodeController.value.text.isEmpty?pipeProdCate:categoryCodeController.value.text,
+        "category_name": "",
+        "gst_group_code": "",
+        "hsn_code": "",
+        "location_code": "",
+        "active": -1,
+        "is_bulky": -1,
+        "is_expiry_mandatory": -1,
+        "rowsPerPage": rowsPerPage,
+        "pageNumber": pageNumber
+      };
+
+      loading.value=true;
+      _api.ItemMstGetBySalesCycleId(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print("ondata....${onValue}");
+        if(jsonResponse is List){
+          List<ItemMasterBySalesId_Model> response = jsonResponse.map((e) => ItemMasterBySalesId_Model.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(pageNumber==0){
+              itemMstGetBySalesIdList.clear();
+            }
+            itemMstGetBySalesIdList.addAll(response);
+            total_rows_items=int.parse(itemMstGetBySalesIdList[0].totalRows!);
+            print('Total rows ${total_rows_items}');
+            Get.toNamed(RoutesName.ItemListBySalesCycle_Screen);
+
+          }else {
+            Utils.sanckBarError("False Message !", response[0].message.toString());
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
 
   void quoteLineCreateFunction(String item_code, String flag){
     print("Index ${index}");
@@ -1415,6 +1492,91 @@ class SalesCycleVm extends GetxController{
       print(error);
       print(stackTrace);
       print("Exception....");
+    }
+  }
+
+  void SalesCycleLineCreateApiHit(String item_code, String SalesId){
+    print("Index ${index}");
+    loading.value = true;
+    Map data={
+      "sales_cycle_id":SalesId,
+      "created_by": email,
+      "lines": [
+        {
+          "line_no": -1,
+          "item_code": item_code.toString(),
+          "item_description":"",
+          "qty": 0 ,
+          "line_status": "Pending"
+        }
+      ]
+    };
+    try{
+      _api.SalesProductLineCreate(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition=="True"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            loading.value = false;
+
+          }else {
+            print("message ${response[0].message.toString()}");
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+  void SalesCycleLineDeleteApiHit(int LineNo, String SalesCycleid) {
+    try{
+      Map data= {
+        "line_no": LineNo,
+        "sales_cycle_id": SalesCycleid,
+        "created_by": email
+      };
+      loading.value=true;
+      _api.SalesProductLineDelete(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+          if( response[0].condition=="True"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            getSaleCycleProductByIdList(SalesCycleid);
+            loading.value = false;
+          }else {
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
     }
   }
 

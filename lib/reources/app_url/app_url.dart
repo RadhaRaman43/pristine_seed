@@ -253,6 +253,9 @@ class AppUrl {
      static const String EmpMstEmailByGet = "$BASE_URL/api/CRM/SalesCycle/EmpMstEmailByGet";
      static const String SalesCycleMstPurchaseByUpdate = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstPurchaseByUpdate";
      static const String SalesCycleProductGetBySalesCycleId = "$BASE_URL/api/CRM/SalesCycle/SalesCycleProductGetBySalesCycleId";
+     static const String SalesProductLineDelete = "$BASE_URL/api/CRM/SalesCycle/SalesProductLineDelete";
+     static const String ItemMstGetBySalesCycleId = "$BASE_URL/api/CRM/SalesCycle/ItemMstGetBySalesCycleId";
+     static const String SalesProductLineCreate = "$BASE_URL/api/CRM/SalesCycle/SalesProductLineCreate";
 
 
 

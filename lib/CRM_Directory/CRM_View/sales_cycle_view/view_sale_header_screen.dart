@@ -383,6 +383,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                              SizedBox(
                                width: size.width * 0.02,
                              ),
+
                              Obx((){
                                return ActionChip(
                                  elevation: 2,
@@ -410,6 +411,26 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                              SizedBox(
                                width: size.width * 0.02,
                              ),
+
+                             Obx((){
+                               return Visibility(
+                                 visible: saleCycleController.filter.value == 'Sales cycle',
+                                 child: CircleAvatar(
+                                   child: InkWell(
+                                     onTap: (){
+                                       String ProductCategory = saleCycleController.saleCycleList[0].productCategoryCode??"";
+                                       String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                       int PageNo =0;
+                                       saleCycleController.itemMstGetBySalesIdApiHit(PageNo, saleCycleController.saleCycleList[0].salesCycleId,PipeProdCate);
+                                     },
+                                     child: Icon(
+                                         Icons.add
+                                     ),
+                                   ),
+                                 ),
+                               );
+                             }),
+
                            ],
                          ),
                     ),
@@ -572,7 +593,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                   // visible: saleCycleController.saleCycleList[0].createdBy==saleCycleController.email,
                   visible:((saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus!.toLowerCase()=="pending") && (saleCycleController.saleCycleList[0].salesCycleStatus!.toLowerCase()=="prospect")
                       && (saleCycleController.saleCycleList[0].isReadySendForApproval == 1)
-                      && (saleCycleController.ischangeNeedIdentity.value && saleCycleController.ischangesolutionAccepted.value) )?true:false,
+                      && (saleCycleController.ischangeNeedIdentity.value && saleCycleController.ischangesolutionAccepted.value) ) && saleCycleController.filter.value == 'Solution Accepted' ?true:false,
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: ElevatedButton(
@@ -2452,30 +2473,9 @@ class ViewSaleHeaderScreen extends StatelessWidget{
         subtitle: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Text(
-                  "Item Name : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  (saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .itemName??"") ,
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
 
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Item Description : ",
@@ -2509,7 +2509,31 @@ class ViewSaleHeaderScreen extends StatelessWidget{
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Category Name : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
 
+                Text(
+                  saleCycleController
+                      .get_SalesCycleProductById_List[index]
+                      .categoryName.toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Qty : ",
@@ -2532,6 +2556,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Unit Price : ",
@@ -2556,6 +2581,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
             ),
 
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "MRP Price : ",
@@ -2580,6 +2606,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
             ),
 
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Total Price : ",
@@ -2603,6 +2630,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
               ],
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Line Status : ",
@@ -2625,34 +2653,13 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                 ),
               ],
             ),
-            Row(
-              children: [
-                Text(
-                  "Category Name : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
 
-                Text(
-                  saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .categoryName.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
 
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Created By :",
+                  "Created By : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.twelve,
@@ -2673,7 +2680,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
               ],
             ),
             Row(
-
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Created On : ",
@@ -2702,8 +2709,11 @@ class ViewSaleHeaderScreen extends StatelessWidget{
           children: [
             InkWell(
                 onTap: (){
-                 // saleCycleController.quoteId.value=saleCycleController.quoteList[index].quoteId!;
-                 // saleCycleController.getQuoteHeaderInformation(saleCycleController.quoteList[index].quoteId, "");
+                  showSalesProductConfirmationDialog(context, saleCycleController
+                      .get_SalesCycleProductById_List[index]
+                      .salesCycleId.toString(), saleCycleController
+                      .get_SalesCycleProductById_List[index]
+                      .lineNo!,);
                 },
                 child: Icon(Icons.delete_forever, color: Colors.red,)),
           ],
@@ -3609,6 +3619,96 @@ class ViewSaleHeaderScreen extends StatelessWidget{
         });
   }
 
+  showSalesProductConfirmationDialog(context, String SalesId, int LineNo){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.check_circle, color: AllColors.lightredColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Delete!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          'Do you want to delete this sales line ?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+
+                      SizedBox(height: 20),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              Get.back();
+
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Cancel',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              saleCycleController.SalesCycleLineDeleteApiHit(LineNo, SalesId);
+                              Get.back();
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Confirm',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ]),
+          );
+
+        });
+  }
+
   /*showWonLossConfirmationDialog(context, SalesCycleModal saleCycleList){
     showDialog(
         context: context,
@@ -3653,10 +3753,12 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                             ),
                             onPressed: ()  {
                               Get.back();
-                              *//*saleCycleController.salesCycleMstUpdateApiHit(saleCycleList,
+                              */
+  /*saleCycleController.salesCycleMstUpdateApiHit(saleCycleList,
                                   saleCycleController.proposedSolutionController.value.text, saleCycleController.updateQuoteAccetedCycleController.value.text
                                   , saleCycleController.competitorNameController.value.text, saleCycleController.quoteRejectReasonController.value.text, "");
-*//*
+*/
+/*
 
                             },
                             child: Container(
@@ -3729,7 +3831,8 @@ class ViewSaleHeaderScreen extends StatelessWidget{
             content: Container(
                 */
 /*height: size.height*.3,
-                width: size.width*4,*//*
+                width: size.width*4,*/
+  /*
 
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -3768,7 +3871,8 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                                   print('Reopen Dialog');
                                   // Reopen the dialog when coming back from the other page
                                   showDialogForsalescycleUpdate(context, saleCycleList);
-                                });*//*
+                                });*/
+  /*
 
                                // navigateAndShowDialog(context, saleCycleList);
                                 Get.toNamed(RoutesName.approvedQuotationListScreen);

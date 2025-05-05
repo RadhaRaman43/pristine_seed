@@ -1581,18 +1581,18 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
+                       /*Container(
                          decoration: BoxDecoration(
                              color: Colors.white,
                              borderRadius: BorderRadius.circular(10)
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
-                         /*  readOnly:accountMaster_page_controller.view=='FromTaskMainScreen'
+                         *//*  readOnly:accountMaster_page_controller.view=='FromTaskMainScreen'
                                || accountMaster_page_controller.view=='VIEW' ||
                                accountMaster_page_controller.view=='Task'||
                                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller.Sale_Representative_Controller.value,
                            decoration: InputDecoration(
@@ -1612,7 +1612,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                        ),
 
-                       SizedBox(height: 15,),
+                       SizedBox(height: 15,),*/
 
                        Container(
                          decoration: BoxDecoration(
@@ -1626,11 +1626,11 @@ class UpdateAccountMaster extends StatelessWidget{
                                accountMaster_page_controller.view=='Task'||
                                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
                                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                           readOnly:  true,
                            controller: accountMaster_page_controller.Regional_service_head_Controller.value,
                            decoration: InputDecoration(
-                               hintText: "Regional Head",
-                               labelText: "Regional Head",
+                               hintText: "Reporting manager",
+                               labelText: "Reporting manager",
                                //suffixIcon: Icon(Icons.email),
                                contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -1654,7 +1654,174 @@ class UpdateAccountMaster extends StatelessWidget{
                      ],
                    ),
                  ),
+               ),
+
+               SizedBox(height: 15,),
+
+
+               Container(
+                 margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                 //color: AllColors.Card1Color,
+                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                 decoration: BoxDecoration(
+                   //color: AllColors.Card3Color, // Set the inside color here
+                   border: Border.all(
+                     color: AllColors.grayColor, // Set the border color here
+                     width: 1.0, // Adjust the border width if necessary
+                   ),
+                   borderRadius: BorderRadius.circular(10.0),
+                 ),
+                 child: InputDecorator(
+                   decoration: InputDecoration(
+                     labelText: 'Geo Information',
+                     labelStyle: GoogleFonts.poppins(
+                         color: AllColors.primaryDark1,
+                         fontWeight: FontWeight.w700,
+                         fontSize: AllFontSize.sisxteen),
+                     border: OutlineInputBorder(
+                       borderSide: BorderSide(
+
+                       ),
+                       borderRadius: BorderRadius.circular(10.0),
+                     ),
+                   ),
+                   child: Column(
+                     children: [
+
+                       Container(
+                         decoration: BoxDecoration(
+                             color: Colors.white,
+                             borderRadius: BorderRadius.circular(10)
+                         ),
+                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                         child: TextFormField(
+                           readOnly: true,
+                           keyboardType: TextInputType.number,
+                           controller: accountMaster_page_controller
+                               .Frontliner_Controller,
+                           decoration: InputDecoration(
+                               hintText: "Frontliner",
+                               labelText: "Frontliner",
+                               //suffixIcon: Icon(Icons.email),
+                               contentPadding: EdgeInsets.symmetric(
+                                   vertical: AllFontSize.ten,
+                                   horizontal: AllFontSize.ten),
+
+                               focusedBorder: OutlineInputBorder(
+                                   borderSide: BorderSide(color: Colors.blue)
+                               ),
+                               border: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(10)
+                               )
+                           ),
+
+                         ),
+                       ),
+
+                       SizedBox(height: 15,),
+
+                       Container(
+                         decoration: BoxDecoration(
+                             color: Colors.white,
+                             borderRadius: BorderRadius.circular(10)
+                         ),
+                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                         child: TextFormField(
+                           readOnly: true,
+                           keyboardType: TextInputType.number,
+                           controller: accountMaster_page_controller
+                               .BranchHead_Controller,
+                           decoration: InputDecoration(
+                               hintText: "Branch Head",
+                               labelText: "Branch Head",
+                               //suffixIcon: Icon(Icons.email),
+                               contentPadding: EdgeInsets.symmetric(
+                                   vertical: AllFontSize.ten,
+                                   horizontal: AllFontSize.ten),
+
+                               focusedBorder: OutlineInputBorder(
+                                   borderSide: BorderSide(color: Colors.blue)
+                               ),
+                               border: OutlineInputBorder(
+                                   borderRadius: BorderRadius.circular(10)
+                               )
+                           ),
+
+                         ),
+                       ),
+
+
+                       SizedBox(height: 15,),
+
+                       Container(
+                   decoration: BoxDecoration(
+                       color: Colors.white,
+                       borderRadius: BorderRadius.circular(10)
+                   ),
+                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   child: TextFormField(
+                     readOnly: true,
+                     controller: accountMaster_page_controller
+                         .ZoneHead_Controller,
+                     decoration: InputDecoration(
+                         hintText: "Zone Head",
+                         labelText: "Zone Head",
+                         //suffixIcon: Icon(Icons.email),
+                         contentPadding: EdgeInsets.symmetric(
+                             vertical: AllFontSize.ten,
+                             horizontal: AllFontSize.ten),
+
+                         focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: Colors.blue)
+                         ),
+                         border: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(10)
+                         )
+                     ),
+
+                   ),
+                 ),
+
+
+
+                       SizedBox(height: 15,),
+
+                       Container(
+                   decoration: BoxDecoration(
+                       color: Colors.white,
+                       borderRadius: BorderRadius.circular(10)
+                   ),
+                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   child: TextFormField(
+                     readOnly: true,
+                     controller: accountMaster_page_controller
+                         .ClusterHead_Controller,
+                     decoration: InputDecoration(
+                         hintText: "Cluster Head",
+                         labelText: "Cluster Head",
+                         //suffixIcon: Icon(Icons.email),
+                         contentPadding: EdgeInsets.symmetric(
+                             vertical: AllFontSize.ten,
+                             horizontal: AllFontSize.ten),
+
+                         focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: Colors.blue)
+                         ),
+                         border: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(10)
+                         )
+                     ),
+
+                   ),
+                 ),
+
+
+
+                     ],
+                   ),
+                 ),
                )
+
 
 
              ],
