@@ -129,6 +129,12 @@ class Accountmastervm extends GetxController{
   var Regional_service_head_Controller = TextEditingController().obs;
   var TatResponse_Controller = TextEditingController();
 
+  var Frontliner_Controller = TextEditingController();
+  var BranchHead_Controller = TextEditingController();
+  var ZoneHead_Controller = TextEditingController();
+  var ClusterHead_Controller = TextEditingController();
+
+
   //todo shipping address
   var Shipping_Address_controller = TextEditingController().obs;
   var Shipping_Address2_Controller = TextEditingController().obs;
@@ -361,7 +367,7 @@ class Accountmastervm extends GetxController{
                 RegionalHeadEmail = pos > -1 ?userGeoHierarchyy[pos].approverEmail.toString():"";
                 print("SalesRepre.. ${pos2 > -1 ? userGeoHierarchyy[pos2].approvedFullName : ""}");
                 Sale_Representative_Controller.value.text = pos2 > -1 ?userGeoHierarchyy[pos2].approvedFullName.toString():"";
-                SalesRepresentativeEmail = pos > -1 ?userGeoHierarchyy[pos].approverEmail.toString():"";
+                SalesRepresentativeEmail = pos2 > -1 ?userGeoHierarchyy[pos2].approverEmail.toString():"";
               }
             }
           }else{
@@ -1499,7 +1505,14 @@ class Accountmastervm extends GetxController{
       TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
       tatResponseType = response[0].tatResponseType??"";
       Sale_Representative_Controller.value.text = response[0].salesRepresentative??"";
-      Regional_service_head_Controller.value.text = response[0].regionalServiceHead??"";
+      SalesRepresentativeEmail = response[0].salesRepresentative??"";
+      Regional_service_head_Controller.value.text = response[0].regionalServiceHeadName??"";
+      RegionalHeadEmail = response[0].regionalServiceHead??"";
+
+      Frontliner_Controller.text = response[0].frontlinerValue??"";
+      BranchHead_Controller.text = response[0].branchHeadValue??"";
+      ZoneHead_Controller.text = response[0].zoneHeadValue??"";
+      ClusterHead_Controller.text = response[0].clustureHeadValue??"";
 
     }catch(e){
 
@@ -1539,6 +1552,7 @@ class Accountmastervm extends GetxController{
       PanNo_Controller.clear();
       IfscCode_Controller.clear();
       IsActive_controller.text = '-1';
+      ReferralBy_Controller.text="No";
       Address_controller.clear();
       Address2_Controller.clear();
       PostCode_Controller.clear();
@@ -1558,7 +1572,9 @@ class Accountmastervm extends GetxController{
       TatResponse_Controller.clear();
       tatResponseType  = '';
       Sale_Representative_Controller.value.clear();
+      SalesRepresentativeEmail = "";
       Regional_service_head_Controller.value.clear();
+      RegionalHeadEmail = "";
 
     }catch(e){
 
@@ -2057,7 +2073,9 @@ class Accountmastervm extends GetxController{
       TatResponse_Controller.text = response[position].tatResponseType??"" + ' (${response[position].tatResponseTime} Hours)';
       tatResponseType = response[position].tatResponseType??"";
       Sale_Representative_Controller.value.text = response[position].salesRepresentative??"";
-      Regional_service_head_Controller.value.text = response[position].regionalServiceHead??"";
+      SalesRepresentativeEmail = response[position].salesRepresentative??"";
+      Regional_service_head_Controller.value.text = response[position].regionalServiceHeadName??"";
+      RegionalHeadEmail = response[position].regionalServiceHead??"";
 
     }catch(e){
 

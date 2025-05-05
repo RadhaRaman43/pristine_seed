@@ -24,6 +24,8 @@ class AccountMasterGetByCodeModel {
   int? tatResponseTime;
   String? salesRepresentative;
   String? regionalServiceHead;
+  String? salesRepresentativeName;
+  String? regionalServiceHeadName;
   String? profile;
   int? isActive;
   String? createdBy;
@@ -42,6 +44,10 @@ class AccountMasterGetByCodeModel {
   String? shippingStateCode;
   String? shippingStateName;
   int? isReferral;
+  String? frontlinerValue;
+  String? branchHeadValue;
+  String? zoneHeadValue;
+  String? clustureHeadValue;
 
   AccountMasterGetByCodeModel(
       {this.condition,
@@ -69,6 +75,8 @@ class AccountMasterGetByCodeModel {
         this.tatResponseTime,
         this.salesRepresentative,
         this.regionalServiceHead,
+        this.salesRepresentativeName,
+        this.regionalServiceHeadName,
         this.profile,
         this.isActive,
         this.createdBy,
@@ -86,7 +94,11 @@ class AccountMasterGetByCodeModel {
         this.shippingPostCode,
         this.shippingStateCode,
         this.shippingStateName,
-        this.isReferral});
+        this.isReferral,
+        this.frontlinerValue,
+        this.branchHeadValue,
+        this.zoneHeadValue,
+        this.clustureHeadValue});
 
   AccountMasterGetByCodeModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -116,6 +128,8 @@ class AccountMasterGetByCodeModel {
     tatResponseTime = json['tat_response_time'];
     salesRepresentative = json['sales_representative'];
     regionalServiceHead = json['regional_service_head'];
+    salesRepresentativeName = json['sales_representative_name'];
+    regionalServiceHeadName = json['regional_service_head_name'];
     profile = json['profile'];
     isActive = json['is_active'];
     createdBy = json['created_by'];
@@ -134,6 +148,10 @@ class AccountMasterGetByCodeModel {
     shippingStateCode = json['shipping_state_code'];
     shippingStateName = json['shipping_state_name'];
     isReferral = json['is_referral'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
   }
 
   Map<String, dynamic> toJson() {
@@ -165,6 +183,8 @@ class AccountMasterGetByCodeModel {
     data['tat_response_time'] = this.tatResponseTime;
     data['sales_representative'] = this.salesRepresentative;
     data['regional_service_head'] = this.regionalServiceHead;
+    data['sales_representative_name'] = this.salesRepresentativeName;
+    data['regional_service_head_name'] = this.regionalServiceHeadName;
     data['profile'] = this.profile;
     data['is_active'] = this.isActive;
     data['created_by'] = this.createdBy;
@@ -183,6 +203,10 @@ class AccountMasterGetByCodeModel {
     data['shipping_state_code'] = this.shippingStateCode;
     data['shipping_state_name'] = this.shippingStateName;
     data['is_referral'] = this.isReferral;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
     return data;
   }
 }

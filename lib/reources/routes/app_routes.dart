@@ -31,6 +31,7 @@ import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_master_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/update_task_mst_infra_screen.dart';
 import '../../CRM_Directory/CRM_View/quote_approval_list/quote_approval_list_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approval_person_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_item_list.dart';
@@ -545,6 +546,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.quoteItemList,
         page: ()=>QuoteItemList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.ItemListBySalesCycle_Screen,
+        page: ()=>Itemlist_by_sales_cycle_Screen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

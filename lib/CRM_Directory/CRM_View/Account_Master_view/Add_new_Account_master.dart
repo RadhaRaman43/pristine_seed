@@ -1454,7 +1454,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                           SizedBox(height: 15,),
 
-                          Obx((){
+                          /*Obx((){
                             return Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -1483,7 +1483,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                               ),
                             );
-                          }),
+                          }),*/
 
 
 
@@ -1501,8 +1501,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                 controller: accountMaster_page_controller
                                     .Regional_service_head_Controller.value,
                                 decoration: InputDecoration(
-                                    hintText: "Regional Head",
-                                    labelText: "Regional Head",
+                                    hintText: "Reporting Manager",
+                                    labelText: "Reporting Manager",
                                     //suffixIcon: Icon(Icons.email),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
@@ -1526,7 +1526,7 @@ class AddNewAccountMaster extends StatelessWidget{
                         ],
                       ),
                     ),
-                  )
+                  ),
 
 
                 ],

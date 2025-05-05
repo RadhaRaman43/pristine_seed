@@ -131,6 +131,18 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.SalesCycleProductGetBySalesCycleId,sessionManagement);
   }
 
+  Future<String> SalesProductLineDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesProductLineDelete,sessionManagement);
+  }
+
+  Future<String> SalesProductLineCreate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesProductLineCreate,sessionManagement);
+  }
+
+  Future<String> ItemMstGetBySalesCycleId(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.ItemMstGetBySalesCycleId,sessionManagement);
+  }
+
 
 
 }

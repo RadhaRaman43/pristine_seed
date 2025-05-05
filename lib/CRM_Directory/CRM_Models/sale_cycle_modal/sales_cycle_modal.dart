@@ -8,6 +8,7 @@ class SalesCycleModal {
   String? contactCode;
   String? contactName;
   String? productCategory;
+  String? productCategoryCode;
   String? salesCycleStatus;
   String? salesCycleApprovalStatus;
   String? salesCycleRemarks;
@@ -76,6 +77,7 @@ class SalesCycleModal {
         this.contactCode,
         this.contactName,
         this.productCategory,
+        this.productCategoryCode,
         this.salesCycleStatus,
         this.salesCycleApprovalStatus,
         this.salesCycleRemarks,
@@ -144,6 +146,7 @@ class SalesCycleModal {
     contactCode = json['contact_code'];
     contactName = json['contact_name'];
     productCategory = json['product_category'];
+    productCategoryCode = json['product_category_code'];
     salesCycleStatus = json['sales_cycle_status'];
     salesCycleApprovalStatus = json['sales_cycle_approval_status'];
     salesCycleRemarks = json['sales_cycle_remarks'];
@@ -214,6 +217,7 @@ class SalesCycleModal {
     data['contact_code'] = this.contactCode;
     data['contact_name'] = this.contactName;
     data['product_category'] = this.productCategory;
+    data['product_category_code'] = this.productCategoryCode;
     data['sales_cycle_status'] = this.salesCycleStatus;
     data['sales_cycle_approval_status'] = this.salesCycleApprovalStatus;
     data['sales_cycle_remarks'] = this.salesCycleRemarks;
