@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
-import 'package:awesome_notifications/awesome_notifications.dart';
+//import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -19,6 +19,7 @@ import 'package:http/http.dart' as http;
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
+import '../../../main.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
@@ -1750,9 +1751,34 @@ class SalesCycleVm extends GetxController{
     }
   }
 
+  void showNotification(String path, String flag) async {
+    String title = (flag == 'quoteReport') ? 'Quote Report Notification' : 'Quote SPR Report Notification';
+    int notificationId = Random().nextInt(100000);
 
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'basic_channel',
+      'Basic notifications',
+      channelDescription: 'Notification channel for basic tests',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      ticker: 'ticker',
+    );
 
-  showNotification(String path, String flag){
+    const NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      notificationId,
+      title,
+      'Report downloaded successfully',
+      platformDetails,
+      payload: 'filePath=$path', // encoded in query format
+    );
+  }
+
+/*  showNotification(String path, String flag){
     String Title = '';
     if(flag == 'quoteReport'){
       Title = 'Quote Report Notification';
@@ -1775,7 +1801,7 @@ class SalesCycleVm extends GetxController{
         ),
       ],
     );
-  }
+  }*/
 
 
   /*Future<void> requestStoragePermission() async {
