@@ -415,10 +415,21 @@ class SalesCycleVm extends GetxController{
   salesCycleMstUpdateApiHit(SalesCycleModal saleCycleList, String proposedSolution,
       String quote_accepted, String competitor_name, String quote_rejected_reason, String flag ){
     print('reject....${quote_rejected_reason}');
-    List<SalesCycleUpdateStatusModal> lines = Quote_Selected_list.map((item) => SalesCycleUpdateStatusModal(quoteId: item.quoteId!)).toList();
+  //  List<SalesCycleUpdateStatusModal> lines = Quote_Selected_list.map((item) => SalesCycleUpdateStatusModal(quoteId: item.quoteId!)).toList();
 
     loading.value = true;
       Map data={
+        "sales_cycle_id": saleCycleList.salesCycleId,
+        "est_closure_date": closureDateController.value.text.isEmpty?saleCycleList.estClosureDate:closureDateController.value.text,
+        "budget_amount": saleCycleList.budgetAmount,
+        "is_decision_maker": identifyDecisionMakerController.value.text=="No"?0:1,
+        "purchase_process": purchaseProcessController.value.text.isEmpty?'':purchaseProcessController.value.text,
+        "purchase_time_frame": purchasTimeFrameController.value.text.isEmpty?'':purchasTimeFrameController.value.text,
+        "commit": saleCycleList.salesCycleStatus!.toLowerCase()=="propose"?1:0,
+        "sales_cycle_owner": saleCycleList.salesCycleOwner,
+        "created_by": email
+      }
+    /*{
         "sales_cycle_id": saleCycleList.salesCycleId,
         "est_closure_date": closureDateController.value.text.isEmpty?saleCycleList.estClosureDate:closureDateController.value.text,
         "budget_amount": Total_Budget_Amount.value,
@@ -436,7 +447,7 @@ class SalesCycleVm extends GetxController{
         "purchase_process": purchaseProcessController.value.text.isEmpty?'':purchaseProcessController.value.text,
         "purchase_time_frame": purchasTimeFrameController.value.text.isEmpty?'':purchasTimeFrameController.value.text,
         "commit": saleCycleCommitController.value.text=="No"?0:1
-      };
+      }*/;
       try{
         _api. salesCycleMstUpdateApiHit(data, sessionManagement).then((onValue){
           final jsonResponse = json.decode(onValue);
@@ -449,10 +460,12 @@ class SalesCycleVm extends GetxController{
               if(flag != ''){
                 salesCycleMstApprovereject(saleCycleList, solutionRejectedRemarkController.value.text.isNotEmpty?solutionRejectedRemarkController.value.text:rejectReasonController.value.text, flag);
               }
+              if(flag=="Pending For Approval"){
+                getSalesCycleMstStatusChange(saleCycleList);
+              }
               pageNumber = 0;
               getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
               Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-
               loading.value = false;
             }else {
               loading.value = false;
@@ -3631,7 +3644,43 @@ class SalesCycleVm extends GetxController{
   }
 
 
+  getSalesCycleMstStatusChange(SalesCycleModal saleCycleList){
+    loading.value = true;
+    Map data={
+      "sales_cycle_id": saleCycleList.salesCycleId,
+      "created_by": email
+    };
+    try{
+      _api.SalesCycleMstStatusChangeApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition!.toLowerCase()=="true"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            getsalesCycleData(0, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            loading.value = false;
+          }else {
+            print("message ${response[0].message.toString()}");
+            loading.value = false;
+            Utils.showToastification("False Message !", response[0].message.toString());
 
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
 
 
 }

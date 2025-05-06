@@ -296,6 +296,32 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                             SizedBox(height: 10,),
                             bindPurchaseTimeFrameDropDown(context),
                             SizedBox(height: 10,),
+                            Visibility(
+                              visible:saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="SUSPECT" && saleCycleController.saleCycleList[0].isReadySendForApproval==1?true:false ,
+                              child: Column(
+                                children: [
+                                  SizedBox(height: 10,),
+                                  Container(
+                                  padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+                                  child: IgnorePointer(
+                                    ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval==0   &&
+                                        (saleCycleController.FromPage.value == 'Sales' || saleCycleController.FromPage.value == 'FromTaskScreen'
+                                        )) || saleCycleController.FromPage.value == 'Task' || saleCycleController.FromPage.value == 'FromTaskScreen'?true:false,
+                                    child: DefaultButton(
+                                      press: (){
+                                        saleCycleController.salesCycleMstUpdateApiHit(saleCycleController.saleCycleList[0],
+                                            saleCycleController.proposedSolutionController.value.text, "", "", "", "");
+                                        //saleCycleController.ProductCategoryWiseAmtCreateApiHit(0);
+
+                                      },
+                                      text: "Save",
+                                    ),
+                                  ),
+                                                              ),
+                                ],
+                              ),),
+
+
                             /*Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -304,7 +330,8 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                               ],
                             ),*/
                             bindProductCategoryDropDown(context),
-                          SizedBox(height: 10,),
+                            SizedBox(height: 10,),
+
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -335,7 +362,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                                       saleCycleController.ProductCategoryWiseAmtCreateApiHit(0);
 
                                     },
-                                    text: "Save",
+                                    text: "Add",
                                   ),
                                 ),
                               ),
@@ -642,7 +669,7 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                 return Visibility(
                   visible:(saleCycleController.saleCycleList[0].salesCycleStatus=="Prospect") &&
                       (saleCycleController.ischangeNeedIdentity.isFalse ||
-                          saleCycleController.ischangesolutionAccepted.isFalse) &&  (saleCycleController.saleCycleList[0].salesCycleApprovalStatus!="Rejected")
+                          saleCycleController.ischangesolutionAccepted.isFalse) &&  (saleCycleController.saleCycleList[0].salesCycleApprovalStatus!="Rejected") && saleCycleController.filter.value == 'Solution Accepted'
                       ?true:false,
                   /* visible:saleCycleController.saleCycleList[0].salesCycleStatus=="Prospect" &&
                  saleCycleController.ischangeNeedIdentity.value && saleCycleController.ischangesolutionAccepted.value?false:true,*/
@@ -1160,13 +1187,12 @@ class ViewSaleHeaderScreen extends StatelessWidget{
                               onPressed: ()  {
                                 print("message ...${payloadMessage}");
                                 if(payloadMessage=="Pending For Approval") {
-                                  saleCycleController.salesCycleMstUpdateApiHit(saleCycleList, 
+                                  saleCycleController.salesCycleMstUpdateApiHit(saleCycleList,
                                       saleCycleController.proposedSolutionController.value.text, "", "", "", "Pending For Approval");
                                 }
                                 else{
                                   saleCycleController.salesCycleMstApprovereject(saleCycleList, saleCycleController.rejectReasonController.value.text, payloadMessage);
                                 }
-
                                 Get.back();
                               },
                               child: Container(
