@@ -37,6 +37,7 @@ class Taskmastervm extends GetxController{
     RxBool PurposeOfVisit=false.obs;
     RxBool PaymentCall=false.obs;
     RxBool IsSalesId=false.obs;
+    RxBool IsCatergorySelected=false.obs;
     int pageNumber = 0;
     int rowsPerPage = 10;
     int total_rows = 0;
@@ -88,19 +89,30 @@ class Taskmastervm extends GetxController{
     var userRegionUpdateController = TextEditingController();
     var userClusterUpdateController = TextEditingController();
     var projectValueUpdateController = TextEditingController();
+    var nameOfProjectController = TextEditingController();
+    var customerNameController = TextEditingController();
+    var locationController = TextEditingController();
+    var timePeriodToCompleteWorkController = TextEditingController();
     var isInfraLeadUpdateController = TextEditingController();
     var expectedDateOfOrderUpdateController = TextEditingController();
     var drawingcollectedUpdateController = TextEditingController();
     var proposalSubmittedUpdateController = TextEditingController();
     var inaugrationDateUpdateController = TextEditingController();
     var architectUpdateController = TextEditingController();
+    var assistantEngineerController = TextEditingController();
     var executiveEngineerUpdateController = TextEditingController();
+    var contactPersonHODController = TextEditingController();
     var nameOfArchitecfirmUpdateController = TextEditingController();
     var nameofInfradepUpdateController = TextEditingController();
     var agencyContractorUpdateController = TextEditingController();
+    var ownerOfContractorController = TextEditingController();
+    var siteManagerController = TextEditingController();
     var expectedRevenueUpdateController = TextEditingController();
+    var furnitureIncludedInCivilController = TextEditingController();
     var valueOfQuoteUpdateController = TextEditingController();
     var dateofcompletioneUpdateController = TextEditingController();
+    var dateOfProposalSubmissionController = TextEditingController();
+    var dateOfDrawingReceivedController = TextEditingController();
     //var Sale_cycle_Id_controller = TextEditingController();
 
     RxList<TaskMasterGetModel> Task_Master_list=<TaskMasterGetModel>[].obs;
@@ -117,6 +129,7 @@ class Taskmastervm extends GetxController{
     RxList<ItemCategoryMstModel> Item_Category_master_list = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_list = <ItemCategoryMstModel>[].obs;
+    RxList<ItemCategoryMstModel> Item_Category_Selected_Infra_list = <ItemCategoryMstModel>[].obs;
     RxList<AlongWithPersonModel> AlongPersonWith_list = <AlongWithPersonModel>[].obs;
     RxList<AlongWithPersonModel> SelectedAlongPersonWith_list = <AlongWithPersonModel>[].obs;
     RxList<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
@@ -928,24 +941,38 @@ class Taskmastervm extends GetxController{
     //todo nirupma code
     gettaskMstInfraUpdate() {
         this.loading.value = true;
+        List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_Infra_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
+
         Map data = {
             "task_id": TaskID,
             "is_infra_lead": isInfraLeadUpdateController.text=="Yes"?1:0,
-            "user_region": userRegionUpdateController.text,
-            "user_clusture": userClusterUpdateController.text,
-            "project_value": projectValueUpdateController.text,
-            "expected_date_of_order": expectedDateOfOrderUpdateController.text,
+            "infra_lead_no": "",
+            "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
+            "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
+            "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdateController.text,
+            "executive_engineer": executiveEngineerUpdateController.text.isEmpty?"":executiveEngineerUpdateController.text,
+            "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEngineerController.text,
+            "project_name": nameOfProjectController.text.isEmpty?"":nameOfProjectController.text,
+            "location": locationController.text.isEmpty?"":locationController.text,
+            "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"":timePeriodToCompleteWorkController.text,
+            "expected_date_of_completion": dateofcompletioneUpdateController.text.isEmpty?"":dateofcompletioneUpdateController.text,
+            "project_value": projectValueUpdateController.text.isEmpty?"":projectValueUpdateController.text,
+            "expected_revenue": expectedRevenueUpdateController.text.isEmpty?"":expectedRevenueUpdateController.text,
+            "furniture_included_in_civil_scope": furnitureIncludedInCivilController.text=="Yes"?1:0,
+            "customer_name": customerNameController.text.isEmpty?"":customerNameController.text,
+            "contact_person_decision_maker": contactPersonHODController.text.isEmpty?"":contactPersonHODController.text,
+            "name_of_agency_contrator": agencyContractorUpdateController.text.isEmpty?"":agencyContractorUpdateController.text,
+            "owner_of_contrator": ownerOfContractorController.text.isEmpty?"":ownerOfContractorController.text,
+            "project_site_manager": siteManagerController.text.isEmpty?"":siteManagerController.text,
+            "name_of_architect_firm": nameOfArchitecfirmUpdateController.text.isEmpty?"":nameOfArchitecfirmUpdateController.text,
+            "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
+            "lines": lines.map((line) => line.toJson()).toList(),
             "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
             "proposal_submitted": proposalSubmittedUpdateController.text=="Yes"?1:0,
-            "inaugration_date_of_project": inaugrationDateUpdateController.text,
-            "architect": architectUpdateController.text,
-            "executive_engineer": executiveEngineerUpdateController.text,
-            "name_of_architect_firm": nameOfArchitecfirmUpdateController.text,
-            "name_of_infra_department": nameofInfradepUpdateController.text,
-            "name_of_agency_contrator": agencyContractorUpdateController.text,
-            "expected_revenue": expectedRevenueUpdateController.text,
-            "value_of_quote": valueOfQuoteUpdateController.text,
-            "expected_date_of_completion": dateofcompletioneUpdateController.text,
+            "date_of_proposal_submission": dateOfProposalSubmissionController.text.isEmpty?"":dateOfProposalSubmissionController.text,
+            "value_of_quote": valueOfQuoteUpdateController.text.isEmpty?"":valueOfQuoteUpdateController.text,
+            "expected_date_of_order": expectedDateOfOrderUpdateController.text.isEmpty?"":expectedDateOfOrderUpdateController.text,
+            "inaugration_date_of_project": inaugrationDateUpdateController.text.isEmpty?"":inaugrationDateUpdateController.text,
             "created_by": email
         };
             try {
@@ -1156,9 +1183,6 @@ class Taskmastervm extends GetxController{
     }
 
     void viewAllDetailsOfTaskUpdateInfra(){
-
-       /* userRegionUpdateController.text=Task_Master_list[0].userRegion ?? "";
-        userClusterUpdateController.text=Task_Master_list[0].userClusture ?? "";*/
         projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();
         isInfraLeadUpdateController.text=Task_Master_list[0].isInfraLead==1 ? "Yes":"No";
         expectedDateOfOrderUpdateController.text=Task_Master_list[0].expectedDateOfOrder ?? "";

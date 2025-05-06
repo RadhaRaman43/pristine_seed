@@ -17,6 +17,8 @@ class TaskMasterGetModel {
   String? previousTaskId;
   String? productCategory;
   String? alongWithPersonName;
+  String? infraProductCategoryCode;
+  String? infraProductCategoryName;
   String? lastActivityStatus;
   String? lastActivityUpdatedBy;
   String? lastActivityUpdatedOn;
@@ -32,26 +34,44 @@ class TaskMasterGetModel {
   String? createdFullName;
   String? createdOn;
   int? isInfraLead;
+  String? infraLeadNo;
   String? userRegion;
   String? userClusture;
-  double? projectValue;
-  String? expectedDateOfOrder;
-  int? drawingCollected;
-  int? proposalSubmitted;
-  String? inaugrationDateOfProject;
-  String? architect;
-  String? executiveEngineer;
-  String? nameOfArchitectFirm;
   String? nameOfInfraDepartment;
-  String? nameOfAgencyContrator;
-  double? expectedRevenue;
-  double? valueOfQuote;
+  String? executiveEngineer;
+  String? assistantEngineer;
+  String? projectName;
+  String? location;
+  String? timePeriodToCompleteCivilWorkInMonths;
   String? expectedDateOfCompletion;
+  double? projectValue;
+  double? expectedRevenue;
+  int? furnitureIncludedInCivilScope;
+  String? customerName;
+  String? contactPersonDecisionMaker;
+  String? nameOfAgencyContrator;
+  String? ownerOfContractor;
+  String? projectSiteManager;
+  String? nameOfArchitectFirm;
+  String? architect;
+  int? drawingCollected;
+  String? dateDrawingReceived;
+  int? proposalSubmitted;
+  String? dateOfProposalSubmission;
+  double? valueOfQuote;
+  String? expectedDateOfOrder;
+  String? inaugrationDateOfProject;
   int? isReadyForApprove;
   int? isCreateTaskDsar;
+  int? isAdminWritePermission;
   String? dateOfVisit;
   String? paymentSaleCycleId;
   String? timeOfVisit;
+  int? isClosedOrCompleted;
+  String? frontlinerValue;
+  String? branchHeadValue;
+  String? zoneHeadValue;
+  String? clustureHeadValue;
 
   TaskMasterGetModel(
       {this.condition,
@@ -72,6 +92,8 @@ class TaskMasterGetModel {
         this.previousTaskId,
         this.productCategory,
         this.alongWithPersonName,
+        this.infraProductCategoryCode,
+        this.infraProductCategoryName,
         this.lastActivityStatus,
         this.lastActivityUpdatedBy,
         this.lastActivityUpdatedOn,
@@ -87,26 +109,44 @@ class TaskMasterGetModel {
         this.createdFullName,
         this.createdOn,
         this.isInfraLead,
+        this.infraLeadNo,
         this.userRegion,
         this.userClusture,
-        this.projectValue,
-        this.expectedDateOfOrder,
-        this.drawingCollected,
-        this.proposalSubmitted,
-        this.inaugrationDateOfProject,
-        this.architect,
-        this.executiveEngineer,
-        this.nameOfArchitectFirm,
         this.nameOfInfraDepartment,
-        this.nameOfAgencyContrator,
-        this.expectedRevenue,
-        this.valueOfQuote,
+        this.executiveEngineer,
+        this.assistantEngineer,
+        this.projectName,
+        this.location,
+        this.timePeriodToCompleteCivilWorkInMonths,
         this.expectedDateOfCompletion,
+        this.projectValue,
+        this.expectedRevenue,
+        this.furnitureIncludedInCivilScope,
+        this.customerName,
+        this.contactPersonDecisionMaker,
+        this.nameOfAgencyContrator,
+        this.ownerOfContractor,
+        this.projectSiteManager,
+        this.nameOfArchitectFirm,
+        this.architect,
+        this.drawingCollected,
+        this.dateDrawingReceived,
+        this.proposalSubmitted,
+        this.dateOfProposalSubmission,
+        this.valueOfQuote,
+        this.expectedDateOfOrder,
+        this.inaugrationDateOfProject,
         this.isReadyForApprove,
         this.isCreateTaskDsar,
+        this.isAdminWritePermission,
         this.dateOfVisit,
         this.paymentSaleCycleId,
-        this.timeOfVisit});
+        this.timeOfVisit,
+        this.isClosedOrCompleted,
+        this.frontlinerValue,
+        this.branchHeadValue,
+        this.zoneHeadValue,
+        this.clustureHeadValue});
 
   TaskMasterGetModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -127,6 +167,8 @@ class TaskMasterGetModel {
     previousTaskId = json['previous_task_id'];
     productCategory = json['product_category'];
     alongWithPersonName = json['along_with_person_name'];
+    infraProductCategoryCode = json['infra_product_category_code'];
+    infraProductCategoryName = json['infra_product_category_name'];
     lastActivityStatus = json['last_activity_status'];
     lastActivityUpdatedBy = json['last_activity_updated_by'];
     lastActivityUpdatedOn = json['last_activity_updated_on'];
@@ -142,26 +184,45 @@ class TaskMasterGetModel {
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
     isInfraLead = json['is_infra_lead'];
+    infraLeadNo = json['infra_lead_no'];
     userRegion = json['user_region'];
     userClusture = json['user_clusture'];
-    projectValue = json['project_value'];
-    expectedDateOfOrder = json['expected_date_of_order'];
-    drawingCollected = json['drawing_collected'];
-    proposalSubmitted = json['proposal_submitted'];
-    inaugrationDateOfProject = json['inaugration_date_of_project'];
-    architect = json['architect'];
-    executiveEngineer = json['executive_engineer'];
-    nameOfArchitectFirm = json['name_of_architect_firm'];
     nameOfInfraDepartment = json['name_of_infra_department'];
-    nameOfAgencyContrator = json['name_of_agency_contrator'];
-    expectedRevenue = json['expected_revenue'];
-    valueOfQuote = json['value_of_quote'];
+    executiveEngineer = json['executive_engineer'];
+    assistantEngineer = json['assistant_engineer'];
+    projectName = json['project_name'];
+    location = json['location'];
+    timePeriodToCompleteCivilWorkInMonths =
+    json['time_period_to_complete_civil_work_in_months'];
     expectedDateOfCompletion = json['expected_date_of_completion'];
+    projectValue = json['project_value'];
+    expectedRevenue = json['expected_revenue'];
+    furnitureIncludedInCivilScope = json['furniture_included_in_civil_scope'];
+    customerName = json['customer_name'];
+    contactPersonDecisionMaker = json['contact_person_decision_maker'];
+    nameOfAgencyContrator = json['name_of_agency_contrator'];
+    ownerOfContractor = json['owner_of_contractor'];
+    projectSiteManager = json['project_site_manager'];
+    nameOfArchitectFirm = json['name_of_architect_firm'];
+    architect = json['architect'];
+    drawingCollected = json['drawing_collected'];
+    dateDrawingReceived = json['date_drawing_received'];
+    proposalSubmitted = json['proposal_submitted'];
+    dateOfProposalSubmission = json['date_of_proposal_submission'];
+    valueOfQuote = json['value_of_quote'];
+    expectedDateOfOrder = json['expected_date_of_order'];
+    inaugrationDateOfProject = json['inaugration_date_of_project'];
     isReadyForApprove = json['is_ready_for_approve'];
     isCreateTaskDsar = json['is_create_task_dsar'];
+    isAdminWritePermission = json['is_admin_write_permission'];
     dateOfVisit = json['date_of_visit'];
     paymentSaleCycleId = json['payment_sale_cycle_id'];
     timeOfVisit = json['time_of_visit'];
+    isClosedOrCompleted = json['is_closed_or_completed'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
   }
 
   Map<String, dynamic> toJson() {
@@ -184,6 +245,8 @@ class TaskMasterGetModel {
     data['previous_task_id'] = this.previousTaskId;
     data['product_category'] = this.productCategory;
     data['along_with_person_name'] = this.alongWithPersonName;
+    data['infra_product_category_code'] = this.infraProductCategoryCode;
+    data['infra_product_category_name'] = this.infraProductCategoryName;
     data['last_activity_status'] = this.lastActivityStatus;
     data['last_activity_updated_by'] = this.lastActivityUpdatedBy;
     data['last_activity_updated_on'] = this.lastActivityUpdatedOn;
@@ -199,26 +262,46 @@ class TaskMasterGetModel {
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
     data['is_infra_lead'] = this.isInfraLead;
+    data['infra_lead_no'] = this.infraLeadNo;
     data['user_region'] = this.userRegion;
     data['user_clusture'] = this.userClusture;
-    data['project_value'] = this.projectValue;
-    data['expected_date_of_order'] = this.expectedDateOfOrder;
-    data['drawing_collected'] = this.drawingCollected;
-    data['proposal_submitted'] = this.proposalSubmitted;
-    data['inaugration_date_of_project'] = this.inaugrationDateOfProject;
-    data['architect'] = this.architect;
-    data['executive_engineer'] = this.executiveEngineer;
-    data['name_of_architect_firm'] = this.nameOfArchitectFirm;
     data['name_of_infra_department'] = this.nameOfInfraDepartment;
-    data['name_of_agency_contrator'] = this.nameOfAgencyContrator;
-    data['expected_revenue'] = this.expectedRevenue;
-    data['value_of_quote'] = this.valueOfQuote;
+    data['executive_engineer'] = this.executiveEngineer;
+    data['assistant_engineer'] = this.assistantEngineer;
+    data['project_name'] = this.projectName;
+    data['location'] = this.location;
+    data['time_period_to_complete_civil_work_in_months'] =
+        this.timePeriodToCompleteCivilWorkInMonths;
     data['expected_date_of_completion'] = this.expectedDateOfCompletion;
+    data['project_value'] = this.projectValue;
+    data['expected_revenue'] = this.expectedRevenue;
+    data['furniture_included_in_civil_scope'] =
+        this.furnitureIncludedInCivilScope;
+    data['customer_name'] = this.customerName;
+    data['contact_person_decision_maker'] = this.contactPersonDecisionMaker;
+    data['name_of_agency_contrator'] = this.nameOfAgencyContrator;
+    data['owner_of_contractor'] = this.ownerOfContractor;
+    data['project_site_manager'] = this.projectSiteManager;
+    data['name_of_architect_firm'] = this.nameOfArchitectFirm;
+    data['architect'] = this.architect;
+    data['drawing_collected'] = this.drawingCollected;
+    data['date_drawing_received'] = this.dateDrawingReceived;
+    data['proposal_submitted'] = this.proposalSubmitted;
+    data['date_of_proposal_submission'] = this.dateOfProposalSubmission;
+    data['value_of_quote'] = this.valueOfQuote;
+    data['expected_date_of_order'] = this.expectedDateOfOrder;
+    data['inaugration_date_of_project'] = this.inaugrationDateOfProject;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_create_task_dsar'] = this.isCreateTaskDsar;
+    data['is_admin_write_permission'] = this.isAdminWritePermission;
     data['date_of_visit'] = this.dateOfVisit;
     data['payment_sale_cycle_id'] = this.paymentSaleCycleId;
     data['time_of_visit'] = this.timeOfVisit;
+    data['is_closed_or_completed'] = this.isClosedOrCompleted;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
     return data;
   }
 }
