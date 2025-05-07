@@ -877,20 +877,14 @@ class TaskMasterScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                InkWell(
-                  onTap: (){
-                    showInfraLeadDetails(context,  position);
-                  },
-                  child: Text(
-                    TaskMaster_page_controller
-                        .Task_Master_list[position].isInfraLead==1?"Yes":"No",
-                    style: GoogleFonts.poppins(
-                      color: Colors.blueAccent,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                      decoration: TextDecoration.underline,
-                      decorationStyle: TextDecorationStyle.wavy,),
-                  ),
+                Text(
+                  TaskMaster_page_controller
+                      .Task_Master_list[position].isInfraLead==1?"Yes":"No",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                    ),
                 ),
               ],
             ),

@@ -490,7 +490,8 @@ class AddNewDsarScreen extends StatelessWidget{
                        if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
                          TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
                        }
-                       TaskMaster_page_controller.isInfraLeadUpdateController.text=TaskMaster_page_controller.isInfraLead.value.text;
+                       TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
+                       TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId, TaskMaster_page_controller.Task_Master_list[0].infraLeadNo);
                        Get.toNamed(RoutesName.updateTaskMstInfraScreen);
                      },
                    ),

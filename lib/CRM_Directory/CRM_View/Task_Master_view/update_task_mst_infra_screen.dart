@@ -29,7 +29,8 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
     return WillPopScope(
       onWillPop: () async {
        // TaskMaster_page_controller.clearUpdateController();
-        Get.toNamed(RoutesName.addNewDSARTask_screen);
+       // Get.toNamed(RoutesName.addNewDSARTask_screen);
+        Get.back();
         return false;
       }, child: Scaffold(
       appBar:  AppBar(
@@ -130,262 +131,274 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
                 )
               ),
               SizedBox(height: 15,),
-              Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AllColors.grayColor, // Set the border color here
-                      width: 1.0, // Adjust the border width if necessary
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Infrastructure Department',
-                      labelStyle: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w700,
-                          fontSize: AllFontSize.sisxteen),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
 
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
+              Obx((){
+                return Visibility(
+                  visible: TaskMaster_page_controller.isInfraYes.value,
+                  child: Container(
                     child: Column(
                       children: [
-                        bindNameOfInfraDepartment(context),
-                        SizedBox(height: 10,),
-                        bindExcecutiveEngineer(context),
-                        SizedBox(height: 10,),
-                        bindAssiEngineer(context)
-                      ],
-                    ),
-                  )
-              ),
-              SizedBox(height: 15,),
-              Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AllColors.grayColor, // Set the border color here
-                      width: 1.0, // Adjust the border width if necessary
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Project Details',
-                      labelStyle: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w700,
-                          fontSize: AllFontSize.sisxteen),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        bindNameOfProject(context),
-                        SizedBox(height: 10,),
-                        bindLocation(context),
-                        SizedBox(height: 10,),
-                        bindTimePeriodToComplete(context),
-                        SizedBox(height: 10,),
-                        bindExpectedDateCompletion(context),
-                        SizedBox(height: 10,),
-                        bindProjectValue(context),
-                        SizedBox(height: 10,),
-                        bindExpectedRevene(context),
-                        SizedBox(height: 10,),
-                        bindFurnitureIncludedInCivil(context),
-                      ],
-                    ),
-                  )
-              ),
-
-              SizedBox(height: 15,),
-              Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AllColors.grayColor, // Set the border color here
-                      width: 1.0, // Adjust the border width if necessary
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Customer Details',
-                      labelStyle: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w700,
-                          fontSize: AllFontSize.sisxteen),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        bindCustomerName(context),
-                        SizedBox(height: 10,),
-                        bindContactPersonHOD(context),
-
-                      ],
-                    ),
-                  )
-              ),
-
-              SizedBox(height: 15,),
-              Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AllColors.grayColor, // Set the border color here
-                      width: 1.0, // Adjust the border width if necessary
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Contactor Details',
-                      labelStyle: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w700,
-                          fontSize: AllFontSize.sisxteen),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        bindNameOfAgencyContractor(context),
-                        SizedBox(height: 10,),
-                        bindOwnerOfContrctor(context),
-                        SizedBox(height: 10,),
-                        bindSiteManager(context)
-
-                      ],
-                    ),
-                  )
-              ),
-
-              SizedBox(height: 15,),
-              Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AllColors.grayColor, // Set the border color here
-                      width: 1.0, // Adjust the border width if necessary
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Architect Details',
-                      labelStyle: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w700,
-                          fontSize: AllFontSize.sisxteen),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        bindNameOfArchitectFilm(context),
-                        SizedBox(height: 10,),
-                        bindArchitect(context),
-
-                      ],
-                    ),
-                  )
-              ),
-
-              SizedBox(height: 15,),
-              Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AllColors.grayColor, // Set the border color here
-                      width: 1.0, // Adjust the border width if necessary
-                    ),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: InputDecorator(
-                    decoration: InputDecoration(
-                      labelText: 'Other Details',
-                      labelStyle: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontWeight: FontWeight.w700,
-                          fontSize: AllFontSize.sisxteen),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide(
-
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        bindItemCategoryDropDown(context),
-                        SizedBox(height: 10,),
-
-                        Obx((){
-                          return Visibility(
-                            visible: TaskMaster_page_controller.IsCatergorySelected.value,
-                            child: Wrap(
-                              spacing: 8.0,
-                              children: TaskMaster_page_controller.Item_Category_Selected_Infra_list.map((category) {
-                                return Chip(
-                                  label: Text(category.categoryName!),
-                                  onDeleted: () {
-                                    TaskMaster_page_controller.Item_Category_Selected_Infra_list.remove(category);
-                                    if(TaskMaster_page_controller.Item_Category_Selected_Infra_list.isEmpty){
-                                      TaskMaster_page_controller.IsCatergorySelected.value = false;
-                                    }else{
-                                      TaskMaster_page_controller.IsCatergorySelected.value =true;
-                                    }
-                                  },
-                                );
-                              }).toList(),
+                        Container(
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AllColors.grayColor, // Set the border color here
+                                width: 1.0, // Adjust the border width if necessary
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
-                          );
-                        }),
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: 'Infrastructure Department',
+                                labelStyle: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AllFontSize.sisxteen),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  bindNameOfInfraDepartment(context),
+                                  SizedBox(height: 10,),
+                                  bindExcecutiveEngineer(context),
+                                  SizedBox(height: 10,),
+                                  bindAssiEngineer(context)
+                                ],
+                              ),
+                            )
+                        ),
+                        SizedBox(height: 15,),
+                        Container(
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AllColors.grayColor, // Set the border color here
+                                width: 1.0, // Adjust the border width if necessary
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: 'Project Details',
+                                labelStyle: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AllFontSize.sisxteen),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  bindNameOfProject(context),
+                                  SizedBox(height: 10,),
+                                  bindLocation(context),
+                                  SizedBox(height: 10,),
+                                  bindTimePeriodToComplete(context),
+                                  SizedBox(height: 10,),
+                                  bindExpectedDateCompletion(context),
+                                  SizedBox(height: 10,),
+                                  bindProjectValue(context),
+                                  SizedBox(height: 10,),
+                                  bindExpectedRevene(context),
+                                  SizedBox(height: 10,),
+                                  bindFurnitureIncludedInCivil(context),
+                                ],
+                              ),
+                            )
+                        ),
+
+                        SizedBox(height: 15,),
+                        Container(
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AllColors.grayColor, // Set the border color here
+                                width: 1.0, // Adjust the border width if necessary
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: 'Customer Details',
+                                labelStyle: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AllFontSize.sisxteen),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  bindCustomerName(context),
+                                  SizedBox(height: 10,),
+                                  bindContactPersonHOD(context),
+
+                                ],
+                              ),
+                            )
+                        ),
+
+                        SizedBox(height: 15,),
+                        Container(
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AllColors.grayColor, // Set the border color here
+                                width: 1.0, // Adjust the border width if necessary
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: 'Contactor Details',
+                                labelStyle: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AllFontSize.sisxteen),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  bindNameOfAgencyContractor(context),
+                                  SizedBox(height: 10,),
+                                  bindOwnerOfContrctor(context),
+                                  SizedBox(height: 10,),
+                                  bindSiteManager(context)
+
+                                ],
+                              ),
+                            )
+                        ),
+
+                        SizedBox(height: 15,),
+                        Container(
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AllColors.grayColor, // Set the border color here
+                                width: 1.0, // Adjust the border width if necessary
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: 'Architect Details',
+                                labelStyle: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AllFontSize.sisxteen),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  bindNameOfArchitectFilm(context),
+                                  SizedBox(height: 10,),
+                                  bindArchitect(context),
+
+                                ],
+                              ),
+                            )
+                        ),
+
+                        SizedBox(height: 15,),
+                        Container(
+                            margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: AllColors.grayColor, // Set the border color here
+                                width: 1.0, // Adjust the border width if necessary
+                              ),
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: InputDecorator(
+                              decoration: InputDecoration(
+                                labelText: 'Other Details',
+                                labelStyle: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: AllFontSize.sisxteen),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide(
+
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                              ),
+                              child: Column(
+                                children: [
+                                  bindItemCategoryDropDown(context),
+                                  SizedBox(height: 10,),
+
+                                  Obx((){
+                                    return Visibility(
+                                      visible: TaskMaster_page_controller.IsCatergorySelected.value,
+                                      child: Wrap(
+                                        spacing: 8.0,
+                                        children: TaskMaster_page_controller.Item_Category_Selected_Infra_list.map((category) {
+                                          return Chip(
+                                            label: Text(category.categoryName!),
+                                            onDeleted: () {
+                                              TaskMaster_page_controller.Item_Category_Selected_Infra_list.remove(category);
+                                              if(TaskMaster_page_controller.Item_Category_Selected_Infra_list.isEmpty){
+                                                TaskMaster_page_controller.IsCatergorySelected.value = false;
+                                              }else{
+                                                TaskMaster_page_controller.IsCatergorySelected.value =true;
+                                              }
+                                            },
+                                          );
+                                        }).toList(),
+                                      ),
+                                    );
+                                  }),
 
 
-                        SizedBox(height: 10,),
-                        bindDrawingCollected(context),
-                        SizedBox(height: 10,),
-                        bindDateOfDrawingReceived(context),
-                        SizedBox(height: 10,),
-                        bindProposalSubmitted(context),
-                        SizedBox(height: 10,),
-                        bindDateOfProposalSubmission(context),
-                        SizedBox(height: 10,),
-                        bindValueOfQuote(context),
-                        SizedBox(height: 10,),
-                        bindExpectedDateOfOrder(context),
-                        SizedBox(height: 10,),
-                        bindInaugrationDateOfProject(context),
+                                  SizedBox(height: 10,),
+                                  bindDrawingCollected(context),
+                                  SizedBox(height: 10,),
+                                  bindDateOfDrawingReceived(context),
+                                  SizedBox(height: 10,),
+                                  bindProposalSubmitted(context),
+                                  SizedBox(height: 10,),
+                                  bindDateOfProposalSubmission(context),
+                                  SizedBox(height: 10,),
+                                  bindValueOfQuote(context),
+                                  SizedBox(height: 10,),
+                                  bindExpectedDateOfOrder(context),
+                                  SizedBox(height: 10,),
+                                  bindInaugrationDateOfProject(context),
 
+                                ],
+                              ),
+                            )
+                        ),
                       ],
                     ),
-                  )
-              ),
+                  ),
+                );
+              })
 
             ],
           ),
@@ -398,9 +411,9 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
   Widget bindIsInfraLead(BuildContext context) {
     return Container(
       child: DropdownMenu<String>(
-        enabled: false,
+        enabled: TaskMaster_page_controller.isInfraLeadUpdateController.value=="yes"?false:true,
         width: size.width-60,
-        controller: TaskMaster_page_controller.isInfraLeadUpdateController,
+        controller: TaskMaster_page_controller.isInfraLeadUpdateController.value,
         label: Text(
           "Is Infra Lead",
           style: GoogleFonts.poppins(
@@ -429,12 +442,13 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
         ),
         onSelected: (String? selection) {
           print(selection);
-          TaskMaster_page_controller.isInfraLead.value.text =
+          TaskMaster_page_controller.isInfraLeadUpdateController.value.text =
               _displayCustomerNeedIdentityStatusForOption(selection!).toString();
-          if(TaskMaster_page_controller.isInfraLead.value.text=="Yes"){
-            TaskMaster_page_controller.isInfraLeadValue.value=false;
+          if(TaskMaster_page_controller.isInfraLeadUpdateController.value.text=="Yes"){
+             TaskMaster_page_controller.isInfraYes.value=true;
           }else{
-            TaskMaster_page_controller.isInfraLeadValue.value=true;
+            //TaskMaster_page_controller.isInfraLeadValue.value=true;
+            TaskMaster_page_controller.isInfraYes.value=false;
           }
           print("Is Lead ${TaskMaster_page_controller.isInfraLead.value.text}");
 
@@ -1187,10 +1201,10 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
       displayStringForOption: _displayItemCatMasterForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
-          return TaskMaster_page_controller.Item_Category_master_list;
+          return TaskMaster_page_controller.Item_Category_Infra_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return TaskMaster_page_controller.Item_Category_master_list
+        return TaskMaster_page_controller.Item_Category_Infra_list
             .where((ItemCategoryMstModel option) {
           return option.categoryName
               .toString()

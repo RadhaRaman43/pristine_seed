@@ -274,6 +274,74 @@ class TaskMasterDetails extends StatelessWidget{
             ),
         
             SizedBox(height: 5,),
+
+            Card(
+              color: AllColors.whiteColor,
+              elevation: 10,
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      /*border: Border.all(
+                        color: AllColors.blackColor, // Set the border color here
+                      ),*/
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: AllColors.textColor
+                    ),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Icon(Icons.person, color: AllColors.whiteColor,),
+                        ),
+                        Text(
+                          "Geo Info",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.whiteColor,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Obx(
+                              () {
+                            return IconButton(
+                              onPressed: () {
+                                TaskMaster_page_controller.toggleGeoInfoCrtd();
+                                if (TaskMaster_page_controller
+                                    .isExpandGeoInfo.value ==
+                                    true) {
+                                  print(
+                                      "If......${TaskMaster_page_controller.isExpandGeoInfo.value}");
+                                } else {
+                                  print(
+                                      "else......${TaskMaster_page_controller.isExpandGeoInfo.value}");
+                                }
+                              },
+                              icon: Icon(
+                                TaskMaster_page_controller
+                                    .isExpandGeoInfo.value
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                                size: 25,
+                                color: AllColors.whiteColor,
+                              ),
+                            );
+                          },
+                        )
+
+                      ],
+                    ),
+                  ),
+                  Obx(() {
+                    return viewGeoInfoDetail(context);
+                  }),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 5,),
         
             Card(
               color: AllColors.whiteColor,
@@ -305,20 +373,20 @@ class TaskMasterDetails extends StatelessWidget{
                               () {
                             return IconButton(
                               onPressed: () {
-                                TaskMaster_page_controller.toggleDsar();
+                                TaskMaster_page_controller.toggleInfraDetails();
                                 if (TaskMaster_page_controller
-                                    .isExpandDSAR.value ==
+                                    .isExpandInfraDeatils.value ==
                                     true) {
                                   print(
-                                      "If......${TaskMaster_page_controller.isExpandDSAR.value}");
+                                      "If......${TaskMaster_page_controller.isExpandInfraDeatils.value}");
                                 } else {
                                   print(
-                                      "else......${TaskMaster_page_controller.isExpandDSAR.value}");
+                                      "else......${TaskMaster_page_controller.isExpandInfraDeatils.value}");
                                 }
                               },
                               icon: Icon(
                                 TaskMaster_page_controller
-                                    .isExpandDSAR.value
+                                    .isExpandInfraDeatils.value
                                     ? Icons.arrow_drop_down
                                     : Icons.arrow_drop_up,
                                 size: 25,
@@ -901,6 +969,7 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget viewTasketails(BuildContext context) {
+    String? dateTimeCreatedOn=StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].dateOfVisit ?? "");
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDetails.value == true ? true : false,
       child: Container(
@@ -1183,13 +1252,9 @@ class TaskMasterDetails extends StatelessWidget{
                 Container(
                   width: size.width * .4,
                   child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .dateOfVisit.toString(),
+                    message: dateTimeCreatedOn,
                     child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .dateOfVisit.toString(),
+                      dateTimeCreatedOn??"",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
@@ -1738,12 +1803,131 @@ class TaskMasterDetails extends StatelessWidget{
     );
   }
 
-  Widget viewInfraDetails(BuildContext context) {
-    print('hcsdgyuifgy${TaskMaster_page_controller
-        .Task_Master_list[0]
-        .isInfraLead}');
+  Widget viewGeoInfoDetail(BuildContext context) {
     return   Visibility(
-      visible: TaskMaster_page_controller.isExpandDSAR.value == true ? true : false,
+      visible: TaskMaster_page_controller.isExpandGeoInfo.value == true ? true : false,
+      child: Container(
+        margin: EdgeInsets.only(left: 10.0, right: 10.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Frontliner ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller
+                      .Task_Master_list[0]
+                      .frontlinerValue ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Branch Head",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  StaticMethod.onlyDate(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .branchHeadValue!) ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Zone Head",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller
+                      .Task_Master_list[0]
+                      .zoneHeadValue ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Cluster Head",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  StaticMethod.onlyDate(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .clustureHeadValue??"") ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget viewInfraDetails(BuildContext context) {
+    String? expOrderDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfOrder ?? "");
+    String? inaugurationDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].inaugrationDateOfProject ?? "");
+    String? expDateOfCompletion=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfCompletion ?? "");
+    return   Visibility(
+      visible: TaskMaster_page_controller.isExpandInfraDeatils.value == true ? true : false,
       child:
       Container(
         margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -1769,10 +1953,12 @@ class TaskMasterDetails extends StatelessWidget{
                         TaskMaster_page_controller.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
                       }
                     }
-                    if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
-                      TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
-                    }
-                    TaskMaster_page_controller.isInfraLeadUpdateController.text=TaskMaster_page_controller.isInfraLead.value.text;
+                    /*if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
+
+                    }*/
+                    TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
+                    //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
+                    TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId, TaskMaster_page_controller.Task_Master_list[0].infraLeadNo);
                     Get.toNamed(RoutesName.updateTaskMstInfraScreen);
                   },
                   child: Text(
@@ -1901,7 +2087,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
                 Spacer(),
                 Text(
-                  TaskMaster_page_controller.Task_Master_list[0].expectedDateOfOrder??"",
+                  expOrderDate??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,
@@ -1973,7 +2159,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
                 Spacer(),
                 Text(
-                  TaskMaster_page_controller.Task_Master_list[0].inaugrationDateOfProject??"",
+                  inaugurationDate??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,
@@ -2141,7 +2327,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
                 Spacer(),
                 Text(
-                  TaskMaster_page_controller.Task_Master_list[0].expectedDateOfCompletion??"",
+                  expDateOfCompletion??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,

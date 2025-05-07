@@ -66,7 +66,7 @@ class _Drawer extends State<CustomDrawer> {
           children: [
             Container(
               width: 330,
-              height: size.height * .43 ,
+              height: size.height * .40 ,
               decoration: BoxDecoration(
                 color: AllColors.primaryDark1,
               ),

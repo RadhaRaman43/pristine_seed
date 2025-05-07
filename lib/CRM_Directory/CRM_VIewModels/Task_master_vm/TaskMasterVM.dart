@@ -47,8 +47,11 @@ class Taskmastervm extends GetxController{
     String TaskID = '';
     RxBool isExpandDetails = true.obs;
     RxBool isExpandCrtd = true.obs;
-    RxBool isExpandDSAR = true.obs;
+    RxBool isExpandGeoInfo = true.obs;
+    RxBool isExpandDSAR = false.obs;
+    RxBool isExpandInfraDeatils = true.obs;
     RxBool isInfraLeadValue=false.obs;
+    RxBool isInfraYes=false.obs;
     RxBool isInfraLeadValueSubmit=false.obs;
     RxString date_filter="Today".obs;
     RxString filter="Running".obs;
@@ -93,7 +96,7 @@ class Taskmastervm extends GetxController{
     var customerNameController = TextEditingController();
     var locationController = TextEditingController();
     var timePeriodToCompleteWorkController = TextEditingController();
-    var isInfraLeadUpdateController = TextEditingController();
+    var isInfraLeadUpdateController = TextEditingController().obs;
     var expectedDateOfOrderUpdateController = TextEditingController();
     var drawingcollectedUpdateController = TextEditingController();
     var proposalSubmittedUpdateController = TextEditingController();
@@ -130,6 +133,7 @@ class Taskmastervm extends GetxController{
     RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_list = <ItemCategoryMstModel>[].obs;
     RxList<ItemCategoryMstModel> Item_Category_Selected_Infra_list = <ItemCategoryMstModel>[].obs;
+    RxList<ItemCategoryMstModel> Item_Category_Infra_list = <ItemCategoryMstModel>[].obs;
     RxList<AlongWithPersonModel> AlongPersonWith_list = <AlongWithPersonModel>[].obs;
     RxList<AlongWithPersonModel> SelectedAlongPersonWith_list = <AlongWithPersonModel>[].obs;
     RxList<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
@@ -170,8 +174,16 @@ class Taskmastervm extends GetxController{
         isExpandCrtd.value = !isExpandCrtd.value;
     }
 
+    void toggleGeoInfoCrtd() {
+        isExpandGeoInfo.value = !isExpandGeoInfo.value;
+    }
+
     void toggleDsar() {
         isExpandDSAR.value = !isExpandDSAR.value;
+    }
+
+    void toggleInfraDetails() {
+        isExpandInfraDeatils.value = !isExpandInfraDeatils.value;
     }
 
     RxInt infraLeadValue=0.obs;
@@ -746,6 +758,52 @@ class Taskmastervm extends GetxController{
         });
     }
 
+    getItemCategoryMstApiHit(String? taskId, String? InfraId) {
+        this.loading.value = true;
+        Map<String, String> data = {
+            'task_id': taskId! ,
+            'filter_category': "",
+            'sales_cycle_id': "",
+            'quote_id': "",
+            'infra_lead_no': InfraId==null?"":InfraId
+        };
+
+        _api.getItemCategoryInfraMstApiHit(data, sessionManagement).then((value) {
+            try {
+                List<ItemCategoryMstModel> Response =
+                (json.decode(value) as List<dynamic>)
+                    .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+                    .toList();
+
+                if (Response.isNotEmpty && Response[0].condition.toString() == "True") {
+                    Item_Category_Infra_list.value = Response;
+
+                    Item_Category_Selected_Infra_list.value = [];
+                    for (int i = 0; i < Item_Category_Infra_list.length; i++) {
+                        if (Item_Category_Infra_list[i].isSelected == 1) {
+                            Item_Category_Selected_Infra_list.add(
+                                Item_Category_Infra_list[i]);
+                        }}
+                    print('master list1....${Item_Category_Infra_list.length.toString()}');
+                } else {
+                    Item_Category_Infra_list.value = [];
+                    Item_Category_Selected_Infra_list.value = [];
+                    //print('master listelsse1....${Item_Category_Selected_list.length.toString()}');
+                }
+            } catch (e) {
+                print('catch....${e.toString()}');
+            }
+        }).onError((error, stackTrace) {
+            Item_Category_Infra_list.value = [];
+            Item_Category_Selected_Infra_list.value = [];
+            Utils.sanckBarError('Api Exception onError', error.toString());
+            print('catchEx....${error.toString()}');
+        }).whenComplete(() {
+            this.loading.value = false;
+        });
+    }
+
+
     getItemCategoryMstWithoutTaskIdApi() {
         this.loading.value = true;
         Map<String, String> data = {
@@ -945,7 +1003,7 @@ class Taskmastervm extends GetxController{
 
         Map data = {
             "task_id": TaskID,
-            "is_infra_lead": isInfraLeadUpdateController.text=="Yes"?1:0,
+            "is_infra_lead": isInfraLeadUpdateController.value.text=="Yes"?1:0,
             "infra_lead_no": "",
             "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
             "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
@@ -968,6 +1026,7 @@ class Taskmastervm extends GetxController{
             "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
             "lines": lines.map((line) => line.toJson()).toList(),
             "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
+            "date_drawing_received": dateOfDrawingReceivedController.text.isEmpty?"":dateOfDrawingReceivedController.text,
             "proposal_submitted": proposalSubmittedUpdateController.text=="Yes"?1:0,
             "date_of_proposal_submission": dateOfProposalSubmissionController.text.isEmpty?"":dateOfProposalSubmissionController.text,
             "value_of_quote": valueOfQuoteUpdateController.text.isEmpty?"":valueOfQuoteUpdateController.text,
@@ -1183,8 +1242,8 @@ class Taskmastervm extends GetxController{
     }
 
     void viewAllDetailsOfTaskUpdateInfra(){
-        projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();
-        isInfraLeadUpdateController.text=Task_Master_list[0].isInfraLead==1 ? "Yes":"No";
+
+        isInfraLeadUpdateController.value.text=Task_Master_list[0].isInfraLead==1 ? "Yes":"No";
         expectedDateOfOrderUpdateController.text=Task_Master_list[0].expectedDateOfOrder ?? "";
         drawingcollectedUpdateController.text=Task_Master_list[0].drawingCollected ==1 ? "Yes":"No";
         proposalSubmittedUpdateController.text=Task_Master_list[0].drawingCollected==1 ? "Yes":"No";
@@ -1197,6 +1256,18 @@ class Taskmastervm extends GetxController{
         expectedRevenueUpdateController.text=Task_Master_list[0].expectedRevenue.toString();
         valueOfQuoteUpdateController.text=Task_Master_list[0].valueOfQuote.toString();
         dateofcompletioneUpdateController.text=Task_Master_list[0].expectedDateOfCompletion??"";
+        assistantEngineerController.text=Task_Master_list[0].assistantEngineer??"";
+        nameOfProjectController.text=Task_Master_list[0].projectName??"";
+        locationController.text=Task_Master_list[0].location??"";
+        timePeriodToCompleteWorkController.text=Task_Master_list[0].timePeriodToCompleteCivilWorkInMonths==null?"":Task_Master_list[0].timePeriodToCompleteCivilWorkInMonths.toString();
+        furnitureIncludedInCivilController.text=Task_Master_list[0].furnitureIncludedInCivilScope==1 ? "Yes":"No";
+        customerNameController.text=Task_Master_list[0].customerName??"";
+        contactPersonHODController.text=Task_Master_list[0].contactPersonDecisionMaker??"";
+        ownerOfContractorController.text=Task_Master_list[0].ownerOfContractor??"";
+        siteManagerController.text=Task_Master_list[0].projectSiteManager??"";
+        dateOfDrawingReceivedController.text=Task_Master_list[0].dateDrawingReceived??"";
+        dateOfProposalSubmissionController.text=Task_Master_list[0].dateOfProposalSubmission??"";
+        projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();
     }
 
     void clearCreateTaskController(){

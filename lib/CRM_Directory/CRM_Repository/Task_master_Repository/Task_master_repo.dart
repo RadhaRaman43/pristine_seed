@@ -41,6 +41,10 @@ class TaskMasterRepo{
     return _apiService.getApi(AppUrl.ItemCategoryMstGetByTaskId, sessionManagement, data);
   }
 
+  Future<String> getItemCategoryInfraMstApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data,AppUrl.ItemCategoryMstGetByDocument, sessionManagement);
+  }
+
   Future<String> getItemCategoryMstWithoutTaskIdApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.ItemCategoryMstGet, sessionManagement, data);
   }
