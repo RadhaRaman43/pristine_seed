@@ -142,13 +142,13 @@ class SalesCycleScreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus??"";
+    String saleCycleStatus = salesCycleController.saleCycleList[position].actualSalesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
       switch (status) {
         case 'PENDING' || 'Pending':
           return Colors.red[900]!;
         case 'Rejected' || 'rejected':
-          return Colors.red;
+          return AllColors.redColor;
         case 'APPROVED' || 'Approved':
           return Colors.green;
         case 'PENDING FOR APPROVAL' || 'Pending For Approval':
@@ -235,10 +235,10 @@ class SalesCycleScreen extends StatelessWidget{
                     child: Tooltip(
                       message: salesCycleController
                           .saleCycleList[position]
-                          .salesCycleApprovalStatus ?? "",
+                          .actualSalesCycleApprovalStatus ?? "",
                       child: Text(salesCycleController
                           .saleCycleList[position]
-                          .salesCycleApprovalStatus ?? "",
+                          .actualSalesCycleApprovalStatus ?? "",
                         style: GoogleFonts.poppins(
                             color: getStatusColor(saleCycleStatus),
                             fontSize: AllFontSize.fourtine,

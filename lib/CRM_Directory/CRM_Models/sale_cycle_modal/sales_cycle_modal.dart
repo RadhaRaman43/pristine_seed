@@ -45,7 +45,7 @@ class SalesCycleModal {
   String? assistantEngineer;
   String? projectName;
   String? location;
-  String? timePeriodToCompleteCivilWorkInMonths;
+  int? timePeriodToCompleteCivilWorkInMonths;
   String? expectedDateOfCompletion;
   double? projectValue;
   double? expectedRevenue;
