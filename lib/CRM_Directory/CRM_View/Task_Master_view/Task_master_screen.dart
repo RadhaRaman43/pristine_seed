@@ -69,7 +69,9 @@ class TaskMasterScreen extends StatelessWidget{
                  Get.toNamed(RoutesName.addNewTaskMaster_screen);
                }, icon: Icon(Icons.add)),
                IconButton(onPressed: () {
+                 TaskMaster_page_controller.Task_status_controller.text = "All";
                  TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                 TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
                  showFilterBottomSheet(context);
                }, icon: Icon(Icons.filter_alt_sharp))
              ],
@@ -231,7 +233,7 @@ class TaskMasterScreen extends StatelessWidget{
                              TaskMaster_page_controller
                                  .filter.value = "All";
                              TaskMaster_page_controller
-                                 .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                                 .getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter,TaskMaster_page_controller.is_done.value);
                            }, //Text
                          );
                        }),
@@ -241,9 +243,9 @@ class TaskMasterScreen extends StatelessWidget{
                ),
                Obx((){
                  return Visibility(
-                   visible: TaskMaster_page_controller.is_done.value == 1
-                       ? false
-                       : true,
+                   visible: TaskMaster_page_controller.is_done.value == 0 && TaskMaster_page_controller.filter.value == "Running"
+                       ? true
+                       : false,
                    child: SingleChildScrollView(
                      scrollDirection: Axis.horizontal,
                      child: Container(
@@ -1463,6 +1465,39 @@ class TaskMasterScreen extends StatelessWidget{
                         ),
 
                         TextField(
+                          controller: TaskMaster_page_controller.filterTask_Id_controller,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              labelText: 'Task Id',
+                              hintText: 'Task Id',
+                              hintStyle: GoogleFonts.poppins(
+                                  color: AllColors.lightblackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize.ten),
+                              labelStyle: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: AllFontSize.sisxteen),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )
+                          ),
+                          cursorColor: AllColors.primaryDark1,
+                          onChanged: (value) {
+                            // Handle the text field value changes if needed
+                          },
+                        ),
+
+                        SizedBox(
+                          height: 10,
+                        ),
+
+
+                        TextField(
                           controller: TaskMaster_page_controller.account_Name_controller,
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
@@ -1593,11 +1628,11 @@ class TaskMasterScreen extends StatelessWidget{
 
                         SizedBox(height: 10,),
 
-                        filterWithTaskCreationOn( context),
+                        /*filterWithTaskCreationOn( context),
 
                         SizedBox(height: 10,),
                         filterWithTaskDueDate( context),
-                        SizedBox(height: 10,),
+                        SizedBox(height: 10,),*/
 
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1613,8 +1648,9 @@ class TaskMasterScreen extends StatelessWidget{
                                       width: 1),
                                 )),
                                 onPressed: () {
+                                  TaskMaster_page_controller.account_name.value = TaskMaster_page_controller.account_Name_controller.text;
                                   Get.back();
-                                  TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.SaleCycleActive_Controller.text, '', '', TaskMaster_page_controller.Task_status_controller.text.toString(), TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                                  TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.SaleCycleActive_Controller.text, TaskMaster_page_controller.filterTask_Id_controller.text, '', TaskMaster_page_controller.Task_status_controller.text.toString(), TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
 
 
                                 },
@@ -1638,8 +1674,10 @@ class TaskMasterScreen extends StatelessWidget{
                                 )),
                                 onPressed: () {
                                   Get.back();
+                                  TaskMaster_page_controller.filterTask_Id_controller.clear();
                                   TaskMaster_page_controller.Task_status_controller.clear();
                                   TaskMaster_page_controller.account_Name_controller.clear();
+                                  TaskMaster_page_controller.account_name.value = "";
                                   TaskMaster_page_controller.Contact_Name_controller.clear();
                                   TaskMaster_page_controller.Type_of_call_controller.clear();
                                   TaskMaster_page_controller.SaleCycleActive_Controller.clear();
@@ -1708,7 +1746,17 @@ class TaskMasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-            suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Task Status',
@@ -1804,7 +1852,17 @@ class TaskMasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Sale Cycle Active',

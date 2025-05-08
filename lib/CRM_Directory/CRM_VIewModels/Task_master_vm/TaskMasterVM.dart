@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
+import '../../../constants/static_methods.dart';
 import '../../../models/employeeDetail/employee_details_model.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
@@ -44,7 +45,7 @@ class Taskmastervm extends GetxController{
     String email="";
     int is_Active = -1;
     String ApproveReject = '';
-    String TaskID = '';
+    String TaskID = '', infraFlag='';
     RxBool isExpandDetails = true.obs;
     RxBool isExpandCrtd = true.obs;
     RxBool isExpandGeoInfo = true.obs;
@@ -62,6 +63,7 @@ class Taskmastervm extends GetxController{
 
     var Task_status_controller = TextEditingController();
     var account_Name_controller = TextEditingController();
+    var filterTask_Id_controller = TextEditingController();
     var Contact_Name_controller = TextEditingController();
     var Type_of_call_controller = TextEditingController();
     var Method_of_call_controller = TextEditingController();
@@ -212,7 +214,7 @@ class Taskmastervm extends GetxController{
                 "filter_task_id": taskId!,
                 "filter_account_name": account_name.value.isEmpty?'':account_name.value,
                 "filter_contact_name": Contact_Name_controller.text.isEmpty?'':Contact_Name_controller.text,
-                "filter_task_status": status,
+                "filter_task_status": status == 'All'?"":status,
                 "filter_is_infra_lead": infraLeadValue.value,
                 "filter_type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "filter_is_sales_cycle_active": is_Active.toString(),
@@ -997,14 +999,20 @@ class Taskmastervm extends GetxController{
 
 
     //todo nirupma code
-    gettaskMstInfraUpdate() {
+    gettaskMstInfraUpdate(String InfraNo, String flag) {
         this.loading.value = true;
+        String? expOrderDate=StaticMethod.convertDateFormat(expectedDateOfOrderUpdateController.text);
+        String? inaugurationDate=StaticMethod.convertDateFormat(inaugrationDateUpdateController.text);
+        String? expDateOfCompletion=StaticMethod.convertDateFormat(dateofcompletioneUpdateController.text);
+        String? dateDrawingReceived=StaticMethod.convertDateFormat(dateOfDrawingReceivedController.text);
+        String? dateOfProposalSubmission=StaticMethod.convertDateFormat(dateOfProposalSubmissionController.text);
+
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_Infra_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
 
         Map data = {
             "task_id": TaskID,
             "is_infra_lead": isInfraLeadUpdateController.value.text=="Yes"?1:0,
-            "infra_lead_no": "",
+            "infra_lead_no": InfraNo,
             "user_region": userRegionUpdateController.text.isEmpty?"":userRegionUpdateController.text,
             "user_clusture": userClusterUpdateController.text.isEmpty?"":userClusterUpdateController.text,
             "name_of_infra_department": nameofInfradepUpdateController.text.isEmpty?"":nameofInfradepUpdateController.text,
@@ -1012,8 +1020,8 @@ class Taskmastervm extends GetxController{
             "assistant_engineer": assistantEngineerController.text.isEmpty?"":assistantEngineerController.text,
             "project_name": nameOfProjectController.text.isEmpty?"":nameOfProjectController.text,
             "location": locationController.text.isEmpty?"":locationController.text,
-            "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"":timePeriodToCompleteWorkController.text,
-            "expected_date_of_completion": dateofcompletioneUpdateController.text.isEmpty?"":dateofcompletioneUpdateController.text,
+            "time_period_to_complete_civil_work_in_months": timePeriodToCompleteWorkController.text.isEmpty?"0":timePeriodToCompleteWorkController.text,
+            "expected_date_of_completion": expDateOfCompletion??"",
             "project_value": projectValueUpdateController.text.isEmpty?"":projectValueUpdateController.text,
             "expected_revenue": expectedRevenueUpdateController.text.isEmpty?"":expectedRevenueUpdateController.text,
             "furniture_included_in_civil_scope": furnitureIncludedInCivilController.text=="Yes"?1:0,
@@ -1026,15 +1034,16 @@ class Taskmastervm extends GetxController{
             "architect": architectUpdateController.text.isEmpty?"":architectUpdateController.text,
             "lines": lines.map((line) => line.toJson()).toList(),
             "drawing_collected": drawingcollectedUpdateController.text=="Yes"?1:0,
-            "date_drawing_received": dateOfDrawingReceivedController.text.isEmpty?"":dateOfDrawingReceivedController.text,
+            "date_drawing_received": dateDrawingReceived??"",
             "proposal_submitted": proposalSubmittedUpdateController.text=="Yes"?1:0,
-            "date_of_proposal_submission": dateOfProposalSubmissionController.text.isEmpty?"":dateOfProposalSubmissionController.text,
+            "date_of_proposal_submission": dateOfProposalSubmission??"",
             "value_of_quote": valueOfQuoteUpdateController.text.isEmpty?"":valueOfQuoteUpdateController.text,
-            "expected_date_of_order": expectedDateOfOrderUpdateController.text.isEmpty?"":expectedDateOfOrderUpdateController.text,
-            "inaugration_date_of_project": inaugrationDateUpdateController.text.isEmpty?"":inaugrationDateUpdateController.text,
+            "expected_date_of_order": expOrderDate??"",
+            "inaugration_date_of_project": inaugurationDate??"",
             "created_by": email
         };
             try {
+                print(data);
                 _api.taskMstInfraUpdateApiHit(data, sessionManagement).then((
                     onValue) {
                     final jsonResponse = json.decode(onValue);
@@ -1048,9 +1057,15 @@ class Taskmastervm extends GetxController{
                                 is_Active.toString(),
                                Task_Master_list[0].taskId,
                                 '', 'GET FROM TASK ID', date_filter, is_done.value);
-                            isInfraLeadValueSubmit.value = true;
-                            Get.toNamed(RoutesName.addNewDSARTask_screen);
-                            clearUpdateController();
+
+                            if(flag == 'FromDSARPage'){
+                                isInfraLeadValueSubmit.value = true;
+                                Get.toNamed(RoutesName.addNewDSARTask_screen);
+                            }else if(flag == 'FromDetailsPage'){
+                                Get.toNamed(RoutesName.taskMasterDetails_screen);
+                            }
+
+                            clearInfraUpdateController();
                             loading.value = false;
                         } else {
                             loading.value = false;
@@ -1225,7 +1240,7 @@ class Taskmastervm extends GetxController{
         },);
     }
 */
-    void clearUpdateController(){
+    void clearInfraUpdateController(){
          projectValueUpdateController.clear();
          expectedDateOfOrderUpdateController.clear();
          drawingcollectedUpdateController.clear();
@@ -1239,15 +1254,32 @@ class Taskmastervm extends GetxController{
          expectedRevenueUpdateController.clear();
          valueOfQuoteUpdateController.clear();
          dateofcompletioneUpdateController.clear();
+         assistantEngineerController.clear();
+         nameOfProjectController.clear();
+         locationController.clear();
+         furnitureIncludedInCivilController.clear();
+         customerNameController.clear();
+         contactPersonHODController.clear();
+         ownerOfContractorController.clear();
+         siteManagerController.clear();
+         dateOfDrawingReceivedController.clear();
+         dateOfProposalSubmissionController.clear();
+         projectValueUpdateController.clear();
+
     }
 
     void viewAllDetailsOfTaskUpdateInfra(){
+        String? expOrderDate=StaticMethod.convertDateFormat1(Task_Master_list[0].expectedDateOfOrder ?? "");
+        String? inaugurationDate=StaticMethod.convertDateFormat1(Task_Master_list[0].inaugrationDateOfProject ?? "");
+        String? expDateOfCompletion=StaticMethod.convertDateFormat1(Task_Master_list[0].expectedDateOfCompletion ?? "");
+        String? dateDrawingReceived=StaticMethod.convertDateFormat1(Task_Master_list[0].dateDrawingReceived ?? "");
+        String? dateOfProposalSubmission=StaticMethod.convertDateFormat1(Task_Master_list[0].dateOfProposalSubmission ?? "");
 
         isInfraLeadUpdateController.value.text=Task_Master_list[0].isInfraLead==1 ? "Yes":"No";
-        expectedDateOfOrderUpdateController.text=Task_Master_list[0].expectedDateOfOrder ?? "";
+        expectedDateOfOrderUpdateController.text=expOrderDate ?? "";
         drawingcollectedUpdateController.text=Task_Master_list[0].drawingCollected ==1 ? "Yes":"No";
         proposalSubmittedUpdateController.text=Task_Master_list[0].drawingCollected==1 ? "Yes":"No";
-        inaugrationDateUpdateController.text=Task_Master_list[0].inaugrationDateOfProject ?? "";
+        inaugrationDateUpdateController.text= inaugurationDate??"";
         architectUpdateController.text=Task_Master_list[0].architect ?? "";
         executiveEngineerUpdateController.text=Task_Master_list[0].executiveEngineer ?? "";
         nameOfArchitecfirmUpdateController.text=Task_Master_list[0].nameOfArchitectFirm ?? "";
@@ -1255,7 +1287,7 @@ class Taskmastervm extends GetxController{
         agencyContractorUpdateController.text=Task_Master_list[0].nameOfAgencyContrator ?? "";
         expectedRevenueUpdateController.text=Task_Master_list[0].expectedRevenue.toString();
         valueOfQuoteUpdateController.text=Task_Master_list[0].valueOfQuote.toString();
-        dateofcompletioneUpdateController.text=Task_Master_list[0].expectedDateOfCompletion??"";
+        dateofcompletioneUpdateController.text=expDateOfCompletion??"";
         assistantEngineerController.text=Task_Master_list[0].assistantEngineer??"";
         nameOfProjectController.text=Task_Master_list[0].projectName??"";
         locationController.text=Task_Master_list[0].location??"";
@@ -1265,12 +1297,13 @@ class Taskmastervm extends GetxController{
         contactPersonHODController.text=Task_Master_list[0].contactPersonDecisionMaker??"";
         ownerOfContractorController.text=Task_Master_list[0].ownerOfContractor??"";
         siteManagerController.text=Task_Master_list[0].projectSiteManager??"";
-        dateOfDrawingReceivedController.text=Task_Master_list[0].dateDrawingReceived??"";
-        dateOfProposalSubmissionController.text=Task_Master_list[0].dateOfProposalSubmission??"";
+        dateOfDrawingReceivedController.text=dateDrawingReceived??"";
+        dateOfProposalSubmissionController.text=dateOfProposalSubmission??"";
         projectValueUpdateController.text=Task_Master_list[0].projectValue.toString();
     }
 
     void clearCreateTaskController(){
+        filterTask_Id_controller.clear();
         Item_Category_Selected_list.value=[];
         SelectedAlongPersonWith_list.value=[];
         account_name.value = '';

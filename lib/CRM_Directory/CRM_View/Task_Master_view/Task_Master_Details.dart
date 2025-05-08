@@ -1947,15 +1947,18 @@ class TaskMasterDetails extends StatelessWidget{
                 InkWell(
                   onTap: (){
                     print("Length${TaskMaster_page_controller.userGeoHierarchyy.length}");
+                    TaskMaster_page_controller.infraFlag = 'FromDetailsPage';
                     for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
                       if(TaskMaster_page_controller.userGeoHierarchyy[i].myLevel==1){
                         TaskMaster_page_controller.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
                         TaskMaster_page_controller.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
                       }
                     }
-                    /*if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
-
-                    }*/
+                    if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
+                      TaskMaster_page_controller.isInfraYes.value = true;
+                    }else{
+                      TaskMaster_page_controller.isInfraYes.value = false;
+                    }
                     TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
                     //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
                     TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId, TaskMaster_page_controller.Task_Master_list[0].infraLeadNo);

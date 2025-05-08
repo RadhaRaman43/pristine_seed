@@ -83,7 +83,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
           //text: "${TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?"Update":"Add"} Infra Details",
           text: "Submit",
           press: (){
-            TaskMaster_page_controller.gettaskMstInfraUpdate();
+            TaskMaster_page_controller.gettaskMstInfraUpdate(TaskMaster_page_controller.Task_Master_list[0].infraLeadNo??"", TaskMaster_page_controller.infraFlag);
           },
         ),
 
@@ -411,7 +411,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
   Widget bindIsInfraLead(BuildContext context) {
     return Container(
       child: DropdownMenu<String>(
-        enabled: TaskMaster_page_controller.isInfraLeadUpdateController.value=="yes"?false:true,
+        enabled: TaskMaster_page_controller.isInfraYes.value== true?false:true,
         width: size.width-60,
         controller: TaskMaster_page_controller.isInfraLeadUpdateController.value,
         label: Text(
@@ -445,7 +445,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
           TaskMaster_page_controller.isInfraLeadUpdateController.value.text =
               _displayCustomerNeedIdentityStatusForOption(selection!).toString();
           if(TaskMaster_page_controller.isInfraLeadUpdateController.value.text=="Yes"){
-             TaskMaster_page_controller.isInfraYes.value=true;
+            TaskMaster_page_controller.isInfraYes.value = true;
           }else{
             //TaskMaster_page_controller.isInfraLeadValue.value=true;
             TaskMaster_page_controller.isInfraYes.value=false;
@@ -880,7 +880,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
         onTap: () async {
           DateTime? initialDate;
           if (TaskMaster_page_controller.inaugrationDateUpdateController.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
+            initialDate = DateFormat('dd-MM-yyyy').parse(
               TaskMaster_page_controller.inaugrationDateUpdateController.text,
             );
             if (initialDate.isBefore(DateTime.now())) {
@@ -910,7 +910,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
             },
 
           );
-          var outputFormat = DateFormat('yyyy-MM-dd');
+          var outputFormat = DateFormat('dd-MM-yyyy');
           if (date != null && date != "")
             TaskMaster_page_controller.inaugrationDateUpdateController.text= outputFormat.format(date);
           /*else
@@ -1362,7 +1362,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
         onTap: () async {
           DateTime? initialDate;
           if (TaskMaster_page_controller.dateofcompletioneUpdateController.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
+            initialDate = DateFormat('dd-MM-yyyy').parse(
               TaskMaster_page_controller.dateofcompletioneUpdateController.text,
             );
             if (initialDate.isBefore(DateTime.now())) {
@@ -1391,7 +1391,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
               );
             },
           );
-          var outputFormat = DateFormat('yyyy-MM-dd');
+          var outputFormat = DateFormat('dd-MM-yyyy');
           if (date != null && date != "")
             TaskMaster_page_controller.dateofcompletioneUpdateController.text= outputFormat.format(date);
           else
@@ -1430,7 +1430,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
         onTap: () async {
           DateTime? initialDate;
           if (TaskMaster_page_controller.dateOfProposalSubmissionController.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
+            initialDate = DateFormat('dd-MM-yyyy').parse(
               TaskMaster_page_controller.dateOfProposalSubmissionController.text,
             );
             if (initialDate.isBefore(DateTime.now())) {
@@ -1459,7 +1459,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
               );
             },
           );
-          var outputFormat = DateFormat('yyyy-MM-dd');
+          var outputFormat = DateFormat('dd-MM-yyyy');
           if (date != null && date != "")
             TaskMaster_page_controller.dateOfProposalSubmissionController.text= outputFormat.format(date);
           else
@@ -1498,7 +1498,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
         onTap: () async {
           DateTime? initialDate;
           if (TaskMaster_page_controller.dateOfDrawingReceivedController.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
+            initialDate = DateFormat('dd-MM-yyyy').parse(
               TaskMaster_page_controller.dateOfDrawingReceivedController.text,
             );
             if (initialDate.isBefore(DateTime.now())) {
@@ -1527,7 +1527,7 @@ class UpdateTaskMstInfraScreen extends StatelessWidget{
               );
             },
           );
-          var outputFormat = DateFormat('yyyy-MM-dd');
+          var outputFormat = DateFormat('dd-MM-yyyy');
           if (date != null && date != "")
             TaskMaster_page_controller.dateOfDrawingReceivedController.text= outputFormat.format(date);
           else

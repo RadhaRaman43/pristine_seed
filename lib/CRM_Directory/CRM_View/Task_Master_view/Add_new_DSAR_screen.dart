@@ -481,6 +481,7 @@ class AddNewDsarScreen extends StatelessWidget{
                      text: "Update Infra Details",
                      press: (){
                        print("Length${TaskMaster_page_controller.userGeoHierarchyy.length}");
+                       TaskMaster_page_controller.infraFlag = 'FromDSARPage';
                        for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
                          if(TaskMaster_page_controller.userGeoHierarchyy[i].myLevel==1){
                            TaskMaster_page_controller.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
@@ -488,7 +489,15 @@ class AddNewDsarScreen extends StatelessWidget{
                          }
                        }
                        if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
+                         TaskMaster_page_controller.isInfraYes.value = true;
                          TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
+                       }else {
+                         TaskMaster_page_controller.isInfraYes.value = false;
+                       }
+                       if(TaskMaster_page_controller.isInfraLead.value.text == 'Yes'){
+                         TaskMaster_page_controller.isInfraYes.value = true;
+                       }else{
+                         TaskMaster_page_controller.isInfraYes.value = false;
                        }
                        TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
                        TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId, TaskMaster_page_controller.Task_Master_list[0].infraLeadNo);
