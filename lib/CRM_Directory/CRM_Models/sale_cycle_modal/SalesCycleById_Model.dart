@@ -1,5 +1,6 @@
 class SalesCycleByIdModel {
   String? condition;
+  String? totalRows;
   int? srNo;
   int? lineNo;
   String? salesCycleId;
@@ -25,6 +26,7 @@ class SalesCycleByIdModel {
 
   SalesCycleByIdModel(
       {this.condition,
+        this.totalRows,
         this.srNo,
         this.lineNo,
         this.salesCycleId,
@@ -50,6 +52,7 @@ class SalesCycleByIdModel {
 
   SalesCycleByIdModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
+    totalRows = json['total_rows'];
     srNo = json['sr_no'];
     lineNo = json['line_no'];
     salesCycleId = json['sales_cycle_id'];
@@ -76,6 +79,7 @@ class SalesCycleByIdModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['condition'] = this.condition;
     data['condition'] = this.condition;
     data['sr_no'] = this.srNo;
     data['line_no'] = this.lineNo;

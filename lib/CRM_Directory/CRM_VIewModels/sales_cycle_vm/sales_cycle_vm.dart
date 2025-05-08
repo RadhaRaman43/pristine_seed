@@ -76,6 +76,7 @@ class SalesCycleVm extends GetxController{
   int total_rows = 0;
   int total_rows_items = 0;
   int total_rows_sales = 0;
+  int total_rows_sale_cyle_item = 0;
   RxBool isDeleteBtn=true.obs;
   RxBool isApprovalVisible=false.obs;
   RxBool isPropectfieldVisible=false.obs;
@@ -424,12 +425,12 @@ class SalesCycleVm extends GetxController{
       Map data={
         "sales_cycle_id": saleCycleList.salesCycleId,
         "est_closure_date": closureDateController.value.text.isEmpty?saleCycleList.estClosureDate:closureDateController.value.text,
-        "budget_amount": flag=="save"?saleCycleList.budgetAmount:updatesalesCycleBudgetAmountController.value.text,
+        "budget_amount": flag==""?updatesalesCycleBudgetAmountController.value.text:saleCycleList.budgetAmount,
         "is_decision_maker": identifyDecisionMakerController.value.text=="No"?0:1,
         "purchase_process": purchaseProcessController.value.text.isEmpty?'':purchaseProcessController.value.text,
         "purchase_time_frame": purchasTimeFrameController.value.text.isEmpty?'':purchasTimeFrameController.value.text,
         "commit": saleCycleList.salesCycleStatus!.toLowerCase()=="propose"?1:0,
-        "sales_cycle_owner": flag=="save"?saleCycleList.salesCycleOwner:saleCycleOwnerSelected.value,
+        "sales_cycle_owner": flag==""?saleCycleOwnerSelected.value:saleCycleList.salesCycleOwner,
         "created_by": email
       }
     /*{
@@ -467,7 +468,7 @@ class SalesCycleVm extends GetxController{
                 getSalesCycleMstStatusChange(saleCycleList);
               }
               pageNumber = 0;
-              getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
+               getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
               Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               loading.value = false;
             }else {
@@ -688,10 +689,17 @@ class SalesCycleVm extends GetxController{
       });
   }
 
-  getSaleCycleProductByIdList(String SalesId){
+  getSaleCycleProductByIdList(int pageNumber,String SalesId){
     Map data= {
       "sales_cycle_id": SalesId,
-      "created_by": email ,
+      "created_by": email,
+      "item_code": "",
+      "item_description": "",
+      "category_name": "",
+      "competitor_name": "",
+      "loss_reason": "",
+      "rowsPerPage": rowsPerPage,
+      "pageNumber": pageNumber
     };
     loading.value=true;
     _api.SalesCycleProductGetBySalesCycleId(data, sessionManagement).then((onValue){
@@ -701,8 +709,12 @@ class SalesCycleVm extends GetxController{
         if(jsonResponse is List){
           List<SalesCycleByIdModel> response = jsonResponse.map((e) => SalesCycleByIdModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            get_SalesCycleProductById_List.value = response;
-            print('SalesProductList${get_SalesCycleProductById_List.length}');
+            if(pageNumber==0){
+              get_SalesCycleProductById_List.clear();
+            }
+            get_SalesCycleProductById_List.addAll(response);
+            print('listSize.....${saleCycleList.length}');
+            total_rows_sale_cyle_item=int.parse(get_SalesCycleProductById_List[0].totalRows!);
 
           }else {
            // Utils.showErrorToastification("Else!", "No Record Found");
@@ -1542,7 +1554,8 @@ class SalesCycleVm extends GetxController{
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
-            getSaleCycleProductByIdList(SalesId);
+             pageNumber=0;
+            getSaleCycleProductByIdList(pageNumber,SalesId);
             loading.value = false;
 
           }else {
@@ -1583,7 +1596,8 @@ class SalesCycleVm extends GetxController{
           List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
           if( response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
-            getSaleCycleProductByIdList(SalesCycleid);
+            pageNumber=0;
+            getSaleCycleProductByIdList(pageNumber,SalesCycleid);
             loading.value = false;
           }else {
             Utils.showErrorToastification("False Message !", response[0].message.toString());
@@ -2701,9 +2715,9 @@ class SalesCycleVm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              salesCycleMstUpdateApiHit(saleCycleList,
-                                  proposedSolutionController.value.text, updateQuoteAccetedCycleController.value.text
-                                  ,competitorNameController.value.text, quoteRejectReasonController.value.text, "");
+                              getSalesCycleMstUpdateSuspect(saleCycleList,
+                                  updateQuoteAccetedCycleController.value.text
+                                  ,competitorNameController.value.text, quoteRejectReasonController.value.text);
                               Get.back();
                              // Get.back();
 
@@ -3267,7 +3281,46 @@ class SalesCycleVm extends GetxController{
   }
 
 
+  getSalesCycleMstUpdateSuspect(SalesCycleModal saleCycleList, String quote_accepted,String competitor_name, String quote_rejected_reason){
+    loading.value = true;
+    Map data={
+      "sales_cycle_id": saleCycleList.salesCycleId,
+      "quote_accepted": quote_accepted,
+      "competitor_name": competitor_name,
+      "quote_rejected_reason": quote_rejected_reason,
+      "created_by": email
+    };
+    try{
+      _api.SalesCycleMstUpdateSuspectApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition!.toLowerCase()=="true"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            getsalesCycleData(0, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            loading.value = false;
+          }else {
+            print("message ${response[0].message.toString()}");
+            loading.value = false;
+            Utils.showToastification("False Message !", response[0].message.toString());
 
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
 
 
 

@@ -148,5 +148,10 @@ class SalesCycleRepository{
   }
 
 
+  Future<String> SalesCycleMstUpdateSuspectApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleMstUpdateSuspect,sessionManagement);
+  }
+
+
 
 }

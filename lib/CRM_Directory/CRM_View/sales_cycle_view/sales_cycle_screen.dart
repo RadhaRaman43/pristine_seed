@@ -169,7 +169,8 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.getPurchaseTimeFrameApi();
           salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId! );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
-          salesCycleController.getSaleCycleProductByIdList(salesCycleController.saleCycleList[position].salesCycleId!);
+          salesCycleController.pageNumber=0;
+          salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
 
           },
           subtitle: Column(
