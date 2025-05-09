@@ -31,7 +31,7 @@ class Utils{
       title,
       message,
       colorText: AllColors.whiteColor,
-      backgroundColor: AllColors.primaryDark1,
+      backgroundColor: AllColors.greenblue,
       barBlur: 2.0,
       duration: const Duration(seconds: 5),
 
