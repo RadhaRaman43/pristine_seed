@@ -9,6 +9,8 @@ class SalesCycleModal {
   String? contactName;
   String? productCategory;
   String? productCategoryCode;
+  String? infraProductCategoryCode;
+  String? infraProductCategoryName;
   String? salesCycleStatus;
   String? salesCycleApprovalStatus;
   String? salesCycleRemarks;
@@ -19,6 +21,8 @@ class SalesCycleModal {
   String? createdBy;
   String? createdFullName;
   String? createdOn;
+  String? salesCycleName;
+  String? salesCycleOwner;
   int? noOfQuotation;
   String? estClosureDate;
   double? budgetAmount;
@@ -33,21 +37,33 @@ class SalesCycleModal {
   String? wonQuoteId;
   int? isSalesCycleClosed;
   int? isInfraLead;
+  String? infraLeadNo;
   String? userRegion;
   String? userClusture;
-  double? projectValue;
-  String? expectedDateOfOrder;
-  int? drawingCollected;
-  int? proposalSubmitted;
-  String? inaugrationDateOfProject;
-  String? architect;
-  String? executiveEngineer;
-  String? nameOfArchitectFirm;
   String? nameOfInfraDepartment;
-  String? nameOfAgencyContrator;
-  double? expectedRevenue;
-  double? valueOfQuote;
+  String? executiveEngineer;
+  String? assistantEngineer;
+  String? projectName;
+  String? location;
+  int? timePeriodToCompleteCivilWorkInMonths;
   String? expectedDateOfCompletion;
+  double? projectValue;
+  double? expectedRevenue;
+  int? furnitureIncludedInCivilScope;
+  String? customerName;
+  String? contactPersonDecisionMaker;
+  String? nameOfAgencyContrator;
+  String? ownerOfContractor;
+  String? projectSiteManager;
+  String? nameOfArchitectFirm;
+  String? architect;
+  int? drawingCollected;
+  String? dateDrawingReceived;
+  int? proposalSubmitted;
+  String? dateOfProposalSubmission;
+  double? valueOfQuote;
+  String? expectedDateOfOrder;
+  String? inaugrationDateOfProject;
   String? updatedBy;
   String? updatedOn;
   int? isReadyForApprove;
@@ -78,6 +94,8 @@ class SalesCycleModal {
         this.contactName,
         this.productCategory,
         this.productCategoryCode,
+        this.infraProductCategoryCode,
+        this.infraProductCategoryName,
         this.salesCycleStatus,
         this.salesCycleApprovalStatus,
         this.salesCycleRemarks,
@@ -88,6 +106,8 @@ class SalesCycleModal {
         this.createdBy,
         this.createdFullName,
         this.createdOn,
+        this.salesCycleName,
+        this.salesCycleOwner,
         this.noOfQuotation,
         this.estClosureDate,
         this.budgetAmount,
@@ -102,21 +122,33 @@ class SalesCycleModal {
         this.wonQuoteId,
         this.isSalesCycleClosed,
         this.isInfraLead,
+        this.infraLeadNo,
         this.userRegion,
         this.userClusture,
-        this.projectValue,
-        this.expectedDateOfOrder,
-        this.drawingCollected,
-        this.proposalSubmitted,
-        this.inaugrationDateOfProject,
-        this.architect,
-        this.executiveEngineer,
-        this.nameOfArchitectFirm,
         this.nameOfInfraDepartment,
-        this.nameOfAgencyContrator,
-        this.expectedRevenue,
-        this.valueOfQuote,
+        this.executiveEngineer,
+        this.assistantEngineer,
+        this.projectName,
+        this.location,
+        this.timePeriodToCompleteCivilWorkInMonths,
         this.expectedDateOfCompletion,
+        this.projectValue,
+        this.expectedRevenue,
+        this.furnitureIncludedInCivilScope,
+        this.customerName,
+        this.contactPersonDecisionMaker,
+        this.nameOfAgencyContrator,
+        this.ownerOfContractor,
+        this.projectSiteManager,
+        this.nameOfArchitectFirm,
+        this.architect,
+        this.drawingCollected,
+        this.dateDrawingReceived,
+        this.proposalSubmitted,
+        this.dateOfProposalSubmission,
+        this.valueOfQuote,
+        this.expectedDateOfOrder,
+        this.inaugrationDateOfProject,
         this.updatedBy,
         this.updatedOn,
         this.isReadyForApprove,
@@ -147,6 +179,8 @@ class SalesCycleModal {
     contactName = json['contact_name'];
     productCategory = json['product_category'];
     productCategoryCode = json['product_category_code'];
+    infraProductCategoryCode = json['infra_product_category_code'];
+    infraProductCategoryName = json['infra_product_category_name'];
     salesCycleStatus = json['sales_cycle_status'];
     salesCycleApprovalStatus = json['sales_cycle_approval_status'];
     salesCycleRemarks = json['sales_cycle_remarks'];
@@ -157,6 +191,8 @@ class SalesCycleModal {
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
+    salesCycleName = json['sales_cycle_name'];
+    salesCycleOwner = json['sales_cycle_owner'];
     noOfQuotation = json['no_of_quotation'];
     estClosureDate = json['est_closure_date'];
     budgetAmount = json['budget_amount'];
@@ -171,21 +207,34 @@ class SalesCycleModal {
     wonQuoteId = json['won_quote_id'];
     isSalesCycleClosed = json['is_sales_cycle_closed'];
     isInfraLead = json['is_infra_lead'];
+    infraLeadNo = json['infra_lead_no'];
     userRegion = json['user_region'];
     userClusture = json['user_clusture'];
-    projectValue = json['project_value'];
-    expectedDateOfOrder = json['expected_date_of_order'];
-    drawingCollected = json['drawing_collected'];
-    proposalSubmitted = json['proposal_submitted'];
-    inaugrationDateOfProject = json['inaugration_date_of_project'];
-    architect = json['architect'];
-    executiveEngineer = json['executive_engineer'];
-    nameOfArchitectFirm = json['name_of_architect_firm'];
     nameOfInfraDepartment = json['name_of_infra_department'];
-    nameOfAgencyContrator = json['name_of_agency_contrator'];
-    expectedRevenue = json['expected_revenue'];
-    valueOfQuote = json['value_of_quote'];
+    executiveEngineer = json['executive_engineer'];
+    assistantEngineer = json['assistant_engineer'];
+    projectName = json['project_name'];
+    location = json['location'];
+    timePeriodToCompleteCivilWorkInMonths =
+    json['time_period_to_complete_civil_work_in_months'];
     expectedDateOfCompletion = json['expected_date_of_completion'];
+    projectValue = json['project_value'];
+    expectedRevenue = json['expected_revenue'];
+    furnitureIncludedInCivilScope = json['furniture_included_in_civil_scope'];
+    customerName = json['customer_name'];
+    contactPersonDecisionMaker = json['contact_person_decision_maker'];
+    nameOfAgencyContrator = json['name_of_agency_contrator'];
+    ownerOfContractor = json['owner_of_contractor'];
+    projectSiteManager = json['project_site_manager'];
+    nameOfArchitectFirm = json['name_of_architect_firm'];
+    architect = json['architect'];
+    drawingCollected = json['drawing_collected'];
+    dateDrawingReceived = json['date_drawing_received'];
+    proposalSubmitted = json['proposal_submitted'];
+    dateOfProposalSubmission = json['date_of_proposal_submission'];
+    valueOfQuote = json['value_of_quote'];
+    expectedDateOfOrder = json['expected_date_of_order'];
+    inaugrationDateOfProject = json['inaugration_date_of_project'];
     updatedBy = json['updated_by'];
     updatedOn = json['updated_on'];
     isReadyForApprove = json['is_ready_for_approve'];
@@ -218,6 +267,8 @@ class SalesCycleModal {
     data['contact_name'] = this.contactName;
     data['product_category'] = this.productCategory;
     data['product_category_code'] = this.productCategoryCode;
+    data['infra_product_category_code'] = this.infraProductCategoryCode;
+    data['infra_product_category_name'] = this.infraProductCategoryName;
     data['sales_cycle_status'] = this.salesCycleStatus;
     data['sales_cycle_approval_status'] = this.salesCycleApprovalStatus;
     data['sales_cycle_remarks'] = this.salesCycleRemarks;
@@ -228,6 +279,8 @@ class SalesCycleModal {
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
+    data['sales_cycle_name'] = this.salesCycleName;
+    data['sales_cycle_owner'] = this.salesCycleOwner;
     data['no_of_quotation'] = this.noOfQuotation;
     data['est_closure_date'] = this.estClosureDate;
     data['budget_amount'] = this.budgetAmount;
@@ -242,21 +295,35 @@ class SalesCycleModal {
     data['won_quote_id'] = this.wonQuoteId;
     data['is_sales_cycle_closed'] = this.isSalesCycleClosed;
     data['is_infra_lead'] = this.isInfraLead;
+    data['infra_lead_no'] = this.infraLeadNo;
     data['user_region'] = this.userRegion;
     data['user_clusture'] = this.userClusture;
-    data['project_value'] = this.projectValue;
-    data['expected_date_of_order'] = this.expectedDateOfOrder;
-    data['drawing_collected'] = this.drawingCollected;
-    data['proposal_submitted'] = this.proposalSubmitted;
-    data['inaugration_date_of_project'] = this.inaugrationDateOfProject;
-    data['architect'] = this.architect;
-    data['executive_engineer'] = this.executiveEngineer;
-    data['name_of_architect_firm'] = this.nameOfArchitectFirm;
     data['name_of_infra_department'] = this.nameOfInfraDepartment;
-    data['name_of_agency_contrator'] = this.nameOfAgencyContrator;
-    data['expected_revenue'] = this.expectedRevenue;
-    data['value_of_quote'] = this.valueOfQuote;
+    data['executive_engineer'] = this.executiveEngineer;
+    data['assistant_engineer'] = this.assistantEngineer;
+    data['project_name'] = this.projectName;
+    data['location'] = this.location;
+    data['time_period_to_complete_civil_work_in_months'] =
+        this.timePeriodToCompleteCivilWorkInMonths;
     data['expected_date_of_completion'] = this.expectedDateOfCompletion;
+    data['project_value'] = this.projectValue;
+    data['expected_revenue'] = this.expectedRevenue;
+    data['furniture_included_in_civil_scope'] =
+        this.furnitureIncludedInCivilScope;
+    data['customer_name'] = this.customerName;
+    data['contact_person_decision_maker'] = this.contactPersonDecisionMaker;
+    data['name_of_agency_contrator'] = this.nameOfAgencyContrator;
+    data['owner_of_contractor'] = this.ownerOfContractor;
+    data['project_site_manager'] = this.projectSiteManager;
+    data['name_of_architect_firm'] = this.nameOfArchitectFirm;
+    data['architect'] = this.architect;
+    data['drawing_collected'] = this.drawingCollected;
+    data['date_drawing_received'] = this.dateDrawingReceived;
+    data['proposal_submitted'] = this.proposalSubmitted;
+    data['date_of_proposal_submission'] = this.dateOfProposalSubmission;
+    data['value_of_quote'] = this.valueOfQuote;
+    data['expected_date_of_order'] = this.expectedDateOfOrder;
+    data['inaugration_date_of_project'] = this.inaugrationDateOfProject;
     data['updated_by'] = this.updatedBy;
     data['updated_on'] = this.updatedOn;
     data['is_ready_for_approve'] = this.isReadyForApprove;
