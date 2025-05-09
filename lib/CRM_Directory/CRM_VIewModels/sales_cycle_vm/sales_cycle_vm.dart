@@ -720,6 +720,7 @@ class SalesCycleVm extends GetxController{
            // Utils.showErrorToastification("Else!", "No Record Found");
             get_SalesCycleProductById_List.value=[];
 
+
           }
         } else {
           loading.value = false;
