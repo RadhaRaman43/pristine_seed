@@ -274,7 +274,7 @@ class TaskMasterDetails extends StatelessWidget{
             ),
         
             SizedBox(height: 5,),
-        
+
             Card(
               color: AllColors.whiteColor,
               elevation: 10,
@@ -286,7 +286,140 @@ class TaskMasterDetails extends StatelessWidget{
                       /*border: Border.all(
                         color: AllColors.blackColor, // Set the border color here
                       ),*/
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: AllColors.textColor
+                    ),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Icon(Icons.person, color: AllColors.whiteColor,),
+                        ),
+                        Text(
+                          "Geo Info",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.whiteColor,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Obx(
+                              () {
+                            return IconButton(
+                              onPressed: () {
+                                TaskMaster_page_controller.toggleGeoInfoCrtd();
+                                if (TaskMaster_page_controller
+                                    .isExpandGeoInfo.value ==
+                                    true) {
+                                  print(
+                                      "If......${TaskMaster_page_controller.isExpandGeoInfo.value}");
+                                } else {
+                                  print(
+                                      "else......${TaskMaster_page_controller.isExpandGeoInfo.value}");
+                                }
+                              },
+                              icon: Icon(
+                                TaskMaster_page_controller
+                                    .isExpandGeoInfo.value
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                                size: 25,
+                                color: AllColors.whiteColor,
+                              ),
+                            );
+                          },
+                        )
+
+                      ],
+                    ),
+                  ),
+                  Obx(() {
+                    return viewGeoInfoDetail(context);
+                  }),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 5,),
+        
+            Card(
+              color: AllColors.whiteColor,
+              elevation: 10,
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.0),
+                        color: AllColors.textColor
+                    ),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Icon(Icons.library_books_sharp, color: AllColors.whiteColor),
+                        ),
+                        Text(
+                          "Infra Details",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.whiteColor,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Obx(
+                              () {
+                            return IconButton(
+                              onPressed: () {
+                                TaskMaster_page_controller.toggleInfraDetails();
+                                if (TaskMaster_page_controller
+                                    .isExpandInfraDeatils.value ==
+                                    true) {
+                                  print(
+                                      "If......${TaskMaster_page_controller.isExpandInfraDeatils.value}");
+                                } else {
+                                  print(
+                                      "else......${TaskMaster_page_controller.isExpandInfraDeatils.value}");
+                                }
+                              },
+                              icon: Icon(
+                                TaskMaster_page_controller
+                                    .isExpandInfraDeatils.value
+                                    ? Icons.arrow_drop_down
+                                    : Icons.arrow_drop_up,
+                                size: 25,
+                                color: AllColors.whiteColor,
+                              ),
+                            );
+                          },
+                        )
+        
+                      ],
+                    ),
+                  ),
+                  Obx(() {
+                    return viewInfraDetails(context);
+                  }),
+                ],
+              ),
+            ),
+
+            SizedBox(height: 5,),
+
+            Card(
+              color: AllColors.whiteColor,
+              elevation: 10,
+              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
+              child: Column(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      /*border: Border.all(
+                        color: AllColors.blackColor, // Set the border color here
+                      ),*/
+                        borderRadius: BorderRadius.circular(10.0),
                         color: AllColors.textColor
                     ),
                     child:Row(
@@ -330,7 +463,7 @@ class TaskMasterDetails extends StatelessWidget{
                             );
                           },
                         )
-        
+
                       ],
                     ),
                   ),
@@ -836,6 +969,7 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget viewTasketails(BuildContext context) {
+    String? dateTimeCreatedOn=StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].dateOfVisit ?? "");
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDetails.value == true ? true : false,
       child: Container(
@@ -1118,13 +1252,9 @@ class TaskMasterDetails extends StatelessWidget{
                 Container(
                   width: size.width * .4,
                   child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .dateOfVisit.toString(),
+                    message: dateTimeCreatedOn,
                     child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .dateOfVisit.toString(),
+                      dateTimeCreatedOn??"",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
@@ -1670,6 +1800,551 @@ class TaskMasterDetails extends StatelessWidget{
           ],
         ),
       ),
+    );
+  }
+
+  Widget viewGeoInfoDetail(BuildContext context) {
+    return   Visibility(
+      visible: TaskMaster_page_controller.isExpandGeoInfo.value == true ? true : false,
+      child: Container(
+        margin: EdgeInsets.only(left: 10.0, right: 10.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Frontliner ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller
+                      .Task_Master_list[0]
+                      .frontlinerValue ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Branch Head",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  StaticMethod.onlyDate(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .branchHeadValue!) ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Zone Head",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller
+                      .Task_Master_list[0]
+                      .zoneHeadValue ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Cluster Head",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  StaticMethod.onlyDate(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .clustureHeadValue??"") ?? "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget viewInfraDetails(BuildContext context) {
+    String? expOrderDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfOrder ?? "");
+    String? inaugurationDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].inaugrationDateOfProject ?? "");
+    String? expDateOfCompletion=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfCompletion ?? "");
+    return   Visibility(
+      visible: TaskMaster_page_controller.isExpandInfraDeatils.value == true ? true : false,
+      child:
+      Container(
+        margin: EdgeInsets.only(left: 10.0, right: 10.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Infra Lead",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                InkWell(
+                  onTap: (){
+                    print("Length${TaskMaster_page_controller.userGeoHierarchyy.length}");
+                    TaskMaster_page_controller.infraFlag = 'FromDetailsPage';
+                    for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
+                      if(TaskMaster_page_controller.userGeoHierarchyy[i].myLevel==1){
+                        TaskMaster_page_controller.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
+                        TaskMaster_page_controller.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
+                      }
+                    }
+                    if(TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1){
+                      TaskMaster_page_controller.isInfraYes.value = true;
+                    }else{
+                      TaskMaster_page_controller.isInfraYes.value = false;
+                    }
+                    TaskMaster_page_controller.viewAllDetailsOfTaskUpdateInfra();
+                    //TaskMaster_page_controller.isInfraLeadUpdateController.value.text=TaskMaster_page_controller.isInfraLead.value.text;
+                    TaskMaster_page_controller.getItemCategoryMstApiHit(TaskMaster_page_controller.Task_Master_list[0].taskId, TaskMaster_page_controller.Task_Master_list[0].infraLeadNo);
+                    Get.toNamed(RoutesName.updateTaskMstInfraScreen);
+                  },
+                  child: Text(
+                    TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?'Yes':'No',
+                    style: GoogleFonts.poppins(
+                      color: Colors.blueAccent,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w500,
+                      decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.wavy,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Infra Lead No.",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].infraLeadNo??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "User Region",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].userRegion??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+
+
+            Row(
+              children: [
+                Text(
+                  "User Cluster",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].userClusture??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Project Value",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].projectValue.toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Exp Date of Order",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  expOrderDate??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Drawing Collected",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].drawingCollected==1?"Yes":"No",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Proposal Submitted",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].proposalSubmitted==1?"Yes":"No",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Inauguration Date of Project",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  inaugurationDate??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Architect",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].architect??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Executive Engineer",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].executiveEngineer??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Name of Infra Department",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].nameOfInfraDepartment??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Name of Agency Contactor",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].nameOfAgencyContrator??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Expected Revenue",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].expectedRevenue.toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Value Of Quote",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  TaskMaster_page_controller.Task_Master_list[0].valueOfQuote.toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Expected Date Of Completion",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Text(
+                  expDateOfCompletion??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+          ],
+        ),
+      )
     );
   }
 

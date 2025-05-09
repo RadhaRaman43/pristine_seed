@@ -214,6 +214,7 @@ class AppUrl {
      static const String TaskDSARMstGet = "$BASE_URL/api/CRM/Task/TaskDSARMstGet";
      static const String TaskDSARMstCreate = "$BASE_URL/api/CRM/Task/TaskDSARMstCreate";
      static const String ItemCategoryMstGetByTaskId = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByTaskId";
+     static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
      static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/TaskSalesProductCategoryCreate";
      static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
      static const String ItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ItemCategoryMstGet";
@@ -242,7 +243,7 @@ class AppUrl {
      static const String quoteHeaderMarkRegret = "$BASE_URL/api/CRM/Quote/QuoteHeaderMarkRegret";
      static const String quoteSendForApproval = "$BASE_URL/api/CRM/Quote/QuoteSendForApproval";
      static const String quoteApproveReject = "$BASE_URL/api/CRM/Quote/QuoteApproveReject";
-     static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
+    // static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
      static const String QuoteSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/QuoteSalesProductCategoryCreate";
      static const String QuoteHeaderUpdateBusinessTerms = "$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateBusinessTerms";
      static const String quotationReport = "$BASE_URL/api/CRM/Quote/QuotationReport";
