@@ -200,6 +200,11 @@ class SalesCycleVm extends GetxController{
   var Shipping_email_Controller=TextEditingController().obs;
 
 
+  //todo update sales cycle product competitor name, loss reason etc ...
+  var updateCompetitorNameProductController=TextEditingController().obs;
+  var updateCompetitorPriceProductController=TextEditingController().obs;
+  var updateLossReasonProductController=TextEditingController().obs;
+
   RxInt index=0.obs;
   final qtyFocusNode = FocusNode();
   RxString quoteId="".obs;
@@ -372,8 +377,6 @@ class SalesCycleVm extends GetxController{
     try{
       Map data={
         "sale_cycle_id": saleCycleId.isNotEmpty?saleCycleId:saleCycleController.value.text,
-       /* "rowperpage": rowsPerPage,
-        "page_number": page_no*/
       };
       loading.value=true;
       _api.SaleCycleProductCategoryWiseAmtGet(data, sessionManagement).then((onValue){
@@ -383,10 +386,6 @@ class SalesCycleVm extends GetxController{
           List<ProductCategoryWiseAmtModel> response = jsonResponse.map((e) => ProductCategoryWiseAmtModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
             loading.value = false;
-            /*if(page_no==0){
-              budgetAmountList.clear();
-            }*/
-           // budgetAmountList.addAll(response);
             budgetAmountList.value = response;
             print('budgetAmt...${budgetAmountList.value}');
             Total_Budget_Amount.value=response[0].totalBudgetAmount??"";
@@ -693,11 +692,11 @@ class SalesCycleVm extends GetxController{
     Map data= {
       "sales_cycle_id": SalesId,
       "created_by": email,
-      "item_code": "",
-      "item_description": "",
-      "category_name": "",
-      "competitor_name": "",
-      "loss_reason": "",
+      "item_code": itemCodeController.value.text.isNotEmpty?itemCodeController.value.text:"",
+      "item_description": updateItemDescriptionController.value.text.isNotEmpty?updateItemDescriptionController.value.text:"",
+      "category_name": categoryNameController.value.text.isNotEmpty?categoryNameController.value.text:"",
+      "competitor_name": updateCompetitorNameProductController.value.text.isNotEmpty?updateCompetitorNameProductController.value.text:"",
+      "loss_reason": updateLossReasonProductController.value.text.isNotEmpty?updateLossReasonProductController.value.text:"",
       "rowsPerPage": rowsPerPage,
       "pageNumber": pageNumber
     };
@@ -3222,7 +3221,7 @@ class SalesCycleVm extends GetxController{
           }else {
             print("message ${response[0].message.toString()}");
             loading.value = false;
-            Utils.showToastification("False Message !", response[0].message.toString());
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
 
           }
         } else {
@@ -3262,7 +3261,7 @@ class SalesCycleVm extends GetxController{
           }else {
             print("message ${response[0].message.toString()}");
             loading.value = false;
-            Utils.showToastification("False Message !", response[0].message.toString());
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
 
           }
         } else {
@@ -3304,7 +3303,7 @@ class SalesCycleVm extends GetxController{
           }else {
             print("message ${response[0].message.toString()}");
             loading.value = false;
-            Utils.showToastification("False Message !", response[0].message.toString());
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
 
           }
         } else {
@@ -3324,5 +3323,80 @@ class SalesCycleVm extends GetxController{
   }
 
 
+  getSalesProductLineCompetitorCreate(String sales_cycle_id,
+      String flagLineAll, RxList<SalesCycleByIdModel> get_salesCycleProductById_List
+      ,int? selectedIndex){
+    loading.value = true;
+    List<Map<String, dynamic>> lineData = [];
+
+    if (flagLineAll == "All") {
+      for (int i = 0; i < get_salesCycleProductById_List.length; i++) {
+        final item = get_salesCycleProductById_List[i];
+        lineData.add({
+          "line_no": item.lineNo ?? "",
+          "item_code": item.itemCode ?? "",
+          "item_description": item.itemDescription ?? "",
+          "qty": item.qty ?? 0,
+          "line_status": item.lineStatus ?? "",
+          "competitor_name": item.competitorName??"",
+          "competitor_price": item.competitorPrice??0.0,
+          "loss_reason": item.lossReason??"",
+        });
+      }
+    } else if (selectedIndex != null && selectedIndex >= 0 && selectedIndex < get_salesCycleProductById_List.length) {
+      final item = get_salesCycleProductById_List[selectedIndex];
+      lineData.add({
+        "line_no": item.lineNo ?? "",
+        "item_code": item.itemCode ?? "",
+        "item_description": item.itemDescription ?? "",
+        "qty": item.qty ?? 0,
+        "line_status": item.lineStatus ?? "",
+        "competitor_name": updateCompetitorNameProductController.value.text,
+        "competitor_price": updateCompetitorPriceProductController.value.text,
+        "loss_reason": updateLossReasonProductController.value.text,
+      });
+    }
+
+    Map<String, dynamic> data = {
+      "sales_cycle_id": sales_cycle_id,
+      "quote_accepted": "Loss",
+      "created_by": email,
+      "flag": flagLineAll,
+      "lines": lineData,
+    };
+    try{
+      _api.SalesProductLineCompetitorCreateApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition!.toLowerCase()=="true"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            pageNumber=0;
+            getSaleCycleProductByIdList(pageNumber, sales_cycle_id);
+            loading.value = false;
+          }else {
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
 
 }

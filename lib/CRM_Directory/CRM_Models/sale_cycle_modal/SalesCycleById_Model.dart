@@ -17,7 +17,7 @@ class SalesCycleByIdModel {
   String? updatedBy;
   String? updatedOn;
   String? competitorName;
-  String? competitorPrice;
+  double? competitorPrice;
   String? lossReason;
   String? lossBy;
   String? lossOn;
