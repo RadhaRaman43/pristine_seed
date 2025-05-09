@@ -153,5 +153,10 @@ class SalesCycleRepository{
   }
 
 
+  Future<String> SalesProductLineCompetitorCreateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesProductLineCompetitorCreate,sessionManagement);
+  }
+
+
 
 }
