@@ -54,6 +54,8 @@ class SalesCycleScreen extends StatelessWidget{
                 ),
                 Spacer(),
                 IconButton(onPressed: () {
+                  salesCycleController.SaleCycleStatusController.value.text = 'All';
+                  salesCycleController.ApprovalStatusController.value.text = 'All';
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
               ],
@@ -474,10 +476,6 @@ class SalesCycleScreen extends StatelessWidget{
   }
 
   void showFilterBottomSheet(BuildContext context) {
-    salesCycleController.accountNameController.value.clear();
-    salesCycleController.contactNameController.value.clear();
-    salesCycleController.SaleCycleStatusController.value.clear();
-    salesCycleController.ApprovalStatusController.value.clear();
     salesCycleController.pageNumber = 0;
     showModalBottomSheet(
       context: context,
@@ -630,6 +628,7 @@ class SalesCycleScreen extends StatelessWidget{
                                 )),
                                 onPressed: () {
                                   Get.back();
+                                  salesCycleController.pageNumber = 0;
                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, '', '', '');
                                   //TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.SaleCycleActive_Controller.text, '', '', TaskMaster_page_controller.Task_status_controller.text.toString());
 
@@ -661,6 +660,7 @@ class SalesCycleScreen extends StatelessWidget{
                                   salesCycleController.SaleCycleStatusController.value.clear();
                                   salesCycleController.ApprovalStatusController.value.clear();
                                   salesCycleController.saleCycleController.value.clear();
+                                  salesCycleController.pageNumber = 0;
                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, '', '', '');
                                   
 
@@ -723,7 +723,17 @@ class SalesCycleScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Sale Cycle Status',
@@ -820,7 +830,17 @@ class SalesCycleScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Approval Status',

@@ -1116,8 +1116,9 @@ class Accountmastervm extends GetxController{
                 AccountMasterGetCode_list.value=response;
                 accountName=AccountMasterGetCode_list[0].accountName.toString();
                 print('Api Hit Mster....${AccountMasterGetCode_list[0].profile.toString()}');
-                Get.toNamed(RoutesName.update_AccountMaster_screen);
                 viewRequestDetails(response);
+                Get.toNamed(RoutesName.update_AccountMaster_screen);
+
 
               } else {
                 AccountMasterGetCode_list.value=[];
