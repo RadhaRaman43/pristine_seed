@@ -124,6 +124,10 @@ class SalesCycleVm extends GetxController{
   var expectedClosuredateController=TextEditingController().obs;
   var contactQuoteCommitController=TextEditingController().obs;
 
+  var QuoteSubmittedController=TextEditingController().obs;
+  var ConfirmDecisionDateController=TextEditingController().obs;
+  var ConfirmExpectedRevenueController=TextEditingController().obs;
+
   var updatecontactpersonNameController=TextEditingController().obs;
   var activeController=TextEditingController().obs;
   var quoteStatusController=TextEditingController().obs;
@@ -193,8 +197,10 @@ class SalesCycleVm extends GetxController{
 
   //todo shipping address
   var shippingController=TextEditingController().obs;
+  var shippingAddress2Controller=TextEditingController().obs;
   var Shipping_PostCode_Controller=TextEditingController().obs;
   var Shipping_City_Controller=TextEditingController().obs;
+  var Shipping_District_Controller=TextEditingController().obs;
   var Shipping_State_Controller=TextEditingController().obs;
   var Shipping_phone_Controller=TextEditingController().obs;
   var Shipping_email_Controller=TextEditingController().obs;
@@ -310,6 +316,9 @@ class SalesCycleVm extends GetxController{
                 closureDateController.value.text=saleCycleList[0].estClosureDate.toString();
                 saleCycleList[0].isDecisionMaker==0?identifyDecisionMakerController.value.text="No":identifyDecisionMakerController.value.text="Yes";
                 saleCycleList[0].commit==0?saleCycleCommitController.value.text="No":saleCycleCommitController.value.text="Yes";
+                saleCycleList[0].quoteSubmitted==0?QuoteSubmittedController.value.text="No":QuoteSubmittedController.value.text="Yes";
+                saleCycleList[0].confirmDecisionDate==0?ConfirmDecisionDateController.value.text="No":ConfirmDecisionDateController.value.text="Yes";
+                saleCycleList[0].confirmExpectedRevenue==0?ConfirmExpectedRevenueController.value.text="No":ConfirmExpectedRevenueController.value.text="Yes";
                 purchaseProcessController.value.text=saleCycleList[0].purchaseProcess==null?"":saleCycleList[0].purchaseProcess.toString();
                 purchasTimeFrameController.value.text=saleCycleList[0].purchaseTimeFrame==null?"":saleCycleList[0].purchaseTimeFrame.toString();
                 budgetAmountController.value.clear();
@@ -2051,6 +2060,14 @@ class SalesCycleVm extends GetxController{
     finalAmountController.value.clear();
   }
 
+  clearSaleProductListController(){
+    itemCodeController.value.clear();
+    categoryNameController.value.clear();
+    updateCompetitorNameProductController.value.clear();
+    updateCompetitorPriceProductController.value.clear();
+    updateLossReasonProductController.value.clear();
+  }
+
 
   void showDialogForsalescycleUpdate(BuildContext context, SalesCycleModal saleCycleList, ) {
     showDialog(
@@ -2284,8 +2301,10 @@ class SalesCycleVm extends GetxController{
                             onPressed: ()  {
                               selectedItem.value = -1;
                               shippingController.value.text=saleCycleList[0].shippingAddress??"";
+                              shippingAddress2Controller.value.text=saleCycleList[0].shippingAddress2??"";
                               Shipping_PostCode_Controller.value.text=saleCycleList[0].shippingPostCode??"";
                               Shipping_City_Controller.value.text=saleCycleList[0].shippingCity??"" ;
+                              Shipping_District_Controller.value.text=saleCycleList[0].shippingDistrict??"" ;
                               Shipping_State_Controller.value.text=saleCycleList[0].shippingStateCode??"";
                               Shipping_phone_Controller.value.text=saleCycleList[0].shippingPhoneNo??"";
                               Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";
@@ -2321,8 +2340,10 @@ class SalesCycleVm extends GetxController{
                             ),
                             onPressed: ()  {
                               shippingController.value.text=address_master_list[selectedItem.value].address??"";
+                              shippingAddress2Controller.value.text=address_master_list[selectedItem.value].address2??"";
                               Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
                               Shipping_City_Controller.value.text=address_master_list[selectedItem.value].city??"" ;
+                              Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"" ;
                               Shipping_State_Controller.value.text=address_master_list[selectedItem.value].stateName??"";
                               Shipping_phone_Controller.value.text=address_master_list[selectedItem.value].phoneNo??"";
                               Shipping_email_Controller.value.text=address_master_list[selectedItem.value].emailId??"";
@@ -3365,6 +3386,7 @@ class SalesCycleVm extends GetxController{
       "lines": lineData,
     };
     try{
+      print(data);
       _api.SalesProductLineCompetitorCreateApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
@@ -3373,6 +3395,7 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition!.toLowerCase()=="true"){
             Utils.showToastification("Message !", response[0].message.toString());
             pageNumber=0;
+            clearSaleProductListController();
             getSaleCycleProductByIdList(pageNumber, sales_cycle_id);
             loading.value = false;
           }else {
@@ -3398,5 +3421,92 @@ class SalesCycleVm extends GetxController{
       loading.value = false;
     }
   }
+
+  UpdateProposeConfirmDecisionApiHit(String salesId){
+    loading.value = true;
+    Map data={
+      "sales_cycle_id": salesId,
+      "quote_submitted": QuoteSubmittedController.value.text == 'Yes'?1:'0',
+      "confirm_decision_date": ConfirmDecisionDateController.value.text == 'Yes'?1:'0',
+      "confirm_expected_revenue": ConfirmExpectedRevenueController.value.text == 'Yes'?1:'0',
+      "created_by": email
+    };
+    try{
+      _api.SalesCycleMstUpdateProposeConfirmDecision(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition!.toLowerCase()=="true"){
+            Utils.showToastification("Success !", response[0].message.toString());
+            loading.value = false;
+            pageNumber = 0;
+            getsalesCycleData(pageNumber, salesId, "ViewHeader", 'Sales');
+            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+          }else {
+            print("message ${response[0].message.toString()}");
+            loading.value = false;
+
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+  FetchSalesProductApiHit(String salesId, String quoteId){
+    loading.value = true;
+    Map data={
+      "quote_id": quoteId,
+      "sales_cycle_id": salesId,
+      "created_by": email
+
+    };
+    try{
+      _api.QuoteLineCreateFromPropectStageApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleQuoteInformationModal> response = jsonResponse.map((e) => SalesCycleQuoteInformationModal.fromJson(e)).toList();
+          if(response[0].condition!.toLowerCase()=="true"){
+            Utils.showToastification("Success !", response[0].message.toString());
+            loading.value = false;
+            quoteLinedata.value = response[0].quoteItems??[];
+            QuoteHeaderDupicateCreate(quoteId);
+            print("message ${response[0].message.toString()}");
+            loading.value = false;
+
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
+
 
 }

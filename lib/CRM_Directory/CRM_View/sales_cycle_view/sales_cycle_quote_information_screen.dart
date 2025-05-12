@@ -239,8 +239,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                     saleCycleController.activeController.value.text=saleCycleController.quoteHeaderdata[0].isActive==1?"Yes":"No";
                                     saleCycleController.quoteCommitController.value.text=saleCycleController.quoteHeaderdata[0].quoteCommit==1?"Yes":"No";
                                     saleCycleController.shippingController.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress??"";
+                                    saleCycleController.shippingAddress2Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress2??"";
                                     saleCycleController.Shipping_PostCode_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPostCode??"";
                                     saleCycleController.Shipping_City_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingCity??"" ;
+                                    saleCycleController.Shipping_District_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingDistrict??"" ;
                                     saleCycleController.Shipping_State_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingStateName??"";
                                     saleCycleController.Shipping_phone_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPhoneNo??"";
                                     saleCycleController.Shipping_email_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingEmailId??"";
@@ -385,48 +387,79 @@ class QuoteInformationScreen extends StatelessWidget{
 
                       Container(
                         margin: EdgeInsets.only(left: 10, right: 10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Quote Item List", style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.eighteen,
-                              fontWeight: FontWeight.w700,
-                            ),),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text("Quote Item List", style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.eighteen,
+                                fontWeight: FontWeight.w700,
+                              ),),
 
-                            Visibility(
-                              visible:saleCycleController.FromPage=="Task" || saleCycleController.FromPage=="FromTaskScreen"?false:true,
-                              child: Row(
-                                children: [
-                                  SizedBox(width: 10,),
-                                  Obx((){
-                                    String ProductCategory = saleCycleController.quoteHeaderdata[0].productCategoryCode??"";
-                                    String PipeProdCate = ProductCategory.replaceAll(', ', '|');
-                                    print("${saleCycleController.quoteHeaderdata[0].quoteStatus}");
-                                    return   Visibility(
-                                      visible:  saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
-                                      child: GestureDetector(
-                                        onTap: (){
-                                          saleCycleController.itemMstGetByQuoteIdApiHit(0,saleCycleController.quoteHeaderdata[0].quoteId, "Add", PipeProdCate);
 
-                                        },
-                                        child: Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(7.0),
-                                            child: Icon(Icons.add, color: AllColors.primaryDark1,),
+                              Visibility(
+                                visible:saleCycleController.FromPage=="Task" || saleCycleController.FromPage=="FromTaskScreen"?false:true,
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 10,),
+                                    GestureDetector(
+                                        child: ElevatedButton(
+                                          style: ElevatedButton.styleFrom(
+                                            side: const BorderSide(
+                                                color: AllColors.primaryDark),
+                                            // Blue border
+                                            backgroundColor: Colors.white,
+                                            // Optional: set background color
+                                            elevation: 0,
+                                            // Optional: remove elevation if you want a flat look
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(
+                                                  8), // Optional: border radius
+                                            ),
                                           ),
-                                          decoration: BoxDecoration(
-                                              borderRadius: BorderRadius.circular(30),
-                                              border: Border.all(color: AllColors.primaryDark1)
+                                          onPressed: () {
+                                            showFetchSalesProductConfirmationDialog(context, saleCycleController.quoteHeaderdata[0].salesCycleId??"", saleCycleController.quoteHeaderdata[0].quoteId??"");
+                                          },
+                                          child: Text("Fetch Sales Product",
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.primaryDark,
+                                              fontSize: AllFontSize.fourtine,
+                                              fontWeight: FontWeight.w700,
+                                            ),),
+                                        )
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Obx((){
+                                      String ProductCategory = saleCycleController.quoteHeaderdata[0].productCategoryCode??"";
+                                      String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                                      print("${saleCycleController.quoteHeaderdata[0].quoteStatus}");
+                                      return   Visibility(
+                                        visible:  saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            saleCycleController.itemMstGetByQuoteIdApiHit(0,saleCycleController.quoteHeaderdata[0].quoteId, "Add", PipeProdCate);
+
+                                          },
+                                          child: Container(
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(7.0),
+                                              child: Icon(Icons.add, color: AllColors.primaryDark1,),
+                                            ),
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.circular(30),
+                                                border: Border.all(color: AllColors.primaryDark1)
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  }),
-                                ],
-                              ),
-                            )
-                          ],),
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              )
+                            ],),
+                        ),
                       ),
                       SizedBox(height: 10,),
                       Divider(height: 1,color: AllColors.bluegrayColor,),
@@ -1592,14 +1625,23 @@ class QuoteInformationScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Text(
-                        saleCycleController
-                            .quoteHeaderdata[0]
-                            .rejectReason ?? "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
+                      Container(
+                        width: size.width*.4,
+                        child: Tooltip(
+                          message: saleCycleController
+                              .quoteHeaderdata[0]
+                              .rejectReason ?? "",
+                          child: Text(
+                            saleCycleController
+                                .quoteHeaderdata[0]
+                                .rejectReason ?? "",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ],
@@ -1996,13 +2038,7 @@ class QuoteInformationScreen extends StatelessWidget{
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(height: 5),
-                        updateQuoteValidity(context),
-                        SizedBox(height: 10),
-                        updateExpectedClosureDate(context),
-                        SizedBox(height: 10),
-                        quoteCommitDropDown(context),
-                        SizedBox(height: 10),
-                        bindActive( context),
+                        bindGeneralAddress(context),
                         SizedBox(height: 10),
                         bindShippingAddress(context),
                         SizedBox(height: 10,),
@@ -2278,7 +2314,7 @@ class QuoteInformationScreen extends StatelessWidget{
           borderRadius: BorderRadius.circular(10)
       ),
       child: DropdownMenu<String>(
-        width: size.width-130,
+        width: size.width-155,
         controller: saleCycleController.activeController.value,
         label: Text(
           "Active",
@@ -2467,6 +2503,52 @@ class QuoteInformationScreen extends StatelessWidget{
 
         });
   }*/
+  Widget bindGeneralAddress(BuildContext context) {
+    return Container(
+      //margin: EdgeInsets.only(left: 15.0, right: 15.0),
+      //color: AllColors.Card1Color,
+      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      decoration: BoxDecoration(
+        //color: AllColors.Card2Color, // Set the inside color here
+        border: Border.all(
+          color: AllColors.grayColor, // Set the border color here
+          width: 1.0, // Adjust the border width if necessary
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: 'General Address',
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w700,
+              fontSize: AllFontSize.sisxteen),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+
+            ),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Column(
+          children: [
+            updateQuoteValidity(context),
+            SizedBox(height: 10),
+            updateExpectedClosureDate(context),
+            SizedBox(height: 10),
+            /* quoteCommitDropDown(context),
+                        SizedBox(height: 10),*/
+            bindActive( context),
+
+
+
+          ],
+        ),
+      ),
+    );
+
+  }
+
 
   Widget bindShippingAddress(BuildContext context) {
     return Container(
@@ -2528,6 +2610,38 @@ class QuoteInformationScreen extends StatelessWidget{
             ),
 
             SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController
+                    .shippingAddress2Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Address 2",
+                    labelText: "Address 2",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+
+            SizedBox(height: 15,),
+
 
             Container(
               decoration: BoxDecoration(
@@ -2601,6 +2715,37 @@ class QuoteInformationScreen extends StatelessWidget{
               child: TextFormField(
                 readOnly: true,
                 controller: saleCycleController
+                    .Shipping_District_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "District",
+                    labelText: "District",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+
+            SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController
                     .Shipping_State_Controller.value,
                 decoration: InputDecoration(
                     hintText: "State",
@@ -2621,7 +2766,7 @@ class QuoteInformationScreen extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 15,),
+           /* SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -2681,7 +2826,7 @@ class QuoteInformationScreen extends StatelessWidget{
                 ),
 
               ),
-            ),
+            ),*/
 
 
           ],
@@ -2901,6 +3046,94 @@ class QuoteInformationScreen extends StatelessWidget{
             ),
           );
 
+        });
+  }
+
+  showFetchSalesProductConfirmationDialog(context, String SalesId,String QuoteId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.check_circle, color: AllColors.lightredColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Fetch!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          'Do you want to Fetch Sales Product ?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+
+                      SizedBox(height: 20),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Cancel',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: () {
+                              saleCycleController.FetchSalesProductApiHit(SalesId, QuoteId);
+                              Get.back();
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Confirm',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ]),
+          );
         });
   }
 

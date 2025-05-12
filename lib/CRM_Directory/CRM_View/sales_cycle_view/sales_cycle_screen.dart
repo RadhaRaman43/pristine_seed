@@ -164,6 +164,7 @@ class SalesCycleScreen extends StatelessWidget{
       child: ListTile(
           onTap: () {
             salesCycleController.filter.value = "Sales cycle";
+            salesCycleController.clearSaleProductListController();
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
           salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];

@@ -175,6 +175,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    ],
                  ),
                  onTap: (){
+                   contact_vm_controller.getDecisionRoleMaster();
                    accountMaster_page_controller.pageNumber = 0;
                    contact_vm_controller.accountCode.value = accountMaster_page_controller.account_code_controller.value.text;
                    accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.text);

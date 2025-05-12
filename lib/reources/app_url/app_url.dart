@@ -243,6 +243,7 @@ class AppUrl {
      static const String quoteHeaderMarkRegret = "$BASE_URL/api/CRM/Quote/QuoteHeaderMarkRegret";
      static const String quoteSendForApproval = "$BASE_URL/api/CRM/Quote/QuoteSendForApproval";
      static const String quoteApproveReject = "$BASE_URL/api/CRM/Quote/QuoteApproveReject";
+     static const String QuoteLineCreateFromPropectStage = "$BASE_URL/api/CRM/Quote/QuoteLineCreateFromPropectStage";
     // static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
      static const String QuoteSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/QuoteSalesProductCategoryCreate";
      static const String QuoteHeaderUpdateBusinessTerms = "$BASE_URL/api/CRM/Quote/QuoteHeaderUpdateBusinessTerms";
@@ -260,6 +261,7 @@ class AppUrl {
      static const String SalesCycleMstStatusChange = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstStatusChange";
      static const String SalesCycleMstUpdateSuspect = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdateSuspect";
      static const String SalesProductLineCompetitorCreate = "$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorCreate";
+     static const String SalesCycleMstUpdateProposeConfirmDecision = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdateProposeConfirmDecision";
 
 
 
