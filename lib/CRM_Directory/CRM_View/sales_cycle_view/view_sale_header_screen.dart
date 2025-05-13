@@ -453,7 +453,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           15, 5, 15, 10),
                                       width: size.width / 2,
                                       child: IgnorePointer(
-                                        ignoring: (saleCycleController
+                                       /* ignoring: (saleCycleController
                                             .saleCycleList[0].quoteAccepted
                                             ?.toUpperCase() == "LOSS") ||
                                             (saleCycleController
@@ -467,7 +467,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             saleCycleController.FromPage
                                                 .value == 'FromTaskScreen'
                                             ? true
-                                            : false,
+                                            : false,*/
+                                        ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
+                                            ?.toUpperCase() == "LOSS") ? true : false,
                                         child: DefaultButton(
                                           press: () {
                                             if (saleCycleController
@@ -1254,7 +1256,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: TextField(
         cursorColor: AllColors.primaryDark1,
-        readOnly: (saleCycleController.saleCycleList[0].quoteAccepted ==
+       /* readOnly: (saleCycleController.saleCycleList[0].quoteAccepted ==
             "LOSS" ||
             saleCycleController.saleCycleList[0].isReadySendForApproval == 0 &&
                 (saleCycleController.FromPage.value == 'Sales'
@@ -1262,6 +1264,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     saleCycleController.FromPage.value == 'Task'))
             || (saleCycleController.FromPage.value == 'Task') ||
             (saleCycleController.FromPage.value == 'FromTaskScreen')
+            ? true
+            : false,*/
+        readOnly: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
+            (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
+            saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")
             ? true
             : false,
         controller: saleCycleController.closureDateController.value,
@@ -5532,14 +5539,19 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindIdentifyDecisionMaker(BuildContext context) {
     return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].quoteAccepted
+      /*ignoring: (saleCycleController.saleCycleList[0].quoteAccepted
           ?.toUpperCase() == "LOSS" ||
           saleCycleController.saleCycleList[0].isReadySendForApproval == 0 &&
               (saleCycleController.FromPage.value == 'Sales'
                   || saleCycleController.FromPage.value == 'FromTaskScreen' ||
                   saleCycleController.FromPage.value == 'Task'))
           || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+      ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
+          (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
+          saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")
+          ? true
+          : false,
       child: Container(
         margin: const EdgeInsets.only(left: 15.0),
         width: double.infinity,
@@ -5652,12 +5664,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindPurchaseProcessDropDown(context) {
     return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
+      /*ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
           0 &&
           (saleCycleController.FromPage.value == 'Sales' ||
               saleCycleController.FromPage.value == 'FromTaskScreen'
           )) || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+      ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
+          (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
+          saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")
+          ? true
+          : false,
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: Autocomplete<CustomList>(
@@ -5781,13 +5798,18 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindPurchaseTimeFrameDropDown(context) {
     return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].quoteAccepted
+      /*ignoring: (saleCycleController.saleCycleList[0].quoteAccepted
           ?.toUpperCase() == "LOSS") ||
           (saleCycleController.saleCycleList[0].isReadySendForApproval == 0 &&
               (saleCycleController.FromPage.value == 'Sales' ||
                   saleCycleController.FromPage.value == 'FromTaskScreen'
               )) || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+      ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
+          (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
+          saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")
+          ? true
+          : false,
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: Autocomplete<CustomList>(
@@ -5910,13 +5932,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindProductCategoryDropDown(context) {
     return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].quoteAccepted
+      /*ignoring: (saleCycleController.saleCycleList[0].quoteAccepted
           ?.toUpperCase() == "LOSS") ||
           (saleCycleController.saleCycleList[0].isReadySendForApproval == 0 &&
-              (/*saleCycleController.FromPage.value == 'Sales'*/ saleCycleController
+              (*//*saleCycleController.FromPage.value == 'Sales'*//* saleCycleController
                   .FromPage.value == 'FromTaskScreen'
               )) || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+      ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
+          ?.toUpperCase() == "LOSS") ? true : false,
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
         width: size.width,
@@ -5954,13 +5978,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               TextEditingController controller,
               FocusNode focusNode, VoidCallback onFieldSubmitted) {
             return TextField(
-              readOnly: (saleCycleController.saleCycleList[0]
+              /*readOnly: (saleCycleController.saleCycleList[0]
                   .isReadySendForApproval == 0 &&
                   (saleCycleController.FromPage.value == 'FromTaskScreen'
                   )) || saleCycleController.FromPage.value == 'Task' ||
                   saleCycleController.FromPage.value == 'FromTaskScreen'
                   ? true
-                  : false,
+                  : false,*/
+              readOnly: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
+                  ?.toUpperCase() == "LOSS") ? true : false,
               onTap: () {
                 controller.clear();
               },
@@ -6053,16 +6079,19 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
       width: size.width / 2,
       child: TextField(
-        readOnly: saleCycleController.saleCycleList[0].quoteAccepted
+        /*readOnly: saleCycleController.saleCycleList[0].quoteAccepted
             ?.toUpperCase() == "LOSS" ||
             (saleCycleController.saleCycleList[0].isReadySendForApproval == 0 &&
-                (/*saleCycleController.FromPage.value == 'Sales' */ saleCycleController
+                (*//*saleCycleController.FromPage.value == 'Sales' *//* saleCycleController
                     .FromPage.value == 'FromTaskScreen'
                     || saleCycleController.FromPage.value == 'Task')) ||
             saleCycleController.FromPage.value == 'Task' ||
             saleCycleController.FromPage.value == 'FromTaskScreen'
             ? true
-            : false,
+            : false,*/
+
+        readOnly: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
+            saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() == "LOSS") ? true : false,
         cursorColor: AllColors.primaryDark1,
         controller: saleCycleController.expectedAmountController.value,
         keyboardType: TextInputType.number,
@@ -6121,14 +6150,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         child:
         Obx(() {
           return IgnorePointer(
-              ignoring: (saleCycleController.saleCycleList[0]
+              /*ignoring: (saleCycleController.saleCycleList[0]
                   .isReadySendForApproval == 0 &&
-                  (/*saleCycleController.FromPage.value == 'Sales' || */saleCycleController
+                  (*//*saleCycleController.FromPage.value == 'Sales' || *//*saleCycleController
                       .FromPage.value == 'FromTaskScreen'
                   )) || saleCycleController.FromPage.value == 'Task' ||
                   saleCycleController.FromPage.value == 'FromTaskScreen'
                   ? true
-                  : false,
+                  : false,*/
+              ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
+                  ?.toUpperCase() == "LOSS") ? true : false,
               child: Column(
                 //mainAxisSize: MainAxisSize.min,
                 children: [
@@ -6229,16 +6260,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                   onTap: () {
                                     if (saleCycleController.saleCycleList[0]
-                                        .quoteAccepted?.toUpperCase() !=
-                                        "LOSS") {
-                                      saleCycleController.ProductCategoryCode
-                                          .value = user.productCategory!;
-                                      saleCycleController.budgetAmountController
-                                          .value.text =
-                                          user.budgetAmount.toString();
-                                      saleCycleController
-                                          .expectedAmountController.value.text =
-                                          user.estimatedAmount.toString();
+                                        .quoteAccepted?.toUpperCase() != "LOSS") {
+                                      saleCycleController.ProductCategoryCode.value = user.productCategory!;
+                                      saleCycleController.budgetAmountController.value.text = user.budgetAmount.toString();
+                                      saleCycleController.expectedAmountController.value.text = user.estimatedAmount.toString();
                                       UpdateEstimatedAmountDailog(
                                           context, user.id);
                                       print('id....Selected...${user.id}');
@@ -6249,13 +6274,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 Visibility(
                                   visible: saleCycleController.saleCycleList[0]
                                       .quoteAccepted?.toUpperCase() != "LOSS" &&
-                                      (saleCycleController
-                                          .saleCycleList[0].createdBy
-                                          ?.toLowerCase() ==
-                                          saleCycleController.email
-                                              .toLowerCase() &&
-                                          saleCycleController.FromPage.value ==
-                                              'Sales'),
+                                      (saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()),
                                   child: InkWell(
                                     child: Padding(
                                       padding: const EdgeInsets.only(

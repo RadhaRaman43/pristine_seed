@@ -124,14 +124,20 @@ class AddNewAccountMaster extends StatelessWidget{
                     side: BorderSide(color: AllColors.whiteColor)),
                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                 //CircleAvatar
-                label: Tooltip(
-                  message: "Create Account ",
-                  child: Text('Save as Draft',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.whiteColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      )),
+                label: Row(
+                  children: [
+                    Icon(Icons.save_as),
+                    SizedBox(width: 5,),
+                    Tooltip(
+                      message: "Create Account ",
+                      child: Text('Draft',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.whiteColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          )),
+                    ),
+                  ],
                 ),
                 onPressed: () async {
 
@@ -516,8 +522,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                 controller: accountMaster_page_controller
                                     .EmailId_Controller,
                                 decoration: InputDecoration(
-                                    hintText: "Email Id",
-                                    labelText: "Email Id",
+                                    hintText: "Email Id**",
+                                    labelText: "Email Id*",
                                     //suffixIcon: Icon(Icons.email),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,

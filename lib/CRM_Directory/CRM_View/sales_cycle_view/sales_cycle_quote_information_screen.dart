@@ -646,6 +646,36 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
+                        Row(
+                          children: [
+                            Text(
+                              "Gm Discount %:",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController.quoteLinedata[index]
+                                    .gmDiscountPer.toString(),
+                                child: Text(
+                                  saleCycleController.quoteLinedata[index]
+                                      .gmDiscountPer.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         Visibility(
                           visible:  saleCycleController.quoteHeaderdata[0].isReadyForApprove== 1?true:false,
                           child: Row(
@@ -768,7 +798,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-                        Row(
+                       /* Row(
                           children: [
                             Text(
                               "Warranty Period : ",
@@ -797,7 +827,7 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
                           ],
-                        ),
+                        ),*/
 
                       ],
                     ),
@@ -848,6 +878,36 @@ class QuoteInformationScreen extends StatelessWidget{
                                 child: Text(
                                   saleCycleController.quoteLinedata[index]
                                       .discountAmt.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Approved Discount %:",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController.quoteLinedata[index]
+                                    .approvedDiscountPer.toString(),
+                                child: Text(
+                                  saleCycleController.quoteLinedata[index]
+                                      .approvedDiscountPer.toString(),
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -1014,7 +1074,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "SPR No : ",
+                              "Sales Credit % : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1024,7 +1084,7 @@ class QuoteInformationScreen extends StatelessWidget{
 
                             Text(
                               saleCycleController.quoteLinedata[index]
-                                  .sprNo.toString(),
+                                  .salesCredit.toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1033,7 +1093,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-                        Row(
+                        /*Row(
                           children: [
                             Text(
                               "Delivery In Weeks : ",
@@ -1062,7 +1122,7 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
                           ],
-                        ),
+                        ),*/
                       ],
                     ),
                   )),
@@ -1081,32 +1141,24 @@ class QuoteInformationScreen extends StatelessWidget{
                           // visible:saleCycleController.FromPage=="Task" || saleCycleController.FromPage=="FromTaskScreen"?false:true,
                           child: InkWell(
                             onTap: (){
-                              saleCycleController.updateItemDescriptionController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .itemName.toString()+ "(${saleCycleController.quoteLinedata[index].itemCode})";
-                              saleCycleController.qtyUpdateLineController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .qty.toString();
-                              saleCycleController.updateUnitPriceController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .unitPrice.toString();
-                              saleCycleController.updateManualPriceController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .quoteLinePrice.toString();
-                              saleCycleController.updateDiscountPerController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .discountPer.toString();
+                              saleCycleController.updateItemDescriptionController.value.text=  saleCycleController.quoteLinedata[index].itemName.toString()+ "(${saleCycleController.quoteLinedata[index].itemCode})";
+                              saleCycleController.qtyUpdateLineController.value.text=  saleCycleController.quoteLinedata[index].qty.toString();
+                              saleCycleController.updateUnitPriceController.value.text=  saleCycleController.quoteLinedata[index].unitPrice.toString();
+                              saleCycleController.updateManualPriceController.value.text=  saleCycleController.quoteLinedata[index].quoteLinePrice.toString();
+                              saleCycleController.updateDiscountPerController.value.text=  saleCycleController.quoteLinedata[index].discountPer.toString();
 
-                              saleCycleController.updateDiscountAmountController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .discountAmt.toString();
+                              saleCycleController.updateDiscountAmountController.value.text=  saleCycleController.quoteLinedata[index].approvedDiscountPer.toString();
+                              saleCycleController.gmDiscountPerContoller.value.text=  saleCycleController.quoteLinedata[index].gmDiscountPer.toString();
+                              saleCycleController.salesCreditPerContoller.value.text=  saleCycleController.quoteLinedata[index].salesCredit.toString();
 
-                              saleCycleController.updateAmountController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .mrpPrice.toString();
-                              saleCycleController.updateTaxPerLineController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .sgstPer.toString();
-                              saleCycleController.updateTaxAmountLineController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .sgstAmt.toString();
-                              saleCycleController.updateGrossAmountLineController.value.text=  saleCycleController.quoteLinedata[index]
-                                  .grossAmount.toString();
-                              saleCycleController.warrentyPeriodController.value.text= saleCycleController.quoteLinedata[index]
+                              saleCycleController.updateAmountController.value.text=  saleCycleController.quoteLinedata[index].mrpPrice.toString();
+                              saleCycleController.updateTaxPerLineController.value.text=  saleCycleController.quoteLinedata[index].sgstPer.toString();
+                              saleCycleController.updateTaxAmountLineController.value.text=  saleCycleController.quoteLinedata[index].sgstAmt.toString();
+                              saleCycleController.updateGrossAmountLineController.value.text=  saleCycleController.quoteLinedata[index].grossAmount.toString();
+                              /*saleCycleController.warrentyPeriodController.value.text= saleCycleController.quoteLinedata[index]
                                   .warrantyPeriod.toString();
                               saleCycleController.deliveryWeeksController.value.text= saleCycleController.quoteLinedata[index]
-                                  .deliveryInWeeks.toString();
+                                  .deliveryInWeeks.toString();*/
 
                               saleCycleController.index.value=index;
 

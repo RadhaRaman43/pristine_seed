@@ -76,8 +76,8 @@ class UpdateBussinessTermPage extends StatelessWidget{
                 SizedBox(height: 5,),
                 bindInstalationChagers(context),
                 bindOthersChagers(context),
-                //bindWarrentyPeriod(context),
-                //bindDeliveryWeeksPeriod(context),
+                bindWarrentyPeriod(context),
+                bindDeliveryWeeksPeriod(context),
                 bindAdvancPaymentPer(context),
                 bindTotalPayment(context),
                 bindAdvancPaymentAmt(context),
@@ -178,7 +178,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
     );
   }
 
- /* Widget bindWarrentyPeriod(BuildContext context) {
+  Widget bindWarrentyPeriod(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: TextField(
@@ -258,7 +258,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
         ),
       ),
     );
-  }*/
+  }
 
   Widget bindAdvancPaymentPer(BuildContext context) {
     return Padding(

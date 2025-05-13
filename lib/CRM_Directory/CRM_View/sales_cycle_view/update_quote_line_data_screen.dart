@@ -73,23 +73,23 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
 
               updateItemDescriptionLine(context),
               updateqtyLine(context),
-              updateUnitPrice(context),
+           //   updateUnitPrice(context),
               updateManualPriceLine(context),
               updateDiscountPerLine(context),
               SizedBox(height: 10,),
               updateDiscountAmount(context),
               SizedBox(height: 10,),
-              updateAmount(context),
+              GmDiscountAmount(context),
               SizedBox(height: 10,),
-              updateTaxPerLine(context),
+              SalesCreditAmount(context),
               SizedBox(height: 10,),
-              updateTaxAmountLine(context),
+             /* updateTaxAmountLine(context),
               SizedBox(height: 10,),
-              updateGrossAmountLine(context),
-              SizedBox(height: 10,),
+              updateGrossAmountLine(context),*/
+              /*SizedBox(height: 10,),
               bindWarrentyPeriod(context),
               SizedBox(height: 10,),
-              bindDeliveryWeeksPeriod(context),
+              bindDeliveryWeeksPeriod(context),*/
               Container(
                 margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                 child: DefaultButton(
@@ -292,8 +292,8 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            hintText: 'Discount Amount',
-            labelText: 'Discount Amount',
+            hintText: 'Approved Discount %',
+            labelText: 'Approved Discount %',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,
@@ -329,6 +329,68 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),
             hintText: 'Amount',
             labelText: 'Amount',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+      ),
+    );
+  }
+
+  Widget GmDiscountAmount(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15),
+      child: TextField(
+        readOnly: true,
+        cursorColor:AllColors.primaryDark1 ,
+        controller: saleCycleController.gmDiscountPerContoller.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            hintText: 'Gm Discount %',
+            labelText: 'Gm Discount %',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+      ),
+    );
+  }
+
+  Widget SalesCreditAmount(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15),
+      child: TextField(
+        readOnly: true,
+        cursorColor:AllColors.primaryDark1 ,
+        controller: saleCycleController.salesCreditPerContoller.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            hintText: 'Sales Credit %',
+            labelText: 'Sales Credit %',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,

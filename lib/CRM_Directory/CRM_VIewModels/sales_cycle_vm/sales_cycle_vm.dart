@@ -161,7 +161,9 @@ class SalesCycleVm extends GetxController{
   var qtyUpdateLineController=TextEditingController().obs;
   var updateUnitPriceController=TextEditingController().obs;
   var updateDiscountAmountController=TextEditingController().obs;
+  var salesCreditPerContoller=TextEditingController().obs;
   var updateAmountController=TextEditingController().obs;
+  var gmDiscountPerContoller=TextEditingController().obs;
   var updateTaxPerLineController=TextEditingController().obs;
   var updateTaxAmountLineController=TextEditingController().obs;
   var updateGrossAmountLineController=TextEditingController().obs;
@@ -914,6 +916,8 @@ class SalesCycleVm extends GetxController{
               updateDiscountPerController.value.text= quoteLinedata[index.value].discountPer.toString();
 
               updateDiscountAmountController.value.text=  quoteLinedata[index.value].discountAmt.toString();
+              gmDiscountPerContoller.value.text=  quoteLinedata[index.value].gmDiscountPer.toString();
+              salesCreditPerContoller.value.text=  quoteLinedata[index.value].salesCredit.toString();
 
               updateAmountController.value.text=  quoteLinedata[index.value].mrpPrice.toString();
               updateTaxPerLineController.value.text=  quoteLinedata[index.value].sgstPer.toString();
@@ -1081,12 +1085,15 @@ class SalesCycleVm extends GetxController{
         {
           "line_no": flag=="CheckBox"?-1:quoteLinedata[index.value].lineNo,
           "item_code": item_code.toString(),
-          "warranty_period": warrentyPeriodController.value.text.isEmpty?'0 Months':warrentyPeriodController.value.text + ' Months',
-          "delivery_in_weeks": deliveryWeeksController.value.text.isEmpty?'0 Weeks':deliveryWeeksController.value.text + ' Weeks',
+         // "warranty_period": warrentyPeriodController.value.text.isEmpty?'0 Months':warrentyPeriodController.value.text + ' Months',
+         // "delivery_in_weeks": deliveryWeeksController.value.text.isEmpty?'0 Weeks':deliveryWeeksController.value.text + ' Weeks',
           "item_description": flag=="CheckBox"?"":(updateItemDescriptionController.value.text.isNotEmpty?updateItemDescriptionController.value.text:quoteLinedata[index.value].itemName??""),
           "qty": flag=="CheckBox"?0 :(qtyUpdateLineController.value.text.isNotEmpty?qtyUpdateLineController.value.text:quoteLinedata[index.value].qty),
           "quote_line_price": flag=="CheckBox"?0:(updateManualPriceController.value.text.isNotEmpty?updateManualPriceController.value.text:quoteLinedata[index.value].quoteLinePrice),
           "discount_per": flag=="CheckBox"?0:(updateDiscountPerController.value.text.isNotEmpty?updateDiscountPerController.value.text:quoteLinedata[index.value].discountPer),
+          "gm_discount_per": flag=="CheckBox"?0:(gmDiscountPerContoller.value.text.isNotEmpty?gmDiscountPerContoller.value.text:quoteLinedata[index.value].gmDiscountPer),
+          "approved_discount_per": flag=="CheckBox"?0:(updateDiscountAmountController.value.text.isNotEmpty?updateDiscountAmountController.value.text:quoteLinedata[index.value].approvedDiscountPer),
+          "sales_credit": flag=="CheckBox"?0:(salesCreditPerContoller.value.text.isNotEmpty?salesCreditPerContoller.value.text:quoteLinedata[index.value].salesCredit),
           "line_status": "Pending"
         }
       ]
@@ -1332,8 +1339,8 @@ class SalesCycleVm extends GetxController{
         "quote_id": quoteId.value,
         "installation_charges": installationChargesController.value.text.isEmpty?'0':installationChargesController.value.text,
         "other_charges": otherChargesController.value.text.isEmpty?'0':otherChargesController.value.text,
-        "warranty_period": '',
-        "delivery_in_weeks": '',
+        "warranty_period": warrentyPeriodController.value.text.isEmpty?'0':warrentyPeriodController.value.text,
+        "delivery_in_weeks": deliveryWeeksController.value.text.isEmpty?'0':deliveryWeeksController.value.text,
         "advance_payment_per": advncPaymentPerController.value.text.isEmpty?'0':advncPaymentPerController.value.text,
         "advance_payment_amt": advncPaymentAmountController.value.text.isEmpty?'0':advncPaymentAmountController.value.text,
         "other_remarks": quoteRemarkController.value.text.isEmpty?'':quoteRemarkController.value.text,
@@ -2063,6 +2070,7 @@ class SalesCycleVm extends GetxController{
   clearSaleProductListController(){
     itemCodeController.value.clear();
     categoryNameController.value.clear();
+    updateItemDescriptionController.value.clear();
     updateCompetitorNameProductController.value.clear();
     updateCompetitorPriceProductController.value.clear();
     updateLossReasonProductController.value.clear();
@@ -3484,13 +3492,15 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition!.toLowerCase()=="true"){
             Utils.showToastification("Success !", response[0].message.toString());
             loading.value = false;
-            quoteLinedata.value = response[0].quoteItems??[];
-            QuoteHeaderDupicateCreate(quoteId);
+            getQuoteHeaderInformation(quoteId, '');
             print("message ${response[0].message.toString()}");
             loading.value = false;
 
-            Utils.showErrorToastification("False Message !", response[0].message.toString());
+            Utils.showToastification("Success !", response[0].message.toString());
 
+          }else {
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
           }
         } else {
           loading.value = false;

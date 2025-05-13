@@ -546,8 +546,8 @@ class UpdateAccountMaster extends StatelessWidget{
                              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                              controller: accountMaster_page_controller.EmailId_Controller,
                              decoration: InputDecoration(
-                                 hintText: "Email Id",
-                                 labelText: "Email Id",
+                                 hintText: "Email Id*",
+                                 labelText: "Email Id*",
                                  //suffixIcon: Icon(Icons.email),
                                  contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
