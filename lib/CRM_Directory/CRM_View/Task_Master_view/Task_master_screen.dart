@@ -113,6 +113,8 @@ class TaskMasterScreen extends StatelessWidget{
                                  fontWeight: FontWeight.w500,
                                )),
                            onPressed: () {
+                             TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                             TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
                              TaskMaster_page_controller.pageNumber=0;
                              TaskMaster_page_controller
                                  .date_filter.value = "Today";
@@ -152,6 +154,8 @@ class TaskMasterScreen extends StatelessWidget{
                                  fontWeight: FontWeight.w500,
                                )),
                            onPressed: () {
+                             TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                             TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
                              TaskMaster_page_controller.pageNumber=0;
                              TaskMaster_page_controller.is_done.value = 1;
                              TaskMaster_page_controller.date_filter.value = "";
@@ -189,6 +193,8 @@ class TaskMasterScreen extends StatelessWidget{
                                  fontWeight: FontWeight.w500,
                                )),
                            onPressed: () {
+                             TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                             TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
                              TaskMaster_page_controller.pageNumber=0;
                              TaskMaster_page_controller.is_done.value = 0;
                              TaskMaster_page_controller.date_filter.value = "";
@@ -227,6 +233,8 @@ class TaskMasterScreen extends StatelessWidget{
                                  fontWeight: FontWeight.w500,
                                )),
                            onPressed: () {
+                             TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                             TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
                              TaskMaster_page_controller.pageNumber=0;
                              TaskMaster_page_controller.is_done.value = 0;
                              TaskMaster_page_controller.date_filter.value = "All";
@@ -735,9 +743,18 @@ class TaskMasterScreen extends StatelessWidget{
                     ),
                   ),
                   onTap: (){
-                    salesCycleController.getsalesCycleData(0, TaskMaster_page_controller
+                    salesCycleController.pageNumber = 0;
+                    salesCycleController.clearSaleProductListController();
+                    salesCycleController.getsalesCycleData(salesCycleController.pageNumber, TaskMaster_page_controller
                         .Task_Master_list[position]
                         .salesCycleId!, "ViewHeader", 'FromTaskScreen');
+                    salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber, TaskMaster_page_controller
+                        .Task_Master_list[position].salesCycleId??"" );
+                    salesCycleController.itemCategorySelectedlist.value = [];
+                    salesCycleController.getPurchaseProcessApi();
+                    salesCycleController.getPurchaseTimeFrameApi();
+                    salesCycleController.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[position].salesCycleId! ,TaskMaster_page_controller.Task_Master_list[position].taskId! );
+                    salesCycleController.ProductCategoryWiseAmtGet(0, TaskMaster_page_controller.Task_Master_list[position].salesCycleId!);
                   },
                 ),
               ],
