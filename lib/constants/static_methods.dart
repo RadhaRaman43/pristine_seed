@@ -210,6 +210,27 @@ class StaticMethod{
       case "Orders Approval":
         return Icons.approval_rounded;
 
+      case "Accounts Master":
+        return Icons.contact_mail_outlined;
+
+      case "Contacts Master":
+        return Icons.contacts_outlined;
+
+      case "Account Draft":
+        return Icons.draw_sharp;
+
+      case "Tasks":
+        return Icons.task;
+
+      case "Sales Cycle":
+        return Icons.save_as_outlined;
+
+      case "Sales Quote":
+        return Icons.request_quote;
+
+      case "Quote Approval List":
+        return Icons.list_alt_outlined;
+
 
 
 

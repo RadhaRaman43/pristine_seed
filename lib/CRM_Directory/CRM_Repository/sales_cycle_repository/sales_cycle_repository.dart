@@ -74,6 +74,10 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.quoteApproveReject,sessionManagement);
   }
 
+  Future<String> QuoteLineCreateFromPropectStageApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteLineCreateFromPropectStage,sessionManagement);
+  }
+
   Future<String> TaskSaleCatCreateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.TaskSalesProductCategoryCreate, sessionManagement);
   }
@@ -155,6 +159,10 @@ class SalesCycleRepository{
 
   Future<String> SalesProductLineCompetitorCreateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesProductLineCompetitorCreate,sessionManagement);
+  }
+
+  Future<String> SalesCycleMstUpdateProposeConfirmDecision(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleMstUpdateProposeConfirmDecision,sessionManagement);
   }
 
 

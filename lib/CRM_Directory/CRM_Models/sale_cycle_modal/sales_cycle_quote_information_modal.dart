@@ -241,7 +241,13 @@ class QuoteItems {
   double? quoteLinePrice;
   double? totalPrice;
   double? discountPer;
+  double? gmDiscountPer;
+  double? approvedDiscountPer;
   double? discountAmt;
+  double? standardCost;
+  double? branchTransferPrice;
+  double? minimalAcceptablePrice;
+  double? listSellingPrice;
   int? isSprRequired;
   String? sprNo;
   double? sgstPer;
@@ -252,6 +258,7 @@ class QuoteItems {
   double? igstAmt;
   double? gstAmount;
   double? grossAmount;
+  double? salesCredit;
   String? createdBy;
   String? createdOn;
   String? lineStatus;
@@ -260,14 +267,8 @@ class QuoteItems {
   String? regretBy;
   String? regretOn;
   String? regretReason;
-  double? standardCost;
-  double? branchTransferPrice;
-  double? minimalAcceptablePrice;
-  double? listSellingPrice;
   String? categoryCode;
   String? categoryName;
-  String? warrantyPeriod;
-  String? deliveryInWeeks;
 
   QuoteItems(
       {this.quoteId,
@@ -283,7 +284,13 @@ class QuoteItems {
         this.quoteLinePrice,
         this.totalPrice,
         this.discountPer,
+        this.gmDiscountPer,
+        this.approvedDiscountPer,
         this.discountAmt,
+        this.standardCost,
+        this.branchTransferPrice,
+        this.minimalAcceptablePrice,
+        this.listSellingPrice,
         this.isSprRequired,
         this.sprNo,
         this.sgstPer,
@@ -294,6 +301,7 @@ class QuoteItems {
         this.igstAmt,
         this.gstAmount,
         this.grossAmount,
+        this.salesCredit,
         this.createdBy,
         this.createdOn,
         this.lineStatus,
@@ -302,14 +310,8 @@ class QuoteItems {
         this.regretBy,
         this.regretOn,
         this.regretReason,
-        this.standardCost,
-        this.branchTransferPrice,
-        this.minimalAcceptablePrice,
-        this.listSellingPrice,
         this.categoryCode,
-        this.categoryName,
-        this.warrantyPeriod,
-        this.deliveryInWeeks});
+        this.categoryName});
 
   QuoteItems.fromJson(Map<String, dynamic> json) {
     quoteId = json['quote_id'];
@@ -325,7 +327,13 @@ class QuoteItems {
     quoteLinePrice = json['quote_line_price'];
     totalPrice = json['total_price'];
     discountPer = json['discount_per'];
+    gmDiscountPer = json['gm_discount_per'];
+    approvedDiscountPer = json['approved_discount_per'];
     discountAmt = json['discount_amt'];
+    standardCost = json['standard_cost'];
+    branchTransferPrice = json['branch_transfer_price'];
+    minimalAcceptablePrice = json['minimal_acceptable_price'];
+    listSellingPrice = json['list_selling_price'];
     isSprRequired = json['is_spr_required'];
     sprNo = json['spr_no'];
     sgstPer = json['sgst_per'];
@@ -336,6 +344,7 @@ class QuoteItems {
     igstAmt = json['igst_amt'];
     gstAmount = json['gst_amount'];
     grossAmount = json['gross_amount'];
+    salesCredit = json['sales_credit'];
     createdBy = json['created_by'];
     createdOn = json['created_on'];
     lineStatus = json['line_status'];
@@ -344,14 +353,8 @@ class QuoteItems {
     regretBy = json['regret_by'];
     regretOn = json['regret_on'];
     regretReason = json['regret_reason'];
-    standardCost = json['standard_cost'];
-    branchTransferPrice = json['branch_transfer_price'];
-    minimalAcceptablePrice = json['minimal_acceptable_price'];
-    listSellingPrice = json['list_selling_price'];
     categoryCode = json['category_code'];
     categoryName = json['category_name'];
-    warrantyPeriod = json['warranty_period'];
-    deliveryInWeeks = json['delivery_in_weeks'];
   }
 
   Map<String, dynamic> toJson() {
@@ -369,7 +372,13 @@ class QuoteItems {
     data['quote_line_price'] = this.quoteLinePrice;
     data['total_price'] = this.totalPrice;
     data['discount_per'] = this.discountPer;
+    data['gm_discount_per'] = this.gmDiscountPer;
+    data['approved_discount_per'] = this.approvedDiscountPer;
     data['discount_amt'] = this.discountAmt;
+    data['standard_cost'] = this.standardCost;
+    data['branch_transfer_price'] = this.branchTransferPrice;
+    data['minimal_acceptable_price'] = this.minimalAcceptablePrice;
+    data['list_selling_price'] = this.listSellingPrice;
     data['is_spr_required'] = this.isSprRequired;
     data['spr_no'] = this.sprNo;
     data['sgst_per'] = this.sgstPer;
@@ -380,6 +389,7 @@ class QuoteItems {
     data['igst_amt'] = this.igstAmt;
     data['gst_amount'] = this.gstAmount;
     data['gross_amount'] = this.grossAmount;
+    data['sales_credit'] = this.salesCredit;
     data['created_by'] = this.createdBy;
     data['created_on'] = this.createdOn;
     data['line_status'] = this.lineStatus;
@@ -388,14 +398,8 @@ class QuoteItems {
     data['regret_by'] = this.regretBy;
     data['regret_on'] = this.regretOn;
     data['regret_reason'] = this.regretReason;
-    data['standard_cost'] = this.standardCost;
-    data['branch_transfer_price'] = this.branchTransferPrice;
-    data['minimal_acceptable_price'] = this.minimalAcceptablePrice;
-    data['list_selling_price'] = this.listSellingPrice;
     data['category_code'] = this.categoryCode;
     data['category_name'] = this.categoryName;
-    data['warranty_period'] = this.warrantyPeriod;
-    data['delivery_in_weeks'] = this.deliveryInWeeks;
     return data;
   }
 }

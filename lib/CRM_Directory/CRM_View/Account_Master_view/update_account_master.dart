@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:gstvalidator/gstvalidator.dart';
+import 'package:navigation_drawer_flutter/component/default_button.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -145,117 +146,7 @@ class UpdateAccountMaster extends StatelessWidget{
                ),
              ),
              Spacer(),
-             /*IconButton(onPressed: () {
-                //showFilterBottomSheet(context);
-              }, icon: Icon(Icons.add)),*/
-             Visibility(
-               visible:accountMaster_page_controller.view=='Account'?true:false ,
-             /*  visible:accountMaster_page_controller.view=='FromTaskMainScreen'
-                   || accountMaster_page_controller.view=='VIEW' ||
-                   accountMaster_page_controller.view=='Task'||
-                   accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                   || accountMaster_page_controller.view=="FromQuoteApproval"?false:true,*/
-               child: ActionChip(
-                 elevation: 2,
-                 padding: EdgeInsets.all(5),
-                 backgroundColor: AllColors.primaryDark1,
-                 shadowColor: Colors.black,
-                 shape: StadiumBorder(
-                     side: BorderSide(color: AllColors.whiteColor)),
-                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                 //CircleAvatar
-                 label: Tooltip(
-                   message: "Update Account ",
-                   child: Text('Update',
-                       style: GoogleFonts.poppins(
-                         color: AllColors.whiteColor,
-                         fontSize: AllFontSize.fourtine,
-                         fontWeight: FontWeight.w500,
-                       )),
-                 ),
-                 onPressed: () {
-                   if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
-                     Utils.sanckBarError('Account Name!', "Please Enter Account Name");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty || accountMaster_page_controller.EmployeeMember_Controller == null){
-                     Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
-                     Utils.sanckBarError('Account Type!', "Please Enter Account Type");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
-                     if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
-                       Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
-                       return  ;
-                     }
-                   }
 
-                   if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
-                     Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
-                     return  ;
-                   }
-
-                   /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
-                     Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
-                     return  ;
-                   }*/
-                   if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
-                     Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
-                     Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
-                     Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
-                     Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
-                     print('GstPan${accountMaster_page_controller.GstPanNo.value}  PanNo...${accountMaster_page_controller.PanNo_Controller.value.text}');
-                     Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
-                     Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
-                     return  ;
-                   }
-
-                   if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
-                     if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
-                       Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
-                       return  ;
-                     }
-                   }
-
-                   if(accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
-                     Utils.sanckBarError('Active!', "Please Enter Active Type");
-                     return  ;
-                   }
-                   if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
-                     Utils.sanckBarError('State!', "Please Enter State");
-                     return  ;
-                   }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
-                     Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
-                     return  ;
-                   }
-                  /* if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
-                     Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
-                     return  ;
-                   }*/
-                   accountMaster_page_controller.AccountMstUploaderApiHit('Update',accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode! , accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
-                   //preventive_page_controller.createPreventiveCalenderCallApi();
-
-                 }, //Text
-               ),
-             ),
 
            ],
          ),
@@ -270,6 +161,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    ],
                  ),
                  onTap: (){
+                   accountMaster_page_controller.pageNumber = 0;
                    accountMaster_page_controller.getAccountDashboardCount(accountMaster_page_controller.pageNumber, accountMaster_page_controller.account_code_controller.text);
                    //accountMaster_page_controller.getAccountTaskHistory(accountMaster_page_controller.pageNumber, accountMaster_page_controller.account_code_controller.value.text);
 
@@ -283,6 +175,8 @@ class UpdateAccountMaster extends StatelessWidget{
                    ],
                  ),
                  onTap: (){
+                   contact_vm_controller.getDecisionRoleMaster();
+                   accountMaster_page_controller.pageNumber = 0;
                    contact_vm_controller.accountCode.value = accountMaster_page_controller.account_code_controller.value.text;
                    accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.text);
 
@@ -311,8 +205,98 @@ class UpdateAccountMaster extends StatelessWidget{
 
      ),
        drawer: CustomDrawer(),
+       floatingActionButton: Visibility(
+         visible:accountMaster_page_controller.view=='Account'?true:false ,
+         child: Container(
+           margin: EdgeInsets.only(left: 30),
+           child: DefaultButton(
+             text: "Update Account",
+             press: () {
+               if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
+                 Utils.sanckBarError('Account Name!', "Please Enter Account Name");
+                 return  ;
+               }
+               if(accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty || accountMaster_page_controller.EmployeeMember_Controller == null){
+                 Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
+                 return  ;
+               }
+               if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
+                 Utils.sanckBarError('Account Type!', "Please Enter Account Type");
+                 return  ;
+               }
+               if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
+                 if(accountMaster_page_controller.PhoneNo_Controller.text.length < 10){
+                   Utils.sanckBarError('Phone No.!', "Please Enter 10 Digit Phone No");
+                   return  ;
+                 }
+               }
+
+               if(accountMaster_page_controller.EmailId_Controller.text.isNotEmpty && EmailValidator.validate(accountMaster_page_controller.EmailId_Controller.text) == false){
+                 Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
+                 return  ;
+               }
+
+               /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+                     Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
+                     return  ;
+                   }*/
+               if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
+                 Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
+                 return  ;
+               }
+               if(accountMaster_page_controller.comp_prof_sub_type_controller.value.text.isEmpty || accountMaster_page_controller.comp_prof_sub_type_controller == null){
+                 Utils.sanckBarError('Company profile sub Type!', "Please Enter Company profile sub Type");
+                 return  ;
+               }
+               if(accountMaster_page_controller.gst_registration_type_controller.value.text.isEmpty || accountMaster_page_controller.gst_registration_type_controller == null){
+                 Utils.sanckBarError('GST Registration Type!', "Please Enter GST Registration Type");
+                 return  ;
+               }
+               if(accountMaster_page_controller.GstNo_Controller.text.isNotEmpty && GSTValidator.validate(accountMaster_page_controller.GstNo_Controller.text) == false){
+                 Utils.sanckBarError('GST No.!', "Please Enter A valid GST No.");
+                 return  ;
+               }
+               if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.PanNo_Controller.value.text != accountMaster_page_controller.GstPanNo.value){
+                 print('GstPan${accountMaster_page_controller.GstPanNo.value}  PanNo...${accountMaster_page_controller.PanNo_Controller.value.text}');
+                 Utils.sanckBarError('Pan No!', "Please Enter Valid Pan No");
+                 return  ;
+               }
+               if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'UnRegistered' && accountMaster_page_controller.PanNo_Controller.value.text.length !=10 && accountMaster_page_controller.PanNo_Controller.value.text.isNotEmpty){
+                 Utils.sanckBarError('Pan No!', "Pan No Should be in 10 digits");
+                 return  ;
+               }
+
+               if(accountMaster_page_controller.IfscCode_Controller.text.isNotEmpty){
+                 if(accountMaster_page_controller.IfscCode_Controller.text.length < 11){
+                   Utils.sanckBarError('IFSC Code!', "IFSC Code Should be in 11 digits");
+                   return  ;
+                 }
+               }
+
+               if(accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
+                 Utils.sanckBarError('Active!', "Please Enter Active Type");
+                 return  ;
+               }
+               if(accountMaster_page_controller.State_Controller.text.isEmpty || accountMaster_page_controller.State_Controller == null){
+                 Utils.sanckBarError('State!', "Please Enter State");
+                 return  ;
+               }else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && accountMaster_page_controller.GovtStateCode.value != accountMaster_page_controller.GstStateCode.value){
+                 Utils.sanckBarError('Wrong State!', "Please Enter Valid State");
+                 return  ;
+               }
+               /* if(accountMaster_page_controller.TatResponse_Controller.text.isEmpty || accountMaster_page_controller.TatResponse_Controller == null){
+                     Utils.sanckBarError('Tat Response!', "Please Enter Tat Response Type");
+                     return  ;
+                   }*/
+               accountMaster_page_controller.AccountMstUploaderApiHit('Update',accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode! , accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
+               //preventive_page_controller.createPreventiveCalenderCallApi();
+
+             },
+           ),
+         ),
+       ),
        body: Container(
-         padding: EdgeInsets.only(bottom: 15),
+         padding: EdgeInsets.only(bottom: 70),
          width: double.infinity,
          height: double.infinity,
          child: SingleChildScrollView(
@@ -562,8 +546,8 @@ class UpdateAccountMaster extends StatelessWidget{
                              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                              controller: accountMaster_page_controller.EmailId_Controller,
                              decoration: InputDecoration(
-                                 hintText: "Email Id",
-                                 labelText: "Email Id",
+                                 hintText: "Email Id*",
+                                 labelText: "Email Id*",
                                  //suffixIcon: Icon(Icons.email),
                                  contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -1176,6 +1160,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                Obx(() => CheckboxListTile(
                  controlAffinity: ListTileControlAffinity.leading,
+                 enabled: accountMaster_page_controller.view=='Account'?true:false,
                  title: Text("Shipping address same as billing address",
                      style: GoogleFonts.poppins(
                        color: AllColors.primaryDark1,

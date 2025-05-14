@@ -173,6 +173,7 @@ class AccountmasterScreen extends StatelessWidget{
           onTap: () {
             accountMaster_page_controller.FromPage.value = 'Account';
             accountMaster_page_controller.view = 'Account';
+            accountMaster_page_controller.getEmployeeMemberApi();
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
             accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
             accountMaster_page_controller.getGeoPostalCodeApi();
@@ -529,69 +530,13 @@ class AccountmasterScreen extends StatelessWidget{
                           height: 10,
                         ),
 
-                        bindCompProfileTypeDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindAnualRevenueDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindNoOfEmpDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindIsActiveDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
                         TextField(
-                          controller: accountMaster_page_controller.Address_controller,
+                          controller: accountMaster_page_controller.EmailId_Controller,
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Address',
-                            hintText: 'Address',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: accountMaster_page_controller.stateName_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'State Name',
-                            hintText: 'State Name',
+                              labelText: 'Email Id',
+                              hintText: 'Email Id',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -649,13 +594,19 @@ class AccountmasterScreen extends StatelessWidget{
                           height: 10,
                         ),
 
+                        bindCompProfileTypeDropDown(context),
+
+                        SizedBox(
+                          height: 10,
+                        ),
+
                         TextField(
-                          controller: accountMaster_page_controller.EmailId_Controller,
+                          controller: accountMaster_page_controller.Address_controller,
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Email Id',
-                              hintText: 'Email Id',
+                              labelText: 'Address',
+                              hintText: 'Address',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -681,6 +632,57 @@ class AccountmasterScreen extends StatelessWidget{
                           height: 10,
                         ),
 
+                        TextField(
+                          controller: accountMaster_page_controller.stateName_controller,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              labelText: 'State Name',
+                              hintText: 'State Name',
+                              hintStyle: GoogleFonts.poppins(
+                                  color: AllColors.lightblackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize.ten),
+                              labelStyle: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: AllFontSize.sisxteen),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )
+                          ),
+                          cursorColor: AllColors.primaryDark1,
+                          onChanged: (value) {
+                            // Handle the text field value changes if needed
+                          },
+                        ),
+
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        bindAnualRevenueDropDown(context),
+
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        bindNoOfEmpDropDown(context),
+
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        bindIsActiveDropDown(context),
+
+                        SizedBox(
+                          height: 10,
+                        ),
+
+
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -696,6 +698,7 @@ class AccountmasterScreen extends StatelessWidget{
                                 )),
                                 onPressed: () {
                                   Get.back();
+                                  accountMaster_page_controller.pageNumber = 0;
                                   accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
                                 },
                                 child: Text(
@@ -797,7 +800,17 @@ class AccountmasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Type',
@@ -892,7 +905,17 @@ class AccountmasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Account Category Type',
@@ -989,7 +1012,17 @@ class AccountmasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Active',
@@ -1093,7 +1126,17 @@ class AccountmasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Annual Revenue',
@@ -1196,7 +1239,17 @@ class AccountmasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'No. Of Employee',
@@ -1291,7 +1344,17 @@ class AccountmasterScreen extends StatelessWidget{
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
+                },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
             hintText: 'Company Profile Type',
