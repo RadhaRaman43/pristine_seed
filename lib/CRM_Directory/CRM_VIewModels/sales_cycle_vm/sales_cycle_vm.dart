@@ -442,26 +442,7 @@ class SalesCycleVm extends GetxController{
         "commit": saleCycleList.salesCycleStatus!.toLowerCase()=="propose"?1:0,
         "sales_cycle_owner": flag==""?saleCycleOwnerSelected.value:saleCycleList.salesCycleOwner,
         "created_by": email
-      }
-    /*{
-        "sales_cycle_id": saleCycleList.salesCycleId,
-        "est_closure_date": closureDateController.value.text.isEmpty?saleCycleList.estClosureDate:closureDateController.value.text,
-        "budget_amount": Total_Budget_Amount.value,
-        "est_budget_amount": Total_Expected_Amount.value,
-        "is_customer_need_identify": customerNeedIdetityController.value.text=="No"?0:1,
-        "proposed_solution": proposedSolution.isNotEmpty?proposedSolution:"",
-        "is_solution_accepted": solutionAcceptedController.value.text=="No"?0:1,
-        "solution_rejected_remarks": solutionRejectedRemarkController.value.text.isNotEmpty?solutionRejectedRemarkController.value.text:"",
-        "quote_accepted": quote_accepted.isEmpty?"":quote_accepted,
-        "competitor_name": competitor_name.isEmpty?"":competitor_name,
-        "quote_rejected_reason": quote_rejected_reason.isEmpty?"":quote_rejected_reason,
-        "lines": lines.map((line) => line.toJson()).toList(),
-        "created_by": email,
-        "is_decision_maker": identifyDecisionMakerController.value.text=="No"?0:1,
-        "purchase_process": purchaseProcessController.value.text.isEmpty?'':purchaseProcessController.value.text,
-        "purchase_time_frame": purchasTimeFrameController.value.text.isEmpty?'':purchasTimeFrameController.value.text,
-        "commit": saleCycleCommitController.value.text=="No"?0:1
-      }*/;
+      };
       try{
         _api. salesCycleMstUpdateApiHit(data, sessionManagement).then((onValue){
           final jsonResponse = json.decode(onValue);
@@ -564,7 +545,7 @@ class SalesCycleVm extends GetxController{
         "filter_contact_person_name": "",
         "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty? filterExpectedClosuredateController.value.text:"",
         "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty? filterQuoteStatusController.value.text:status,
-        "filter_created_by": email,
+        "filter_created_by": FromPage=="QuoteApprovalPage"?"":email,
         "filter_approved_by": "",
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
@@ -1124,6 +1105,8 @@ class SalesCycleVm extends GetxController{
       },
       ).onError(
             (error, stackTrace) {
+              Utils.showErrorToastification("Error Message !", error.toString());
+              loading.value = false;
           print(error);
         },
       );
@@ -1419,10 +1402,10 @@ class SalesCycleVm extends GetxController{
       print(e);
     }
   }
-  void quoteApprovalRejectApiHit(String quoteStatus) {
+  void quoteApprovalRejectApiHit(String quoteStatus, String quoteId) {
     try{
       Map data= {
-        "quote_id": quoteId.value,
+        "quote_id": quoteId,
         "created_by": email,
         "quote_status": quoteStatus.toString(),
         "reject_reason": rejectreasonQuoteController.value.text
@@ -1436,7 +1419,9 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
-            getQuoteHeaderInformation(quoteId.value, "quoteApprovalScreen");
+            pageNumber=0;
+            Get.offAllNamed(RoutesName.quoteApprovalListScreen);
+           // getQuoteHeaderInformation(quoteId, "quoteApprovalScreen");
           }else {
             Utils.showErrorToastification("False Message !", response[0].message.toString());
             loading.value = false;
@@ -1526,7 +1511,7 @@ class SalesCycleVm extends GetxController{
           Utils.showToastification("Success!", response[0].message.toString());
           getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
-          getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
+          //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
           quoteValidityController.value.clear();
           expectedClosuredateController.value.clear();
           productCategoryController.value.clear();
@@ -1670,7 +1655,7 @@ class SalesCycleVm extends GetxController{
     }
   }*/
 
- /* Future<bool> _requestPermission(Permission permission) async {
+ Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
       return true;
     } else {
@@ -1681,7 +1666,7 @@ class SalesCycleVm extends GetxController{
 
 
 
-  Future<void> fileDownload(String url) async {
+  /*  Future<void> fileDownload(String url) async {
     try {
       // Request storage permissions
       if (await _requestPermission(Permission.storage)) {
@@ -1722,11 +1707,10 @@ class SalesCycleVm extends GetxController{
 */
 
   Future<void> checkPermissions() async {
-    if (await Permission.storage.request().isGranted) {
-      // Permission granted
+    //await _requestPermission(Permission.storage
+    if (await _requestPermission(Permission.storage)) {
       print("Storage permission grant.");
     } else {
-      // Handle the case when permission is not granted
       print("Storage permission is required to save the file.");
     }
   }
@@ -1804,6 +1788,7 @@ class SalesCycleVm extends GetxController{
     }
   }
 
+
   void showNotification(String path, String flag) async {
     String title = (flag == 'quoteReport') ? 'Quote Report Notification' : 'Quote SPR Report Notification';
     int notificationId = Random().nextInt(100000);
@@ -1827,9 +1812,11 @@ class SalesCycleVm extends GetxController{
       title,
       'Report downloaded successfully',
       platformDetails,
-      payload: 'filePath=$path', // encoded in query format
+      payload: 'filePath=$path',
     );
   }
+
+
 
 /*  showNotification(String path, String flag){
     String Title = '';
@@ -1965,11 +1952,12 @@ class SalesCycleVm extends GetxController{
     }
   }
 
-  Future<void> reportSprDownload(String flag) async {
+  Future<void> reportSprDownload(String flag ,String quoteId) async {
     try{
       var company_id = await sessionManagement.getCompanyId();
       Map<String, String> data = {
         "company_id":company_id.toString(),
+        "quote_id":quoteId.toString() ,
         "spr_no":quoteHeaderdata[0].sprNo.toString(),
         "user_name":"",
       };
@@ -2104,10 +2092,7 @@ class SalesCycleVm extends GetxController{
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     bindUpdateSalesCycle(context),
-
                     SizedBox(height: 10,),
-
-
                     Obx(() {
                       return Visibility(
                         visible: isApprove.value && Quote_Selected_list.length>0,
@@ -2150,7 +2135,7 @@ class SalesCycleVm extends GetxController{
                               ),
                               onPressed: ()  {
                                 pageNumberForQuote = 0;
-                                getQuoteHeaderData(pageNumberForQuote,salesCycleId.value, "Approved");
+                                getQuoteHeaderData(pageNumberForQuote,saleCycleList.salesCycleId!, "Approved");
                                 Get.toNamed(RoutesName.approvedQuotationListScreen);
                               },
                               child: Container(
