@@ -112,8 +112,11 @@ class ApprovalPersonList extends StatelessWidget{
 
   Widget BindCustomerRequestListView(context, int position){
     String? dateApprovedOn=StaticMethod.dateTimeToDate(saleCycleController.approvalPersonList[position].approvedOn??"");
+    final item = saleCycleController.approvalPersonList[position];
     return Card(
-        margin: EdgeInsets.all(5),
+        margin: EdgeInsets.all(10),
+        elevation: 3,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: ListTile(
         onTap: () {
       //accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
@@ -131,7 +134,7 @@ class ApprovalPersonList extends StatelessWidget{
 
           subtitle: Column(
             children: [
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -372,13 +375,56 @@ class ApprovalPersonList extends StatelessWidget{
                   ),
 
                 ],
-              ),
+              ),*/
 
-
+              detailRow("Approver Order", item.approverOrder.toString(), ),
+              detailRow("Is SPR", item.isSpr.toString() == '1' ? "Yes" : "No", ),
+              detailRow("SPR No", item.sprNo ?? "",),
+              detailRow("SPR Category Name", item.sprCategoryName ?? "", ),
+              detailRow("Approver Geo Name", item.approverGeoName ?? "", ),
+              detailRow("Approver Geo Value", item.approverGeoValue ?? "", ),
+              detailRow("Quote Status", item.quoteStatus ?? "", ),
+              detailRow("Approved By", item.approvedFullName ?? "", ),
+              detailRow("Approved On", dateApprovedOn ?? "", ),
+              detailRow("Reject Reason", item.rejectReason ?? "",),
             ],
           ),
         )
     );
   }
 
+  Widget detailRow(String label, String? value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 6,
+          child: Text(
+            "$label  :",
+            style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 4,
+          child: Tooltip(
+            message: value ?? '',
+            child: Text(
+              value ?? '',
+              overflow: TextOverflow.ellipsis,
+              //maxLines: 2,
+              style: GoogleFonts.poppins(
+                color: AllColors.textColor,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }

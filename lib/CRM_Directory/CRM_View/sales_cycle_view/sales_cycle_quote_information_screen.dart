@@ -199,6 +199,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                 padding: const EdgeInsets.all(8.0),
                                 child: Visibility(
                                   visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
+                                  //visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
                                   child: Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
@@ -316,7 +317,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                 );
                               }),*/
 
-                            Obx((){
+                         /*   Obx((){
                               return   Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Visibility(
@@ -342,7 +343,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                     ),
                                   ),),
                               );
-                            }),
+                            }),*/
 
                             Obx((){
                               return   Padding(
@@ -389,9 +390,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w700,
                               ),),
 
-                             /*Obx((){
+                             Obx((){
                                return  Visibility(
-                                 visible: saleCycleController.quoteHeaderdata[0].approvedBy?.toLowerCase()==saleCycleController.email.toLowerCase() || (saleCycleController.FromPage=="Task" || saleCycleController.FromPage=="FromTaskScreen")?false:true,
+                                 visible: saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                                     && saleCycleController.FromPage.value=="Sales"?true:false,
                                  child: Row(
                                    children: [
                                      SizedBox(width: 10,),
@@ -424,7 +426,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                        String PipeProdCate = ProductCategory.replaceAll(', ', '|');
                                        print("${saleCycleController.quoteHeaderdata[0].quoteStatus}");
                                        return   Visibility(
-                                         visible:  saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                                         visible:  saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
                                          child: GestureDetector(
                                            onTap: (){
                                              saleCycleController.itemMstGetByQuoteIdApiHit(0,saleCycleController.quoteHeaderdata[0].quoteId, "Add", PipeProdCate);
@@ -446,7 +448,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                    ],
                                  ),
                                );
-                             }),*/
+                             }),
                             ],),
                         ),
                       ),
@@ -510,68 +512,107 @@ class QuoteInformationScreen extends StatelessWidget{
       child: Card(
         child: ListTile(
           contentPadding: EdgeInsets.only(left: 5, right: 5),
-          title:Column(
+          title:Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
+              Column(
                 children: [
-                  Text(
-                    "Item Name: ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-
-                  Container(
-                    width: size.width*.4,
-                    child: Tooltip(
-                      message: "${ saleCycleController.quoteLinedata[index]
-                          .itemName??""}(${saleCycleController.quoteLinedata[index]
-                          .itemCode})",
-                      child: Text("${ saleCycleController.quoteLinedata[index]
-                          .itemName??""}(${saleCycleController.quoteLinedata[index]
-                          .itemCode})",
-                        overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Text(
+                        "Item Name: ",
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                    ),
+              
+                      Container(
+                        width: size.width*.4,
+                        child: Tooltip(
+                          message: "${ saleCycleController.quoteLinedata[index]
+                              .itemName??""}(${saleCycleController.quoteLinedata[index]
+                              .itemCode})",
+                          child: Text("${ saleCycleController.quoteLinedata[index]
+                              .itemName??""}(${saleCycleController.quoteLinedata[index]
+                              .itemCode})",
+                            overflow: TextOverflow.ellipsis,
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w800,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              Row(
-                children: [
-                  Text(
-                    "Item Desc: ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Container(
-                    width: size.width*.4,
-                    child: Tooltip(
-                      message: saleCycleController.quoteLinedata[index]
-                          .itemDescription??"",
-                      child: Text(
-                        ( saleCycleController.quoteLinedata[index]
-                            .itemDescription??"") ,
+                 /* Row(
+                    children: [
+                      Text(
+                        "Item Desc: ",
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: AllColors.primaryDark1,
                           fontSize: AllFontSize.twelve,
                           fontWeight: FontWeight.w500,
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ),
+                      Container(
+                        width: size.width*.4,
+                        child: Tooltip(
+                          message: saleCycleController.quoteLinedata[index]
+                              .itemDescription??"",
+                          child: Text(
+                            ( saleCycleController.quoteLinedata[index]
+                                .itemDescription??"") ,
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),*/
                 ],
               ),
+              Obx((){
+                RxBool approverGeoName=false.obs;
+                for(int i=0; i<saleCycleController.approvalPersonList.length; i++){
+                 if( saleCycleController.email.toLowerCase()==saleCycleController.approvalPersonList[i].approvedBy?.toLowerCase() &&
+                      saleCycleController.approvalPersonList[i].approverGeoName?.toLowerCase() =='branch head'){
+                   approverGeoName.value=true;
+                   break;
+                 }
+                }
+                return Visibility(
+                  visible: approverGeoName.value,
+                  child: GestureDetector(
+                      onTap: (){
+                        saleCycleController.bmDiscountPerController.value.text=saleCycleController.quoteLinedata[index]
+                            .bmDiscountPer==null?"0":saleCycleController.quoteLinedata[index]
+                            .bmDiscountPer.toString();
+                        saleCycleController.salesCreditPerContoller.value.text=saleCycleController.quoteLinedata[index]
+                            .salesCredit==null?"0":saleCycleController.quoteLinedata[index]
+                            .salesCredit.toString();
+                        saleCycleController.updateDiscountAmountController.value.text=saleCycleController.quoteLinedata[index]
+                            .approvedDiscountPer==null?"0":saleCycleController.quoteLinedata[index]
+                            .approvedDiscountPer.toString();
+                        showDialogForGmBmDiscount(context, index);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Tooltip(
+                            message: "Update Bm Discount %",
+                            child: Icon(Icons.update, color: AllColors.textColor,)),
+                      )
+                  ),
+                );
+              })
+
             ],
           ),
           subtitle: Column(
@@ -587,7 +628,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "Cat Name: ",
+                              "Cate. Name: ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -613,7 +654,6 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-
                         Row(
                           children: [
                             Text(
@@ -638,7 +678,133 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
+                              "Manual Price : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController.quoteLinedata[index]
+                                  .quoteLinePrice.toString(),
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Discount % : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController.quoteLinedata[index]
+                                  .discountPer.toString(),
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Approved Discount %:",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController.quoteLinedata[index]
+                                    .approvedDiscountPer.toString(),
+                                child: Text(
+                                  saleCycleController.quoteLinedata[index]
+                                      .approvedDiscountPer.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Bm Discount % : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController.quoteLinedata[index]
+                                  .bmDiscountPer.toString(),
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
                               "Gm Discount %:",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController.quoteLinedata[index]
+                                    .gmDiscountPer.toString(),
+                                child: Text(
+                                  saleCycleController.quoteLinedata[index]
+                                      .gmDiscountPer.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Gm Discount Amt:",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -720,74 +886,11 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Text(
-                              "Amount : ",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
 
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .totalPrice.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Gross Amt.: ",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
 
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .grossAmount.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
 
-                        Row(
-                          children: [
-                            Text(
-                              "Manual Price : ",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
 
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .quoteLinePrice.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                       /* Row(
+                        /* Row(
                           children: [
                             Text(
                               "Warranty Period : ",
@@ -826,158 +929,6 @@ class QuoteInformationScreen extends StatelessWidget{
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Discount % : ",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .discountPer.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Discount Amount:",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Tooltip(
-                                message: saleCycleController.quoteLinedata[index]
-                                    .discountAmt.toString(),
-                                child: Text(
-                                  saleCycleController.quoteLinedata[index]
-                                      .discountAmt.toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Approved Discount %:",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Tooltip(
-                                message: saleCycleController.quoteLinedata[index]
-                                    .approvedDiscountPer.toString(),
-                                child: Text(
-                                  saleCycleController.quoteLinedata[index]
-                                      .approvedDiscountPer.toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Tax % :",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .sgstPer.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              "Tax Amount:",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-
-                            Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .sgstAmt.toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Visibility(
-                          visible:  saleCycleController.quoteHeaderdata[0].isReadyForApprove== 1?true:false,
-                          child: Row(
-                            children: [
-                              Text(
-                                "Br. Tnsfr. Pr.: ",
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-
-                              Text(
-                                saleCycleController.quoteLinedata[index]
-                                    .branchTransferPrice.toString(),
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-
                         Visibility(
                           visible:  saleCycleController.quoteHeaderdata[0].isReadyForApprove== 1?true:false,
                           child: Row(
@@ -1036,6 +987,154 @@ class QuoteInformationScreen extends StatelessWidget{
                             ],
                           ),
                         ),
+                        Row(
+                          children: [
+                            Text(
+                              "Discount Amount:",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController.quoteLinedata[index]
+                                    .discountAmt.toString(),
+                                child: Text(
+                                  saleCycleController.quoteLinedata[index]
+                                      .discountAmt.toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Amount : ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController.quoteLinedata[index]
+                                  .totalPrice.toString(),
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Tax % :",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController.quoteLinedata[index]
+                                  .sgstPer.toString(),
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Tax Amount:",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController.quoteLinedata[index]
+                                  .sgstAmt.toString(),
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Text(
+                              "Gross Amt.: ",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+
+                            Text(
+                              saleCycleController.quoteLinedata[index]
+                                  .grossAmount.toString(),
+                              style: GoogleFonts.poppins(
+                                color: AllColors.textColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+
+
+
+                        /*    Visibility(
+                          visible:  saleCycleController.quoteHeaderdata[0].isReadyForApprove== 1?true:false,
+                          child: Row(
+                            children: [
+                              Text(
+                                "Br. Tnsfr. Pr.: ",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+
+                              Text(
+                                saleCycleController.quoteLinedata[index]
+                                    .branchTransferPrice.toString(),
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),*/
+
+
 
 
                         Row(
@@ -4364,7 +4463,167 @@ class QuoteInformationScreen extends StatelessWidget{
         ),
       ),
     );
+
+
+
+}
+
+  void showDialogForGmBmDiscount(BuildContext context, int index) {
+    showDialog(context: context, builder: (BuildContext context, ){
+      return Container(
+        child: AlertDialog(
+          title: Text("Quote Item Update",   style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w700,
+          ),),
+          content: Container(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 5),
+                    bindApprovedDiscountPer(context),
+                    SizedBox(height: 10),
+                    bindBmDiscountPer(context),
+                    SizedBox(height: 10,),
+                    bindSalesCreditPer(context),
+                    SizedBox(height: 10,),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AllColors.redColor,
+                            ),
+                          ),
+                          onPressed: ()  {
+                            Get.back();
+                          },
+                          child: Text('Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.whiteColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AllColors.primaryDark1,
+                            ),
+                          ),
+                          onPressed: ()  {
+                            saleCycleController.index.value=index;
+                            saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[index].itemCode!, "");
+                          },
+                          child: Text('Update',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.whiteColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+
+                    SizedBox(height: 10,),
+
+                  ],
+                ),
+              )
+          ),
+        ),
+      );
+    });
   }
+
+  bindApprovedDiscountPer(BuildContext context) {
+    return  TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: saleCycleController.updateDiscountAmountController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Approved Discount %',
+          labelText: 'Approved Discount %',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  bindBmDiscountPer(BuildContext context) {
+     return  TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: saleCycleController.bmDiscountPerController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Bm Discount %',
+          labelText: 'Bm Discount %',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+
+  bindSalesCreditPer(BuildContext context) {
+    return  TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: saleCycleController.salesCreditPerContoller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Sales Credit %',
+          labelText: 'Sales Credit %',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
 }
 
 

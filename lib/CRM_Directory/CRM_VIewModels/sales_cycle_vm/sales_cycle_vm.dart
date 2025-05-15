@@ -213,6 +213,11 @@ class SalesCycleVm extends GetxController{
   var updateCompetitorPriceProductController=TextEditingController().obs;
   var updateLossReasonProductController=TextEditingController().obs;
 
+  //todo update quote item list data on approval page
+  var bmDiscountPerController=TextEditingController().obs;
+
+
+
   RxInt index=0.obs;
   final qtyFocusNode = FocusNode();
   RxString quoteId="".obs;
@@ -646,6 +651,7 @@ class SalesCycleVm extends GetxController{
             List<getApprovalPersonMadol> response = jsonResponse.map((e) => getApprovalPersonMadol.fromJson(e)).toList();
             if(response!= null && response.length>0 && response[0].condition=="True"){
               approvalPersonList.value = response;
+              print("Index..${index.value}");
               //Get.toNamed(RoutesName.approvalPersonList);
 
               /*if(pageNumberForQuote==0){
@@ -914,7 +920,8 @@ class SalesCycleVm extends GetxController{
               Get.toNamed(RoutesName.quoteInformationScreen);
             }
             else if(flag=="quoteApprovalScreen"){
-              quoteApprovalPage.value=flag;
+              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
+               quoteApprovalPage.value=flag;
                Get.toNamed(RoutesName.quoteInformationScreen);
             }
             else if(flag=="QuoteDashboard"){
@@ -1059,28 +1066,41 @@ class SalesCycleVm extends GetxController{
     print("Index ${index}");
     loading.value = true;
     Map data={
-      "quote_id": quoteId.value,
-      "sales_cycle_id":salesCycleId.value,
+      "quote_id": quoteHeaderdata[0].quoteId/*quoteId.value*/,
+      "sales_cycle_id":quoteHeaderdata[0].salesCycleId,
       "created_by": email,
       "lines": [
-        {
-          "line_no": flag=="CheckBox"?-1:quoteLinedata[index.value].lineNo,
-          "item_code": item_code.toString(),
+          {
+            "line_no":  flag=="CheckBox"?-1:quoteLinedata[index.value].lineNo,
+            "item_code": item_code.toString(),
+            "item_description": flag=="CheckBox"?"":(updateItemDescriptionController.value.text.isNotEmpty?updateItemDescriptionController.value.text:quoteLinedata[index.value].itemName??""),
+            "qty": flag=="CheckBox"?0 :(qtyUpdateLineController.value.text.isNotEmpty?qtyUpdateLineController.value.text:quoteLinedata[index.value].qty),
+            "quote_line_price": flag=="CheckBox"?0:(updateManualPriceController.value.text.isNotEmpty?updateManualPriceController.value.text:quoteLinedata[index.value].quoteLinePrice),
+            "discount_per": flag=="CheckBox"?0:(updateDiscountPerController.value.text.isNotEmpty?updateDiscountPerController.value.text:quoteLinedata[index.value].discountPer),
+            "bm_discount_per": flag=="CheckBox"?"":bmDiscountPerController.value.text.isNotEmpty?bmDiscountPerController.value.text:quoteLinedata[index.value].bmDiscountPer,
+            "gm_discount_per": flag=="CheckBox"?0:(gmDiscountPerContoller.value.text.isNotEmpty?gmDiscountPerContoller.value.text:quoteLinedata[index.value].gmDiscountPer),
+            "gm_discount_amount": flag=="CheckBox"?0:quoteLinedata[index.value].gmDiscountAmount,
+            "approved_discount_per": flag=="CheckBox"?0:(updateDiscountAmountController.value.text.isNotEmpty?updateDiscountAmountController.value.text:quoteLinedata[index.value].approvedDiscountPer),
+            "sales_credit": flag=="CheckBox"?0:(salesCreditPerContoller.value.text.isNotEmpty?salesCreditPerContoller.value.text:quoteLinedata[index.value].salesCredit),
+            "line_status": flag=="CheckBox"?"Pending":quoteHeaderdata[0].quoteStatus,
+          }
+        /*  "line_no":
+          "item_code":
          // "warranty_period": warrentyPeriodController.value.text.isEmpty?'0 Months':warrentyPeriodController.value.text + ' Months',
          // "delivery_in_weeks": deliveryWeeksController.value.text.isEmpty?'0 Weeks':deliveryWeeksController.value.text + ' Weeks',
-          "item_description": flag=="CheckBox"?"":(updateItemDescriptionController.value.text.isNotEmpty?updateItemDescriptionController.value.text:quoteLinedata[index.value].itemName??""),
-          "qty": flag=="CheckBox"?0 :(qtyUpdateLineController.value.text.isNotEmpty?qtyUpdateLineController.value.text:quoteLinedata[index.value].qty),
-          "quote_line_price": flag=="CheckBox"?0:(updateManualPriceController.value.text.isNotEmpty?updateManualPriceController.value.text:quoteLinedata[index.value].quoteLinePrice),
-          "discount_per": flag=="CheckBox"?0:(updateDiscountPerController.value.text.isNotEmpty?updateDiscountPerController.value.text:quoteLinedata[index.value].discountPer),
-          "gm_discount_per": flag=="CheckBox"?0:(gmDiscountPerContoller.value.text.isNotEmpty?gmDiscountPerContoller.value.text:quoteLinedata[index.value].gmDiscountPer),
-          "approved_discount_per": flag=="CheckBox"?0:(updateDiscountAmountController.value.text.isNotEmpty?updateDiscountAmountController.value.text:quoteLinedata[index.value].approvedDiscountPer),
-          "sales_credit": flag=="CheckBox"?0:(salesCreditPerContoller.value.text.isNotEmpty?salesCreditPerContoller.value.text:quoteLinedata[index.value].salesCredit),
-          "line_status": "Pending"
-        }
+          "item_description":
+          "qty":
+          "quote_line_price":
+          "discount_per":
+          "gm_discount_per":
+          "approved_discount_per":
+          "sales_credit":
+          "line_status": "Pending"*/
+
       ]
     };
     try{
-      _api.quoteLineCreateApiHit(data, sessionManagement).then((onValue){
+      _api. quoteLineCreateApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
         if(jsonResponse is List){
