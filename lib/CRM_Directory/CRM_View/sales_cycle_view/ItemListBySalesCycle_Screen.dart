@@ -489,7 +489,6 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
 
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
-
                         children: [
                           Text(
                             "Standard Cost:",
@@ -501,7 +500,7 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                           ),
                           SizedBox(width: 5),
                           Container(
-                            width: size.width*.2,
+                            width: size.width*.08,
                             child: Tooltip(
                               message:  saleCycleController
                                   .itemMstGetBySalesIdList[index]
@@ -525,17 +524,24 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                         mainAxisAlignment: MainAxisAlignment.start,
 
                         children: [
-                          Text(
-                            "Branch Transfer Price:",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
+                          Container(
+                            width:size.width*0.3,
+                            child: Tooltip(
+                              message:    "Branch Transfer Price:",
+                              child: Text(
+                                "Branch Transfer Price:",
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(width: 5),
                           Container(
-                            width: size.width*.1,
+                            width: size.width*.08,
                             child: Tooltip(
                               message:  saleCycleController
                                   .itemMstGetBySalesIdList[index]
@@ -559,17 +565,24 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
                         mainAxisAlignment: MainAxisAlignment.start,
 
                         children: [
-                          Text(
-                            "Min. Acceptable price:",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
+                          Container(
+                            width:size.width*0.3,
+                            child: Tooltip(
+                              message: "Min. Acceptable price:",
+                              child: Text(
+                                "Min. Acceptable price:",
+                                overflow: TextOverflow.ellipsis,
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                           ),
                           SizedBox(width: 5),
                           Container(
-                            width: size.width*.05,
+                            width: size.width*.08,
                             child: Tooltip(
                               message:saleCycleController
                                   .itemMstGetBySalesIdList[index]

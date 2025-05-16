@@ -241,7 +241,9 @@ class QuoteItems {
   double? quoteLinePrice;
   double? totalPrice;
   double? discountPer;
+  double? bmDiscountPer;
   double? gmDiscountPer;
+  double? gmDiscountAmount;
   double? approvedDiscountPer;
   double? discountAmt;
   double? standardCost;
@@ -284,7 +286,9 @@ class QuoteItems {
         this.quoteLinePrice,
         this.totalPrice,
         this.discountPer,
+        this.bmDiscountPer,
         this.gmDiscountPer,
+        this.gmDiscountAmount,
         this.approvedDiscountPer,
         this.discountAmt,
         this.standardCost,
@@ -327,7 +331,9 @@ class QuoteItems {
     quoteLinePrice = json['quote_line_price'];
     totalPrice = json['total_price'];
     discountPer = json['discount_per'];
+    bmDiscountPer = json['bm_discount_per'];
     gmDiscountPer = json['gm_discount_per'];
+    gmDiscountAmount = json['gm_discount_amount'];
     approvedDiscountPer = json['approved_discount_per'];
     discountAmt = json['discount_amt'];
     standardCost = json['standard_cost'];
@@ -372,7 +378,9 @@ class QuoteItems {
     data['quote_line_price'] = this.quoteLinePrice;
     data['total_price'] = this.totalPrice;
     data['discount_per'] = this.discountPer;
+    data['bm_discount_per'] = this.bmDiscountPer;
     data['gm_discount_per'] = this.gmDiscountPer;
+    data['gm_discount_amount'] = this.gmDiscountAmount;
     data['approved_discount_per'] = this.approvedDiscountPer;
     data['discount_amt'] = this.discountAmt;
     data['standard_cost'] = this.standardCost;
