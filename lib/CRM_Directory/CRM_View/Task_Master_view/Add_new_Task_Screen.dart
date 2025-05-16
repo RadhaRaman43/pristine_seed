@@ -184,6 +184,9 @@ class AddNewTaskScreen extends StatelessWidget{
                             accountMaster_page_controller.FromPage.value = "Task";
                             accountMaster_page_controller.DraftId = '';
                             accountMaster_page_controller.clearController();
+                            accountMaster_page_controller.getEmployeeMemberApi();
+                            accountMaster_page_controller.getCompanyProfileTypeApi("");
+                            accountMaster_page_controller.getGeoPostalCodeApi();
                             Get.toNamed(RoutesName.add_New_AccountMaster_screen);
                           }, icon: Icon(Icons.add)),
                     )

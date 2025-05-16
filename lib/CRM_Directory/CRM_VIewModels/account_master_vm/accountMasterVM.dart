@@ -34,6 +34,7 @@ import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Repository/AccountMaster_Repository/account_master_repo.dart';
 import '../../CRM_View/Account_Master_view/AccountTaskHistoryModel.dart';
 import '../Task_master_vm/TaskMasterVM.dart';
+import '../contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../sales_cycle_vm/sales_cycle_vm.dart';
 
 class Accountmastervm extends GetxController{
@@ -1225,16 +1226,31 @@ class Accountmastervm extends GetxController{
 
      //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
           if(flag == 'Create'){
-            print("ttttttttttt");
             Utils.showToastification("Success!", "Account Create Successful");
-            clearAccoundController();
-            //deleteAccountData(DraftId);
-            pageNumber=0;
-            getAccountMaster(pageNumber ,is_Active.toString());
-            getDraftAccountMaster(pageNumber,is_Active.toString());
-            Get.toNamed(RoutesName.accountMaster_screen);
+
+            if(FromPage == "Task"){
+              clearController();
+              TaskMaster_page_controller.clearCreateTaskController();
+              TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
+              TaskMaster_page_controller.getEmpMstEmailByApi();
+              Get.toNamed(RoutesName.addNewTaskMaster_screen);
+            }else if(FromPage == "Contact"){
+              clearController();
+              final contact_vm_controller = Get.put(ContactMasterVM());
+              contact_vm_controller.resetAllContactCreativeField('Icon');
+              contact_vm_controller.insideOut = true;
+              contact_vm_controller.getAccountMaster("");
+              contact_vm_controller.getDecisionRoleMaster();
+              Get.toNamed(RoutesName.addNewContactMaster_screen);
+            }else{
+              clearAccoundController();
+              //deleteAccountData(DraftId);
+              pageNumber=0;
+              getAccountMaster(pageNumber ,is_Active.toString());
+              getDraftAccountMaster(pageNumber,is_Active.toString());
+              Get.toNamed(RoutesName.accountMaster_screen);
+            }
           }else if(flag == 'Update'){
-            print("Update....");
             Utils.showToastification("Success!", "Account Update Successful");
             viewRequestDetails(response);
             clearAccoundController();
