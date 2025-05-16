@@ -842,7 +842,7 @@ class QuoteItemList extends StatelessWidget{
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: size.width*.1,
+                          width: size.width*.05,
                           child: Tooltip(
                             message:  saleCycleController
                                 .itemMstGetByQuoteIdList[index]

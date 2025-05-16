@@ -959,11 +959,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                saleCycleController.salesCycleMstUpdateApiHit(
+                                saleCycleController.getSalesCycleMstUpdateProposedSolution(saleCycleController.saleCycleList[0]
+                                     ,"Approved");
+                               /* saleCycleController.salesCycleMstUpdateApiHit(
                                     saleCycleController.saleCycleList[0],
                                     saleCycleController
                                         .proposedSolutionController.value.text,
-                                    "", "", "", "Approved");
+                                    "", "", "", "Approved");*/
                               },
                               child: Container(
                                 width: size.width,
@@ -1008,9 +1010,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
-                                saleCycleController.salesCycleMstUpdateApiHit(
+                                /*saleCycleController.salesCycleMstUpdateApiHit(
                                     saleCycleController.saleCycleList[0],
-                                    "", "", "", "", "Rejected");
+                                    "", "", "", "", "Rejected");*/
+                                saleCycleController.getSalesCycleMstUpdateProposedSolution( saleCycleController.saleCycleList[0]
+                                    , "Rejected" );
                               },
                               child: Container(
                                 width: size.width,
@@ -3702,7 +3706,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
 
                       Container(
-                        width: size.width * 0.5,
+                        width: size.width * 0.4,
                         child: Tooltip(
                           message: saleCycleController
                               .get_SalesCycleProductById_List[index]
@@ -5945,7 +5949,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   .FromPage.value == 'FromTaskScreen'
               )) || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-      ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
+      ignoring: saleCycleController.saleCycleList[0]
+          .salesCycleStatus!.toLowerCase()!="suspect" || (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
           ?.toUpperCase() == "LOSS") ? true : false,
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
@@ -6096,7 +6101,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             ? true
             : false,*/
 
-        readOnly: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
+        readOnly: saleCycleController.saleCycleList[0]
+            .salesCycleStatus!.toLowerCase()!="suspect" || (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
             saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() == "LOSS") ? true : false,
         cursorColor: AllColors.primaryDark1,
         controller: saleCycleController.expectedAmountController.value,
@@ -6279,6 +6285,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
                                 Visibility(
                                   visible: saleCycleController.saleCycleList[0]
+                                      .salesCycleStatus!.toLowerCase()=="suspect" && saleCycleController.saleCycleList[0]
                                       .quoteAccepted?.toUpperCase() != "LOSS" &&
                                       (saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()),
                                   child: InkWell(
@@ -7015,44 +7022,48 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 children: [
                   //bindBudgetAmount(context),
                   bindExpectedAmount(context),
-                  Container(
-                    padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
-                    width: size.width / 2,
-                    child: IgnorePointer(
-                      ignoring: (saleCycleController.saleCycleList[0]
-                          .isReadySendForApproval == 0 &&
-                          (saleCycleController.FromPage.value == 'Sales' ||
-                              saleCycleController.FromPage.value ==
-                                  'FromTaskScreen'
-                          )) || saleCycleController.FromPage.value == 'Task' ||
-                          saleCycleController.FromPage.value == 'FromTaskScreen'
-                          ? true
-                          : false,
-                      child: DefaultButton(
-                        press: () {
-                          if (saleCycleController.productCategoryController
-                              .value.text.isEmpty || saleCycleController
-                              .productCategoryController.value.text == "") {
-                            Utils.showErrorToastification("Product Category",
-                                "Please select product category");
-                            return;
-                          }
-                          /* if(saleCycleController.budgetAmountController.value.text.isEmpty || saleCycleController.budgetAmountController.value.text == "" ){
-                            Utils.showErrorToastification("Budget Amount", "Please enter budget amount");
-                            return;
-                          }*/
-                          if (saleCycleController.expectedAmountController.value
-                              .text.isEmpty || saleCycleController
-                              .expectedAmountController.value.text == "") {
-                            Utils.showErrorToastification("Expected Amount",
-                                "Please enter expected amount");
-                            return;
-                          }
+                  Visibility(
+                    visible: saleCycleController.saleCycleList[0]
+                        .salesCycleStatus!.toLowerCase()=="suspect",
+                    child: Container(
+                      padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+                      width: size.width / 2,
+                      child: IgnorePointer(
+                        ignoring: (saleCycleController.saleCycleList[0]
+                            .isReadySendForApproval == 0 &&
+                            (saleCycleController.FromPage.value == 'Sales' ||
+                                saleCycleController.FromPage.value ==
+                                    'FromTaskScreen'
+                            )) || saleCycleController.FromPage.value == 'Task' ||
+                            saleCycleController.FromPage.value == 'FromTaskScreen'
+                            ? true
+                            : false,
+                        child: DefaultButton(
+                          press: () {
+                            if (saleCycleController.productCategoryController
+                                .value.text.isEmpty || saleCycleController
+                                .productCategoryController.value.text == "") {
+                              Utils.showErrorToastification("Product Category",
+                                  "Please select product category");
+                              return;
+                            }
+                            /* if(saleCycleController.budgetAmountController.value.text.isEmpty || saleCycleController.budgetAmountController.value.text == "" ){
+                              Utils.showErrorToastification("Budget Amount", "Please enter budget amount");
+                              return;
+                            }*/
+                            if (saleCycleController.expectedAmountController.value
+                                .text.isEmpty || saleCycleController
+                                .expectedAmountController.value.text == "") {
+                              Utils.showErrorToastification("Expected Amount",
+                                  "Please enter expected amount");
+                              return;
+                            }
 
-                          saleCycleController
-                              .ProductCategoryWiseAmtCreateApiHit(0);
-                        },
-                        text: "Save",
+                            saleCycleController
+                                .ProductCategoryWiseAmtCreateApiHit(0);
+                          },
+                          text: "Save",
+                        ),
                       ),
                     ),
                   ),
@@ -8324,7 +8335,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
+                        padding: const EdgeInsets.only(left: 5.0),
                         child: Text(
                           "Sales Cycle Products",
                           style: GoogleFonts.poppins(
@@ -8542,7 +8553,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ElevatedButton(
                         style: ButtonStyle(
                           backgroundColor: MaterialStateProperty.all<Color>(
-                            AllColors.redColor,
+                            AllColors.greenblue,
+
                           ),
                         ),
                         onPressed: () {
