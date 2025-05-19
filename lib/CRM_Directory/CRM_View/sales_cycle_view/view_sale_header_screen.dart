@@ -645,7 +645,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                   Obx(() {
                                     return Visibility(
-                                      visible: saleCycleController.filter.value == 'Sales cycle' && saleCycleController.saleCycleList[0].quoteAccepted != 'Loss',
+                                      visible:saleCycleController.get_SalesCycleProductById_List
+                                          .value.length>0,
                                       child: CircleAvatar(
                                         child: InkWell(
                                           onTap: () {
@@ -832,25 +833,28 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         ),),
                                       Row(
                                         children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              showDialogForFilter(context);
-                                            },
-                                            child: Container(
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(
-                                                    7.0),
-                                                child: Icon(
-                                                  Icons.filter_alt_rounded,
-                                                  color: AllColors
-                                                      .primaryDark1,),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  borderRadius: BorderRadius
-                                                      .circular(30),
-                                                  border: Border.all(
-                                                      color: AllColors
-                                                          .primaryDark1)
+                                          Visibility(
+                                            visible:saleCycleController.quoteList.value.length>0,
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                showDialogForFilter(context);
+                                              },
+                                              child: Container(
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      7.0),
+                                                  child: Icon(
+                                                    Icons.filter_alt_rounded,
+                                                    color: AllColors
+                                                        .primaryDark1,),
+                                                ),
+                                                decoration: BoxDecoration(
+                                                    borderRadius: BorderRadius
+                                                        .circular(30),
+                                                    border: Border.all(
+                                                        color: AllColors
+                                                            .primaryDark1)
+                                                ),
                                               ),
                                             ),
                                           ),
