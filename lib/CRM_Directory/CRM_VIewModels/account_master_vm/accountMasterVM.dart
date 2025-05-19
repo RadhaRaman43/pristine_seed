@@ -583,7 +583,7 @@ class Accountmastervm extends GetxController{
   getEmployeeMemberApi() {
     Map data = {
       "email_id": email,
-      "flag": ""
+      "flag": "GeoLevelLower"
     };
     print(data);
     loading.value = true;

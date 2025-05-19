@@ -1614,7 +1614,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
         return TextField(
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
-              accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?false:true,
+              accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?true :false,
           cursorColor: AllColors.primaryDark1,
           /*controller: controller
             ..text = accountMaster_page_controller.EmployeeMember_Controller
