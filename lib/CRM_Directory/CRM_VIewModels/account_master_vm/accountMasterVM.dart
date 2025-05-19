@@ -1467,7 +1467,8 @@ class Accountmastervm extends GetxController{
       account_code_controller.text = response[0].accountCode??"";
       account_name_controller.text = response[0].accountName??"";
       EmployeeMember_Controller.text = response[0].accountOwnerFullName??"";
-      AccountOwner = employee_Member_list[0].loginEmailId??"";
+      AccountOwner = response[0].accountOwner??"";
+      print('AccountOwener.....${AccountOwner}');
       AccountTitle_Controller.text = response[0].accountTitle??"";
       account_type_controller.text = response[0].accountType??"";
       ReferralBy_Controller.text = response[0].isReferral==1?"Yes":"No";
@@ -2035,7 +2036,7 @@ class Accountmastervm extends GetxController{
       account_code_controller.text = response[position].accountCode??"";
       account_name_controller.text = response[position].accountName??"";
       EmployeeMember_Controller.text = response[position].accountOwnerFullName??"";
-      AccountOwner = employee_Member_list[0].loginEmailId??"";
+      AccountOwner = response[0].accountOwner??"";
       print('Onwer...${EmployeeMember_Controller.text}');
      // AccountOwner = employee_Member_list[position].loginEmailId??"";
       AccountTitle_Controller.text = response[position].accountTitle??"";
