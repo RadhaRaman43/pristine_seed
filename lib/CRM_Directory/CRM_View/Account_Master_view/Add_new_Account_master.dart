@@ -91,6 +91,10 @@ class AddNewAccountMaster extends StatelessWidget{
             print('FromPage....${accountMaster_page_controller.FromPage == "Task"}');
             accountMaster_page_controller.clearController();
             Get.back();
+          }else if(accountMaster_page_controller.FromPage == "Contact"){
+            print('FromPage....${accountMaster_page_controller.FromPage == "Contact"}');
+            accountMaster_page_controller.clearController();
+            Get.back();
           }
           else{
             accountMaster_page_controller.clearController();
@@ -574,8 +578,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                               ),
                                               //height: size.height*10,
                                               width: size.width * .65,
-                                              child: bindComProfSubTypeDropDown(
-                                                  context),
+                                              child: bindComProfSubTypeDropDown(context),
                                             ),
                                             Container(
                                               decoration: BoxDecoration(
@@ -1611,7 +1614,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
         return TextField(
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
-              accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?false:true,
+              accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?true :false,
           cursorColor: AllColors.primaryDark1,
           /*controller: controller
             ..text = accountMaster_page_controller.EmployeeMember_Controller
