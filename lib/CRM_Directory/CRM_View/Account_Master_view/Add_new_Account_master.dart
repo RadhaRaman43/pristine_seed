@@ -948,7 +948,7 @@ class AddNewAccountMaster extends StatelessWidget{
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      child: Column(
+                      child: Column (
                         children: [
 
                           Container(

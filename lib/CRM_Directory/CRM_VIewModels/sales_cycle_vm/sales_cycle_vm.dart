@@ -2142,6 +2142,7 @@ class SalesCycleVm extends GetxController{
 
                     Obx((){
                       return Column(
+                        mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Visibility(
@@ -2748,9 +2749,10 @@ class SalesCycleVm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              getSalesCycleMstUpdateSuspect(saleCycleList,
+                              getSalesCycleMstUpdatePropose(saleCycleList,updateQuoteAccetedCycleController.value.text);
+                             /* getSalesCycleMstUpdateSuspect(saleCycleList,
                                   updateQuoteAccetedCycleController.value.text
-                                  ,competitorNameController.value.text, quoteRejectReasonController.value.text);
+                                  ,competitorNameController.value.text, quoteRejectReasonController.value.text);*/
                               Get.back();
                              // Get.back();
 
@@ -3569,4 +3571,56 @@ class SalesCycleVm extends GetxController{
 
   }
 
+
+  getSalesCycleMstUpdatePropose(SalesCycleModal saleCycleList,String quote_accepted ){
+    loading.value = true;
+    List<Map<String, dynamic>> lineData = [];
+    if(Quote_Selected_list.isNotEmpty){
+      for(int i=0; i<Quote_Selected_list.length; i++){
+        var item=Quote_Selected_list[i];
+        lineData.add({
+          "quote_id":item.quoteId
+        });
+      }
+    }
+    Map data={
+      "sales_cycle_id": saleCycleList.salesCycleId,
+      "quote_accepted": quote_accepted,
+      "created_by": email,
+      "lines": lineData
+    };
+    try{
+      _api.SalesCycleMstUpdateProposeApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition=="True"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            pageNumber = 0;
+            getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            //salesCycleMstApprovereject(saleCycleList,solutionRejectedRemarkController.value.text,approRejeStatus);
+            loading.value = false;
+          }else {
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          loading.value = false;
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.showErrorToastification("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+
+
+  }
 }

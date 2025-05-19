@@ -139,237 +139,235 @@ class QuoteInformationScreen extends StatelessWidget{
               child: Container(
                 child: ListView(
                     children: [
-                      Visibility(
-                        visible: saleCycleController.FromPage=="Sales" || saleCycleController.FromPage=="QuoteApprovalPage" ||
-                            saleCycleController.quoteApprovalPage.value=="quoteApprovalScreen"?true:false,
-                        // visible: saleCycleController.FromPage=="Sales" || saleCycleController.quoteApprovalPage.value=="quoteApprovalScreen"?true:false,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Obx((){
-                              return  Padding(
-                                padding: const EdgeInsets.only(right: 0.0),
-                                child: Visibility(
-                                  visible:  saleCycleController.quoteHeaderdata[0].isReadyForApprove!= 1?false:true,
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        ActionChip(
-                                          label: Text("Approve", style: GoogleFonts.poppins(
-                                            color: AllColors.whiteColor,
-                                            fontWeight: FontWeight.w500,
-                                          ),),
-                                          onPressed: (){
-                                            saleCycleController.quoteStatusController.value.clear();
-                                            saleCycleController.isReject.value=false;
-                                            saleCycleController.isApprove.value=false;
-                                            showdialogForApproval(context);
-                                          },
-                                          backgroundColor: AllColors.primaryDark1,
-                                          shape: StadiumBorder(
-                                            side: BorderSide.none,
-                                          ),
+                      /*visible: saleCycleController.FromPage=="QuoteApprovalPage" ||
+                          saleCycleController.quoteApprovalPage.value=="quoteApprovalScreen"?true:false,*/
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Obx((){
+                            return  Padding(
+                              padding: const EdgeInsets.only(right: 0.0),
+                              child: Visibility(
+                                visible: (saleCycleController.FromPage!="QuoteApprovalPage" ||
+                                    saleCycleController.quoteApprovalPage.value!="quoteApprovalScreen")|| saleCycleController.quoteHeaderdata[0].isReadyForApprove!= 1?false:true,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      ActionChip(
+                                        label: Text("Approve", style: GoogleFonts.poppins(
+                                          color: AllColors.whiteColor,
+                                          fontWeight: FontWeight.w500,
+                                        ),),
+                                        onPressed: (){
+                                          saleCycleController.quoteStatusController.value.clear();
+                                          saleCycleController.isReject.value=false;
+                                          saleCycleController.isApprove.value=false;
+                                          showdialogForApproval(context);
+                                        },
+                                        backgroundColor: AllColors.primaryDark1,
+                                        shape: StadiumBorder(
+                                          side: BorderSide.none,
                                         ),
-                                       /* ActionChip(
-                                          label: Text("Reject", style: GoogleFonts.poppins(
-                                            color: AllColors.whiteColor,
-                                            fontWeight: FontWeight.w500,
-                                          ),),
+                                      ),
+                                     /* ActionChip(
+                                        label: Text("Reject", style: GoogleFonts.poppins(
+                                          color: AllColors.whiteColor,
+                                          fontWeight: FontWeight.w500,
+                                        ),),
 
-                                          onPressed: (){
-                                            showdialogForApproval(context);
-                                            //openConfirmationDialog(context, "Do you want to Update this Sales Cycle?", "Approved");
-                                            saleCycleController.quoteStatusController.value.clear();
-                                            saleCycleController.rejectreasonQuoteController.value.clear();
-                                            saleCycleController.isApprove.value=false;
-                                            saleCycleController.isReject.value=false;
-                                          },
-                                          backgroundColor: AllColors.primaryDark1,
-                                          shape: StadiumBorder(
-                                            side: BorderSide.none,
-                                          ),
-                                        ),*/
-                                      ]
-
-                                  ),),
-                              );
-                            }),
-                            Obx((){
-                              return  Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Visibility(
-                                  visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
-                                  //visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
-                                  child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Container(
-                                          child: DefaultButton(
-                                            press: (){
-                                              saleCycleController.BusinessTerm.value = false;
-                                              saleCycleController.clearBusinessTerm();
-                                              Get.toNamed(RoutesName.UpdateBussinessTermPage);
-                                              //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
-                                            },
-                                            text: "Sent For Approval",
-                                          ),
-                                          width: size.width*.49,
-                                          //margin: EdgeInsets.only(right: 10),
+                                        onPressed: (){
+                                          showdialogForApproval(context);
+                                          //openConfirmationDialog(context, "Do you want to Update this Sales Cycle?", "Approved");
+                                          saleCycleController.quoteStatusController.value.clear();
+                                          saleCycleController.rejectreasonQuoteController.value.clear();
+                                          saleCycleController.isApprove.value=false;
+                                          saleCycleController.isReject.value=false;
+                                        },
+                                        backgroundColor: AllColors.primaryDark1,
+                                        shape: StadiumBorder(
+                                          side: BorderSide.none,
                                         ),
-                                      ]
-                                  ),),
-                              );
-                            }),
+                                      ),*/
+                                    ]
 
-                            Obx((){
-                              return Visibility(
-                                visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending" ?true:false,
-                                child: GestureDetector(
-                                  onTap: (){
-                                    saleCycleController.accountCode.value=saleCycleController.saleCycleList[0].accountCode??"";
-                                    saleCycleController.updateQuoteValidityController.value.text=saleCycleController.quoteHeaderdata[0].quoteValidity!;
-                                    saleCycleController.updateExpectedClosureDateController.value.text=saleCycleController.quoteHeaderdata[0].expClosureDate!;
-                                    //saleCycleController.updatecontactpersonNameController.value.text=saleCycleController.quoteHeaderdata[0].contactPersonName.toString();
-                                    saleCycleController.activeController.value.text=saleCycleController.quoteHeaderdata[0].isActive==1?"Yes":"No";
-                                    saleCycleController.quoteCommitController.value.text=saleCycleController.quoteHeaderdata[0].quoteCommit==1?"Yes":"No";
-                                    saleCycleController.shippingController.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress??"";
-                                    saleCycleController.shippingAddress2Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress2??"";
-                                    saleCycleController.Shipping_PostCode_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPostCode??"";
-                                    saleCycleController.Shipping_City_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingCity??"" ;
-                                    saleCycleController.Shipping_District_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingDistrict??"" ;
-                                    saleCycleController.Shipping_State_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingStateName??"";
-                                    saleCycleController.Shipping_phone_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPhoneNo??"";
-                                    saleCycleController.Shipping_email_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingEmailId??"";
+                                ),),
+                            );
+                          }),
+                          Obx((){
+                            return  Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Visibility(
+                                visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
+                                //visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Container(
+                                        child: DefaultButton(
+                                          press: (){
+                                            saleCycleController.BusinessTerm.value = false;
+                                            saleCycleController.clearBusinessTerm();
+                                            Get.toNamed(RoutesName.UpdateBussinessTermPage);
+                                            //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
+                                          },
+                                          text: "Sent For Approval",
+                                        ),
+                                        width: size.width*.49,
+                                        //margin: EdgeInsets.only(right: 10),
+                                      ),
+                                    ]
+                                ),),
+                            );
+                          }),
 
-                                    showDialogForHeaderUpdate(context);
-                                  },
-                                  child: Container(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(7.0),
-                                      child: Icon(Icons.update, color: AllColors.primaryDark1,),
-                                    ),
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(color: AllColors.primaryDark1)
-                                    ),
+                          Obx((){
+                            return Visibility(
+                              visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending" ?true:false,
+                              child: GestureDetector(
+                                onTap: (){
+                                  saleCycleController.accountCode.value=saleCycleController.saleCycleList[0].accountCode??"";
+                                  saleCycleController.updateQuoteValidityController.value.text=saleCycleController.quoteHeaderdata[0].quoteValidity!;
+                                  saleCycleController.updateExpectedClosureDateController.value.text=saleCycleController.quoteHeaderdata[0].expClosureDate!;
+                                  //saleCycleController.updatecontactpersonNameController.value.text=saleCycleController.quoteHeaderdata[0].contactPersonName.toString();
+                                  saleCycleController.activeController.value.text=saleCycleController.quoteHeaderdata[0].isActive==1?"Yes":"No";
+                                  saleCycleController.quoteCommitController.value.text=saleCycleController.quoteHeaderdata[0].quoteCommit==1?"Yes":"No";
+                                  saleCycleController.shippingController.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress??"";
+                                  saleCycleController.shippingAddress2Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress2??"";
+                                  saleCycleController.Shipping_PostCode_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPostCode??"";
+                                  saleCycleController.Shipping_City_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingCity??"" ;
+                                  saleCycleController.Shipping_District_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingDistrict??"" ;
+                                  saleCycleController.Shipping_State_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingStateName??"";
+                                  saleCycleController.Shipping_phone_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPhoneNo??"";
+                                  saleCycleController.Shipping_email_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingEmailId??"";
+
+                                  showDialogForHeaderUpdate(context);
+                                },
+                                child: Container(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(7.0),
+                                    child: Icon(Icons.update, color: AllColors.primaryDark1,),
+                                  ),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(color: AllColors.primaryDark1)
                                   ),
                                 ),
-                              );
-                            }),
-                            /*Obx((){
-                                return   Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Visibility(
-                                    visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
-                                          border: Border.all(color: AllColors.primaryDark1)
-                                      ),
-                                      child: IconButton(onPressed: (){
-                                        saleCycleController.reportDownload();
-                                      },
-                                          icon: Icon(Icons.cloud_download_rounded)),
-                                    ),),
-                                );
-                              }),*/
-
-                            /*Obx((){
-                                return   Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Visibility(
-                                    //visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
-                                    visible:  saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 0?true:false,
-                                    child: Tooltip(
-                                      message: 'Download Quote Report',
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(30),
-                                            border: Border.all(color: AllColors.primaryDark1)
-                                        ),
-                                        child: IconButton(onPressed: (){
-                                          saleCycleController.reportDownload("quoteReport");
-                                        },
-
-                                            icon: Icon(Icons.cloud_download_rounded)),
-                                      ),
-                                    ),),
-                                );
-                              }),*/
-                            /*Obx((){
-                                return   Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Visibility(
-                                    visible:  saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 0 && saleCycleController.quoteHeaderdata[0].isSpr==1?true:false,
-                                    child: Tooltip(
-                                      message: 'Download Quote SPR Report',
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(30),
-                                            border: Border.all(color: AllColors.primaryDark1)
-                                        ),
-                                        child: IconButton(onPressed: (){
-                                          saleCycleController.reportSprDownload("quoteSprReport");
-                                        },
-                                            icon: Icon(Icons.cloud_download_rounded)),
-                                      ),
-                                    ),),
-                                );
-                              }),*/
-
-                         /*   Obx((){
+                              ),
+                            );
+                          }),
+                          /*Obx((){
                               return   Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Visibility(
                                   visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
-                                  //visible:  saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 0?true:false,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(color: AllColors.primaryDark1)
+                                    ),
+                                    child: IconButton(onPressed: (){
+                                      saleCycleController.reportDownload();
+                                    },
+                                        icon: Icon(Icons.cloud_download_rounded)),
+                                  ),),
+                              );
+                            }),*/
+
+                          /*Obx((){
+                              return   Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Visibility(
+                                  //visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
+                                  visible:  saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 0?true:false,
                                   child: Tooltip(
-                                    message: 'View Business Term',
+                                    message: 'Download Quote Report',
                                     child: Container(
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(30),
                                           border: Border.all(color: AllColors.primaryDark1)
                                       ),
                                       child: IconButton(onPressed: (){
-                                        saleCycleController.BusinessTerm.value = true;
-                                        saleCycleController.SetBusinessTerm();
-                                        saleCycleController.calculateFinalAmt();
-                                        Get.toNamed(RoutesName.UpdateBussinessTermPage);
-                                        //saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId??"");
-                                        // Get.offAllNamed(RoutesName.approvalPersonList);
-
+                                        saleCycleController.reportDownload("quoteReport");
                                       },
-                                          icon: Icon(Icons.note_alt_rounded)),
+
+                                          icon: Icon(Icons.cloud_download_rounded)),
+                                    ),
+                                  ),),
+                              );
+                            }),*/
+                          /*Obx((){
+                              return   Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Visibility(
+                                  visible:  saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 0 && saleCycleController.quoteHeaderdata[0].isSpr==1?true:false,
+                                  child: Tooltip(
+                                    message: 'Download Quote SPR Report',
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          border: Border.all(color: AllColors.primaryDark1)
+                                      ),
+                                      child: IconButton(onPressed: (){
+                                        saleCycleController.reportSprDownload("quoteSprReport");
+                                      },
+                                          icon: Icon(Icons.cloud_download_rounded)),
                                     ),
                                   ),),
                               );
                             }),*/
 
-                            Obx((){
-                              return   Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Visibility(
-                                  visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
-                                  child: Tooltip(
-                                    message: 'View Approver Persons',
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
-                                          border: Border.all(color: AllColors.primaryDark1)
-                                      ),
-                                      child: IconButton(onPressed: (){
-                                        Get.toNamed(RoutesName.approvalPersonList);
-                                        saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId??"");
-                                        // Get.offAllNamed(RoutesName.approvalPersonList);
-
-                                      },
-                                          icon: Icon(Icons.groups)),
+                       /*   Obx((){
+                            return   Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Visibility(
+                                visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
+                                //visible:  saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 0?true:false,
+                                child: Tooltip(
+                                  message: 'View Business Term',
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(color: AllColors.primaryDark1)
                                     ),
-                                  ),),
-                              );
-                            }),
-                          ],
-                        ),
+                                    child: IconButton(onPressed: (){
+                                      saleCycleController.BusinessTerm.value = true;
+                                      saleCycleController.SetBusinessTerm();
+                                      saleCycleController.calculateFinalAmt();
+                                      Get.toNamed(RoutesName.UpdateBussinessTermPage);
+                                      //saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId??"");
+                                      // Get.offAllNamed(RoutesName.approvalPersonList);
+
+                                    },
+                                        icon: Icon(Icons.note_alt_rounded)),
+                                  ),
+                                ),),
+                            );
+                          }),*/
+
+                          Obx((){
+                            return   Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Visibility(
+                                visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
+                                child: Tooltip(
+                                  message: 'View Approver Persons',
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(color: AllColors.primaryDark1)
+                                    ),
+                                    child: IconButton(onPressed: (){
+                                      Get.toNamed(RoutesName.approvalPersonList);
+                                      saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId??"");
+                                      // Get.offAllNamed(RoutesName.approvalPersonList);
+
+                                    },
+                                        icon: Icon(Icons.groups)),
+                                  ),
+                                ),),
+                            );
+                          }),
+                        ],
                       ),
 
                       Obx((){

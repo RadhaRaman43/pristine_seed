@@ -1128,6 +1128,7 @@ class UpdateAccountMaster extends StatelessWidget{
                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                            child: TextFormField(
                              maxLength: 500,
+                             readOnly: true,
                              maxLines: 3,
                              controller: accountMaster_page_controller
                                  .FullAddress_Controller.value,
@@ -1431,6 +1432,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
                            maxLength: 500,
+                           readOnly: true,
                            maxLines: 3,
                            controller: accountMaster_page_controller
                                .Shipping_FullAddress_Controller.value,
