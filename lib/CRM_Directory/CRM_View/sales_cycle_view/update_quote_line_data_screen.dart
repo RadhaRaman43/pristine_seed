@@ -72,9 +72,14 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
             children: [
 
               updateItemDescriptionLine(context),
+              SizedBox(height: 10,),
+              updateItemDescription2Line(context),
+              SizedBox(height: 10,),
               updateqtyLine(context),
+              SizedBox(height: 10,),
            //   updateUnitPrice(context),
               updateManualPriceLine(context),
+              SizedBox(height: 10,),
               updateDiscountPerLine(context),
               SizedBox(height: 10,),
               updateDiscountAmount(context),
@@ -570,6 +575,40 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,
                 fontSize: AllFontSize.fourtine),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+      ),
+    );
+  }
+
+  updateItemDescription2Line(BuildContext context) {
+    return  Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10),
+      child: TextField(
+        onSubmitted: (value){
+          saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
+        },
+        cursorColor:AllColors.primaryDark1 ,
+        controller: saleCycleController.updateItemDescription2Controller.value,
+        keyboardType: TextInputType.number,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            hintText: 'Item Description',
+            labelText: 'Item Description',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
             labelStyle: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontWeight: FontWeight.w500,

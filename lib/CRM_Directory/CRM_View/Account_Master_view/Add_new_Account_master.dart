@@ -96,6 +96,9 @@ class AddNewAccountMaster extends StatelessWidget{
             accountMaster_page_controller.clearController();
             Get.back();
           }
+          else if(accountMaster_page_controller.FromPage == "AccountUpdate"){
+            Get.back();
+          }
           else{
             accountMaster_page_controller.clearController();
             Get.toNamed(RoutesName.accountMaster_screen);

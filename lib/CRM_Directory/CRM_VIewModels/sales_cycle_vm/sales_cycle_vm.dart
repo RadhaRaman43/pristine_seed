@@ -156,6 +156,7 @@ class SalesCycleVm extends GetxController{
 
   // todo update quote controller
   var updateItemDescriptionController=TextEditingController().obs;
+  var updateItemDescription2Controller=TextEditingController().obs;
   var updateManualPriceController=TextEditingController().obs;
   var updateDiscountPerController=TextEditingController().obs;
   var qtyUpdateLineController=TextEditingController().obs;
