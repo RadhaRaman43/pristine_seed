@@ -153,6 +153,10 @@ class SalesCycleVm extends GetxController{
   var updatesalesCycleBudgetAmountController=TextEditingController().obs;
 
   RxString saleCycleOwnerSelected="".obs;
+  RxBool showUpdateBtnApproveQuoteItem=false.obs;
+  RxBool showBranchHead=false.obs;
+  RxBool showClusterHead=false.obs;
+  RxBool showGeneralManager=false.obs;
 
   // todo update quote controller
   var updateItemDescriptionController=TextEditingController().obs;
@@ -1069,7 +1073,7 @@ class SalesCycleVm extends GetxController{
           {
             "line_no":  flag=="CheckBox"?-1:quoteLinedata[index.value].lineNo,
             "item_code": item_code.toString(),
-            "item_description": flag=="CheckBox"?"":(updateItemDescriptionController.value.text.isNotEmpty?updateItemDescriptionController.value.text:quoteLinedata[index.value].itemName??""),
+            "item_description": flag=="CheckBox"?"":(updateItemDescription2Controller.value.text.isNotEmpty?updateItemDescription2Controller.value.text:quoteLinedata[index.value].itemName??""),
             "qty": flag=="CheckBox"?0 :(qtyUpdateLineController.value.text.isNotEmpty?qtyUpdateLineController.value.text:quoteLinedata[index.value].qty),
             "quote_line_price": flag=="CheckBox"?0:(updateManualPriceController.value.text.isNotEmpty?updateManualPriceController.value.text:quoteLinedata[index.value].quoteLinePrice),
             "discount_per": flag=="CheckBox"?0:(updateDiscountPerController.value.text.isNotEmpty?updateDiscountPerController.value.text:quoteLinedata[index.value].discountPer),

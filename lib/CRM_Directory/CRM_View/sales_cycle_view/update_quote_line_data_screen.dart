@@ -119,7 +119,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
 
   Widget updateItemDescriptionLine(BuildContext context) {
     return  Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10),
+      padding: const EdgeInsets.only(left: 15.0, right: 15,),
       child: TextField(
         readOnly: true,
           /*onSubmitted: (value) {
@@ -154,7 +154,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
   }
   Widget updateManualPriceLine(BuildContext context) {
     return  Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10),
+      padding: const EdgeInsets.only(left: 15.0, right: 15),
       child: TextField(
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
@@ -188,7 +188,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
   }
   Widget updateDiscountPerLine(BuildContext context) {
     return  Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10),
+      padding: const EdgeInsets.only(left: 15.0, right: 15, ),
       child: TextField(
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
@@ -199,8 +199,8 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            hintText: 'Discount %',
-            labelText: 'Discount %',
+            hintText: 'Seeking %',
+            labelText: 'Seeking %',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,
@@ -221,7 +221,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
   }
   Widget updateqtyLine(BuildContext context) {
     return  Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10),
+      padding: const EdgeInsets.only(left: 15.0, right: 15,),
       child: TextField(
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
@@ -592,7 +592,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
 
   updateItemDescription2Line(BuildContext context) {
     return  Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 10),
+      padding: const EdgeInsets.only(left: 15.0, right: 15),
       child: TextField(
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
