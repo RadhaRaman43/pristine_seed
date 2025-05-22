@@ -677,6 +677,7 @@ class ContactMasterScreen extends StatelessWidget{
        // leading: bindAvatar( contact_vm_controller.contact_master_list[position].contactName?[0].toUpperCase()?? ""),
         trailing: InkWell(
           onTap: (){
+            contact_vm_controller.FromPage.value="";
             contact_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller
                 .contact_master_list[position]
                 .accountCode?? "");

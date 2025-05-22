@@ -178,6 +178,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    contact_vm_controller.getDecisionRoleMaster();
                    accountMaster_page_controller.pageNumber = 0;
                    contact_vm_controller.accountCode.value = accountMaster_page_controller.account_code_controller.value.text;
+                   contact_vm_controller.FromPage.value="AccountUpdate";
                    accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.text);
 
                  },
@@ -1128,6 +1129,7 @@ class UpdateAccountMaster extends StatelessWidget{
                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                            child: TextFormField(
                              maxLength: 500,
+                             readOnly: true,
                              maxLines: 3,
                              controller: accountMaster_page_controller
                                  .FullAddress_Controller.value,
@@ -1431,6 +1433,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
                            maxLength: 500,
+                           readOnly: true,
                            maxLines: 3,
                            controller: accountMaster_page_controller
                                .Shipping_FullAddress_Controller.value,

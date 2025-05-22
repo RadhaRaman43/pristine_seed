@@ -12,6 +12,7 @@ class getApprovalPersonMadol {
   String? sprCategoryName;
   String? approverGeoName;
   String? approverGeoValue;
+  String? userType;
 
   getApprovalPersonMadol(
       {this.condition,
@@ -26,7 +27,8 @@ class getApprovalPersonMadol {
         this.sprCategoryCode,
         this.sprCategoryName,
         this.approverGeoName,
-        this.approverGeoValue});
+        this.approverGeoValue,
+        this.userType});
 
   getApprovalPersonMadol.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -42,6 +44,7 @@ class getApprovalPersonMadol {
     sprCategoryName = json['spr_category_name'];
     approverGeoName = json['approver_geo_name'];
     approverGeoValue = json['approver_geo_value'];
+    userType = json['user_type'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +62,7 @@ class getApprovalPersonMadol {
     data['spr_category_name'] = this.sprCategoryName;
     data['approver_geo_name'] = this.approverGeoName;
     data['approver_geo_value'] = this.approverGeoValue;
+    data['user_type'] = this.userType;
     return data;
   }
 }

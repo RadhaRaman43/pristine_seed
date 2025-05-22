@@ -96,6 +96,9 @@ class AddNewAccountMaster extends StatelessWidget{
             accountMaster_page_controller.clearController();
             Get.back();
           }
+          else if(accountMaster_page_controller.FromPage == "AccountUpdate"){
+            Get.back();
+          }
           else{
             accountMaster_page_controller.clearController();
             Get.toNamed(RoutesName.accountMaster_screen);
@@ -948,7 +951,7 @@ class AddNewAccountMaster extends StatelessWidget{
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      child: Column(
+                      child: Column (
                         children: [
 
                           Container(

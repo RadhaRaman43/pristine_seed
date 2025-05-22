@@ -245,6 +245,7 @@ class QuoteItems {
   double? gmDiscountPer;
   double? gmDiscountAmount;
   double? approvedDiscountPer;
+  double? approvedAmount;
   double? discountAmt;
   double? standardCost;
   double? branchTransferPrice;
@@ -290,6 +291,7 @@ class QuoteItems {
         this.gmDiscountPer,
         this.gmDiscountAmount,
         this.approvedDiscountPer,
+        this.approvedAmount,
         this.discountAmt,
         this.standardCost,
         this.branchTransferPrice,
@@ -335,6 +337,7 @@ class QuoteItems {
     gmDiscountPer = json['gm_discount_per'];
     gmDiscountAmount = json['gm_discount_amount'];
     approvedDiscountPer = json['approved_discount_per'];
+    approvedAmount = json['approved_amount'];
     discountAmt = json['discount_amt'];
     standardCost = json['standard_cost'];
     branchTransferPrice = json['branch_transfer_price'];
@@ -382,6 +385,7 @@ class QuoteItems {
     data['gm_discount_per'] = this.gmDiscountPer;
     data['gm_discount_amount'] = this.gmDiscountAmount;
     data['approved_discount_per'] = this.approvedDiscountPer;
+    data['approved_amount'] = this.approvedAmount;
     data['discount_amt'] = this.discountAmt;
     data['standard_cost'] = this.standardCost;
     data['branch_transfer_price'] = this.branchTransferPrice;

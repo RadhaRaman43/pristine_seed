@@ -41,6 +41,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        print("FromPage....${accountMaster_page_controller.FromPage.value}");
         if(accountMaster_page_controller.FromPage == "Account"){
           contact_vm_controller.account_name_controller.clear();
           contact_vm_controller.contact_name_controller.clear();
@@ -55,6 +56,9 @@ class AddNewcontactMasterContact extends StatelessWidget{
           contact_vm_controller.phone_no_controller.clear();
           contact_vm_controller.emailId_controller.clear();
           Get.back();
+        }
+        else if(contact_vm_controller.FromPage.value== "AccountUpdate"){
+          Get.toNamed(RoutesName.viewContacts_screen);
         }
         else{
           contact_vm_controller.filterIconColor.value=false;
@@ -133,7 +137,6 @@ class AddNewcontactMasterContact extends StatelessWidget{
             else{
               contact_vm_controller.contact_code="";
               contact_vm_controller.createNewContactMstApi("Create");
-
             }
 
           },
@@ -212,7 +215,11 @@ class AddNewcontactMasterContact extends StatelessWidget{
                         ),
                         child: IconButton(
                             onPressed: (){
-                              accountMaster_page_controller.FromPage.value = "Contact";
+                              if( contact_vm_controller.FromPage.value=="AccountUpdate"){
+                                accountMaster_page_controller.FromPage.value = "AccountUpdate";
+                              }else{
+                                accountMaster_page_controller.FromPage.value = "Contact";
+                              }
                               accountMaster_page_controller.DraftId = '';
                               accountMaster_page_controller.clearController();
                               accountMaster_page_controller.getEmployeeMemberApi();

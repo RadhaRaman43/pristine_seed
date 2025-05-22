@@ -381,6 +381,7 @@ class ApprovalPersonList extends StatelessWidget{
               detailRow("Is SPR", item.isSpr.toString() == '1' ? "Yes" : "No", ),
               detailRow("SPR No", item.sprNo ?? "",),
               detailRow("SPR Category Name", item.sprCategoryName ?? "", ),
+              detailRow("User Type", item.userType ?? "", ),
               detailRow("Approver Geo Name", item.approverGeoName ?? "", ),
               detailRow("Approver Geo Value", item.approverGeoValue ?? "", ),
               detailRow("Quote Status", item.quoteStatus ?? "", ),

@@ -204,7 +204,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible: saleCycleController.FromPage.value == 'Sales' &&
+                  visible: /*saleCycleController.FromPage.value == 'Sales' &&*/
                       saleCycleController.saleCycleList[0].quoteAccepted
                           ?.toUpperCase() != "LOSS",
                   child: PopupMenuButton(
@@ -793,6 +793,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 ignoring: (saleCycleController
                                                     .saleCycleList[0].quoteAccepted
                                                     ?.toUpperCase() == "LOSS") ||
+                                                    (saleCycleController.saleCycleList[0]
+                                                        .isReadySendForApproval == 0 )
+                                                    ? true
+                                                    : false,
+                                               /* ignoring: (saleCycleController
+                                                    .saleCycleList[0].quoteAccepted
+                                                    ?.toUpperCase() == "LOSS") ||
                                                     (saleCycleController
                                                         .saleCycleList[0]
                                                         .isReadySendForApproval == 0 &&
@@ -804,7 +811,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                     saleCycleController.FromPage
                                                         .value == 'FromTaskScreen'
                                                     ? true
-                                                    : false,
+                                                    : false,*/
                                                 child: DefaultButton(
                                                   press: () {
                                                     showProposeConfirmationDialog(context,saleCycleController.saleCycleList[0].salesCycleId??"");
@@ -932,8 +939,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               Visibility(
                   visible: (saleCycleController.saleCycleList[0].createdBy
                       ?.toLowerCase() ==
-                      saleCycleController.email.toLowerCase() &&
-                      saleCycleController.FromPage == "Sales") &&
+                      saleCycleController.email.toLowerCase()
+                      /*saleCycleController.FromPage == "Sales"*/) &&
                       saleCycleController.saleCycleList[0].quoteAccepted
                           ?.toUpperCase() != "LOSS" ? true : false,
                   child: Stack(
@@ -1718,7 +1725,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ?.toLowerCase() == "rejected" ||
             saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
                 "LOSS"
-            || saleCycleController.FromPage != 'Sales' ? false : true,
+            /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
         onSelected: (String? selection) {
           print(selection);
 
@@ -1783,7 +1790,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ?.toLowerCase() == "rejected" ||
             saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
                 "LOSS"
-            || saleCycleController.FromPage != 'Sales' ? false : true,
+           /* || saleCycleController.FromPage != 'Sales'*/ ? false : true,
         onSelected: (String? selection) {
           print(selection);
 
@@ -1848,7 +1855,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ?.toLowerCase() == "rejected" ||
             saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
                 "LOSS"
-            || saleCycleController.FromPage != 'Sales' ? false : true,
+            /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
         onSelected: (String? selection) {
           print(selection);
 
@@ -2001,7 +2008,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ?.toLowerCase() == "rejected" ||
             saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
                 "LOSS"
-            || saleCycleController.FromPage != 'Sales' ? false : true,
+           /* || saleCycleController.FromPage != 'Sales'*/ ? false : true,
         onSelected: (String? selection) {
           print(selection);
 
@@ -2076,7 +2083,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ?.toLowerCase() == "rejected" ||
             saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
                 "LOSS"
-            || saleCycleController.FromPage != 'Sales' ? false : true,
+            /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
         onSelected: (String? selection) {
           print(selection);
           saleCycleController.solutionAcceptedController.value.text =
@@ -2113,10 +2120,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
             saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                 ?.toLowerCase() == "rejected" ||
-            saleCycleController.FromPage == 'Task' ||
             saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
-                "LOSS"
-            || saleCycleController.FromPage == 'FromTaskScreen' ? true : false,
+                "LOSS" ? true : false,
         cursorColor: AllColors.primaryDark1,
         controller: saleCycleController.proposedSolutionController.value,
         maxLength: 500,
@@ -4276,8 +4281,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             Visibility(
               //visible: true,
               visible: saleCycleController.saleCycleList[0].createdBy ==
-                  saleCycleController.email &&
-                  saleCycleController.FromPage == 'Sales' ? true : false,
+                  saleCycleController.email
+                  /*saleCycleController.FromPage == 'Sales'*/ ? true : false,
               child: InkWell(
                   onTap: () {
                     showConfirmationDialog(context, saleCycleController
@@ -7775,15 +7780,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10, right: 10),
       child: TextField(
         cursorColor: AllColors.primaryDark1,
-        readOnly: (saleCycleController.saleCycleList[0]
-            .isReadySendForApproval == 0 &&
+          /* readOnly: saleCycleController.saleCycleList[0]
+            .isReadySendForApproval == 0
             (saleCycleController.FromPage.value == 'Sales'
                 || saleCycleController.FromPage.value == 'FromTaskScreen' ||
-                saleCycleController.FromPage.value == 'Task'))
-            || saleCycleController.FromPage.value == 'Task' ||
-            saleCycleController.FromPage.value == 'FromTaskScreen'
+                saleCycleController.FromPage.value == 'Task')
             ? true
-            : false,
+            : false,*/
         controller: saleCycleController.closureDateController.value,
         decoration: InputDecoration(
             suffixIcon: Icon(Icons.calendar_month),
@@ -7808,8 +7811,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             )
         ),
         onTap: () async {
-          if (saleCycleController.saleCycleList[0].isReadySendForApproval ==
-              1 && saleCycleController.FromPage.value == 'Sales') {
+          /*if (saleCycleController.saleCycleList[0].isReadySendForApproval ==
+              1) {*/
             DateTime? initialDate;
             if (saleCycleController.closureDateController.value.text
                 .isNotEmpty) {
@@ -7851,21 +7854,21 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             if (date != null && date != "")
               saleCycleController.closureDateController.value.text =
                   outputFormat.format(date);
-          }
+
         },
       ),
     );
   }
 
   Widget bindUpdateSalesIdentifyDecisionMaker(BuildContext context) {
-    return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
-          0 && (saleCycleController.FromPage.value == 'Sales'
+   // return IgnorePointer(
+      //ignoring: saleCycleController.saleCycleList[0].isReadySendForApproval ==*
+          /*&& (saleCycleController.FromPage.value == 'Sales'
           || saleCycleController.FromPage.value == 'FromTaskScreen' ||
           saleCycleController.FromPage.value == 'Task'))
           || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
-      child: Container(
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+      return Container(
         padding: EdgeInsets.only(left: 10.0, right: 10.0),
         // margin: const EdgeInsets.only(left: 15.0,),
         // width: double.infinity,
@@ -7913,11 +7916,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   AllColors.primaryDark1),));
           }).toList(),
         ),
-      ),
-    );
+      );
+
   }
 
-  Widget bindUpdateSalesSaleCycleCommit(BuildContext context) {
+/*  Widget bindUpdateSalesSaleCycleCommit(BuildContext context) {
     return IgnorePointer(
       ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
           0 && (saleCycleController.FromPage.value == 'Sales'
@@ -7974,17 +7977,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         ),
       ),
     );
-  }
+  }*/
 
   Widget bindUpdateSalesPurchaseProcessDropDown(context) {
-    return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
-          0 &&
+   // return IgnorePointer(
+      //ignoring: saleCycleController.saleCycleList[0].isReadySendForApproval ==0
+           /*&&
           (saleCycleController.FromPage.value == 'Sales' ||
               saleCycleController.FromPage.value == 'FromTaskScreen'
           )) || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
-      child: Container(
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+      return Container(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Autocomplete<CustomList>(
           displayStringForOption: _displayPurchaseProcessForOption,
@@ -8011,14 +8014,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               TextEditingController controller,
               FocusNode focusNode, VoidCallback onFieldSubmitted) {
             return TextField(
-              readOnly: (saleCycleController.saleCycleList[0]
+              /* readOnly: saleCycleController.saleCycleList[0]
                   .isReadySendForApproval == 0 &&
                   (saleCycleController.FromPage.value == 'Sales' ||
                       saleCycleController.FromPage.value == 'FromTaskScreen'
                   )) || saleCycleController.FromPage.value == 'Task' ||
                   saleCycleController.FromPage.value == 'FromTaskScreen'
                   ? true
-                  : false,
+                  : false,*/
               cursorColor: AllColors.primaryDark1,
               controller: controller
                 ..text = saleCycleController.purchaseProcessController.value
@@ -8099,20 +8102,20 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
+
   }
 
 
   Widget bindUpdateSalesPurchaseTimeFrameDropDown(context) {
-    return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
-          0 &&
+   // return IgnorePointer(
+     // ignoring: saleCycleController.saleCycleList[0].isReadySendForApproval ==0
+          /*&&
           (saleCycleController.FromPage.value == 'Sales' ||
               saleCycleController.FromPage.value == 'FromTaskScreen'
           )) || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
-      child: Container(
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+      return Container(
         padding: const EdgeInsets.only(left: 10, right: 10),
         child: Autocomplete<CustomList>(
           displayStringForOption: _displayPurchaseTimeFrameForOption,
@@ -8139,14 +8142,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               TextEditingController controller,
               FocusNode focusNode, VoidCallback onFieldSubmitted) {
             return TextField(
-              readOnly: (saleCycleController.saleCycleList[0]
+              /*readOnly: saleCycleController.saleCycleList[0]
                   .isReadySendForApproval == 0 &&
                   (saleCycleController.FromPage.value == 'Sales' ||
                       saleCycleController.FromPage.value == 'FromTaskScreen'
                   )) || saleCycleController.FromPage.value == 'Task' ||
                   saleCycleController.FromPage.value == 'FromTaskScreen'
                   ? true
-                  : false,
+                  : false,*/
 
               cursorColor: AllColors.primaryDark1,
               controller: controller
@@ -8228,44 +8231,36 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             );
           },
         ),
-      ),
-    );
+      );
+
   }
 
   bindSalesCycleOwner(BuildContext context) {
-    return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
-          0 &&
-          (saleCycleController.FromPage.value == 'Sales' ||
-              saleCycleController.FromPage.value == 'FromTaskScreen'
-          )) || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
-      child: Container(
-        padding: EdgeInsets.only(left: 10, right: 10),
-        child: TextField(
-          readOnly: true,
-          cursorColor: AllColors.primaryDark1,
-          controller: saleCycleController.salesCycleOwnerController.value,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
-              hintText: 'Sales Cycle Owner',
-              labelText: 'Sales Cycle Owner',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
+    return Container(
+      padding: EdgeInsets.only(left: 10, right: 10),
+      child: TextField(
+        readOnly: true,
+        cursorColor: AllColors.primaryDark1,
+        controller: saleCycleController.salesCycleOwnerController.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
+            hintText: 'Sales Cycle Owner',
+            labelText: 'Sales Cycle Owner',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w700,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
         ),
       ),
     );
@@ -8273,25 +8268,25 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
 
   bindUpdateSalesBudgetAmount(BuildContext context) {
-    return IgnorePointer(
-      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
+   // return IgnorePointer(
+      /*ignoring: saleCycleController.saleCycleList[0].isReadySendForApproval ==
           0 &&
           (saleCycleController.FromPage.value == 'Sales' ||
               saleCycleController.FromPage.value == 'FromTaskScreen'
           )) || saleCycleController.FromPage.value == 'Task' ||
-          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,
-      child: Container(
+          saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
+    return  Container(
         padding: EdgeInsets.only(left: 10, right: 10),
         child: TextField(
           keyboardType: TextInputType.number,
-          readOnly: (saleCycleController.saleCycleList[0]
+            /*readOnly: saleCycleController.saleCycleList[0]
               .isReadySendForApproval == 0 &&
               (saleCycleController.FromPage.value == 'Sales' ||
                   saleCycleController.FromPage.value == 'FromTaskScreen'
               )) || saleCycleController.FromPage.value == 'Task' ||
               saleCycleController.FromPage.value == 'FromTaskScreen'
               ? true
-              : false,
+              : false,*/
           cursorColor: AllColors.primaryDark1,
           controller: saleCycleController.updatesalesCycleBudgetAmountController
               .value,
@@ -8316,8 +8311,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               )
           ),
         ),
-      ),
-    );
+      );
+
   }
 
 
