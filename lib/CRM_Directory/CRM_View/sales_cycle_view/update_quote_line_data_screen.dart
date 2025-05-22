@@ -158,7 +158,6 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
       child: TextField(
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
-
         },
         cursorColor:AllColors.primaryDark1 ,
         controller: saleCycleController.updateManualPriceController.value,

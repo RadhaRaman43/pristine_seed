@@ -375,7 +375,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       Obx(() {
                         return Visibility(
                           visible: saleCycleController.saleCycleList[0]
-                              .salesCycleStatus == "Suspect" ? true : false,
+                              .salesCycleStatus!.toLowerCase() == "suspect" ? true : false,
                           child: Container(
                             child: Column(
                               children: [
@@ -448,7 +448,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   children: [
                                     //bindBudgetAmount(context),
                                     bindExpectedAmount(context),
-                                    Container(
+                                    Visibility(
+                                      visible: saleCycleController.saleCycleList[0]
+                                          .quoteAccepted?.toUpperCase()=="LOSS" ||
+                                          saleCycleController.saleCycleList[0].createdBy != saleCycleController.email?false:true,
+                                      child:  Container(
                                       padding: EdgeInsets.fromLTRB(
                                           15, 5, 15, 10),
                                       width: size.width / 2,
@@ -506,8 +510,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           text: "Add",
                                         ),
                                       ),
-                                    ),
-
+                                    ),)
                                   ],
                                 ),
 
@@ -3424,11 +3427,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         saleCycleController.get_SalesCycleProductById_List[index].createdOn ??
             "");
     return Card(
-      //margin: EdgeInsets.all(5),
       child: IgnorePointer(
         ignoring: saleCycleController.saleCycleList[0].salesCycleStatus == 'Propose',
         child: ListTile(
-          onTap: () {
+          /*onTap: () {
             if (flag == "Update") {
               saleCycleController.updateCompetitorNameProductController.value
                   .text =
@@ -3443,19 +3445,44 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       .lossReason ?? "";
               showDialogSalesCycleProductModify(context, index);
             }
-          },
+          },*/
           contentPadding: EdgeInsets.only(left: 5, right: 10),
           title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Item Code: ",
+                "Item Code:  ${saleCycleController
+                    .get_SalesCycleProductById_List[index]
+                    .itemCode??""}",
                 style: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontSize: AllFontSize.fourtine,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              Text(
+             GestureDetector(
+               onTap: (){
+                 saleCycleController.updateCompetitorNameProductController.value
+                     .text =
+                     saleCycleController.get_SalesCycleProductById_List[index]
+                         .competitorName ?? "";
+                 saleCycleController.updateCompetitorPriceProductController.value
+                     .text =
+                     (saleCycleController.get_SalesCycleProductById_List[index]
+                         .competitorPrice ?? 0).toString();
+                 saleCycleController.updateLossReasonProductController.value.text =
+                     saleCycleController.get_SalesCycleProductById_List[index]
+                         .lossReason ?? "";
+                 showDialogSalesCycleProductModify(context, index);
+               },
+               child:  Visibility(
+                   visible:flag == "Update" && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect",
+                   child: Icon(Icons.update_outlined, color: AllColors.textColor,)
+               ),
+             )
+
+
+             /* Text(
                 saleCycleController
                     .get_SalesCycleProductById_List[index]
                     .itemCode ?? "",
@@ -3464,13 +3491,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   fontSize: AllFontSize.fourtine,
                   fontWeight: FontWeight.w800,
                 ),
-              ),
+              ),*/
             ],
           ),
           subtitle: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -6097,7 +6123,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   Widget bindExpectedAmount(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
-      width: size.width / 2,
+      width: (saleCycleController.saleCycleList[0]
+          .quoteAccepted!.toLowerCase()!="loss") &&
+          saleCycleController.saleCycleList[0].createdBy?.toLowerCase() == saleCycleController.email.toLowerCase()?size.width/2:size.width,
       child: TextField(
         /*readOnly: saleCycleController.saleCycleList[0].quoteAccepted
             ?.toUpperCase() == "LOSS" ||
@@ -7033,19 +7061,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   bindExpectedAmount(context),
                   Visibility(
                     visible: saleCycleController.saleCycleList[0]
-                        .salesCycleStatus!.toLowerCase()=="suspect",
+                        .salesCycleStatus!.toLowerCase()=="suspect" &&  saleCycleController.saleCycleList[0]
+                        .quoteAccepted!.toLowerCase()!="loss",
                     child: Container(
                       padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
                       width: size.width / 2,
                       child: IgnorePointer(
                         ignoring: (saleCycleController.saleCycleList[0]
-                            .isReadySendForApproval == 0 &&
-                            (saleCycleController.FromPage.value == 'Sales' ||
-                                saleCycleController.FromPage.value ==
-                                    'FromTaskScreen'
-                            )) || saleCycleController.FromPage.value == 'Task' ||
-                            saleCycleController.FromPage.value == 'FromTaskScreen'
-                            ? true
+                            .isReadySendForApproval == 0)? true
                             : false,
                         child: DefaultButton(
                           press: () {
@@ -8336,7 +8359,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 5.0),
                         child: Text(
-                          "Sales Cycle Products",
+                          "Sales Cycle Pro.",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.sisxteen,
@@ -8381,7 +8404,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                       Obx(() {
                         return Visibility(
-                          visible: saleCycleController.saleCycleList[0].salesCycleStatus == 'Propose',
+                          visible: saleCycleController.get_SalesCycleProductById_List.value.length>0,
                           child: CircleAvatar(
                             child: InkWell(
                               onTap: () {
