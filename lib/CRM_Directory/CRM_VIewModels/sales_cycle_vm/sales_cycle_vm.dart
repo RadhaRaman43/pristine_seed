@@ -2195,7 +2195,7 @@ class SalesCycleVm extends GetxController{
                                 ),
                                 onPressed: ()  {
                                   navigator?.pop(context);
-                                  showWonLossConfirmationDialog(context, saleCycleList);
+                                  showWonLossConfirmationDialog(context, saleCycleList, "propose");
 
                                 },
                                 child: Container(
@@ -2242,7 +2242,7 @@ class SalesCycleVm extends GetxController{
                                       Utils.showErrorToastification('Error', 'Please Enter Reject Reason Name');
                                       return;
                                     }
-                                    showWonLossConfirmationDialog(context, saleCycleList);
+                                    showWonLossConfirmationDialog(context, saleCycleList,saleCycleList.salesCycleStatus!);
 
                                    // Get.back();
 
@@ -2694,7 +2694,7 @@ class SalesCycleVm extends GetxController{
   }
 
 
-  showWonLossConfirmationDialog(context, SalesCycleModal saleCycleList){
+  showWonLossConfirmationDialog(context, SalesCycleModal saleCycleList, String salesCycleStatusFlag){
     showDialog(
         context: context,
         builder: (context){
@@ -2763,12 +2763,19 @@ class SalesCycleVm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              getSalesCycleMstUpdatePropose(saleCycleList,updateQuoteAccetedCycleController.value.text);
+                              if(salesCycleStatusFlag!.toLowerCase()=="propose"){
+                                getSalesCycleMstUpdatePropose(saleCycleList,updateQuoteAccetedCycleController.value.text);
+                              }else{
+                                getSalesCycleMstUpdateSuspect(saleCycleList,
+                                    updateQuoteAccetedCycleController.value.text
+                                    ,competitorNameController.value.text, quoteRejectReasonController.value.text);
+                              }
+
                              /* getSalesCycleMstUpdateSuspect(saleCycleList,
                                   updateQuoteAccetedCycleController.value.text
                                   ,competitorNameController.value.text, quoteRejectReasonController.value.text);*/
                               Get.back();
-                             // Get.back();
+                              Get.back();
 
                             },
                             child: Container(

@@ -760,24 +760,25 @@ class Taskmastervm extends GetxController{
         });
     }
 
-    getItemCategoryMstApiHit(String? taskId, String? InfraId) {
+    getItemCategoryMstApiHit(String? taskId, String? InfraId, String saleCycleId) {
         this.loading.value = true;
         Map<String, String> data = {
             'task_id': taskId! ,
             'filter_category': "",
-            'sales_cycle_id': "",
+            'sales_cycle_id': saleCycleId,
             'quote_id': "",
             'infra_lead_no': InfraId==null?"":InfraId
         };
 
         _api.getItemCategoryInfraMstApiHit(data, sessionManagement).then((value) {
+            print(value);
             try {
                 List<ItemCategoryMstModel> Response =
                 (json.decode(value) as List<dynamic>)
                     .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
                     .toList();
 
-                if (Response.isNotEmpty && Response[0].condition.toString() == "True") {
+                if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
                     Item_Category_Infra_list.value = Response;
 
                     Item_Category_Selected_Infra_list.value = [];
