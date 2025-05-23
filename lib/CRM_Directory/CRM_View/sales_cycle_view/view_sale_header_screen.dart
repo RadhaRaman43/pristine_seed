@@ -4301,32 +4301,33 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             ),
           ],
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Visibility(
-              //visible: true,
-              visible: saleCycleController.saleCycleList[0].createdBy ==
-                  saleCycleController.email
-                  /*saleCycleController.FromPage == 'Sales'*/ ? true : false,
-              child: InkWell(
+        trailing: Visibility(
+          visible: saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase()=="LOSS" ?false:true,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Visibility(
+                visible: saleCycleController.saleCycleList[0].isReadySendForApproval ==1
+                    && saleCycleController.saleCycleList[0].isSalesCycleClosed!=1 ? true : false,
+                child: InkWell(
+                    onTap: () {
+                      showConfirmationDialog(context, saleCycleController
+                          .quoteList[index]
+                          .quoteId ?? "");
+                    },
+                    child: Icon(Icons.add_chart, color: Colors.blueAccent,)),
+              ),
+              SizedBox(width: 8,),
+              InkWell(
                   onTap: () {
-                    showConfirmationDialog(context, saleCycleController
-                        .quoteList[index]
-                        .quoteId ?? "");
+                    saleCycleController.quoteId.value =
+                    saleCycleController.quoteList[index].quoteId!;
+                    saleCycleController.getQuoteHeaderInformation(
+                        saleCycleController.quoteList[index].quoteId, "");
                   },
-                  child: Icon(Icons.add_chart, color: Colors.blueAccent,)),
-            ),
-            SizedBox(width: 8,),
-            InkWell(
-                onTap: () {
-                  saleCycleController.quoteId.value =
-                  saleCycleController.quoteList[index].quoteId!;
-                  saleCycleController.getQuoteHeaderInformation(
-                      saleCycleController.quoteList[index].quoteId, "");
-                },
-                child: Icon(Icons.remove_red_eye, color: Colors.blueAccent,)),
-          ],
+                  child: Icon(Icons.remove_red_eye, color: Colors.blueAccent,)),
+            ],
+          ),
         ),
       ),
     );
@@ -5592,7 +5593,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   saleCycleController.FromPage.value == 'Task'))
           || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-      ignoring: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||
+      ignoring: ( saleCycleController.saleCycleList[0].isReadySendForApproval==0/*saleCycleController.saleCycleList[0].createdBy != saleCycleController.email*/ ||
           (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
           saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")
           ? true
@@ -5750,11 +5751,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               readOnly: (saleCycleController.saleCycleList[0].quoteAccepted
                   ?.toUpperCase() == "LOSS") ||
                   (saleCycleController.saleCycleList[0]
-                      .isReadySendForApproval == 0 &&
-                      (saleCycleController.FromPage.value == 'Sales' ||
-                          saleCycleController.FromPage.value == 'FromTaskScreen'
-                      )) || saleCycleController.FromPage.value == 'Task' ||
-                  saleCycleController.FromPage.value == 'FromTaskScreen'
+                      .isReadySendForApproval == 0
+                      )
                   ? true
                   : false,
               cursorColor: AllColors.primaryDark1,
@@ -8470,12 +8468,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               children: [
                                 filterWithItemCode(context),
                                 SizedBox(height: 5,),
-
                                 filterItemDescription(context),
                                 SizedBox(height: 5,),
-
                                 filterWithCategoryName(context),
-
                                 SizedBox(height: 5,),
                                 EditCompetitorName(context),
                                 SizedBox(height: 5,),
