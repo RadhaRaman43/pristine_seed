@@ -164,7 +164,8 @@ class QuoteItemList extends StatelessWidget{
                                         saleCycleController.categoryCodeController.value.clear();
                                         saleCycleController.gstGrpCodeController.value.clear();
                                         saleCycleController.hsnCodeController.value.clear();
-                                        saleCycleController.itemMstGetByQuoteIdApiHit(0,saleCycleController.quoteHeaderdata[0].quoteId, "", PipeProdCate);
+                                        saleCycleController.pageNumber=0;
+                                        saleCycleController.itemMstGetByQuoteIdApiHit(saleCycleController.pageNumber,saleCycleController.quoteHeaderdata[0].quoteId, "", PipeProdCate);
                                         Navigator.pop(context);
                                       }catch(e){
                                         print("Exception..${e.toString()}");
@@ -193,7 +194,8 @@ class QuoteItemList extends StatelessWidget{
                                     onPressed: ()  {
                                       String ProductCategory = saleCycleController.quoteHeaderdata[0].productCategoryCode??"";
                                       String PipeProdCate = ProductCategory.replaceAll(', ', '|');
-                                      saleCycleController.itemMstGetByQuoteIdApiHit(0,saleCycleController.quoteHeaderdata[0].quoteId, "", PipeProdCate);
+                                      saleCycleController.pageNumber=0;
+                                      saleCycleController.itemMstGetByQuoteIdApiHit(saleCycleController.pageNumber,saleCycleController.quoteHeaderdata[0].quoteId, "", PipeProdCate);
                                       Navigator.pop(context);
                                       saleCycleController.itemCodeController.value.clear();
                                       saleCycleController.nameController.value.clear();
@@ -842,7 +844,7 @@ class QuoteItemList extends StatelessWidget{
                         ),
                         SizedBox(width: 5),
                         Container(
-                          width: size.width*.1,
+                          width: size.width*.05,
                           child: Tooltip(
                             message:  saleCycleController
                                 .itemMstGetByQuoteIdList[index]

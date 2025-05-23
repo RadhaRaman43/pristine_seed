@@ -69,6 +69,7 @@ class ContactMasterVM extends GetxController{
 
     email=await sessionManagement.getEmail() ?? '';
     getContactMasterList(pageNumber,"","","");
+    getDecisionRoleMaster();
 
   }
 

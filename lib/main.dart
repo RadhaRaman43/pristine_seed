@@ -11,7 +11,7 @@ import 'dart:io';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 FlutterLocalNotificationsPlugin();
-void main() {
+void main() async{
   /*AwesomeNotifications().initialize(
     null,
     [
@@ -39,18 +39,46 @@ void main() {
         return;
       }
   );*/
-
-
-
-
-
-
-
-
-  runApp(const MyApp());
-// todo for Trust all certificates for network requests (for testing only).
+  // todo for Trust all certificates for network requests (for testing only).
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
+  await _initLocalNotifications();
+  runApp(const MyApp());
+
+}
+
+Future<void> _initLocalNotifications() async {
+  const AndroidInitializationSettings androidSettings =
+  AndroidInitializationSettings('@mipmap/launcher_icon');
+
+  final InitializationSettings initSettings = InitializationSettings(
+    android: androidSettings,
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) async {
+      final String? payload = response.payload;
+      if (payload != null && payload.contains('filePath=')) {
+        final filePath = Uri.splitQueryString(payload)['filePath'];
+        if (filePath != null) {
+          await OpenFile.open(filePath);
+        }
+      }
+    },
+  );
+
+  // Create notification channel (required for Android 8.0+)
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'basic_channel',
+    'Basic notifications',
+    description: 'Notification channel for basic tests',
+    importance: Importance.high,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -144,11 +172,6 @@ class MyApp extends StatelessWidget{
       // });
     }
   }
-
-
-
-
-
 }
 /*
 class MyHomePage extends StatefulWidget {

@@ -247,6 +247,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: (){
+                      saleCycleController.pageNumber = 0;
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position]
                           .salesCycleId!, "ViewHeader", "QuoteApprovalPage");
                     },
@@ -284,8 +285,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   InkWell(
-                    child: Flexible(
-                      fit: FlexFit.loose,
+                    child: Container(
+                      width: size.width*0.4,
                       child: Tooltip(
                         message: quoteApprovalController.quoteApprovalList[position]
                             .accountName  ?? "",

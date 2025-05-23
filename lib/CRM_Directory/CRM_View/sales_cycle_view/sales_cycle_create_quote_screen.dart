@@ -31,6 +31,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         saleCycleController.expectedClosuredateController.value.clear();
         saleCycleController.productCategoryController.value.clear();
         saleCycleController.shippingController.value.clear();
+        saleCycleController.shippingAddress2Controller.value.clear();
         Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         return false;
       },
@@ -93,8 +94,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
 
                 }),
                 SizedBox(height: 10,),
-                bindQuoteCommitName(context),
-                SizedBox(height: 10,),
+               /* bindQuoteCommitName(context),
+                SizedBox(height: 10,),*/
                 bindShippingAddress(context),
                 SizedBox(height: 10,),
                  Container(
@@ -297,6 +298,37 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: TextFormField(
                 readOnly: true,
+                controller: saleCycleController
+                    .shippingAddress2Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Address 2 ",
+                    labelText: "Address 2 ",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+
+            SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
                 keyboardType: TextInputType.number,
                 controller: saleCycleController
                     .Shipping_PostCode_Controller.value,
@@ -361,6 +393,37 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               child: TextFormField(
                 readOnly: true,
                 controller: saleCycleController
+                    .Shipping_District_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "District",
+                    labelText: "District",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+
+            SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController
                     .Shipping_State_Controller.value,
                 decoration: InputDecoration(
                     hintText: "State",
@@ -381,7 +444,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 15,),
+            /*SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -441,7 +504,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 ),
 
               ),
-            ),
+            ),*/
 
 
           ],

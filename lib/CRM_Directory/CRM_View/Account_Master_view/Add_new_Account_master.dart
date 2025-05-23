@@ -91,6 +91,13 @@ class AddNewAccountMaster extends StatelessWidget{
             print('FromPage....${accountMaster_page_controller.FromPage == "Task"}');
             accountMaster_page_controller.clearController();
             Get.back();
+          }else if(accountMaster_page_controller.FromPage == "Contact"){
+            print('FromPage....${accountMaster_page_controller.FromPage == "Contact"}');
+            accountMaster_page_controller.clearController();
+            Get.back();
+          }
+          else if(accountMaster_page_controller.FromPage == "AccountUpdate"){
+            Get.back();
           }
           else{
             accountMaster_page_controller.clearController();
@@ -124,14 +131,20 @@ class AddNewAccountMaster extends StatelessWidget{
                     side: BorderSide(color: AllColors.whiteColor)),
                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                 //CircleAvatar
-                label: Tooltip(
-                  message: "Create Account ",
-                  child: Text('Save as Draft',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.whiteColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      )),
+                label: Row(
+                  children: [
+                    Icon(Icons.save_as),
+                    SizedBox(width: 5,),
+                    Tooltip(
+                      message: "Create Account ",
+                      child: Text('Draft',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.whiteColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          )),
+                    ),
+                  ],
                 ),
                 onPressed: () async {
 
@@ -516,8 +529,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                 controller: accountMaster_page_controller
                                     .EmailId_Controller,
                                 decoration: InputDecoration(
-                                    hintText: "Email Id",
-                                    labelText: "Email Id",
+                                    hintText: "Email Id**",
+                                    labelText: "Email Id*",
                                     //suffixIcon: Icon(Icons.email),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
@@ -568,8 +581,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                               ),
                                               //height: size.height*10,
                                               width: size.width * .65,
-                                              child: bindComProfSubTypeDropDown(
-                                                  context),
+                                              child: bindComProfSubTypeDropDown(context),
                                             ),
                                             Container(
                                               decoration: BoxDecoration(
@@ -939,7 +951,7 @@ class AddNewAccountMaster extends StatelessWidget{
                           borderRadius: BorderRadius.circular(10.0),
                         ),
                       ),
-                      child: Column(
+                      child: Column (
                         children: [
 
                           Container(
@@ -1605,7 +1617,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
         return TextField(
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
-              accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?false:true,
+              accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?true :false,
           cursorColor: AllColors.primaryDark1,
           /*controller: controller
             ..text = accountMaster_page_controller.EmployeeMember_Controller

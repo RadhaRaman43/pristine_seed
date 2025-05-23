@@ -41,6 +41,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        print("FromPage....${accountMaster_page_controller.FromPage.value}");
         if(accountMaster_page_controller.FromPage == "Account"){
           contact_vm_controller.account_name_controller.clear();
           contact_vm_controller.contact_name_controller.clear();
@@ -55,6 +56,9 @@ class AddNewcontactMasterContact extends StatelessWidget{
           contact_vm_controller.phone_no_controller.clear();
           contact_vm_controller.emailId_controller.clear();
           Get.back();
+        }
+        else if(contact_vm_controller.FromPage.value== "AccountUpdate"){
+          Get.toNamed(RoutesName.viewContacts_screen);
         }
         else{
           contact_vm_controller.filterIconColor.value=false;
@@ -133,7 +137,6 @@ class AddNewcontactMasterContact extends StatelessWidget{
             else{
               contact_vm_controller.contact_code="";
               contact_vm_controller.createNewContactMstApi("Create");
-
             }
 
           },
@@ -183,10 +186,52 @@ class AddNewcontactMasterContact extends StatelessWidget{
               ),
               SizedBox(height: 15,),
 
-                Container(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: bindAccountOwnerDropDown(context),
+              Container(
+                padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                height: 50,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        //color: AllColors.whiteColor,
+                          borderRadius: BorderRadius.circular(10)
+                      ),
+                      //height: size.height*10,
+                      width: contact_vm_controller.updateContact?size.width*.92:size.width*.7,
+                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: bindAccountOwnerDropDown(context),
+                    ),
+                    Visibility(
+                      visible: contact_vm_controller.updateContact==true?false:true,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AllColors.whiteColor,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: AllColors.lightblackColor, // Set the border color to black
+                            width: 1.0, // You can adjust the width of the border as needed
+                          ),
+                        ),
+                        child: IconButton(
+                            onPressed: (){
+                              if( contact_vm_controller.FromPage.value=="AccountUpdate"){
+                                accountMaster_page_controller.FromPage.value = "AccountUpdate";
+                              }else{
+                                accountMaster_page_controller.FromPage.value = "Contact";
+                              }
+                              accountMaster_page_controller.DraftId = '';
+                              accountMaster_page_controller.clearController();
+                              accountMaster_page_controller.getEmployeeMemberApi();
+                              accountMaster_page_controller.getCompanyProfileTypeApi("");
+                              accountMaster_page_controller.getGeoPostalCodeApi();
+                              Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                            }, icon: Icon(Icons.add)),
+                      ),
+                    )
+                  ],
                 ),
+              ),
 
               SizedBox(height: 15,),
 

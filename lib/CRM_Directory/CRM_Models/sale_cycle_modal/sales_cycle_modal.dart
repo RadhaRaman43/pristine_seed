@@ -22,6 +22,7 @@ class SalesCycleModal {
   String? createdFullName;
   String? createdOn;
   String? salesCycleName;
+  String? salesCycleOwnerName;
   String? salesCycleOwner;
   int? noOfQuotation;
   String? estClosureDate;
@@ -82,6 +83,13 @@ class SalesCycleModal {
   String? purchaseProcess;
   String? purchaseTimeFrame;
   int? commit;
+  int? quoteSubmitted;
+  int? confirmDecisionDate;
+  int? confirmExpectedRevenue;
+  String? frontlinerValue;
+  String? branchHeadValue;
+  String? zoneHeadValue;
+  String? clustureHeadValue;
 
   SalesCycleModal(
       {this.condition,
@@ -107,6 +115,7 @@ class SalesCycleModal {
         this.createdFullName,
         this.createdOn,
         this.salesCycleName,
+        this.salesCycleOwnerName,
         this.salesCycleOwner,
         this.noOfQuotation,
         this.estClosureDate,
@@ -166,7 +175,14 @@ class SalesCycleModal {
         this.isDecisionMaker,
         this.purchaseProcess,
         this.purchaseTimeFrame,
-        this.commit});
+        this.commit,
+        this.quoteSubmitted,
+        this.confirmDecisionDate,
+        this.confirmExpectedRevenue,
+        this.frontlinerValue,
+        this.branchHeadValue,
+        this.zoneHeadValue,
+        this.clustureHeadValue});
 
   SalesCycleModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -192,6 +208,7 @@ class SalesCycleModal {
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
     salesCycleName = json['sales_cycle_name'];
+    salesCycleOwnerName = json['sales_cycle_owner_name'];
     salesCycleOwner = json['sales_cycle_owner'];
     noOfQuotation = json['no_of_quotation'];
     estClosureDate = json['est_closure_date'];
@@ -253,6 +270,13 @@ class SalesCycleModal {
     purchaseProcess = json['purchase_process'];
     purchaseTimeFrame = json['purchase_time_frame'];
     commit = json['commit'];
+    quoteSubmitted = json['quote_submitted'];
+    confirmDecisionDate = json['confirm_decision_date'];
+    confirmExpectedRevenue = json['confirm_expected_revenue'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
   }
 
   Map<String, dynamic> toJson() {
@@ -280,6 +304,7 @@ class SalesCycleModal {
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
     data['sales_cycle_name'] = this.salesCycleName;
+    data['sales_cycle_owner_name'] = this.salesCycleOwnerName;
     data['sales_cycle_owner'] = this.salesCycleOwner;
     data['no_of_quotation'] = this.noOfQuotation;
     data['est_closure_date'] = this.estClosureDate;
@@ -343,6 +368,13 @@ class SalesCycleModal {
     data['purchase_process'] = this.purchaseProcess;
     data['purchase_time_frame'] = this.purchaseTimeFrame;
     data['commit'] = this.commit;
+    data['quote_submitted'] = this.quoteSubmitted;
+    data['confirm_decision_date'] = this.confirmDecisionDate;
+    data['confirm_expected_revenue'] = this.confirmExpectedRevenue;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
     return data;
   }
 }
