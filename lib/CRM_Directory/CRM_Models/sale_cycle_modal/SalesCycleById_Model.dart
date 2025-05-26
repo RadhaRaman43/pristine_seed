@@ -23,6 +23,8 @@ class SalesCycleByIdModel {
   String? lossOn;
   String? categoryCode;
   String? categoryName;
+  double? productTotalQty;
+  double? productTotalAmount;
 
   SalesCycleByIdModel(
       {this.condition,
@@ -48,7 +50,9 @@ class SalesCycleByIdModel {
         this.lossBy,
         this.lossOn,
         this.categoryCode,
-        this.categoryName});
+        this.categoryName,
+        this.productTotalQty,
+        this.productTotalAmount});
 
   SalesCycleByIdModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -75,6 +79,8 @@ class SalesCycleByIdModel {
     lossOn = json['loss_on'];
     categoryCode = json['category_code'];
     categoryName = json['category_name'];
+    productTotalQty = json['product_total_qty'];
+    productTotalAmount = json['product_total_amount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -103,6 +109,8 @@ class SalesCycleByIdModel {
     data['loss_on'] = this.lossOn;
     data['category_code'] = this.categoryCode;
     data['category_name'] = this.categoryName;
+    data['product_total_qty'] = this.productTotalQty;
+    data['product_total_amount'] = this.productTotalAmount;
     return data;
   }
 }

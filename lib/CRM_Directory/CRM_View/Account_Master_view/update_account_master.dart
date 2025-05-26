@@ -297,7 +297,7 @@ class UpdateAccountMaster extends StatelessWidget{
          ),
        ),
        body: Container(
-         padding: EdgeInsets.only(bottom: 70),
+         //padding: EdgeInsets.only(bottom: 70),
          width: double.infinity,
          height: double.infinity,
          child: SingleChildScrollView(
@@ -1808,7 +1808,10 @@ class UpdateAccountMaster extends StatelessWidget{
                      ],
                    ),
                  ),
-               )
+               ),
+
+               SizedBox(height: 100,),
+
 
 
 

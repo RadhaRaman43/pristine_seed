@@ -653,8 +653,8 @@ class SalesCycleVm extends GetxController{
             if(response!= null && response.length>0 && response[0].condition=="True"){
               approvalPersonList.value = response;
               print("Index..${index.value}");
+              findquotationUserType(approvalPersonList.value);
               //Get.toNamed(RoutesName.approvalPersonList);
-
               /*if(pageNumberForQuote==0){
               approvalPersonList.clear();
             }
@@ -920,7 +920,8 @@ class SalesCycleVm extends GetxController{
               Get.toNamed(RoutesName.quoteInformationScreen);
             }
             else if(flag=="quoteApprovalScreen"){
-              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
+              print("Approver person");
+               getApprovalPersonList(quoteHeaderdata[0].quoteId!);
                quoteApprovalPage.value=flag;
                Get.toNamed(RoutesName.quoteInformationScreen);
             }
@@ -1073,7 +1074,7 @@ class SalesCycleVm extends GetxController{
           {
             "line_no":  flag=="CheckBox"?-1:quoteLinedata[index.value].lineNo,
             "item_code": item_code.toString(),
-            "item_description": flag=="CheckBox"?"":(updateItemDescription2Controller.value.text.isNotEmpty?updateItemDescription2Controller.value.text:quoteLinedata[index.value].itemName??""),
+            "item_description": flag=="CheckBox"?"":(updateItemDescription2Controller.value.text.isNotEmpty?updateItemDescription2Controller.value.text:quoteLinedata[index.value].itemDescription??""),
             "qty": flag=="CheckBox"?0 :(qtyUpdateLineController.value.text.isNotEmpty?qtyUpdateLineController.value.text:quoteLinedata[index.value].qty),
             "quote_line_price": flag=="CheckBox"?0:(updateManualPriceController.value.text.isNotEmpty?updateManualPriceController.value.text:quoteLinedata[index.value].quoteLinePrice),
             "discount_per": flag=="CheckBox"?0:(updateDiscountPerController.value.text.isNotEmpty?updateDiscountPerController.value.text:quoteLinedata[index.value].discountPer),
@@ -1108,8 +1109,15 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
-            itemMstGetByQuoteIdApiHit(0,quoteId.value, "", '');
-            getQuoteHeaderInformation(quoteId.value, "Add");
+            if(flag=="BmGMUpdate"){
+              getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
+            }else{
+              pageNumber=0;
+              itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", '');
+              getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
+            }
+
+
             /*if(flag=="Update"){
               Get.toNamed(RoutesName.quoteInformationScreen);
             }*/
@@ -1158,7 +1166,8 @@ class SalesCycleVm extends GetxController{
           if( response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
-            itemMstGetByQuoteIdApiHit(0,quoteHeaderdata[0].quoteId, "", '');
+            pageNumber=0;
+            itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", '');
             getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, flag);
           }else {
             Utils.showErrorToastification("False Message !", response[0].message.toString());
@@ -2186,7 +2195,7 @@ class SalesCycleVm extends GetxController{
                                 ),
                                 onPressed: ()  {
                                   navigator?.pop(context);
-                                  showWonLossConfirmationDialog(context, saleCycleList);
+                                  showWonLossConfirmationDialog(context, saleCycleList, "propose");
 
                                 },
                                 child: Container(
@@ -2233,7 +2242,7 @@ class SalesCycleVm extends GetxController{
                                       Utils.showErrorToastification('Error', 'Please Enter Reject Reason Name');
                                       return;
                                     }
-                                    showWonLossConfirmationDialog(context, saleCycleList);
+                                    showWonLossConfirmationDialog(context, saleCycleList,saleCycleList.salesCycleStatus!);
 
                                    // Get.back();
 
@@ -2685,7 +2694,7 @@ class SalesCycleVm extends GetxController{
   }
 
 
-  showWonLossConfirmationDialog(context, SalesCycleModal saleCycleList){
+  showWonLossConfirmationDialog(context, SalesCycleModal saleCycleList, String salesCycleStatusFlag){
     showDialog(
         context: context,
         builder: (context){
@@ -2754,12 +2763,19 @@ class SalesCycleVm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              getSalesCycleMstUpdatePropose(saleCycleList,updateQuoteAccetedCycleController.value.text);
+                              if(salesCycleStatusFlag!.toLowerCase()=="propose"){
+                                getSalesCycleMstUpdatePropose(saleCycleList,updateQuoteAccetedCycleController.value.text);
+                              }else{
+                                getSalesCycleMstUpdateSuspect(saleCycleList,
+                                    updateQuoteAccetedCycleController.value.text
+                                    ,competitorNameController.value.text, quoteRejectReasonController.value.text);
+                              }
+
                              /* getSalesCycleMstUpdateSuspect(saleCycleList,
                                   updateQuoteAccetedCycleController.value.text
                                   ,competitorNameController.value.text, quoteRejectReasonController.value.text);*/
                               Get.back();
-                             // Get.back();
+                              Get.back();
 
                             },
                             child: Container(
@@ -3625,7 +3641,35 @@ class SalesCycleVm extends GetxController{
       loading.value = false;
       print(e);
     }
+  }
 
-
+  void findquotationUserType(List<getApprovalPersonMadol> approvalPersonList){
+    try{
+      for(int i=0; i<approvalPersonList.length; i++){
+        if(email.toLowerCase()==approvalPersonList[i].approvedBy?.toLowerCase()){
+          if(approvalPersonList[i].userType?.toLowerCase() =='branch head'){
+            showBranchHead.value=true;
+          }else{
+            showBranchHead.value=false;
+          }
+          if(approvalPersonList[i].userType?.toLowerCase() =='cluster head') {
+            showClusterHead.value=true;
+          }
+          else{
+            showClusterHead.value=false;
+          }
+          if(approvalPersonList[i].userType?.toLowerCase() =='general manager') {
+            showGeneralManager.value=true;
+          }
+          else{
+            showGeneralManager.value=false;
+          }
+          //saleCycleController.showUpdateBtnApproveQuoteItem.value=true;
+        }
+      }
+      print("Branch Head ..${showBranchHead.value}");
+    }catch(e){
+      print("Catch Block exception Exception ..${e}");
+    }
   }
 }
