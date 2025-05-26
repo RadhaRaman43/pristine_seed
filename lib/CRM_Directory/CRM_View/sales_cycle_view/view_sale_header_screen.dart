@@ -312,7 +312,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       }*/
                       // Always add the second item
                       if (saleCycleController.saleCycleList[0].salesCycleStatus
-                          ?.toLowerCase() == "prospect") {
+                          ?.toLowerCase() != "suspect") {
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -3344,8 +3344,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           //todo comment infra lead details dialog
 /*showInfraLeadDetails(
                               context, saleCycleController.saleCycleList);*/
-                          TaskMaster_page_controller.userRegionUpdateController.text=saleCycleController.saleCycleList[0].userRegion??"";
-                          TaskMaster_page_controller.userClusterUpdateController.text=saleCycleController.saleCycleList[0].userClusture??"";
+                          /*TaskMaster_page_controller.userRegionUpdateController.text=saleCycleController.saleCycleList[0].userRegion??"";
+                          TaskMaster_page_controller.userClusterUpdateController.text=saleCycleController.saleCycleList[0].userClusture??"";*/
+
+                          for(int i=0; i<TaskMaster_page_controller.userGeoHierarchyy.length;i++){
+                            if(TaskMaster_page_controller.userGeoHierarchyy[i].myLevel==1){
+                              TaskMaster_page_controller.userRegionUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-1].geoValue!;
+                              TaskMaster_page_controller.userClusterUpdateController.text=TaskMaster_page_controller.userGeoHierarchyy[i-2].geoValue!;
+                            }
+                          }
                           print("userRegion...${TaskMaster_page_controller.userRegionUpdateController.text}...usercluster..${TaskMaster_page_controller.userClusterUpdateController.text}");
                           if(saleCycleController.saleCycleList[0].isInfraLead==1){
                             TaskMaster_page_controller.isInfraYes.value = true;
@@ -3420,7 +3427,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           height: size.height / 2,
           child: ListView.separated(
               controller: scrollController,
-              padding: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 50),
               separatorBuilder: (context, index) =>
                   Divider(height: .05, color: Colors.transparent,),
               shrinkWrap: true,
@@ -4329,33 +4336,35 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             ),
           ],
         ),
-        trailing: Visibility(
-          visible: saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase()=="LOSS" ?false:true,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Visibility(
-                visible: saleCycleController.saleCycleList[0].isReadySendForApproval ==1
-                    && saleCycleController.saleCycleList[0].isSalesCycleClosed!=1 ? true : false,
-                child: InkWell(
-                    onTap: () {
-                      showConfirmationDialog(context, saleCycleController
-                          .quoteList[index]
-                          .quoteId ?? "");
-                    },
-                    child: Icon(Icons.add_chart, color: Colors.blueAccent,)),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Visibility(
+              visible: saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase()=="LOSS" ?false:true,
+              child: Container(
+                child: Visibility(
+                  visible: saleCycleController.saleCycleList[0].isReadySendForApproval ==1
+                      && saleCycleController.saleCycleList[0].isSalesCycleClosed!=1 ? true : false,
+                  child: InkWell(
+                      onTap: () {
+                        showConfirmationDialog(context, saleCycleController
+                            .quoteList[index]
+                            .quoteId ?? "");
+                      },
+                      child: Icon(Icons.add_chart, color: Colors.blueAccent,)),
+                ),
               ),
-              SizedBox(width: 8,),
-              InkWell(
-                  onTap: () {
-                    saleCycleController.quoteId.value =
-                    saleCycleController.quoteList[index].quoteId!;
-                    saleCycleController.getQuoteHeaderInformation(
-                        saleCycleController.quoteList[index].quoteId, "");
-                  },
-                  child: Icon(Icons.remove_red_eye, color: Colors.blueAccent,)),
-            ],
-          ),
+            ),
+            SizedBox(width: 8,),
+            InkWell(
+                onTap: () {
+                  saleCycleController.quoteId.value =
+                  saleCycleController.quoteList[index].quoteId!;
+                  saleCycleController.getQuoteHeaderInformation(
+                      saleCycleController.quoteList[index].quoteId, "");
+                },
+                child: Icon(Icons.remove_red_eye, color: Colors.blueAccent,)),
+          ],
         ),
       ),
     );
@@ -6010,9 +6019,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   .FromPage.value == 'FromTaskScreen'
               )) || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-      ignoring: saleCycleController.saleCycleList[0]
+      /*ignoring: saleCycleController.saleCycleList[0]
           .salesCycleStatus!.toLowerCase()!="suspect" || (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
-          ?.toUpperCase() == "LOSS") ? true : false,
+          ?.toUpperCase() == "LOSS") ? true : false,*/
+      ignoring:  saleCycleController.saleCycleList[0].quoteAccepted
+          ?.toUpperCase() == "LOSS" ||  saleCycleController.saleCycleList[0].salesCycleApprovalStatus
+          ?.toLowerCase() != "pending",
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
         width: size.width,
@@ -6057,8 +6069,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   saleCycleController.FromPage.value == 'FromTaskScreen'
                   ? true
                   : false,*/
-              readOnly: (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
-                  ?.toUpperCase() == "LOSS") ? true : false,
+          /*    readOnly: (*//*saleCycleController.saleCycleList[0].createdBy != saleCycleController.email ||*//* saleCycleController.saleCycleList[0].quoteAccepted
+                  ?.toUpperCase() == "LOSS") ? true : false,*/
               onTap: () {
                 controller.clear();
               },
@@ -8372,6 +8384,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return Container(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -8456,6 +8469,53 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         return bindSalesCycleProductData(context, "Update");
                       }),
                     )
+                ),
+                Center(
+                    child: Divider(height: 1, color: AllColors.primaryDark1,)),
+                Container(
+                  padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Total :", style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.sisxteen,
+                        fontWeight: FontWeight.w900,
+                      ),),
+
+                      Row(
+                        children: [
+                          Text("Qty - ", style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w900,
+                          ),),
+                          Text(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
+                          saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString(), style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("Price - ", style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w900,
+                          ),),
+                          Text(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
+                              :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString(), style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                        ],
+                      ),
+                    ],
+                  ),
                 )
 
               ],
