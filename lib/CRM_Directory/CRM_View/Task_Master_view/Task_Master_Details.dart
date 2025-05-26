@@ -1506,7 +1506,7 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                     SizedBox(width: 2,),
                     Visibility(
-                      visible: account_vm_controller.view=='Sales' || TaskMaster_page_controller.email==TaskMaster_page_controller
+                      visible: account_vm_controller.view=='Sales' || account_vm_controller.view=='TaskDashboard' || TaskMaster_page_controller.email==TaskMaster_page_controller
                                .Task_Master_list[0].approvedBy ?false:true,
                       child: InkWell(
                           onTap: () {
@@ -1601,7 +1601,7 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                     SizedBox(width: 2,),
                     Visibility(
-                      visible: account_vm_controller.view=='Sales' || TaskMaster_page_controller.email==TaskMaster_page_controller
+                      visible: account_vm_controller.view=='Sales' || account_vm_controller.view=='TaskDashboard' || TaskMaster_page_controller.email==TaskMaster_page_controller
                           .Task_Master_list[0].approvedBy ?false:true,
                       child: InkWell(
                           onTap: () {
