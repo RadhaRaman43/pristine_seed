@@ -2248,7 +2248,7 @@ class SalesCycleVm extends GetxController{
 
                                   },
                                   child: Container(
-                                    child: Text('Reject',
+                                    child: Text('Loss',
                                       style: GoogleFonts.poppins(
                                         color: AllColors.blackColor,
                                         fontSize: AllFontSize.fourtine,

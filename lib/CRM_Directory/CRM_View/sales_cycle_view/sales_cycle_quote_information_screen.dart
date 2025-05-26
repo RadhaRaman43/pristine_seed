@@ -3908,6 +3908,55 @@ class QuoteInformationScreen extends StatelessWidget{
                         return bindSalesCycleProductData(context,);
                       }),
                     )
+                ),
+                Center(
+                    child: Divider(height: 1, color: AllColors.primaryDark1,)),
+                Container(
+                  padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Total ", style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.sisxteen,
+                        fontWeight: FontWeight.w900,
+                      ),),
+
+                      Row(
+                        children: [
+                          Text("Qty: ", style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w900,
+                          ),),
+                          Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
+                          saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString()):"",
+                            style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("Price: ", style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w900,
+                          ),),
+                          Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
+                              :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString()):"0",
+                            style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                        ],
+                      ),
+                    ],
+                  ),
                 )
               ],
             )
@@ -4186,7 +4235,7 @@ class QuoteInformationScreen extends StatelessWidget{
           height: size.height / 2,
           child: ListView.separated(
               controller: scrollController,
-              padding: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 50),
               separatorBuilder: (context, index) =>
                   Divider(height: .05, color: Colors.transparent,),
               shrinkWrap: true,
