@@ -177,6 +177,10 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
             accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
             accountMaster_page_controller.getGeoPostalCodeApi();
+            //todo for state , city and district....
+            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'state');
+            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'city');
+            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'district');
 
           },
           subtitle: Column(

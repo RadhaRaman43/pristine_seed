@@ -218,6 +218,8 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                   onTap: (){
                     salesCycleController.getsalesCycleData(0,  accountMaster_page_controller.AccountDashboardDataSalesList[position]
                         .salesCycleId!, "ViewHeader", 'FromDashboard');
+                    salesCycleController.pageNumber=0;
+                    salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
                   },
                 ),
               ],

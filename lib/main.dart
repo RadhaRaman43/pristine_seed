@@ -1,5 +1,6 @@
 //import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:navigation_drawer_flutter/constants/theme.dart';
@@ -41,6 +42,7 @@ void main() async{
   );*/
   // todo for Trust all certificates for network requests (for testing only).
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);//todo lock landscape mode
   HttpOverrides.global = MyHttpOverrides();
   await _initLocalNotifications();
   runApp(const MyApp());

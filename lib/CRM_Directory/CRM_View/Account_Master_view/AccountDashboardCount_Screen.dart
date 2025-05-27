@@ -490,7 +490,7 @@ class AccountdashboardcountScreen extends StatelessWidget{
                                         crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                         children: [
-                                          RichText(
+                                         /* RichText(
                                             text: TextSpan(
                                               children: [
                                                 TextSpan(
@@ -514,8 +514,8 @@ class AccountdashboardcountScreen extends StatelessWidget{
                                               ],
                                             ),
                                             softWrap: true,
-                                          ),
-                                          RichText(
+                                          ),*/
+                                        /*  RichText(
                                             text: TextSpan(
                                               children: [
                                                 TextSpan(
@@ -539,8 +539,8 @@ class AccountdashboardcountScreen extends StatelessWidget{
                                               ],
                                             ),
                                             softWrap: true,
-                                          ),
-                                          RichText(
+                                          ),*/
+                                         /* RichText(
                                             text: TextSpan(
                                               children: [
                                                 TextSpan(
@@ -564,7 +564,7 @@ class AccountdashboardcountScreen extends StatelessWidget{
                                               ],
                                             ),
                                             softWrap: true,
-                                          ),
+                                          ),*/
                                           RichText(
                                             text: TextSpan(
                                               children: [
@@ -590,36 +590,67 @@ class AccountdashboardcountScreen extends StatelessWidget{
                                             ),
                                             softWrap: true,
                                           ),
-                                          RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: "Next Interaction Date:  ",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.primaryDark1,
-                                                    // Change this to your desired color for "Message:"
-                                                    fontSize: AllFontSize.fourtine,
-                                                    fontWeight: FontWeight.w500,
+                                          Visibility(
+                                            visible: accountMaster_page_controller.AccountTaskHistoryList[position].dsarStatus?.toLowerCase() == "sales cycle"?true:false,
+                                            child: RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: "Next Interaction Date:  ",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.primaryDark1,
+                                                      // Change this to your desired color for "Message:"
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
                                                   ),
-                                                ),
-                                                TextSpan(
-                                                  text: accountMaster_page_controller.AccountTaskHistoryList[position].nextInteractionDate??"",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.textColor,
-                                                    // This keeps the rest of the text color unchanged
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
+                                                  TextSpan(
+                                                    text: accountMaster_page_controller.AccountTaskHistoryList[position].nextInteractionDate??"",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.textColor,
+                                                      // This keeps the rest of the text color unchanged
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
+                                                ],
+                                              ),
+                                              softWrap: true,
                                             ),
-                                            softWrap: true,
+                                          ),
+                                          Visibility(
+                                            visible: accountMaster_page_controller.AccountTaskHistoryList[position].dsarStatus?.toLowerCase() == "sales cycle"?true:false,
+                                            child: RichText(
+                                              text: TextSpan(
+                                                children: [
+                                                  TextSpan(
+                                                    text: "Next Interaction Time:  ",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.primaryDark1,
+                                                      // Change this to your desired color for "Message:"
+                                                      fontSize: AllFontSize.fourtine,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  TextSpan(
+                                                    text: accountMaster_page_controller.AccountTaskHistoryList[position].nextInteractionTime??"",
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.textColor,
+                                                      // This keeps the rest of the text color unchanged
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              softWrap: true,
+                                            ),
                                           ),
                                           RichText(
                                             text: TextSpan(
                                               children: [
                                                 TextSpan(
-                                                  text: "Next Interaction Time:  ",
+                                                  text: "DSAR Remarks:  ",
                                                   style: GoogleFonts.poppins(
                                                     color: AllColors.primaryDark1,
                                                     // Change this to your desired color for "Message:"
@@ -628,7 +659,7 @@ class AccountdashboardcountScreen extends StatelessWidget{
                                                   ),
                                                 ),
                                                 TextSpan(
-                                                  text: accountMaster_page_controller.AccountTaskHistoryList[position].nextInteractionTime??"",
+                                                  text: accountMaster_page_controller.AccountTaskHistoryList[position].remarks,
                                                   style: GoogleFonts.poppins(
                                                     color: AllColors.textColor,
                                                     // This keeps the rest of the text color unchanged
@@ -654,31 +685,6 @@ class AccountdashboardcountScreen extends StatelessWidget{
                                                 ),
                                                 TextSpan(
                                                   text: accountMaster_page_controller.AccountTaskHistoryList[position].taskRemarks,
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.textColor,
-                                                    // This keeps the rest of the text color unchanged
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                            softWrap: true,
-                                          ),
-                                          RichText(
-                                            text: TextSpan(
-                                              children: [
-                                                TextSpan(
-                                                  text: "DSAR Remarks:  ",
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.primaryDark1,
-                                                    // Change this to your desired color for "Message:"
-                                                    fontSize: AllFontSize.fourtine,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                TextSpan(
-                                                  text: accountMaster_page_controller.AccountTaskHistoryList[position].remarks,
                                                   style: GoogleFonts.poppins(
                                                     color: AllColors.textColor,
                                                     // This keeps the rest of the text color unchanged

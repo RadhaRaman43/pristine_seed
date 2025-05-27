@@ -993,12 +993,19 @@ class UpdateAccountMaster extends StatelessWidget{
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller.Address_controller,
                            onChanged: (value){
-                             accountMaster_page_controller.FullAddress_Controller.value.text = value + ", " + accountMaster_page_controller
-                                 .Address2_Controller.text + ", " + accountMaster_page_controller
-                                 .City_Controller.text + ", " + accountMaster_page_controller
-                                 .District_Controller.text + ", " + accountMaster_page_controller
-                                 .State_Controller.text + ", " + accountMaster_page_controller
-                                 .PostCode_Controller.text;
+                             final parts = [
+                               value,
+                               accountMaster_page_controller.Address2_Controller.text,
+                               accountMaster_page_controller.City_Controller.text,
+                               accountMaster_page_controller.District_Controller.text,
+                               accountMaster_page_controller.State_Controller.text,
+                               accountMaster_page_controller.PostCode_Controller.text,
+                             ];
+
+                             // Filter out empty strings and join with commas
+                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                             accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
                            },
                            decoration: InputDecoration(
                                hintText: "Address",
@@ -1034,12 +1041,19 @@ class UpdateAccountMaster extends StatelessWidget{
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller.Address2_Controller,
                            onChanged: (value){
-                             accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-                                 .Address_controller.text + ", " + value + ", "+ accountMaster_page_controller
-                                 .City_Controller.text + ", " + accountMaster_page_controller
-                                 .District_Controller.text + ", " + accountMaster_page_controller
-                                 .State_Controller.text + ", " + accountMaster_page_controller
-                                 .PostCode_Controller.text;
+                             final parts = [
+                               accountMaster_page_controller.Address_controller.text,
+                               value,
+                               accountMaster_page_controller.City_Controller.text,
+                               accountMaster_page_controller.District_Controller.text,
+                               accountMaster_page_controller.State_Controller.text,
+                               accountMaster_page_controller.PostCode_Controller.text,
+                             ];
+
+                             // Filter out empty strings and join with commas
+                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                             accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
                            },
                            decoration: InputDecoration(
                                hintText: "Address2",
@@ -1276,12 +1290,19 @@ class UpdateAccountMaster extends StatelessWidget{
                            controller: accountMaster_page_controller
                                .Shipping_Address_controller.value,
                            onChanged: (value){
-                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = value + ", " + accountMaster_page_controller
-                                 .Shipping_Address2_Controller.value.text + ", " + accountMaster_page_controller
-                                 .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-                                 .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-                                 .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-                                 .Shipping_PostCode_Controller.value.text;
+                             final parts = [
+                               value,
+                               accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                               accountMaster_page_controller.Shipping_City_Controller.value.text,
+                               accountMaster_page_controller.Shipping_District_Controller.value.text,
+                               accountMaster_page_controller.Shipping_State_Controller.value.text,
+                               accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                             ];
+
+                             // Filter out empty strings and join with commas
+                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                            },
                            decoration: InputDecoration(
                                hintText: "Address",
@@ -1315,12 +1336,19 @@ class UpdateAccountMaster extends StatelessWidget{
                            controller: accountMaster_page_controller
                                .Shipping_Address2_Controller.value,
                            onChanged: (value){
-                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-                                 .Shipping_Address_controller.value.text + ", " + value + ", " +  accountMaster_page_controller
-                                 .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-                                 .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-                                 .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-                                 .Shipping_PostCode_Controller.value.text;
+                             final parts = [
+                               accountMaster_page_controller.Shipping_Address_controller.value.text,
+                               value,
+                               accountMaster_page_controller.Shipping_City_Controller.value.text,
+                               accountMaster_page_controller.Shipping_District_Controller.value.text,
+                               accountMaster_page_controller.Shipping_State_Controller.value.text,
+                               accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                             ];
+
+                             // Filter out empty strings and join with commas
+                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                            },
                            decoration: InputDecoration(
                                hintText: "Address2",
@@ -3117,12 +3145,19 @@ class UpdateAccountMaster extends StatelessWidget{
 
         //accountMaster_page_controller.getCompanyProfileTypeApi();
 
-        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-            .Address_controller.text + ", " + accountMaster_page_controller
-            .Address2_Controller.text + ", " + accountMaster_page_controller
-            .City_Controller.text + ", " + accountMaster_page_controller
-            .District_Controller.text + ", " + accountMaster_page_controller
-            .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+        final parts = [
+          accountMaster_page_controller.Address_controller.text,
+          accountMaster_page_controller.Address2_Controller.text,
+          accountMaster_page_controller.City_Controller.text,
+          accountMaster_page_controller.District_Controller.text,
+          accountMaster_page_controller.State_Controller.text,
+          accountMaster_page_controller.PostCode_Controller.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
 
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
@@ -3157,12 +3192,19 @@ class UpdateAccountMaster extends StatelessWidget{
                 Utils.sanckBarError("Wrong State", "Please Select Valid State");
               }*/
 
-              accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-                  .Address_controller.text + ", " + accountMaster_page_controller
-                  .Address2_Controller.text + ", " + accountMaster_page_controller
-                  .City_Controller.text + ", " + accountMaster_page_controller
-                  .District_Controller.text + ", " + value+ ", " + accountMaster_page_controller.PostCode_Controller.text;
+              final parts = [
+                accountMaster_page_controller.Address_controller.text,
+                accountMaster_page_controller.Address2_Controller.text,
+                accountMaster_page_controller.City_Controller.text,
+                accountMaster_page_controller.District_Controller.text,
+                value,
+                accountMaster_page_controller.PostCode_Controller.text,
+              ];
 
+              // Filter out empty strings and join with commas
+              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+              accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
@@ -3260,12 +3302,19 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'state');
         accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'city');
         accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'district');
-        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-            .Address_controller.text + ", " + accountMaster_page_controller
-            .Address2_Controller.text + ", " + accountMaster_page_controller
-            .City_Controller.text + ", " + accountMaster_page_controller
-            .District_Controller.text + ", " + accountMaster_page_controller
-            .stateName_controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+        final parts = [
+          accountMaster_page_controller.Address_controller.text,
+          accountMaster_page_controller.Address2_Controller.text,
+          accountMaster_page_controller.City_Controller.text,
+          accountMaster_page_controller.District_Controller.text,
+          accountMaster_page_controller.State_Controller.text,
+          accountMaster_page_controller.PostCode_Controller.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
 
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
@@ -3278,12 +3327,19 @@ class UpdateAccountMaster extends StatelessWidget{
           child: TextFormField(
             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
             onChanged: (value){
-              accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-                  .Address_controller.text + ", " + accountMaster_page_controller
-                  .Address2_Controller.text + ", " + accountMaster_page_controller
-                  .City_Controller.text + ", " + accountMaster_page_controller
-                  .District_Controller.text + ", " + accountMaster_page_controller
-                  .stateName_controller.text + ", " + value;
+              final parts = [
+                accountMaster_page_controller.Address_controller.text,
+                accountMaster_page_controller.Address2_Controller.text,
+                accountMaster_page_controller.City_Controller.text,
+                accountMaster_page_controller.District_Controller.text,
+                accountMaster_page_controller.State_Controller.text,
+                value,
+              ];
+
+              // Filter out empty strings and join with commas
+              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+              accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
@@ -3381,13 +3437,19 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'state');
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'city');
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'district');
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
-            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_PostCode_Controller.value.text;
+        final parts = [
+          accountMaster_page_controller.Shipping_Address_controller.value.text,
+          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+          accountMaster_page_controller.Shipping_City_Controller.value.text,
+          accountMaster_page_controller.Shipping_District_Controller.value.text,
+          accountMaster_page_controller.Shipping_State_Controller.value.text,
+          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -3399,12 +3461,19 @@ class UpdateAccountMaster extends StatelessWidget{
           child: TextFormField(
             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
             onChanged: (value){
-              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-                  .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-                  .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
-                  .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-                  .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-                  .Shipping_State_Controller.value.text + ", " + value;
+              final parts = [
+                accountMaster_page_controller.Shipping_Address_controller.value.text,
+                accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                accountMaster_page_controller.Shipping_City_Controller.value.text,
+                accountMaster_page_controller.Shipping_District_Controller.value.text,
+                accountMaster_page_controller.Shipping_State_Controller.value.text,
+                value,
+              ];
+
+              // Filter out empty strings and join with commas
+              final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
@@ -3426,8 +3495,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code*',
-              labelText: 'Post Code*',
+              hintText: 'Post Code',
+              labelText: 'Post Code',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -3501,13 +3570,19 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.Shipping_State_Controller.value.text =
             _displayStateListForOption(selection).toString();
         FocusNode().unfocus();
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
-            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_PostCode_Controller.value.text;
+        final parts = [
+          accountMaster_page_controller.Shipping_Address_controller.value.text,
+          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+          accountMaster_page_controller.Shipping_City_Controller.value.text,
+          accountMaster_page_controller.Shipping_District_Controller.value.text,
+          accountMaster_page_controller.Shipping_State_Controller.value.text,
+          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -3519,12 +3594,19 @@ class UpdateAccountMaster extends StatelessWidget{
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
               onChanged: (value){
-                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-                    .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-                    .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
-                    .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-                    .Shipping_District_Controller.value.text + ", " + value + ", " + accountMaster_page_controller
-                    .Shipping_PostCode_Controller.value.text;
+                final parts = [
+                  accountMaster_page_controller.Shipping_Address_controller.value.text,
+                  accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                  accountMaster_page_controller.Shipping_City_Controller.value.text,
+                  accountMaster_page_controller.Shipping_District_Controller.value.text,
+                  value,
+                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                ];
+
+                // Filter out empty strings and join with commas
+                final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
@@ -3546,8 +3628,8 @@ class UpdateAccountMaster extends StatelessWidget{
                 ),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'State*',
-                labelText: 'State*',
+                hintText: 'State',
+                labelText: 'State',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
@@ -3621,12 +3703,19 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.City_Controller.text =
             _displayCityListForOption(selection).toString();
         FocusNode().unfocus();
-        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-            .Address_controller.text + ", " + accountMaster_page_controller
-            .Address2_Controller.text + ", " + accountMaster_page_controller
-            .City_Controller.text + ", " + accountMaster_page_controller
-            .District_Controller.text + ", " + accountMaster_page_controller
-            .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+        final parts = [
+          accountMaster_page_controller.Address_controller.text,
+          accountMaster_page_controller.Address2_Controller.text,
+          accountMaster_page_controller.City_Controller.text,
+          accountMaster_page_controller.District_Controller.text,
+          accountMaster_page_controller.State_Controller.text,
+          accountMaster_page_controller.PostCode_Controller.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -3638,11 +3727,19 @@ class UpdateAccountMaster extends StatelessWidget{
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
               onChanged: (value){
-                accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-                    .Address_controller.text + ", " + accountMaster_page_controller
-                    .Address2_Controller.text + ", " + value + ", " + accountMaster_page_controller
-                    .District_Controller.text + ", " + accountMaster_page_controller
-                    .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+                final parts = [
+                  accountMaster_page_controller.Address_controller.text,
+                  accountMaster_page_controller.Address2_Controller.text,
+                  value,
+                  accountMaster_page_controller.District_Controller.text,
+                  accountMaster_page_controller.State_Controller.text,
+                  accountMaster_page_controller.PostCode_Controller.text,
+                ];
+
+                // Filter out empty strings and join with commas
+                final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
@@ -3740,13 +3837,19 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.Shipping_City_Controller.value.text =
             _displayCityListForOption(selection).toString();
         FocusNode().unfocus();
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
-            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_PostCode_Controller.value.text;
+        final parts = [
+          accountMaster_page_controller.Shipping_Address_controller.value.text,
+          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+          accountMaster_page_controller.Shipping_City_Controller.value.text,
+          accountMaster_page_controller.Shipping_District_Controller.value.text,
+          accountMaster_page_controller.Shipping_State_Controller.value.text,
+          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -3758,12 +3861,19 @@ class UpdateAccountMaster extends StatelessWidget{
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
               onChanged: (value){
-                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-                    .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-                    .Shipping_Address2_Controller.value.text + ", " +  value + ", " + accountMaster_page_controller
-                    .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-                    .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-                    .Shipping_PostCode_Controller.value.text;
+                final parts = [
+                  accountMaster_page_controller.Shipping_Address_controller.value.text,
+                  accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                  value,
+                  accountMaster_page_controller.Shipping_District_Controller.value.text,
+                  accountMaster_page_controller.Shipping_State_Controller.value.text,
+                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                ];
+
+                // Filter out empty strings and join with commas
+                final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
@@ -3785,8 +3895,8 @@ class UpdateAccountMaster extends StatelessWidget{
                 ),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'City*',
-                labelText: 'City*',
+                hintText: 'City',
+                labelText: 'City',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
@@ -3860,12 +3970,19 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.District_Controller.text =
             _displayDistrictListForOption(selection).toString();
         FocusNode().unfocus();
-        accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-            .Address_controller.text + ", " + accountMaster_page_controller
-            .Address2_Controller.text + ", " + accountMaster_page_controller
-            .City_Controller.text + ", " + accountMaster_page_controller
-            .District_Controller.text + ", " + accountMaster_page_controller
-            .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+        final parts = [
+          accountMaster_page_controller.Address_controller.text,
+          accountMaster_page_controller.Address2_Controller.text,
+          accountMaster_page_controller.City_Controller.text,
+          accountMaster_page_controller.District_Controller.text,
+          accountMaster_page_controller.State_Controller.text,
+          accountMaster_page_controller.PostCode_Controller.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -3877,11 +3994,19 @@ class UpdateAccountMaster extends StatelessWidget{
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
               onChanged: (value){
-                accountMaster_page_controller.FullAddress_Controller.value.text = accountMaster_page_controller
-                    .Address_controller.text + ", " + accountMaster_page_controller
-                    .Address2_Controller.text + ", " + accountMaster_page_controller
-                    .City_Controller.text + ", " + value + ", " + accountMaster_page_controller
-                    .State_Controller.text + ", " + accountMaster_page_controller.PostCode_Controller.text;
+                final parts = [
+                  accountMaster_page_controller.Address_controller.text,
+                  accountMaster_page_controller.Address2_Controller.text,
+                  accountMaster_page_controller.City_Controller.text,
+                  value,
+                  accountMaster_page_controller.State_Controller.text,
+                  accountMaster_page_controller.PostCode_Controller.text,
+                ];
+
+                // Filter out empty strings and join with commas
+                final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
@@ -3978,13 +4103,19 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.Shipping_District_Controller.value.text =
             _displayDistrictListForOption(selection).toString();
         FocusNode().unfocus();
-        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-            .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
-            .Shipping_City_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_District_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-            .Shipping_PostCode_Controller.value.text;
+        final parts = [
+          accountMaster_page_controller.Shipping_Address_controller.value.text,
+          accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+          accountMaster_page_controller.Shipping_City_Controller.value.text,
+          accountMaster_page_controller.Shipping_District_Controller.value.text,
+          accountMaster_page_controller.Shipping_State_Controller.value.text,
+          accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+        ];
+
+        // Filter out empty strings and join with commas
+        final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+        accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -3996,12 +4127,19 @@ class UpdateAccountMaster extends StatelessWidget{
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
               onChanged: (value){
-                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller
-                    .Shipping_Address_controller.value.text + ", " + accountMaster_page_controller
-                    .Shipping_Address2_Controller.value.text + ", " +  accountMaster_page_controller
-                    .Shipping_City_Controller.value.text + ", " + value + ", " + accountMaster_page_controller
-                    .Shipping_State_Controller.value.text + ", " + accountMaster_page_controller
-                    .Shipping_PostCode_Controller.value.text;
+                final parts = [
+                  accountMaster_page_controller.Shipping_Address_controller.value.text,
+                  accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                  accountMaster_page_controller.Shipping_City_Controller.value.text,
+                  value,
+                  accountMaster_page_controller.Shipping_State_Controller.value.text,
+                  accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                ];
+
+                // Filter out empty strings and join with commas
+                final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
@@ -4023,8 +4161,8 @@ class UpdateAccountMaster extends StatelessWidget{
                 ),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'District*',
-                labelText: 'District*',
+                hintText: 'District',
+                labelText: 'District',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),
