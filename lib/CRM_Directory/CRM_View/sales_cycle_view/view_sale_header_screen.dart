@@ -667,7 +667,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   Obx(() {
                                     return Visibility(
                                       visible:saleCycleController.get_SalesCycleProductById_List
-                                          .value.length>0,
+                                          .value.length>0 && saleCycleController.filter
+                                          .value == 'Sales cycle',
                                       child: CircleAvatar(
                                         child: InkWell(
                                           onTap: () {
@@ -802,8 +803,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             fontSize: AllFontSize.sisxteen,
                                             fontWeight: FontWeight.w900,
                                           ),),
-                                          Text(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
-                                          saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString(), style: GoogleFonts.poppins(
+                                          Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
+                                          saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString()):"",
+                                            style: GoogleFonts.poppins(
                                             color: AllColors.primaryDark1,
                                             fontSize: AllFontSize.sisxteen,
                                             fontWeight: FontWeight.w700,
@@ -818,8 +820,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             fontSize: AllFontSize.sisxteen,
                                             fontWeight: FontWeight.w900,
                                           ),),
-                                          Text(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
-                                              :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString(), style: GoogleFonts.poppins(
+                                          Text(saleCycleController.get_SalesCycleProductById_List.isNotEmpty?(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
+                                              :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString()):"",
+                                            style: GoogleFonts.poppins(
                                             color: AllColors.primaryDark1,
                                             fontSize: AllFontSize.sisxteen,
                                             fontWeight: FontWeight.w700,
@@ -6234,7 +6237,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           (saleCycleController.FromPage.value=="FromDashboard")
       ,
       child: Container(
-        padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+        padding: EdgeInsets.fromLTRB(15, 5, 0, 10),
         width: size.width/2,
         child: TextField(
           /*readOnly: saleCycleController.saleCycleList[0].quoteAccepted
@@ -7108,22 +7111,23 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     );
   }*/
 
+
   void ShowProductCategoryTable(BuildContext context,
       RxList<ProductCategoryWiseAmtModel> budgetAmountList) {
-    Size size = Get.size;
-    showModalBottomSheet(context: context,
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return Container(
-          width: double.infinity,
-          // height: double.infinity,
-          height: saleCycleController.budgetAmountList.length > 3
-              ? (size.height / 2) + 50 : null,
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: Column(
-            //mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min, // Ensure minimal height
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child:Row(
                   children: [
                     InkWell(
                       child: CircleBackButton(
@@ -7157,84 +7161,90 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Center(child: Divider(height: 1, color: AllColors.primaryDark1,)),
-              SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  bindProductCategoryDropDown(context),
-
-                ],
-              ),
-              SizedBox(height: 10,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  //bindBudgetAmount(context),
-                  bindExpectedAmount(context),
-                  Visibility(
-                    visible:  saleCycleController.saleCycleList[0]
-                        .quoteAccepted!.toLowerCase()=="loss" ||  saleCycleController.saleCycleList[0]
-                        .salesCycleApprovalStatus!.toLowerCase()=="rejected" ||  (saleCycleController.FromPage.value=="FromDashboard")
-                         || saleCycleController.saleCycleList[0]
-                        .createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()?false:true  ,
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
-                      width: size.width / 2,
-                      child: IgnorePointer(
-                        ignoring: (saleCycleController.saleCycleList[0]
-                            .isReadySendForApproval == 0)? true
-                            : false,
-                        child: DefaultButton(
-                          press: () {
-                            if (saleCycleController.productCategoryController
-                                .value.text.isEmpty || saleCycleController
-                                .productCategoryController.value.text == "") {
-                              Utils.showErrorToastification("Product Category",
-                                  "Please select product category");
-                              return;
-                            }
-                            /* if(saleCycleController.budgetAmountController.value.text.isEmpty || saleCycleController.budgetAmountController.value.text == "" ){
+              Center(
+                  child: Divider(
+                    height: 1,
+                    color: AllColors.primaryDark1,
+                  )),
+              SingleChildScrollView(
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        bindProductCategoryDropDown(context),
+                        SizedBox(height: 10,),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            //bindBudgetAmount(context),
+                            bindExpectedAmount(context),
+                            Visibility(
+                              visible:  saleCycleController.saleCycleList[0]
+                                  .quoteAccepted!.toLowerCase()=="loss" ||  saleCycleController.saleCycleList[0]
+                                  .salesCycleApprovalStatus!.toLowerCase()=="rejected" ||  (saleCycleController.FromPage.value=="FromDashboard")
+                                  || saleCycleController.saleCycleList[0]
+                                      .createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()?false:true  ,
+                              child: Container(
+                                padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
+                                width: size.width / 2-20,
+                                child: IgnorePointer(
+                                  ignoring: (saleCycleController.saleCycleList[0]
+                                      .isReadySendForApproval == 0)? true
+                                      : false,
+                                  child: DefaultButton(
+                                    press: () {
+                                      if (saleCycleController.productCategoryController
+                                          .value.text.isEmpty || saleCycleController
+                                          .productCategoryController.value.text == "") {
+                                        Utils.showErrorToastification("Product Category",
+                                            "Please select product category");
+                                        return;
+                                      }
+                                      /* if(saleCycleController.budgetAmountController.value.text.isEmpty || saleCycleController.budgetAmountController.value.text == "" ){
                               Utils.showErrorToastification("Budget Amount", "Please enter budget amount");
                               return;
                             }*/
-                            if (saleCycleController.expectedAmountController.value
-                                .text.isEmpty || saleCycleController
-                                .expectedAmountController.value.text == "") {
-                              Utils.showErrorToastification("Expected Amount",
-                                  "Please enter expected amount");
-                              return;
-                            }
+                                      if (saleCycleController.expectedAmountController.value
+                                          .text.isEmpty || saleCycleController
+                                          .expectedAmountController.value.text == "") {
+                                        Utils.showErrorToastification("Expected Amount",
+                                            "Please enter expected amount");
+                                        return;
+                                      }
 
-                            saleCycleController
-                                .ProductCategoryWiseAmtCreateApiHit(0);
-                          },
-                          text: "Save",
+                                      saleCycleController
+                                          .ProductCategoryWiseAmtCreateApiHit(0);
+                                    },
+                                    text: "Save",
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                          ],
                         ),
-                      ),
+
+                        SizedBox(height: 10,),
+
+                        SingleChildScrollView(
+                          child: Container(
+                            margin: EdgeInsets.only(left: 15, right: 15),
+                            width: double.infinity,
+                            // height: 300,
+                            child: Obx((){
+                              return  BindAmmountTable(context);
+                            }),
+
+
+                          ),
+                        ),
+                        SizedBox(height: 10,),
+                      ],
                     ),
                   ),
-
-                ],
-              ),
-
-              SizedBox(height: 10,),
-
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    margin: EdgeInsets.only(left: 15, right: 15),
-                    width: double.infinity,
-                    // height: 300,
-                    child: Obx((){
-                      return  BindAmmountTable(context);
-                     }),
-
-
-                  ),
                 ),
-              ),
-              SizedBox(height: 10,),
+              )
             ],
           ),
         );

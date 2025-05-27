@@ -50,8 +50,9 @@ class TaskMasterDetails extends StatelessWidget{
     return WillPopScope(
         onWillPop: () async {
           if(account_vm_controller.view=='Sales'){
-            account_vm_controller.view='';
-            Get.back();
+            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+            //account_vm_controller.view='';
+           // Get.back();
           }else if (account_vm_controller.view=="TaskDashboard"){
             account_vm_controller.view='';
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
@@ -1131,7 +1132,11 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                   ),
                   onTap: (){
-                    account_vm_controller.view='Task';
+                    if(account_vm_controller.view=="Sales"){
+                      account_vm_controller.view="Sales";
+                    }else{
+                      account_vm_controller.view='Task';
+                    }
                     contact_vm_controller.view='VIEW';
                     account_vm_controller.getAccMasterBuyCodeApi(TaskMaster_page_controller.Task_Master_list[0].accountCode);
                   },
