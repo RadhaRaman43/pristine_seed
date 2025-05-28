@@ -66,8 +66,10 @@ class DraftItemList extends StatelessWidget{
                 fit: FlexFit.loose,
                 child: Container(
                   padding: EdgeInsets.only(left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
-                  child:
-                  BindCustomerListView(context)
+                   child:Obx((){
+                     return  BindCustomerListView(context);
+                   })
+
                   ),
 
                 ),
@@ -81,10 +83,11 @@ class DraftItemList extends StatelessWidget{
   }
 
   Widget BindCustomerListView(context) {
-    if (accountMaster_page_controller.Account_Master_Draft_list1.isNotEmpty &&
-        accountMaster_page_controller.Account_Master_Draft_list1.length > 0  ) {
+    print('DraftList3...${accountMaster_page_controller.Account_Master_Draft_list1.value.length}');
+    if (accountMaster_page_controller.Account_Master_Draft_list1.value.isNotEmpty &&
+        accountMaster_page_controller.Account_Master_Draft_list1.value.length > 0  ) {
       ScrollController scrollController = ScrollController();
-      print('DraftList1...${accountMaster_page_controller.Account_Master_Draft_list1.length}');
+      print('DraftList1...${accountMaster_page_controller.Account_Master_Draft_list1.value.length}');
       scrollController.addListener(() {
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
@@ -110,7 +113,7 @@ class DraftItemList extends StatelessWidget{
           padding: EdgeInsets.zero,
           separatorBuilder: (context, index) => Divider(height: .05, color: Colors.transparent,),
           shrinkWrap: true,
-          itemCount: accountMaster_page_controller.Account_Master_Draft_list1.length,
+          itemCount: accountMaster_page_controller.Account_Master_Draft_list1.value.length,
           controller: scrollController,
           itemBuilder: (BuildContext context, int index) {
             return BindCustomerRequestListView(context, index);

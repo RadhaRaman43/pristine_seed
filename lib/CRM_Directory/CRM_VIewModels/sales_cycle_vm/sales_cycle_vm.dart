@@ -351,7 +351,6 @@ class SalesCycleVm extends GetxController{
               else{
                 ischangesolutionAccepted.value=false;
               }
-              print("change .... ${ischangeNeedIdentity.value} && ${ischangesolutionAccepted.value}");
 
             }
             if(saleCycleList[0].salesCycleStatus=="Suspect") {
@@ -889,46 +888,66 @@ class SalesCycleVm extends GetxController{
         print(onValue);
         if(jsonResponse is List){
           List<SalesCycleQuoteInformationModal> response = jsonResponse.map((e) => SalesCycleQuoteInformationModal.fromJson(e)).toList();
-          if(response!= null && response.length>0 && response[0].condition=="True"){
+          if(response!= null && response.length>0 && response[0].condition=="True") {
             loading.value = false;
-            quoteHeaderdata.value=response;
-            quoteLinedata.value=quoteHeaderdata[0].quoteItems ?? [];
-            if(quoteLinedata.length > 0){
-              print('InsideAPI...${quoteLinedata[index.value].itemDescription}');
-              updateItemDescriptionController.value.text=  quoteLinedata[index.value].itemDescription??"";
+            quoteHeaderdata.value = response;
+            quoteLinedata.value = quoteHeaderdata[0].quoteItems ?? [];
+            if (quoteLinedata.length > 0) {
+              print(
+                  'InsideAPI...${quoteLinedata[index.value].itemDescription}');
+              updateItemDescriptionController.value.text =
+                  quoteLinedata[index.value].itemDescription ?? "";
               print('ItemDesc...${updateItemDescriptionController.value.text}');
-              print('ItemDescList...${quoteLinedata[index.value].itemDescription.toString()}');
-              qtyUpdateLineController.value.text=  quoteLinedata[index.value].qty.toString();
-              updateUnitPriceController.value.text=  quoteLinedata[index.value].unitPrice.toString();
-              updateManualPriceController.value.text=  quoteLinedata[index.value].quoteLinePrice.toString();
-              updateDiscountPerController.value.text= quoteLinedata[index.value].discountPer.toString();
+              print('ItemDescList...${quoteLinedata[index.value].itemDescription
+                  .toString()}');
+              qtyUpdateLineController.value.text =
+                  quoteLinedata[index.value].qty.toString();
+              updateUnitPriceController.value.text =
+                  quoteLinedata[index.value].unitPrice.toString();
+              updateManualPriceController.value.text =
+                  quoteLinedata[index.value].quoteLinePrice.toString();
+              updateDiscountPerController.value.text =
+                  quoteLinedata[index.value].discountPer.toString();
 
-              updateDiscountAmountController.value.text=  quoteLinedata[index.value].discountAmt.toString();
-              gmDiscountPerContoller.value.text=  quoteLinedata[index.value].gmDiscountPer.toString();
-              salesCreditPerContoller.value.text=  quoteLinedata[index.value].salesCredit.toString();
+              updateDiscountAmountController.value.text =
+                  quoteLinedata[index.value].discountAmt.toString();
+              gmDiscountPerContoller.value.text =
+                  quoteLinedata[index.value].gmDiscountPer.toString();
+              salesCreditPerContoller.value.text =
+                  quoteLinedata[index.value].salesCredit.toString();
 
-              updateAmountController.value.text=  quoteLinedata[index.value].mrpPrice.toString();
-              updateTaxPerLineController.value.text=  quoteLinedata[index.value].sgstPer.toString();
-              updateTaxAmountLineController.value.text=  quoteLinedata[index.value].sgstAmt.toString();
-              updateGrossAmountLineController.value.text=  quoteLinedata[index.value].grossAmount.toString();
+              updateAmountController.value.text =
+                  quoteLinedata[index.value].mrpPrice.toString();
+              updateTaxPerLineController.value.text =
+                  quoteLinedata[index.value].sgstPer.toString();
+              updateTaxAmountLineController.value.text =
+                  quoteLinedata[index.value].sgstAmt.toString();
+              updateGrossAmountLineController.value.text =
+                  quoteLinedata[index.value].grossAmount.toString();
             }
-
-            if(flag==""){
-              quoteApprovalPage.value=flag;
-              Get.toNamed(RoutesName.quoteInformationScreen);
-            }else if(flag=="approvedQuotationScreen"){
-              quoteApprovalPage.value=flag;
-              Get.toNamed(RoutesName.quoteInformationScreen);
-            }
-            else if(flag=="quoteApprovalScreen"){
+            Get.toNamed(RoutesName.quoteInformationScreen);
+            quoteApprovalPage.value = flag;
+            if (flag == "quoteApprovalScreen") {
               print("Approver person");
-               getApprovalPersonList(quoteHeaderdata[0].quoteId!);
-               quoteApprovalPage.value=flag;
-               Get.toNamed(RoutesName.quoteInformationScreen);
+              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
             }
-            else if(flag=="QuoteDashboard"){
-              quoteApprovalPage.value=flag;
-              Get.toNamed(RoutesName.quoteInformationScreen);}
+           /* if (flag == "") {
+              quoteApprovalPage.value = flag;
+               Get.toNamed(RoutesName.quoteInformationScreen);
+            } else if (flag == "approvedQuotationScreen") {
+              quoteApprovalPage.value = flag;
+              Get.toNamed(RoutesName.quoteInformationScreen);
+            }
+            else if (flag == "quoteApprovalScreen") {
+              print("Approver person");
+              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
+              quoteApprovalPage.value = flag;
+              Get.toNamed(RoutesName.quoteInformationScreen);
+            }
+            else if (flag == "QuoteDashboard") {
+              quoteApprovalPage.value = flag;
+               Get.toNamed(RoutesName.quoteInformationScreen);}
+            }*/
           }else {
             Utils.showErrorToastification("False Message !", response[0].message.toString());
             loading.value = false;
@@ -3620,7 +3639,7 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
             pageNumber = 0;
-            getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
             //salesCycleMstApprovereject(saleCycleList,solutionRejectedRemarkController.value.text,approRejeStatus);
             loading.value = false;
           }else {
