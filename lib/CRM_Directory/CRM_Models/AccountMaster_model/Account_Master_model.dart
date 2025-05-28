@@ -31,6 +31,7 @@ class AccountMasterModel {
   String? gstType;
   String? gstNo;
   String? panNo;
+  int? isAccountFixed;
 
   AccountMasterModel(
       {this.id,
@@ -64,7 +65,8 @@ class AccountMasterModel {
         this.isManager,
         this.gstType,
         this.gstNo,
-        this.panNo});
+        this.panNo,
+        this.isAccountFixed});
 
   AccountMasterModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -101,6 +103,7 @@ class AccountMasterModel {
     gstType = json['gst_type'];
     gstNo = json['gst_no'];
     panNo = json['pan_no'];
+    isAccountFixed = json['is_account_fixed'];
   }
 
   Map<String, dynamic> toJson() {
@@ -139,6 +142,7 @@ class AccountMasterModel {
     data['gst_type'] = this.gstType;
     data['gst_no'] = this.gstNo;
     data['pan_no'] = this.panNo;
+    data['is_account_fixed'] = this.isAccountFixed;
     return data;
   }
 }

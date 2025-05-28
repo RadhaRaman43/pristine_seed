@@ -146,8 +146,7 @@ class AccountmasterScreen extends StatelessWidget{
             color: Colors.transparent,
           ),
           shrinkWrap: true,
-          itemCount: accountMaster_page_controller
-              .Account_Master_list.value.length,
+          itemCount: accountMaster_page_controller.Account_Master_list.value.length,
           itemBuilder: (BuildContext context, int index) {
             return BindCustomerRequestListView(context, index);
           });
