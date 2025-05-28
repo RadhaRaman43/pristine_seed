@@ -1098,7 +1098,7 @@ class Accountmastervm extends GetxController{
     Map<String , String> data = {
       "account_code": accountCode.toString()
     };
-    print(data);
+    print('data: $data');
     loading.value = true;
       _api.getAccountMasterGetByCodeApiHit(data, sessionManagement).then(
             (value) {
@@ -1203,7 +1203,8 @@ class Accountmastervm extends GetxController{
           "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
           "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
           "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text,
-          "is_referral": ReferralBy_Controller.text == "Yes"?1:0
+          "is_referral": ReferralBy_Controller.text == "Yes"?1:0,
+          "is_account_fixed": flag=="Create"?0:AccountMasterGetCode_list[0].isAccountFixed
         }
       ]
     };
