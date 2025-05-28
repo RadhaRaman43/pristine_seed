@@ -448,9 +448,122 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       SizedBox(height: 10,),
                       Divider(height: 1,color: AllColors.bluegrayColor,),
+                      Center(
+                        child: Divider(
+                          height: 1,
+                          color: AllColors.lightgreyColor,
+                        ),
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Total ", style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.sisxteen,
+                              fontWeight: FontWeight.w700,
+                            ),),
+
+                            Row(
+                              children: [
+                                Text("Qty: ", style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                                Text(saleCycleController.quoteHeaderdata[0].quoteTotalQty==null?"0":
+                                saleCycleController.quoteHeaderdata[0].quoteTotalQty.toString(), style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Text("Amount: ", style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                                Text(saleCycleController.quoteHeaderdata[0].quoteTotalAmount==null?"0"
+                                    :saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString(), style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      Center(
+                        child: Divider(
+                          height: 1,
+                          color: AllColors.lightgreyColor,
+                        ),
+                      ),
                       Obx((){
                         return bindQuoteItemList(context);
                       }),
+                      Center(
+                          child: Divider(height: 1, color: AllColors.primaryDark1,)),
+                    /*  Center(
+                        child: Divider(
+                          height: 1,
+                          color: AllColors.lightgreyColor,
+                        ),
+                      ),
+
+                      Container(
+                        padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Total ", style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.sisxteen,
+                              fontWeight: FontWeight.w700,
+                            ),),
+
+                            Row(
+                              children: [
+                                Text("Qty: ", style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                                Text(saleCycleController.quoteHeaderdata[0].quoteTotalQty==null?"0":
+                                saleCycleController.quoteHeaderdata[0].quoteTotalQty.toString(), style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                              ],
+                            ),
+
+                            Row(
+                              children: [
+                                Text("Amount: ", style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                                Text(saleCycleController.quoteHeaderdata[0].quoteTotalAmount==null?"0"
+                                    :saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString(), style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )*/
+
+
                     ]
                 ),
               ),
@@ -460,6 +573,21 @@ class QuoteInformationScreen extends StatelessWidget{
     );
   }
 
+
+  Widget tableCellValue(dynamic value) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        value?.toString() ?? '0',
+        textAlign: TextAlign.center,
+        style: GoogleFonts.poppins(
+          color: AllColors.primaryDark1,
+          fontSize: AllFontSize.fourtine,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
 
 
   Widget bindQuoteItemList(BuildContext context) {
@@ -3908,6 +4036,55 @@ class QuoteInformationScreen extends StatelessWidget{
                         return bindSalesCycleProductData(context,);
                       }),
                     )
+                ),
+                Center(
+                    child: Divider(height: 1, color: AllColors.primaryDark1,)),
+                Container(
+                  padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Total ", style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.sisxteen,
+                        fontWeight: FontWeight.w900,
+                      ),),
+
+                      Row(
+                        children: [
+                          Text("Qty: ", style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w900,
+                          ),),
+                          Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
+                          saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString()):"",
+                            style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                        ],
+                      ),
+
+                      Row(
+                        children: [
+                          Text("Price: ", style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w900,
+                          ),),
+                          Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
+                              :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString()):"0",
+                            style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),),
+                        ],
+                      ),
+                    ],
+                  ),
                 )
               ],
             )
@@ -4186,7 +4363,7 @@ class QuoteInformationScreen extends StatelessWidget{
           height: size.height / 2,
           child: ListView.separated(
               controller: scrollController,
-              padding: EdgeInsets.only(bottom: 10),
+              padding: EdgeInsets.only(bottom: 50),
               separatorBuilder: (context, index) =>
                   Divider(height: .05, color: Colors.transparent,),
               shrinkWrap: true,

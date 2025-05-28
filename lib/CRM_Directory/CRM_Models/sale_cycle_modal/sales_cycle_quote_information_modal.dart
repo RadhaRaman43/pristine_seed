@@ -35,10 +35,14 @@ class SalesCycleQuoteInformationModal {
   double? advancePaymentAmt;
   String? otherRemarks;
   int? isSpr;
+  String? quoteAccepted;
   String? sprNo;
   int? isReadyForApprove;
   int? isReadySendForApproval;
+  double? quoteTotalQty;
   double? quoteTotalAmount;
+  double? quoteTotalApprovedDiscountAmount;
+  double? quoteTotalGmDiscountAmount;
   double? quoteGrossAmount;
   double? quoteGstAmount;
   List<QuoteItems>? quoteItems;
@@ -90,10 +94,14 @@ class SalesCycleQuoteInformationModal {
         this.advancePaymentAmt,
         this.otherRemarks,
         this.isSpr,
+        this.quoteAccepted,
         this.sprNo,
         this.isReadyForApprove,
         this.isReadySendForApproval,
+        this.quoteTotalQty,
         this.quoteTotalAmount,
+        this.quoteTotalApprovedDiscountAmount,
+        this.quoteTotalGmDiscountAmount,
         this.quoteGrossAmount,
         this.quoteGstAmount,
         this.quoteItems,
@@ -144,11 +152,15 @@ class SalesCycleQuoteInformationModal {
     advancePaymentAmt = json['advance_payment_amt'];
     otherRemarks = json['other_remarks'];
     isSpr = json['is_spr'];
+    quoteAccepted = json['quote_accepted'];
     sprNo = json['spr_no'];
     isReadyForApprove = json['is_ready_for_approve'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
+    quoteTotalQty = json['quote_total_qty'];
     quoteTotalAmount = json['quote_total_amount'];
     quoteGrossAmount = json['quote_gross_amount'];
+    quoteTotalApprovedDiscountAmount = json['quote_total_approved_discount_amount'];
+    quoteTotalGmDiscountAmount = json['quote_total_gm_discount_amount'];
     quoteGstAmount = json['quote_gst_amount'];
     if (json['quote_items'] != null) {
       quoteItems = <QuoteItems>[];
@@ -206,10 +218,14 @@ class SalesCycleQuoteInformationModal {
     data['other_remarks'] = this.otherRemarks;
     data['is_spr'] = this.isSpr;
     data['spr_no'] = this.sprNo;
+    data['quote_accepted'] = this.quoteAccepted;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
+    data['quote_total_qty'] = this.quoteTotalQty;
     data['quote_total_amount'] = this.quoteTotalAmount;
     data['quote_gross_amount'] = this.quoteGrossAmount;
+    data['quote_total_approved_discount_amount'] = this.quoteTotalApprovedDiscountAmount;
+    data['quote_total_gm_discount_amount'] = this.quoteTotalGmDiscountAmount;
     data['quote_gst_amount'] = this.quoteGstAmount;
     if (this.quoteItems != null) {
       data['quote_items'] = this.quoteItems!.map((v) => v.toJson()).toList();
