@@ -232,7 +232,8 @@ class Accountmastervm extends GetxController{
     isExpandDSARHistory.value = !isExpandDSARHistory.value;
   }
 
-  void clearAccoundController(){
+  void
+  clearAccoundController(){
     account_name_controller.text = '';
     account_type_controller.text = '';
     account_cat_type_controller.text = '';
@@ -314,7 +315,6 @@ class Accountmastervm extends GetxController{
          if(jsonResponse is List){
            List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
            if(response!= null && response.length>0 && response[0].condition=="True"){
-             loading.value = false;
               if(page_no==0){
                 Account_Master_list.clear();
               }
@@ -322,23 +322,22 @@ class Accountmastervm extends GetxController{
              total_rows=int.parse(Account_Master_list[0].totalRows!);
 
            }else {
-             loading.value = false;
              Account_Master_list.value=[];
 
            }
-         } else {
-           loading.value = false;
-
          }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
+        Utils.sanckBarException("Error!", error.toString());
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
+      Utils.sanckBarException("Api Error!",' API error' );
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
    }
 
@@ -1226,7 +1225,6 @@ class Accountmastervm extends GetxController{
      //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
           if(flag == 'Create'){
             Utils.showToastification("Success!", "Account Create Successful");
-
             if(FromPage == "Task"){
               clearController();
               TaskMaster_page_controller.clearCreateTaskController();
@@ -1274,8 +1272,9 @@ class Accountmastervm extends GetxController{
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
-      print("Exce3ption....");
+      print("Exce3ption....$error");
       //service_indent_header_list.value = [];
+      Utils.showExceptionToastification("catch Api Error!", error.toString());
     }
   }
 
@@ -1551,6 +1550,11 @@ class Accountmastervm extends GetxController{
       ShippingCityMasterPinCode_list.value=[];
       ShippingDistrictMasterPinCode_list.value=[];
       ImageString.value == '';
+
+      //todo radha raman
+      ImageUrl_Controller.clear();
+      Website_Controller.clear();
+
       account_code_controller.clear();
       account_name_controller.clear();
       EmployeeMember_Controller.clear();
@@ -2220,7 +2224,7 @@ class Accountmastervm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              if(account_code_controller.value.text.isEmpty){
+                              /*if(account_code_controller.value.text.isEmpty){
                                 selectedItem.value = -1;
                                 Shipping_Address_controller.value.text="";
                                 Shipping_Address2_Controller.value.text="";
@@ -2241,6 +2245,8 @@ class Accountmastervm extends GetxController{
                                 Shipping_District_Controller.value.text=AccountMasterGetCode_list[0].shippingDistrict??"";
                                 consigneeId = '';
                               }
+                              isChecked.value=false;*/
+
 
 
                               // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
@@ -2272,6 +2278,7 @@ class Accountmastervm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
+                              isChecked.value=false;
                               Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
                               Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";
                               Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
@@ -2282,6 +2289,12 @@ class Accountmastervm extends GetxController{
                                ShowState.value=true;
                               Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"";
                               consigneeId = address_master_list[selectedItem.value].consigneeId??"";
+                              Shipping_FullAddress_Controller.value.text=Shipping_Address_controller.value.text+', '+
+                                  Shipping_Address2_Controller.value.text+', '+
+                                  Shipping_PostCode_Controller.value.text+', '+
+                                  Shipping_City_Controller.value.text+', '+
+                                  Shipping_District_Controller.value.text+', '+
+                                  Shipping_State_Controller.value.text;
                               Get.back();
                             },
                             child: Container(
