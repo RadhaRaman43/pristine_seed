@@ -346,7 +346,7 @@ class QuoteInformationScreen extends StatelessWidget{
 
                           Obx((){
                             return   Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.only(right:15.0, top: 8, bottom: 8),
                               child: Visibility(
                                 visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
                                 child: Tooltip(
@@ -454,10 +454,71 @@ class QuoteInformationScreen extends StatelessWidget{
                           color: AllColors.lightgreyColor,
                         ),
                       ),
-
                       Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              Text("Total",
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                              VerticalDivider(
+                                width: 20, // total space taken
+                                thickness: 1,
+                                color: AllColors.lightgreyColor,
+                              ),
+
+                              Table(
+                                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                columnWidths: const {
+                                  0: FixedColumnWidth(120),
+                                  1: FixedColumnWidth(150),
+                                  2: FixedColumnWidth(120),
+                                  3: FixedColumnWidth(130),
+                                  4: FixedColumnWidth(130),
+                                },
+                                border: TableBorder.symmetric(
+                                  inside: BorderSide(width: 1, color: AllColors.lightgreyColor),
+                                ),
+                                children: [
+                                  // Header Row
+                                  TableRow(
+                                    children: [
+                                      tableHeaderCell("Qty"),
+                                      tableHeaderCell("Approved Price"),
+                                      tableHeaderCell("Amount"),
+                                      tableHeaderCell("Gst Amount"),
+                                      tableHeaderCell("Total Amount"),
+                                    ],
+                                  ),
+                                  // Value Row
+                                  TableRow(
+                                    children: [
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalQty),
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalAmount),
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGstAmount),
+                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGrossAmount),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+
+
+
+                      /* Container(
                         padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text("Total ", style: GoogleFonts.poppins(
@@ -467,38 +528,79 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),),
 
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Qty: ", style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700,
-                                ),),
-                                Text(saleCycleController.quoteHeaderdata[0].quoteTotalQty==null?"0":
-                                saleCycleController.quoteHeaderdata[0].quoteTotalQty.toString(), style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700,
-                                ),),
+                                Row(
+                                  children: [
+                                    Text("Qty: ", style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                    Text(saleCycleController.quoteHeaderdata[0].quoteTotalQty==null?"0":
+                                    saleCycleController.quoteHeaderdata[0].quoteTotalQty.toString(), style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Approved Price: ", style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                    Text(saleCycleController.quoteHeaderdata[0].quoteTotalQty==null?"0":
+                                    saleCycleController.quoteHeaderdata[0].quoteTotalQty.toString(), style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                  ],
+                                ),
                               ],
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Amount: ", style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700,
-                                ),),
-                                Text(saleCycleController.quoteHeaderdata[0].quoteTotalAmount==null?"0"
-                                    :saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString(), style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700,
-                                ),),
+                                Row(
+                                  children: [
+                                    Text("Amount: ", style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                    Text(saleCycleController.quoteHeaderdata[0].quoteTotalAmount==null?"0"
+                                        :saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString(), style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text("Gst Amount: ", style: GoogleFonts.poppins(
+                                      color: AllColors.textColor,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                    Text(saleCycleController.quoteHeaderdata[0].quoteTotalAmount==null?"0"
+                                        :saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString(), style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                    ),),
+                                  ],
+                                ),
                               ],
                             ),
                           ],
                         ),
-                      ),
+                      ),*/
+                      ,
                       Center(
                         child: Divider(
                           height: 1,
@@ -570,6 +672,37 @@ class QuoteInformationScreen extends StatelessWidget{
             ),
           ],)
     ),
+    );
+  }
+
+
+  Widget tableHeaderCell(String title) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        title,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.poppins(
+          color: AllColors.textColor,
+          fontSize: AllFontSize.sisxteen,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
+
+  Widget tableValueCell(dynamic value) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        value?.toString() ?? "0",
+        textAlign: TextAlign.center,
+        style: GoogleFonts.poppins(
+          color: AllColors.primaryDark1,
+          fontSize: AllFontSize.sisxteen,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
     );
   }
 
@@ -880,7 +1013,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                 ),
 
                                 Container(
-                                  width: size.width*.12,
+                                  width: size.width*.1,
                                   child: Tooltip(
                                     message: saleCycleController.quoteLinedata[index]
                                         .branchTransferPrice.toString(),
