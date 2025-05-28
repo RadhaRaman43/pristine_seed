@@ -119,6 +119,9 @@ class UpdateAccountMaster extends StatelessWidget{
            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
            Get.toNamed(RoutesName.accountMaster_screen);
          }
+         else if(accountMaster_page_controller.view=="Sales"){
+           Get.toNamed(RoutesName.taskMasterDetails_screen);
+         }
 
          else{
            accountMaster_page_controller.clearController();

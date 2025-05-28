@@ -274,7 +274,8 @@ class SalesCycleVm extends GetxController{
     item.isSelected = item.isSelected == 1 ? 0 : 1;
     if(item.isSelected==1)
     {
-      SalesCycleLineCreateApiHit(itemMstGetBySalesIdList[index].itemCode!, salesCycleId.value);
+      SalesCycleLineCreateApiHit(itemMstGetBySalesIdList[index].itemCode!,
+          salesCycleId.value, 0,"Add");
       itemMstGetBySalesIdList[index] = item;
     }
     else{
@@ -1564,7 +1565,7 @@ class SalesCycleVm extends GetxController{
     }
   }
 
-  void SalesCycleLineCreateApiHit(String item_code, String SalesId){
+  void SalesCycleLineCreateApiHit(String item_code, String SalesId,int lineNo, String flag){
     print("Index ${index}");
     loading.value = true;
     Map data={
@@ -1572,10 +1573,10 @@ class SalesCycleVm extends GetxController{
       "created_by": email,
       "lines": [
         {
-          "line_no": -1,
+          "line_no": flag=="Add"?-1:lineNo.toString(),
           "item_code": item_code.toString(),
           "item_description":"",
-          "qty": 0 ,
+          "qty": qtyUpdateLineController.value.text.isNotEmpty? qtyUpdateLineController.value.text:0,
           "line_status": "Pending"
         }
       ]
@@ -2248,7 +2249,7 @@ class SalesCycleVm extends GetxController{
 
                                   },
                                   child: Container(
-                                    child: Text('Reject',
+                                    child: Text('Loss',
                                       style: GoogleFonts.poppins(
                                         color: AllColors.blackColor,
                                         fontSize: AllFontSize.fourtine,
