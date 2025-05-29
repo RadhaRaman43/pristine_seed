@@ -185,6 +185,18 @@ class Accountmastervm extends GetxController{
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
   List<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
 
+
+  //todo new filter controller
+  //var account_code_controller = TextEditingController().obs;
+  var postal_code_controller = TextEditingController().obs;
+  var district_controller = TextEditingController().obs;
+  var created_by_controller = TextEditingController().obs;
+  var frontliner_controller = TextEditingController().obs;
+  var branch_head__value_controller = TextEditingController().obs;
+  var zone_head__value_controller = TextEditingController().obs;
+  var cluster_head__value_controller = TextEditingController().obs;
+
+
   @override
   void onInit() async {
     super.onInit();
@@ -291,6 +303,26 @@ class Accountmastervm extends GetxController{
     print('isActiveInAPi...${is_Active}');
     try{
       Map<String, String> data={
+        "filter_account_code":account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
+        "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
+        "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
+        "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
+        "filter_phone_no":  PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text,
+        "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
+        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
+        "filter_postal_code": postal_code_controller.value.text.isEmpty?"":postal_code_controller.value.text,
+        "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
+        "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
+        "filter_account_owner": email,
+        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
+        "filter_zone_head_value": zone_head__value_controller.value.text.isEmpty?"":zone_head__value_controller.value.text,
+        "filter_clusture_head_value": cluster_head__value_controller.value.text.isEmpty?"":cluster_head__value_controller.value.text,
+        "filter_is_active": is_Active.toString(),
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString()
+      };
+      /*{
         "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
         "filter_account_owner": "",
         "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
@@ -308,9 +340,10 @@ class Accountmastervm extends GetxController{
         "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
         "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
         "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
-      };
+      };*/
       loading.value=true;
       _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
          final jsonResponse = json.decode(onValue);
          if(jsonResponse is List){
            List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
@@ -328,6 +361,7 @@ class Accountmastervm extends GetxController{
          }
       },
       ).onError((error, stackTrace) {
+        loading.value=false;
         Utils.sanckBarException("Error!", error.toString());
           print(error);
         },
@@ -402,6 +436,25 @@ class Accountmastervm extends GetxController{
     print('isActiveInAPi...${is_Active}');
     try{
       Map<String, String> data={
+        "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
+        "filter_account_name": account_name_controller.text.isEmpty?"":account_name_controller.text,
+        "filter_account_type": account_type_controller.text.isEmpty?"":account_type_controller.text,
+        "filter_email_id": EmailId_Controller.text.isEmpty?"":EmailId_Controller.text,
+        "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text,
+        "filter_company_profile_type":comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text ,
+        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
+        "filter_postal_code": postal_code_controller.value.text.isEmpty?"":postal_code_controller.value.text,
+        "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
+        "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
+        "filter_account_owner":email ,
+        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
+        "filter_zone_head_value": zone_head__value_controller.value.text.isEmpty?"":zone_head__value_controller.value.text,
+        "filter_clusture_head_value": cluster_head__value_controller.value.text.isEmpty?"":cluster_head__value_controller.value.text,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString()
+      };
+      /*{
         "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
         "filter_account_owner": "",
         "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
@@ -419,7 +472,7 @@ class Accountmastervm extends GetxController{
         "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
         "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
         "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
-      };
+      };*/
       loading.value=true;
       _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);

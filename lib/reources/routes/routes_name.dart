@@ -98,6 +98,7 @@ class RoutesName{
 
   //todo Contact Master Screen
   static const contactMaster_screen="/Contact_Master_Screen";
+  static const allContactMasterScreen="/all_contact_master_screen";
   static const addNewContactMaster_screen="/Add_newContact_Master";
   static const viewContacts_screen="/View_contacts_screen";
   static const viewAddress_screen="/View_address_screen";

@@ -667,8 +667,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                   Obx(() {
                                     return Visibility(
-                                      visible:saleCycleController.get_SalesCycleProductById_List
-                                          .value.length>0 && saleCycleController.filter
+                                      visible: saleCycleController.filter
                                           .value == 'Sales cycle',
                                       child: CircleAvatar(
                                         child: InkWell(
@@ -709,29 +708,25 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               Container(
                                 child: Row(
                                   children: [
-                                    Obx(() {
-                                      return Expanded(/*child: Visibility(
+                                    /*child: Visibility(
                                           visible: saleCycleController
                                               .saleCycleList[0]
                                               .salesCycleStatus!
                                               .toUpperCase() == "PROSPECT"
                                               ? true
                                               : false,*/
-                                          child: bindCustomerNeedIdentity(
-                                              context));
+                                    Obx(() {
+                                      return bindCustomerNeedIdentity(
+                                          context);
                                     }),
 
                                     SizedBox(width: 10,),
                                     Obx(() {
-                                      return Expanded(/*child: Visibility(
-                                          visible: (saleCycleController
-                                              .saleCycleList[0]
-                                              .salesCycleStatus!
-                                              .toUpperCase() == "PROSPECT") &&
-                                              saleCycleController
-                                                  .ischangeNeedIdentity.value,*/
+                                      return Expanded(child: Visibility(
+                                          visible:saleCycleController
+                                                  .ischangeNeedIdentity.value,
                                           child: bindSolutionAccepted(
-                                              context));
+                                              context)));
                                     })
 
                                   ],

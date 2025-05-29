@@ -76,7 +76,6 @@ class ContactMasterVM extends GetxController{
   Future<void>refreshList() async{
     getContactMasterList(pageNumber,"","","");
 
-
   }
 
   getDecisionRoleMaster() {

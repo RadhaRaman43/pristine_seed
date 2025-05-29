@@ -247,6 +247,7 @@ class SalesCycleVm extends GetxController{
   }
 
   Future<void>refreshList() async{
+    pageNumber=0;
     getsalesCycleData(pageNumber, "", "",'');
   }
 
@@ -513,7 +514,8 @@ class SalesCycleVm extends GetxController{
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
-            getsalesCycleData(0, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            pageNumber=0;
+            getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
             isApprovalVisible.value=false;
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             loading.value = false;
