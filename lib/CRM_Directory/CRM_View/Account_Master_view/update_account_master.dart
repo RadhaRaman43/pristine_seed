@@ -996,7 +996,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller.Address_controller,
-                           maxLength: 150,
+                           //maxLength: 150,
                            onChanged: (value){
                              final parts = [
                                value,
@@ -1045,7 +1045,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller.Address2_Controller,
-                           maxLength: 150,
+                          // maxLength: 150,
                            onChanged: (value){
                              final parts = [
                                accountMaster_page_controller.Address_controller.text,
@@ -1148,7 +1148,7 @@ class UpdateAccountMaster extends StatelessWidget{
                            ),
                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                            child: TextFormField(
-                             maxLength: 500,
+                             //maxLength: 500,
                              readOnly: true,
                              maxLines: 3,
                              controller: accountMaster_page_controller
@@ -1304,6 +1304,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
+                           //maxLength: 150,
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
                            controller: accountMaster_page_controller
                                .Shipping_Address_controller.value,
@@ -1351,6 +1352,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
                            readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                           //maxLength: 150,
                            controller: accountMaster_page_controller
                                .Shipping_Address2_Controller.value,
                            onChanged: (value){
@@ -1478,7 +1480,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                          child: TextFormField(
-                           maxLength: 500,
+                           //maxLength: 500,
                            readOnly: true,
                            maxLines: 3,
                            controller: accountMaster_page_controller
@@ -3236,7 +3238,7 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextFormField(
             readOnly: accountMaster_page_controller.view=='Account'?false:true,
-            maxLength: 50,
+            //maxLength: 50,
             /*validator: (value){
               if(value == null || value.isEmpty){
                 return null;
@@ -3394,7 +3396,7 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextFormField(
             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-            maxLength: 50,
+            //maxLength: 50,
             onChanged: (value){
               final parts = [
                 accountMaster_page_controller.Address_controller.text,
@@ -3529,6 +3531,7 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextFormField(
             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+           // maxLength: 50,
             onChanged: (value){
               final parts = [
                 accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -3662,6 +3665,7 @@ class UpdateAccountMaster extends StatelessWidget{
             ),
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -3795,7 +3799,7 @@ class UpdateAccountMaster extends StatelessWidget{
             ),
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-              maxLength: 50,
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Address_controller.text,
@@ -3930,6 +3934,7 @@ class UpdateAccountMaster extends StatelessWidget{
             ),
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -4063,7 +4068,7 @@ class UpdateAccountMaster extends StatelessWidget{
             ),
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-              maxLength: 150,
+              //maxLength: 150,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Address_controller.text,
@@ -4197,6 +4202,7 @@ class UpdateAccountMaster extends StatelessWidget{
             ),
             child: TextFormField(
               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Shipping_Address_controller.value.text,

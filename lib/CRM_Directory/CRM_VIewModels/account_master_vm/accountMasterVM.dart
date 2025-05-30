@@ -1396,7 +1396,6 @@ class Accountmastervm extends GetxController{
         if (response != null &&
             response.length > 0 &&
             response[0].condition == "True") {
-          loading.value = false;
           if(flag == 'Create'){
             print("ttttttttttt");
             Utils.showToastification("Success!", "Account is Save In Draft Successful");
@@ -1419,21 +1418,20 @@ class Accountmastervm extends GetxController{
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
           //viewRequestDetails(response);
         } else {
-          loading.value = false;
-          // AccountMasterGetCode_list.value = [];
           Utils.showErrorToastification("Error!", response[0].message??"");
-          //service_installation_details_list.value=[];
         }
       } else {
-        loading.value = false;
-        // service_indent_header_list.value = [];
-        Utils.showExceptionToastification("Api Error!", JsonResponse);
+        Utils.showExceptionToastification("Response Error!", JsonResponse);
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
-      print("Exce3ption....");
+      print("Exce3ption....${error}");
+      Utils.showExceptionToastification("Api Error!", error.toString());
       //service_indent_header_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -2331,23 +2329,29 @@ class Accountmastervm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              isChecked.value=false;
-                              Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
-                              Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";
-                              Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
-                              Shipping_City_Controller.value.text=address_master_list[selectedItem.value].city??"" ;
-                              Shipping_State_Controller.value.text=address_master_list[selectedItem.value].stateName??"";
-                              print('StatNane...${Shipping_State_Controller.value.text}');
-                               ShowState.value=false;
-                               ShowState.value=true;
-                              Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"";
-                              consigneeId = address_master_list[selectedItem.value].consigneeId??"";
-                              Shipping_FullAddress_Controller.value.text=Shipping_Address_controller.value.text+', '+
-                                  Shipping_Address2_Controller.value.text+', '+
-                                  Shipping_PostCode_Controller.value.text+', '+
-                                  Shipping_City_Controller.value.text+', '+
-                                  Shipping_District_Controller.value.text+', '+
-                                  Shipping_State_Controller.value.text;
+                              try{
+                                isChecked.value=false;
+                                Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
+                                Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";
+                                Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
+                                Shipping_City_Controller.value.text=address_master_list[selectedItem.value].city??"" ;
+                                Shipping_State_Controller.value.text=address_master_list[selectedItem.value].stateName??"";
+                                print('StatNane...${Shipping_State_Controller.value.text}');
+                                ShowState.value=false;
+                                ShowState.value=true;
+                                Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"";
+                                consigneeId = address_master_list[selectedItem.value].consigneeId??"";
+                                Shipping_FullAddress_Controller.value.text=Shipping_Address_controller.value.text+', '+
+                                    Shipping_Address2_Controller.value.text+', '+
+                                    Shipping_PostCode_Controller.value.text+', '+
+                                    Shipping_City_Controller.value.text+', '+
+                                    Shipping_District_Controller.value.text+', '+
+                                    Shipping_State_Controller.value.text;
+                              }
+                              catch(e){
+                                Utils.sanckBarError('Select ', "Addresss");
+                              }
+
                               Get.back();
                             },
                             child: Container(

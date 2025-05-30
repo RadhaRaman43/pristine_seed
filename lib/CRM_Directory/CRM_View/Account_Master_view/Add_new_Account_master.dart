@@ -959,7 +959,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
-                              maxLength: 150,
+                              //maxLength: 150,
                               controller: accountMaster_page_controller
                                   .Address_controller,
                               onChanged: (value) {
@@ -1006,7 +1006,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
-                              maxLength: 150,
+                              //maxLength: 150,
                               controller: accountMaster_page_controller.Address2_Controller,
                               onChanged: (value) {
                                 final parts = [
@@ -1082,7 +1082,7 @@ class AddNewAccountMaster extends StatelessWidget{
                               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: TextFormField(
                                 readOnly: true,
-                                maxLength: 500,
+                                //maxLength: 500,
                                 maxLines: 3,
                                 controller: accountMaster_page_controller.FullAddress_Controller.value,
                                 decoration: InputDecoration(
@@ -1219,6 +1219,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller.Shipping_Address_controller.value,
+                              //maxLength: 150,
                               onChanged: (value){
                                 print('valus....$value');
                                 final parts = [
@@ -1264,6 +1265,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               controller: accountMaster_page_controller.Shipping_Address2_Controller.value,
+                              //maxLength: 150,
                               onChanged: (value){
                                 final parts = [
                                   accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -1363,7 +1365,7 @@ class AddNewAccountMaster extends StatelessWidget{
                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               readOnly: true,
-                              maxLength: 500,
+                              //maxLength: 500,
                               maxLines: 3,
                               controller: accountMaster_page_controller.Shipping_FullAddress_Controller.value,
                               decoration: InputDecoration(
@@ -2717,7 +2719,7 @@ class AddNewAccountMaster extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextFormField(
-            maxLength: 50,
+            //maxLength: 50,
             onChanged: (value){
               final parts = [
                 accountMaster_page_controller.Address_controller.text,
@@ -2851,6 +2853,7 @@ class AddNewAccountMaster extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextFormField(
+            //maxLength: 50,
             onChanged: (value){
               final parts = [
                 accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -2991,7 +2994,7 @@ class AddNewAccountMaster extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextFormField(
-            maxLength: 50,
+            //maxLength: 50,
             /*validator: (value){
               if(value == null || value.isEmpty){
                 return null;
@@ -3146,6 +3149,7 @@ class AddNewAccountMaster extends StatelessWidget{
                   borderRadius: BorderRadius.circular(10)
               ),
               child: TextFormField(
+                //maxLength: 50,
                 onChanged: (value){
                   final parts = [
                     accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -3279,7 +3283,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 borderRadius: BorderRadius.circular(10)
             ),
             child: TextFormField(
-              maxLength: 50,
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Address_controller.text,
@@ -3413,6 +3417,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 borderRadius: BorderRadius.circular(10)
             ),
             child: TextFormField(
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Shipping_Address_controller.value.text,
@@ -3546,7 +3551,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 borderRadius: BorderRadius.circular(10)
             ),
             child: TextFormField(
-              maxLength: 50,
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Address_controller.text,
@@ -3679,6 +3684,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 borderRadius: BorderRadius.circular(10)
             ),
             child: TextFormField(
+              //maxLength: 50,
               onChanged: (value){
                 final parts = [
                   accountMaster_page_controller.Shipping_Address_controller.value.text,
