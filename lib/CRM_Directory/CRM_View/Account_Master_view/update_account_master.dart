@@ -120,6 +120,9 @@ class UpdateAccountMaster extends StatelessWidget{
            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
            Get.toNamed(RoutesName.accountMaster_screen);
          }
+         if(accountMaster_page_controller.view=="ALLContactList"){
+           Get.toNamed(RoutesName.allContactMasterScreen);
+         }
          else if(accountMaster_page_controller.view=="Sales"){
            Get.toNamed(RoutesName.taskMasterDetails_screen);
          }
@@ -156,6 +159,60 @@ class UpdateAccountMaster extends StatelessWidget{
          ),
          actions: [
            PopupMenuButton(itemBuilder: (BuildContext context){
+             List<PopupMenuEntry>  items= [];
+
+             if(accountMaster_page_controller.view!="ALLContactList"){
+               items.add(
+                 PopupMenuItem(
+                   child: Row(
+                     children: [
+                       Icon(Icons.dashboard, color: Colors.black,),
+                       Text('View Dashboard'),
+                     ],
+                   ),
+                   onTap: (){
+                     accountMaster_page_controller.pageNumber = 0;
+                     accountMaster_page_controller.getAccountDashboardCount(accountMaster_page_controller.pageNumber, accountMaster_page_controller.account_code_controller.text);
+                     //accountMaster_page_controller.getAccountTaskHistory(accountMaster_page_controller.pageNumber, accountMaster_page_controller.account_code_controller.value.text);
+
+                   },
+                 ),);
+             }
+             items.add( PopupMenuItem(
+               child: Row(
+                 children: [
+                   Icon(Icons.contacts, color: Colors.black,),
+                   Text('View Contacts'),
+                 ],
+               ),
+               onTap: (){
+                 contact_vm_controller.getDecisionRoleMaster();
+                 accountMaster_page_controller.pageNumber = 0;
+                 contact_vm_controller.accountCode.value = accountMaster_page_controller.account_code_controller.value.text;
+                 contact_vm_controller.FromPage.value="AccountUpdate";
+                 accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.text);
+
+               },
+             ),);
+             items.add(PopupMenuItem(
+               child: Row(
+                 children: [
+                   Icon(Icons.home, color: Colors.black,),
+                   Text('View Addresses'),
+                 ],
+               ),
+               onTap: (){
+                 address_vm_controller.clearController();
+                 address_vm_controller.account_code_controller = accountMaster_page_controller.account_code_controller;
+                 address_vm_controller.account_name_controller = accountMaster_page_controller.account_name_controller;
+                 address_vm_controller.pageNumber = 0;
+                 address_vm_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
+
+               },
+             ),);
+             return items;
+
+               //todo comment code for visibility gone of dashbord
              return [
                PopupMenuItem(
                  child: Row(

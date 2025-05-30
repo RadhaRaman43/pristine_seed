@@ -31,7 +31,7 @@ class AllContactMasterScreen extends StatelessWidget{
           title:Row(
             children: [
               Text(
-                'All Contact Master',
+                'All Contact List',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20.0,
@@ -39,20 +39,12 @@ class AllContactMasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  child: Obx(() {
-                    //child:
-                    return IconButton(onPressed: () {
-                      showFilterBottomSheet(context);
-                    },
-                        icon: Icon(Icons.filter_alt_sharp,
-                            color: contact_vm_controller.filterIconColor.value ? AllColors.redColor : AllColors.whiteColor));
-                  }
-                  ),
-                ),
-              )
+              IconButton(onPressed: () {
+                  showFilterBottomSheet(context);
+                },
+                    icon: Icon(Icons.filter_alt_sharp,
+                        color: contact_vm_controller.filterIconColor.value ? AllColors.redColor : AllColors.whiteColor)),
+
             ],
           )
 
@@ -177,6 +169,36 @@ class AllContactMasterScreen extends StatelessWidget{
                         ),
                         SizedBox(
                           height: 10,
+                        ),
+                        TextField(
+                          controller: contact_vm_controller.account_code_controller,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              labelText: 'Account Code',
+                              hintText: 'Account Code',
+                              hintStyle: GoogleFonts.poppins(
+                                  color: AllColors.lightblackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize.ten),
+                              labelStyle: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: AllFontSize.sisxteen),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )
+                          ),
+                          cursorColor: AllColors.primaryDark1,
+                          onChanged: (value) {
+                            // Handle the text field value changes if needed
+                          },
+                        ),
+                        SizedBox(
+                          height: 5,
                         ),
                         TextField(
                           controller: contact_vm_controller.account_name_controller,
@@ -316,20 +338,11 @@ class AllContactMasterScreen extends StatelessWidget{
                                       width: 1),
                                 )),
                                 onPressed: () {
-                                 /* contact_vm_controller.pageNumber=0;
-                                  Get.back();
-                                  contact_vm_controller.getContactMasterList(
+                                  contact_vm_controller.pageNumber=0;
+                                  contact_vm_controller.getContactMasterAllList(
                                     contact_vm_controller.pageNumber,
-                                    contact_vm_controller.account_name_controller.text,
-                                    contact_vm_controller.contact_name_controller.text,
-                                    contact_vm_controller.depart_name_controller.text,
                                   );
-                                  contact_vm_controller.filterIconColor.value=true;
-                                  print('icon color ${contact_vm_controller.filterIconColor}');
-                                  if(contact_vm_controller.account_name_controller.text.isEmpty &&
-                                      contact_vm_controller.contact_name_controller.text.isEmpty &&contact_vm_controller.depart_name_controller.text.isEmpty){
-                                    contact_vm_controller.filterIconColor.value=false;
-                                  }*/
+                                  Get.back();
 
                                 },
                                 child: Text(
@@ -351,17 +364,15 @@ class AllContactMasterScreen extends StatelessWidget{
                                       color: AllColors.redColor, width: 1),
                                 )),
                                 onPressed: () {
-                               /*   Get.back();
                                   contact_vm_controller.pageNumber=0;
-                                  contact_vm_controller.filterIconColor.value=false;
                                   contact_vm_controller.account_name_controller.clear();
                                   contact_vm_controller.contact_name_controller.clear();
                                   contact_vm_controller.depart_name_controller.clear();
                                   contact_vm_controller.emailId_controller.clear();
                                   contact_vm_controller.phone_no_controller.clear();
-                                  contact_vm_controller.getContactMasterList(contact_vm_controller.pageNumber, '', '', '');*/
-
-
+                                  contact_vm_controller.account_code_controller.clear();
+                                  contact_vm_controller.getContactMasterAllList(contact_vm_controller.pageNumber);
+                                  Get.back();
                                 },
                                 child: Text(
                                   'Reset',
@@ -428,18 +439,13 @@ class AllContactMasterScreen extends StatelessWidget{
     }
   }
   Widget BindCustomerRequestListView(context, int position) {
-
-
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
-        onTap: () {
-          //accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
-        },
         subtitle: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Contact Code : ",
@@ -459,6 +465,7 @@ class AllContactMasterScreen extends StatelessWidget{
                           .contact_master_list[position]
                           .contactCode?? "",
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -471,7 +478,7 @@ class AllContactMasterScreen extends StatelessWidget{
             ),
             SizedBox(height: 3),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Contact Name : ",
@@ -491,6 +498,7 @@ class AllContactMasterScreen extends StatelessWidget{
                           .contact_master_list[position]
                           .contactName?? "",
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
                       style:GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -504,7 +512,41 @@ class AllContactMasterScreen extends StatelessWidget{
               height: 2,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Account Code : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: contact_vm_controller
+                        .contact_master_list[position]
+                        .accountCode?? "",
+                    child: Text(
+                      contact_vm_controller
+                          .contact_master_list[position]
+                          .accountCode?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w300),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Account Name : ",
@@ -521,9 +563,9 @@ class AllContactMasterScreen extends StatelessWidget{
                         .accountName?? "",
                     child: InkWell(
                       onTap: (){
-                        account_vm_controller.view='VIEW';
-                        contact_vm_controller.view='VIEW';
-                        contact_vm_controller.FromPage.value ='Contact';
+                        account_vm_controller.view='ALLContactList';
+                        contact_vm_controller.view='ALLContactList';
+                        contact_vm_controller.FromPage.value ='ALLContactList';
                         account_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller.contact_master_list[position].accountCode);
                         print('accout code.....${contact_vm_controller.contact_master_list[position].accountCode}');
 
@@ -533,6 +575,7 @@ class AllContactMasterScreen extends StatelessWidget{
                             .contact_master_list[position]
                             .accountName?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: Colors.blue,
                             fontSize: AllFontSize.fourtine,
@@ -547,7 +590,7 @@ class AllContactMasterScreen extends StatelessWidget{
               height: 2,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Email Id : ",
@@ -567,6 +610,7 @@ class AllContactMasterScreen extends StatelessWidget{
                           .contact_master_list[position]
                           .emailId?? "",
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -578,7 +622,7 @@ class AllContactMasterScreen extends StatelessWidget{
             ),
             SizedBox(height: 3),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Phone No. : ",
@@ -592,6 +636,7 @@ class AllContactMasterScreen extends StatelessWidget{
                       .contact_master_list[position]
                       .phoneNo ?? "",
                   overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.end,
                   style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -601,7 +646,7 @@ class AllContactMasterScreen extends StatelessWidget{
             ),
             SizedBox(height: 3),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Department Name : ",
@@ -621,6 +666,7 @@ class AllContactMasterScreen extends StatelessWidget{
                           .contact_master_list[position]
                           .departmentName?? "",
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -632,7 +678,7 @@ class AllContactMasterScreen extends StatelessWidget{
             ),
             SizedBox(height: 3),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Designation Name : ",
@@ -652,6 +698,7 @@ class AllContactMasterScreen extends StatelessWidget{
                           .contact_master_list[position]
                           .designationname?? "",
                       overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -666,17 +713,6 @@ class AllContactMasterScreen extends StatelessWidget{
           ],
         ),
         // leading: bindAvatar( contact_vm_controller.contact_master_list[position].contactName?[0].toUpperCase()?? ""),
-        trailing: InkWell(
-          onTap: (){
-         /*   contact_vm_controller.FromPage.value="";
-            contact_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller
-                .contact_master_list[position]
-                .accountCode?? "");
-            contact_vm_controller.insideOut = true;
-            contact_vm_controller.upDateContact('OutSide', position);*/
-          },
-          child: Icon(Icons.update),
-        ),
       ),
     );
   }
