@@ -103,7 +103,8 @@ class UpdateAccountMaster extends StatelessWidget{
            TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
            Get.toNamed(RoutesName.taskMaster_screen);
          }else if(accountMaster_page_controller.view=='FromSaleCycleMainScreen'){
-           saleCycleController.getsalesCycleData(0, "", "",'');
+           saleCycleController.pageNumber=0;
+           saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
            Get.toNamed(RoutesName.salesCycleScreen);
          }
          else if(accountMaster_page_controller.view=="FromQuoteApproval"){

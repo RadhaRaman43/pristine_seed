@@ -237,6 +237,8 @@ class SalesCycleVm extends GetxController{
   RxBool ischangesolutionAccepted=false.obs;
   RxBool isnextbtn=false.obs;
 
+  RxString filterQuoteAcceptedFlag="Open".obs;
+
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
@@ -297,6 +299,34 @@ class SalesCycleVm extends GetxController{
       Map data={
         "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:saleCycleController.value.text,
         "filter_task_id": "",
+        "filter_account_code": "",
+        "filter_account_name": accountNameController.value.text.isEmpty?"":accountNameController.value,
+        "filter_sales_cycle_owner": "",
+        "filter_product_category": "",
+        "filter_purchase_process": "",
+        "filter_proposed_solution": "",
+        "filter_expected_closure_date": "",
+        "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All'?'':SaleCycleStatusController.value.text,
+        "filter_sales_cycle_approval_status": ApprovalStatusController.value.text.isEmpty || ApprovalStatusController.value.text == 'All'?'':ApprovalStatusController.value.text,
+        "filter_sales_cycle_quote_accepted": filterQuoteAcceptedFlag.value,
+        "is_commit": -1,
+        "filter_solution_accepted": -1,
+        "filter_created_by": email,
+        "filter_approved_by": "",
+        "filter_created_on": "",
+        "filter_company_profile_type": "",
+        "filter_postal_code": "",
+        "filter_district": "",
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": "",
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": "",
+        "row_per_page": rowsPerPage,
+        "page_number": page_no
+      };
+      /*{
+        "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:saleCycleController.value.text,
+        "filter_task_id": "",
         "filter_account_name": accountNameController.value.text.isEmpty?"":accountNameController.value.text,
         "filter_contact_name": contactNameController.value.text.isEmpty?'':contactNameController.value.text,
         "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All'?'':SaleCycleStatusController.value.text,
@@ -305,7 +335,7 @@ class SalesCycleVm extends GetxController{
         "filter_approved_by": "",
         "row_per_page": rowsPerPage,
         "page_number": page_no
-  };
+  };*/
       loading.value=true;
       _api.salesCycleMstGetApihit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);

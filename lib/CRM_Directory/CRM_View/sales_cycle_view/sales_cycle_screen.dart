@@ -78,6 +78,109 @@ class SalesCycleScreen extends StatelessWidget{
                     ),
                   );
                 }),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                              backgroundColor:
+                              salesCycleController.filterQuoteAcceptedFlag.value == 'Open'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                'Open',
+                                style: GoogleFonts.poppins(
+                                  color: salesCycleController.filterQuoteAcceptedFlag.value == 'Open'
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
+                                salesCycleController.pageNumber=0;
+                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                              },
+                            );
+                          }),
+                          SizedBox(width: 8),
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                              backgroundColor:
+                              salesCycleController.filterQuoteAcceptedFlag.value == 'Won'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                'Won',
+                                style: GoogleFonts.poppins(
+                                  color: salesCycleController.filterQuoteAcceptedFlag.value == 'Won'
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
+                                salesCycleController.pageNumber=0;
+                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                              },
+                            );
+                          }),
+                          SizedBox(width: 8), // optional spacing between chips
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                              backgroundColor:
+                              salesCycleController.filterQuoteAcceptedFlag.value == 'Loss'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                'Loss',
+                                style: GoogleFonts.poppins(
+                                  color: salesCycleController.filterQuoteAcceptedFlag.value == 'Loss'
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
+                                salesCycleController.pageNumber=0;
+                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                              },
+                            );
+                          }),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
                 Flexible(
                   fit: FlexFit.loose,
                   child: Container(
@@ -162,9 +265,7 @@ class SalesCycleScreen extends StatelessWidget{
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
-          onTap: () {
-            salesCycleController.filter.value = "Sales cycle";
-            salesCycleController.clearSaleProductListController();
+          onTap: () {salesCycleController.filter.value = "Sales cycle";salesCycleController.clearSaleProductListController();
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
           salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];
