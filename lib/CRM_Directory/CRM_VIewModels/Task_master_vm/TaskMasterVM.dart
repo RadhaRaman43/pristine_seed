@@ -223,6 +223,7 @@ class Taskmastervm extends GetxController{
                 "filter_approved_by": "",
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
+                "filter_product_category": "",
                 "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
                 "row_per_page": rowsPerPage.toString(),
