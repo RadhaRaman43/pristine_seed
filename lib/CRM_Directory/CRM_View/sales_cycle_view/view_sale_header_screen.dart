@@ -927,28 +927,25 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         ),),
                                       Row(
                                         children: [
-                                          Visibility(
-                                            visible:saleCycleController.quoteList.value.length>0,
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                showDialogForFilter(context);
-                                              },
-                                              child: Container(
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      7.0),
-                                                  child: Icon(
-                                                    Icons.filter_alt_rounded,
-                                                    color: AllColors
-                                                        .primaryDark1,),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                    borderRadius: BorderRadius
-                                                        .circular(30),
-                                                    border: Border.all(
-                                                        color: AllColors
-                                                            .primaryDark1)
-                                                ),
+                                          GestureDetector(
+                                            onTap: () {
+                                              showDialogForFilter(context);
+                                            },
+                                            child: Container(
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                    7.0),
+                                                child: Icon(
+                                                  Icons.filter_alt_rounded,
+                                                  color: AllColors
+                                                      .primaryDark1,),
+                                              ),
+                                              decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius
+                                                      .circular(30),
+                                                  border: Border.all(
+                                                      color: AllColors
+                                                          .primaryDark1)
                                               ),
                                             ),
                                           ),
@@ -8575,59 +8572,57 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
 
                 Obx((){
-                  return Visibility(
-                      visible: saleCycleController.get_SalesCycleProductById_List.length>0,
-                      child: Column(
-                        children: [
-                          Center(
-                              child: Divider(height: 1, color: AllColors.primaryDark1,)),
-                          Container(
-                            padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  return Column(
+                    children: [
+                      Center(
+                          child: Divider(height: 1, color: AllColors.primaryDark1,)),
+                      Container(
+                        padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text("Total ", style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.sisxteen,
+                              fontWeight: FontWeight.w900,
+                            ),),
+
+                            Row(
                               children: [
-                                Text("Total ", style: GoogleFonts.poppins(
+                                Text("Qty: ", style: GoogleFonts.poppins(
                                   color: AllColors.textColor,
                                   fontSize: AllFontSize.sisxteen,
                                   fontWeight: FontWeight.w900,
                                 ),),
-
-                                Row(
-                                  children: [
-                                    Text("Qty: ", style: GoogleFonts.poppins(
-                                      color: AllColors.textColor,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w900,
-                                    ),),
-                                    Text(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
-                                    saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString(), style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700,
-                                    ),),
-                                  ],
-                                ),
-
-                                Row(
-                                  children: [
-                                    Text("Price: ", style: GoogleFonts.poppins(
-                                      color: AllColors.textColor,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w900,
-                                    ),),
-                                    Text(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
-                                        :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString(), style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700,
-                                    ),),
-                                  ],
-                                ),
+                                Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
+                                saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString()):"", style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
                               ],
                             ),
-                          )
-                        ],
-                      ));
+
+                            Row(
+                              children: [
+                                Text("Price: ", style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w900,
+                                ),),
+                                Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
+                                    :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString()):"", style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700,
+                                ),),
+                              ],
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  );
                 }),
 
 
