@@ -791,7 +791,7 @@ class TaskMasterDetails extends StatelessWidget{
         if (!TaskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
           //TaskMaster_page_controller.Item_Category_code_list.add(selection.categoryCode!);
           TaskMaster_page_controller.Item_Category_Selected_list.add(selection);
-          Utils.showToastification('Success', 'Add Successfully');
+          Utils.showToastification('Success', 'Add Successfully ${selection.categoryCode}');
           print('CateCode....${TaskMaster_page_controller.Item_Category_code_list.length}');
         }else{
           Utils.showErrorToastification('Error', 'Already Selected');
@@ -1511,8 +1511,11 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                     SizedBox(width: 2,),
                     Visibility(
-                      visible: account_vm_controller.view=='Sales' || account_vm_controller.view=='TaskDashboard' || TaskMaster_page_controller.email==TaskMaster_page_controller
-                               .Task_Master_list[0].approvedBy ?false:true,
+                      visible:
+                      TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==0||
+                      account_vm_controller.view=='Sales'
+                          || account_vm_controller.view=='TaskDashboard'
+                          || TaskMaster_page_controller.email==TaskMaster_page_controller.Task_Master_list[0].approvedBy ?false:true,
                       child: InkWell(
                           onTap: () {
                             TaskMaster_page_controller
@@ -1606,7 +1609,9 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                     SizedBox(width: 2,),
                     Visibility(
-                      visible: account_vm_controller.view=='Sales' || account_vm_controller.view=='TaskDashboard' || TaskMaster_page_controller.email==TaskMaster_page_controller
+                      visible:
+                      TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==0||
+                      account_vm_controller.view=='Sales' || account_vm_controller.view=='TaskDashboard' || TaskMaster_page_controller.email==TaskMaster_page_controller
                           .Task_Master_list[0].approvedBy ?false:true,
                       child: InkWell(
                           onTap: () {
@@ -1742,8 +1747,9 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             Row(
               children: [
-                Text(
-                  "Approved On",
+                Text( TaskMaster_page_controller
+                    .Task_Master_list[0]
+                    .taskStatus?.toLowerCase()=="rejected"? "Rejected On":"Approved On",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,

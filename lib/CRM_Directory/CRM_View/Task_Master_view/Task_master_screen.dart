@@ -835,8 +835,9 @@ class TaskMasterScreen extends StatelessWidget{
                   fit: FlexFit.loose,
                   child: Tooltip(
                     message: TaskMaster_page_controller
+                        .Task_Master_list[position].createdFullName! + "| ${StaticMethod.dateTimeToDate(TaskMaster_page_controller
                         .Task_Master_list[position]
-                        .createdFullName!,
+                        .createdOn!)}",
                     child: Text(
                       TaskMaster_page_controller
                           .Task_Master_list[position]
@@ -1025,7 +1026,8 @@ class TaskMasterScreen extends StatelessWidget{
             )
           ],
         ),*/
-        trailing: taskStatus == 'PENDING FOR APPROVAL' ? InkWell(
+        trailing: taskStatus == 'PENDING FOR APPROVAL' ?
+        InkWell(
           onTap: (){
             if(IsReadyForApprove == 1){
               showApprovRejectDialog(context, TaskMaster_page_controller
