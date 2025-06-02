@@ -21,7 +21,6 @@ class SalesCycleModal {
   String? createdBy;
   String? createdFullName;
   String? createdOn;
-  String? salesCycleName;
   String? salesCycleOwnerName;
   String? salesCycleOwner;
   int? noOfQuotation;
@@ -90,6 +89,9 @@ class SalesCycleModal {
   String? branchHeadValue;
   String? zoneHeadValue;
   String? clustureHeadValue;
+  String? companyProfileType;
+  String? postCode;
+  String? district;
 
   SalesCycleModal(
       {this.condition,
@@ -114,7 +116,6 @@ class SalesCycleModal {
         this.createdBy,
         this.createdFullName,
         this.createdOn,
-        this.salesCycleName,
         this.salesCycleOwnerName,
         this.salesCycleOwner,
         this.noOfQuotation,
@@ -182,7 +183,10 @@ class SalesCycleModal {
         this.frontlinerValue,
         this.branchHeadValue,
         this.zoneHeadValue,
-        this.clustureHeadValue});
+        this.clustureHeadValue,
+        this.companyProfileType,
+        this.postCode,
+        this.district});
 
   SalesCycleModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -207,7 +211,6 @@ class SalesCycleModal {
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
-    salesCycleName = json['sales_cycle_name'];
     salesCycleOwnerName = json['sales_cycle_owner_name'];
     salesCycleOwner = json['sales_cycle_owner'];
     noOfQuotation = json['no_of_quotation'];
@@ -277,6 +280,9 @@ class SalesCycleModal {
     branchHeadValue = json['branch_head_value'];
     zoneHeadValue = json['zone_head_value'];
     clustureHeadValue = json['clusture_head_value'];
+    companyProfileType = json['company_profile_type'];
+    postCode = json['post_code'];
+    district = json['district'];
   }
 
   Map<String, dynamic> toJson() {
@@ -303,7 +309,6 @@ class SalesCycleModal {
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
-    data['sales_cycle_name'] = this.salesCycleName;
     data['sales_cycle_owner_name'] = this.salesCycleOwnerName;
     data['sales_cycle_owner'] = this.salesCycleOwner;
     data['no_of_quotation'] = this.noOfQuotation;
@@ -375,6 +380,9 @@ class SalesCycleModal {
     data['branch_head_value'] = this.branchHeadValue;
     data['zone_head_value'] = this.zoneHeadValue;
     data['clusture_head_value'] = this.clustureHeadValue;
+    data['company_profile_type'] = this.companyProfileType;
+    data['post_code'] = this.postCode;
+    data['district'] = this.district;
     return data;
   }
 }

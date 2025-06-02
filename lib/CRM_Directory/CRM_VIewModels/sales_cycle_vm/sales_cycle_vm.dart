@@ -221,6 +221,20 @@ class SalesCycleVm extends GetxController{
   //todo update quote item list data on approval page
   var bmDiscountPerController=TextEditingController().obs;
 
+ //todo new filter on sales cycle screen
+  var createdOnCnontroller=TextEditingController().obs;
+  var isCommitController=TextEditingController().obs;
+  var branch_head_value_controller=TextEditingController().obs;
+  var zone_head_value_controller=TextEditingController().obs;
+  var cluster_head_value_controller=TextEditingController().obs;
+  var frontliner_controller=TextEditingController().obs;
+  var createdByController=TextEditingController().obs;
+  var district_controller=TextEditingController().obs;
+  var postalCodeController=TextEditingController().obs;
+  var companyProfileTypeController=TextEditingController().obs;
+  var filterTask_Id_controller=TextEditingController().obs;
+  var accountCodeController=TextEditingController().obs;
+
 
 
   RxInt index=0.obs;
@@ -298,29 +312,29 @@ class SalesCycleVm extends GetxController{
     try{
       Map data={
         "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:saleCycleController.value.text,
-        "filter_task_id": "",
-        "filter_account_code": "",
-        "filter_account_name": accountNameController.value.text.isEmpty?"":accountNameController.value,
-        "filter_sales_cycle_owner": "",
-        "filter_product_category": "",
-        "filter_purchase_process": "",
-        "filter_proposed_solution": "",
-        "filter_expected_closure_date": "",
+        "filter_task_id": filterTask_Id_controller.value.text.isEmpty?"":filterTask_Id_controller.value.text,
+        "filter_account_code": accountCodeController.value.text.isEmpty?"":accountCodeController.value.text,
+        "filter_account_name": accountNameController.value.text.isEmpty?"":accountNameController.value.text,
+        "filter_sales_cycle_owner": salesCycleOwnerController.value.text.isEmpty?email:salesCycleOwnerController.value.text,
+        "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
+        "filter_purchase_process": purchaseProcessController.value.text.isEmpty?"":purchaseProcessController.value.text,
+        "filter_proposed_solution": proposedSolutionController.value.text.isEmpty?"":proposedSolutionController.value.text,
+        "filter_expected_closure_date": expectedClosuredateController.value.text.isEmpty?"": expectedClosuredateController.value.text,
         "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All'?'':SaleCycleStatusController.value.text,
         "filter_sales_cycle_approval_status": ApprovalStatusController.value.text.isEmpty || ApprovalStatusController.value.text == 'All'?'':ApprovalStatusController.value.text,
         "filter_sales_cycle_quote_accepted": filterQuoteAcceptedFlag.value,
-        "is_commit": -1,
-        "filter_solution_accepted": -1,
-        "filter_created_by": email,
+        "is_commit": isCommitController.value.text.isEmpty?-1:(isCommitController.value.text=="Yes"?1:0),
+        "filter_solution_accepted": solutionAcceptedController.value.text.isEmpty?-1:(solutionAcceptedController.value.text=="Yes"?1:0),
+        "filter_created_by": createdByController.value.text.isEmpty?"": createdByController.value.text,
         "filter_approved_by": "",
-        "filter_created_on": "",
-        "filter_company_profile_type": "",
-        "filter_postal_code": "",
-        "filter_district": "",
-        "filter_frontliner_value": "",
-        "filter_branch_head_value": "",
-        "filter_zone_head_value": "",
-        "filter_clusture_head_value": "",
+        "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+        "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"": companyProfileTypeController.value.text,
+        "filter_postal_code": postalCodeController.value.text.isEmpty?"": postalCodeController.value.text,
+        "filter_district": district_controller.value.text.isEmpty?"": district_controller.value.text,
+        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
+        "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+        "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };
@@ -576,6 +590,28 @@ class SalesCycleVm extends GetxController{
     try{
       Map data= {
         "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty? filterQuoteIdController.value.text:"",
+        "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:"",
+        "filter_account_code": "",
+        "filter_account_name": "",
+        "filter_rh_approval": "",
+        "filter_cbh_approval": "",
+        "filter_category_approval": "",
+        "filter_gm_approval": "",
+        "filter_quote_version": 0,
+        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty? filterQuoteValidityController.value.text:"",
+        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty? filterExpectedClosuredateController.value.text:"",
+        "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty? filterQuoteStatusController.value.text:status,
+        "filter_product_category": "",
+        "filter_created_by": FromPage=="QuoteApprovalPage"?"":email,
+        "filter_created_on": "",
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": "",
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": "",
+        "row_per_page": rowsPerPage,
+        "page_number": pageNumberForQuote
+      };/*{
+        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty? filterQuoteIdController.value.text:"",
         "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:"" ,
         "filter_account_name": "",
         "filter_contact_name": "",
@@ -587,7 +623,7 @@ class SalesCycleVm extends GetxController{
         "filter_approved_by": "",
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
-  };
+  };*/
       loading.value=true;
       _api.quoteHeaderGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -3723,5 +3759,32 @@ class SalesCycleVm extends GetxController{
     }catch(e){
       print("Catch Block exception Exception ..${e}");
     }
+  }
+
+  void clearAllFieldOfFilter() {
+    saleCycleController.value.clear();
+    salesCycleOwnerController.value.clear();
+    filterTask_Id_controller.value.clear();
+    SaleCycleStatusController.value.clear();
+    ApprovalStatusController.value.clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    salesCycleOwnerController.value.clear();
+    productCategoryController.value.clear();
+    purchaseProcessController.value.clear();
+    companyProfileTypeController.value.clear();
+    isCommitController.value.clear();
+    solutionAcceptedController.value.clear();
+    proposedSolutionController.value.clear();
+    postalCodeController.value.clear();
+    district_controller.value.clear();
+    branch_head_value_controller.value.clear();
+    zone_head_value_controller.value.clear();
+    cluster_head_value_controller.value.clear();
+    createdByController.value.clear();
+    filterExpectedClosuredateController.value.clear();
+    createdOnCnontroller.value.clear();
+
+
   }
 }
