@@ -611,6 +611,7 @@ class ApprovedQuotationList extends StatelessWidget{
                                       ),
                                     ),
                                     onPressed: ()  {
+                                      saleCycleController.pageNumberForQuote=0;
                                       saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,saleCycleController.salesCycleId.value, 'Approved');
                                       Navigator.pop(context);
                                     },

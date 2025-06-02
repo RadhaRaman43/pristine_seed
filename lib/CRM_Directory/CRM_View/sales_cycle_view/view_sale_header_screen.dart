@@ -4346,6 +4346,144 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
               ],
             ),
+            Row(
+              children: [
+                Text(
+                  "Account Code : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                Text(
+                  saleCycleController
+                      .quoteList[index]
+                      .accountCode??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Account Name : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                Text(
+                  saleCycleController
+                      .quoteList[index]
+                      .accountName??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "RH approval : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                /*Text(
+                  saleCycleController
+                      .quoteList[index]
+                      .rh??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),*/
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "CBH Approval: ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+               /* Text(
+                  saleCycleController
+                      .quoteList[index]
+                      .accountName??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),*/
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Category Approval: ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                /*Text(
+                  saleCycleController
+                      .quoteList[index]
+                      .accountName??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),*/
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Gm Approval : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                /*Text(
+                  saleCycleController
+                      .quoteList[index]
+                      ??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),*/
+              ],
+            ),
 
             Row(
               children: [
@@ -9459,6 +9597,23 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
+                              filterWithQuoteRhApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuotecnhApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteCategoryApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteGmApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+
                               filterWithQuoteProductCategory(),
                               SizedBox(
                                 height: 10,
@@ -9507,9 +9662,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   width: 1),
                             )),
                             onPressed: () {
-                              Get.back();
+
                               saleCycleController.pageNumberForQuote = 0;
-                              saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote, "","",);
+                              saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,
+                                saleCycleController.saleCycleList[0].salesCycleId!,"",);
+                              Get.back();
                             },
                             child: Text(
                               'Submit',
@@ -9530,10 +9687,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   color: AllColors.redColor, width: 1),
                             )),
                             onPressed: () {
-                              Get.back();
-                              saleCycleController.clearAllFieldOfFilter();
+
+                              saleCycleController.clearAllFieldOfQuoteFilter();
                               saleCycleController.pageNumberForQuote = 0;
-                              saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
+                              //saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
+                              saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,
+                                saleCycleController.saleCycleList[0].salesCycleId!,"",);
+                              Get.back();
 
                             },
                             child: Text(
@@ -9761,14 +9921,134 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           );
           var outputFormat = DateFormat('yyyy-MM-dd');
           if (date != null && date != "")
-            salesCycleController.createdOnCnontroller.value.text =
+            saleCycleController.createdOnCnontroller.value.text =
                 outputFormat.format(date);
           else
-            salesCycleController.createdOnCnontroller.value.text =
+            saleCycleController.createdOnCnontroller.value.text =
             "";
         }
 
 
+    );
+  }
+
+  filterWithQuoteRhApproval() {
+   return TextField(
+      controller: saleCycleController.rh_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Rh Approval',
+          hintText: 'Rh Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuotecnhApproval() {
+   return TextField(
+      controller: saleCycleController.cbh_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'CBH Approval',
+          hintText: 'CbH Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteCategoryApproval() {
+    return  TextField(
+      controller: saleCycleController.category_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Category Approval',
+          hintText: 'Category Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteGmApproval() {
+    return TextField(
+      controller: saleCycleController.gm_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Gm Approval',
+          hintText: 'Gm Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
   }
 

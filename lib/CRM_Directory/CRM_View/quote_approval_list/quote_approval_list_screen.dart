@@ -576,8 +576,621 @@ class QuoteApprovalListScreen extends StatelessWidget{
       ),
     );
   }
-
   void showDialogForFilter(BuildContext context) {
+    // accountMaster_page_controller.IsActive_controller.clear();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.85,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                        SizedBox(width: 5,),
+                        Text(
+                          "Quote Filter ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.cancel,
+                              color: AllColors.primaryDark1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.primaryDark1,
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              filterWithQuoteId(context),
+                              SizedBox(height: 10),
+                              filterWithQuoteStatus(context),
+                              SizedBox(height: 10),
+                              filterWithSaleCycle(context),
+                              SizedBox(height: 10),
+                              filterWithQuoteValidity(context),
+                              SizedBox(height: 10),
+                              filterWithQuoteClosureDate(context),
+                              SizedBox(height: 10),
+                              TextField(
+                                controller: quoteApprovalController.accountNameController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Account Name',
+                                    hintText: 'Account Name',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              TextField(
+                                controller: quoteApprovalController.accountCodeController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Account Code',
+                                    hintText: 'Account Code',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
+
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteRhApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuotecnhApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteCategoryApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteGmApproval(),
+                              SizedBox(
+                                height: 10,
+                              ),
+
+                              filterWithQuoteProductCategory(),
+                              SizedBox(
+                                height: 10,
+                              ),
+
+                              filterWithQuoteFrontLinerValue(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteBranchHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteZoneHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteClusterHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithQuoteCreatedOn(context),
+                              SizedBox(
+                                height: 10,
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              side: BorderSide(
+                                  color: AllColors.primaryDark,
+                                  width: 1),
+                            )),
+                            onPressed: () {
+
+                              quoteApprovalController.pageNumberForQuote = 0;
+                              quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,
+                                );
+                              Get.back();
+                            },
+                            child: Text(
+                              'Submit',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              side: BorderSide(
+                                  color: AllColors.redColor, width: 1),
+                            )),
+                            onPressed: () {
+
+                              quoteApprovalController.clearAllFieldOfQuoteFilter();
+                              quoteApprovalController.pageNumberForQuote = 0;
+                              //saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
+                              quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                              Get.back();
+
+                            },
+                            child: Text(
+                              'Reset',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+
+        );
+      },
+    );
+  }
+  filterWithQuoteRhApproval() {
+    return TextField(
+      controller: quoteApprovalController.rh_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Rh Approval',
+          hintText: 'Rh Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuotecnhApproval() {
+    return TextField(
+      controller: quoteApprovalController.cbh_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'CBH Approval',
+          hintText: 'CbH Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteCategoryApproval() {
+    return  TextField(
+      controller: quoteApprovalController.category_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Category Approval',
+          hintText: 'Category Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteGmApproval() {
+    return TextField(
+      controller: quoteApprovalController.gm_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Gm Approval',
+          hintText: 'Gm Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteStatus(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: quoteApprovalController.filterQuoteStatusController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Quote Status',
+          labelText: 'Quote Status',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  filterWithQuoteProductCategory() {
+    return TextField(
+      controller: quoteApprovalController.productCategoryController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Product Category',
+          hintText: 'Product Category',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteFrontLinerValue() {
+    return TextField(
+      controller: quoteApprovalController.frontliner_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'FrontLiner Value',
+          hintText: 'FrontLiner Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteClusterHead() {
+    return TextField(
+      controller: quoteApprovalController.cluster_head_value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Cluster Head Value',
+          hintText: 'Cluster Head Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteZoneHead() {
+    return TextField(
+      controller: quoteApprovalController.zone_head_value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Zone Head Value',
+          hintText: 'Zone Head Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteBranchHead() {
+    return TextField(
+      controller: quoteApprovalController.branch_head_value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Branch Head Value',
+          hintText: 'Branch Head Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteCreatedOn(BuildContext context) {
+    return TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: quoteApprovalController.createdOnCnontroller.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Created On',
+            labelText: 'Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme: ColorScheme.light(
+                      primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                      textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            quoteApprovalController.createdOnCnontroller.value.text =
+                outputFormat.format(date);
+          else
+            quoteApprovalController.createdOnCnontroller.value.text =
+            "";
+        }
+
+
+    );
+  }
+/*  void showDialogForFilter(BuildContext context) {
     showModalBottomSheet(context: context,
         isScrollControlled: true,
         builder: (BuildContext context){
@@ -631,12 +1244,12 @@ class QuoteApprovalListScreen extends StatelessWidget{
                             SizedBox(height: 10),
                             filterWithQuoteClosureDate( context),
                             SizedBox(height: 10),
-                           /* filterWithQuotetotalAmount( context),
+                           *//* filterWithQuotetotalAmount( context),
                             SizedBox(height: 10),
                             filterWithQuoteGstAmt( context),
                             SizedBox(height: 10),
                             filterWithQuoteCrossAmt( context),
-                            SizedBox(height: 10),*/
+                            SizedBox(height: 10),*//*
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -707,7 +1320,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
             ),
           );
         });
-  }
+  }*/
 
   Widget filterWithQuoteId(BuildContext context) {
     return  TextField(
@@ -988,5 +1601,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
       ),
     );
   }
+
+
 
 }

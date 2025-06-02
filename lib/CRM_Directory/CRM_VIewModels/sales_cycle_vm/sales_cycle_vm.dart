@@ -235,6 +235,11 @@ class SalesCycleVm extends GetxController{
   var filterTask_Id_controller=TextEditingController().obs;
   var accountCodeController=TextEditingController().obs;
 
+  var rh_Approval_controller=TextEditingController().obs;
+  var cbh_Approval_controller=TextEditingController().obs;
+  var category_Approval_controller=TextEditingController().obs;
+  var gm_Approval_controller=TextEditingController().obs;
+
 
 
   RxInt index=0.obs;
@@ -406,6 +411,7 @@ class SalesCycleVm extends GetxController{
             }
             if(saleCycleList[0].salesCycleStatus=="Propose") {
               print("Sales cycle status..${saleCycleList[0].salesCycleId}");
+              pageNumberForQuote=0;
               getQuoteHeaderData(pageNumberForQuote,saleCycleList[0].salesCycleId!, '');
               getQuoteWonData(saleCycleList[0].salesCycleId!);
             }
@@ -591,23 +597,23 @@ class SalesCycleVm extends GetxController{
       Map data= {
         "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty? filterQuoteIdController.value.text:"",
         "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:"",
-        "filter_account_code": "",
-        "filter_account_name": "",
-        "filter_rh_approval": "",
-        "filter_cbh_approval": "",
-        "filter_category_approval": "",
-        "filter_gm_approval": "",
-        "filter_quote_version": 0,
-        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty? filterQuoteValidityController.value.text:"",
-        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty? filterExpectedClosuredateController.value.text:"",
+        "filter_account_code": accountCodeController.value.text.isEmpty?"": accountCodeController.value.text,
+        "filter_account_name":  accountNameController.value.text.isEmpty?"": accountNameController.value.text,
+        "filter_rh_approval": rh_Approval_controller.value.text.isEmpty?"": rh_Approval_controller.value.text,
+        "filter_cbh_approval": cbh_Approval_controller.value.text.isEmpty?"": cbh_Approval_controller.value.text,
+        "filter_category_approval": category_Approval_controller.value.text.isEmpty?"": category_Approval_controller.value.text,
+        "filter_gm_approval": gm_Approval_controller.value.text.isEmpty?"": gm_Approval_controller.value.text,
+        "filter_quote_version": -1,
+        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty?filterQuoteValidityController.value.text:"",
+        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
         "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty? filterQuoteStatusController.value.text:status,
-        "filter_product_category": "",
+        "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_created_by": FromPage=="QuoteApprovalPage"?"":email,
-        "filter_created_on": "",
-        "filter_frontliner_value": "",
-        "filter_branch_head_value": "",
-        "filter_zone_head_value": "",
-        "filter_clusture_head_value": "",
+        "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
+        "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+        "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
       };/*{
@@ -922,7 +928,8 @@ class SalesCycleVm extends GetxController{
           List<SalesCycleUpdateStatusModal> response = jsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
             loading.value = false;
-            getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
+            pageNumberForQuote=0;
+            getQuoteHeaderData(pageNumberForQuote,  saleCycleList[0].salesCycleId!, '');
             //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
           }else {
             Utils.showErrorToastification("False Message !", response[0].message.toString());
@@ -1448,8 +1455,22 @@ class SalesCycleVm extends GetxController{
         "advance_payment_per": advncPaymentPerController.value.text.isEmpty?'0':advncPaymentPerController.value.text,
         "advance_payment_amt": advncPaymentAmountController.value.text.isEmpty?'0':advncPaymentAmountController.value.text,
         "other_remarks": quoteRemarkController.value.text.isEmpty?'':quoteRemarkController.value.text,
+        "terms_and_condition":"" ,
         "created_by": email
       };
+
+
+      /*{
+        "quote_id": quoteId.value,
+        "installation_charges": installationChargesController.value.text.isEmpty?'0':installationChargesController.value.text,
+        "other_charges": otherChargesController.value.text.isEmpty?'0':otherChargesController.value.text,
+        "warranty_period": warrentyPeriodController.value.text.isEmpty?'0':warrentyPeriodController.value.text,
+        "delivery_in_weeks": deliveryWeeksController.value.text.isEmpty?'0':deliveryWeeksController.value.text,
+        "advance_payment_per": advncPaymentPerController.value.text.isEmpty?'0':advncPaymentPerController.value.text,
+        "advance_payment_amt": advncPaymentAmountController.value.text.isEmpty?'0':advncPaymentAmountController.value.text,
+        "other_remarks": quoteRemarkController.value.text.isEmpty?'':quoteRemarkController.value.text,
+        "created_by": email
+      };*/
       loading.value=true;
       _api.UpdateBusinessTermsApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -1630,7 +1651,8 @@ class SalesCycleVm extends GetxController{
         if (response != null && response.isNotEmpty && response[0].condition == "True") {
           loading.value = false;
           Utils.showToastification("Success!", response[0].message.toString());
-          getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
+          pageNumberForQuote=0;
+          getQuoteHeaderData(pageNumberForQuote,  saleCycleList[0].salesCycleId!, '');
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
           //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
           quoteValidityController.value.clear();
@@ -3784,6 +3806,31 @@ class SalesCycleVm extends GetxController{
     createdByController.value.clear();
     filterExpectedClosuredateController.value.clear();
     createdOnCnontroller.value.clear();
+
+
+  }
+
+  void clearAllFieldOfQuoteFilter() {
+    filterQuoteIdController.value
+        .clear();
+  filterQuoteStatusController.value
+        .clear();
+    filterExpectedClosuredateController
+        .value.clear();
+    filterQuoteValidityController.value
+        .clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    rh_Approval_controller.value.clear();
+    cbh_Approval_controller.value.clear();
+    category_Approval_controller.value.clear();
+    gm_Approval_controller.value.clear();
+    productCategoryController.value.clear();
+    createdOnCnontroller.value.clear();
+    frontliner_controller.value.clear();
+    branch_head_value_controller.value.clear();
+    zone_head_value_controller.value.clear();
+    cluster_head_value_controller.value.clear();
 
 
   }

@@ -228,7 +228,7 @@ class Taskmastervm extends GetxController{
         }
         try{
             Map data={
-                "filter_task_id": filterTask_Id_controller.text.isEmpty?"":filterTask_Id_controller.text,
+                "filter_task_id": filterTask_Id_controller.text.isEmpty?taskId:filterTask_Id_controller.text,
                 "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
                 "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
                 "filter_task_status": status == 'All'?"":status,
