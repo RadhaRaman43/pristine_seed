@@ -299,6 +299,7 @@ class Taskmastervm extends GetxController{
                             }else if(Active == 0){
                                 IsSaleCycleActive = 'No';
                             }
+
                             getTaskMstDSARList(taskId);
                             getItemCategoryMstApi(taskId);
                             getTaskPersonMstByTaskIdApi(taskId!);
@@ -929,7 +930,7 @@ class Taskmastervm extends GetxController{
 
                 } else {
                     loading.value = false;
-                    Utils.showErrorToastification("Error!", "Please select at least single product category");
+                    Utils.showErrorToastification("Error!", "${response[0].message}");
                 }
             } else {
                 loading.value = false;
@@ -959,6 +960,7 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
             };
+            print('sale id map data${data}');
             loading.value=true;
             _api.SalesCycleMstGetByAccountCodeApiHit(data, sessionManagement).then((onValue){
                 final jsonResponse = json.decode(onValue);

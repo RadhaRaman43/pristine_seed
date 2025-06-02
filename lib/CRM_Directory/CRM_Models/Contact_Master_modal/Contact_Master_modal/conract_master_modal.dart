@@ -7,6 +7,7 @@ class ContactMstGetListModal {
   String? contactTitle;
   String? accountCode;
   String? accountName;
+  String? fullAddress;
   String? emailId;
   String? phoneNo;
   String? alternateNo;
@@ -30,6 +31,7 @@ class ContactMstGetListModal {
         this.contactTitle,
         this.accountCode,
         this.accountName,
+        this.fullAddress,
         this.emailId,
         this.phoneNo,
         this.alternateNo,
@@ -53,6 +55,7 @@ class ContactMstGetListModal {
     contactTitle = json['contact_title'];
     accountCode = json['account_code'];
     accountName = json['account_name'];
+    fullAddress = json['full_address'];
     emailId = json['email_id'];
     phoneNo = json['phone_no'];
     alternateNo = json['alternate_no'];
@@ -78,6 +81,7 @@ class ContactMstGetListModal {
     data['contact_title'] = this.contactTitle;
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;
+    data['full_address'] = this.fullAddress;
     data['email_id'] = this.emailId;
     data['phone_no'] = this.phoneNo;
     data['alternate_no'] = this.alternateNo;

@@ -118,6 +118,7 @@ class ContactMasterVM extends GetxController{
         "filter_department_name": depart_name,
         "email_id": emailId_controller.value.text.isEmpty?"":emailId_controller.value.text,
         "phone_no": phone_no_controller.value.text.isEmpty?"":phone_no_controller.value.text,
+        "created_by": email,
         "row_per_page": rowsPerPage.toString(),
         "page_number": pageNumber.toString()
       };
@@ -368,6 +369,7 @@ class ContactMasterVM extends GetxController{
             "contact_title": contact_title_controller.text,
             "account_code": accountCode.value.isNotEmpty?accountCode.value:"",
             "account_name": accountName.value.isNotEmpty?accountName.value:account_name_controller.text,
+            "full_address": FullAddress_Controller.value.text,
             "phone_no": phone_no_controller.text,
             "email_id": emailId_controller.text,
             "alternate_no": alternate_no_controller.text,
@@ -378,6 +380,7 @@ class ContactMasterVM extends GetxController{
           }
         ]
       };
+      print('fuul add ${FullAddress_Controller.value.text}');
       print("creative data is ${data}");
       loading.value=true;
       _api.ContactMstUploader(data, sessionManagement).then((onValue){
@@ -445,7 +448,8 @@ class ContactMasterVM extends GetxController{
     contact_title_controller.text=contact_master_list[index].contactTitle?? "";
     designation_name_controller.text=contact_master_list[index].designationname ?? "";
     contact_code_controller.text=contact_master_list[index].contactCode ?? "";
-      IsHeDecisionMakerController.value.text=contact_master_list[index].contactRole??"";
+    FullAddress_Controller.value.text=contact_master_list[index].fullAddress ?? "";
+    IsHeDecisionMakerController.value.text=contact_master_list[index].contactRole??"";
     }else if(flag == 'Inside'){
       contact_code=account_vm_controller.view_contract_list[index].contactCode?? "";
       account_name_controller.text=account_vm_controller.view_contract_list[index].accountName?? "";

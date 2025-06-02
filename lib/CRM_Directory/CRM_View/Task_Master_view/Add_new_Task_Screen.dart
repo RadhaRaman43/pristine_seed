@@ -382,7 +382,6 @@ class AddNewTaskScreen extends StatelessWidget{
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: AllFontSize.ten,
                                     horizontal: AllFontSize.ten),
-
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue)
                                 ),
@@ -477,12 +476,14 @@ class AddNewTaskScreen extends StatelessWidget{
       onSelected: (AccountMasterModel selection) {
         //print(selection.loginEmailId);
         // Update the TextField with the selected
+
         taskMaster_page_controller.account_Name_controller.text =
             _displayAccountNameForOption(selection).toString();
         taskMaster_page_controller.account_code.value=selection.accountCode!;
         taskMaster_page_controller.account_name.value=selection.accountName!;
             taskMaster_page_controller.getContactMasterList();
             taskMaster_page_controller.pageNumber = 0;
+        print('I select account name');
             taskMaster_page_controller.getSaleIDByAccountCode(taskMaster_page_controller.pageNumber);
         //taskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
