@@ -340,7 +340,7 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Company Profile Type : ",
                 value: salesCycleController.saleCycleList[position].companyProfileType,
-                width: size.width * 0.35,
+                width: size.width * 0.33,
               ),
               _buildLabelWithValue(
                 label: "Is Commit : ",
@@ -402,7 +402,7 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Expected Closure Date : ",
                 value: salesCycleController.saleCycleList[position].estClosureDate,
-                width: size.width * 0.33,
+                width: size.width * 0.3,
               ),
               _buildLabelWithValue(
                 label: "Created On: ",
