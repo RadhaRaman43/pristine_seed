@@ -297,8 +297,8 @@ class AllContactMasterScreen extends StatelessWidget{
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Mobile No',
-                              hintText: 'Mobile No',
+                              labelText: 'Phone No',
+                              hintText: 'Phone No',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
