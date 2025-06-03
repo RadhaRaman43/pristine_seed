@@ -88,6 +88,7 @@ class UpdateAccountMaster extends StatelessWidget{
   Widget build(BuildContext context) {
    return WillPopScope(
        onWillPop: () async {
+         print("account view...${accountMaster_page_controller.view}");
          if(accountMaster_page_controller.view=='VIEW'){
            accountMaster_page_controller.view='';
            Get.toNamed(RoutesName.contactMaster_screen);
@@ -108,6 +109,7 @@ class UpdateAccountMaster extends StatelessWidget{
            Get.toNamed(RoutesName.salesCycleScreen);
          }
          else if(accountMaster_page_controller.view=="FromQuoteApproval"){
+           print("view..");
            Get.offAllNamed(RoutesName.quoteApprovalListScreen);
          }
          else if(accountMaster_page_controller.view=='FromSaleDetailsScreen'){
@@ -121,18 +123,17 @@ class UpdateAccountMaster extends StatelessWidget{
            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
            Get.toNamed(RoutesName.accountMaster_screen);
          }
-         if(accountMaster_page_controller.view=="ALLContactList"){
+         else if(accountMaster_page_controller.view=="ALLContactList"){
            Get.toNamed(RoutesName.allContactMasterScreen);
          }
          else if(accountMaster_page_controller.view=="Sales"){
            Get.toNamed(RoutesName.taskMasterDetails_screen);
          }
-
          else{
            accountMaster_page_controller.clearController();
            accountMaster_page_controller.pageNumber = 0;
            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
-         Get.toNamed(RoutesName.accountMaster_screen);
+           Get.toNamed(RoutesName.accountMaster_screen);
          }
      return false;
    },

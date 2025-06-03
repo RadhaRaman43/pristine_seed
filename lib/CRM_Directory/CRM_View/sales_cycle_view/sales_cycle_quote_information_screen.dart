@@ -3720,6 +3720,12 @@ class QuoteInformationScreen extends StatelessWidget{
                     bindDropDownOfRejectAndApprove(context),
                     SizedBox(height: 10),
                     Obx((){
+                      return  Visibility(
+                          visible:saleCycleController.isApprove.value ,
+                          child: managerRemarksField(context));
+                    }),
+
+                    Obx((){
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -3795,6 +3801,32 @@ class QuoteInformationScreen extends StatelessWidget{
           );
 
         });
+  }
+  Widget managerRemarksField(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: saleCycleController.managerRemarksController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Manager Remarks',
+          labelText: 'Manager Remarks',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.fourtine),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
   }
 
   showFetchSalesProductConfirmationDialog(context, String SalesId,String QuoteId) {

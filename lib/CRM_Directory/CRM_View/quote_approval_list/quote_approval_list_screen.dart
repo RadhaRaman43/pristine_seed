@@ -295,7 +295,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                               .accountName ??
                               "",
                           overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
+                          //textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
                             fontSize: AllFontSize.fourtine,

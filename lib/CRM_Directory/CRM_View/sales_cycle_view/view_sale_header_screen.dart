@@ -978,6 +978,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 saleCycleController.Shipping_email_Controller.value.text = saleCycleController.saleCycleList[0].shippingEmailId ?? "";
                                                 saleCycleController.itemCategorySelectedlist.value = [];
                                                 saleCycleController.getItemCategoryMstApi(saleCycleController.saleCycleList[0].salesCycleId!, saleCycleController.saleCycleList[0].taskId!);
+                                                saleCycleController.clearAllFieldOfQuoteFilter();
                                                 Get.toNamed(RoutesName
                                                     .salesCycleCreateQuoteScreen);
                                               },

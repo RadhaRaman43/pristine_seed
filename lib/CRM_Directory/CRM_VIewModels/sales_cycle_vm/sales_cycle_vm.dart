@@ -242,6 +242,7 @@ class SalesCycleVm extends GetxController{
   var gm_Approval_controller=TextEditingController().obs;
 
 
+  var managerRemarksController=TextEditingController().obs;
 
   RxInt index=0.obs;
   final qtyFocusNode = FocusNode();
@@ -262,6 +263,7 @@ class SalesCycleVm extends GetxController{
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
+    clearAllFieldOfFilter();
     getsalesCycleData(pageNumber, "", "",'');
     itemCategorySelectedlist.value=[];
     super.onInit();
@@ -293,6 +295,7 @@ class SalesCycleVm extends GetxController{
   }
 
   void toggleSalesCheckbox(int index) {
+    clearSaleProductListController();
     var item = itemMstGetBySalesIdList[index];
     item.isSelected = item.isSelected == 1 ? 0 : 1;
     if(item.isSelected==1)
@@ -1461,7 +1464,7 @@ class SalesCycleVm extends GetxController{
         "advance_payment_per": advncPaymentPerController.value.text.isEmpty?'0':advncPaymentPerController.value.text,
         "advance_payment_amt": advncPaymentAmountController.value.text.isEmpty?'0':advncPaymentAmountController.value.text,
         "other_remarks": quoteRemarkController.value.text.isEmpty?'':quoteRemarkController.value.text,
-        "terms_and_condition":"" ,
+        "terms_and_condition":termConditionController.value.text.isEmpty?"":termConditionController.value.text,
         "created_by": email
       };
 
@@ -1487,7 +1490,8 @@ class SalesCycleVm extends GetxController{
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
             quoteSendForApprovalApiHit();
-            getQuoteHeaderInformation(quoteId.value, "");
+            //todo commented by nirupma
+           // getQuoteHeaderInformation(quoteId.value, "");
           }else {
             Utils.showErrorToastification("False Message !", response[0].message.toString());
             loading.value = false;
@@ -1556,7 +1560,9 @@ class SalesCycleVm extends GetxController{
         "quote_id": quoteId,
         "created_by": email,
         "quote_status": quoteStatus.toString(),
-        "reject_reason": rejectreasonQuoteController.value.text
+        "reject_reason": rejectreasonQuoteController.value.text,
+        "manager_remarks": managerRemarksController.value.text.isEmpty?"":managerRemarksController.value.text
+
       };
       loading.value=true;
       _api.quoteApproveRejectApiHit(data, sessionManagement).then((onValue){
@@ -2190,6 +2196,7 @@ class SalesCycleVm extends GetxController{
     quoteTotAmountController.value.text = quoteHeaderdata[0].quoteTotalAmount.toString();
     advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString();
     quoteRemarkController.value.text = quoteHeaderdata[0].otherRemarks.toString();
+    //termConditionController.value.text = quoteHeaderdata[0].tem.toString();
   }
 
   clearBusinessTerm(){
@@ -2202,6 +2209,7 @@ class SalesCycleVm extends GetxController{
     pendingAmountController.value.clear();
     quoteRemarkController.value.clear();
     finalAmountController.value.clear();
+    termConditionController.value.clear();
   }
 
   clearSaleProductListController(){
