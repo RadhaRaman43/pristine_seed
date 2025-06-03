@@ -185,6 +185,7 @@ class SalesCycleVm extends GetxController{
   var finalAmountController=TextEditingController().obs;
   var pendingAmountController=TextEditingController().obs;
   var quoteRemarkController=TextEditingController().obs;
+  var termConditionController=TextEditingController().obs;
 
   //todo Item list
   var itemCodeController=TextEditingController().obs;
@@ -1201,16 +1202,21 @@ class SalesCycleVm extends GetxController{
         print(onValue);
         if(jsonResponse is List){
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
-          if(response[0].condition=="True"){
+          if(response[0].condition?.toLowerCase()=="true"){
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
-            if(flag=="BmGMUpdate"){
-              getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
-            }else{
-              pageNumber=0;
-              itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", '');
-              getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
-            }
+            getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
+            if(flag!="BmGMUpdate"){
+              if(quoteHeaderdata.length>0){
+                String ProductCategory = quoteHeaderdata[0].productCategoryCode??"";
+                String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+                pageNumber=0;
+                itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", PipeProdCate);
+              }
+            }/*else{
+
+              //getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
+            }*/
 
 
             /*if(flag=="Update"){
@@ -1262,7 +1268,7 @@ class SalesCycleVm extends GetxController{
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
             pageNumber=0;
-            itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", '');
+            //itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", '');
             getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, flag);
           }else {
             Utils.showErrorToastification("False Message !", response[0].message.toString());

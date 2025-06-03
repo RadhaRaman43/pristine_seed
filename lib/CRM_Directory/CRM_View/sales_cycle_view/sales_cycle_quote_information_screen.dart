@@ -474,41 +474,45 @@ class QuoteInformationScreen extends StatelessWidget{
                                 color: AllColors.lightgreyColor,
                               ),
 
-                              Table(
-                                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                                columnWidths: const {
-                                  0: FixedColumnWidth(120),
-                                  1: FixedColumnWidth(150),
-                                  2: FixedColumnWidth(120),
-                                  3: FixedColumnWidth(130),
-                                  4: FixedColumnWidth(130),
-                                },
-                                border: TableBorder.symmetric(
-                                  inside: BorderSide(width: 1, color: AllColors.lightgreyColor),
-                                ),
-                                children: [
-                                  // Header Row
-                                  TableRow(
-                                    children: [
-                                      tableHeaderCell("Qty"),
-                                      tableHeaderCell("Approved Price"),
-                                      tableHeaderCell("Amount"),
-                                      tableHeaderCell("Gst Amount"),
-                                      tableHeaderCell("Total Amount"),
-                                    ],
+                              Obx((){
+                                return Table(
+                                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                                  columnWidths: const {
+                                    0: FixedColumnWidth(120),
+                                    1: FixedColumnWidth(150),
+                                    2: FixedColumnWidth(120),
+                                    3: FixedColumnWidth(130),
+                                    4: FixedColumnWidth(130),
+                                  },
+                                  border: TableBorder.symmetric(
+                                    inside: BorderSide(width: 1, color: AllColors.lightgreyColor),
                                   ),
-                                  // Value Row
-                                  TableRow(
-                                    children: [
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalQty),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalAmount),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGstAmount),
-                                      tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGrossAmount),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                  children: [
+                                    // Header Row
+                                    TableRow(
+                                      children: [
+                                        tableHeaderCell("Qty"),
+                                        tableHeaderCell("Approved Price"),
+                                        tableHeaderCell("Amount"),
+                                        tableHeaderCell("Gst Amount"),
+                                        tableHeaderCell("Total Amount"),
+                                      ],
+                                    ),
+                                    // Value Row
+                                    TableRow(
+                                      children: [
+                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalQty),
+                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),
+                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalAmount),
+                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGstAmount),
+                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGrossAmount),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              })
+
+
                             ],
                           ),
                         ),
