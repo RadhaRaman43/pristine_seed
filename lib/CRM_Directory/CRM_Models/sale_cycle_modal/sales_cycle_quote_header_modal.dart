@@ -13,6 +13,10 @@ class SalesCycleQuoteHeaderModal {
   String? quoteValidity;
   String? expClosureDate;
   int? quoteCommit;
+  String? approvedBy;
+  String? approvedFullName;
+  String? approvedOn;
+  String? rejectReason;
   String? createdBy;
   String? createdFullName;
   String? createdOn;
@@ -36,13 +40,10 @@ class SalesCycleQuoteHeaderModal {
   double? quoteTotalAmount;
   double? quoteGrossAmount;
   double? quoteGstAmount;
-  String? shippingAddress;
-  String? shippingAddress2;
-  String? shippingPostCode;
-  String? shippingStateCode;
-  String? shippingStateName;
-  String? shippingCity;
-  String? shippingDistrict;
+  String? frontlinerValue;
+  String? branchHeadValue;
+  String? zoneHeadValue;
+  String? clustureHeadValue;
 
   SalesCycleQuoteHeaderModal(
       {this.condition,
@@ -59,6 +60,10 @@ class SalesCycleQuoteHeaderModal {
         this.quoteValidity,
         this.expClosureDate,
         this.quoteCommit,
+        this.approvedBy,
+        this.approvedFullName,
+        this.approvedOn,
+        this.rejectReason,
         this.createdBy,
         this.createdFullName,
         this.createdOn,
@@ -82,13 +87,10 @@ class SalesCycleQuoteHeaderModal {
         this.quoteTotalAmount,
         this.quoteGrossAmount,
         this.quoteGstAmount,
-        this.shippingAddress,
-        this.shippingAddress2,
-        this.shippingPostCode,
-        this.shippingStateCode,
-        this.shippingStateName,
-        this.shippingCity,
-        this.shippingDistrict});
+        this.frontlinerValue,
+        this.branchHeadValue,
+        this.zoneHeadValue,
+        this.clustureHeadValue});
 
   SalesCycleQuoteHeaderModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -105,6 +107,10 @@ class SalesCycleQuoteHeaderModal {
     quoteValidity = json['quote_validity'];
     expClosureDate = json['exp_closure_date'];
     quoteCommit = json['quote_commit'];
+    approvedBy = json['approved_by'];
+    approvedFullName = json['approved_full_name'];
+    approvedOn = json['approved_on'];
+    rejectReason = json['reject_reason'];
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
@@ -128,13 +134,10 @@ class SalesCycleQuoteHeaderModal {
     quoteTotalAmount = json['quote_total_amount'];
     quoteGrossAmount = json['quote_gross_amount'];
     quoteGstAmount = json['quote_gst_amount'];
-    shippingAddress = json['shipping_address'];
-    shippingAddress2 = json['shipping_address2'];
-    shippingPostCode = json['shipping_post_code'];
-    shippingStateCode = json['shipping_state_code'];
-    shippingStateName = json['shipping_state_name'];
-    shippingCity = json['shipping_city'];
-    shippingDistrict = json['shipping_district'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
   }
 
   Map<String, dynamic> toJson() {
@@ -153,6 +156,10 @@ class SalesCycleQuoteHeaderModal {
     data['quote_validity'] = this.quoteValidity;
     data['exp_closure_date'] = this.expClosureDate;
     data['quote_commit'] = this.quoteCommit;
+    data['approved_by'] = this.approvedBy;
+    data['approved_full_name'] = this.approvedFullName;
+    data['approved_on'] = this.approvedOn;
+    data['reject_reason'] = this.rejectReason;
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
@@ -176,13 +183,10 @@ class SalesCycleQuoteHeaderModal {
     data['quote_total_amount'] = this.quoteTotalAmount;
     data['quote_gross_amount'] = this.quoteGrossAmount;
     data['quote_gst_amount'] = this.quoteGstAmount;
-    data['shipping_address'] = this.shippingAddress;
-    data['shipping_address2'] = this.shippingAddress2;
-    data['shipping_post_code'] = this.shippingPostCode;
-    data['shipping_state_code'] = this.shippingStateCode;
-    data['shipping_state_name'] = this.shippingStateName;
-    data['shipping_city'] = this.shippingCity;
-    data['shipping_district'] = this.shippingDistrict;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
     return data;
   }
 }

@@ -24,10 +24,24 @@ class QuoteApprovalListVm extends GetxController{
   var filterQuoteContactNameController=TextEditingController().obs;
   var filterQuoteValidityController=TextEditingController().obs;
   var filterExpectedClosuredateController=TextEditingController().obs;
-  /*var filterQouteTatolAmtController=TextEditingController().obs;
-  var filterQuoteGstAmtController=TextEditingController().obs;
-  var filterQuoteGrossAmtController=TextEditingController().obs;*/
   var filterQuoteSaleCycleController=TextEditingController().obs;
+
+  var createdOnCnontroller=TextEditingController().obs;
+  var branch_head_value_controller=TextEditingController().obs;
+  var zone_head_value_controller=TextEditingController().obs;
+  var cluster_head_value_controller=TextEditingController().obs;
+  var frontliner_controller=TextEditingController().obs;
+  var createdByController=TextEditingController().obs;
+  var companyProfileTypeController=TextEditingController().obs;
+  var accountCodeController=TextEditingController().obs;
+  var accountNameController=TextEditingController().obs;
+  var rh_Approval_controller=TextEditingController().obs;
+  var cbh_Approval_controller=TextEditingController().obs;
+  var category_Approval_controller=TextEditingController().obs;
+  var gm_Approval_controller=TextEditingController().obs;
+  var filterQuoteStatusController=TextEditingController().obs;
+  var productCategoryController=TextEditingController().obs;
+
 
   RxList<SalesCycleQuoteHeaderModal> quoteApprovalList=<SalesCycleQuoteHeaderModal>[].obs;
   @override
@@ -44,7 +58,30 @@ class QuoteApprovalListVm extends GetxController{
 
   getQuoteHeaderData(int pageNumberForQuote){
     try{
-      Map data= {
+      Map data={
+        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty? filterQuoteIdController.value.text:"",
+        "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isEmpty?"":filterQuoteSaleCycleController.value.text,
+        "filter_account_code": accountCodeController.value.text.isEmpty?"": accountCodeController.value.text,
+        "filter_account_name":  accountNameController.value.text.isEmpty?"": accountNameController.value.text,
+        "filter_rh_approval":  rh_Approval_controller.value.text.isEmpty?"": rh_Approval_controller.value.text,
+        "filter_cbh_approval":  cbh_Approval_controller.value.text.isEmpty?"": cbh_Approval_controller.value.text,
+        "filter_category_approval":  category_Approval_controller.value.text.isEmpty?"": category_Approval_controller.value.text,
+        "filter_gm_approval":  gm_Approval_controller.value.text.isEmpty?"": gm_Approval_controller.value.text,
+        "filter_quote_version": -1,
+        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty?filterQuoteValidityController.value.text:"",
+        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
+        "filter_quote_status":"Under Approval",
+        "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
+        "filter_created_by": email,
+        "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
+        "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+        "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+        "row_per_page": rowsPerPage,
+        "page_number": pageNumberForQuote
+      };
+      /* {
         "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty?filterQuoteIdController.value.text:"",
         "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isNotEmpty?filterQuoteSaleCycleController.value.text:"" ,
         "filter_account_name": filterQuoteAccountNameController.value.text.isNotEmpty?filterQuoteAccountNameController.value.text:"",
@@ -57,7 +94,7 @@ class QuoteApprovalListVm extends GetxController{
         "filter_approved_by": "",
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
-      };
+      };*/
       loading.value=true;
       _api.quoteHeaderGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -93,4 +130,31 @@ class QuoteApprovalListVm extends GetxController{
       loading.value = false;
     }
   }
+
+  void clearAllFieldOfQuoteFilter() {
+    filterQuoteIdController.value
+        .clear();
+    filterQuoteStatusController.value
+        .clear();
+    filterExpectedClosuredateController
+        .value.clear();
+    filterQuoteValidityController.value
+        .clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    rh_Approval_controller.value.clear();
+    cbh_Approval_controller.value.clear();
+    category_Approval_controller.value.clear();
+    gm_Approval_controller.value.clear();
+    productCategoryController.value.clear();
+    createdOnCnontroller.value.clear();
+    frontliner_controller.value.clear();
+    branch_head_value_controller.value.clear();
+    zone_head_value_controller.value.clear();
+    cluster_head_value_controller.value.clear();
+    filterQuoteSaleCycleController.value.clear();
+
+
+  }
 }
+

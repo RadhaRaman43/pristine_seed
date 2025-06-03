@@ -22,7 +22,6 @@ import '../../account_master_vm/accountMasterVM.dart';
 class AllContactMasterVm extends GetxController{
   final _api=ContactMasterRepo();
   SessionManagement sessionManagement = SessionManagement();
-  final account_vm_controller = Get.put(Accountmastervm());
   RxBool loading=false.obs;
 
   RxString accountName="".obs;
@@ -40,28 +39,15 @@ class AllContactMasterVm extends GetxController{
   String view ="";
 
   var account_name_controller = TextEditingController();
+  var account_code_controller = TextEditingController();
   var FullAddress_Controller = TextEditingController().obs;
   var contact_name_controller = TextEditingController();
   var depart_name_controller = TextEditingController();
   var phone_no_controller = TextEditingController();
   var emailId_controller = TextEditingController();
-  var alternate_no_controller = TextEditingController();
-  var reporting_person_controller = TextEditingController();
-  var contact_title_controller = TextEditingController();
-  var designation_name_controller = TextEditingController();
-  var contact_code_controller = TextEditingController();
-  var IsHeDecisionMakerController = TextEditingController().obs;
-
-
-  // RxList<String> isHeDecisionMakerList =["Yes", "No"].obs;
-  RxList<CustomList> isHeDecisionMakerList=<CustomList>[].obs;
   RxList<ContactMstGetListModal> contact_master_list = <ContactMstGetListModal>[].obs;
-  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
-  RxList<AccountMasterGetByCodeModel> AccountMasterGetCode_list = <AccountMasterGetByCodeModel>[].obs;
-  RxList<DepartNameModal> department_name_list=<DepartNameModal>[].obs;
-  RxList<DesignationModal> designation_name_list=<DesignationModal>[].obs;
 
-  Rx<ContactMstGetListModal> contact_master_update =new ContactMstGetListModal().obs;
+
   @override
   void onInit() async{
     // TODO: implement onInit
@@ -81,11 +67,11 @@ class AllContactMasterVm extends GetxController{
   void getContactMasterAllList(int pageNumber) {
     Map<String, String> data={
       "filter_contact_name": contact_name_controller.text.isEmpty?"":contact_name_controller.text,
-      "filter_account_code": "",
-      "filter_account_name": "",
-      "filter_department_name": "",
-      "email_id": "",
-      "phone_no": "",
+      "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
+      "filter_account_name": account_name_controller.text.isEmpty?"":account_name_controller.text,
+      "filter_department_name": depart_name_controller.text.isEmpty?"":depart_name_controller.text,
+      "email_id": emailId_controller.text.isEmpty?"":emailId_controller.text,
+      "phone_no": phone_no_controller.text.isEmpty?"":phone_no_controller.text,
       "created_by": email,
       "row_per_page": rowsPerPage.toString(),
       "page_number": pageNumber.toString()

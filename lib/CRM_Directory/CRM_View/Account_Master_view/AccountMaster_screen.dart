@@ -1677,8 +1677,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Code',
-          hintText: 'Account Code',
+          labelText: 'Company Profile Type',
+          hintText: 'Company Profile Type',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
