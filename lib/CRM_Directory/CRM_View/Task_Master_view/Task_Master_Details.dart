@@ -1902,7 +1902,7 @@ class TaskMasterDetails extends StatelessWidget{
                   StaticMethod.onlyDate(
                       TaskMaster_page_controller
                           .Task_Master_list[0]
-                          .branchHeadValue!) ?? "",
+                          .branchHeadValue??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,

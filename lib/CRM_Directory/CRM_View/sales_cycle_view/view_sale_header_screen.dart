@@ -428,7 +428,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           .salesCycleStatus!.toUpperCase() ==
                                           "SUSPECT" &&
                                       saleCycleController.saleCycleList[0]
-                                          .isReadySendForApproval == 1)
+                                          .isReadySendForApproval == 1) && !(saleCycleController.FromPage.value =="FromDashboard")
                                       ? true
                                       : false,
                                   child: Column(
@@ -476,7 +476,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       visible: saleCycleController.saleCycleList[0]
                                           .quoteAccepted?.toUpperCase()=="LOSS" ||
                                           saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase() || saleCycleController.saleCycleList[0]
-                                          .salesCycleApprovalStatus?.toLowerCase()=="rejected"?false:true,
+                                          .salesCycleApprovalStatus?.toLowerCase()=="rejected" || (saleCycleController.FromPage.value=="FromDashboard")?false:true,
                                       child:  Container(
                                       padding: EdgeInsets.fromLTRB(
                                           15, 5, 15, 10),
@@ -872,7 +872,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             Visibility(
                                               visible: saleCycleController
                                                   .saleCycleList[0].quoteAccepted
-                                                  ?.toUpperCase() != "LOSS",
+                                                  ?.toUpperCase() == "LOSS" || saleCycleController.FromPage.value=="FromDashboard"?false:true,
                                               child: Container(
                                                 padding: EdgeInsets.fromLTRB(
                                                     15, 5, 15, 10),
@@ -957,7 +957,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 .saleCycleList[0].createdBy?.toLowerCase() ==
                                                 saleCycleController.email.toLowerCase() &&
                                                 saleCycleController
-                                                    .saleCycleList[0].quoteAccepted?.toUpperCase()!="LOSS" ? true : false,
+                                                    .saleCycleList[0].quoteAccepted?.toUpperCase()!="LOSS" && !(saleCycleController.FromPage.value=="FromDashboard")? true : false,
                                             child: GestureDetector(
                                               onTap: () {
                                                 saleCycleController.contactCode.value = saleCycleController.saleCycleList[0].contactCode ?? "";
@@ -1353,95 +1353,98 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   Widget bindClosureDate(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
-      child: TextField(
-        cursorColor: AllColors.primaryDark1,
-        /* readOnly: (saleCycleController.saleCycleList[0].quoteAccepted ==
-            "LOSS" ||
-            saleCycleController.saleCycleList[0].isReadySendForApproval == 0 &&
-                (saleCycleController.FromPage.value == 'Sales'
-                    || saleCycleController.FromPage.value == 'FromTaskScreen' ||
-                    saleCycleController.FromPage.value == 'Task'))
-            || (saleCycleController.FromPage.value == 'Task') ||
-            (saleCycleController.FromPage.value == 'FromTaskScreen')
-            ? true
-            : false,*/
-        readOnly: (saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase() ||
-            (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
-            saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")
-            ? true
-            : false,
-        controller: saleCycleController.closureDateController.value,
-        decoration: InputDecoration(
-            suffixIcon: Icon(Icons.calendar_month),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            hintText: 'Select Estimated Closure Date',
-            labelText: 'Estimated Closure Date',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.fourtine),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
-        ),
-        onTap: () async {
-          if (saleCycleController.saleCycleList[0].quoteAccepted != "LOSS" &&
-              saleCycleController.saleCycleList[0].isReadySendForApproval ==
-                  1) {
-            DateTime? initialDate;
-            if (saleCycleController.closureDateController.value.text
-                .isNotEmpty) {
-              initialDate = DateFormat('yyyy-MM-dd').parse(
-                saleCycleController.closureDateController.value.text,
-              );
-              // Ensure initialDate is not before firstDate
-              if (initialDate.isBefore(DateTime.now())) {
+      child: IgnorePointer(
+        ignoring: saleCycleController.FromPage.value =="FromDashboard",
+        child: TextField(
+          cursorColor: AllColors.primaryDark1,
+          /* readOnly: (saleCycleController.saleCycleList[0].quoteAccepted ==
+              "LOSS" ||
+              saleCycleController.saleCycleList[0].isReadySendForApproval == 0 &&
+                  (saleCycleController.FromPage.value == 'Sales'
+                      || saleCycleController.FromPage.value == 'FromTaskScreen' ||
+                      saleCycleController.FromPage.value == 'Task'))
+              || (saleCycleController.FromPage.value == 'Task') ||
+              (saleCycleController.FromPage.value == 'FromTaskScreen')
+              ? true
+              : false,*/
+          readOnly: (saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase() ||
+              (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
+              saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")&& !(saleCycleController.FromPage.value=="FromDashboard")
+              ? true
+              : false,
+          controller: saleCycleController.closureDateController.value,
+          decoration: InputDecoration(
+              suffixIcon: Icon(Icons.calendar_month),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten
+              ),
+              hintText: 'Select Estimated Closure Date',
+              labelText: 'Estimated Closure Date',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.fourtine),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )
+          ),
+          onTap: () async {
+            if (saleCycleController.saleCycleList[0].quoteAccepted != "LOSS" &&
+                saleCycleController.saleCycleList[0].isReadySendForApproval ==
+                    1 ) {
+              DateTime? initialDate;
+              if (saleCycleController.closureDateController.value.text
+                  .isNotEmpty) {
+                initialDate = DateFormat('yyyy-MM-dd').parse(
+                  saleCycleController.closureDateController.value.text,
+                );
+                // Ensure initialDate is not before firstDate
+                if (initialDate.isBefore(DateTime.now())) {
+                  initialDate = DateTime.now();
+                }
+              } else {
                 initialDate = DateTime.now();
               }
-            } else {
-              initialDate = DateTime.now();
+
+              DateTime ending_date = new DateTime(2200);
+              FocusScope.of(context).requestFocus(new FocusNode());
+              DateTime? date = await showDatePicker(
+                context: context,
+                initialDate: initialDate,
+                firstDate: DateTime.now(),
+                lastDate: ending_date,
+                builder: (BuildContext context, Widget? child) {
+                  return Theme(
+                    data: ThemeData.light().copyWith(
+                      primaryColor: AllColors.primaryDark1,
+                      // Header background color
+                      //accentColor: AllColors.primaryDark1, // Color of the buttons
+                      colorScheme: ColorScheme.light(
+                          primary: AllColors.primaryDark1),
+                      buttonTheme: ButtonThemeData(
+                          textTheme: ButtonTextTheme.primary),
+                    ),
+                    child: child!,
+                  );
+                },
+
+              );
+              var outputFormat = DateFormat('yyyy-MM-dd');
+              if (date != null && date != "")
+                saleCycleController.closureDateController.value.text =
+                    outputFormat.format(date);
+              /* else
+               saleCycleController.closureDateController.value.text = "";*/
             }
-
-            DateTime ending_date = new DateTime(2200);
-            FocusScope.of(context).requestFocus(new FocusNode());
-            DateTime? date = await showDatePicker(
-              context: context,
-              initialDate: initialDate,
-              firstDate: DateTime.now(),
-              lastDate: ending_date,
-              builder: (BuildContext context, Widget? child) {
-                return Theme(
-                  data: ThemeData.light().copyWith(
-                    primaryColor: AllColors.primaryDark1,
-                    // Header background color
-                    //accentColor: AllColors.primaryDark1, // Color of the buttons
-                    colorScheme: ColorScheme.light(
-                        primary: AllColors.primaryDark1),
-                    buttonTheme: ButtonThemeData(
-                        textTheme: ButtonTextTheme.primary),
-                  ),
-                  child: child!,
-                );
-              },
-
-            );
-            var outputFormat = DateFormat('yyyy-MM-dd');
-            if (date != null && date != "")
-              saleCycleController.closureDateController.value.text =
-                  outputFormat.format(date);
-            /* else
-             saleCycleController.closureDateController.value.text = "";*/
-          }
-        },
+          },
+        ),
       ),
     );
   }
@@ -1754,195 +1757,204 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   }*/
 
   Widget bindQuoteSubmitted(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10, bottom: 10),
-      child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width / 2 - 16,
-        controller: saleCycleController.QuoteSubmittedController.value,
-        label: Text(
-          "Quote Submitted",
-          style: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+    return IgnorePointer(
+      ignoring: saleCycleController.FromPage.value=="FromDashboard",
+      child: Container(
+        padding: const EdgeInsets.only(left: 10, bottom: 10),
+        child: DropdownMenu<String>(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width / 2 - 16,
+          controller: saleCycleController.QuoteSubmittedController.value,
+          label: Text(
+            "Quote Submitted",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w700),
+          ),
+
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: AllColors.primaryDark1,),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            filled: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          ),
+
+          //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
+          enabled: saleCycleController.saleCycleList[0].approvedBy
+              ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
+              saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                  ?.toLowerCase() == "rejected" ||
+              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
+                  "LOSS"
+              /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
+          onSelected: (String? selection) {
+            print(selection);
+
+            saleCycleController.QuoteSubmittedController.value.text =
+                _displayCustomerNeedIdentityStatusForOption(selection!)
+                    .toString();
+
+          },
+
+          dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<
+              DropdownMenuEntry<String>>((String e) {
+            return DropdownMenuEntry<String>(
+                value: e, label: e!, style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+                  AllColors.primaryDark1),));
+          }).toList(),
         ),
-
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(
-              color: AllColors.primaryDark1,),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          filled: false,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        ),
-
-        //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-        enabled: saleCycleController.saleCycleList[0].approvedBy
-            ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
-            saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
-                ?.toLowerCase() == "rejected" ||
-            saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
-                "LOSS"
-            /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
-        onSelected: (String? selection) {
-          print(selection);
-
-          saleCycleController.QuoteSubmittedController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!)
-                  .toString();
-
-        },
-
-        dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<
-            DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(
-              value: e, label: e!, style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
-                AllColors.primaryDark1),));
-        }).toList(),
       ),
     );
   }
 
   Widget bindConfirmDecisionDate(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 10, bottom: 10),
-      child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width / 2 - 16,
-        controller: saleCycleController.ConfirmDecisionDateController.value,
-        label: Text(
-          "Confirm Decision Date",
-          style: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+    return IgnorePointer(
+      ignoring: saleCycleController.FromPage.value=="FromDashboard",
+      child: Container(
+        padding: const EdgeInsets.only(right: 10, bottom: 10),
+        child: DropdownMenu<String>(
+          width: MediaQuery
+              .of(context)
+              .size
+              .width / 2 - 16,
+          controller: saleCycleController.ConfirmDecisionDateController.value,
+          label: Text(
+            "Confirm Decision Date",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w700),
+          ),
+
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: AllColors.primaryDark1,),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            filled: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          ),
+
+          //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
+          enabled: saleCycleController.saleCycleList[0].approvedBy
+              ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
+              saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                  ?.toLowerCase() == "rejected" ||
+              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
+                  "LOSS"
+             /* || saleCycleController.FromPage != 'Sales'*/ ? false : true,
+          onSelected: (String? selection) {
+            print(selection);
+
+            saleCycleController.ConfirmDecisionDateController.value.text =
+                _displayCustomerNeedIdentityStatusForOption(selection!)
+                    .toString();
+
+          },
+
+          dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<
+              DropdownMenuEntry<String>>((String e) {
+            return DropdownMenuEntry<String>(
+                value: e, label: e!, style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+                  AllColors.primaryDark1),));
+          }).toList(),
         ),
-
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(
-              color: AllColors.primaryDark1,),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          filled: false,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        ),
-
-        //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-        enabled: saleCycleController.saleCycleList[0].approvedBy
-            ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
-            saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
-                ?.toLowerCase() == "rejected" ||
-            saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
-                "LOSS"
-           /* || saleCycleController.FromPage != 'Sales'*/ ? false : true,
-        onSelected: (String? selection) {
-          print(selection);
-
-          saleCycleController.ConfirmDecisionDateController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!)
-                  .toString();
-
-        },
-
-        dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<
-            DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(
-              value: e, label: e!, style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
-                AllColors.primaryDark1),));
-        }).toList(),
       ),
     );
   }
 
   Widget bindConfirmExpectedRevenue(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 10, bottom: 10,),
-      child: DropdownMenu<String>(
-        width: saleCycleController
-            .saleCycleList[0].quoteAccepted
-            ?.toUpperCase() == "LOSS"?size.width-20:size.width / 2 - 16,
-        controller: saleCycleController.ConfirmExpectedRevenueController.value,
-        label: Text(
-          "Confirm Expected Revenue",
-          style: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+    return IgnorePointer(
+      ignoring: saleCycleController.FromPage.value=="FromDashboard",
+      child: Container(
+        padding: const EdgeInsets.only(left: 10, bottom: 10,),
+        child: DropdownMenu<String>(
+          width: saleCycleController
+              .saleCycleList[0].quoteAccepted
+              ?.toUpperCase() == "LOSS" ||  saleCycleController.FromPage.value=="FromDashboard"?size.width-20:size.width / 2 - 16,
+          controller: saleCycleController.ConfirmExpectedRevenueController.value,
+          label: Text(
+            "Confirm Expected Revenue",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w700),
+          ),
+
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: AllColors.primaryDark1,),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            filled: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          ),
+
+          //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
+          enabled: saleCycleController.saleCycleList[0].approvedBy
+              ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
+              saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                  ?.toLowerCase() == "rejected" ||
+              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
+                  "LOSS"
+              /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
+          onSelected: (String? selection) {
+            print(selection);
+
+            saleCycleController.ConfirmExpectedRevenueController.value.text =
+                _displayCustomerNeedIdentityStatusForOption(selection!)
+                    .toString();
+
+          },
+
+          dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<
+              DropdownMenuEntry<String>>((String e) {
+            return DropdownMenuEntry<String>(
+                value: e, label: e!, style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+                  AllColors.primaryDark1),));
+          }).toList(),
         ),
-
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(
-              color: AllColors.primaryDark1,),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          filled: false,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        ),
-
-        //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-        enabled: saleCycleController.saleCycleList[0].approvedBy
-            ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
-            saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
-                ?.toLowerCase() == "rejected" ||
-            saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
-                "LOSS"
-            /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
-        onSelected: (String? selection) {
-          print(selection);
-
-          saleCycleController.ConfirmExpectedRevenueController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!)
-                  .toString();
-
-        },
-
-        dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<
-            DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(
-              value: e, label: e!, style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
-                AllColors.primaryDark1),));
-        }).toList(),
       ),
     );
   }
@@ -5852,7 +5864,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
       ignoring: ( saleCycleController.saleCycleList[0].isReadySendForApproval==0/*saleCycleController.saleCycleList[0].createdBy != saleCycleController.email*/ ||
-          (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending' && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
+          (saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() !='pending'
+              && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() =='suspect') ||
           saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "loss")
           ? true
           : false,
@@ -5889,6 +5902,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),
           ),
+          enabled: (saleCycleController.FromPage.value!="FromDashboard"),
           onSelected: (String? selection) {
             print(selection);
             saleCycleController.identifyDecisionMakerController.value.text =
@@ -6007,7 +6021,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               FocusNode focusNode, VoidCallback onFieldSubmitted) {
             return TextField(
               readOnly: (saleCycleController.saleCycleList[0].quoteAccepted
-                  ?.toUpperCase() == "LOSS") ||
+                  ?.toUpperCase() == "LOSS") || (saleCycleController.FromPage.value=="FromDashboard")||
                   (saleCycleController.saleCycleList[0]
                       .isReadySendForApproval == 0
                       )
@@ -6138,15 +6152,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               TextEditingController controller,
               FocusNode focusNode, VoidCallback onFieldSubmitted) {
             return TextField(
-              readOnly: (saleCycleController.saleCycleList[0]
-                  .isReadySendForApproval == 0 &&
-                  (saleCycleController.FromPage.value == 'Sales' ||
-                      saleCycleController.FromPage.value == 'FromTaskScreen'
-                  )) || saleCycleController.FromPage.value == 'Task' ||
-                  saleCycleController.FromPage.value == 'FromTaskScreen'
-                  ? true
-                  : false,
-
+              readOnly: saleCycleController.saleCycleList[0]
+                  .isReadySendForApproval == 0 ||
+                saleCycleController.FromPage.value=="FromDashboard" ? true : false,
               cursorColor: AllColors.primaryDark1,
               controller: controller
                 ..text = saleCycleController.purchasTimeFrameController.value
@@ -8680,24 +8688,21 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                       ),*/
-                      Obx(() {
-                        return Visibility(
-                          visible: saleCycleController.get_SalesCycleProductById_List.value.length>0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 10.0),
-                            child: CircleAvatar(
-                              child: InkWell(
-                                onTap: () {
-                                  showDialogSalesCycleProductFilter(context);
-                                },
-                                child: Icon(
-                                    Icons.filter_alt_rounded
-                                ),
+
+                       Padding(
+                          padding: const EdgeInsets.only(right: 10.0),
+                          child: CircleAvatar(
+                            child: InkWell(
+                              onTap: () {
+                                showDialogSalesCycleProductFilter(context);
+                              },
+                              child: Icon(
+                                  Icons.filter_alt_rounded
                               ),
                             ),
                           ),
-                        );
-                      }),
+                        ),
+
 
                     ],
                   ),

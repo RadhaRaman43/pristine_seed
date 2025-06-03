@@ -3660,6 +3660,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                   saleCycleController.quoteApprovalRejectApiHit(flag,saleCycleController.quoteHeaderdata[0].quoteId!);
                                 }
                                 else if(flag=="Rejected"){
+                                  saleCycleController.managerRemarksController.value.clear();
                                   saleCycleController.quoteApprovalRejectApiHit(flag,saleCycleController.quoteHeaderdata[0].quoteId!);
                                 }
                                 else{

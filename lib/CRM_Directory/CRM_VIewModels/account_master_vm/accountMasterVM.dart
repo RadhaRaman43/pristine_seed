@@ -1671,9 +1671,16 @@ class Accountmastervm extends GetxController{
         if(jsonResponse is List){
           List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
+            if(pageNumber==0){
+              view_contract_list.clear();
+            }
+            view_contract_list.addAll(response);
+            print('listSize.....${view_contract_list.length}');
+            total_rows=int.parse(view_contract_list[0].totalRows!);
             loading.value = false;
-            view_contract_list.value=[];
-            view_contract_list.value=response;
+            //todo commented by nirupma
+            /*view_contract_list.value=[];
+            view_contract_list.value=response;*/
             Get.toNamed(RoutesName.viewContacts_screen);
 
           }else {

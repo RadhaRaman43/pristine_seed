@@ -297,6 +297,11 @@ class SalesCycleScreen extends StatelessWidget{
                 value: salesCycleController.saleCycleList[position].salesCycleId,
               ),
               _buildLabelWithValue(
+                label: "Task Id : ",
+                value: salesCycleController.saleCycleList[position].taskId,
+                width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
                 label: "Approval Status : ",
                 value: salesCycleController.saleCycleList[position].salesCycleApprovalStatus,
                 width: size.width * 0.36,
@@ -2333,39 +2338,67 @@ class SalesCycleScreen extends StatelessWidget{
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
       ),
-      onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        onTap: () async {
+          FocusScope.of(context).unfocus();
 
-        DateTimeRange? picked = await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2200),
-          initialDateRange: DateTimeRange(
-            start: DateTime.now(),
-            end: DateTime.now().add(Duration(days: 7)),
-          ),
-          builder: (BuildContext context, Widget? child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                primaryColor: AllColors.primaryDark1,
-                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                buttonTheme: ButtonThemeData(
-                  textTheme: ButtonTextTheme.primary,
+          // 🎯 START DATE PICKER with custom theme
+          DateTime? startDate = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2200),
+            builder: (context, child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: Colors.green, // 🎨 Start date primary color
+                    onPrimary: Colors.white, // Text color on selected date
+                    onSurface: Colors.black, // Default text color
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.green, // "OK" and "CANCEL"
+                    ),
+                  ),
                 ),
-              ),
-              child: child!,
-            );
-          },
-        );
+                child: child!,
+              );
+            },
+          );
 
-        if (picked != null) {
-          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
-          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          salesCycleController.createdOnCnontroller.value.text = '$startDate@$endDate';
-        } else {
-          salesCycleController.createdOnCnontroller.value.text = '';
+          if (startDate == null) return;
+          DateTime? endDate = await showDatePicker(
+            context: context,
+            initialDate: startDate.add(Duration(days: 1)),
+            firstDate: startDate,
+            lastDate: DateTime(2200),
+            builder: (context, child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  colorScheme: ColorScheme.light(
+                    primary: Colors.red, // 🎨 End date primary color
+                    onPrimary: Colors.white,
+                    onSurface: Colors.black,
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.red,
+                    ),
+                  ),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          if (endDate != null) {
+            final formattedStart = DateFormat('yyyy-MM-dd').format(startDate);
+            final formattedEnd = DateFormat('yyyy-MM-dd').format(endDate);
+            salesCycleController.createdOnCnontroller.value.text = '$formattedStart@$formattedEnd';
+          }
         }
-      },
+
+
     );
   }
 
