@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -251,6 +252,7 @@ class SalesCycleScreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
+    var createdOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].createdOn??"");
     String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
       switch (status) {
@@ -406,7 +408,7 @@ class SalesCycleScreen extends StatelessWidget{
               ),
               _buildLabelWithValue(
                 label: "Created On: ",
-                value: salesCycleController.saleCycleList[position].createdOn,
+                value: createdOn,
                 width: size.width * 0.33,
               ),
               _buildLabelWithValue(
@@ -2244,7 +2246,7 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
-  bindCreatedOn(BuildContext context) {
+ /* bindCreatedOn(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,
         controller: salesCycleController.createdOnCnontroller.value,
@@ -2304,5 +2306,67 @@ class SalesCycleScreen extends StatelessWidget{
 
 
     );
+  }*/
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: salesCycleController.createdOnCnontroller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Date Range',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          salesCycleController.createdOnCnontroller.value.text = '$startDate@$endDate';
+        } else {
+          salesCycleController.createdOnCnontroller.value.text = '';
+        }
+      },
+    );
   }
+
 }
