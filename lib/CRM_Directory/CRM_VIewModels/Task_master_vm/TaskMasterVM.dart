@@ -291,7 +291,7 @@ class Taskmastervm extends GetxController{
                         Task_Master_list.addAll(response);
                         total_rows=int.parse(Task_Master_list[0].totalRows!);
 
-
+                        print('flag data...$flag');
                         if(flag == 'View'){
                             Active = Task_Master_list[0].isSalesCycleActive!;
                             if(Active == 1){

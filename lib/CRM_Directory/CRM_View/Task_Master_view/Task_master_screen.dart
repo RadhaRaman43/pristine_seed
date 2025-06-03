@@ -658,6 +658,7 @@ class TaskMasterScreen extends StatelessWidget {
       margin: EdgeInsets.all(5),
       child: ListTile(
           onTap: () {
+            print('task id......${TaskMaster_page_controller.Task_Master_list[position].taskId}');
             TaskMaster_page_controller.getTaskMaster(
                 0,
                 TaskMaster_page_controller.is_Active.toString(),
@@ -1181,7 +1182,8 @@ class TaskMasterScreen extends StatelessWidget {
             )
           ],
         ),*/
-          trailing: taskStatus == 'PENDING FOR APPROVAL' ? InkWell(
+          trailing: taskStatus == 'PENDING FOR APPROVAL' ?
+          InkWell(
             onTap: () {
               if (IsReadyForApprove == 1) {
                 showApprovRejectDialog(context, TaskMaster_page_controller
@@ -1200,7 +1202,7 @@ class TaskMasterScreen extends StatelessWidget {
               }
             },
             child: Icon(Icons.update, color: Colors.blue,),
-          ) : (taskStatus.toLowerCase() == 'approved' ? InkWell(
+          ) : (taskStatus.toLowerCase() == 'approved' || taskStatus.toLowerCase() == 'rejected' ? InkWell(
             onTap: () {
               TaskMaster_page_controller.getTaskMaster(
                   0,

@@ -58,9 +58,32 @@ class TaskMasterDetails extends StatelessWidget{
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
           }
           else {
+
+            TaskMaster_page_controller.pageNumber = 0;
+            TaskMaster_page_controller
+                .date_filter.value = "Today";
+            TaskMaster_page_controller
+                .is_done.value = 0;
+            TaskMaster_page_controller
+                .filter.value = "Running";
+            TaskMaster_page_controller.is_Active=-1;
+            TaskMaster_page_controller
+                .getTaskMaster(
+                TaskMaster_page_controller.pageNumber,
+                TaskMaster_page_controller.is_Active
+                    .toString(),
+                '',
+                '',
+                '',
+                TaskMaster_page_controller.date_filter,
+                TaskMaster_page_controller.is_done.value);
+
             //Get.offAllNamed(RoutesName.taskMaster_screen);
-            TaskMaster_page_controller.pageNumber=0;
-            TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '', '', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+
+           /* TaskMaster_page_controller.pageNumber=0;
+            TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber,
+            TaskMaster_page_controller.is_Active.toString(), '', '', '',
+            TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);*/
             Get.toNamed(RoutesName.taskMaster_screen);
           }
          // Get.back();
@@ -1189,7 +1212,9 @@ class TaskMasterDetails extends StatelessWidget{
                       .Task_Master_list[0]
                       .taskStatus ?? "",
                   style: GoogleFonts.poppins(
-                    color: Colors.green,
+                    color:TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .taskStatus?.toLowerCase()=='rejected'?Colors.red: Colors.green,
                     fontSize: AllFontSize.fourtine,
                     fontWeight: FontWeight.w500,
                   ),
@@ -1512,12 +1537,16 @@ class TaskMasterDetails extends StatelessWidget{
                     SizedBox(width: 2,),
                     Visibility(
                       visible:
-                      TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==0||
+                      TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==1 &&
+                          account_vm_controller.view!='TaskDashboard' &&
+                      TaskMaster_page_controller.TaskDSAR_Master_list.length==0 ?true:false,
+                     /* TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==1||
                       account_vm_controller.view=='Sales'
                           || account_vm_controller.view=='TaskDashboard'
-                          || TaskMaster_page_controller.email==TaskMaster_page_controller.Task_Master_list[0].approvedBy ?false:true,
+                          || TaskMaster_page_controller.email==TaskMaster_page_controller.Task_Master_list[0].approvedBy ?false:true,*/
                       child: InkWell(
                           onTap: () {
+                            print('sales and dashboard view:${ account_vm_controller.view} ${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar}');
                             TaskMaster_page_controller
                                 .Item_Category_Selected_list
                                 .value = [];
@@ -1610,9 +1639,12 @@ class TaskMasterDetails extends StatelessWidget{
                     SizedBox(width: 2,),
                     Visibility(
                       visible:
-                      TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==0||
+                      TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==1 &&
+                          account_vm_controller.view!='TaskDashboard' &&
+                          TaskMaster_page_controller.TaskDSAR_Master_list.length==0 ?true:false,
+                      /*TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar==1||
                       account_vm_controller.view=='Sales' || account_vm_controller.view=='TaskDashboard' || TaskMaster_page_controller.email==TaskMaster_page_controller
-                          .Task_Master_list[0].approvedBy ?false:true,
+                          .Task_Master_list[0].approvedBy ?false:true,*/
                       child: InkWell(
                           onTap: () {
                             TaskMaster_page_controller
@@ -2547,8 +2579,7 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             Row(
               children: [
-                Text(
-                  "Remarks",
+                Text( "Call Description",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
