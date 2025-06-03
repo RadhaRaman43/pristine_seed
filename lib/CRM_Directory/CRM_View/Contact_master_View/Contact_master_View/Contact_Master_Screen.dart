@@ -19,6 +19,16 @@ class ContactMasterScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        contact_vm_controller.pageNumber=0;
+        contact_vm_controller.filterIconColor.value=false;
+        contact_vm_controller.account_name_controller.clear();
+        contact_vm_controller.contact_name_controller.clear();
+        contact_vm_controller.depart_name_controller.clear();
+        contact_vm_controller.emailId_controller.clear();
+        contact_vm_controller.phone_no_controller.clear();
+        contact_vm_controller.getContactMasterList(contact_vm_controller.pageNumber, '', '', '');
+
+
         Get.toNamed(RoutesName.homeScreen);
         return false;
       }, child: Scaffold(
