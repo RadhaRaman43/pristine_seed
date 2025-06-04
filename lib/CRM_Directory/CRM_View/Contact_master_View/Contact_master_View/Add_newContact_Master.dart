@@ -311,8 +311,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
                     keyboardType: TextInputType.number,
                     controller: contact_vm_controller.phone_no_controller,
                     decoration: InputDecoration(
-                        hintText: "Phone No.",
-                        labelText: "Phone No.",
+                        hintText: "Phone No.*",
+                        labelText: "Phone No.*",
                         //suffixIcon: Icon(Icons.email),
                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -372,8 +372,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
                     },
                     controller: contact_vm_controller.emailId_controller,
                     decoration: InputDecoration(
-                        hintText: "Email Id",
-                        labelText: "Email Id",
+                        hintText: "Email Id*",
+                        labelText: "Email Id*",
                         //suffixIcon: Icon(Icons.email),
                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 

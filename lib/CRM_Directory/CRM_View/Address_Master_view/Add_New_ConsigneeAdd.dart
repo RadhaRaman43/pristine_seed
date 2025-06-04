@@ -739,7 +739,7 @@ class AddNewConsigneeadd extends StatelessWidget{
     );
   }
 
-  Widget bindGstRegistrationTypeDropDown(context){
+  /*Widget bindGstRegistrationTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayGstRegisterTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -837,6 +837,63 @@ class AddNewConsigneeadd extends StatelessWidget{
           ),
         );
       },
+    );
+  }*/
+
+  Widget bindGstRegistrationTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.gst_registration_type_controller.value,
+        label: Text(
+          "GST Type*",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          address_vm_controller.gst_registration_type_controller.value.text =
+              _displayGstRegisterTypeForOption(selection!).toString();
+          if(address_vm_controller.gst_registration_type_controller.value.text == 'Registered'){
+            address_vm_controller.GstRegistration.value = true;
+          }else{
+            // accountMaster_page_controller.GstStateList.addAll(accountMaster_page_controller.StateMaster_list);
+            address_vm_controller.GstRegistration.value = false;
+          }
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Gst_Registration_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

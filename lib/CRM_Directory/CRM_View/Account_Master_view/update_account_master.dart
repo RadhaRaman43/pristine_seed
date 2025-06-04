@@ -163,7 +163,7 @@ class UpdateAccountMaster extends StatelessWidget{
            PopupMenuButton(itemBuilder: (BuildContext context){
              List<PopupMenuEntry>  items= [];
 
-             if(accountMaster_page_controller.view!="ALLContactList"){
+             if(accountMaster_page_controller.view!="VIEW" && accountMaster_page_controller.view!="ALLContactList"){
                items.add(
                  PopupMenuItem(
                    child: Row(
@@ -300,10 +300,10 @@ class UpdateAccountMaster extends StatelessWidget{
                  return  ;
                }
 
-               /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+               if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
                      Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
                      return  ;
-                   }*/
+                   }
                if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
                  Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
                  return  ;
@@ -458,8 +458,8 @@ class UpdateAccountMaster extends StatelessWidget{
                    maxLines: 2,
                    controller: accountMaster_page_controller.AccountTitle_Controller,
                    decoration: InputDecoration(
-                       hintText: "Account Title",
-                       labelText: "Account Title",
+                       hintText: "Branch Name",
+                       labelText: "Branch Name",
                        //suffixIcon: Icon(Icons.email),
                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -873,8 +873,8 @@ class UpdateAccountMaster extends StatelessWidget{
                              },
                              controller: accountMaster_page_controller.PanNo_Controller,
                              decoration: InputDecoration(
-                                 hintText: "PAN No.",
-                                 labelText: "PAN No.",
+                                 hintText: "Customer PAN No.",
+                                 labelText: "Customer PAN No.",
                                  //suffixIcon: Icon(Icons.email),
                                  contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -904,8 +904,8 @@ class UpdateAccountMaster extends StatelessWidget{
                            controller: accountMaster_page_controller
                                .IfscCode_Controller,
                            decoration: InputDecoration(
-                               hintText: "IFSC Code",
-                               labelText: "IFSC Code",
+                               hintText: "Customer IFSC Code",
+                               labelText: "Customer IFSC Code",
                                //suffixIcon: Icon(Icons.email),
                                contentPadding: EdgeInsets.symmetric(
                                    vertical: AllFontSize.ten,
@@ -1654,8 +1654,8 @@ class UpdateAccountMaster extends StatelessWidget{
                              FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
                            ],
                            decoration: InputDecoration(
-                               hintText: "Annual Revenue",
-                               labelText: "Annual Revenue",
+                               hintText: "Annual Turnover Of Client",
+                               labelText: "Annual Turnover Of Client",
                                //suffixIcon: Icon(Icons.email),
                                contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -2541,8 +2541,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type',
-              labelText: 'Account Category Type',
+              hintText: 'Account Category Type*',
+              labelText: 'Account Category Type*',
               /*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
@@ -2860,7 +2860,7 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
 
-  Widget bindGstRegistrationTypeDropDown(context){
+  /*Widget bindGstRegistrationTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayGstRegisterTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -2923,19 +2923,19 @@ class UpdateAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'GST Registration Type*',
               labelText: 'GST Registration Type*',
-              /*hintStyle: GoogleFonts.poppins(
+              *//*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
                   fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
+              ),*//*
+              *//*labelStyle: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
+                  fontSize: AllFontSize.sisxteen),*//*
+              *//*focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              ),*//*
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2983,6 +2983,63 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
         );
       },
+    );
+  }*/
+
+  Widget bindGstRegistrationTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.gst_registration_type_controller.value,
+        label: Text(
+          "GST Registration Type*",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        enabled: accountMaster_page_controller.view=='Account'?true:false,
+        //initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.gst_registration_type_controller.value.text =
+              _displayGstRegisterTypeForOption(selection!).toString();
+          if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered'){
+            accountMaster_page_controller.GstRegistration.value = true;
+          }else{
+            // accountMaster_page_controller.GstStateList.addAll(accountMaster_page_controller.StateMaster_list);
+            accountMaster_page_controller.GstRegistration.value = false;
+          }
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Gst_Registration_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 
@@ -3120,7 +3177,7 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
-  Widget bindIsReferralDropDown(context) {
+  /*Widget bindIsReferralDropDown(context) {
     return Autocomplete<String>(
       displayStringForOption: _displayIsActiveForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -3160,11 +3217,11 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextField(
             readOnly: accountMaster_page_controller.view=='Account'?false:true,
-            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+            *//* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
                 || accountMaster_page_controller.view=='VIEW' ||
                 accountMaster_page_controller.view=='Task'||
                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = accountMaster_page_controller.ReferralBy_Controller
@@ -3236,6 +3293,62 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
         );
       },
+    );
+  }*/
+
+  Widget bindIsReferralDropDown(context) {
+    return Container(
+      // margin: const EdgeInsets.only(left: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.ReferralBy_Controller,
+        label: Text(
+          "Is Referral",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        //initialSelection: "No",
+        enabled: accountMaster_page_controller.view=='Account'?true:false,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          accountMaster_page_controller.ReferralBy_Controller.text =
+              _displayIsActiveForOption(selection!).toString();
+          if(accountMaster_page_controller.ReferralBy_Controller.text == 'Yes'){
+            accountMaster_page_controller.isReferral.value = true;
+          }else{
+            accountMaster_page_controller.isReferral.value = false;
+          }
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.IsActiveTypeList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

@@ -350,7 +350,7 @@ class TaskMasterScreen extends StatelessWidget {
                                         color: AllColors.grayColor)),
                                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                 //CircleAvatar
-                                label: Text('Today',
+                                label: Text("Today Calls",
                                     style: GoogleFonts.poppins(
                                       color: TaskMaster_page_controller
                                           .date_filter.value ==
@@ -398,7 +398,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           color: AllColors.grayColor)),
                                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                   //CircleAvatar
-                                  label: Text('Future',
+                                  label: Text("Future Calls",
                                       style: GoogleFonts.poppins(
                                         color: TaskMaster_page_controller
                                             .date_filter.value ==
@@ -449,7 +449,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           color: AllColors.grayColor)),
                                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                   //CircleAvatar
-                                  label: Text('Breached',
+                                  label: Text('Lapsed Calls',
                                       style: GoogleFonts.poppins(
                                         color: TaskMaster_page_controller
                                             .date_filter.value ==
@@ -501,7 +501,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           color: AllColors.grayColor)),
                                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                   //CircleAvatar
-                                  label: Text('All',
+                                  label: Text('All Calls',
                                       style: GoogleFonts.poppins(
                                         color: TaskMaster_page_controller
                                             .date_filter.value ==
@@ -1087,6 +1087,7 @@ class TaskMasterScreen extends StatelessWidget {
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
+
                     ),
                   ),
                 ],
@@ -1248,6 +1249,40 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 15,),
                   bindApprovRejectDropDown(context),
+                  SizedBox(height: 55,),
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.ApproveBool
+                          .value,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          controller: TaskMaster_page_controller
+                              .managerRemarksController.value,
+                          decoration: InputDecoration(
+                              hintText: "Manager Remarks",
+                              labelText: "Manager Remarks",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+
+                              /*focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),*/
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+                    );
+                  }),
                   SizedBox(height: 55,),
                   Obx(() {
                     return Visibility(

@@ -336,6 +336,7 @@ class _Drawer extends State<CustomDrawer> {
                                               home_vm.openMenu(cTitle, iconData);
                                               //accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
                                               // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
+                                              accountMaster_page_controller.clearFilterController();
                                               accountMaster_page_controller.pageNumber = 0;
                                               accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
                                               Get.toNamed(RoutesName.Draft_item_list);

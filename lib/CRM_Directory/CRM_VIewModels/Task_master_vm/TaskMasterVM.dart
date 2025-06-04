@@ -74,6 +74,7 @@ class Taskmastervm extends GetxController{
     var SaleCycleActive_Controller = TextEditingController();
     var ApproveReject_Controller = TextEditingController();
     var RejectReason_Controller = TextEditingController();
+    var managerRemarksController=TextEditingController().obs;
     var Sale_cycle_Id_controller = TextEditingController();
     var DSAR_Status_type_controller = TextEditingController().obs;
     var ItemCat_type_controller = TextEditingController();

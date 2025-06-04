@@ -1586,6 +1586,32 @@ class Accountmastervm extends GetxController{
     }
   }
 
+  clearFilterController(){
+    account_code_controller.clear();
+    account_name_controller.clear();
+    account_type_controller.clear();
+    comp_prof_type_controller.clear();
+    stateName_controller.clear();
+    IsActive_controller.clear();
+    PhoneNo_Controller.clear();
+    EmailId_Controller.clear();
+    postal_code_controller.value.clear();
+    district_controller.value.clear();
+    created_by_controller.value.clear();
+    frontliner_controller.value.clear();
+    branch_head__value_controller.value.clear();
+    zone_head__value_controller.value.clear();
+    cluster_head__value_controller.value.clear();
+    //accountMaster_page_controller.Address_controller.clear();
+    // accountMaster_page_controller.Annual_Revenue_Controller.clear();
+    //accountMaster_page_controller.No_Of_Emp_Controller.clear();
+    //accountMaster_page_controller.no_of_employees_min = '';
+    // accountMaster_page_controller.no_of_employees_max = '';
+    // accountMaster_page_controller.annual_revenue_min = '';
+    //accountMaster_page_controller.annual_revenue_max = '';
+    //accountMaster_page_controller.account_cat_type_controller.clear();
+  }
+
   clearController(){
     try{
       compProfileRemrk.value = false;
@@ -1619,7 +1645,7 @@ class Accountmastervm extends GetxController{
       comp_prof_type_controller.clear();
       comp_prof_sub_type_controller.value.clear();
       comp_prof_remarks_controller.clear();
-      gst_registration_type_controller.value.clear();
+      gst_registration_type_controller.value.text = 'UnRegistered';
       GstNo_Controller.clear();
       PanNo_Controller.clear();
       IfscCode_Controller.clear();
