@@ -217,6 +217,9 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                   ),
                   onTap: (){
                     salesCycleController.clearAllFieldOfFilter();
+                    salesCycleController.filterQuoteAcceptedFlag.value=
+                        accountMaster_page_controller.AccountDashboardDataSalesList[position]
+                            .quoteAccepted??"";
                     salesCycleController.pageNumber=0;
                     salesCycleController.getsalesCycleData(salesCycleController.pageNumber,  accountMaster_page_controller.AccountDashboardDataSalesList[position]
                         .salesCycleId!, "ViewHeader", 'FromDashboard');
