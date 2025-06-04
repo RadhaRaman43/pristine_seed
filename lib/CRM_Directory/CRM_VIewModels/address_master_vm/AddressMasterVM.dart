@@ -187,7 +187,7 @@ class Addressmastervm extends GetxController{
             Get.toNamed(RoutesName.viewAddress_screen);
             getAddressMasterList(0, account_code_controller.value.text);
            // resetAllContactCreativeField('Icon');
-            Utils.showToastification('Error', response[0].message!);
+            Utils.showToastification('Address add successfully', response[0].message!);
             //Get.offAllNamed(RoutesName.contactMaster_screen);
 
           }else {
