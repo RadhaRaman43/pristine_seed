@@ -83,7 +83,9 @@ class UpdateBussinessTermPage extends StatelessWidget{
                 bindAdvancPaymentAmt(context),
                 bindFinalAmt(context),
                 bindPendingAmt(context),
+                bindTermCondotion(context),
                 bindRemarks(context),
+
             SizedBox(height: 10,),
             Visibility(
               visible: saleCycleController.BusinessTerm.value == true ? false : true,
@@ -604,5 +606,38 @@ class UpdateBussinessTermPage extends StatelessWidget{
 
   }
 
+  Widget bindTermCondotion(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
+      child: Obx(() {
+        return TextField(
+          readOnly:  saleCycleController.BusinessTerm.value,
+          cursorColor: AllColors.primaryDark1,
+          controller: saleCycleController.termConditionController.value,
+          decoration: InputDecoration(
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+              hintText: 'Term & Condition',
+              labelText: 'Term & Condition',
+              hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.fourtine),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w500,
+                  fontSize: AllFontSize.sisxteen),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+              )
+          ),
+        );
+
+      }),
+    );
+  }
 
 }

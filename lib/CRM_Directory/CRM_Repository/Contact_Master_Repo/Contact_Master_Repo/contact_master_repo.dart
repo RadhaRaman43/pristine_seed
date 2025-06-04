@@ -30,4 +30,10 @@ class ContactMasterRepo{
     return _apiService.getApi(AppUrl.AccountMstGetBuyCode, sessionManagement, data);
   }
 
+
+  Future<String> getContactMstGetAllApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.ContactMstGetAll,sessionManagement);
+  }
+
+
 }

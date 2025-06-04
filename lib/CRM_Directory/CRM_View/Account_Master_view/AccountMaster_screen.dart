@@ -146,8 +146,7 @@ class AccountmasterScreen extends StatelessWidget{
             color: Colors.transparent,
           ),
           shrinkWrap: true,
-          itemCount: accountMaster_page_controller
-              .Account_Master_list.value.length,
+          itemCount: accountMaster_page_controller.Account_Master_list.value.length,
           itemBuilder: (BuildContext context, int index) {
             return BindCustomerRequestListView(context, index);
           });
@@ -161,6 +160,7 @@ class AccountmasterScreen extends StatelessWidget{
 
   Widget BindCustomerRequestListView(context, int position) {
     int? IsActive = accountMaster_page_controller.Account_Master_list[position].isActive;
+    var controller=accountMaster_page_controller.Account_Master_list[position];
     String isActive = "";
     if(IsActive == 1){
       isActive = "Yes";
@@ -183,8 +183,70 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'district');
 
           },
-          subtitle: Column(
+          subtitle:Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              buildInfoRow("Account Code", controller.accountCode),
+              buildInfoRow("Account Name", controller.accountName),
+              buildInfoRow("Account Type", controller.accountType),
+              buildInfoRow("Company Type", controller.companyProfileType),
+              buildInfoRow("Company Sub Type", controller.companyProfileSubType),
+              buildInfoRow("Email Id", controller.emailId),
+              buildInfoRow("Phone No.", controller.phoneNo),
+              buildInfoRow("Created By", controller.createdBy),
+              buildInfoRow("Frontliner Value", controller.frontlinerValue),
+              buildInfoRow("Branch Head Value", controller.branchHeadValue),
+              buildInfoRow("Zone Head Value", controller.zoneHeadValue),
+              buildInfoRow("Cluster Head Value", controller.clustureHeadValue),
+              buildInfoRow("Address", controller.permanentAddress?.address ?? ""),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  "Is Active: $isActive",
+                  style: GoogleFonts.poppins(
+                      color: Colors.blue,
+                      fontSize: AllFontSize.twelve,
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+            ],
+          ),
+
+          /* Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Account Code : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .accountCode??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .accountCode??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 2,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -200,11 +262,11 @@ class AccountmasterScreen extends StatelessWidget{
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
-                          .accountName!,
+                          .accountName??"",
                       child: Text(
                         accountMaster_page_controller
                             .Account_Master_list[position]
-                            .accountName!,
+                            .accountName??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -233,11 +295,11 @@ class AccountmasterScreen extends StatelessWidget{
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
-                          .accountType!,
+                          .accountType??"",
                       child: Text(
                         accountMaster_page_controller
                             .Account_Master_list[position]
-                            .accountType!,
+                            .accountType??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -264,7 +326,7 @@ class AccountmasterScreen extends StatelessWidget{
                   Text(
                     accountMaster_page_controller
                         .Account_Master_list[position]
-                        .companyProfileType!,
+                        .companyProfileType??"",
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
@@ -272,6 +334,7 @@ class AccountmasterScreen extends StatelessWidget{
                   ),
                 ],
               ),
+              SizedBox(height: 3),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -287,11 +350,229 @@ class AccountmasterScreen extends StatelessWidget{
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
-                          .companyProfileSubType!,
+                          .companyProfileSubType??"",
                       child: Text(
                         accountMaster_page_controller
                             .Account_Master_list[position]
-                            .companyProfileSubType!,
+                            .companyProfileSubType??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Email Id : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .emailId??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .emailId??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Phone No.: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .phoneNo??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .phoneNo??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Created By: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .createdBy??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .createdBy??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Frontliner Value: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .frontlinerValue??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .frontlinerValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Branch Head Value ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .branchHeadValue??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .branchHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Zone Head Value ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .zoneHeadValue??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .zoneHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Cluster Head Value ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: accountMaster_page_controller
+                          .Account_Master_list[position]
+                          .clustureHeadValue??"",
+                      child: Text(
+                        accountMaster_page_controller
+                            .Account_Master_list[position]
+                            .clustureHeadValue??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -318,11 +599,11 @@ class AccountmasterScreen extends StatelessWidget{
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
-                          .permanentAddress!.address!,
+                          .permanentAddress!.address??"",
                       child: Text(
                         accountMaster_page_controller
                             .Account_Master_list[position]
-                            .permanentAddress!.address!,
+                            .permanentAddress!.address??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -334,7 +615,7 @@ class AccountmasterScreen extends StatelessWidget{
                 ],
               ),
               SizedBox(height: 3),
-              Row(
+              *//*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -349,11 +630,11 @@ class AccountmasterScreen extends StatelessWidget{
                     child: Tooltip(
                       message: accountMaster_page_controller
                           .Account_Master_list[position]
-                          .accountCategoryType!,
+                          .accountCategoryType??"",
                       child: Text(
                         accountMaster_page_controller
                             .Account_Master_list[position]
-                            .accountCategoryType!,
+                            .accountCategoryType??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -364,7 +645,7 @@ class AccountmasterScreen extends StatelessWidget{
                   ),
 
                 ],
-              ),
+              ),*//*
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -379,7 +660,7 @@ class AccountmasterScreen extends StatelessWidget{
                 ],
               ),
             ],
-          ),
+          ),*/
         /*leading: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -393,6 +674,38 @@ class AccountmasterScreen extends StatelessWidget{
       ),
     );
   }
+
+  Widget buildInfoRow(String label, String? value) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "$label: ",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500),
+          ),
+          Expanded(
+            child: Tooltip(
+              message: value ?? "",
+              child: Text(
+                value ?? "",
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   Widget bindAvatar(String? profile){
     if (profile != null && profile != "")
@@ -437,333 +750,269 @@ class AccountmasterScreen extends StatelessWidget{
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // Ensure minimal height
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                    SizedBox(width: 5,),
-                    Text(
-                      "Filter ",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twentee,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Spacer(),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 18.0),
-                        child: Icon(
-                          Icons.cancel,
-                          color: AllColors.primaryDark1,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.85,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
-              Center(
-                  child: Divider(
-                    height: 1,
-                    color: AllColors.primaryDark1,
-                  )),
-              SingleChildScrollView(
-                child: Container(
-                  //height: size.height*.40,
-                  child: Padding(
+              child: Column(
+                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        TextField(
-                          cursorColor:AllColors.primaryDark1,
-                          controller: accountMaster_page_controller.account_name_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Account Name',
-                            hintText: 'Account Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
+                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                        SizedBox(width: 5,),
+                        Text(
+                          "Filter ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w700,
                           ),
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
                           },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-
-                        bindAccountTypeDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindAccCatogeryTypeDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: accountMaster_page_controller.EmailId_Controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Email Id',
-                              hintText: 'Email Id',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: accountMaster_page_controller.PhoneNo_Controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Phone No.',
-                              hintText: 'Phone No.',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindCompProfileTypeDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: accountMaster_page_controller.Address_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Address',
-                              hintText: 'Address',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: accountMaster_page_controller.stateName_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'State Name',
-                              hintText: 'State Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindAnualRevenueDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindNoOfEmpDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        bindIsActiveDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: size.width * 0.4,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark,
-                                      width: 1),
-                                )),
-                                onPressed: () {
-                                  Get.back();
-                                  accountMaster_page_controller.pageNumber = 0;
-                                  accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
-                                },
-                                child: Text(
-                                  'Submit',
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.cancel,
+                              color: AllColors.primaryDark1,
                             ),
-                            Container(
-                              width: size.width * 0.4,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.redColor, width: 1),
-                                )),
-                                onPressed: () {
-                                  Get.back();
-                                  accountMaster_page_controller.account_name_controller.clear();
-                                  accountMaster_page_controller.account_type_controller.clear();
-                                  accountMaster_page_controller.comp_prof_type_controller.clear();
-                                  accountMaster_page_controller.account_cat_type_controller.clear();
-                                  accountMaster_page_controller.stateName_controller.clear();
-                                  accountMaster_page_controller.Address_controller.clear();
-                                  accountMaster_page_controller.Annual_Revenue_Controller.clear();
-                                  accountMaster_page_controller.No_Of_Emp_Controller.clear();
-                                  accountMaster_page_controller.IsActive_controller.clear();
-                                  accountMaster_page_controller.PhoneNo_Controller.clear();
-                                  accountMaster_page_controller.EmailId_Controller.clear();
-                                  accountMaster_page_controller.no_of_employees_min = '';
-                                  accountMaster_page_controller.no_of_employees_max = '';
-                                  accountMaster_page_controller.annual_revenue_min = '';
-                                  accountMaster_page_controller.annual_revenue_max = '';
-
-                                  accountMaster_page_controller.getAccountMaster(0,'All');
-
-                                },
-                                child: Text(
-                                  'Reset',
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.redColor,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-
+                          ),
+                        )
                       ],
                     ),
                   ),
-                ),
-              )
-            ],
-          ),
+                  Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.primaryDark1,
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              bindAccountCode(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindAccountName(),
+                    
+                              SizedBox(
+                                height: 10,
+                              ),
+                    
+                    
+                              bindAccountTypeDropDown(context),
+                    
+                              SizedBox(
+                                height: 10,
+                              ),
+                    
+                              /*bindAccCatogeryTypeDropDown(context),
+                    
+                          SizedBox(
+                            height: 10,
+                          ),*/
+                    
+                              bindEmailId(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindPhoneNo(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindCompProfileTypeDropDown(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              /*
+                          TextField(
+                            controller: accountMaster_page_controller.Address_controller,
+                            decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                labelText: 'Address',
+                                hintText: 'Address',
+                                hintStyle: GoogleFonts.poppins(
+                                    color: AllColors.lightblackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize.ten),
+                                labelStyle: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: AllFontSize.sisxteen),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                                )
+                            ),
+                            cursorColor: AllColors.primaryDark1,
+                            onChanged: (value) {
+                              // Handle the text field value changes if needed
+                            },
+                          ),
+                    
+                          SizedBox(
+                            height: 10,
+                          ),*/
+                              bindSateName(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindPostalCode(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindDistrict(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              /* bindAnualRevenueDropDown(context),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          bindNoOfEmpDropDown(context),
+                          SizedBox(
+                            height: 10,
+                          ),*/
+                              bindIsActiveDropDown(context),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindCreatedBy(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindFrontLinerValue(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindBranchHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindZoneHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindClusterHead(),
+                    
+                              SizedBox(
+                                height: 10,
+                              ),
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              side: BorderSide(
+                                  color: AllColors.primaryDark,
+                                  width: 1),
+                            )),
+                            onPressed: () {
+                              Get.back();
+                              accountMaster_page_controller.pageNumber = 0;
+                              accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
+                            },
+                            child: Text(
+                              'Submit',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              side: BorderSide(
+                                  color: AllColors.redColor, width: 1),
+                            )),
+                            onPressed: () {
+                              Get.back();
+                              accountMaster_page_controller.account_code_controller.clear();
+                              accountMaster_page_controller.account_name_controller.clear();
+                              accountMaster_page_controller.account_type_controller.clear();
+                              accountMaster_page_controller.comp_prof_type_controller.clear();
+                              accountMaster_page_controller.stateName_controller.clear();
+                              accountMaster_page_controller.IsActive_controller.clear();
+                              accountMaster_page_controller.PhoneNo_Controller.clear();
+                              accountMaster_page_controller.EmailId_Controller.clear();
+                              accountMaster_page_controller.postal_code_controller.value.clear();
+                              accountMaster_page_controller.district_controller.value.clear();
+                              accountMaster_page_controller.created_by_controller.value.clear();
+                              accountMaster_page_controller.frontliner_controller.value.clear();
+                              accountMaster_page_controller.branch_head__value_controller.value.clear();
+                              accountMaster_page_controller.zone_head__value_controller.value.clear();
+                              accountMaster_page_controller.cluster_head__value_controller.value.clear();
+                              //accountMaster_page_controller.Address_controller.clear();
+                              // accountMaster_page_controller.Annual_Revenue_Controller.clear();
+                              //accountMaster_page_controller.No_Of_Emp_Controller.clear();
+                              //accountMaster_page_controller.no_of_employees_min = '';
+                             // accountMaster_page_controller.no_of_employees_max = '';
+                             // accountMaster_page_controller.annual_revenue_min = '';
+                              //accountMaster_page_controller.annual_revenue_max = '';
+                              //accountMaster_page_controller.account_cat_type_controller.clear();
+                             accountMaster_page_controller.pageNumber=0;
+                              accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber,'All');
+
+                            },
+                            child: Text(
+                              'Reset',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+
         );
       },
     );
@@ -1316,7 +1565,7 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-  Widget bindCompProfileTypeDropDown(context){
+  /*Widget bindCompProfileTypeDropDown(context){
     return Autocomplete<CompanyTypeModel>(
       displayStringForOption: _displayCompProfileTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -1417,6 +1666,393 @@ class AccountmasterScreen extends StatelessWidget{
             ),
           ),
         );
+      },
+    );
+  }*/
+
+  bindCompProfileTypeDropDown() {
+    return TextField(
+      cursorColor:AllColors.primaryDark1,
+      controller: accountMaster_page_controller.comp_prof_type_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Company Profile Type',
+          hintText: 'Company Profile Type',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+  bindAccountCode() {
+    return TextField(
+      cursorColor:AllColors.primaryDark1,
+      controller: accountMaster_page_controller.account_code_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Account Code',
+          hintText: 'Account Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindAccountName() {
+    return   TextField(
+      cursorColor:AllColors.primaryDark1,
+      controller: accountMaster_page_controller.account_name_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Account Name',
+          hintText: 'Account Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  bindEmailId() {
+    return  TextField(
+      controller: accountMaster_page_controller.EmailId_Controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Email Id',
+          hintText: 'Email Id',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+
+  }
+
+  bindPhoneNo() {
+    return     TextField(
+      controller: accountMaster_page_controller.PhoneNo_Controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Phone No.',
+          hintText: 'Phone No.',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindSateName() {
+    return   TextField(
+      controller: accountMaster_page_controller.stateName_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'State Name',
+          hintText: 'State Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindPostalCode() {
+    return TextField(
+      controller: accountMaster_page_controller.postal_code_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Postal Code',
+          hintText: 'Postal Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindDistrict() {
+    return TextField(
+      controller: accountMaster_page_controller.district_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'District',
+          hintText: 'District',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindCreatedBy() {
+    return  TextField(
+      controller: accountMaster_page_controller.created_by_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Created By',
+          hintText: 'Created By',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindFrontLinerValue() {
+    return  TextField(
+      controller: accountMaster_page_controller.frontliner_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'FrontLiner Value',
+          hintText: 'FrontLiner Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindClusterHead() {
+    return TextField(
+      controller: accountMaster_page_controller.cluster_head__value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Cluster Head Value',
+          hintText: 'Cluster Head Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindZoneHead() {
+    return   TextField(
+      controller: accountMaster_page_controller.zone_head__value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Zone Head Value',
+          hintText: 'Zone Head Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindBranchHead() {
+    return   TextField(
+      controller: accountMaster_page_controller.branch_head__value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Branch Head Value',
+          hintText: 'Branch Head Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
       },
     );
   }

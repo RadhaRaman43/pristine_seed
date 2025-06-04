@@ -62,6 +62,7 @@ class Taskmastervm extends GetxController{
     String IsSaleCycleActive= '';
 
     var Task_status_controller = TextEditingController();
+    var account_code_controller = TextEditingController();
     var account_Name_controller = TextEditingController();
     var filterTask_Id_controller = TextEditingController();
     var Contact_Name_controller = TextEditingController();
@@ -89,6 +90,21 @@ class Taskmastervm extends GetxController{
     var filterTaskCreationOnController=TextEditingController().obs;
     var DataOFVisitController=TextEditingController().obs;
     var VisitTime_controller=TextEditingController().obs;
+
+    //todo new controller added by nirupma for filter
+    var companyProfileTypeController=TextEditingController().obs;
+    var postalCodeController=TextEditingController().obs;
+    var district_controller=TextEditingController().obs;
+    var created_by_controller=TextEditingController().obs;
+    var frontliner_controller=TextEditingController().obs;
+    var cluster_head_value_controller=TextEditingController().obs;
+    var zone_head_value_controller=TextEditingController().obs;
+    var branch_head_value_controller=TextEditingController().obs;
+    var EmailId_Controller=TextEditingController().obs;
+    var PhoneNo_Controller=TextEditingController().obs;
+    var product_category_controller=TextEditingController().obs;
+    var method_of_call_controller=TextEditingController().obs;
+    var account_owner_controller=TextEditingController().obs;
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -155,7 +171,7 @@ class Taskmastervm extends GetxController{
         CallStatusMasterApiHit('Call');
         MethodOfCallMasterApiHit();
         CallDSARsMasterApiHit();
-        TaskStatusListTypeList.value = ['All', 'Pending For Approval', 'Approved', 'Rejected'];
+        TaskStatusListTypeList.value = ['All', 'Pending','Pending For Approval', 'Approved', 'Rejected'];
         SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
         approveRejectList.value = ['Approve', 'Reject'];
         Item_Category_Selected_list.value = [];
@@ -189,7 +205,8 @@ class Taskmastervm extends GetxController{
     }
 
     RxInt infraLeadValue=0.obs;
-    getTaskMaster(int page_no, String IsActive, String? taskId, String flag, String status, RxString date_filter, int is_done, ){
+    getTaskMaster(int page_no, String IsActive, String? taskId,
+        String flag, String status, RxString date_filter, int is_done, ){
         if(isInfraLeadFilterController.text=="All"){
             infraLeadValue.value=-1;
         }
@@ -211,6 +228,36 @@ class Taskmastervm extends GetxController{
         }
         try{
             Map data={
+                "filter_task_id": filterTask_Id_controller.text.isEmpty?taskId:filterTask_Id_controller.text,
+                "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
+                "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
+                "filter_task_status": status == 'All'?"":status,
+                "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
+                "filter_type_of_call":  Type_of_call_controller.text.isEmpty?"":Type_of_call_controller.text,
+                "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
+                "filter_last_activity_status": "",
+                "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
+                "filter_is_infra_lead": infraLeadValue.value,
+                "filter_is_sales_cycle_active": is_Active.toString(),
+                "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
+                "filter_created_by": email,
+                "filter_approved_by": "",
+                "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
+                "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
+                "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
+                "filter_is_closed_completed": is_done,
+                "filter_day_flag": date_filter.toString(),
+                "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
+                "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
+                "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+                "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
+                "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+                "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+                "row_per_page": rowsPerPage.toString(),
+                "page_number": page_no.toString()
+            };
+
+            /*{
                 "filter_task_id": taskId!,
                 "filter_account_name": account_name.value.isEmpty?'':account_name.value,
                 "filter_contact_name": Contact_Name_controller.text.isEmpty?'':Contact_Name_controller.text,
@@ -223,11 +270,12 @@ class Taskmastervm extends GetxController{
                 "filter_approved_by": "",
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
+                "filter_product_category": "",
                 "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
-            };
+            };*/
             print("Data Json....${data}");
             loading.value=true;
             _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
@@ -243,7 +291,7 @@ class Taskmastervm extends GetxController{
                         Task_Master_list.addAll(response);
                         total_rows=int.parse(Task_Master_list[0].totalRows!);
 
-
+                        print('flag data...$flag');
                         if(flag == 'View'){
                             Active = Task_Master_list[0].isSalesCycleActive!;
                             if(Active == 1){
@@ -251,9 +299,10 @@ class Taskmastervm extends GetxController{
                             }else if(Active == 0){
                                 IsSaleCycleActive = 'No';
                             }
+
                             getTaskMstDSARList(taskId);
                             getItemCategoryMstApi(taskId);
-                            getTaskPersonMstByTaskIdApi(taskId);
+                            getTaskPersonMstByTaskIdApi(taskId!);
                             Get.toNamed(RoutesName.taskMasterDetails_screen);
 
                         }
@@ -881,7 +930,7 @@ class Taskmastervm extends GetxController{
 
                 } else {
                     loading.value = false;
-                    Utils.showErrorToastification("Error!", "Please select at least single product category");
+                    Utils.showErrorToastification("Error!", "${response[0].message}");
                 }
             } else {
                 loading.value = false;
@@ -911,6 +960,7 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
             };
+            print('sale id map data${data}');
             loading.value=true;
             _api.SalesCycleMstGetByAccountCodeApiHit(data, sessionManagement).then((onValue){
                 final jsonResponse = json.decode(onValue);
@@ -1328,5 +1378,31 @@ class Taskmastervm extends GetxController{
 
 
     }
+
+  void resetAllFieldOfFilter() {
+       account_code_controller.clear();
+       account_Name_controller.clear();
+       companyProfileTypeController.value.clear();
+       postalCodeController.value.clear();
+       district_controller.value.clear();
+       created_by_controller.value.clear();
+       frontliner_controller.value.clear();
+       cluster_head_value_controller.value.clear();
+       zone_head_value_controller.value.clear();
+       branch_head_value_controller.value.clear();
+      // EmailId_Controller.value.clear();
+       PhoneNo_Controller.value.clear();
+       product_category_controller.value.clear();
+       method_of_call_controller.value.clear();
+       account_owner_controller.value.clear();
+       Type_of_call_controller.clear();
+       Method_of_call_controller.clear();
+       Sale_cycle_Id_controller.clear();
+       filterTask_Id_controller.clear();
+       isInfraLeadFilterController.text = "No";
+       Task_status_controller.clear();
+       filterTaskDuedateController.value.clear();
+       filterTaskCreationOnController.value.clear();
+  }
 
 }

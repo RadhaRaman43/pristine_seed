@@ -678,9 +678,9 @@ class ContactMasterScreen extends StatelessWidget{
         trailing: InkWell(
           onTap: (){
             contact_vm_controller.FromPage.value="";
-            contact_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller
+            /*contact_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller
                 .contact_master_list[position]
-                .accountCode?? "");
+                .accountCode?? "");*/
             contact_vm_controller.insideOut = true;
             contact_vm_controller.upDateContact('OutSide', position);
           },

@@ -195,6 +195,7 @@ class AppUrl {
      static const String DraftAccountMstGet = "$BASE_URL/api/CRM/Account/DraftAccountMstGet";
      static const String DraftAccountMstUploader = "$BASE_URL/api/CRM/Account/DraftAccountMstUploader";
      static const String CompanyTypeMstGet = "$BASE_URL/api/CRM/Master/CompanyTypeMstGet";
+     static const String ContactMstGetAll = "$BASE_URL/api/CRM/Contact/ContactMstGetAll";
 
      //todo contact master repo.....
      static const String ContactMstGet = "$BASE_URL/api/CRM/Contact/ContactMstGet";

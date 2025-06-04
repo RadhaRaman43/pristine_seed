@@ -48,6 +48,7 @@ class AccountMasterGetByCodeModel {
   String? branchHeadValue;
   String? zoneHeadValue;
   String? clustureHeadValue;
+  int? isAccountFixed;
 
   AccountMasterGetByCodeModel(
       {this.condition,
@@ -98,7 +99,8 @@ class AccountMasterGetByCodeModel {
         this.frontlinerValue,
         this.branchHeadValue,
         this.zoneHeadValue,
-        this.clustureHeadValue});
+        this.clustureHeadValue,
+        this.isAccountFixed});
 
   AccountMasterGetByCodeModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -152,6 +154,7 @@ class AccountMasterGetByCodeModel {
     branchHeadValue = json['branch_head_value'];
     zoneHeadValue = json['zone_head_value'];
     clustureHeadValue = json['clusture_head_value'];
+    isAccountFixed = json['is_account_fixed'];
   }
 
   Map<String, dynamic> toJson() {
@@ -207,6 +210,7 @@ class AccountMasterGetByCodeModel {
     data['branch_head_value'] = this.branchHeadValue;
     data['zone_head_value'] = this.zoneHeadValue;
     data['clusture_head_value'] = this.clustureHeadValue;
+    data['is_account_fixed'] = this.isAccountFixed;
     return data;
   }
 }

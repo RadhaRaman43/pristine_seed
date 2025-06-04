@@ -243,7 +243,7 @@ class AddNewcontactMasterContact extends StatelessWidget{
                   ),
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   child: TextFormField(
-                    readOnly: true,
+                    //readOnly: true,
                     maxLength: 500,
                     maxLines: 3,
                     controller: contact_vm_controller

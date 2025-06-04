@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
+import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/all_contact_master_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
@@ -54,6 +55,7 @@ class _Drawer extends State<CustomDrawer> {
   final TaskMaster_page_controller=Get.put(Taskmastervm());
   final saleCycleController=Get.put(SalesCycleVm());
   final quoteApprovalController=Get.put(QuoteApprovalListVm());
+  var allContactMastercontroller=Get.put(AllContactMasterVm());
   DatabaseHelper crmDatabase = DatabaseHelper();
 
   @override
@@ -337,6 +339,18 @@ class _Drawer extends State<CustomDrawer> {
                                               accountMaster_page_controller.pageNumber = 0;
                                               accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
                                               Get.toNamed(RoutesName.Draft_item_list);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'All Contacts Master':
+
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              //accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
+                                              // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
+                                              allContactMastercontroller.pageNumber = 0;
+                                              allContactMastercontroller.getContactMasterAllList(allContactMastercontroller.pageNumber);
+                                              Get.toNamed(RoutesName.allContactMasterScreen);
                                               Navigator.of(context);
                                               break;
 

@@ -185,6 +185,18 @@ class Accountmastervm extends GetxController{
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
   List<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
 
+
+  //todo new filter controller
+  //var account_code_controller = TextEditingController().obs;
+  var postal_code_controller = TextEditingController().obs;
+  var district_controller = TextEditingController().obs;
+  var created_by_controller = TextEditingController().obs;
+  var frontliner_controller = TextEditingController().obs;
+  var branch_head__value_controller = TextEditingController().obs;
+  var zone_head__value_controller = TextEditingController().obs;
+  var cluster_head__value_controller = TextEditingController().obs;
+
+
   @override
   void onInit() async {
     super.onInit();
@@ -232,7 +244,8 @@ class Accountmastervm extends GetxController{
     isExpandDSARHistory.value = !isExpandDSARHistory.value;
   }
 
-  void clearAccoundController(){
+  void
+  clearAccoundController(){
     account_name_controller.text = '';
     account_type_controller.text = '';
     account_cat_type_controller.text = '';
@@ -290,6 +303,26 @@ class Accountmastervm extends GetxController{
     print('isActiveInAPi...${is_Active}');
     try{
       Map<String, String> data={
+        "filter_account_code":account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
+        "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
+        "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
+        "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
+        "filter_phone_no":  PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text,
+        "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
+        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
+        "filter_postal_code": postal_code_controller.value.text.isEmpty?"":postal_code_controller.value.text,
+        "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
+        "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
+        "filter_account_owner": email,
+        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
+        "filter_zone_head_value": zone_head__value_controller.value.text.isEmpty?"":zone_head__value_controller.value.text,
+        "filter_clusture_head_value": cluster_head__value_controller.value.text.isEmpty?"":cluster_head__value_controller.value.text,
+        "filter_is_active": is_Active.toString(),
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString()
+      };
+      /*{
         "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
         "filter_account_owner": "",
         "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
@@ -307,14 +340,14 @@ class Accountmastervm extends GetxController{
         "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
         "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
         "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
-      };
+      };*/
       loading.value=true;
       _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
          final jsonResponse = json.decode(onValue);
          if(jsonResponse is List){
            List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
            if(response!= null && response.length>0 && response[0].condition=="True"){
-             loading.value = false;
               if(page_no==0){
                 Account_Master_list.clear();
               }
@@ -322,23 +355,23 @@ class Accountmastervm extends GetxController{
              total_rows=int.parse(Account_Master_list[0].totalRows!);
 
            }else {
-             loading.value = false;
              Account_Master_list.value=[];
 
            }
-         } else {
-           loading.value = false;
-
          }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
+        loading.value=false;
+        Utils.sanckBarException("Error!", error.toString());
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
+      Utils.sanckBarException("Api Error!",' API error' );
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
    }
 
@@ -403,6 +436,25 @@ class Accountmastervm extends GetxController{
     print('isActiveInAPi...${is_Active}');
     try{
       Map<String, String> data={
+        "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
+        "filter_account_name": account_name_controller.text.isEmpty?"":account_name_controller.text,
+        "filter_account_type": account_type_controller.text.isEmpty?"":account_type_controller.text,
+        "filter_email_id": EmailId_Controller.text.isEmpty?"":EmailId_Controller.text,
+        "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text,
+        "filter_company_profile_type":comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text ,
+        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
+        "filter_postal_code": postal_code_controller.value.text.isEmpty?"":postal_code_controller.value.text,
+        "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
+        "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
+        "filter_account_owner":email ,
+        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
+        "filter_zone_head_value": zone_head__value_controller.value.text.isEmpty?"":zone_head__value_controller.value.text,
+        "filter_clusture_head_value": cluster_head__value_controller.value.text.isEmpty?"":cluster_head__value_controller.value.text,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString()
+      };
+      /*{
         "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
         "filter_account_owner": "",
         "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
@@ -420,7 +472,7 @@ class Accountmastervm extends GetxController{
         "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
         "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
         "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
-      };
+      };*/
       loading.value=true;
       _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -1098,7 +1150,7 @@ class Accountmastervm extends GetxController{
     Map<String , String> data = {
       "account_code": accountCode.toString()
     };
-    print(data);
+    print('data: $data');
     loading.value = true;
       _api.getAccountMasterGetByCodeApiHit(data, sessionManagement).then(
             (value) {
@@ -1203,7 +1255,8 @@ class Accountmastervm extends GetxController{
           "pan_no": PanNo_Controller.text.isEmpty?'':PanNo_Controller.text,
           "alternate_no": Alternate_PhoneNo_Controller.text.isEmpty?'':Alternate_PhoneNo_Controller.text,
           "ifsc_code": IfscCode_Controller.text.isEmpty?'':IfscCode_Controller.text,
-          "is_referral": ReferralBy_Controller.text == "Yes"?1:0
+          "is_referral": ReferralBy_Controller.text == "Yes"?1:0,
+          "is_account_fixed": flag=="Create"?0:AccountMasterGetCode_list[0].isAccountFixed
         }
       ]
     };
@@ -1225,7 +1278,6 @@ class Accountmastervm extends GetxController{
      //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
           if(flag == 'Create'){
             Utils.showToastification("Success!", "Account Create Successful");
-
             if(FromPage == "Task"){
               clearController();
               TaskMaster_page_controller.clearCreateTaskController();
@@ -1273,8 +1325,9 @@ class Accountmastervm extends GetxController{
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
-      print("Exce3ption....");
+      print("Exce3ption....$error");
       //service_indent_header_list.value = [];
+      Utils.showExceptionToastification("catch Api Error!", error.toString());
     }
   }
 
@@ -1343,7 +1396,6 @@ class Accountmastervm extends GetxController{
         if (response != null &&
             response.length > 0 &&
             response[0].condition == "True") {
-          loading.value = false;
           if(flag == 'Create'){
             print("ttttttttttt");
             Utils.showToastification("Success!", "Account is Save In Draft Successful");
@@ -1366,21 +1418,20 @@ class Accountmastervm extends GetxController{
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
           //viewRequestDetails(response);
         } else {
-          loading.value = false;
-          // AccountMasterGetCode_list.value = [];
           Utils.showErrorToastification("Error!", response[0].message??"");
-          //service_installation_details_list.value=[];
         }
       } else {
-        loading.value = false;
-        // service_indent_header_list.value = [];
-        Utils.showExceptionToastification("Api Error!", JsonResponse);
+        Utils.showExceptionToastification("Response Error!", JsonResponse);
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
-      print("Exce3ption....");
+      print("Exce3ption....${error}");
+      Utils.showExceptionToastification("Api Error!", error.toString());
       //service_indent_header_list.value = [];
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -1550,6 +1601,11 @@ class Accountmastervm extends GetxController{
       ShippingCityMasterPinCode_list.value=[];
       ShippingDistrictMasterPinCode_list.value=[];
       ImageString.value == '';
+
+      //todo radha raman
+      ImageUrl_Controller.clear();
+      Website_Controller.clear();
+
       account_code_controller.clear();
       account_name_controller.clear();
       EmployeeMember_Controller.clear();
@@ -1615,9 +1671,16 @@ class Accountmastervm extends GetxController{
         if(jsonResponse is List){
           List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
+            if(pageNumber==0){
+              view_contract_list.clear();
+            }
+            view_contract_list.addAll(response);
+            print('listSize.....${view_contract_list.length}');
+            total_rows=int.parse(view_contract_list[0].totalRows!);
             loading.value = false;
-            view_contract_list.value=[];
-            view_contract_list.value=response;
+            //todo commented by nirupma
+            /*view_contract_list.value=[];
+            view_contract_list.value=response;*/
             Get.toNamed(RoutesName.viewContacts_screen);
 
           }else {
@@ -2219,7 +2282,7 @@ class Accountmastervm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              if(account_code_controller.value.text.isEmpty){
+                              /*if(account_code_controller.value.text.isEmpty){
                                 selectedItem.value = -1;
                                 Shipping_Address_controller.value.text="";
                                 Shipping_Address2_Controller.value.text="";
@@ -2240,6 +2303,8 @@ class Accountmastervm extends GetxController{
                                 Shipping_District_Controller.value.text=AccountMasterGetCode_list[0].shippingDistrict??"";
                                 consigneeId = '';
                               }
+                              isChecked.value=false;*/
+
 
 
                               // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
@@ -2271,16 +2336,29 @@ class Accountmastervm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
-                              Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";
-                              Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
-                              Shipping_City_Controller.value.text=address_master_list[selectedItem.value].city??"" ;
-                              Shipping_State_Controller.value.text=address_master_list[selectedItem.value].stateName??"";
-                              print('StatNane...${Shipping_State_Controller.value.text}');
-                               ShowState.value=false;
-                               ShowState.value=true;
-                              Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"";
-                              consigneeId = address_master_list[selectedItem.value].consigneeId??"";
+                              try{
+                                isChecked.value=false;
+                                Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
+                                Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";
+                                Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
+                                Shipping_City_Controller.value.text=address_master_list[selectedItem.value].city??"" ;
+                                Shipping_State_Controller.value.text=address_master_list[selectedItem.value].stateName??"";
+                                print('StatNane...${Shipping_State_Controller.value.text}');
+                                ShowState.value=false;
+                                ShowState.value=true;
+                                Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"";
+                                consigneeId = address_master_list[selectedItem.value].consigneeId??"";
+                                Shipping_FullAddress_Controller.value.text=Shipping_Address_controller.value.text+', '+
+                                    Shipping_Address2_Controller.value.text+', '+
+                                    Shipping_PostCode_Controller.value.text+', '+
+                                    Shipping_City_Controller.value.text+', '+
+                                    Shipping_District_Controller.value.text+', '+
+                                    Shipping_State_Controller.value.text;
+                              }
+                              catch(e){
+                                Utils.sanckBarError('Select ', "Addresss");
+                              }
+
                               Get.back();
                             },
                             child: Container(

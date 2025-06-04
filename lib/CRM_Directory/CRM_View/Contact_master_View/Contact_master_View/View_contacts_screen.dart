@@ -155,7 +155,8 @@ class ViewContactsScreen extends StatelessWidget{
 
           if (accountMaster_page_controller.pageNumber + 1 != total_page) {
             this.accountMaster_page_controller.pageNumber += 1;
-            accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber, '', '', '');
+            accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.text);
+            //accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber, '', '', '');
 
           }
         }

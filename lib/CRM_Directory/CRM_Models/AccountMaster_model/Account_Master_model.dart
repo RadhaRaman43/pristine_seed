@@ -1,9 +1,9 @@
 class AccountMasterModel {
-  int? id;
   String? condition;
   String? totalRows;
   String? accountCode;
   String? accountName;
+  String? accountOwnerFullName;
   String? accountOwner;
   String? accountTitle;
   String? accountType;
@@ -14,6 +14,8 @@ class AccountMasterModel {
   String? companyProfileType;
   String? companyProfileSubType;
   String? companyProfileRemark;
+  String? stateCode;
+  String? stateName;
   PermanentAddress? permanentAddress;
   int? noOfEmployees;
   double? annualRevenue;
@@ -21,6 +23,8 @@ class AccountMasterModel {
   int? tatResponseTime;
   String? salesRepresentative;
   String? regionalServiceHead;
+  String? salesRepresentativeName;
+  String? regionalServiceHeadName;
   String? profile;
   int? isActive;
   String? createdBy;
@@ -28,16 +32,25 @@ class AccountMasterModel {
   String? updatedBy;
   String? updatedOn;
   int? isManager;
-  String? gstType;
-  String? gstNo;
-  String? panNo;
+  String? shippingAddress;
+  String? shippingAddress2;
+  String? shippingCity;
+  String? shippingDistrict;
+  String? shippingPostCode;
+  String? shippingStateCode;
+  int? isReferral;
+  String? frontlinerValue;
+  String? branchHeadValue;
+  String? zoneHeadValue;
+  String? clustureHeadValue;
+  int? isAccountFixed;
 
   AccountMasterModel(
-      {this.id,
-        this.condition,
+      {this.condition,
         this.totalRows,
         this.accountCode,
         this.accountName,
+        this.accountOwnerFullName,
         this.accountOwner,
         this.accountTitle,
         this.accountType,
@@ -48,6 +61,8 @@ class AccountMasterModel {
         this.companyProfileType,
         this.companyProfileSubType,
         this.companyProfileRemark,
+        this.stateCode,
+        this.stateName,
         this.permanentAddress,
         this.noOfEmployees,
         this.annualRevenue,
@@ -55,6 +70,8 @@ class AccountMasterModel {
         this.tatResponseTime,
         this.salesRepresentative,
         this.regionalServiceHead,
+        this.salesRepresentativeName,
+        this.regionalServiceHeadName,
         this.profile,
         this.isActive,
         this.createdBy,
@@ -62,16 +79,25 @@ class AccountMasterModel {
         this.updatedBy,
         this.updatedOn,
         this.isManager,
-        this.gstType,
-        this.gstNo,
-        this.panNo});
+        this.shippingAddress,
+        this.shippingAddress2,
+        this.shippingCity,
+        this.shippingDistrict,
+        this.shippingPostCode,
+        this.shippingStateCode,
+        this.isReferral,
+        this.frontlinerValue,
+        this.branchHeadValue,
+        this.zoneHeadValue,
+        this.clustureHeadValue,
+        this.isAccountFixed});
 
   AccountMasterModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
     condition = json['condition'];
     totalRows = json['total_rows'];
     accountCode = json['account_code'];
     accountName = json['account_name'];
+    accountOwnerFullName = json['account_owner_full_name'];
     accountOwner = json['account_owner'];
     accountTitle = json['account_title'];
     accountType = json['account_type'];
@@ -82,6 +108,8 @@ class AccountMasterModel {
     companyProfileType = json['company_profile_type'];
     companyProfileSubType = json['company_profile_sub_type'];
     companyProfileRemark = json['company_profile_remark'];
+    stateCode = json['StateCode'];
+    stateName = json['StateName'];
     permanentAddress = json['PermanentAddress'] != null
         ? new PermanentAddress.fromJson(json['PermanentAddress'])
         : null;
@@ -91,6 +119,8 @@ class AccountMasterModel {
     tatResponseTime = json['tat_response_time'];
     salesRepresentative = json['sales_representative'];
     regionalServiceHead = json['regional_service_head'];
+    salesRepresentativeName = json['sales_representative_name'];
+    regionalServiceHeadName = json['regional_service_head_name'];
     profile = json['profile'];
     isActive = json['is_active'];
     createdBy = json['created_by'];
@@ -98,18 +128,27 @@ class AccountMasterModel {
     updatedBy = json['updated_by'];
     updatedOn = json['updated_on'];
     isManager = json['is_manager'];
-    gstType = json['gst_type'];
-    gstNo = json['gst_no'];
-    panNo = json['pan_no'];
+    shippingAddress = json['shipping_address'];
+    shippingAddress2 = json['shipping_address2'];
+    shippingCity = json['shipping_city'];
+    shippingDistrict = json['shipping_district'];
+    shippingPostCode = json['shipping_post_code'];
+    shippingStateCode = json['shipping_state_code'];
+    isReferral = json['is_referral'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
+    isAccountFixed = json['is_account_fixed'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
-   // data['id'] = this.id;
     data['total_rows'] = this.totalRows;
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;
+    data['account_owner_full_name'] = this.accountOwnerFullName;
     data['account_owner'] = this.accountOwner;
     data['account_title'] = this.accountTitle;
     data['account_type'] = this.accountType;
@@ -120,6 +159,8 @@ class AccountMasterModel {
     data['company_profile_type'] = this.companyProfileType;
     data['company_profile_sub_type'] = this.companyProfileSubType;
     data['company_profile_remark'] = this.companyProfileRemark;
+    data['StateCode'] = this.stateCode;
+    data['StateName'] = this.stateName;
     if (this.permanentAddress != null) {
       data['PermanentAddress'] = this.permanentAddress!.toJson();
     }
@@ -129,6 +170,8 @@ class AccountMasterModel {
     data['tat_response_time'] = this.tatResponseTime;
     data['sales_representative'] = this.salesRepresentative;
     data['regional_service_head'] = this.regionalServiceHead;
+    data['sales_representative_name'] = this.salesRepresentativeName;
+    data['regional_service_head_name'] = this.regionalServiceHeadName;
     data['profile'] = this.profile;
     data['is_active'] = this.isActive;
     data['created_by'] = this.createdBy;
@@ -136,9 +179,18 @@ class AccountMasterModel {
     data['updated_by'] = this.updatedBy;
     data['updated_on'] = this.updatedOn;
     data['is_manager'] = this.isManager;
-    data['gst_type'] = this.gstType;
-    data['gst_no'] = this.gstNo;
-    data['pan_no'] = this.panNo;
+    data['shipping_address'] = this.shippingAddress;
+    data['shipping_address2'] = this.shippingAddress2;
+    data['shipping_city'] = this.shippingCity;
+    data['shipping_district'] = this.shippingDistrict;
+    data['shipping_post_code'] = this.shippingPostCode;
+    data['shipping_state_code'] = this.shippingStateCode;
+    data['is_referral'] = this.isReferral;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
+    data['is_account_fixed'] = this.isAccountFixed;
     return data;
   }
 }
@@ -154,16 +206,15 @@ class PermanentAddress {
   String? city;
   String? district;
 
-  PermanentAddress(
-      {this.address,
-        this.address2,
-        this.postCode,
-        this.stateCode,
-        this.stateName,
-        this.countryCode,
-        this.countryName,
-        this.city,
-        this.district});
+  PermanentAddress({this.address,
+    this.address2,
+    this.postCode,
+    this.stateCode,
+    this.stateName,
+    this.countryCode,
+    this.countryName,
+    this.city,
+    this.district});
 
   PermanentAddress.fromJson(Map<String, dynamic> json) {
     address = json['Address'];

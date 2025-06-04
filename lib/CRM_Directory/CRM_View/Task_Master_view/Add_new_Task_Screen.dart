@@ -382,7 +382,6 @@ class AddNewTaskScreen extends StatelessWidget{
                                 contentPadding: EdgeInsets.symmetric(
                                     vertical: AllFontSize.ten,
                                     horizontal: AllFontSize.ten),
-
                                 focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(color: Colors.blue)
                                 ),
@@ -477,12 +476,14 @@ class AddNewTaskScreen extends StatelessWidget{
       onSelected: (AccountMasterModel selection) {
         //print(selection.loginEmailId);
         // Update the TextField with the selected
+
         taskMaster_page_controller.account_Name_controller.text =
             _displayAccountNameForOption(selection).toString();
         taskMaster_page_controller.account_code.value=selection.accountCode!;
         taskMaster_page_controller.account_name.value=selection.accountName!;
             taskMaster_page_controller.getContactMasterList();
             taskMaster_page_controller.pageNumber = 0;
+        print('I select account name');
             taskMaster_page_controller.getSaleIDByAccountCode(taskMaster_page_controller.pageNumber);
         //taskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
@@ -1115,8 +1116,83 @@ class AddNewTaskScreen extends StatelessWidget{
       ),
     );
   }
-
   Widget bindDateOfVisit(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+      child: TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: taskMaster_page_controller.DataOFVisitController.value,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two,
+            horizontal: AllFontSize.ten,
+          ),
+          suffixIcon: Icon(Icons.calendar_month),
+          hintText: 'Date Of Visit',
+          labelText: 'Date Of Visit',
+          hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten,
+          ),
+          labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.sisxteen,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+        onTap: () async {
+          DateTime? initialDate;
+          String dateString = taskMaster_page_controller.DataOFVisitController.value.text;
+
+          try {
+            if (dateString.isNotEmpty) {
+              initialDate = DateFormat('dd-MM-yyyy').parseStrict(dateString);
+            } else {
+              initialDate = DateTime.now();
+            }
+          } catch (e) {
+            initialDate = DateTime.now(); // Fallback if parsing fails
+          }
+
+          DateTime endingDate = DateTime(2200);
+          FocusScope.of(context).requestFocus(FocusNode());
+
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: initialDate,
+            firstDate: DateTime(1900), // Allow selection from 1900 onwards
+            lastDate: endingDate,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          if (date != null) {
+            taskMaster_page_controller.DataOFVisitController.value.text =
+                DateFormat('dd-MM-yyyy').format(date);
+          } else {
+            taskMaster_page_controller.DataOFVisitController.value.text = "";
+          }
+        },
+      ),
+    );
+  }
+
+  /*Widget bindDateOfVisit(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(left: 15.0, right: 15.0),
       child: TextField(
@@ -1191,7 +1267,7 @@ class AddNewTaskScreen extends StatelessWidget{
 
       ),
     );
-  }
+  }*/
 
 
   Widget bindVisitTimePicker(context){
