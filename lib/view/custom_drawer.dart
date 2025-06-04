@@ -371,9 +371,10 @@ class _Drawer extends State<CustomDrawer> {
                                               //Get.offAllNamed(RoutesName.salesCycleScreen,);
                                               accountMaster_page_controller.FromPage.value = '';
                                               contact_vm_controller.FromPage.value ='';
-                                              saleCycleController.accountNameController.value.clear();
+                                              /*saleCycleController.accountNameController.value.clear();
                                               saleCycleController.contactNameController.value.clear();
-                                              saleCycleController.ApprovalStatusController.value.clear();
+                                              saleCycleController.ApprovalStatusController.value.clear();*/
+                                              saleCycleController.clearAllFieldOfFilter();
                                               saleCycleController.pageNumber = 0;
                                               Get.toNamed(RoutesName.salesCycleScreen,);
                                               saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');

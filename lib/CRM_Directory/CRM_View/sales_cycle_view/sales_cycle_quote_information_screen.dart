@@ -54,11 +54,9 @@ class QuoteInformationScreen extends StatelessWidget{
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         }
         // saleCycleController.FromPage="Sales";
-
-
-
         return false;
-      }, child: Scaffold(
+      },
+      child: Scaffold(
         appBar:  AppBar(
           backgroundColor: AllColors.primaryDark1,
           iconTheme: IconThemeData(
@@ -972,7 +970,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-                        Row(
+                      /*  Row(
                           children: [
                             Text(
                               "Min. Acpt. Amt. :",
@@ -1001,7 +999,7 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
                           ],
-                        ),
+                        ),*/
                         Obx((){
                           return Visibility(
                             visible: saleCycleController.showBranchHead.value,

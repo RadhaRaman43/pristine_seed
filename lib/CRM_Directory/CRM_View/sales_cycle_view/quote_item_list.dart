@@ -708,6 +708,23 @@ class QuoteItemList extends StatelessWidget{
                         ),
                       ],
                     ),
+
+
+
+
+
+
+
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              child: Container(
+                //width: size.width/2,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -779,24 +796,7 @@ class QuoteItemList extends StatelessWidget{
                         ),
                       ],
                     ),
-
-
-
-
-
-
-                  ],
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                //width: size.width/2,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-
-                    Row(
+                   /* Row(
                       mainAxisAlignment: MainAxisAlignment.start,
 
                       children: [
@@ -897,7 +897,7 @@ class QuoteItemList extends StatelessWidget{
                           ),
                         ),
                       ],
-                    ),
+                    ),*/
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
 
