@@ -226,6 +226,7 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                     salesCycleController.pageNumber=0;
                     salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
                   },
+
                 ),
               ],
             ),
