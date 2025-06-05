@@ -145,6 +145,44 @@ class TaskMasterDetails extends StatelessWidget{
                       }, icon: Icon(Icons.update)),
                     );
                   }),
+
+                  Obx((){
+                    return Visibility(
+                      visible: TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .taskStatus!.toLowerCase() == 'rejected' ?true:false,
+                      child: ActionChip(
+                        elevation: 2,
+                        padding: EdgeInsets.all(5),
+                        backgroundColor: AllColors.primaryDark1,
+                        shadowColor: Colors.black,
+                        shape: StadiumBorder(
+                            side: BorderSide(color: AllColors.whiteColor)),
+                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                        //CircleAvatar
+                        label: Row(
+                          children: [
+                            //Icon(Icons.undo_sharp),
+                            //SizedBox(width: 5,),
+                            Tooltip(
+                              message: "Reopen task ",
+                              child: Text('Reopen',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.whiteColor,
+                                    fontSize: AllFontSize.ten,
+                                    fontWeight: FontWeight.w400,
+                                  )),
+                            ),
+                          ],
+                        ),
+                        onPressed: () async {
+                          showTaskReopenDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
+                        }, //Text
+                      ),
+                    );
+                  })
+
+
                 ],
               )
 
@@ -1254,6 +1292,93 @@ class TaskMasterDetails extends StatelessWidget{
                           : TaskMaster_page_controller
                           .Task_Master_list[0]
                           .taskRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Manager Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .managerRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .managerRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .managerRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .managerRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+
+            Row(
+              children: [
+                Text(
+                  "Reopen Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .reopenRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .reopenRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .reopenRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .reopenRemarks ?? "",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(
@@ -3085,6 +3210,94 @@ class TaskMasterDetails extends StatelessWidget{
     );
   }
 
+  showTaskReopenDialog(context, String TaskId){
+    TaskMaster_page_controller.taskReopenRemarksController.value.clear();
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+              title:  Text(
+                'Reopen Task',
+                style: GoogleFonts.poppins(
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700,
+                  color: AllColors.primaryDark1,
+                ),
+              ),
+              content: Wrap(
+                children: [
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  SizedBox(height: 15,),
+                  Container(
+                  decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                controller: TaskMaster_page_controller
+                    .taskReopenRemarksController.value,
+                decoration: InputDecoration(
+                    hintText: "Reopen Remarks",
+                    labelText: "Reopen Remarks",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    /*focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue)
+                            ),*/
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+                  SizedBox(height: 55,),
+
+                   Center(
+                     child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: ()  {
+                          if(TaskMaster_page_controller.taskReopenRemarksController.value.text.isEmpty || TaskMaster_page_controller.taskReopenRemarksController.value.text == null) {
+                            Utils.sanckBarError(
+                                'Error : ', 'Please enter reopen remarks.');
+                            return;
+                          }
+                          TaskMaster_page_controller.taskReopenApiHit(TaskId);
+                          Navigator.pop(context);
+
+
+                        },
+                        child: Container(
+                          width: 80,
+                          alignment: Alignment.center,
+                          child: Text('Submit',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                   ),
+
+                ],
+              )
+          );
+        });
+  }
+
   showApprovRejectDialog(context, String TaskId){
     TaskMaster_page_controller.ApproveReject_Controller.clear();
     TaskMaster_page_controller.RejectReason_Controller.clear();
@@ -3110,6 +3323,40 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                   SizedBox(height: 15,),
                   bindApprovRejectDropDown(context),
+                  SizedBox(height: 55,),
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.ApproveBool
+                          .value,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          controller: TaskMaster_page_controller
+                              .managerRemarksController.value,
+                          decoration: InputDecoration(
+                              hintText: "Manager Remarks",
+                              labelText: "Manager Remarks",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+
+                              /*focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),*/
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+                    );
+                  }),
                   SizedBox(height: 55,),
                   Obx(() {
                     return Visibility(

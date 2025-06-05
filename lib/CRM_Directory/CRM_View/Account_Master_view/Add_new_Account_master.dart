@@ -50,8 +50,8 @@ class AddNewAccountMaster extends StatelessWidget{
   static String _displayAccTypeForOption(CustomList option) =>
       option.value!;
 
-  static String _displayAccCategoryForOption(CustomList option) =>
-      option.value!;
+  static String _displayAccCategoryForOption(GetMasterTypeModel option) =>
+      option.code! + " (" + option.description! + ")";
 
   static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
       option.description!;
@@ -1473,8 +1473,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                 FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
                               ],
                               decoration: InputDecoration(
-                                  hintText: "Annual Turnover Of Client",
-                                  labelText: "Annual Turnover Of Client",
+                                  hintText: "Customer Annual Turnover",
+                                  labelText: "Customer Annual Turnover",
                                   //suffixIcon: Icon(Icons.email),
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: AllFontSize.ten,
@@ -1835,7 +1835,7 @@ class AddNewAccountMaster extends StatelessWidget{
   }
 
   Widget bindAccCatogeryTypeDropDown(context){
-    return Autocomplete<CustomList>(
+    return Autocomplete<GetMasterTypeModel>(
       displayStringForOption: _displayAccCategoryForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
@@ -1843,15 +1843,15 @@ class AddNewAccountMaster extends StatelessWidget{
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return accountMaster_page_controller.get_Acc_category_list
-            .where((CustomList option) {
-          return option.value
+            .where((GetMasterTypeModel option) {
+          return option.code
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
-      onSelected: (CustomList selection) {
-        print(selection.value);
+      onSelected: (GetMasterTypeModel selection) {
+        print(selection.code);
         // Update the TextField with the selected
         accountMaster_page_controller.account_cat_type_controller.text =
             _displayAccCategoryForOption(selection).toString();
@@ -1886,19 +1886,6 @@ class AddNewAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Account Category Type*',
               labelText: 'Account Category Type*',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -1907,8 +1894,8 @@ class AddNewAccountMaster extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
+          AutocompleteOnSelected<GetMasterTypeModel> onSelected,
+          Iterable<GetMasterTypeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -1921,7 +1908,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final CustomList option =
+                  final GetMasterTypeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -1929,15 +1916,31 @@ class AddNewAccountMaster extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.value.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.code!,
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                              TextSpan(
+                                text: " (${option.description!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
                     ),
                   );
                 },

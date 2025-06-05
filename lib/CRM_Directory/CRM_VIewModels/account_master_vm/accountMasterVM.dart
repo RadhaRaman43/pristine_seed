@@ -150,7 +150,7 @@ class Accountmastervm extends GetxController{
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<AccountMasterGetByCodeModel> Account_Master_Draft_list1=<AccountMasterGetByCodeModel>[].obs;
   List<AccountDraftModel> Account_Master_Draft_list=<AccountDraftModel>[];
-  RxList<CustomList> get_Acc_category_list=<CustomList>[].obs;
+  RxList<GetMasterTypeModel> get_Acc_category_list=<GetMasterTypeModel>[].obs;
   RxList<CustomList> get_Acc_type_list=<CustomList>[].obs;
   RxList<CompanyTypeModel > get_Comp_Profile_type_list=<CompanyTypeModel >[].obs;
   RxList<CustomList> get_Gst_Registration_list=<CustomList>[].obs;
@@ -510,17 +510,17 @@ class Accountmastervm extends GetxController{
 
   getAccCategoryApi() {
     this.loading.value = true;
-    Map<String, String> data = {'flag': "account_category"};
+    Map<String, String> data = {};
 
-    _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
+    _api.getAccountCategoryTypeApiHit(data, sessionManagement).then((value) {
       try {
         List<GetMasterTypeModel> emp_masterResponse =
         (json.decode(value) as List<dynamic>)
             .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
             .toList();
 
-        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
-          get_Acc_category_list.value = emp_masterResponse[0].list!;
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0].condition.toString() == "True") {
+          get_Acc_category_list.value = emp_masterResponse;
           print('master list....${get_Acc_category_list.length.toString()}');
         } else {
           get_Acc_category_list.value = [];

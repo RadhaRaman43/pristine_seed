@@ -498,136 +498,139 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
 
   Widget bindAccountOwnerDropDown(context){
-    return Autocomplete<AccountMasterModel>(
-      displayStringForOption: _displayAccNameForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if(contact_vm_controller.updateContact){
-          contact_vm_controller.Account_Master_list.value=[];
-        }
-        if (textEditingValue.text.isEmpty) {
-          return contact_vm_controller.Account_Master_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        /*return contact_vm_controller.Account_Master_list
-            .where((AccountMasterModel option) {
-          return option.accountName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();*/
-        return await contact_vm_controller.getAccountMaster(textEditingValue.text);
-      },
-      onSelected: (AccountMasterModel selection) {
-        print(selection.accountName);
-        // Update the TextField with the selected
-        contact_vm_controller.account_name_controller.text =
-            _displayAccNameForOption(selection).toString();
-        contact_vm_controller.accountName.value=selection.accountName??"";
-        contact_vm_controller.accountCode.value=selection.accountCode??"";
-        contact_vm_controller.getAccMasterBuyCodeApi(selection.accountCode??"");
+    return IgnorePointer(
+      ignoring: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+      child: Autocomplete<AccountMasterModel>(
+        displayStringForOption: _displayAccNameForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if(contact_vm_controller.updateContact){
+            contact_vm_controller.Account_Master_list.value=[];
+          }
+          if (textEditingValue.text.isEmpty) {
+            return contact_vm_controller.Account_Master_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          /*return contact_vm_controller.Account_Master_list
+              .where((AccountMasterModel option) {
+            return option.accountName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();*/
+          return await contact_vm_controller.getAccountMaster(textEditingValue.text);
+        },
+        onSelected: (AccountMasterModel selection) {
+          print(selection.accountName);
+          // Update the TextField with the selected
+          contact_vm_controller.account_name_controller.text =
+              _displayAccNameForOption(selection).toString();
+          contact_vm_controller.accountName.value=selection.accountName??"";
+          contact_vm_controller.accountCode.value=selection.accountCode??"";
+          contact_vm_controller.getAccMasterBuyCodeApi(selection.accountCode??"");
 
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextFormField(
-          readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = contact_vm_controller.account_name_controller.text,
-          focusNode: focusNode,
-          onTapOutside: (value){
-            FocusNode().unfocus();
-          },
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = contact_vm_controller.account_name_controller.text,
+            focusNode: focusNode,
+            onTapOutside: (value){
+              FocusNode().unfocus();
+            },
 
-          decoration: InputDecoration(
-            suffixIcon: IconButton(
-              color: AllColors.primaryDark1,
-              onPressed: (){
-                if(focusNode.hasFocus){
-                  focusNode.unfocus();
-                }else{
-                  focusNode.requestFocus();
-                }
-              },
-              icon: Icon(Icons.arrow_drop_down),
-            ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Name',
-            labelText: 'Account Name',
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<AccountMasterModel> onSelected,
-          Iterable<AccountMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.9,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final AccountMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child:
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:  option.accountName!,
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
-                                ),
-                              ),
-                              TextSpan(
-                                text: " (${option.accountCode!})",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.redColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
-                                ),
-                              ),
-                            ],
-                          ),
-                          softWrap: true,
-                        )
-
-                      /*Text(
-                        option.accountName! + " (${option.accountCode!})",
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),*/
-                    ),
-                  );
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
                 },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Account Name',
+              labelText: 'Account Name',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<AccountMasterModel> onSelected,
+            Iterable<AccountMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.9,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final AccountMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child:
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:  option.accountName!,
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: " (${option.accountCode!})",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.redColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                  ),
+                                ),
+                              ],
+                            ),
+                            softWrap: true,
+                          )
+
+                        /*Text(
+                          option.accountName! + " (${option.accountCode!})",
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),*/
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 

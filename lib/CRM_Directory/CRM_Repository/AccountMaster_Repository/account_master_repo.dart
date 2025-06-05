@@ -14,6 +14,10 @@ class AccountMasterRepo {
     return _apiService.getApi(AppUrl.getMasterType, sessionManagement, data);
   }
 
+  Future<String> getAccountCategoryTypeApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.AccountCategoryTypeMstGet, sessionManagement, data);
+  }
+
   Future<String> EmployeeMamberGetApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.employeeMemberGet,sessionManagement);
   }

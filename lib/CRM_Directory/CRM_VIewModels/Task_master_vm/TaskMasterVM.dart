@@ -75,6 +75,7 @@ class Taskmastervm extends GetxController{
     var ApproveReject_Controller = TextEditingController();
     var RejectReason_Controller = TextEditingController();
     var managerRemarksController=TextEditingController().obs;
+    var taskReopenRemarksController=TextEditingController().obs;
     var Sale_cycle_Id_controller = TextEditingController();
     var DSAR_Status_type_controller = TextEditingController().obs;
     var ItemCat_type_controller = TextEditingController();
@@ -257,26 +258,6 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
             };
-
-            /*{
-                "filter_task_id": taskId!,
-                "filter_account_name": account_name.value.isEmpty?'':account_name.value,
-                "filter_contact_name": Contact_Name_controller.text.isEmpty?'':Contact_Name_controller.text,
-                "filter_task_status": status == 'All'?"":status,
-                "filter_is_infra_lead": infraLeadValue.value,
-                "filter_type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
-                "filter_is_sales_cycle_active": is_Active.toString(),
-                "filter_sales_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
-                "filter_created_by": email,
-                "filter_approved_by": "",
-                "filter_is_closed_completed": is_done,
-                "filter_day_flag": date_filter.toString(),
-                "filter_product_category": "",
-                "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
-                "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
-                "row_per_page": rowsPerPage.toString(),
-                "page_number": page_no.toString()
-            };*/
             print("Data Json....${data}");
             loading.value=true;
             _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
@@ -477,12 +458,13 @@ class Taskmastervm extends GetxController{
         }
     }
 
-    ApproveRejectApiHit(String? rejectReason){
+    ApproveRejectApiHit(String? taskId){
         try{
             Map<String, String> data={
-                "task_id": rejectReason!,
+                "task_id": taskId!,
                 "task_status": ApproveReject,
                 "reject_reason": RejectReason_Controller.text.isEmpty?'':RejectReason_Controller.text,
+                "manager_remarks": managerRemarksController.value.text.isEmpty?'':managerRemarksController.value.text,
                 "created_by": email,
 
             };
@@ -499,6 +481,52 @@ class Taskmastervm extends GetxController{
                         pageNumber=0;
                         getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter, is_done.value);
                         Get.toNamed(RoutesName.taskMaster_screen);
+
+                    }else {
+                        loading.value = false;
+                        Utils.showErrorToastification('Error!', response[0].message.toString());
+                        print(response[0].message.toString());
+                        //Task_Master_list.value=[];
+
+                    }
+                } else {
+                    loading.value = false;
+                    print('APi Not hit');
+
+                }
+            },
+            ).onError(
+                    (error, stackTrace) {
+                    print(error);
+                },
+            );
+        }catch(e){
+            loading.value = false;
+            print(e);
+        }
+    }
+
+    taskReopenApiHit(String? taskId){
+        try{
+            Map<String, String> data={
+                "task_id": taskId!,
+                "created_by": email,
+                "reopen_remarks": taskReopenRemarksController.value.text.isEmpty?'':taskReopenRemarksController.value.text,
+
+            };
+            loading.value=true;
+            _api.TaskMstRejectReopenApiHit(data, sessionManagement).then((onValue){
+                final jsonResponse = json.decode(onValue);
+                if(jsonResponse is List){
+                    List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
+                    if(response!= null && response.length>0 && response[0].condition=="True"){
+                        loading.value = false;
+                        //Task_Master_list.addAll(response);
+                        Utils.showToastification('Success!', response[0].message.toString());
+                        // Get.offAllNamed(RoutesName.taskMaster_screen);
+                        pageNumber=0;
+                        getTaskMaster(pageNumber, 'All', TaskID, "",'', date_filter, is_done.value);
+                        Get.toNamed(RoutesName.taskMasterDetails_screen);
 
                     }else {
                         loading.value = false;

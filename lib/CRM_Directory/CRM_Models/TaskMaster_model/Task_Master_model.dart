@@ -30,6 +30,8 @@ class TaskMasterGetModel {
   String? approvedFullName;
   String? approvedOn;
   String? rejectReason;
+  String? reopenRemarks;
+  String? managerRemarks;
   String? createdBy;
   String? createdFullName;
   String? createdOn;
@@ -105,6 +107,8 @@ class TaskMasterGetModel {
         this.approvedFullName,
         this.approvedOn,
         this.rejectReason,
+        this.reopenRemarks,
+        this.managerRemarks,
         this.createdBy,
         this.createdFullName,
         this.createdOn,
@@ -180,6 +184,8 @@ class TaskMasterGetModel {
     approvedFullName = json['approved_full_name'];
     approvedOn = json['approved_on'];
     rejectReason = json['reject_reason'];
+    reopenRemarks = json['reopen_remarks'];
+    managerRemarks = json['manager_remarks'];
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
@@ -258,6 +264,8 @@ class TaskMasterGetModel {
     data['approved_full_name'] = this.approvedFullName;
     data['approved_on'] = this.approvedOn;
     data['reject_reason'] = this.rejectReason;
+    data['reopen_remarks'] = this.reopenRemarks;
+    data['manager_remarks'] = this.managerRemarks;
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
