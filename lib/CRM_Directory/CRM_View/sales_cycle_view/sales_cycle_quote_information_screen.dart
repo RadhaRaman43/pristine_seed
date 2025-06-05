@@ -84,7 +84,7 @@ class QuoteInformationScreen extends StatelessWidget{
           actions: [
             Obx(() {
               return Visibility(
-                visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
+                visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase()== 'draft'?false:true,
                 child: PopupMenuButton(
                   itemBuilder: (BuildContext context) {
                     return [
@@ -195,8 +195,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             return  Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Visibility(
-                                visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
-                                //visible: saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
+                                visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
@@ -220,7 +219,9 @@ class QuoteInformationScreen extends StatelessWidget{
 
                           Obx((){
                             return Visibility(
-                              visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending" ?true:false,
+                              visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email
+                                  && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="draft" &&
+                                  saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open"?true:false,
                               child: GestureDetector(
                                 onTap: (){
                                   saleCycleController.accountCode.value=saleCycleController.quoteHeaderdata[0].accountCode??"";
@@ -346,7 +347,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             return   Padding(
                               padding: const EdgeInsets.only(right:15.0, top: 8, bottom: 8),
                               child: Visibility(
-                                visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toUpperCase()== 'PENDING'?false:true,
+                                visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase()== 'draft'?false:true,
                                 child: Tooltip(
                                   message: 'View Approver Persons',
                                   child: Container(
@@ -388,7 +389,9 @@ class QuoteInformationScreen extends StatelessWidget{
 
                              Obx((){
                                return  Visibility(
-                                 visible: saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                                 visible: saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                                     && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="draft"
+                                     && saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=='open'?true:false,
                                  child: Row(
                                    children: [
                                      SizedBox(width: 10,),
@@ -419,7 +422,6 @@ class QuoteInformationScreen extends StatelessWidget{
                                      Obx((){
                                        String ProductCategory = saleCycleController.quoteHeaderdata[0].productCategoryCode??"";
                                        String PipeProdCate = ProductCategory.replaceAll(', ', '|');
-                                       print("${saleCycleController.quoteHeaderdata[0].quoteStatus}");
                                        return   GestureDetector(
                                          onTap: (){
                                            saleCycleController.pageNumber=0;
@@ -951,7 +953,7 @@ class QuoteInformationScreen extends StatelessWidget{
                         Row(
                           children: [
                             Text(
-                              "List Selling Pr. :",
+                              "LSP :",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1006,7 +1008,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             child: Row(
                               children: [
                                 Text(
-                                  "Branch Tran. Pri. : ",
+                                  "BTP : ",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.twelve,
@@ -1685,7 +1687,8 @@ class QuoteInformationScreen extends StatelessWidget{
               Obx((){
                 return Visibility(
                   //visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
-                  visible:saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                  //visible:saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
+                  visible:saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="draft" && saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open"?true:false,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -1764,6 +1767,26 @@ class QuoteInformationScreen extends StatelessWidget{
     String? expectedclosuredate=StaticMethod.convertDateFormat1(saleCycleController.quoteHeaderdata[0].expClosureDate ?? "");
     String?quoteValidityDate=StaticMethod.convertDateFormat1(saleCycleController.quoteHeaderdata[0].quoteValidity ?? "");
     String? regretOn=StaticMethod.dateTimeToDate(saleCycleController.quoteHeaderdata[0].regretOn ?? "");
+    String saleCycleQuoteStatus = saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ??
+        "";
+    Color getStatusColor(String status) {
+      switch (status) {
+        case  "draft":
+          return Colors.red[900]!;
+        case 'regret':
+          return Colors.red;
+        case 'rejected':
+          return Colors.red;
+        case 'approved':
+          return Colors.green;
+        case 'won':
+          return Colors.green;
+        case 'pending for approval':
+          return Colors.yellow[700]!;
+        default:
+          return Colors.black;
+      }
+    }
     return Container(
       width: double.infinity,
       child: Column(
@@ -1959,7 +1982,7 @@ class QuoteInformationScreen extends StatelessWidget{
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
+                                  color: getStatusColor(saleCycleQuoteStatus),
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500),
                             ),

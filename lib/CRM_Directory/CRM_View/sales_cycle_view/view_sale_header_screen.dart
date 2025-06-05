@@ -206,7 +206,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               Obx(() {
                 return Visibility(
                   visible: saleCycleController.saleCycleList[0].quoteAccepted
-                          ?.toUpperCase() != "LOSS" && !(saleCycleController.FromPage.value=="FromDashboard"),
+                          ?.toUpperCase() != "LOSS" &&
+                      saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase()!="rejected" && !(saleCycleController.FromPage.value=="FromDashboard"),
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       List<PopupMenuEntry> items = [];
@@ -335,41 +336,44 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         );
                       }
-                      
-                      items.add(
-                        PopupMenuItem(
-                          child: Row(
-                            children: [
-                              Icon(Icons.contacts, color: Colors.black),
-                              Text(' Mark Won / Loss'),
-                            ],
-                          ),
-                          onTap: () {
-                            saleCycleController
-                                .updateQuoteAccetedCycleController.value
-                                .clear();
-                            saleCycleController.saleCycleController.value
-                                .clear();
-                            saleCycleController.isChooseQuote.value = false;
-                            saleCycleController.isApprove.value = false;
-                            saleCycleController.isReject.value = false;
-                            saleCycleController.isCheck.value = -1;
-                            saleCycleController.checkBoxValues.updateAll((key,
-                                value) => false);
-                            saleCycleController.Quote_Selected_list.clear();
-                            if (saleCycleController.saleCycleList[0]
-                                .salesCycleStatus != "Propose") {
+                      if(saleCycleController.saleCycleList[0].quoteAccepted
+                          ?.toLowerCase()=="open" ){
+                        items.add(
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.contacts, color: Colors.black),
+                                Text(' Mark Won / Loss'),
+                              ],
+                            ),
+                            onTap: () {
                               saleCycleController
                                   .updateQuoteAccetedCycleController.value
-                                  .text = "LOSS";
-                              saleCycleController.isReject.value = true;
-                            }
-                            saleCycleController.showDialogForsalescycleUpdate(
-                                context,
-                                saleCycleController.saleCycleList[0]);
-                          },
-                        ),
-                      );
+                                  .clear();
+                              saleCycleController.saleCycleController.value
+                                  .clear();
+                              saleCycleController.isChooseQuote.value = false;
+                              saleCycleController.isApprove.value = false;
+                              saleCycleController.isReject.value = false;
+                              saleCycleController.isCheck.value = -1;
+                              saleCycleController.checkBoxValues.updateAll((key,
+                                  value) => false);
+                              saleCycleController.Quote_Selected_list.clear();
+                              if (saleCycleController.saleCycleList[0]
+                                  .salesCycleStatus != "Propose") {
+                                saleCycleController
+                                    .updateQuoteAccetedCycleController.value
+                                    .text = "LOSS";
+                                saleCycleController.isReject.value = true;
+                              }
+                              saleCycleController.showDialogForsalescycleUpdate(
+                                  context,
+                                  saleCycleController.saleCycleList[0]);
+                            },
+                          ),
+                        );
+                      }
+
                       return items;
                     },
                   ),
@@ -474,7 +478,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     bindExpectedAmount(context),
                                     Visibility(
                                       visible: saleCycleController.saleCycleList[0]
-                                          .quoteAccepted?.toUpperCase()=="LOSS" ||
+                                          .quoteAccepted?.toUpperCase()!="OPEN" ||
                                           saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase() || saleCycleController.saleCycleList[0]
                                           .salesCycleApprovalStatus?.toLowerCase()=="rejected" || (saleCycleController.FromPage.value=="FromDashboard")?false:true,
                                       child:  Container(
@@ -499,7 +503,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             : false,*/
                                         ignoring: (saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase() ||
                                             saleCycleController.saleCycleList[0].quoteAccepted
-                                            ?.toUpperCase() == "LOSS") ? true : false,
+                                            ?.toUpperCase() != "OPEN") ? true : false,
                                         child: DefaultButton(
                                           press: () {
                                             if (saleCycleController
@@ -876,7 +880,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             Visibility(
                                               visible: saleCycleController
                                                   .saleCycleList[0].quoteAccepted
-                                                  ?.toUpperCase() == "LOSS" || saleCycleController.FromPage.value=="FromDashboard"?false:true,
+                                                  ?.toUpperCase() != "OPEN" || saleCycleController.FromPage.value=="FromDashboard"?false:true,
                                               child: Container(
                                                 padding: EdgeInsets.fromLTRB(
                                                     15, 5, 15, 10),
@@ -957,7 +961,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 .saleCycleList[0].createdBy?.toLowerCase() ==
                                                 saleCycleController.email.toLowerCase() &&
                                                 saleCycleController
-                                                    .saleCycleList[0].quoteAccepted?.toUpperCase()!="LOSS" && !(saleCycleController.FromPage.value=="FromDashboard")? true : false,
+                                                    .saleCycleList[0].quoteAccepted?.toUpperCase()=="OPEN" && !(saleCycleController.FromPage.value=="FromDashboard")? true : false,
                                             child: GestureDetector(
                                               onTap: () {
                                                 saleCycleController.clearAllFieldOfQuoteFilter();
@@ -1800,9 +1804,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
               saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                   ?.toLowerCase() == "rejected" ||
-              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
-                  "LOSS"
-              /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
+              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() !=
+                  "OPEN"
+              /*| | saleCycleController.FromPage != 'Sales'*/ ? false : true,
           onSelected: (String? selection) {
             print(selection);
 
@@ -1934,8 +1938,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
               saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                   ?.toLowerCase() == "rejected" ||
-              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
-                  "LOSS" ? false : true,
+              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() !=
+                  "OPEN" ? false : true,
           onSelected: (String? selection) {
             print(selection);
             saleCycleController.isCommitController.value.text =
@@ -1962,7 +1966,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         child: DropdownMenu<String>(
           width: saleCycleController
               .saleCycleList[0].quoteAccepted
-              ?.toUpperCase() == "LOSS" ||  saleCycleController.FromPage.value=="FromDashboard"?size.width-20:size.width / 2 - 16,
+              ?.toUpperCase() != "OPEN" ||  saleCycleController.FromPage.value=="FromDashboard"?size.width-20:size.width / 2 - 16,
           controller: saleCycleController.ConfirmExpectedRevenueController.value,
           label: Text(
             "Confirm Expected Revenue",
@@ -1997,8 +2001,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ?.toLowerCase() == saleCycleController.email.toLowerCase() ||
               saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                   ?.toLowerCase() == "rejected" ||
-              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() ==
-                  "LOSS"
+              saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() !=
+                  "OPEN"
               /*|| saleCycleController.FromPage != 'Sales'*/ ? false : true,
           onSelected: (String? selection) {
             print(selection);
@@ -2517,7 +2521,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           Visibility(
                             visible:  saleCycleController.FromPage.value=="FromDashboard" ||
                                 saleCycleController.email.toLowerCase() == saleCycleController
-                                    .saleCycleList[0].approvedBy?.toLowerCase() || saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == 'loss'? false : true,
+                                    .saleCycleList[0].approvedBy?.toLowerCase() ||
+                                saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() != 'open'? false : true,
                             child: InkWell(
                                 onTap: () {
                                   saleCycleController.itemCategorySelectedlist
@@ -4200,9 +4205,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         "";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'Pending':
+        case 'DRAFT'|| "Draft":
           return Colors.red[900]!;
-        case 'REGRET':
+        case 'REGRET'||'Regret':
           return Colors.red;
         case 'Rejected':
           return Colors.red;
@@ -4351,7 +4356,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             Row(
               children: [
                 Text(
-                  "Expected Closure Date : ",
+                  "Exp Closure Date : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.twelve,
@@ -6475,7 +6480,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           .salesCycleStatus!.toLowerCase()!="suspect" || (saleCycleController.saleCycleList[0].createdBy != saleCycleController.email || saleCycleController.saleCycleList[0].quoteAccepted
           ?.toUpperCase() == "LOSS") ? true : false,*/
       ignoring:  saleCycleController.saleCycleList[0].quoteAccepted
-          ?.toUpperCase() == "LOSS" || saleCycleController.saleCycleList[0]
+          ?.toUpperCase() != "open" || saleCycleController.saleCycleList[0]
           .salesCycleApprovalStatus?.toLowerCase()=="rejected"
           || saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase()
       ||   (saleCycleController.FromPage.value=="FromDashboard"),
@@ -6615,7 +6620,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   Widget bindExpectedAmount(BuildContext context) {
     return IgnorePointer(
       ignoring:  saleCycleController.saleCycleList[0].quoteAccepted
-          ?.toUpperCase() == "LOSS" || saleCycleController.saleCycleList[0]
+          ?.toUpperCase() != "OPEN" || saleCycleController.saleCycleList[0]
           .salesCycleApprovalStatus?.toLowerCase()=="rejected" ||
           saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase() ||
           (saleCycleController.FromPage.value=="FromDashboard")
@@ -6808,7 +6813,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                   onTap: () {
                                     if (!(saleCycleController.FromPage.value=="FromDashboard") && saleCycleController.saleCycleList[0]
-                                        .quoteAccepted?.toUpperCase() != "LOSS") {
+                                        .quoteAccepted?.toUpperCase() == "OPEN" && saleCycleController.saleCycleList[0]
+                                        .actualSalesCycleApprovalStatus?.toLowerCase() != "rejected") {
                                       saleCycleController.ProductCategoryCode.value = user.productCategory!;
                                       saleCycleController.budgetAmountController.value.text = user.budgetAmount.toString();
                                       saleCycleController.expectedAmountController.value.text = user.estimatedAmount.toString();
@@ -6823,7 +6829,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   visible: /*saleCycleController.saleCycleList[0]
                                       .salesCycleStatus!.toLowerCase()=="suspect" */saleCycleController.saleCycleList[0]
                               .salesCycleApprovalStatus?.toLowerCase() == "rejected" || saleCycleController.saleCycleList[0]
-                                      .quoteAccepted?.toUpperCase() == "LOSS" ||
+                                      .quoteAccepted?.toUpperCase() != "OPEN" ||
                                       saleCycleController.saleCycleList[0].createdBy?.toLowerCase() != saleCycleController.email.toLowerCase()
                                       ||   (saleCycleController.FromPage.value=="FromDashboard")?false:true,
                                   child: InkWell(
@@ -7566,7 +7572,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             bindExpectedAmount(context),
                             Visibility(
                               visible:  saleCycleController.saleCycleList[0]
-                                  .quoteAccepted!.toLowerCase()=="loss" ||  saleCycleController.saleCycleList[0]
+                                  .quoteAccepted!.toLowerCase()!="open" ||  saleCycleController.saleCycleList[0]
                                   .salesCycleApprovalStatus!.toLowerCase()=="rejected" ||  (saleCycleController.FromPage.value=="FromDashboard")
                                   || saleCycleController.saleCycleList[0]
                                       .createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()?false:true  ,
@@ -9486,7 +9492,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       ),
     );
   }
-
+/*
   void showConfirmationDialogForMarkLoss(BuildContext context, SalesCycleModal saleCycleList) {
     showDialog(
         context: context,
@@ -9550,16 +9556,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
+                              saleCycleController.filterQuoteAcceptedFlag.value == 'Loss';
                               saleCycleController.getSalesCycleMstUpdateSuspect(saleCycleList,
                                   saleCycleController.updateQuoteAccetedCycleController.value.text
                                   ,saleCycleController.competitorNameController.value.text, saleCycleController.quoteRejectReasonController.value.text);
                               
-                            /*  saleCycleController
+                            *//*  saleCycleController
                                   .getSalesProductLineCompetitorCreate(
                                   saleCycleController.saleCycleList[0]
                                       .salesCycleId!, "All",
                                   saleCycleController
-                                      .get_SalesCycleProductById_List, 0);*/
+                                      .get_SalesCycleProductById_List, 0);*//*
                               Get.back();
                             },
                             child: Container(
@@ -9581,7 +9588,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ]),
           );
         });
-  }
+  }*/
 
   void updateQtySalesCycleProduct(BuildContext context, int position) {
     showDialog(
@@ -10113,6 +10120,70 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: saleCycleController.createdOnCnontroller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          saleCycleController.createdOnStartToEnd.value="$startDate@$endDate";
+          saleCycleController.createdOnCnontroller.value.text = '$startDate - $endDate';
+        } else {
+          saleCycleController.createdOnCnontroller.value.text = '';
+          saleCycleController.createdOnStartToEnd.value="";
+        }
+      },
+    );
+  }
+
+
+ /* filterWithQuoteCreatedOn(BuildContext context) {
+    return TextField(
         cursorColor: AllColors.primaryDark1,
         controller: saleCycleController.createdOnCnontroller.value,
         decoration: InputDecoration(
@@ -10171,7 +10242,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
 
     );
-  }
+  }*/
 
   filterWithQuoteRhApproval() {
    return TextField(

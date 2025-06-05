@@ -364,10 +364,10 @@ class SalesCycleScreen extends StatelessWidget{
               ),
 
 
-              _buildLabelWithValue(
+              /*_buildLabelWithValue(
                 label: "Proposed Solution: ",
                 value: salesCycleController.saleCycleList[position].proposedSolution,
-              ),
+              ),*/
               _buildLabelWithValue(
                 label: "Post Code : ",
                 value: salesCycleController.saleCycleList[position].postCode,
@@ -999,10 +999,10 @@ class SalesCycleScreen extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindProposedSolution(context),
+                            /*  bindProposedSolution(context),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
 
 
                               bindPostalCode(),

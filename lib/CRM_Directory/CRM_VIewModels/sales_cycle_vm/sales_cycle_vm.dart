@@ -385,7 +385,8 @@ class SalesCycleVm extends GetxController{
                 saleCycleList[0].isDecisionMaker==0?identifyDecisionMakerController.value.text="No":identifyDecisionMakerController.value.text="Yes";
                 saleCycleList[0].commit==0?saleCycleCommitController.value.text="No":saleCycleCommitController.value.text="Yes";
                 saleCycleList[0].quoteSubmitted==0?QuoteSubmittedController.value.text="No":QuoteSubmittedController.value.text="Yes";
-                saleCycleList[0].confirmDecisionDate==0?ConfirmDecisionDateController.value.text="No":ConfirmDecisionDateController.value.text="Yes";
+                saleCycleList[0].commit==0?isCommitController.value.text="No":isCommitController.value.text="Yes";
+                //saleCycleList[0].confirmDecisionDate==0?ConfirmDecisionDateController.value.text="No":ConfirmDecisionDateController.value.text="Yes";
                 saleCycleList[0].confirmExpectedRevenue==0?ConfirmExpectedRevenueController.value.text="No":ConfirmExpectedRevenueController.value.text="Yes";
                 purchaseProcessController.value.text=saleCycleList[0].purchaseProcess==null?"":saleCycleList[0].purchaseProcess.toString();
                 purchasTimeFrameController.value.text=saleCycleList[0].purchaseTimeFrame==null?"":saleCycleList[0].purchaseTimeFrame.toString();
@@ -614,7 +615,7 @@ class SalesCycleVm extends GetxController{
         "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty? filterQuoteStatusController.value.text:status,
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_created_by": FromPage=="QuoteApprovalPage"?"":email,
-        "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+        "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
         "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
         "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
@@ -2195,7 +2196,9 @@ class SalesCycleVm extends GetxController{
     //saleCycleController.deliveryWeeksController.value.text = saleCycleController.quoteHeaderdata[0].deliveryInWeeks.toString();
     advncPaymentPerController.value.text = quoteHeaderdata[0].advancePaymentPer.toString();
     quoteTotAmountController.value.text = quoteHeaderdata[0].quoteTotalAmount.toString();
-    advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString();
+    advncPaymentAmountController.value.text =
+    quoteHeaderdata[0].advancePaymentAmt!=null?quoteHeaderdata[0].advancePaymentAmt!.toStringAsFixed(4):"";
+    //advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString();
     quoteRemarkController.value.text = quoteHeaderdata[0].otherRemarks.toString();
     //termConditionController.value.text = quoteHeaderdata[0].tem.toString();
   }
@@ -3021,7 +3024,6 @@ class SalesCycleVm extends GetxController{
 
 
   Widget bindUpdateSalesCycle(BuildContext context) {
-
     return Autocomplete<String>(
       displayStringForOption: _displayCustomerNeedIdentityStatusForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -3044,6 +3046,7 @@ class SalesCycleVm extends GetxController{
       //  print('IsActive.....${saleCycleController.updateQuoteAccetedCycleController.value.text}');
         if(updateQuoteAccetedCycleController.value.text=="WON"){
          selectedQuotationIdController.value.clear();
+          filterQuoteAcceptedFlag.value = 'Won';
           isChooseQuote.value = true;
           isApprove.value=true;
           isReject.value=false;
@@ -3051,11 +3054,13 @@ class SalesCycleVm extends GetxController{
         else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
          competitorNameController.value.clear();
           quoteRejectReasonController.value.clear();
+          filterQuoteAcceptedFlag.value = 'Loss';
           isReject.value=true;
           isApprove.value=false;
           isChooseQuote.value = false;
         }
         else{
+          filterQuoteAcceptedFlag.value = 'Open';
           isApprove.value=false;
           isReject.value=false;
           isChooseQuote.value = false;
@@ -3489,7 +3494,9 @@ class SalesCycleVm extends GetxController{
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
           if(response[0].condition!.toLowerCase()=="true"){
             Utils.showToastification("Message !", response[0].message.toString());
-            getsalesCycleData(0, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            pageNumber=0;
+            filterQuoteAcceptedFlag.value = 'Loss';
+            getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
             loading.value = false;
           }else {
             print("message ${response[0].message.toString()}");
