@@ -32,6 +32,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         saleCycleController.productCategoryController.value.clear();
         saleCycleController.shippingController.value.clear();
         saleCycleController.shippingAddress2Controller.value.clear();
+        saleCycleController.accountNameController.value.clear();
+        saleCycleController.contactNameController.value.clear();
         Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         return false;
       },
@@ -103,8 +105,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                   child: DefaultButton(
                     press: (){
                       saleCycleController.saleCycleQuoteCreate(saleCycleController.saleCycleList[0].salesCycleId!);
-                      // saleCycleController.accountNameController.value.clear();
-                     // saleCycleController.contactNameController.value.clear();
+                       //saleCycleController.accountNameController.value.clear();
+                      //saleCycleController.contactNameController.value.clear();
 
                     },
                     text: "Add Quote",

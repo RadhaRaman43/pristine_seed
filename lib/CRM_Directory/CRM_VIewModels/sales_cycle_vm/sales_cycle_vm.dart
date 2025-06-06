@@ -224,6 +224,7 @@ class SalesCycleVm extends GetxController{
 
  //todo new filter on sales cycle screen
   var createdOnCnontroller=TextEditingController().obs;
+  RxString createdOnStartToEnd="".obs;
   var isCommitController=TextEditingController().obs;
   var branch_head_value_controller=TextEditingController().obs;
   var zone_head_value_controller=TextEditingController().obs;
@@ -328,7 +329,7 @@ class SalesCycleVm extends GetxController{
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty?"":purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty?"":proposedSolutionController.value.text,
-        "filter_expected_closure_date": expectedClosuredateController.value.text.isEmpty?"": expectedClosuredateController.value.text,
+        "filter_expected_closure_date": filterExpectedClosuredateController.value.text.isEmpty?"": filterExpectedClosuredateController.value.text,
         "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All'?'':SaleCycleStatusController.value.text,
         "filter_sales_cycle_approval_status": ApprovalStatusController.value.text.isEmpty || ApprovalStatusController.value.text == 'All'?'':ApprovalStatusController.value.text,
         "filter_sales_cycle_quote_accepted": filterQuoteAcceptedFlag.value,
@@ -336,7 +337,7 @@ class SalesCycleVm extends GetxController{
         "filter_solution_accepted": solutionAcceptedController.value.text.isEmpty?-1:(solutionAcceptedController.value.text=="Yes"?1:0),
         "filter_created_by": createdByController.value.text.isEmpty?"": createdByController.value.text,
         "filter_approved_by": "",
-        "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+        "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"": companyProfileTypeController.value.text,
         "filter_postal_code": postalCodeController.value.text.isEmpty?"": postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty?"": district_controller.value.text,
@@ -384,7 +385,8 @@ class SalesCycleVm extends GetxController{
                 saleCycleList[0].isDecisionMaker==0?identifyDecisionMakerController.value.text="No":identifyDecisionMakerController.value.text="Yes";
                 saleCycleList[0].commit==0?saleCycleCommitController.value.text="No":saleCycleCommitController.value.text="Yes";
                 saleCycleList[0].quoteSubmitted==0?QuoteSubmittedController.value.text="No":QuoteSubmittedController.value.text="Yes";
-                saleCycleList[0].confirmDecisionDate==0?ConfirmDecisionDateController.value.text="No":ConfirmDecisionDateController.value.text="Yes";
+                saleCycleList[0].commit==0?isCommitController.value.text="No":isCommitController.value.text="Yes";
+                //saleCycleList[0].confirmDecisionDate==0?ConfirmDecisionDateController.value.text="No":ConfirmDecisionDateController.value.text="Yes";
                 saleCycleList[0].confirmExpectedRevenue==0?ConfirmExpectedRevenueController.value.text="No":ConfirmExpectedRevenueController.value.text="Yes";
                 purchaseProcessController.value.text=saleCycleList[0].purchaseProcess==null?"":saleCycleList[0].purchaseProcess.toString();
                 purchasTimeFrameController.value.text=saleCycleList[0].purchaseTimeFrame==null?"":saleCycleList[0].purchaseTimeFrame.toString();
@@ -613,7 +615,7 @@ class SalesCycleVm extends GetxController{
         "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty? filterQuoteStatusController.value.text:status,
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_created_by": FromPage=="QuoteApprovalPage"?"":email,
-        "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+        "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
         "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
         "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
@@ -2194,7 +2196,9 @@ class SalesCycleVm extends GetxController{
     //saleCycleController.deliveryWeeksController.value.text = saleCycleController.quoteHeaderdata[0].deliveryInWeeks.toString();
     advncPaymentPerController.value.text = quoteHeaderdata[0].advancePaymentPer.toString();
     quoteTotAmountController.value.text = quoteHeaderdata[0].quoteTotalAmount.toString();
-    advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString();
+    advncPaymentAmountController.value.text =
+    quoteHeaderdata[0].advancePaymentAmt!=null?quoteHeaderdata[0].advancePaymentAmt!.toStringAsFixed(4):"";
+    //advncPaymentAmountController.value.text = quoteHeaderdata[0].advancePaymentAmt.toString();
     quoteRemarkController.value.text = quoteHeaderdata[0].otherRemarks.toString();
     //termConditionController.value.text = quoteHeaderdata[0].tem.toString();
   }
@@ -2451,16 +2455,26 @@ class SalesCycleVm extends GetxController{
                             ),
                             onPressed: ()  {
                               selectedItem.value = -1;
-                              shippingController.value.text=saleCycleList[0].shippingAddress??"";
+
+                              //todo commented by nirupma
+                              shippingController.value.text="";
+                              shippingAddress2Controller.value.text="";
+                              Shipping_PostCode_Controller.value.text="";
+                              Shipping_City_Controller.value.text="" ;
+                              Shipping_District_Controller.value.text="" ;
+                              Shipping_State_Controller.value.text="";
+                              Shipping_phone_Controller.value.text="";
+                              Shipping_email_Controller.value.text="";
+
+                           /*   shippingController.value.text=saleCycleList[0].shippingAddress??"";
                               shippingAddress2Controller.value.text=saleCycleList[0].shippingAddress2??"";
                               Shipping_PostCode_Controller.value.text=saleCycleList[0].shippingPostCode??"";
                               Shipping_City_Controller.value.text=saleCycleList[0].shippingCity??"" ;
                               Shipping_District_Controller.value.text=saleCycleList[0].shippingDistrict??"" ;
                               Shipping_State_Controller.value.text=saleCycleList[0].shippingStateCode??"";
                               Shipping_phone_Controller.value.text=saleCycleList[0].shippingPhoneNo??"";
-                              Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";
+                              Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";*/
                               consigneeId = '';
-
                               // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
                               Get.back();
                             },
@@ -3010,7 +3024,6 @@ class SalesCycleVm extends GetxController{
 
 
   Widget bindUpdateSalesCycle(BuildContext context) {
-
     return Autocomplete<String>(
       displayStringForOption: _displayCustomerNeedIdentityStatusForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -3033,6 +3046,7 @@ class SalesCycleVm extends GetxController{
       //  print('IsActive.....${saleCycleController.updateQuoteAccetedCycleController.value.text}');
         if(updateQuoteAccetedCycleController.value.text=="WON"){
          selectedQuotationIdController.value.clear();
+          filterQuoteAcceptedFlag.value = 'Won';
           isChooseQuote.value = true;
           isApprove.value=true;
           isReject.value=false;
@@ -3040,11 +3054,13 @@ class SalesCycleVm extends GetxController{
         else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
          competitorNameController.value.clear();
           quoteRejectReasonController.value.clear();
+          filterQuoteAcceptedFlag.value = 'Loss';
           isReject.value=true;
           isApprove.value=false;
           isChooseQuote.value = false;
         }
         else{
+          filterQuoteAcceptedFlag.value = 'Open';
           isApprove.value=false;
           isReject.value=false;
           isChooseQuote.value = false;
@@ -3478,7 +3494,9 @@ class SalesCycleVm extends GetxController{
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
           if(response[0].condition!.toLowerCase()=="true"){
             Utils.showToastification("Message !", response[0].message.toString());
-            getsalesCycleData(0, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            pageNumber=0;
+            filterQuoteAcceptedFlag.value = 'Loss';
+            getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
             loading.value = false;
           }else {
             print("message ${response[0].message.toString()}");
@@ -3585,9 +3603,10 @@ class SalesCycleVm extends GetxController{
     loading.value = true;
     Map data={
       "sales_cycle_id": salesId,
-      "quote_submitted": QuoteSubmittedController.value.text == 'Yes'?1:'0',
-      "confirm_decision_date": ConfirmDecisionDateController.value.text == 'Yes'?1:'0',
-      "confirm_expected_revenue": ConfirmExpectedRevenueController.value.text == 'Yes'?1:'0',
+      "is_commit": isCommitController.value.text=='Yes'?1:0,
+      "quote_submitted": QuoteSubmittedController.value.text == 'Yes'?1:0,
+      "confirm_decision_date": 0,
+      "confirm_expected_revenue": ConfirmExpectedRevenueController.value.text == 'Yes'?1:0,
       "created_by": email
     };
     try{
@@ -3798,6 +3817,7 @@ class SalesCycleVm extends GetxController{
   }
 
   void clearAllFieldOfFilter() {
+    print("Clear Filed");
     saleCycleController.value.clear();
     salesCycleOwnerController.value.clear();
     filterTask_Id_controller.value.clear();
@@ -3820,7 +3840,7 @@ class SalesCycleVm extends GetxController{
     createdByController.value.clear();
     filterExpectedClosuredateController.value.clear();
     createdOnCnontroller.value.clear();
-
+    createdOnStartToEnd.value="";
 
   }
 
@@ -3845,6 +3865,7 @@ class SalesCycleVm extends GetxController{
     branch_head_value_controller.value.clear();
     zone_head_value_controller.value.clear();
     cluster_head_value_controller.value.clear();
+    createdOnStartToEnd.value="";
 
 
   }

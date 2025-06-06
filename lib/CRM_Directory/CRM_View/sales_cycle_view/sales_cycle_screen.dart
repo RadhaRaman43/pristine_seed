@@ -345,9 +345,9 @@ class SalesCycleScreen extends StatelessWidget{
                 width: size.width * 0.35,
               ),
               _buildLabelWithValue(
-                label: "Company Profile Type : ",
+                label: "Company Pro. Type : ",
                 value: salesCycleController.saleCycleList[position].companyProfileType,
-                width: size.width * 0.33,
+                width: size.width * 0.3,
               ),
               _buildLabelWithValue(
                 label: "Is Commit : ",
@@ -364,10 +364,10 @@ class SalesCycleScreen extends StatelessWidget{
               ),
 
 
-              _buildLabelWithValue(
+              /*_buildLabelWithValue(
                 label: "Proposed Solution: ",
                 value: salesCycleController.saleCycleList[position].proposedSolution,
-              ),
+              ),*/
               _buildLabelWithValue(
                 label: "Post Code : ",
                 value: salesCycleController.saleCycleList[position].postCode,
@@ -407,7 +407,7 @@ class SalesCycleScreen extends StatelessWidget{
                 width: size.width * 0.4,
               ),
               _buildLabelWithValue(
-                label: "Expected Closure Date : ",
+                label: "Exp. Closure Date : ",
                 value: salesCycleController.saleCycleList[position].estClosureDate,
                 width: size.width * 0.3,
               ),
@@ -999,10 +999,10 @@ class SalesCycleScreen extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindProposedSolution(context),
+                            /*  bindProposedSolution(context),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
 
 
                               bindPostalCode(),
@@ -2321,7 +2321,7 @@ class SalesCycleScreen extends StatelessWidget{
         contentPadding: EdgeInsets.symmetric(
             vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Select Date Range',
+        hintText: 'Select Start Date -End Date',
         labelText: 'Created On',
         hintStyle: GoogleFonts.poppins(
             color: AllColors.lightblackColor,
@@ -2338,68 +2338,42 @@ class SalesCycleScreen extends StatelessWidget{
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
       ),
-        onTap: () async {
-          FocusScope.of(context).unfocus();
-
-          // 🎯 START DATE PICKER with custom theme
-          DateTime? startDate = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: DateTime(1900),
-            lastDate: DateTime(2200),
-            builder: (context, child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  colorScheme: ColorScheme.light(
-                    primary: Colors.green, // 🎨 Start date primary color
-                    onPrimary: Colors.white, // Text color on selected date
-                    onSurface: Colors.black, // Default text color
-                  ),
-                  textButtonTheme: TextButtonThemeData(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.green, // "OK" and "CANCEL"
-                    ),
-                  ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+         /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
                 ),
-                child: child!,
-              );
-            },
-          );
+              ),
+              child: child!,
+            );
+          },
+        );
 
-          if (startDate == null) return;
-          DateTime? endDate = await showDatePicker(
-            context: context,
-            initialDate: startDate.add(Duration(days: 1)),
-            firstDate: startDate,
-            lastDate: DateTime(2200),
-            builder: (context, child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  colorScheme: ColorScheme.light(
-                    primary: Colors.red, // 🎨 End date primary color
-                    onPrimary: Colors.white,
-                    onSurface: Colors.black,
-                  ),
-                  textButtonTheme: TextButtonThemeData(
-                    style: TextButton.styleFrom(
-                      foregroundColor: Colors.red,
-                    ),
-                  ),
-                ),
-                child: child!,
-              );
-            },
-          );
-
-          if (endDate != null) {
-            final formattedStart = DateFormat('yyyy-MM-dd').format(startDate);
-            final formattedEnd = DateFormat('yyyy-MM-dd').format(endDate);
-            salesCycleController.createdOnCnontroller.value.text = '$formattedStart@$formattedEnd';
-          }
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          salesCycleController.createdOnStartToEnd.value="$startDate@$endDate";
+          salesCycleController.createdOnCnontroller.value.text = '$startDate - $endDate';
+        } else {
+          salesCycleController.createdOnCnontroller.value.text = '';
+          salesCycleController.createdOnStartToEnd.value="";
         }
-
-
+      },
     );
   }
+
 
 }
