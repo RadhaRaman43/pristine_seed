@@ -248,6 +248,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   InkWell(
                     onTap: (){
                       saleCycleController.pageNumber = 0;
+                      saleCycleController.filterQuoteAcceptedFlag.value="";
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position]
                           .salesCycleId!, "ViewHeader", "QuoteApprovalPage");
                     },

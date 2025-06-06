@@ -28,6 +28,7 @@ class ApprovedQuotationList extends StatelessWidget{
           if(saleCycleController.quoteApprovalPage.value=="approvedQuotationScreen"){
             saleCycleController.pageNumber=0;
             saleCycleController.pageNumberForQuote=0;
+            saleCycleController.filterQuoteAcceptedFlag.value="";
             saleCycleController.getsalesCycleData(saleCycleController.pageNumber, saleCycleController.salesCycleId.value, "", saleCycleController.FromPage.value);
             saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,saleCycleController.salesCycleId.value, '');
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
@@ -35,6 +36,7 @@ class ApprovedQuotationList extends StatelessWidget{
           }else {
             saleCycleController.pageNumber=0;
             saleCycleController.pageNumberForQuote=0;
+            saleCycleController.filterQuoteAcceptedFlag.value="";
             saleCycleController.getsalesCycleData(saleCycleController.pageNumber, saleCycleController.salesCycleId.value, "", saleCycleController.FromPage.value);
             saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,saleCycleController.salesCycleId.value, '');
             //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
