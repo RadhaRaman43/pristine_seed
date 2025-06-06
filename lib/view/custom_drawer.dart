@@ -323,8 +323,7 @@ class _Drawer extends State<CustomDrawer> {
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               //Get.offAllNamed(RoutesName.contactMaster_screen);
-                                              contact_vm_controller.emailId_controller.clear();
-                                              contact_vm_controller.phone_no_controller.clear();
+                                              contact_vm_controller.clearAllFilterContoller();
                                               contact_vm_controller.pageNumber = 0;
                                               Get.toNamed(RoutesName.contactMaster_screen);
                                               contact_vm_controller.getContactMasterList(0,"","","");

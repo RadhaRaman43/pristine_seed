@@ -514,4 +514,15 @@ class ContactMasterVM extends GetxController{
   }
 
 
+  clearAllFilterContoller(){
+    filterIconColor.value=false;
+    account_name_controller.clear();
+    account_code_controller.clear();
+    contact_name_controller.clear();
+    depart_name_controller.clear();
+    emailId_controller.clear();
+    phone_no_controller.clear();
+  }
+
+
 }

@@ -1229,6 +1229,7 @@ class TaskMasterScreen extends StatelessWidget {
   showApprovRejectDialog(context, String TaskId) {
     TaskMaster_page_controller.ApproveReject_Controller.clear();
     TaskMaster_page_controller.RejectReason_Controller.clear();
+    TaskMaster_page_controller.managerRemarksController.value.clear();
     TaskMaster_page_controller.ApproveBool.value = false;
     TaskMaster_page_controller.RejectBool.value = false;
     showDialog(
