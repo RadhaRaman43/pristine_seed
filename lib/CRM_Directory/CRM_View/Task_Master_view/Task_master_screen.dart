@@ -882,6 +882,7 @@ class TaskMasterScreen extends StatelessWidget {
                     onTap: () {
                       salesCycleController.pageNumber = 0;
                       salesCycleController.clearSaleProductListController();
+                      salesCycleController.filterQuoteAcceptedFlag.value="";
                       salesCycleController.getsalesCycleData(
                           salesCycleController.pageNumber,
                           TaskMaster_page_controller
@@ -1703,27 +1704,23 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(
                                 height: 5,
                               ),
+                              bindTaskStatusDropDown(context),
+                              SizedBox(
+                                height: 10,
+                              ),
                               bindTaskId(),
                               SizedBox(
                                 height: 5,
-                              ),
-                              bindAccountCode(),
-                              SizedBox(
-                                height: 10,
                               ),
                               bindAccountName(),
                               SizedBox(
                                 height: 10,
                               ),
-                              bindTaskStatusDropDown(context),
+                              bindAccountCode(),
                               SizedBox(
                                 height: 10,
                               ),
 
-                              bindProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
                               bindTypeOfCall(),
                               SizedBox(
                                 height: 10,
@@ -1740,6 +1737,10 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
+                              bindLastActivityStatus(),
+                              SizedBox(
+                                height: 10,
+                              ),
                               bindSaleCycleActiveDropDown(context),
                               SizedBox(
                                 height: 10,
@@ -1747,12 +1748,16 @@ class TaskMasterScreen extends StatelessWidget {
 
                               bindSaleCycleId(),
                               SizedBox(height: 10,),
-
-                              bindCreatedBy(),
+                              bindProductCategory(),
                               SizedBox(
                                 height: 10,
                               ),
                               bindCreatedOn(context),
+
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindCreatedBy(),
                               SizedBox(height: 10,),
 
                               filterAccountOwner(),
@@ -2252,6 +2257,36 @@ class TaskMasterScreen extends StatelessWidget {
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
           labelText: 'Email Id',
           hintText: 'Email Id',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  bindLastActivityStatus() {
+    return TextField(
+      controller: TaskMaster_page_controller.lastActivityStatus_Controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Last Activity Status ',
+          hintText: 'Last Activity Status',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

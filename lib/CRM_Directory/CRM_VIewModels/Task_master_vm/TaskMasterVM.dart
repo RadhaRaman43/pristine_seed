@@ -104,6 +104,7 @@ class Taskmastervm extends GetxController{
     var zone_head_value_controller=TextEditingController().obs;
     var branch_head_value_controller=TextEditingController().obs;
     var EmailId_Controller=TextEditingController().obs;
+    var lastActivityStatus_Controller=TextEditingController().obs;
     var PhoneNo_Controller=TextEditingController().obs;
     var product_category_controller=TextEditingController().obs;
     var method_of_call_controller=TextEditingController().obs;
@@ -231,7 +232,7 @@ class Taskmastervm extends GetxController{
         }
         try{
             Map data={
-                "filter_task_id": filterTask_Id_controller.text.isEmpty?taskId:filterTask_Id_controller.text,
+                "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.text,
                 "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
                 "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
                 "filter_task_status": status == 'All'?"":status,
@@ -1420,8 +1421,9 @@ class Taskmastervm extends GetxController{
        cluster_head_value_controller.value.clear();
        zone_head_value_controller.value.clear();
        branch_head_value_controller.value.clear();
-      // EmailId_Controller.value.clear();
+       EmailId_Controller.value.clear();
        PhoneNo_Controller.value.clear();
+       lastActivityStatus_Controller.value.clear();
        product_category_controller.value.clear();
        method_of_call_controller.value.clear();
        account_owner_controller.value.clear();
