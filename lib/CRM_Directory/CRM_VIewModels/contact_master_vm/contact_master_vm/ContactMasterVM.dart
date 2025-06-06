@@ -40,6 +40,7 @@ class ContactMasterVM extends GetxController{
   String view ="";
 
   var account_name_controller = TextEditingController();
+  var account_code_controller = TextEditingController();
   var FullAddress_Controller = TextEditingController().obs;
   var contact_name_controller = TextEditingController();
   var depart_name_controller = TextEditingController();
@@ -113,7 +114,7 @@ class ContactMasterVM extends GetxController{
 
       Map<String, String> data={
         "filter_contact_name": contact_name,
-        "filter_account_code":"",
+        "filter_account_code":account_code_controller.text.isEmpty?"":account_code_controller.value.text,
         "filter_account_name": account_name,
         "filter_department_name": depart_name,
         "email_id": emailId_controller.value.text.isEmpty?"":emailId_controller.value.text,

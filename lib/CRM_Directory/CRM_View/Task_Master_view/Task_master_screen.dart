@@ -350,7 +350,7 @@ class TaskMasterScreen extends StatelessWidget {
                                         color: AllColors.grayColor)),
                                 //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                 //CircleAvatar
-                                label: Text('Today',
+                                label: Text("Today Calls",
                                     style: GoogleFonts.poppins(
                                       color: TaskMaster_page_controller
                                           .date_filter.value ==
@@ -398,7 +398,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           color: AllColors.grayColor)),
                                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                   //CircleAvatar
-                                  label: Text('Future',
+                                  label: Text("Future Calls",
                                       style: GoogleFonts.poppins(
                                         color: TaskMaster_page_controller
                                             .date_filter.value ==
@@ -449,7 +449,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           color: AllColors.grayColor)),
                                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                   //CircleAvatar
-                                  label: Text('Breached',
+                                  label: Text('Lapsed Calls',
                                       style: GoogleFonts.poppins(
                                         color: TaskMaster_page_controller
                                             .date_filter.value ==
@@ -501,7 +501,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           color: AllColors.grayColor)),
                                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                   //CircleAvatar
-                                  label: Text('All',
+                                  label: Text('All Calls',
                                       style: GoogleFonts.poppins(
                                         color: TaskMaster_page_controller
                                             .date_filter.value ==
@@ -1065,6 +1065,7 @@ class TaskMasterScreen extends StatelessWidget {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     "Remarks : ",
@@ -1087,6 +1088,7 @@ class TaskMasterScreen extends StatelessWidget {
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
+
                     ),
                   ),
                 ],
@@ -1248,6 +1250,40 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 15,),
                   bindApprovRejectDropDown(context),
+                  SizedBox(height: 55,),
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.ApproveBool
+                          .value,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          controller: TaskMaster_page_controller
+                              .managerRemarksController.value,
+                          decoration: InputDecoration(
+                              hintText: "Manager Remarks",
+                              labelText: "Manager Remarks",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+
+                              /*focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),*/
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+                    );
+                  }),
                   SizedBox(height: 55,),
                   Obx(() {
                     return Visibility(
@@ -1716,7 +1752,7 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
-                              filterWithTaskCreationOn(context),
+                              bindCreatedOn(context),
                               SizedBox(height: 10,),
 
                               filterAccountOwner(),
@@ -3371,6 +3407,69 @@ class TaskMasterScreen extends StatelessWidget {
             ],
           ),
         );
+      },
+    );
+  }
+
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+          start: DateTime.now(),
+          end: DateTime.now().add(Duration(days: 7)),
+        ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          TaskMaster_page_controller.createdOnStartToEnd.value="$startDate@$endDate";
+          TaskMaster_page_controller.filterTaskCreationOnController.value.text = '$startDate - $endDate';
+        } else {
+          TaskMaster_page_controller.filterTaskCreationOnController.value.text = '';
+          TaskMaster_page_controller.createdOnStartToEnd.value="";
+        }
       },
     );
   }

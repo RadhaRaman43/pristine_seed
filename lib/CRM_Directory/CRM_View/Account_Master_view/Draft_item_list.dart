@@ -518,6 +518,10 @@ class DraftItemList extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
+                              bindCompanyProfileType(),
+                              SizedBox(
+                                height: 10,
+                              ),
 
                               bindEmailId(),
                               SizedBox(
@@ -527,10 +531,10 @@ class DraftItemList extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindCompProfileTypeDropDown(context),
+                              /*bindCompProfileTypeDropDown(context),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindSateName(),
                               SizedBox(
                                 height: 10,
@@ -615,29 +619,7 @@ class DraftItemList extends StatelessWidget{
                             )),
                             onPressed: () {
                               Get.back();
-                              accountMaster_page_controller.account_code_controller.clear();
-                              accountMaster_page_controller.account_name_controller.clear();
-                              accountMaster_page_controller.account_type_controller.clear();
-                              accountMaster_page_controller.comp_prof_type_controller.clear();
-                              accountMaster_page_controller.stateName_controller.clear();
-                              //accountMaster_page_controller.IsActive_controller.clear();
-                              accountMaster_page_controller.PhoneNo_Controller.clear();
-                              accountMaster_page_controller.EmailId_Controller.clear();
-                              accountMaster_page_controller.postal_code_controller.value.clear();
-                              accountMaster_page_controller.district_controller.value.clear();
-                              accountMaster_page_controller.created_by_controller.value.clear();
-                              accountMaster_page_controller.frontliner_controller.value.clear();
-                              accountMaster_page_controller.branch_head__value_controller.value.clear();
-                              accountMaster_page_controller.zone_head__value_controller.value.clear();
-                              accountMaster_page_controller.cluster_head__value_controller.value.clear();
-                              //accountMaster_page_controller.Address_controller.clear();
-                              // accountMaster_page_controller.Annual_Revenue_Controller.clear();
-                              //accountMaster_page_controller.No_Of_Emp_Controller.clear();
-                              //accountMaster_page_controller.no_of_employees_min = '';
-                              // accountMaster_page_controller.no_of_employees_max = '';
-                              // accountMaster_page_controller.annual_revenue_min = '';
-                              //accountMaster_page_controller.annual_revenue_max = '';
-                              //accountMaster_page_controller.account_cat_type_controller.clear();
+                              accountMaster_page_controller.clearFilterController();
                               accountMaster_page_controller.pageNumber=0;
                               accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
 
@@ -1100,7 +1082,7 @@ class DraftItemList extends StatelessWidget{
       },
     );
   }
-  bindAccountTypeDropDown() {
+  bindCompanyProfileType() {
     return   TextField(
       controller: accountMaster_page_controller.comp_prof_type_controller,
       decoration: InputDecoration(
@@ -1127,6 +1109,58 @@ class DraftItemList extends StatelessWidget{
       onChanged: (value) {
         // Handle the text field value changes if needed
       },
+    );
+  }
+
+  Widget bindAccountTypeDropDown() {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-18,
+        controller:  accountMaster_page_controller.account_type_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        //initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.account_type_controller.text =
+              _displayAccTypeForOption(selection!).toString();
+
+          accountMaster_page_controller. custome_selection.value=selection;
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Acc_type_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

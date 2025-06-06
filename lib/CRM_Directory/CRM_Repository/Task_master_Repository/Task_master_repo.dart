@@ -17,6 +17,10 @@ class TaskMasterRepo{
     return _apiService.postApi(data, AppUrl.TaskMstApproveReject,sessionManagement);
   }
 
+  Future<String> TaskMstRejectReopenApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.TaskMstRejectReopen,sessionManagement);
+  }
+
   Future<String> AccountMasterGetApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.AccountMstGet,sessionManagement);
   }

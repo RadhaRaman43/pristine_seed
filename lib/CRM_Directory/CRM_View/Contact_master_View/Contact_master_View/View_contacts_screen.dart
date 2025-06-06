@@ -77,8 +77,8 @@ class ViewContactsScreen extends StatelessWidget{
                 );
               }),
               Visibility(
-                visible: contact_vm_controller.FromPage.value == 'Contact' ||
-                    accountMaster_page_controller.FromPage.value == 'Account' || contact_vm_controller.FromPage.value == 'AccountUpdate'?true:false,
+                //visible: contact_vm_controller.FromPage.value == 'Contact' || accountMaster_page_controller.FromPage.value == 'Account' || contact_vm_controller.FromPage.value == 'AccountUpdate'?true:false,
+                visible: accountMaster_page_controller.FromPage.value == 'Contact' || accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
                 child: Container(
                   width: double.infinity,
                   height: 150,

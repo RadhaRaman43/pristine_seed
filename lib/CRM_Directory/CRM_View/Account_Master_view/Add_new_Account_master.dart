@@ -2,6 +2,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -49,8 +50,8 @@ class AddNewAccountMaster extends StatelessWidget{
   static String _displayAccTypeForOption(CustomList option) =>
       option.value!;
 
-  static String _displayAccCategoryForOption(CustomList option) =>
-      option.value!;
+  static String _displayAccCategoryForOption(GetMasterTypeModel option) =>
+      option.code! + " (" + option.description! + ")";
 
   static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
       option.description!;
@@ -85,7 +86,7 @@ class AddNewAccountMaster extends StatelessWidget{
     return WillPopScope(
         onWillPop: () async {
           if(accountMaster_page_controller.view == 'FromDraft'){
-            accountMaster_page_controller.clearController();
+            accountMaster_page_controller.clearFilterController();
             Get.toNamed(RoutesName.Draft_item_list);
           }else if(accountMaster_page_controller.FromPage == "Task"){
             print('FromPage....${accountMaster_page_controller.FromPage == "Task"}');
@@ -206,10 +207,10 @@ class AddNewAccountMaster extends StatelessWidget{
               return  ;
             }
 
-            /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+            if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
               Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
               return  ;
-            }*/
+            }
             if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
               Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
               return  ;
@@ -371,8 +372,8 @@ class AddNewAccountMaster extends StatelessWidget{
                       maxLines: 2,
                       controller: accountMaster_page_controller.AccountTitle_Controller,
                       decoration: InputDecoration(
-                          hintText: "Account Title",
-                          labelText: "Account Title",
+                          hintText: "Branch Name",
+                          labelText: "Branch Name",
                           //suffixIcon: Icon(Icons.email),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: AllFontSize.ten,
@@ -786,8 +787,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                 controller: accountMaster_page_controller
                                     .PanNo_Controller,
                                 decoration: InputDecoration(
-                                    hintText: "PAN No.",
-                                    labelText: "PAN No.",
+                                    hintText: "Customer PAN No.",
+                                    labelText: "Customer PAN No.",
                                     //suffixIcon: Icon(Icons.email),
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
@@ -818,8 +819,8 @@ class AddNewAccountMaster extends StatelessWidget{
                               controller: accountMaster_page_controller
                                   .IfscCode_Controller,
                               decoration: InputDecoration(
-                                  hintText: "IFSC Code",
-                                  labelText: "IFSC Code",
+                                  hintText: "Customer IFSC Code",
+                                  labelText: "Customer IFSC Code",
                                   //suffixIcon: Icon(Icons.email),
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: AllFontSize.ten,
@@ -1467,9 +1468,13 @@ class AddNewAccountMaster extends StatelessWidget{
                               keyboardType: TextInputType.number,
                               controller: accountMaster_page_controller
                                   .Annual_Revenue_Controller,
+                              inputFormatters: [
+                                FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
+                                FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
+                              ],
                               decoration: InputDecoration(
-                                  hintText: "Annual Revenue",
-                                  labelText: "Annual Revenue",
+                                  hintText: "Customer Annual Turnover",
+                                  labelText: "Customer Annual Turnover",
                                   //suffixIcon: Icon(Icons.email),
                                   contentPadding: EdgeInsets.symmetric(
                                       vertical: AllFontSize.ten,
@@ -1830,7 +1835,7 @@ class AddNewAccountMaster extends StatelessWidget{
   }
 
   Widget bindAccCatogeryTypeDropDown(context){
-    return Autocomplete<CustomList>(
+    return Autocomplete<GetMasterTypeModel>(
       displayStringForOption: _displayAccCategoryForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
@@ -1838,15 +1843,15 @@ class AddNewAccountMaster extends StatelessWidget{
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return accountMaster_page_controller.get_Acc_category_list
-            .where((CustomList option) {
-          return option.value
+            .where((GetMasterTypeModel option) {
+          return option.code
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
-      onSelected: (CustomList selection) {
-        print(selection.value);
+      onSelected: (GetMasterTypeModel selection) {
+        print(selection.code);
         // Update the TextField with the selected
         accountMaster_page_controller.account_cat_type_controller.text =
             _displayAccCategoryForOption(selection).toString();
@@ -1879,21 +1884,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type',
-              labelText: 'Account Category Type',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              hintText: 'Account Category Type*',
+              labelText: 'Account Category Type*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -1902,8 +1894,8 @@ class AddNewAccountMaster extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
+          AutocompleteOnSelected<GetMasterTypeModel> onSelected,
+          Iterable<GetMasterTypeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -1916,7 +1908,7 @@ class AddNewAccountMaster extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final CustomList option =
+                  final GetMasterTypeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -1924,15 +1916,31 @@ class AddNewAccountMaster extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.value.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.code!,
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                              TextSpan(
+                                text: " (${option.description!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
                     ),
                   );
                 },
@@ -2164,114 +2172,60 @@ class AddNewAccountMaster extends StatelessWidget{
    }
 
 
-  Widget bindGstRegistrationTypeDropDown(context){
-    return Autocomplete<CustomList>(
-      displayStringForOption: _displayGstRegisterTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Gst_Registration_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.get_Gst_Registration_list
-            .where((CustomList option) {
-          return option.value
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (CustomList selection) {
-        print(selection.value);
-        // Update the TextField with the selected
-        accountMaster_page_controller.gst_registration_type_controller.value.text =
-            _displayGstRegisterTypeForOption(selection).toString();
-        if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered'){
-          accountMaster_page_controller.GstRegistration.value = true;
-        }else{
-         // accountMaster_page_controller.GstStateList.addAll(accountMaster_page_controller.StateMaster_list);
-          accountMaster_page_controller.GstRegistration.value = false;
-        }
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            onTap: (){
-              controller.clear();
-            },
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.gst_registration_type_controller.value
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'GST Registration Type*',
-              labelText: 'GST Registration Type*',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
+  Widget bindGstRegistrationTypeDropDown(BuildContext context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.gst_registration_type_controller.value,
+        label: Text(
+          "GST Registration Type*",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final CustomList option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.value.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
           ),
-        );
-      },
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.gst_registration_type_controller.value.text =
+              _displayGstRegisterTypeForOption(selection!).toString();
+
+          if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered'){
+            accountMaster_page_controller.GstRegistration.value = true;
+          }else{
+            accountMaster_page_controller.GstRegistration.value = false;
+          }
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Gst_Registration_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 
@@ -2547,7 +2501,7 @@ class AddNewAccountMaster extends StatelessWidget{
     );
   }
 
-  Widget bindIsReferralDropDown(context) {
+  /*Widget bindIsReferralDropDown(context) {
     return Autocomplete<String>(
       displayStringForOption: _displayIsActiveForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -2608,7 +2562,7 @@ class AddNewAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Is Referral',
               labelText: 'Is Referral',
-              /*hintStyle: GoogleFonts.poppins(
+              *//*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
                   fontSize: AllFontSize.ten
@@ -2620,7 +2574,7 @@ class AddNewAccountMaster extends StatelessWidget{
               focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              ),*//*
 
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
@@ -2669,6 +2623,61 @@ class AddNewAccountMaster extends StatelessWidget{
           ),
         );
       },
+    );
+  }*/
+
+  Widget bindIsReferralDropDown(context) {
+    return Container(
+     // margin: const EdgeInsets.only(left: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.ReferralBy_Controller,
+        label: Text(
+          "Is Referral",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        initialSelection: "No",
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          accountMaster_page_controller.ReferralBy_Controller.text =
+              _displayIsActiveForOption(selection!).toString();
+          if(accountMaster_page_controller.ReferralBy_Controller.text == 'Yes'){
+            accountMaster_page_controller.isReferral.value = true;
+          }else{
+            accountMaster_page_controller.isReferral.value = false;
+          }
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.IsActiveTypeList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

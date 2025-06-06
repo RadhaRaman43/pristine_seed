@@ -196,6 +196,7 @@ class AppUrl {
      static const String DraftAccountMstUploader = "$BASE_URL/api/CRM/Account/DraftAccountMstUploader";
      static const String CompanyTypeMstGet = "$BASE_URL/api/CRM/Master/CompanyTypeMstGet";
      static const String ContactMstGetAll = "$BASE_URL/api/CRM/Contact/ContactMstGetAll";
+     static const String AccountCategoryTypeMstGet = "$BASE_URL/api/CRM/Master/AccountCategoryTypeMstGet";
 
      //todo contact master repo.....
      static const String ContactMstGet = "$BASE_URL/api/CRM/Contact/ContactMstGet";
@@ -223,6 +224,7 @@ class AppUrl {
      static const String taskPersonMstCreate = "$BASE_URL/api/CRM/Task/task_person_mst_create";
      static const String GeoGetPincodeHierarchy = "$BASE_URL/api/GeographicalSetup/GeoGetPincodeHierarchy";
      static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
+     static const String TaskMstRejectReopen = "$BASE_URL/api/CRM/Task/TaskMstRejectReopen";
 
 
      //todo sales cycle

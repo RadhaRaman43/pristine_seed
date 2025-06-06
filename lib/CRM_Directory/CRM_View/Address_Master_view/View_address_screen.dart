@@ -82,8 +82,8 @@ class ViewAddressScreen extends StatelessWidget{
                     );
                   }),
                   Visibility(
-                    //visible: address_vm_controller.FromPage.value == 'Address' || accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
-                    visible: accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
+                    visible: accountMaster_page_controller.FromPage.value == 'Contact' || accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
+                    //visible: accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
                     child: Container(
                       width: double.infinity,
                       height: 150,
