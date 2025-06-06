@@ -523,14 +523,14 @@ class DraftItemList extends StatelessWidget{
                                 height: 10,
                               ),
 
-                              bindEmailId(),
+                             /* bindEmailId(),
                               SizedBox(
                                 height: 10,
-                              ),
-                              bindPhoneNo(),
+                              ),*/
+                              /*bindPhoneNo(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               /*bindCompProfileTypeDropDown(context),
                               SizedBox(
                                 height: 10,
@@ -551,11 +551,17 @@ class DraftItemList extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),*/
-                              /*bindCreatedBy(),
+
+                              bindFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),*/
-                              bindFrontLinerValue(),
+                              ),
+                              bindClusterHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindZoneHead(),
+
                               SizedBox(
                                 height: 10,
                               ),
@@ -563,15 +569,11 @@ class DraftItemList extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindZoneHead(),
+                              bindCreatedBy(),
                               SizedBox(
                                 height: 10,
                               ),
-                              bindClusterHead(),
 
-                              SizedBox(
-                                height: 10,
-                              ),
 
                             ],
                           ),
@@ -1052,6 +1054,38 @@ class DraftItemList extends StatelessWidget{
       },
     );
   }
+
+
+  bindCreatedBy() {
+    return  TextField(
+      controller: accountMaster_page_controller.created_by_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Created By',
+          hintText: 'Created By',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
 
   bindBranchHead() {
     return   TextField(

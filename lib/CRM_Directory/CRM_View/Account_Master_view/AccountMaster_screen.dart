@@ -167,6 +167,20 @@ class AccountmasterScreen extends StatelessWidget{
     }else{
       isActive = "No";
     }
+    final parts = [
+      controller.permanentAddress!.address!,
+      controller.permanentAddress!.address2!,
+      controller.permanentAddress!.city!,
+      controller.permanentAddress!.district!,
+      controller.permanentAddress!.stateName!,
+      controller.permanentAddress!.postCode!,
+
+    ];
+
+    // Filter out empty strings and join with commas
+    final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+   // accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -177,10 +191,6 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
             accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
             accountMaster_page_controller.getGeoPostalCodeApi();
-            //todo for state , city and district....
-            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'state');
-            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'city');
-            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'district');
 
           },
           subtitle:Column(
@@ -198,7 +208,9 @@ class AccountmasterScreen extends StatelessWidget{
               buildInfoRow("Branch Head Value", controller.branchHeadValue),
              // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
               buildInfoRow("Cluster Head Value", controller.clustureHeadValue),
-              buildInfoRow("Address", controller.permanentAddress?.address ?? ""),
+              //buildInfoRow("Address", controller.permanentAddress!.address! + ","+ controller.permanentAddress!.address2! + ", " + controller.permanentAddress!.city! + ","+ "\n" + controller.permanentAddress!.district! + ","+ controller.permanentAddress!.stateName! + ","+  controller.permanentAddress!.postCode!),
+              buildInfoRow("Address", fullAddress),
+             // buildInfoRow("Shipping Address", fullAddress),
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(

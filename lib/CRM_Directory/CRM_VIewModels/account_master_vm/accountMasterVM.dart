@@ -808,10 +808,13 @@ class Accountmastervm extends GetxController{
               loading.value = false;
               if(flag == 'state'){
                 ShippingStateMasterPinCode_list.value=response;
+                print('stateList....${ShippingStateMasterPinCode_list[0].stateName}');
               }else if(flag == 'city'){
                 ShippingCityMasterPinCode_list.value = response;
+                print('cityList....${ShippingCityMasterPinCode_list[0].city}');
               }else if(flag == 'district'){
                 ShippingDistrictMasterPinCode_list.value = response;
+                print('districtList....${ShippingDistrictMasterPinCode_list[0].district}');
               }
 
             } else {
@@ -1213,6 +1216,10 @@ class Accountmastervm extends GetxController{
       InActive=0;
       //print(accountMaster_page_controller.InActive);
     }
+    String message = account_cat_type_controller.text;
+
+    String accountCatTypeCode = message.substring(0,1);
+
     Map<String, dynamic> data = {
       "created_by": email,
       "flag": flag,
@@ -1226,7 +1233,7 @@ class Accountmastervm extends GetxController{
           "referral_by": ReferralByName_Controller.text.isEmpty?'':ReferralByName_Controller.text,
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
-          "account_category_type": account_cat_type_controller.text.isEmpty?'':account_cat_type_controller.text,
+          "account_category_type": accountCatTypeCode,
           "company_profile_type": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text,
           "company_profile_sub_type": comp_prof_sub_type_controller.value.text.isEmpty?'':comp_prof_sub_type_controller.value.text,
           "company_profile_remark": comp_prof_remarks_controller.text.isEmpty?'':comp_prof_remarks_controller.text,
@@ -1580,6 +1587,22 @@ class Accountmastervm extends GetxController{
       BranchHead_Controller.text = response[0].branchHeadValue??"";
       ZoneHead_Controller.text = response[0].zoneHeadValue??"";
       ClusterHead_Controller.text = response[0].clustureHeadValue??"";
+      //todo for state , city and district....
+      getStateMasterApi(PostCode_Controller.text, 'state');
+      getStateMasterApi(PostCode_Controller.text, 'city');
+      getStateMasterApi(PostCode_Controller.text, 'district');
+      getShippingStateMasterApi(Shipping_PostCode_Controller.value.text,'state');
+      getShippingStateMasterApi(Shipping_PostCode_Controller.value.text,'city');
+      getShippingStateMasterApi(Shipping_PostCode_Controller.value.text,'district');
+
+      for(int i= 0; i < get_Acc_category_list.length; i++){
+        if(response[0].accountCategoryType == get_Acc_category_list[i].code){
+          account_cat_type_controller.text = get_Acc_category_list[i].code! + " (" + get_Acc_category_list[i].description! + ")";
+         // print('accoutCatType.....${account_cat_type_controller.text}');
+        }
+      }
+
+
 
     }catch(e){
 
@@ -1602,6 +1625,7 @@ class Accountmastervm extends GetxController{
     branch_head__value_controller.value.clear();
     zone_head__value_controller.value.clear();
     cluster_head__value_controller.value.clear();
+    created_by_controller.value.clear();
     //accountMaster_page_controller.Address_controller.clear();
     // accountMaster_page_controller.Annual_Revenue_Controller.clear();
     //accountMaster_page_controller.No_Of_Emp_Controller.clear();

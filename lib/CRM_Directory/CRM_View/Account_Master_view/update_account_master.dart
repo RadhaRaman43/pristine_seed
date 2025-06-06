@@ -105,6 +105,7 @@ class UpdateAccountMaster extends StatelessWidget{
            Get.toNamed(RoutesName.taskMaster_screen);
          }else if(accountMaster_page_controller.view=='FromSaleCycleMainScreen'){
            saleCycleController.pageNumber=0;
+           saleCycleController.filterQuoteAcceptedFlag.value="";
            saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
            Get.toNamed(RoutesName.salesCycleScreen);
          }
@@ -2543,19 +2544,6 @@ class UpdateAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Account Category Type*',
               labelText: 'Account Category Type*',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

@@ -359,6 +359,12 @@ class _Drawer extends State<CustomDrawer> {
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               //Get.offAllNamed(RoutesName.taskMaster_screen);
+                                              TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                                              TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
+                                              TaskMaster_page_controller.date_filter.value = "Today";
+                                              TaskMaster_page_controller.is_done.value = 0;
+                                              TaskMaster_page_controller.filter.value = "Running";
+                                              TaskMaster_page_controller.resetAllFieldOfFilter();
                                               accountMaster_page_controller.FromPage.value = '';
                                               contact_vm_controller.FromPage.value ='';
                                               TaskMaster_page_controller.pageNumber = 0;

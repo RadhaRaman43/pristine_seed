@@ -527,6 +527,7 @@ class ViewContactsScreen extends StatelessWidget{
                           onPressed: (){
                             Navigator.pop(context, false);
                             contact_vm_controller.contact_name_controller.clear();
+                            contact_vm_controller.pageNumber = 0;
                             accountMaster_page_controller.getContactMasterList(
                               contact_vm_controller.pageNumber, accountMaster_page_controller.accountName, contact_vm_controller.contact_name_controller.text,contact_vm_controller.accountCode.value.toString());
                           },
@@ -554,6 +555,7 @@ class ViewContactsScreen extends StatelessWidget{
                               Utils.showErrorToastification('Error', 'Please Enter Contact Name');
                             }else {
                               Navigator.pop(context, true);
+                              contact_vm_controller.pageNumber = 0;
                               accountMaster_page_controller.getContactMasterList(
                                 contact_vm_controller.pageNumber, accountMaster_page_controller.accountName, contact_vm_controller.contact_name_controller.text,contact_vm_controller.accountCode.value.toString());
                              // contact_vm_controller.contact_name_controller.clear();
