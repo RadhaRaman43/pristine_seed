@@ -1566,14 +1566,14 @@ class Accountmastervm extends GetxController{
       GovtStateCode.value = response[0].permanentAddress!.stateCode??"";
       City_Controller.text = response[0].permanentAddress!.city??"";
       District_Controller.text = response[0].permanentAddress!.district??"";
-      FullAddress_Controller.value.text = Address_controller.text + "," + Address2_Controller.text + "," + City_Controller.text + "," + District_Controller.text + "," + State_Controller.text + "," + PostCode_Controller.text;
+      //FullAddress_Controller.value.text = Address_controller.text + "," + Address2_Controller.text + "," + City_Controller.text + "," + District_Controller.text + "," + State_Controller.text + "," + PostCode_Controller.text;
       Shipping_Address_controller.value.text = response[0].shippingAddress??"";
       Shipping_Address2_Controller.value.text = response[0].shippingAddress2??"";
       Shipping_PostCode_Controller.value.text = response[0].shippingPostCode??"";
       Shipping_City_Controller.value.text = response[0].shippingCity??"";
       Shipping_District_Controller.value.text = response[0].shippingDistrict??"";
       Shipping_State_Controller.value.text = response[0].shippingStateName??"";
-      Shipping_FullAddress_Controller.value.text = Shipping_Address_controller.value.text + "," + Shipping_Address2_Controller.value.text + "," + Shipping_City_Controller.value.text + "," + Shipping_District_Controller.value.text + "," + Shipping_State_Controller.value.text + "," + Shipping_PostCode_Controller.value.text;
+     // Shipping_FullAddress_Controller.value.text = Shipping_Address_controller.value.text + "," + Shipping_Address2_Controller.value.text + "," + Shipping_City_Controller.value.text + "," + Shipping_District_Controller.value.text + "," + Shipping_State_Controller.value.text + "," + Shipping_PostCode_Controller.value.text;
       No_Of_Emp_Controller.text = response[0].noOfEmployees.toString();
       Annual_Revenue_Controller.text = response[0].annualRevenue.toString();
       TatResponse_Controller.text = response[0].tatResponseType??"" + ' (${response[0].tatResponseTime} Hours)';
@@ -1601,6 +1601,35 @@ class Accountmastervm extends GetxController{
          // print('accoutCatType.....${account_cat_type_controller.text}');
         }
       }
+
+      final parts = [
+        response[0].permanentAddress!.address??"",
+        response[0].permanentAddress!.address2??"",
+        response[0].permanentAddress!.city??"",
+        response[0].permanentAddress!.district??"",
+        response[0].permanentAddress!.stateName??"",
+        response[0].permanentAddress!.postCode??"",
+
+      ];
+
+      // Filter out empty strings and join with commas
+      final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+      FullAddress_Controller.value.text = fullAddress;
+
+      final parts2 = [
+        response[0].shippingAddress??"",
+        response[0].shippingAddress2??"",
+        response[0].shippingCity??"",
+        response[0].shippingDistrict??"",
+        response[0].shippingStateName??"",
+        response[0].shippingPostCode??"",
+
+      ];
+
+      // Filter out empty strings and join with commas
+      final ShippingFullAddress = parts2.where((part) => part.trim().isNotEmpty).join(", ");
+      Shipping_FullAddress_Controller.value.text = ShippingFullAddress;
+
 
 
 
@@ -2230,12 +2259,12 @@ class Accountmastervm extends GetxController{
     }
   }
 
-  void getAddressMasterList(int pageNumber, String account_Code) {
+  void getAddressMasterList(int pageNumber, String account_Code, String account_name) {
     try{
       Map data={
         "consignee_id": "",
         "account_code":account_Code,
-        "account_name": "",
+        "account_name": account_name,
         "contact_name": "",
         "email_id": "",
         "phone_no": "",
@@ -2251,7 +2280,13 @@ class Accountmastervm extends GetxController{
           List<AddressMasterModel> response = jsonResponse.map((e) => AddressMasterModel.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
-            address_master_list.value=[];
+
+            if(pageNumber==0){
+              address_master_list.clear();
+            }
+            address_master_list.addAll(response);
+            total_rows=int.parse(address_master_list[0].totalRows!);
+
             address_master_list.value=response;
 
             // Get.toNamed(RoutesName.viewAddress_screen);
@@ -2332,7 +2367,7 @@ class Accountmastervm extends GetxController{
                               ),
                             ),
                             onPressed: ()  {
-                              /*if(account_code_controller.value.text.isEmpty){
+                              if(account_code_controller.value.text.isEmpty){
                                 selectedItem.value = -1;
                                 Shipping_Address_controller.value.text="";
                                 Shipping_Address2_Controller.value.text="";
@@ -2343,7 +2378,10 @@ class Accountmastervm extends GetxController{
                                 ShowState.value=true;
                                 Shipping_District_Controller.value.text="";
                                 consigneeId = '';
+                                Shipping_FullAddress_Controller.value.text = "";
                               } else{
+                                ShowState.value=false;
+                                ShowState.value=true;
                                 selectedItem.value = -1;
                                 Shipping_Address_controller.value.text=AccountMasterGetCode_list[0].shippingAddress??"";
                                 Shipping_Address2_Controller.value.text=AccountMasterGetCode_list[0].shippingAddress2??"";
@@ -2352,8 +2390,9 @@ class Accountmastervm extends GetxController{
                                 Shipping_State_Controller.value.text=AccountMasterGetCode_list[0].shippingStateName??"";
                                 Shipping_District_Controller.value.text=AccountMasterGetCode_list[0].shippingDistrict??"";
                                 consigneeId = '';
+                                Shipping_FullAddress_Controller.value.text = "";
                               }
-                              isChecked.value=false;*/
+                              isChecked.value=false;
 
 
 
@@ -2452,7 +2491,7 @@ class Accountmastervm extends GetxController{
           //print("last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
 
           if (pageNumber + 1 < total_page) {
-            getAddressMasterList(pageNumber, "");
+            getAddressMasterList(pageNumber, "", "");
             this.pageNumber += 1;
           }
         }

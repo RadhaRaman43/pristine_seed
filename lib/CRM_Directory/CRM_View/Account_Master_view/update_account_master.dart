@@ -1314,7 +1314,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                child: Icon(Icons.add),
                                onTap: (){
                                  accountMaster_page_controller.pageNumber = 0;
-                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
+                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text, accountMaster_page_controller.account_name_controller.text);
                                  accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
 
