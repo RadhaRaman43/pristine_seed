@@ -348,6 +348,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
           onChanged: (value){
             calculatePer();
           },
+
           decoration: InputDecoration(
               suffixIcon: Icon(Icons.currency_rupee),
               contentPadding: EdgeInsets.symmetric(
@@ -492,13 +493,19 @@ class UpdateBussinessTermPage extends StatelessWidget{
     final text = saleCycleController.advncPaymentPerController.value.text;
     final percentageValue = int.tryParse(text);
     if (percentageValue == null) {
-     // Utils.showErrorToastification('Error', 'Please enter a valid number');
       saleCycleController.advncPaymentAmountController.value.clear();
     } else if (percentageValue > 100) {
       Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
     } else if(percentageValue <= 100){
          final advanceAmt = (saleCycleController.quoteHeaderdata[0].quoteTotalAmount! * percentageValue) / 100;
          saleCycleController.advncPaymentAmountController.value.text = advanceAmt.toString();
+         final parts=saleCycleController.advncPaymentAmountController.value.text.split('.');
+         if(parts.length==2 && parts[1].length>4){
+           String trimmed = '${parts[0]}.${parts[1].substring(0, 4)}';
+           saleCycleController.advncPaymentAmountController.value.text=trimmed;
+           saleCycleController.advncPaymentAmountController.value.selection =
+               TextSelection.fromPosition(TextPosition(offset: trimmed.length));
+         }
     }
 
     double? advcAmount = double.tryParse(saleCycleController.advncPaymentAmountController.value.text);
@@ -654,10 +661,11 @@ class UpdateBussinessTermPage extends StatelessWidget{
       }
       if(percantage<=100){
         saleCycleController.advncPaymentPerController.value.text = percantage.toStringAsFixed(2);
-       // saleCycleController.advncPaymentPerController.value.text="$percantage";
+
       }else{
         Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
       }
+
     }
   }
 }

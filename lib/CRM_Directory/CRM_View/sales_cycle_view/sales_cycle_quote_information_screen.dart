@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -19,155 +17,197 @@ import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM
 import '../../CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
-class QuoteInformationScreen extends StatelessWidget{
+class QuoteInformationScreen extends StatelessWidget {
   QuoteInformationScreen({super.key});
-  final saleCycleController=Get.put(SalesCycleVm());
-  final accountMaster_page_controller=Get.put(Accountmastervm());
+  final saleCycleController = Get.put(SalesCycleVm());
+  final accountMaster_page_controller = Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
-  final quoteApprovalController=Get.put(QuoteApprovalListVm());
+  final quoteApprovalController = Get.put(QuoteApprovalListVm());
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
-
-  static String _displayStatusForOption(String option) =>
-      option;
-  Size size=Get.size;
+  static String _displayStatusForOption(String option) => option;
+  Size size = Get.size;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if(saleCycleController.quoteApprovalPage.value=="quoteApprovalScreen"){
+        if (saleCycleController.quoteApprovalPage.value ==
+            "quoteApprovalScreen") {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
-        }else if(saleCycleController.quoteApprovalPage.value=="approvedQuotationScreen"){
+        } else if (saleCycleController.quoteApprovalPage.value ==
+            "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;
-          saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,saleCycleController.salesCycleId.value, "Approved");
+          saleCycleController.getQuoteHeaderData(
+              saleCycleController.pageNumberForQuote,
+              saleCycleController.salesCycleId.value,
+              "Approved");
           Get.toNamed(RoutesName.approvedQuotationListScreen);
-        }else if(saleCycleController.quoteApprovalPage.value=="QuoteDashboard"){
+        } else if (saleCycleController.quoteApprovalPage.value ==
+            "QuoteDashboard") {
           Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
-        }
-        else{
-          saleCycleController.pageNumber=0;
-          saleCycleController.pageNumberForQuote=0;
-          saleCycleController.getsalesCycleData(saleCycleController.pageNumber, saleCycleController.quoteHeaderdata[0].salesCycleId!, "", saleCycleController.FromPage.value);
-          saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,saleCycleController.quoteHeaderdata[0].salesCycleId!, '');
+        } else {
+          saleCycleController.pageNumber = 0;
+          saleCycleController.pageNumberForQuote = 0;
+          saleCycleController.filterQuoteAcceptedFlag.value = "";
+          saleCycleController.getsalesCycleData(
+              saleCycleController.pageNumber,
+              saleCycleController.quoteHeaderdata[0].salesCycleId!,
+              "",
+              saleCycleController.FromPage.value);
+          saleCycleController.getQuoteHeaderData(
+              saleCycleController.pageNumberForQuote,
+              saleCycleController.quoteHeaderdata[0].salesCycleId!,
+              '');
           Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         }
         // saleCycleController.FromPage="Sales";
         return false;
       },
       child: Scaffold(
-        appBar:  AppBar(
-          backgroundColor: AllColors.primaryDark1,
-          iconTheme: IconThemeData(
-            color: AllColors.whiteColor,
-          ),
-          title:Row(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Quote(${saleCycleController.quoteHeaderdata[0].quoteId.toString()})',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.whiteColor,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w700,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              Spacer(),
-            ],
-          ),
-          actions: [
-            Obx(() {
-              return Visibility(
-                visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase()== 'draft'?false:true,
-                child: PopupMenuButton(
-                  itemBuilder: (BuildContext context) {
-                    return [
-                      PopupMenuItem(
-                        child: Row(
-                          children: [
-                            Icon(Icons.download, color: Colors.black,),
-                            Text('Quote Report'),
-                          ],
-                        ),
-                        onTap: () {
-                          saleCycleController.reportDownload("quoteReport");
-                        },
+          appBar: AppBar(
+            backgroundColor: AllColors.primaryDark1,
+            iconTheme: IconThemeData(
+              color: AllColors.whiteColor,
+            ),
+            title: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Quote(${saleCycleController.quoteHeaderdata[0].quoteId.toString()})',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w700,
                       ),
-                      if (saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 0 &&
-                          saleCycleController.quoteHeaderdata[0].isSpr == 1)
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+                Spacer(),
+              ],
+            ),
+            actions: [
+              Obx(() {
+                return Visibility(
+                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus!
+                              .toLowerCase() ==
+                          'draft'
+                      ? false
+                      : true,
+                  child: PopupMenuButton(
+                    itemBuilder: (BuildContext context) {
+                      return [
                         PopupMenuItem(
                           child: Row(
                             children: [
-                              Icon(Icons.download, color: Colors.black,),
-                              Text('Quote Srp Report'),
+                              Icon(
+                                Icons.download,
+                                color: Colors.black,
+                              ),
+                              Text('Quote Report'),
                             ],
                           ),
                           onTap: () {
-                            saleCycleController.reportSprDownload("quoteSprReport",saleCycleController.quoteHeaderdata[0].quoteId!);
+                            saleCycleController.reportDownload("quoteReport");
                           },
                         ),
-                    ];
-                  },
-                ),
-              );
-            }),
-          ],
-
-        ),
-        drawer: CustomDrawer(),
-        body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Obx((){
-              return Visibility(
-                visible:saleCycleController.loading.value ,
-                child: LinearProgressIndicator(
-                  backgroundColor: AllColors.primaryDark1,
-                  color: AllColors.textColor,
-                ),
-              );
-            }),
-            Expanded(
-              child: Container(
-                child: ListView(
-                    children: [
-                      /*visible: saleCycleController.FromPage=="QuoteApprovalPage" ||
+                        if (saleCycleController.quoteHeaderdata[0]
+                                    .isReadySendForApproval ==
+                                0 &&
+                            saleCycleController.quoteHeaderdata[0].isSpr == 1)
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.download,
+                                  color: Colors.black,
+                                ),
+                                Text('Quote Srp Report'),
+                              ],
+                            ),
+                            onTap: () {
+                              saleCycleController.reportSprDownload(
+                                  "quoteSprReport",
+                                  saleCycleController
+                                      .quoteHeaderdata[0].quoteId!);
+                            },
+                          ),
+                      ];
+                    },
+                  ),
+                );
+              }),
+            ],
+          ),
+          drawer: CustomDrawer(),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Obx(() {
+                return Visibility(
+                  visible: saleCycleController.loading.value,
+                  child: LinearProgressIndicator(
+                    backgroundColor: AllColors.primaryDark1,
+                    color: AllColors.textColor,
+                  ),
+                );
+              }),
+              Expanded(
+                child: Container(
+                  child: ListView(children: [
+                    /*visible: saleCycleController.FromPage=="QuoteApprovalPage" ||
                           saleCycleController.quoteApprovalPage.value=="quoteApprovalScreen"?true:false,*/
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Obx((){
-                            return  Padding(
-                              padding: const EdgeInsets.only(right: 0.0),
-                              child: Visibility(
-                                visible: (saleCycleController.FromPage=="QuoteApprovalPage" ||
-                                    saleCycleController.quoteApprovalPage.value=="quoteApprovalScreen")?true:false,
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      ActionChip(
-                                        label: Text("Approve", style: GoogleFonts.poppins(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Obx(() {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 0.0),
+                            child: Visibility(
+                              visible: (saleCycleController.FromPage ==
+                                          "QuoteApprovalPage" ||
+                                      saleCycleController
+                                              .quoteApprovalPage.value ==
+                                          "quoteApprovalScreen")
+                                  ? true
+                                  : false,
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    ActionChip(
+                                      label: Text(
+                                        "Approve",
+                                        style: GoogleFonts.poppins(
                                           color: AllColors.whiteColor,
                                           fontWeight: FontWeight.w500,
-                                        ),),
-                                        onPressed: (){
-                                          saleCycleController.quoteStatusController.value.clear();
-                                          saleCycleController.isReject.value=false;
-                                          saleCycleController.isApprove.value=false;
-                                          showdialogForApproval(context);
-                                        },
-                                        backgroundColor: AllColors.primaryDark1,
-                                        shape: StadiumBorder(
-                                          side: BorderSide.none,
                                         ),
                                       ),
-                                     /* ActionChip(
+                                      onPressed: () {
+                                        saleCycleController
+                                            .quoteStatusController.value
+                                            .clear();
+                                        saleCycleController
+                                            .rejectreasonQuoteController.value
+                                            .clear();
+                                        saleCycleController
+                                            .managerRemarksController.value
+                                            .clear();
+                                        saleCycleController.isReject.value =
+                                            false;
+                                        saleCycleController.isApprove.value =
+                                            false;
+                                        showdialogForApproval(context);
+                                      },
+                                      backgroundColor: AllColors.primaryDark1,
+                                      shape: StadiumBorder(
+                                        side: BorderSide.none,
+                                      ),
+                                    ),
+                                    /* ActionChip(
                                         label: Text("Reject", style: GoogleFonts.poppins(
                                           color: AllColors.whiteColor,
                                           fontWeight: FontWeight.w500,
@@ -186,75 +226,144 @@ class QuoteInformationScreen extends StatelessWidget{
                                           side: BorderSide.none,
                                         ),
                                       ),*/
-                                    ]
-
-                                ),),
-                            );
-                          }),
-                          Obx((){
-                            return  Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Visibility(
-                                visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && saleCycleController.quoteHeaderdata[0].isReadySendForApproval== 1?true:false,
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Container(
-                                        child: DefaultButton(
-                                          press: (){
-                                            saleCycleController.BusinessTerm.value = false;
-                                            saleCycleController.clearBusinessTerm();
-                                            Get.toNamed(RoutesName.UpdateBussinessTermPage);
-                                            //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
-                                          },
-                                          text: "Sent For Approval",
-                                        ),
-                                        width: size.width*.49,
-                                        //margin: EdgeInsets.only(right: 10),
+                                  ]),
+                            ),
+                          );
+                        }),
+                        Obx(() {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Visibility(
+                              visible: saleCycleController
+                                              .quoteHeaderdata[0].quoteAccepted
+                                              ?.toLowerCase() ==
+                                          "open" &&
+                                      saleCycleController.quoteHeaderdata[0]
+                                              .isReadySendForApproval ==
+                                          1
+                                  ? true
+                                  : false,
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Container(
+                                      child: DefaultButton(
+                                        press: () {
+                                          saleCycleController
+                                              .BusinessTerm.value = false;
+                                          saleCycleController
+                                              .clearBusinessTerm();
+                                          Get.toNamed(RoutesName
+                                              .UpdateBussinessTermPage);
+                                          //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
+                                        },
+                                        text: "Sent For Approval",
                                       ),
-                                    ]
-                                ),),
-                            );
-                          }),
+                                      width: size.width * .49,
+                                      //margin: EdgeInsets.only(right: 10),
+                                    ),
+                                  ]),
+                            ),
+                          );
+                        }),
+                        Obx(() {
+                          return Visibility(
+                            visible: saleCycleController
+                                            .quoteHeaderdata[0].createdBy ==
+                                        saleCycleController.email &&
+                                    saleCycleController
+                                            .quoteHeaderdata[0].quoteStatus
+                                            ?.toLowerCase() ==
+                                        "draft" &&
+                                    saleCycleController
+                                            .quoteHeaderdata[0].quoteAccepted
+                                            ?.toLowerCase() ==
+                                        "open"
+                                ? true
+                                : false,
+                            child: GestureDetector(
+                              onTap: () {
+                                saleCycleController.accountCode.value =
+                                    saleCycleController
+                                            .quoteHeaderdata[0].accountCode ??
+                                        "";
+                                saleCycleController
+                                        .updateQuoteValidityController
+                                        .value
+                                        .text =
+                                    saleCycleController
+                                        .quoteHeaderdata[0].quoteValidity!;
+                                saleCycleController
+                                        .updateExpectedClosureDateController
+                                        .value
+                                        .text =
+                                    saleCycleController
+                                        .quoteHeaderdata[0].expClosureDate!;
+                                //saleCycleController.updatecontactpersonNameController.value.text=saleCycleController.quoteHeaderdata[0].contactPersonName.toString();
+                                saleCycleController.activeController.value
+                                    .text = saleCycleController
+                                            .quoteHeaderdata[0].isActive ==
+                                        1
+                                    ? "Yes"
+                                    : "No";
+                                saleCycleController.quoteCommitController.value
+                                    .text = saleCycleController
+                                            .quoteHeaderdata[0].quoteCommit ==
+                                        1
+                                    ? "Yes"
+                                    : "No";
+                                saleCycleController.shippingController.value
+                                    .text = saleCycleController
+                                        .quoteHeaderdata[0].shippingAddress ??
+                                    "";
+                                saleCycleController.shippingAddress2Controller
+                                    .value.text = saleCycleController
+                                        .quoteHeaderdata[0].shippingAddress2 ??
+                                    "";
+                                saleCycleController.Shipping_PostCode_Controller
+                                    .value.text = saleCycleController
+                                        .quoteHeaderdata[0].shippingPostCode ??
+                                    "";
+                                saleCycleController.Shipping_City_Controller
+                                    .value.text = saleCycleController
+                                        .quoteHeaderdata[0].shippingCity ??
+                                    "";
+                                saleCycleController.Shipping_District_Controller
+                                    .value.text = saleCycleController
+                                        .quoteHeaderdata[0].shippingDistrict ??
+                                    "";
+                                saleCycleController.Shipping_State_Controller
+                                    .value.text = saleCycleController
+                                        .quoteHeaderdata[0].shippingStateName ??
+                                    "";
+                                saleCycleController.Shipping_phone_Controller
+                                    .value.text = saleCycleController
+                                        .quoteHeaderdata[0].shippingPhoneNo ??
+                                    "";
+                                saleCycleController.Shipping_email_Controller
+                                    .value.text = saleCycleController
+                                        .quoteHeaderdata[0].shippingEmailId ??
+                                    "";
 
-                          Obx((){
-                            return Visibility(
-                              visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email
-                                  && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="draft" &&
-                                  saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open"?true:false,
-                              child: GestureDetector(
-                                onTap: (){
-                                  saleCycleController.accountCode.value=saleCycleController.quoteHeaderdata[0].accountCode??"";
-                                  saleCycleController.updateQuoteValidityController.value.text=saleCycleController.quoteHeaderdata[0].quoteValidity!;
-                                  saleCycleController.updateExpectedClosureDateController.value.text=saleCycleController.quoteHeaderdata[0].expClosureDate!;
-                                  //saleCycleController.updatecontactpersonNameController.value.text=saleCycleController.quoteHeaderdata[0].contactPersonName.toString();
-                                  saleCycleController.activeController.value.text=saleCycleController.quoteHeaderdata[0].isActive==1?"Yes":"No";
-                                  saleCycleController.quoteCommitController.value.text=saleCycleController.quoteHeaderdata[0].quoteCommit==1?"Yes":"No";
-                                  saleCycleController.shippingController.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress??"";
-                                  saleCycleController.shippingAddress2Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingAddress2??"";
-                                  saleCycleController.Shipping_PostCode_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPostCode??"";
-                                  saleCycleController.Shipping_City_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingCity??"" ;
-                                  saleCycleController.Shipping_District_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingDistrict??"" ;
-                                  saleCycleController.Shipping_State_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingStateName??"";
-                                  saleCycleController.Shipping_phone_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingPhoneNo??"";
-                                  saleCycleController.Shipping_email_Controller.value.text=saleCycleController.quoteHeaderdata[0].shippingEmailId??"";
-
-                                  showDialogForHeaderUpdate(context);
-                                },
-                                child: Container(
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(7.0),
-                                    child: Icon(Icons.update, color: AllColors.primaryDark1,),
-                                  ),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(color: AllColors.primaryDark1)
+                                showDialogForHeaderUpdate(context);
+                              },
+                              child: Container(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(7.0),
+                                  child: Icon(
+                                    Icons.update,
+                                    color: AllColors.primaryDark1,
                                   ),
                                 ),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(
+                                        color: AllColors.primaryDark1)),
                               ),
-                            );
-                          }),
-                          /*Obx((){
+                            ),
+                          );
+                        }),
+                        /*Obx((){
                               return   Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Visibility(
@@ -272,7 +381,7 @@ class QuoteInformationScreen extends StatelessWidget{
                               );
                             }),*/
 
-                          /*Obx((){
+                        /*Obx((){
                               return   Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Visibility(
@@ -294,7 +403,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                   ),),
                               );
                             }),*/
-                          /*Obx((){
+                        /*Obx((){
                               return   Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Visibility(
@@ -315,7 +424,7 @@ class QuoteInformationScreen extends StatelessWidget{
                               );
                             }),*/
 
-                       /*   Obx((){
+                        /*   Obx((){
                             return   Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Visibility(
@@ -343,184 +452,253 @@ class QuoteInformationScreen extends StatelessWidget{
                             );
                           }),*/
 
-                          Obx((){
-                            return   Padding(
-                              padding: const EdgeInsets.only(right:15.0, top: 8, bottom: 8),
-                              child: Visibility(
-                                visible:  saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase()== 'draft'?false:true,
-                                child: Tooltip(
-                                  message: 'View Approver Persons',
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        border: Border.all(color: AllColors.primaryDark1)
-                                    ),
-                                    child: IconButton(onPressed: (){
-                                      Get.toNamed(RoutesName.approvalPersonList);
-                                      saleCycleController.getApprovalPersonList(saleCycleController.quoteHeaderdata[0].quoteId??"");
-                                      // Get.offAllNamed(RoutesName.approvalPersonList);
-
-                                    },
-                                        icon: Icon(Icons.groups)),
-                                  ),
-                                ),),
-                            );
-                          }),
-                        ],
-                      ),
-
-                      Obx((){
-                        return BindSalesData(context);
-                      }),
-                      SizedBox(height: 10,),
-
-                      Container(
-                        margin: EdgeInsets.only(left: 10, right: 10),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Quote Item List", style: GoogleFonts.poppins(
+                        Obx(() {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15.0, top: 8, bottom: 8),
+                            child: Visibility(
+                              visible: saleCycleController
+                                          .quoteHeaderdata[0].quoteStatus!
+                                          .toLowerCase() ==
+                                      'draft'
+                                  ? false
+                                  : true,
+                              child: Tooltip(
+                                message: 'View Approver Persons',
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                          color: AllColors.primaryDark1)),
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Get.toNamed(
+                                            RoutesName.approvalPersonList);
+                                        saleCycleController
+                                            .getApprovalPersonList(
+                                                saleCycleController
+                                                        .quoteHeaderdata[0]
+                                                        .quoteId ??
+                                                    "");
+                                        // Get.offAllNamed(RoutesName.approvalPersonList);
+                                      },
+                                      icon: Icon(Icons.groups)),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                    Obx(() {
+                      return BindSalesData(context);
+                    }),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10, right: 10),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Quote Item List",
+                              style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.eighteen,
                                 fontWeight: FontWeight.w700,
-                              ),),
-
-                             Obx((){
-                               return  Visibility(
-                                 visible: saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                                     && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="draft"
-                                     && saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=='open'?true:false,
-                                 child: Row(
-                                   children: [
-                                     SizedBox(width: 10,),
-                                     GestureDetector(
-                                         child: ElevatedButton(
-                                           style: ElevatedButton.styleFrom(
-                                             side: const BorderSide(
-                                                 color: AllColors.primaryDark),
-                                             backgroundColor: Colors.white,
-                                             elevation: 0,
-                                             shape: RoundedRectangleBorder(
-                                               borderRadius: BorderRadius.circular(
-                                                   8),
-                                             ),
-                                           ),
-                                           onPressed: () {
-                                             showFetchSalesProductConfirmationDialog(context, saleCycleController.quoteHeaderdata[0].salesCycleId??"", saleCycleController.quoteHeaderdata[0].quoteId??"");
-                                           },
-                                           child: Text("Fetch Sales Product",
-                                             style: GoogleFonts.poppins(
-                                               color: AllColors.primaryDark,
-                                               fontSize: AllFontSize.fourtine,
-                                               fontWeight: FontWeight.w700,
-                                             ),),
-                                         )
-                                     ),
-                                     SizedBox(width: 10,),
-                                     Obx((){
-                                       String ProductCategory = saleCycleController.quoteHeaderdata[0].productCategoryCode??"";
-                                       String PipeProdCate = ProductCategory.replaceAll(', ', '|');
-                                       return   GestureDetector(
-                                         onTap: (){
-                                           saleCycleController.pageNumber=0;
-                                           saleCycleController.itemMstGetByQuoteIdApiHit(0,saleCycleController.quoteHeaderdata[0].quoteId, "Add", PipeProdCate);
-                                         },
-                                         child: Container(
-                                           child: Padding(
-                                             padding: const EdgeInsets.all(7.0),
-                                             child: Icon(Icons.add, color: AllColors.primaryDark1,),
-                                           ),
-                                           decoration: BoxDecoration(
-                                               borderRadius: BorderRadius.circular(30),
-                                               border: Border.all(color: AllColors.primaryDark1)
-                                           ),
-                                         ),
-                                       );
-                                     }),
-                                   ],
-                                 ),
-                               );
-                             }),
-                            ],),
-                        ),
-                      ),
-                      SizedBox(height: 10,),
-                      Divider(height: 1,color: AllColors.bluegrayColor,),
-                      Center(
-                        child: Divider(
-                          height: 1,
-                          color: AllColors.lightgreyColor,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              Text("Total",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700,
-                                ),
                               ),
-                              VerticalDivider(
-                                width: 20, // total space taken
-                                thickness: 1,
-                                color: AllColors.lightgreyColor,
-                              ),
-
-                              Obx((){
-                                return Table(
-                                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                                  columnWidths: const {
-                                    0: FixedColumnWidth(120),
-                                    1: FixedColumnWidth(150),
-                                    2: FixedColumnWidth(120),
-                                    3: FixedColumnWidth(130),
-                                    4: FixedColumnWidth(130),
-                                  },
-                                  border: TableBorder.symmetric(
-                                    inside: BorderSide(width: 1, color: AllColors.lightgreyColor),
-                                  ),
+                            ),
+                            Obx(() {
+                              return Visibility(
+                                visible: saleCycleController
+                                                .quoteHeaderdata[0].createdBy
+                                                ?.toLowerCase() ==
+                                            saleCycleController.email
+                                                .toLowerCase() &&
+                                        saleCycleController
+                                                .quoteHeaderdata[0].quoteStatus
+                                                ?.toLowerCase() ==
+                                            "draft" &&
+                                        saleCycleController.quoteHeaderdata[0]
+                                                .quoteAccepted
+                                                ?.toLowerCase() ==
+                                            'open'
+                                    ? true
+                                    : false,
+                                child: Row(
                                   children: [
-                                    // Header Row
-                                    TableRow(
-                                      children: [
-                                        tableHeaderCell("Qty"),
-                                        tableHeaderCell("Approved Price"),
-                                        tableHeaderCell("Amount"),
-                                        tableHeaderCell("Gst Amount"),
-                                        tableHeaderCell("Total Amount"),
-                                      ],
+                                    SizedBox(
+                                      width: 10,
                                     ),
-                                    // Value Row
-                                    TableRow(
-                                      children: [
-                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalQty),
-                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),
-                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteTotalAmount),
-                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGstAmount),
-                                        tableValueCell(saleCycleController.quoteHeaderdata[0].quoteGrossAmount),
-                                      ],
+                                    GestureDetector(
+                                        child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        side: const BorderSide(
+                                            color: AllColors.primaryDark),
+                                        backgroundColor: Colors.white,
+                                        elevation: 0,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        showFetchSalesProductConfirmationDialog(
+                                            context,
+                                            saleCycleController
+                                                    .quoteHeaderdata[0]
+                                                    .salesCycleId ??
+                                                "",
+                                            saleCycleController
+                                                    .quoteHeaderdata[0]
+                                                    .quoteId ??
+                                                "");
+                                      },
+                                      child: Text(
+                                        "Fetch Sales Product",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    )),
+                                    SizedBox(
+                                      width: 10,
                                     ),
+                                    Obx(() {
+                                      String ProductCategory =
+                                          saleCycleController.quoteHeaderdata[0]
+                                                  .productCategoryCode ??
+                                              "";
+                                      String PipeProdCate =
+                                          ProductCategory.replaceAll(', ', '|');
+                                      return GestureDetector(
+                                        onTap: () {
+                                          saleCycleController.pageNumber = 0;
+                                          saleCycleController
+                                              .itemMstGetByQuoteIdApiHit(
+                                                  0,
+                                                  saleCycleController
+                                                      .quoteHeaderdata[0]
+                                                      .quoteId,
+                                                  "Add",
+                                                  PipeProdCate);
+                                        },
+                                        child: Container(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(7.0),
+                                            child: Icon(
+                                              Icons.add,
+                                              color: AllColors.primaryDark1,
+                                            ),
+                                          ),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(30),
+                                              border: Border.all(
+                                                  color:
+                                                      AllColors.primaryDark1)),
+                                        ),
+                                      );
+                                    }),
                                   ],
-                                );
-                              })
-
-
-                            ],
-                          ),
+                                ),
+                              );
+                            }),
+                          ],
                         ),
-                      )
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Divider(
+                      height: 1,
+                      color: AllColors.bluegrayColor,
+                    ),
+                    Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.lightgreyColor,
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 10),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Text(
+                              "Total",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.sisxteen,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            VerticalDivider(
+                              width: 20, // total space taken
+                              thickness: 1,
+                              color: AllColors.lightgreyColor,
+                            ),
+                            Obx(() {
+                              return Table(
+                                defaultVerticalAlignment:
+                                    TableCellVerticalAlignment.middle,
+                                columnWidths: const {
+                                  0: FixedColumnWidth(120),
+                                  1: FixedColumnWidth(150),
+                                  2: FixedColumnWidth(120),
+                                  3: FixedColumnWidth(130),
+                                  4: FixedColumnWidth(130),
+                                },
+                                border: TableBorder.symmetric(
+                                  inside: BorderSide(
+                                      width: 1,
+                                      color: AllColors.lightgreyColor),
+                                ),
+                                children: [
+                                  // Header Row
+                                  TableRow(
+                                    children: [
+                                      tableHeaderCell("Qty"),
+                                      tableHeaderCell("Approved Price"),
+                                      tableHeaderCell("Amount"),
+                                      tableHeaderCell("Gst Amount"),
+                                      tableHeaderCell("Total Amount"),
+                                    ],
+                                  ),
+                                  // Value Row
+                                  TableRow(
+                                    children: [
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteTotalQty),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0]
+                                          .quoteTotalApprovedDiscountAmount),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteTotalAmount),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteGstAmount),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteGrossAmount),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            })
+                          ],
+                        ),
+                      ),
+                    )
 
-
-
-                      /* Container(
+                    /* Container(
                         padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -604,18 +782,21 @@ class QuoteInformationScreen extends StatelessWidget{
                           ],
                         ),
                       ),*/
-                      ,
-                      Center(
-                        child: Divider(
-                          height: 1,
-                          color: AllColors.lightgreyColor,
-                        ),
+                    ,
+                    Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.lightgreyColor,
                       ),
-                      Obx((){
-                        return bindQuoteItemList(context);
-                      }),
-                      Center(
-                          child: Divider(height: 1, color: AllColors.primaryDark1,)),
+                    ),
+                    Obx(() {
+                      return bindQuoteItemList(context);
+                    }),
+                    Center(
+                        child: Divider(
+                      height: 1,
+                      color: AllColors.primaryDark1,
+                    )),
                     /*  Center(
                         child: Divider(
                           height: 1,
@@ -668,17 +849,13 @@ class QuoteInformationScreen extends StatelessWidget{
                           ],
                         ),
                       )*/
-
-
-                    ]
+                  ]),
                 ),
               ),
-            ),
-          ],)
-    ),
+            ],
+          )),
     );
   }
-
 
   Widget tableHeaderCell(String title) {
     return Padding(
@@ -710,7 +887,6 @@ class QuoteInformationScreen extends StatelessWidget{
     );
   }
 
-
   Widget tableCellValue(dynamic value) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -726,25 +902,28 @@ class QuoteInformationScreen extends StatelessWidget{
     );
   }
 
-
   Widget bindQuoteItemList(BuildContext context) {
-    if (saleCycleController.quoteLinedata.value.isNotEmpty && saleCycleController.quoteLinedata.value.length > 0) {
-      return Obx(() {
-        return  Container(
-          height: size.height/2,
-          child: ListView.separated(
-              padding: EdgeInsets.only(bottom: 50),
-              separatorBuilder: (context, index) => Divider(height: .05, color: Colors.transparent,),
-              shrinkWrap: true,
-              itemCount:saleCycleController.quoteLinedata.value.length,
-              itemBuilder: (BuildContext context, int index) {
-                return bindPendingListView(context, index);
-              }),
-        );
-      },
+    if (saleCycleController.quoteLinedata.value.isNotEmpty &&
+        saleCycleController.quoteLinedata.value.length > 0) {
+      return Obx(
+        () {
+          return Container(
+            height: size.height / 2,
+            child: ListView.separated(
+                padding: EdgeInsets.only(bottom: 50),
+                separatorBuilder: (context, index) => Divider(
+                      height: .05,
+                      color: Colors.transparent,
+                    ),
+                shrinkWrap: true,
+                itemCount: saleCycleController.quoteLinedata.value.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return bindPendingListView(context, index);
+                }),
+          );
+        },
       );
-    }
-    else {
+    } else {
       return Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 18.0),
@@ -758,20 +937,16 @@ class QuoteInformationScreen extends StatelessWidget{
         ),
       );
     }
-
   }
 
-
-
-
   Widget bindPendingListView(BuildContext context, int index) {
-    int srNo=index+1;
+    int srNo = index + 1;
     //String? dateCreatedOn=StaticMethod.dateTimeToDate(saleCycleController.quoteList[index].createdOn??"");
     return InkWell(
       child: Card(
         child: ListTile(
           contentPadding: EdgeInsets.only(left: 5, right: 5),
-          title:Row(
+          title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
@@ -786,16 +961,13 @@ class QuoteInformationScreen extends StatelessWidget{
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-              
                       Container(
-                        width: size.width*.4,
+                        width: size.width * .4,
                         child: Tooltip(
-                          message: "${ saleCycleController.quoteLinedata[index]
-                              .itemName??""}(${saleCycleController.quoteLinedata[index]
-                              .itemCode})",
-                          child: Text("${ saleCycleController.quoteLinedata[index]
-                              .itemName??""}(${saleCycleController.quoteLinedata[index]
-                              .itemCode})",
+                          message:
+                              "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
+                          child: Text(
+                            "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
                             overflow: TextOverflow.ellipsis,
                             style: GoogleFonts.poppins(
                               color: AllColors.textColor,
@@ -807,36 +979,52 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                     ],
                   ),
-
                 ],
               ),
-              Obx((){
+              Obx(() {
                 return Visibility(
-                  visible:  saleCycleController.showBranchHead.value ||saleCycleController.showClusterHead.value
-                      || saleCycleController.showGeneralManager.value,
+                  visible: saleCycleController.showBranchHead.value ||
+                      saleCycleController.showClusterHead.value ||
+                      saleCycleController.showGeneralManager.value,
                   child: GestureDetector(
-                      onTap: (){
-                        saleCycleController.bmDiscountPerController.value.text=saleCycleController.quoteLinedata[index]
-                            .bmDiscountPer==null?"0":saleCycleController.quoteLinedata[index]
-                            .bmDiscountPer.toString();
-                        saleCycleController.salesCreditPerContoller.value.text=saleCycleController.quoteLinedata[index]
-                            .salesCredit==null?"0":saleCycleController.quoteLinedata[index]
-                            .salesCredit.toString();
-                        saleCycleController.updateDiscountAmountController.value.text=saleCycleController.quoteLinedata[index]
-                            .approvedDiscountPer==null?"0":saleCycleController.quoteLinedata[index]
-                            .approvedDiscountPer.toString();
+                      onTap: () {
+                        saleCycleController.bmDiscountPerController.value.text =
+                            saleCycleController
+                                        .quoteLinedata[index].bmDiscountPer ==
+                                    null
+                                ? "0"
+                                : saleCycleController
+                                    .quoteLinedata[index].bmDiscountPer
+                                    .toString();
+                        saleCycleController.salesCreditPerContoller.value.text =
+                            saleCycleController
+                                        .quoteLinedata[index].salesCredit ==
+                                    null
+                                ? "0"
+                                : saleCycleController
+                                    .quoteLinedata[index].salesCredit
+                                    .toString();
+                        saleCycleController.updateDiscountAmountController.value
+                            .text = saleCycleController
+                                    .quoteLinedata[index].approvedDiscountPer ==
+                                null
+                            ? "0"
+                            : saleCycleController
+                                .quoteLinedata[index].approvedDiscountPer
+                                .toString();
                         showDialogForGmBmDiscount(context, index);
                       },
                       child: Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: Tooltip(
                             message: "Update Bm Discount %",
-                            child: Icon(Icons.update, color: AllColors.textColor,)),
-                      )
-                  ),
+                            child: Icon(
+                              Icons.update,
+                              color: AllColors.textColor,
+                            )),
+                      )),
                 );
               })
-
             ],
           ),
           subtitle: Column(
@@ -844,8 +1032,9 @@ class QuoteInformationScreen extends StatelessWidget{
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(child: Container(
-                    width: size.width/2,
+                  Expanded(
+                      child: Container(
+                    width: size.width / 2,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -860,13 +1049,15 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
                             Container(
-                              width: size.width*.2,
+                              width: size.width * .2,
                               child: Tooltip(
-                                message: saleCycleController.quoteLinedata[index]
-                                    .itemDescription??"",
+                                message: saleCycleController
+                                        .quoteLinedata[index].itemDescription ??
+                                    "",
                                 child: Text(
-                                  ( saleCycleController.quoteLinedata[index]
-                                      .itemDescription??"") ,
+                                  (saleCycleController.quoteLinedata[index]
+                                          .itemDescription ??
+                                      ""),
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -889,13 +1080,15 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
                             Container(
-                              width: size.width*.16,
+                              width: size.width * .16,
                               child: Tooltip(
-                                message: saleCycleController.quoteLinedata[index]
-                                    .categoryName??"",
+                                message: saleCycleController
+                                        .quoteLinedata[index].categoryName ??
+                                    "",
                                 child: Text(
-                                  ( saleCycleController.quoteLinedata[index]
-                                      .categoryName??"") ,
+                                  (saleCycleController
+                                          .quoteLinedata[index].categoryName ??
+                                      ""),
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -918,8 +1111,8 @@ class QuoteInformationScreen extends StatelessWidget{
                               ),
                             ),
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .qty.toString(),
+                              saleCycleController.quoteLinedata[index].qty
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -938,10 +1131,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .quoteLinePrice.toString(),
+                              saleCycleController
+                                  .quoteLinedata[index].quoteLinePrice
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -950,6 +1143,44 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
+                        Obx(() {
+                          return Visibility(
+                            visible: saleCycleController.showBranchHead.value ||
+                                saleCycleController.showClusterHead.value,
+                            child: Row(
+                              children: [
+                                Text(
+                                  "MAP:",
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Container(
+                                  width: size.width * .12,
+                                  child: Tooltip(
+                                    message: saleCycleController
+                                        .quoteLinedata[index]
+                                        .minimalAcceptablePrice
+                                        .toString(),
+                                    child: Text(
+                                      saleCycleController.quoteLinedata[index]
+                                          .minimalAcceptablePrice
+                                          .toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
                         Row(
                           children: [
                             Text(
@@ -960,10 +1191,9 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .sgstAmt.toString(),
+                              saleCycleController.quoteLinedata[index].sgstAmt
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -972,58 +1202,69 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-                      /*  Row(
-                          children: [
-                            Text(
-                              "Min. Acpt. Amt. :",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                       Obx((){
+                         return Visibility(
+                             visible: saleCycleController
+                                 .quoteHeaderdata[0].isReadyForApprove ==
+                                 1,
+                             child: Row(
+                               children: [
+                                 Text(
+                                   "BTP : ",
+                                   style: GoogleFonts.poppins(
+                                     color: AllColors.primaryDark1,
+                                     fontSize: AllFontSize.twelve,
+                                     fontWeight: FontWeight.w500,
+                                   ),
+                                 ),
+                                 Container(
+                                   width: size.width * .1,
+                                   child: Tooltip(
+                                     message: saleCycleController
+                                         .quoteLinedata[index].branchTransferPrice
+                                         .toString(),
+                                     child: Text(
+                                       saleCycleController
+                                           .quoteLinedata[index].branchTransferPrice
+                                           .toString(),
+                                       overflow: TextOverflow.ellipsis,
+                                       style: GoogleFonts.poppins(
+                                         color: AllColors.textColor,
+                                         fontSize: AllFontSize.twelve,
+                                         fontWeight: FontWeight.w500,
+                                       ),
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),);
+                       }),
 
-                            Container(
-                              width: size.width*.12,
-                              child: Tooltip(
-                                message: saleCycleController.quoteLinedata[index]
-                                    .minimalAcceptablePrice.toString(),
-                                child: Text(
-                                  saleCycleController.quoteLinedata[index]
-                                      .minimalAcceptablePrice.toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),*/
-                        Obx((){
+                        Obx(() {
                           return Visibility(
-                            visible: saleCycleController.showBranchHead.value,
+                            visible:
+                                saleCycleController.showGeneralManager.value,
                             child: Row(
                               children: [
                                 Text(
-                                  "BTP : ",
+                                  "MAP:",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.twelve,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-
                                 Container(
-                                  width: size.width*.1,
+                                  width: size.width * .12,
                                   child: Tooltip(
-                                    message: saleCycleController.quoteLinedata[index]
-                                        .branchTransferPrice.toString(),
+                                    message: saleCycleController
+                                        .quoteLinedata[index]
+                                        .minimalAcceptablePrice
+                                        .toString(),
                                     child: Text(
                                       saleCycleController.quoteLinedata[index]
-                                          .branchTransferPrice.toString(),
+                                          .minimalAcceptablePrice
+                                          .toString(),
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
@@ -1037,9 +1278,39 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           );
                         }),
-                        Obx((){
+                        Obx(() {
                           return Visibility(
-                            visible: saleCycleController.showGeneralManager.value,
+                            visible: saleCycleController
+                                    .quoteHeaderdata[0].isReadyForApprove ==
+                                1,
+                            child: Row(
+                              children: [
+                                Text(
+                                  "Bm % : ",
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Text(
+                                  saleCycleController
+                                      .quoteLinedata[index].bmDiscountPer
+                                      .toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }),
+                        Obx(() {
+                          return Visibility(
+                            visible:
+                                saleCycleController.showGeneralManager.value,
                             child: Row(
                               children: [
                                 Text(
@@ -1050,15 +1321,16 @@ class QuoteInformationScreen extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-
                                 Container(
-                                  width: size.width*.12,
+                                  width: size.width * .12,
                                   child: Tooltip(
-                                    message: saleCycleController.quoteLinedata[index]
-                                        .standardCost.toString(),
+                                    message: saleCycleController
+                                        .quoteLinedata[index].standardCost
+                                        .toString(),
                                     child: Text(
-                                      saleCycleController.quoteLinedata[index]
-                                          .standardCost.toString(),
+                                      saleCycleController
+                                          .quoteLinedata[index].standardCost
+                                          .toString(),
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
@@ -1073,7 +1345,7 @@ class QuoteInformationScreen extends StatelessWidget{
                           );
                         }),
 
-                      /*  Row(
+                        /*  Row(
                           children: [
                             Text(
                               "Brand Transfer RS : ",
@@ -1105,10 +1377,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .discountPer.toString(),
+                              saleCycleController
+                                  .quoteLinedata[index].discountPer
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1117,7 +1389,39 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-                       /* Row(
+                        Row(
+                          children: [
+                            Text(
+                              "Approved Dis. %:",
+                              style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            Flexible(
+                              fit: FlexFit.loose,
+                              child: Tooltip(
+                                message: saleCycleController
+                                    .quoteLinedata[index].approvedDiscountPer
+                                    .toString(),
+                                child: Text(
+                                  saleCycleController
+                                      .quoteLinedata[index].approvedDiscountPer
+                                      .toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        /* Row(
                           children: [
                             Text(
                               "Discount % : ",
@@ -1139,40 +1443,8 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),*/
-                        Row(
-                          children: [
-                            Text(
-                              "Approved Dis. %:",
-                              style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
 
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Tooltip(
-                                message: saleCycleController.quoteLinedata[index]
-                                    .approvedDiscountPer.toString(),
-                                child: Text(
-                                  saleCycleController.quoteLinedata[index]
-                                      .approvedDiscountPer.toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-
-
-                    /*    Row(
+                        /*    Row(
                           children: [
                             Text(
                               "Gm Discount Amt:",
@@ -1202,7 +1474,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),*/
-                       /* Row(
+                        /* Row(
                           children: [
                             Text(
                               "Gm Discount %:",
@@ -1262,7 +1534,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),*/
-                      /*  Row(
+                        /*  Row(
                           children: [
                             Text(
                               "Standard Cost : ",
@@ -1322,15 +1594,16 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),*/
-
                       ],
                     ),
                   )),
-                  Expanded(child: Container(
-                    width: size.width/2,
+                  Expanded(
+                      child: Container(
+                    width: size.width / 2,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+
                         Row(
                           children: [
                             Text(
@@ -1341,17 +1614,25 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Flexible(
                               fit: FlexFit.loose,
                               child: Tooltip(
-                                message: saleCycleController.quoteLinedata[index]
-                                    .approvedAmount==null?"0":saleCycleController.quoteLinedata[index]
-                                    .approvedAmount.toString(),
+                                message: saleCycleController
+                                            .quoteLinedata[index]
+                                            .approvedAmount ==
+                                        null
+                                    ? "0"
+                                    : saleCycleController
+                                        .quoteLinedata[index].approvedAmount
+                                        .toString(),
                                 child: Text(
                                   saleCycleController.quoteLinedata[index]
-                                      .approvedAmount==null?"":saleCycleController.quoteLinedata[index]
-                                      .approvedAmount.toString(),
+                                              .approvedAmount ==
+                                          null
+                                      ? ""
+                                      : saleCycleController
+                                          .quoteLinedata[index].approvedAmount
+                                          .toString(),
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -1363,37 +1644,10 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-                        Obx((){
+                        Obx(() {
                           return Visibility(
-                            visible: saleCycleController.quoteHeaderdata[0].isReadyForApprove== 1,
-                            child: Row(
-                              children: [
-                                Text(
-                                  "Bm % : ",
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-
-                                Text(
-                                  saleCycleController.quoteLinedata[index]
-                                      .bmDiscountPer.toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }),
-
-                        Obx((){
-                          return Visibility(
-                            visible: saleCycleController.showGeneralManager.value,
+                            visible:
+                                saleCycleController.showGeneralManager.value,
                             child: Column(
                               children: [
                                 Row(
@@ -1406,10 +1660,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-
                                     Text(
-                                      saleCycleController.quoteLinedata[index]
-                                          .gmDiscountPer.toString(),
+                                      saleCycleController
+                                          .quoteLinedata[index].gmDiscountPer
+                                          .toString(),
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
                                         fontSize: AllFontSize.twelve,
@@ -1428,15 +1682,18 @@ class QuoteInformationScreen extends StatelessWidget{
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-
                                     Flexible(
                                       fit: FlexFit.loose,
                                       child: Tooltip(
-                                        message: saleCycleController.quoteLinedata[index]
-                                            .gmDiscountAmount.toString(),
+                                        message: saleCycleController
+                                            .quoteLinedata[index]
+                                            .gmDiscountAmount
+                                            .toString(),
                                         child: Text(
-                                          saleCycleController.quoteLinedata[index]
-                                              .gmDiscountAmount.toString(),
+                                          saleCycleController
+                                              .quoteLinedata[index]
+                                              .gmDiscountAmount
+                                              .toString(),
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
                                             fontSize: AllFontSize.twelve,
@@ -1462,10 +1719,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .salesCredit.toString(),
+                              saleCycleController
+                                  .quoteLinedata[index].salesCredit
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1515,10 +1772,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .totalPrice.toString(),
+                              saleCycleController
+                                  .quoteLinedata[index].totalPrice
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1537,10 +1794,9 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .sgstPer.toString(),
+                              saleCycleController.quoteLinedata[index].sgstPer
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1559,10 +1815,9 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .gstAmount.toString(),
+                              saleCycleController.quoteLinedata[index].gstAmount
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1581,10 +1836,10 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .totalPrice.toString(),
+                              saleCycleController
+                                  .quoteLinedata[index].totalPrice
+                                  .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1593,8 +1848,6 @@ class QuoteInformationScreen extends StatelessWidget{
                             ),
                           ],
                         ),
-
-
 
                         /*    Visibility(
                           visible:  saleCycleController.quoteHeaderdata[0].isReadyForApprove== 1?true:false,
@@ -1622,9 +1875,6 @@ class QuoteInformationScreen extends StatelessWidget{
                           ),
                         ),*/
 
-
-
-
                         Row(
                           children: [
                             Text(
@@ -1635,10 +1885,13 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-
                             Text(
-                              saleCycleController.quoteLinedata[index]
-                                  .isSprRequired.toString() == "1" ? "Yes":"No",
+                              saleCycleController
+                                          .quoteLinedata[index].isSprRequired
+                                          .toString() ==
+                                      "1"
+                                  ? "Yes"
+                                  : "No",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1683,76 +1936,140 @@ class QuoteInformationScreen extends StatelessWidget{
                   )),
                 ],
               ),
-              SizedBox(height: 6,),
-              Obx((){
+              SizedBox(
+                height: 6,
+              ),
+              Obx(() {
                 return Visibility(
                   //visible:saleCycleController.quoteHeaderdata[0].createdBy==saleCycleController.email && saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
                   //visible:saleCycleController.quoteHeaderdata[0].quoteStatus=="Pending"?true:false,
-                  visible:saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="draft" && saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open"?true:false,
+                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus
+                                  ?.toLowerCase() ==
+                              "draft" &&
+                          saleCycleController.quoteHeaderdata[0].quoteAccepted
+                                  ?.toLowerCase() ==
+                              "open"
+                      ? true
+                      : false,
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
-                          onTap: (){
-                            saleCycleController.updateItemDescriptionController.value.text=  saleCycleController.quoteLinedata[index].itemName.toString()+ "(${saleCycleController.quoteLinedata[index].itemCode})";
-                            saleCycleController.updateItemDescription2Controller.value.text=  saleCycleController.quoteLinedata[index].itemDescription.toString();
-                            saleCycleController.qtyUpdateLineController.value.text=  saleCycleController.quoteLinedata[index].qty.toString();
-                            saleCycleController.updateUnitPriceController.value.text=  saleCycleController.quoteLinedata[index].unitPrice.toString();
-                            saleCycleController.updateManualPriceController.value.text=  saleCycleController.quoteLinedata[index].quoteLinePrice.toString();
-                            saleCycleController.updateDiscountPerController.value.text=  saleCycleController.quoteLinedata[index].discountPer.toString();
+                          onTap: () {
+                            saleCycleController.updateItemDescriptionController
+                                .value.text = saleCycleController
+                                    .quoteLinedata[index].itemName
+                                    .toString() +
+                                "(${saleCycleController.quoteLinedata[index].itemCode})";
+                            saleCycleController.updateItemDescription2Controller
+                                    .value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].itemDescription
+                                    .toString();
+                            saleCycleController
+                                    .qtyUpdateLineController.value.text =
+                                saleCycleController.quoteLinedata[index].qty
+                                    .toString();
+                            saleCycleController
+                                    .updateUnitPriceController.value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].unitPrice
+                                    .toString();
+                            saleCycleController
+                                    .updateManualPriceController.value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].quoteLinePrice
+                                    .toString();
+                            saleCycleController
+                                    .updateDiscountPerController.value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].discountPer
+                                    .toString();
 
-                            saleCycleController.updateDiscountAmountController.value.text=  saleCycleController.quoteLinedata[index].approvedDiscountPer.toString();
-                            saleCycleController.gmDiscountPerContoller.value.text=  saleCycleController.quoteLinedata[index].gmDiscountPer.toString();
-                            saleCycleController.salesCreditPerContoller.value.text=  saleCycleController.quoteLinedata[index].salesCredit.toString();
+                            saleCycleController
+                                    .updateDiscountAmountController.value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].approvedDiscountPer
+                                    .toString();
+                            saleCycleController
+                                    .gmDiscountPerContoller.value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].gmDiscountPer
+                                    .toString();
+                            saleCycleController
+                                    .salesCreditPerContoller.value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].salesCredit
+                                    .toString();
 
-                            saleCycleController.updateAmountController.value.text=  saleCycleController.quoteLinedata[index].mrpPrice.toString();
-                            saleCycleController.updateTaxPerLineController.value.text=  saleCycleController.quoteLinedata[index].sgstPer.toString();
-                            saleCycleController.updateTaxAmountLineController.value.text=  saleCycleController.quoteLinedata[index].sgstAmt.toString();
-                            saleCycleController.updateGrossAmountLineController.value.text=  saleCycleController.quoteLinedata[index].grossAmount.toString();
+                            saleCycleController
+                                    .updateAmountController.value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].mrpPrice
+                                    .toString();
+                            saleCycleController
+                                    .updateTaxPerLineController.value.text =
+                                saleCycleController.quoteLinedata[index].sgstPer
+                                    .toString();
+                            saleCycleController
+                                    .updateTaxAmountLineController.value.text =
+                                saleCycleController.quoteLinedata[index].sgstAmt
+                                    .toString();
+                            saleCycleController.updateGrossAmountLineController
+                                    .value.text =
+                                saleCycleController
+                                    .quoteLinedata[index].grossAmount
+                                    .toString();
                             /*saleCycleController.warrentyPeriodController.value.text= saleCycleController.quoteLinedata[index]
                                 .warrantyPeriod.toString();
                             saleCycleController.deliveryWeeksController.value.text= saleCycleController.quoteLinedata[index]
                                 .deliveryInWeeks.toString();*/
 
-                            saleCycleController.index.value=index;
+                            saleCycleController.index.value = index;
                             Get.toNamed(RoutesName.updatequoteLineData);
-
-                          },
-                          child: Icon(Icons.update, color: Colors.blue,size: 30),
-                        ),
-                        InkWell(
-                          onTap: (){
-                            showDialogForCreateDuplicate(context, index);
                           },
                           child:
-                          Icon(Icons.add_chart, color: Colors.blue,size: 30,),
+                              Icon(Icons.update, color: Colors.blue, size: 30),
                         ),
-
                         InkWell(
-                          onTap: (){
-                            showDialogForDelete(context,index );
+                          onTap: () {
+                            showDialogForCreateDuplicate(context, index);
                           },
-                          child: Icon(Icons.delete, color: Colors.red,size: 30),
+                          child: Icon(
+                            Icons.add_chart,
+                            color: Colors.blue,
+                            size: 30,
+                          ),
                         ),
-
-                      ]
-                  ),
+                        InkWell(
+                          onTap: () {
+                            showDialogForDelete(context, index);
+                          },
+                          child:
+                              Icon(Icons.delete, color: Colors.red, size: 30),
+                        ),
+                      ]),
                 );
-              }
+              }),
+              SizedBox(
+                height: 6,
               ),
-              SizedBox(height: 6,),
             ],
           ),
-          leading:  Row(
+          leading: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text("${srNo}",
+              Text(
+                "${srNo}",
                 style: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontSize: AllFontSize.sisxteen,
                   fontWeight: FontWeight.w800,
-                ),),
-              VerticalDivider(color: Colors.grey,)
+                ),
+              ),
+              VerticalDivider(
+                color: Colors.grey,
+              )
             ],
           ),
         ),
@@ -1760,18 +2077,22 @@ class QuoteInformationScreen extends StatelessWidget{
     );
   }
 
-
-  Widget  BindSalesData(BuildContext context) {
-    String? dateTimeCreatedOn=StaticMethod.dateTimeToDate(saleCycleController.quoteHeaderdata[0].createdOn ?? "");
-    String? dateTimeApprovedOn=StaticMethod.dateTimeToDate(saleCycleController.quoteHeaderdata[0].approvedOn ?? "");
-    String? expectedclosuredate=StaticMethod.convertDateFormat1(saleCycleController.quoteHeaderdata[0].expClosureDate ?? "");
-    String?quoteValidityDate=StaticMethod.convertDateFormat1(saleCycleController.quoteHeaderdata[0].quoteValidity ?? "");
-    String? regretOn=StaticMethod.dateTimeToDate(saleCycleController.quoteHeaderdata[0].regretOn ?? "");
-    String saleCycleQuoteStatus = saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ??
-        "";
+  Widget BindSalesData(BuildContext context) {
+    String? dateTimeCreatedOn = StaticMethod.dateTimeToDate(
+        saleCycleController.quoteHeaderdata[0].createdOn ?? "");
+    String? dateTimeApprovedOn = StaticMethod.dateTimeToDate(
+        saleCycleController.quoteHeaderdata[0].approvedOn ?? "");
+    String? expectedclosuredate = StaticMethod.convertDateFormat1(
+        saleCycleController.quoteHeaderdata[0].expClosureDate ?? "");
+    String? quoteValidityDate = StaticMethod.convertDateFormat1(
+        saleCycleController.quoteHeaderdata[0].quoteValidity ?? "");
+    String? regretOn = StaticMethod.dateTimeToDate(
+        saleCycleController.quoteHeaderdata[0].regretOn ?? "");
+    String saleCycleQuoteStatus =
+        saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() ?? "";
     Color getStatusColor(String status) {
       switch (status) {
-        case  "draft":
+        case "draft":
           return Colors.red[900]!;
         case 'regret':
           return Colors.red;
@@ -1787,6 +2108,7 @@ class QuoteInformationScreen extends StatelessWidget{
           return Colors.black;
       }
     }
+
     return Container(
       width: double.infinity,
       child: Column(
@@ -1809,12 +2131,10 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w700,
                     fontSize: AllFontSize.twentee),
                 border: OutlineInputBorder(
-                  borderSide: BorderSide(
-                  ),
+                  borderSide: BorderSide(),
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-
               child: Column(
                 children: [
                   Row(
@@ -1829,9 +2149,8 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Text(
-                        saleCycleController
-                            .quoteHeaderdata[0]
-                            .salesCycleId ?? "",
+                        saleCycleController.quoteHeaderdata[0].salesCycleId ??
+                            "",
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.sisxteen,
@@ -1843,7 +2162,6 @@ class QuoteInformationScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-
                   Row(
                     children: [
                       Text(
@@ -1860,12 +2178,12 @@ class QuoteInformationScreen extends StatelessWidget{
                           width: size.width * .4,
                           child: Tooltip(
                             message: saleCycleController
-                                .quoteHeaderdata[0].accountName?? "",
+                                    .quoteHeaderdata[0].accountName ??
+                                "",
                             child: Text(
                               saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .accountName ??
-                                  "" ,
+                                      .quoteHeaderdata[0].accountName ??
+                                  "",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
@@ -1873,16 +2191,19 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                                 decoration: TextDecoration.underline,
-                                decorationStyle: TextDecorationStyle.wavy,),
+                                decorationStyle: TextDecorationStyle.wavy,
+                              ),
                             ),
                           ),
                         ),
-                        onTap: (){
-                          accountMaster_page_controller.view='FromquoteInformationScreen';
-                          contact_vm_controller.view='FromquoteInformationScreen';
-                          accountMaster_page_controller.getAccMasterBuyCodeApi(saleCycleController
-                              .quoteHeaderdata[0]
-                              .accountCode!);
+                        onTap: () {
+                          accountMaster_page_controller.view =
+                              'FromquoteInformationScreen';
+                          contact_vm_controller.view =
+                              'FromquoteInformationScreen';
+                          accountMaster_page_controller.getAccMasterBuyCodeApi(
+                              saleCycleController
+                                  .quoteHeaderdata[0].accountCode!);
                         },
                       ),
                     ],
@@ -1890,7 +2211,6 @@ class QuoteInformationScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-
                   Row(
                     children: [
                       Text(
@@ -1903,9 +2223,8 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Text(
-                        saleCycleController
-                            .quoteHeaderdata[0]
-                            .contactName ?? "",
+                        saleCycleController.quoteHeaderdata[0].contactName ??
+                            "",
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -1917,7 +2236,6 @@ class QuoteInformationScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-
                   Row(
                     children: [
                       Text(
@@ -1930,15 +2248,14 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width*.4,
+                        width: size.width * .4,
                         child: Tooltip(
-                          message:  saleCycleController
-                              .quoteHeaderdata[0]
-                              .productCategory ?? "",
+                          message: saleCycleController
+                                  .quoteHeaderdata[0].productCategory ??
+                              "",
                           child: Text(
                             saleCycleController
-                                .quoteHeaderdata[0]
-                                .productCategory!,
+                                .quoteHeaderdata[0].productCategory!,
                             style: GoogleFonts.poppins(
                               color: AllColors.textColor,
                               fontSize: AllFontSize.fourtine,
@@ -1954,9 +2271,6 @@ class QuoteInformationScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-
-
-
                   Row(
                     children: [
                       Text(
@@ -1969,16 +2283,16 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
                             message: saleCycleController
-                                .quoteHeaderdata[0].quoteStatus ?? '',
-
+                                    .quoteHeaderdata[0].quoteStatus ??
+                                '',
                             child: Text(
                               saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .quoteStatus ?? "",
+                                      .quoteHeaderdata[0].quoteStatus ??
+                                  "",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
@@ -1987,10 +2301,8 @@ class QuoteInformationScreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500),
                             ),
                           );
-
                         }),
                       )
-
                     ],
                   ),
                   SizedBox(
@@ -2032,7 +2344,7 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Tooltip(
                           message: quoteValidityDate.toString(),
                           child: Text(
@@ -2045,10 +2357,7 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontWeight: FontWeight.w500),
                           ),
                         ),
-
-
                       )
-
                     ],
                   ),
                   SizedBox(
@@ -2066,16 +2375,21 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
                             message: saleCycleController
-                                .quoteHeaderdata[0].quoteCommit.toString()=='1'?'Yes':'No',
-
+                                        .quoteHeaderdata[0].quoteCommit
+                                        .toString() ==
+                                    '1'
+                                ? 'Yes'
+                                : 'No',
                             child: Text(
-                              saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .quoteCommit.toString()=='1'?'Yes':'No',
+                              saleCycleController.quoteHeaderdata[0].quoteCommit
+                                          .toString() ==
+                                      '1'
+                                  ? 'Yes'
+                                  : 'No',
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
@@ -2084,10 +2398,8 @@ class QuoteInformationScreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500),
                             ),
                           );
-
                         }),
                       )
-
                     ],
                   ),
                   SizedBox(
@@ -2105,16 +2417,18 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
                             message: saleCycleController
-                                .quoteHeaderdata[0].quoteTotalAmount.toString() ?? '',
-
+                                    .quoteHeaderdata[0].quoteTotalAmount
+                                    .toString() ??
+                                '',
                             child: Text(
                               saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .quoteTotalAmount.toString() ?? "",
+                                      .quoteHeaderdata[0].quoteTotalAmount
+                                      .toString() ??
+                                  "",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
@@ -2123,10 +2437,8 @@ class QuoteInformationScreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500),
                             ),
                           );
-
                         }),
                       )
-
                     ],
                   ),
                   SizedBox(
@@ -2144,16 +2456,18 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
                             message: saleCycleController
-                                .quoteHeaderdata[0].quoteGstAmount.toString() ?? '',
-
+                                    .quoteHeaderdata[0].quoteGstAmount
+                                    .toString() ??
+                                '',
                             child: Text(
                               saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .quoteGstAmount.toString() ?? "",
+                                      .quoteHeaderdata[0].quoteGstAmount
+                                      .toString() ??
+                                  "",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
@@ -2162,10 +2476,8 @@ class QuoteInformationScreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500),
                             ),
                           );
-
                         }),
                       )
-
                     ],
                   ),
                   SizedBox(
@@ -2183,16 +2495,18 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
                             message: saleCycleController
-                                .quoteHeaderdata[0].quoteGrossAmount.toString() ?? '',
-
+                                    .quoteHeaderdata[0].quoteGrossAmount
+                                    .toString() ??
+                                '',
                             child: Text(
                               saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .quoteGrossAmount.toString() ?? "",
+                                      .quoteHeaderdata[0].quoteGrossAmount
+                                      .toString() ??
+                                  "",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
@@ -2201,16 +2515,13 @@ class QuoteInformationScreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500),
                             ),
                           );
-
                         }),
                       )
-
                     ],
                   ),
                   SizedBox(
                     height: 3,
                   ),
-
                   Row(
                     children: [
                       Text(
@@ -2223,13 +2534,15 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.4,
+                        width: size.width * .4,
                         child: Tooltip(
                           message: saleCycleController
-                              .quoteHeaderdata[0].createdFullName ?? "",
+                                  .quoteHeaderdata[0].createdFullName ??
+                              "",
                           child: Text(
                             saleCycleController
-                                .quoteHeaderdata[0].createdFullName ?? "",
+                                    .quoteHeaderdata[0].createdFullName ??
+                                "",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.end,
                             style: GoogleFonts.poppins(
@@ -2244,9 +2557,8 @@ class QuoteInformationScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-
                   Row(
-                    children:   [
+                    children: [
                       Text(
                         "Created on",
                         style: GoogleFonts.poppins(
@@ -2282,15 +2594,15 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width*.4,
+                        width: size.width * .4,
                         child: Tooltip(
                           message: saleCycleController
-                              .quoteHeaderdata[0]
-                              .rejectReason ?? "",
+                                  .quoteHeaderdata[0].rejectReason ??
+                              "",
                           child: Text(
                             saleCycleController
-                                .quoteHeaderdata[0]
-                                .rejectReason ?? "",
+                                    .quoteHeaderdata[0].rejectReason ??
+                                "",
                             style: GoogleFonts.poppins(
                               color: AllColors.textColor,
                               fontSize: AllFontSize.fourtine,
@@ -2323,19 +2635,19 @@ class QuoteInformationScreen extends StatelessWidget{
                           saleCycleController.getSaleCycleProductByIdList(
                               saleCycleController.pageNumber,
                               saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .salesCycleId!);
+                                  .quoteHeaderdata[0].salesCycleId!);
                           bindListBottomSheet(context);
                         },
-                        child: Text('View',
+                        child: Text(
+                          'View',
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,),
+                            decorationStyle: TextDecorationStyle.wavy,
+                          ),
                           textAlign: TextAlign.end,
-
                         ),
                       ),
                     ],
@@ -2355,21 +2667,24 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
-                            message:saleCycleController
-                                .quoteHeaderdata[0]
-                                .installationCharges==null ? "":saleCycleController
-                                .quoteHeaderdata[0]
-                                .installationCharges.toString(),
-
+                            message: saleCycleController.quoteHeaderdata[0]
+                                        .installationCharges ==
+                                    null
+                                ? ""
+                                : saleCycleController
+                                    .quoteHeaderdata[0].installationCharges
+                                    .toString(),
                             child: Text(
-                              saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .installationCharges==null ? "":saleCycleController
-                                  .quoteHeaderdata[0]
-                                  .installationCharges.toString(),
+                              saleCycleController.quoteHeaderdata[0]
+                                          .installationCharges ==
+                                      null
+                                  ? ""
+                                  : saleCycleController
+                                      .quoteHeaderdata[0].installationCharges
+                                      .toString(),
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
@@ -2378,20 +2693,13 @@ class QuoteInformationScreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500),
                             ),
                           );
-
                         }),
                       )
-
                     ],
                   ),
                   SizedBox(
                     height: 3,
                   ),
-
-
-
-
-
                   Row(
                     children: [
                       Text(
@@ -2404,14 +2712,16 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width *.3,
+                        width: size.width * .3,
                         child: Obx(() {
                           return Text(
                             saleCycleController
-                                .quoteHeaderdata[0]
-                                .otherCharges==null? "": saleCycleController
-                                .quoteHeaderdata[0]
-                                .otherCharges.toString(),
+                                        .quoteHeaderdata[0].otherCharges ==
+                                    null
+                                ? ""
+                                : saleCycleController
+                                    .quoteHeaderdata[0].otherCharges
+                                    .toString(),
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.end,
                             style: GoogleFonts.poppins(
@@ -2419,16 +2729,13 @@ class QuoteInformationScreen extends StatelessWidget{
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500),
                           );
-
                         }),
                       )
-
                     ],
                   ),
                   SizedBox(
                     height: 3,
                   ),
-
                   Row(
                     children: [
                       Text(
@@ -2440,9 +2747,9 @@ class QuoteInformationScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Text( saleCycleController
-                          .quoteHeaderdata[0]
-                          .warrantyPeriod??"",
+                      Text(
+                        saleCycleController.quoteHeaderdata[0].warrantyPeriod ??
+                            "",
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -2465,9 +2772,10 @@ class QuoteInformationScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Text( saleCycleController
-                          .quoteHeaderdata[0]
-                          .deliveryInWeeks??"",
+                      Text(
+                        saleCycleController
+                                .quoteHeaderdata[0].deliveryInWeeks ??
+                            "",
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -2490,11 +2798,14 @@ class QuoteInformationScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Text( saleCycleController
-                          .quoteHeaderdata[0]
-                          .advancePaymentPer==null?"":saleCycleController
-                          .quoteHeaderdata[0]
-                          .advancePaymentPer.toString(),
+                      Text(
+                        saleCycleController
+                                    .quoteHeaderdata[0].advancePaymentPer ==
+                                null
+                            ? ""
+                            : saleCycleController
+                                .quoteHeaderdata[0].advancePaymentPer
+                                .toString(),
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -2506,9 +2817,6 @@ class QuoteInformationScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-
-
-
                   Row(
                     children: [
                       Text(
@@ -2520,11 +2828,14 @@ class QuoteInformationScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Text( saleCycleController
-                          .quoteHeaderdata[0]
-                          .advancePaymentAmt==null?"":saleCycleController
-                          .quoteHeaderdata[0]
-                          .advancePaymentAmt.toString(),
+                      Text(
+                        saleCycleController
+                                    .quoteHeaderdata[0].advancePaymentAmt ==
+                                null
+                            ? ""
+                            : saleCycleController
+                                .quoteHeaderdata[0].advancePaymentAmt
+                                .toString(),
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
@@ -2536,7 +2847,6 @@ class QuoteInformationScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
-
                   Row(
                     children: [
                       Text(
@@ -2549,14 +2859,15 @@ class QuoteInformationScreen extends StatelessWidget{
                       ),
                       Spacer(),
                       Container(
-                        width: size.width*0.5,
+                        width: size.width * 0.5,
                         child: Tooltip(
-                          message:saleCycleController
-                              .quoteHeaderdata[0]
-                              .otherRemarks??"" ,
-                          child: Text( saleCycleController
-                              .quoteHeaderdata[0]
-                              .otherRemarks??"",
+                          message: saleCycleController
+                                  .quoteHeaderdata[0].otherRemarks ??
+                              "",
+                          child: Text(
+                            saleCycleController
+                                    .quoteHeaderdata[0].otherRemarks ??
+                                "",
                             style: GoogleFonts.poppins(
                               color: AllColors.textColor,
                               fontSize: AllFontSize.fourtine,
@@ -2574,7 +2885,6 @@ class QuoteInformationScreen extends StatelessWidget{
                   ),
                 ],
               ),
-
             ),
           ),
         ],
@@ -2582,190 +2892,200 @@ class QuoteInformationScreen extends StatelessWidget{
     );
   }
 
-
-
   Future showDialogForDelete(BuildContext context, int index) {
     return showDialog(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return Container(
             child: AlertDialog(
-              title: Text("Delete",   style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w700,
-              ),),
+              title: Text(
+                "Delete",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               content: Container(
-                /*height: size.height*.21,
+                  /*height: size.height*.21,
                   width: size.width*4,*/
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                          'Do you want to delete this Quote Line?',
-                          style: GoogleFonts.poppins(
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            color: AllColors.primaryDark1,
-                          )),
-                      SizedBox(height: 10),
-                      Container(
-                        width: size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    AllColors.lightredColor,
-                                  ),
-                                ),
-                                onPressed: ()  {
-                                  Get.back();
-                                },
-                                child: Container(
-                                  child: Text('Cancel',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.blackColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Do you want to delete this Quote Line?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 10),
+                  Container(
+                    width: size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Container(
+                              child: Text(
+                                'Cancel',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 10,),
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    AllColors.greenblue,
-                                  ),
-                                ),
-                                onPressed: ()  {
-                                  saleCycleController.quoteLineDeleteApiHit(saleCycleController.quoteLinedata[index].lineNo!, "");
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  child: Text('Confirm',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.blackColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: () {
+                              saleCycleController.quoteLineDeleteApiHit(
+                                  saleCycleController
+                                      .quoteLinedata[index].lineNo!,
+                                  "");
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              child: Text(
+                                'Confirm',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   )
-              ),
+                ],
+              )),
             ),
           );
-
         });
   }
-
 
   Future showDialogForCreateDuplicate(BuildContext context, int index) {
     return showDialog(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return Container(
             child: AlertDialog(
-              title: Text("Create Duplicate",   style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w700,
-              ),),
+              title: Text(
+                "Create Duplicate",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               content: Container(
-                /* height: size.height*.21,
+                  /* height: size.height*.21,
                   width: size.width*4,*/
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                          'Do you want to Create Duplicate Line of this Quote?',
-                          style: GoogleFonts.poppins(
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            color: AllColors.primaryDark1,
-                          )),
-                      SizedBox(height: 10),
-
-                      Container(
-                        width: size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    AllColors.lightredColor,
-                                  ),
-                                ),
-                                onPressed: ()  {
-                                  Get.back();
-                                },
-                                child: Container(
-                                  child: Text('Cancel',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.blackColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Do you want to Create Duplicate Line of this Quote?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 10),
+                  Container(
+                    width: size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: () {
+                              Get.back();
+                            },
+                            child: Container(
+                              child: Text(
+                                'Cancel',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
                             ),
-                            SizedBox(width: 10,),
-                            Expanded(
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    AllColors.greenblue,
-                                  ),
-                                ),
-                                onPressed: ()  {
-                                  saleCycleController.quoteLineCreateDuplicateApiHit(saleCycleController.quoteLinedata[index].lineNo!);
-                                  //Get.back();
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  child: Text('Confirm',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.blackColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: () {
+                              saleCycleController
+                                  .quoteLineCreateDuplicateApiHit(
+                                      saleCycleController
+                                          .quoteLinedata[index].lineNo!);
+                              //Get.back();
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              child: Text(
+                                'Confirm',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                            )
-                          ],
-                        ),
-                      )
-                    ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   )
-              ),
+                ],
+              )),
             ),
           );
-
         });
   }
 
   Widget bindRejectreason(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
       maxLines: 2,
       maxLength: 500,
       controller: saleCycleController.rejectreasonQuoteController.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+              vertical: AllFontSize.twelve, horizontal: AllFontSize.ten),
           hintText: 'Enter Reject Reason',
           labelText: 'Reject Reason',
           hintStyle: GoogleFonts.poppins(
@@ -2781,114 +3101,112 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
-
-
-
-
 
   Future showDialogForHeaderUpdate(BuildContext context) {
     return showDialog(
         context: context,
-        builder: (BuildContext context){
+        builder: (BuildContext context) {
           return Container(
             child: AlertDialog(
-              title: Text("Header Quote Update",   style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w700,
-              ),),
+              title: Text(
+                "Header Quote Update",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               content: Container(
                   /*height: size.height*.4,
                   width: size.width*4,*/
                   child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(height: 5),
-                        bindGeneralAddress(context),
-                        SizedBox(height: 10),
-                        bindShippingAddress(context),
-                        SizedBox(height: 10,),
-                    
-                        Container(
-                          width: size.width,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.primaryDark1,
-                              ),
-                            ),
-                            onPressed: ()  {
-                              saleCycleController.quoteHeaderUpdateApiHit();
-                              Get.back();
-                            },
-                            child: Container(
-                              child: Text('Update Quote',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.whiteColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(height: 5),
+                    bindGeneralAddress(context),
+                    SizedBox(height: 10),
+                    bindShippingAddress(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: size.width,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.primaryDark1,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.quoteHeaderUpdateApiHit();
+                          Get.back();
+                        },
+                        child: Container(
+                          child: Text(
+                            'Update Quote',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.whiteColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
-                        SizedBox(height: 10,),
-                        Container(
-                          width: size.width,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.primaryDark1,
-                              ),
-                            ),
-                            onPressed: ()  {
-                              saleCycleController.pageNumber = 0;
-                              saleCycleController.getAddressMasterList(saleCycleController.pageNumber,saleCycleController.accountCode.value);
-                              saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list);
-
-                            },
-                            child: Container(
-                              child: Text('Change Address',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.whiteColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      width: size.width,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.primaryDark1,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.pageNumber = 0;
+                          saleCycleController.getAddressMasterList(
+                              saleCycleController.pageNumber,
+                              saleCycleController.accountCode.value);
+                          saleCycleController.showConsigneeAddressList(
+                              context, saleCycleController.address_master_list);
+                        },
+                        child: Container(
+                          child: Text(
+                            'Change Address',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.whiteColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                        )
-                      ],
-                    ),
-                  )
-              ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              )),
             ),
           );
-
         });
   }
-
-
 
   Widget updateQuoteValidity(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10)
-      ),
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: TextField(
-          cursorColor:AllColors.primaryDark1 ,
+          cursorColor: AllColors.primaryDark1,
           controller: saleCycleController.updateQuoteValidityController.value,
           decoration: InputDecoration(
               suffixIcon: Icon(Icons.calendar_month),
               contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten
-              ),
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
               hintText: 'Quote Validity',
               labelText: 'Quote Validity',
               hintStyle: GoogleFonts.poppins(
@@ -2904,11 +3222,11 @@ class QuoteInformationScreen extends StatelessWidget{
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
+              )),
           onTap: () async {
             DateTime? initialDate;
-            if (saleCycleController.updateQuoteValidityController.value.text.isNotEmpty) {
+            if (saleCycleController
+                .updateQuoteValidityController.value.text.isNotEmpty) {
               initialDate = DateFormat('yyyy-MM-dd').parse(
                 saleCycleController.updateQuoteValidityController.value.text,
               );
@@ -2929,42 +3247,39 @@ class QuoteInformationScreen extends StatelessWidget{
               builder: (BuildContext context, Widget? child) {
                 return Theme(
                   data: ThemeData.light().copyWith(
-                    primaryColor: AllColors.primaryDark1, // Header background color
+                    primaryColor:
+                        AllColors.primaryDark1, // Header background color
                     //accentColor: AllColors.primaryDark1, // Color of the buttons
-                    colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                    buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                    colorScheme:
+                        ColorScheme.light(primary: AllColors.primaryDark1),
+                    buttonTheme:
+                        ButtonThemeData(textTheme: ButtonTextTheme.primary),
                   ),
                   child: child!,
                 );
               },
-
             );
             var outputFormat = DateFormat('yyyy-MM-dd');
             if (date != null && date != "")
-              saleCycleController.updateQuoteValidityController.value.text= outputFormat.format(date);
+              saleCycleController.updateQuoteValidityController.value.text =
+                  outputFormat.format(date);
             /* else
               saleCycleController.updateQuoteValidityController.value.text = "";*/
-          }
-
-
-
-      ),
+          }),
     );
   }
 
   Widget updateExpectedClosureDate(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10)
-      ),
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: TextField(
-          cursorColor:AllColors.primaryDark1 ,
-          controller: saleCycleController.updateExpectedClosureDateController.value,
+          cursorColor: AllColors.primaryDark1,
+          controller:
+              saleCycleController.updateExpectedClosureDateController.value,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten
-              ),
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
               suffixIcon: Icon(Icons.calendar_month),
               hintText: 'Expected Closure Date',
               labelText: 'Expected Closure Date',
@@ -2981,13 +3296,14 @@ class QuoteInformationScreen extends StatelessWidget{
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
+              )),
           onTap: () async {
             DateTime? initialDate;
-            if (saleCycleController.updateExpectedClosureDateController.value.text.isNotEmpty) {
+            if (saleCycleController
+                .updateExpectedClosureDateController.value.text.isNotEmpty) {
               initialDate = DateFormat('yyyy-MM-dd').parse(
-                saleCycleController.updateExpectedClosureDateController.value.text,
+                saleCycleController
+                    .updateExpectedClosureDateController.value.text,
               );
               // Ensure initialDate is not before firstDate
               if (initialDate.isBefore(DateTime.now())) {
@@ -3000,34 +3316,35 @@ class QuoteInformationScreen extends StatelessWidget{
             FocusScope.of(context).requestFocus(new FocusNode());
             DateTime? date = await showDatePicker(
               context: context,
-              initialDate:initialDate,
+              initialDate: initialDate,
               firstDate: DateTime.now(),
               lastDate: ending_date,
               builder: (BuildContext context, Widget? child) {
                 return Theme(
                   data: ThemeData.light().copyWith(
-                    primaryColor: AllColors.primaryDark1, // Header background color
+                    primaryColor:
+                        AllColors.primaryDark1, // Header background color
                     //accentColor: AllColors.primaryDark1, // Color of the buttons
-                    colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                    buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                    colorScheme:
+                        ColorScheme.light(primary: AllColors.primaryDark1),
+                    buttonTheme:
+                        ButtonThemeData(textTheme: ButtonTextTheme.primary),
                   ),
                   child: child!,
                 );
               },
-
             );
             var outputFormat = DateFormat('yyyy-MM-dd');
             if (date != null && date != "")
-              saleCycleController.updateExpectedClosureDateController.value.text= outputFormat.format(date);
+              saleCycleController.updateExpectedClosureDateController.value
+                  .text = outputFormat.format(date);
             /*else
               saleCycleController.updateExpectedClosureDateController.value.text = "";*/
-          }
-      ),
+          }),
     );
   }
 
-
- /* Widget quoteCommitDropDown(BuildContext context) {
+  /* Widget quoteCommitDropDown(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
@@ -3081,11 +3398,9 @@ class QuoteInformationScreen extends StatelessWidget{
   Widget bindActive(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10)
-      ),
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: DropdownMenu<String>(
-        width: size.width-155,
+        width: size.width - 155,
         controller: saleCycleController.activeController.value,
         label: Text(
           "Active",
@@ -3094,18 +3409,17 @@ class QuoteInformationScreen extends StatelessWidget{
               fontSize: AllFontSize.fourtine,
               fontWeight: FontWeight.w500),
         ),
-
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             borderSide: BorderSide(
-              color: AllColors.primaryDark1,),
+              color: AllColors.primaryDark1,
+            ),
           ),
           focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
                 color: AllColors.primaryDark1), // Change the color to green
           ),
-
           border: OutlineInputBorder(
             borderSide: BorderSide(
                 color: AllColors.primaryDark1), // Change the color to green
@@ -3114,20 +3428,28 @@ class QuoteInformationScreen extends StatelessWidget{
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         ),
-        enabled: saleCycleController.quoteHeaderdata[0].isReadySendForApproval!=1?false:true,
+        enabled:
+            saleCycleController.quoteHeaderdata[0].isReadySendForApproval != 1
+                ? false
+                : true,
         onSelected: (String? selection) {
           print(selection);
           saleCycleController.activeController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!).toString();
+              _displayCustomerNeedIdentityStatusForOption(selection!)
+                  .toString();
         },
-
-        dropdownMenuEntries: saleCycleController.customerNeedIdentityList.map<DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        dropdownMenuEntries: saleCycleController.customerNeedIdentityList
+            .map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e,
+              label: e!,
+              style: ButtonStyle(
+                foregroundColor:
+                    MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+              ));
         }).toList(),
       ),
     );
-
   }
 
   /*Future showDialogForRegretHeaderUpdate(BuildContext context) {
@@ -3214,8 +3536,6 @@ class QuoteInformationScreen extends StatelessWidget{
         });
   }*/
 
-
-
   /* Future updateDropdownForHeaderRegret(BuildContext context) {
     return showDialog(
         context: context,
@@ -3251,8 +3571,8 @@ class QuoteInformationScreen extends StatelessWidget{
                             }
 
                             // saleCycleController.quoteLineMarkRegretApiHit(saleCycleController.quoteLinedata[index].lineNo!);
-                            *//* Get.back();
-                            Get.back();*//*
+                            */ /* Get.back();
+                            Get.back();*/ /*
                           },
                           child: Container(
                             child: Text('Submit',
@@ -3295,9 +3615,7 @@ class QuoteInformationScreen extends StatelessWidget{
               fontWeight: FontWeight.w700,
               fontSize: AllFontSize.sisxteen),
           border: OutlineInputBorder(
-            borderSide: BorderSide(
-
-            ),
+            borderSide: BorderSide(),
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
@@ -3309,17 +3627,12 @@ class QuoteInformationScreen extends StatelessWidget{
             SizedBox(height: 10),
             /* quoteCommitDropDown(context),
                         SizedBox(height: 10),*/
-            bindActive( context),
-
-
-
+            bindActive(context),
           ],
         ),
       ),
     );
-
   }
-
 
   Widget bindShippingAddress(BuildContext context) {
     return Container(
@@ -3342,202 +3655,147 @@ class QuoteInformationScreen extends StatelessWidget{
               fontWeight: FontWeight.w700,
               fontSize: AllFontSize.sisxteen),
           border: OutlineInputBorder(
-            borderSide: BorderSide(
-
-            ),
+            borderSide: BorderSide(),
             borderRadius: BorderRadius.circular(10.0),
           ),
         ),
         child: Column(
           children: [
-
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: TextFormField(
                 readOnly: true,
-                controller: saleCycleController
-                    .shippingController.value,
+                controller: saleCycleController.shippingController.value,
                 decoration: InputDecoration(
                     hintText: "Address",
                     labelText: "Address",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
+                        borderSide: BorderSide(color: Colors.blue)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
+                        borderRadius: BorderRadius.circular(10))),
               ),
             ),
-
-            SizedBox(height: 15,),
-
+            SizedBox(
+              height: 15,
+            ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: TextFormField(
                 readOnly: true,
-                controller: saleCycleController
-                    .shippingAddress2Controller.value,
+                controller:
+                    saleCycleController.shippingAddress2Controller.value,
                 decoration: InputDecoration(
                     hintText: "Address 2",
                     labelText: "Address 2",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
+                        borderSide: BorderSide(color: Colors.blue)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
+                        borderRadius: BorderRadius.circular(10))),
               ),
             ),
-
-            SizedBox(height: 15,),
-
-
+            SizedBox(
+              height: 15,
+            ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: TextFormField(
                 readOnly: true,
                 keyboardType: TextInputType.number,
-                controller: saleCycleController
-                    .Shipping_PostCode_Controller.value,
+                controller:
+                    saleCycleController.Shipping_PostCode_Controller.value,
                 decoration: InputDecoration(
                     hintText: "Post Code",
                     labelText: "Post Code",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
+                        borderSide: BorderSide(color: Colors.blue)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
+                        borderRadius: BorderRadius.circular(10))),
               ),
             ),
-
-            SizedBox(height: 15,),
-
+            SizedBox(
+              height: 15,
+            ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: TextFormField(
                 readOnly: true,
-                controller: saleCycleController
-                    .Shipping_City_Controller.value,
+                controller: saleCycleController.Shipping_City_Controller.value,
                 decoration: InputDecoration(
                     hintText: "City",
                     labelText: "City",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
+                        borderSide: BorderSide(color: Colors.blue)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
+                        borderRadius: BorderRadius.circular(10))),
               ),
             ),
-
-            SizedBox(height: 15,),
-
+            SizedBox(
+              height: 15,
+            ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: TextFormField(
                 readOnly: true,
-                controller: saleCycleController
-                    .Shipping_District_Controller.value,
+                controller:
+                    saleCycleController.Shipping_District_Controller.value,
                 decoration: InputDecoration(
                     hintText: "District",
                     labelText: "District",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
+                        borderSide: BorderSide(color: Colors.blue)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
+                        borderRadius: BorderRadius.circular(10))),
               ),
             ),
-
-            SizedBox(height: 15,),
-
+            SizedBox(
+              height: 15,
+            ),
             Container(
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
               child: TextFormField(
                 readOnly: true,
-                controller: saleCycleController
-                    .Shipping_State_Controller.value,
+                controller: saleCycleController.Shipping_State_Controller.value,
                 decoration: InputDecoration(
                     hintText: "State",
                     labelText: "State",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
                     focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
+                        borderSide: BorderSide(color: Colors.blue)),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
+                        borderRadius: BorderRadius.circular(10))),
               ),
             ),
 
-           /* SizedBox(height: 15,),
+            /* SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -3598,28 +3856,29 @@ class QuoteInformationScreen extends StatelessWidget{
 
               ),
             ),*/
-
-
           ],
         ),
       ),
     );
-
   }
 
-
-  void openConfirmationDialog(BuildContext context, String message, String flag) {
+  void openConfirmationDialog(
+      BuildContext context, String message, String flag) {
     showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return AlertDialog(
-            title:  Row(
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.check_circle, color: AllColors.lightredColor,),
-                SizedBox(width: 5,),
-                Text(
-                    'Update!',
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Update!',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -3629,105 +3888,110 @@ class QuoteInformationScreen extends StatelessWidget{
             ),
             content: Container(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                        message
-                        ,
-                        style: GoogleFonts.poppins(
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                          color: AllColors.primaryDark1,
-                        )),
-
-                    SizedBox(height: 10),
-                    Container(
-                      width: size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                  AllColors.lightredColor,
-                                ),
-                              ),
-                              onPressed: ()  {
-                                Get.back();
-                              },
-                              child: Container(
-                                child: Text('Cancel',
-                                  /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(message,
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                      color: AllColors.primaryDark1,
+                    )),
+                SizedBox(height: 10),
+                Container(
+                  width: size.width,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AllColors.lightredColor,
+                            ),
+                          ),
+                          onPressed: () {
+                            Get.back();
+                          },
+                          child: Container(
+                            child: Text(
+                              'Cancel',
+                              /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                              style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ),
-                          SizedBox(width: 10,),
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                  AllColors.greenblue,
-                                ),
-                              ),
-                              onPressed: ()  {
-                                if(flag=="Approved") {
-                                  saleCycleController.quoteApprovalRejectApiHit(flag,saleCycleController.quoteHeaderdata[0].quoteId!);
-                                }
-                                else if(flag=="Rejected"){
-                                  saleCycleController.managerRemarksController.value.clear();
-                                  saleCycleController.quoteApprovalRejectApiHit(flag,saleCycleController.quoteHeaderdata[0].quoteId!);
-                                }
-                                else{
-                                  saleCycleController.quoteSendForApprovalApiHit();
-                                }
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AllColors.greenblue,
+                            ),
+                          ),
+                          onPressed: () {
+                            if (flag == "Approved") {
+                              saleCycleController.quoteApprovalRejectApiHit(
+                                  flag,
+                                  saleCycleController
+                                      .quoteHeaderdata[0].quoteId!);
+                            } else if (flag == "Rejected") {
+                              saleCycleController.quoteApprovalRejectApiHit(
+                                  flag,
+                                  saleCycleController
+                                      .quoteHeaderdata[0].quoteId!);
+                            } else {
+                              saleCycleController.quoteSendForApprovalApiHit();
+                            }
 
-                                Get.back();
-                                Get.back();
-                              },
-                              child: Container(
-                                //width: 80,
-                                //alignment: Alignment.center,
-                                child: Text('Confirm',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+                            Get.back();
+                            Get.back();
+                          },
+                          child: Container(
+                            //width: 80,
+                            //alignment: Alignment.center,
+                            child: Text(
+                              'Confirm',
+                              style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 )
-            ),
+              ],
+            )),
           );
-
         });
-
   }
 
   void showdialogForApproval(BuildContext context) {
     showDialog(
         context: context,
-        builder: (context){
+        builder: (context) {
           return AlertDialog(
-            title:  Row(
+            title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.check_circle, color: AllColors.lightredColor,),
-                SizedBox(width: 5,),
-                Text(
-                    'Update Quote',
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Update Quote',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -3737,35 +4001,77 @@ class QuoteInformationScreen extends StatelessWidget{
             ),
             content: Container(
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    bindDropDownOfRejectAndApprove(context),
-                    SizedBox(height: 10),
-                    Obx((){
-                      return  Visibility(
-                          visible:saleCycleController.isApprove.value ,
-                          child: managerRemarksField(context));
-                    }),
-
-                    Obx((){
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Visibility(
-                            visible: saleCycleController.isApprove.value,
-                            child: ElevatedButton(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                bindDropDownOfRejectAndApprove(context),
+                SizedBox(height: 10),
+                Obx(() {
+                  return Visibility(
+                      visible: saleCycleController.isApprove.value,
+                      child: managerRemarksField(context));
+                }),
+                Obx(() {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Visibility(
+                        visible: saleCycleController.isApprove.value,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AllColors.greenblue,
+                            ),
+                          ),
+                          onPressed: () {
+                            openConfirmationDialog(
+                                context,
+                                "Do you want to Update this Sales Cycle?",
+                                "Approved");
+                          },
+                          child: Container(
+                            child: Text(
+                              'Approve',
+                              style: GoogleFonts.poppins(
+                                color: AllColors.blackColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+                Obx(() {
+                  return Visibility(
+                    visible: saleCycleController.isReject.value,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        bindRejectreason(context),
+                        SizedBox(
+                          height: 6,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            ElevatedButton(
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(
-                                  AllColors.greenblue,
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                  AllColors.redColor,
                                 ),
                               ),
-                              onPressed: ()  {
-                                openConfirmationDialog(context,
+                              onPressed: () {
+                                openConfirmationDialog(
+                                    context,
                                     "Do you want to Update this Sales Cycle?",
-                                    "Approved");
+                                    "Rejected");
                               },
                               child: Container(
-                                child: Text('Approve',
+                                child: Text(
+                                  'Reject',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.blackColor,
                                     fontSize: AllFontSize.fourtine,
@@ -3774,56 +4080,18 @@ class QuoteInformationScreen extends StatelessWidget{
                                 ),
                               ),
                             ),
-                          ),
-
-                        ],
-                      );
-                    }),
-                    Obx((){
-                      return  Visibility(
-                        visible: saleCycleController.isReject.value,
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            bindRejectreason(context),
-                            SizedBox(height: 6,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                ElevatedButton(
-                                  style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all<Color>(
-                                      AllColors.redColor,
-                                    ),
-                                  ),
-                                  onPressed: ()  {
-                                    openConfirmationDialog(context, "Do you want to Update this Sales Cycle?", "Rejected");
-                                  },
-                                  child: Container(
-                                    child: Text('Reject',
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.blackColor,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w700,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
-                      );
-                    }),
-
-
-                  ],
-                )
-            ),
+                      ],
+                    ),
+                  );
+                }),
+              ],
+            )),
           );
-
         });
   }
+
   Widget managerRemarksField(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -3846,12 +4114,12 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
-  showFetchSalesProductConfirmationDialog(context, String SalesId,String QuoteId) {
+  showFetchSalesProductConfirmationDialog(
+      context, String SalesId, String QuoteId) {
     showDialog(
         context: context,
         builder: (context) {
@@ -3859,10 +4127,14 @@ class QuoteInformationScreen extends StatelessWidget{
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.check_circle, color: AllColors.lightredColor,),
-                SizedBox(width: 5,),
-                Text(
-                    'Fetch!',
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Fetch!',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -3870,71 +4142,70 @@ class QuoteInformationScreen extends StatelessWidget{
                     ))
               ],
             ),
-            content: Wrap(
+            content: Wrap(children: [
+              Column(
                 children: [
-                  Column(
+                  Text('Do you want to Fetch Sales Product ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text(
-                          'Do you want to Fetch Sales Product ?',
-                          style: GoogleFonts.poppins(
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            color: AllColors.primaryDark1,
-                          )),
-
-                      SizedBox(height: 20),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.lightredColor,
-                              ),
-                            ),
-                            onPressed: () {
-                              Get.back();
-                            },
-                            child: Container(
-                              width: 60,
-                              alignment: Alignment.center,
-                              child: Text('Cancel',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.lightredColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.greenblue,
-                              ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.FetchSalesProductApiHit(
+                              SalesId, QuoteId);
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Confirm',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
                             ),
-                            onPressed: () {
-                              saleCycleController.FetchSalesProductApiHit(SalesId, QuoteId);
-                              Get.back();
-                            },
-                            child: Container(
-                              width: 60,
-                              alignment: Alignment.center,
-                              child: Text('Confirm',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontSize: AllFontSize.twelve,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+                          ),
+                        ),
                       )
                     ],
-                  ),
-                ]),
+                  )
+                ],
+              ),
+            ]),
           );
         });
   }
@@ -3947,8 +4218,7 @@ class QuoteInformationScreen extends StatelessWidget{
           return saleCycleController.statusList.value;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return saleCycleController.statusList.value
-            .where((String option) {
+        return saleCycleController.statusList.value.where((String option) {
           return option
               .toString()
               .toLowerCase()
@@ -3959,43 +4229,43 @@ class QuoteInformationScreen extends StatelessWidget{
         print(selection);
         saleCycleController.quoteStatusController.value.text =
             _displayStatusForOption(selection!).toString();
-        print('IsActive.....${saleCycleController.quoteStatusController.value.text}');
-        if(saleCycleController.quoteStatusController.value.text=="Approve"){
-          saleCycleController.isApprove.value=true;
-          saleCycleController.isReject.value=false;
-        }
-        else if(saleCycleController.quoteStatusController.value.text=="Reject"){
-          saleCycleController.isReject.value=true;
-          saleCycleController.isApprove.value=false;
-        }
-        else{
-          saleCycleController.isApprove.value=false;
-          saleCycleController.isReject.value=false;
+        print(
+            'IsActive.....${saleCycleController.quoteStatusController.value.text}');
+        if (saleCycleController.quoteStatusController.value.text == "Approve") {
+          saleCycleController.isApprove.value = true;
+          saleCycleController.isReject.value = false;
+        } else if (saleCycleController.quoteStatusController.value.text ==
+            "Reject") {
+          saleCycleController.isReject.value = true;
+          saleCycleController.isApprove.value = false;
+        } else {
+          saleCycleController.isApprove.value = false;
+          saleCycleController.isReject.value = false;
         }
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
         return TextField(
-          onTap: (){
+          onTap: () {
             saleCycleController.quoteStatusController.value.clear();
           },
-          onChanged: (value){
-            if(saleCycleController.quoteStatusController.value.text=="Approve"){
-              saleCycleController.isApprove.value=true;
-              saleCycleController.isReject.value=false;
-            }
-            else if(saleCycleController.quoteStatusController.value.text=="Reject"){
-              saleCycleController.isReject.value=true;
-              saleCycleController.isApprove.value=false;
-            }
-            else{
-              saleCycleController.isApprove.value=false;
-              saleCycleController.isReject.value=false;
+          onChanged: (value) {
+            if (saleCycleController.quoteStatusController.value.text ==
+                "Approve") {
+              saleCycleController.isApprove.value = true;
+              saleCycleController.isReject.value = false;
+            } else if (saleCycleController.quoteStatusController.value.text ==
+                "Reject") {
+              saleCycleController.isReject.value = true;
+              saleCycleController.isApprove.value = false;
+            } else {
+              saleCycleController.isApprove.value = false;
+              saleCycleController.isReject.value = false;
             }
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text =  saleCycleController.quoteStatusController.value.text,
+            ..text = saleCycleController.quoteStatusController.value.text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
@@ -4017,8 +4287,7 @@ class QuoteInformationScreen extends StatelessWidget{
               ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
+              )),
         );
       },
       optionsViewBuilder: (BuildContext context,
@@ -4029,14 +4298,13 @@ class QuoteInformationScreen extends StatelessWidget{
           child: Material(
             elevation: 4.0,
             child: Container(
-              width: size.width*.62,
+              width: size.width * .62,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
+                  final String option = suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
                       onSelected(option);
@@ -4050,7 +4318,7 @@ class QuoteInformationScreen extends StatelessWidget{
                             fontWeight: FontWeight.w300,
                             fontSize: AllFontSize
                                 .sisxteen // Change the text color here
-                        ),
+                            ),
                       ),
                     ),
                   );
@@ -4116,10 +4384,7 @@ class QuoteInformationScreen extends StatelessWidget{
         foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
     }).toList(),
   );*/
-
-
   }
-
 
 /*
   void showDialogforUpdateLine(BuildContext context, int index) {
@@ -4177,109 +4442,146 @@ class QuoteInformationScreen extends StatelessWidget{
   }*/
 
   void bindListBottomSheet(BuildContext context) {
-    showModalBottomSheet(context: context,
+    showModalBottomSheet(
+      context: context,
       builder: (BuildContext context) {
         return Container(
             child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      InkWell(
-                        child: CircleBackButton(
-                          press: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0),
-                        child: Text(
-                          "Sales Cycle Products",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.sisxteen,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      Spacer(),
-                       CircleAvatar(
-                          child: InkWell(
-                            onTap: () {
-                              showDialogSalesCycleProductFilter(context);
-                            },
-                            child: Icon(
-                                Icons.filter_alt_rounded
-                            ),
-                          ),
-                        ),
-
-                    ],
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  InkWell(
+                    child: CircleBackButton(
+                      press: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
                   ),
-                ),
-                Center(
-                    child: Divider(height: 1, color: AllColors.primaryDark1,)),
-                Expanded(
-                    child: SingleChildScrollView(
-                      child: Obx(() {
-                        return bindSalesCycleProductData(context,);
-                      }),
-                    )
-                ),
-                Center(
-                    child: Divider(height: 1, color: AllColors.primaryDark1,)),
-                Container(
-                  padding: EdgeInsets.only(top: 10,bottom: 10, left: 10, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text("Total ", style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10.0),
+                    child: Text(
+                      "Sales Cycle Products",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
                         fontSize: AllFontSize.sisxteen,
-                        fontWeight: FontWeight.w900,
-                      ),),
-
-                      Row(
-                        children: [
-                          Text("Qty: ", style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.sisxteen,
-                            fontWeight: FontWeight.w900,
-                          ),),
-                          Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalQty==null?"0":
-                          saleCycleController.get_SalesCycleProductById_List[0].productTotalQty.toString()):"",
-                            style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.sisxteen,
-                            fontWeight: FontWeight.w700,
-                          ),),
-                        ],
+                        fontWeight: FontWeight.w700,
                       ),
-
-                      Row(
-                        children: [
-                          Text("Price: ", style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.sisxteen,
-                            fontWeight: FontWeight.w900,
-                          ),),
-                          Text(saleCycleController.get_SalesCycleProductById_List.length>0?(saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount==null?"0"
-                              :saleCycleController.get_SalesCycleProductById_List[0].productTotalAmount.toString()):"0",
-                            style: GoogleFonts.poppins(
-                            color: AllColors.primaryDark1,
-                            fontSize: AllFontSize.sisxteen,
-                            fontWeight: FontWeight.w700,
-                          ),),
-                        ],
+                    ),
+                  ),
+                  Spacer(),
+                  CircleAvatar(
+                    child: InkWell(
+                      onTap: () {
+                        showDialogSalesCycleProductFilter(context);
+                      },
+                      child: Icon(Icons.filter_alt_rounded),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Center(
+                child: Divider(
+              height: 1,
+              color: AllColors.primaryDark1,
+            )),
+            Expanded(child: SingleChildScrollView(
+              child: Obx(() {
+                return bindSalesCycleProductData(
+                  context,
+                );
+              }),
+            )),
+            Center(
+                child: Divider(
+              height: 1,
+              color: AllColors.primaryDark1,
+            )),
+            Container(
+              padding:
+                  EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Total ",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Qty: ",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      Text(
+                        saleCycleController
+                                    .get_SalesCycleProductById_List.length >
+                                0
+                            ? (saleCycleController
+                                        .get_SalesCycleProductById_List[0]
+                                        .productTotalQty ==
+                                    null
+                                ? "0"
+                                : saleCycleController
+                                    .get_SalesCycleProductById_List[0]
+                                    .productTotalQty
+                                    .toString())
+                            : "",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ],
                   ),
-                )
-              ],
+                  Row(
+                    children: [
+                      Text(
+                        "Price: ",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      Text(
+                        saleCycleController
+                                    .get_SalesCycleProductById_List.length >
+                                0
+                            ? (saleCycleController
+                                        .get_SalesCycleProductById_List[0]
+                                        .productTotalAmount ==
+                                    null
+                                ? "0"
+                                : saleCycleController
+                                    .get_SalesCycleProductById_List[0]
+                                    .productTotalAmount
+                                    .toString())
+                            : "0",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             )
-        );
+          ],
+        ));
       },
     );
   }
@@ -4292,10 +4594,14 @@ class QuoteInformationScreen extends StatelessWidget{
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.check_circle, color: AllColors.lightredColor,),
-                SizedBox(width: 5,),
-                Text(
-                    'Filter List ',
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Filter List ',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -4303,85 +4609,103 @@ class QuoteInformationScreen extends StatelessWidget{
                     ))
               ],
             ),
-            content: Container(
-                child: Obx(() {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SingleChildScrollView(
-                        child: Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
+            content: Container(child: Obx(() {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SingleChildScrollView(
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            filterWithItemCode(context),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            filterItemDescription(context),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            filterWithCategoryName(context),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            EditCompetitorName(context),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            EditLossReason(context),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                filterWithItemCode(context),
-                                SizedBox(height: 5,),
-
-                                filterItemDescription(context),
-                                SizedBox(height: 5,),
-
-                                filterWithCategoryName(context),
-
-                                SizedBox(height: 5,),
-                                EditCompetitorName(context),
-                                SizedBox(height: 5,),
-                                EditLossReason(context),
-                                SizedBox(height: 5,),
-
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(
-                                          AllColors.redColor,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        saleCycleController.pageNumber=0;
-                                        saleCycleController.clearSaleProductListController();
-                                        saleCycleController.getSaleCycleProductByIdList(saleCycleController.pageNumber,saleCycleController.quoteHeaderdata[0].salesCycleId!);
-                                        Get.back();
-                                      },
-                                      child: Text('Reset',
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.blackColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                      AllColors.redColor,
                                     ),
-                                    ElevatedButton(
-                                      style: ButtonStyle(
-                                        backgroundColor: MaterialStateProperty.all<Color>(
-                                          AllColors.greenblue,
-                                        ),
-                                      ),
-                                      onPressed: () {
-                                        saleCycleController.pageNumber=0;
-                                        saleCycleController.getSaleCycleProductByIdList(saleCycleController.pageNumber,saleCycleController.quoteHeaderdata[0].salesCycleId!);
-                                        Get.back();
-                                      },
-                                      child: Text('Submit',
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.blackColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
+                                  ),
+                                  onPressed: () {
+                                    saleCycleController.pageNumber = 0;
+                                    saleCycleController
+                                        .clearSaleProductListController();
+                                    saleCycleController
+                                        .getSaleCycleProductByIdList(
+                                            saleCycleController.pageNumber,
+                                            saleCycleController
+                                                .quoteHeaderdata[0]
+                                                .salesCycleId!);
+                                    Get.back();
+                                  },
+                                  child: Text(
+                                    'Reset',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
                                     ),
-                                  ],
+                                  ),
                                 ),
-
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all<Color>(
+                                      AllColors.greenblue,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    saleCycleController.pageNumber = 0;
+                                    saleCycleController
+                                        .getSaleCycleProductByIdList(
+                                            saleCycleController.pageNumber,
+                                            saleCycleController
+                                                .quoteHeaderdata[0]
+                                                .salesCycleId!);
+                                    Get.back();
+                                  },
+                                  child: Text(
+                                    'Submit',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
+                          ],
                         ),
-                      )
-                    ],
-                  );
-                })
-            ),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            })),
           );
         });
   }
@@ -4408,13 +4732,12 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
   Widget filterItemDescription(BuildContext context) {
-    return  TextField(
+    return TextField(
       cursorColor: AllColors.primaryDark1,
       controller: saleCycleController.updateItemDescriptionController.value,
       decoration: InputDecoration(
@@ -4435,8 +4758,7 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
@@ -4462,8 +4784,7 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
@@ -4489,16 +4810,15 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
   Widget EditCompetitorName(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: saleCycleController.updateCompetitorNameProductController
-          .value,
+      controller:
+          saleCycleController.updateCompetitorNameProductController.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
@@ -4517,14 +4837,13 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
   Widget bindSalesCycleProductData(BuildContext context) {
-    print("Lengh${saleCycleController.get_SalesCycleProductById_List.value
-        .length}");
+    print(
+        "Lengh${saleCycleController.get_SalesCycleProductById_List.value.length}");
     if (saleCycleController.get_SalesCycleProductById_List.value.isNotEmpty &&
         saleCycleController.get_SalesCycleProductById_List.value.length > 0) {
       ScrollController scrollController = ScrollController();
@@ -4533,10 +4852,10 @@ class QuoteInformationScreen extends StatelessWidget{
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
           int total_page = (saleCycleController.total_rows_sale_cyle_item /
-              saleCycleController.rowsPerPage)
+                  saleCycleController.rowsPerPage)
               .toInt();
           if ((saleCycleController.total_rows_sale_cyle_item %
-              saleCycleController.rowsPerPage) >
+                  saleCycleController.rowsPerPage) >
               0) total_page += 1;
 
           //print(
@@ -4544,30 +4863,33 @@ class QuoteInformationScreen extends StatelessWidget{
           if (saleCycleController.pageNumber + 1 < total_page) {
             saleCycleController.getSaleCycleProductByIdList(
               saleCycleController.pageNumber + 1,
-              saleCycleController.quoteHeaderdata[0].salesCycleId!,);
+              saleCycleController.quoteHeaderdata[0].salesCycleId!,
+            );
             saleCycleController.pageNumber += 1;
           }
         }
       });
-      return Obx(() {
-        return Container(
-          height: size.height / 2,
-          child: ListView.separated(
-              controller: scrollController,
-              padding: EdgeInsets.only(bottom: 50),
-              separatorBuilder: (context, index) =>
-                  Divider(height: .05, color: Colors.transparent,),
-              shrinkWrap: true,
-              itemCount: saleCycleController.get_SalesCycleProductById_List
-                  .value.length,
-              itemBuilder: (BuildContext context, int index) {
-                return bindSaleCycleProductListView(context, index);
-              }),
-        );
-      },
+      return Obx(
+        () {
+          return Container(
+            height: size.height / 2,
+            child: ListView.separated(
+                controller: scrollController,
+                padding: EdgeInsets.only(bottom: 50),
+                separatorBuilder: (context, index) => Divider(
+                      height: .05,
+                      color: Colors.transparent,
+                    ),
+                shrinkWrap: true,
+                itemCount: saleCycleController
+                    .get_SalesCycleProductById_List.value.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return bindSaleCycleProductListView(context, index);
+                }),
+          );
+        },
       );
-    }
-    else {
+    } else {
       return Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 18.0),
@@ -4602,8 +4924,8 @@ class QuoteInformationScreen extends StatelessWidget{
             ),
             Text(
               saleCycleController
-                  .get_SalesCycleProductById_List[index]
-                  .itemCode ?? "",
+                      .get_SalesCycleProductById_List[index].itemCode ??
+                  "",
               style: GoogleFonts.poppins(
                 color: AllColors.textColor,
                 fontSize: AllFontSize.fourtine,
@@ -4615,7 +4937,6 @@ class QuoteInformationScreen extends StatelessWidget{
         subtitle: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4627,17 +4948,17 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Container(
                   width: size.width * .4,
                   child: Tooltip(
                     message: saleCycleController
-                        .get_SalesCycleProductById_List[index]
-                        .itemDescription ?? "",
+                            .get_SalesCycleProductById_List[index]
+                            .itemDescription ??
+                        "",
                     child: Text(
-                      saleCycleController
-                          .get_SalesCycleProductById_List[index]
-                          .itemDescription ?? "",
+                      saleCycleController.get_SalesCycleProductById_List[index]
+                              .itemDescription ??
+                          "",
                       style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.twelve,
@@ -4661,11 +4982,10 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Text(
                   saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .categoryName.toString(),
+                      .get_SalesCycleProductById_List[index].categoryName
+                      .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4685,11 +5005,9 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Text(
-                  saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .qty.toString(),
+                  saleCycleController.get_SalesCycleProductById_List[index].qty
+                      .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4734,11 +5052,10 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Text(
                   saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .mrpPrice.toString(),
+                      .get_SalesCycleProductById_List[index].mrpPrice
+                      .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4747,7 +5064,6 @@ class QuoteInformationScreen extends StatelessWidget{
                 ),
               ],
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4759,11 +5075,10 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Text(
                   saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .totalPrice.toString(),
+                      .get_SalesCycleProductById_List[index].totalPrice
+                      .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4783,11 +5098,10 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Text(
                   saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .lineStatus ?? "",
+                          .get_SalesCycleProductById_List[index].lineStatus ??
+                      "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4796,8 +5110,6 @@ class QuoteInformationScreen extends StatelessWidget{
                 ),
               ],
             ),
-
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4809,11 +5121,10 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Text(
                   saleCycleController
-                      .get_SalesCycleProductById_List[index]
-                      .createdBy.toString(),
+                      .get_SalesCycleProductById_List[index].createdBy
+                      .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -4833,7 +5144,6 @@ class QuoteInformationScreen extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-
                 Text(
                   dateCreatedOn.toString(),
                   style: GoogleFonts.poppins(
@@ -4844,7 +5154,6 @@ class QuoteInformationScreen extends StatelessWidget{
                 ),
               ],
             ),
-
             Column(
               children: [
                 Row(
@@ -4858,17 +5167,18 @@ class QuoteInformationScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-
                     Container(
                       width: size.width * 0.5,
                       child: Tooltip(
                         message: saleCycleController
-                            .get_SalesCycleProductById_List[index]
-                            .competitorName ?? "",
+                                .get_SalesCycleProductById_List[index]
+                                .competitorName ??
+                            "",
                         child: Text(
                           saleCycleController
-                              .get_SalesCycleProductById_List[index]
-                              .competitorName ?? "",
+                                  .get_SalesCycleProductById_List[index]
+                                  .competitorName ??
+                              "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.twelve,
@@ -4892,13 +5202,15 @@ class QuoteInformationScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-
                     Text(
-                      saleCycleController
-                          .get_SalesCycleProductById_List[index]
-                          .competitorPrice == null ? "" : saleCycleController
-                          .get_SalesCycleProductById_List[index]
-                          .competitorPrice.toString(),
+                      saleCycleController.get_SalesCycleProductById_List[index]
+                                  .competitorPrice ==
+                              null
+                          ? ""
+                          : saleCycleController
+                              .get_SalesCycleProductById_List[index]
+                              .competitorPrice
+                              .toString(),
                       style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.twelve,
@@ -4922,12 +5234,14 @@ class QuoteInformationScreen extends StatelessWidget{
                       width: size.width * 0.5,
                       child: Tooltip(
                         message: saleCycleController
-                            .get_SalesCycleProductById_List[index]
-                            .lossReason ?? "",
+                                .get_SalesCycleProductById_List[index]
+                                .lossReason ??
+                            "",
                         child: Text(
                           saleCycleController
-                              .get_SalesCycleProductById_List[index]
-                              .lossReason ?? "",
+                                  .get_SalesCycleProductById_List[index]
+                                  .lossReason ??
+                              "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.twelve,
@@ -4951,16 +5265,16 @@ class QuoteInformationScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-
                     Container(
                       width: size.width * 0.5,
                       child: Tooltip(
                         message: saleCycleController
-                            .get_SalesCycleProductById_List[index].lossOn ??
+                                .get_SalesCycleProductById_List[index].lossOn ??
                             "",
                         child: Text(
                           saleCycleController
-                              .get_SalesCycleProductById_List[index].lossOn ??
+                                  .get_SalesCycleProductById_List[index]
+                                  .lossOn ??
                               "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -4985,16 +5299,16 @@ class QuoteInformationScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-
                     Container(
                       width: size.width * 0.5,
                       child: Tooltip(
                         message: saleCycleController
-                            .get_SalesCycleProductById_List[index].lossBy ??
+                                .get_SalesCycleProductById_List[index].lossBy ??
                             "",
                         child: Text(
                           saleCycleController
-                              .get_SalesCycleProductById_List[index].lossBy ??
+                                  .get_SalesCycleProductById_List[index]
+                                  .lossBy ??
                               "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -5010,46 +5324,53 @@ class QuoteInformationScreen extends StatelessWidget{
                 ),
               ],
             )
-
           ],
         ),
-
       ),
     );
-
-
-
-}
+  }
 
   void showDialogForGmBmDiscount(BuildContext context, int index) {
-    showDialog(context: context, builder: (BuildContext context, ){
-      return Container(
-        child: AlertDialog(
-          title: Text("Quote Item Update",   style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
-            fontWeight: FontWeight.w700,
-          ),),
-          content: Container(
-              child: SingleChildScrollView(
+    showDialog(
+        context: context,
+        builder: (
+          BuildContext context,
+        ) {
+          return Container(
+            child: AlertDialog(
+              title: Text(
+                "Quote Item Update",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Container(
+                  child: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(height: 5),
                     bindApprovedDiscountPer(context),
                     SizedBox(height: 10),
-                    Obx((){
+                    Obx(() {
                       return Visibility(
                           visible: saleCycleController.showGeneralManager.value,
-                          child:bindGmDiscountPer(context) );
+                          child: bindGmDiscountPer(context));
                     }),
-                    SizedBox(height: 10,),
-                    Obx((){
-                      return  Visibility(
-                        visible: saleCycleController.showBranchHead.value || saleCycleController.showGeneralManager.value,
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Obx(() {
+                      return Visibility(
+                          visible: saleCycleController.showBranchHead.value ||
+                              saleCycleController.showGeneralManager.value,
                           child: bindSalesCreditPer(context));
                     }),
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -5059,10 +5380,11 @@ class QuoteInformationScreen extends StatelessWidget{
                               AllColors.redColor,
                             ),
                           ),
-                          onPressed: ()  {
+                          onPressed: () {
                             Get.back();
                           },
-                          child: Text('Cancel',
+                          child: Text(
+                            'Cancel',
                             style: GoogleFonts.poppins(
                               color: AllColors.whiteColor,
                               fontSize: AllFontSize.fourtine,
@@ -5076,12 +5398,16 @@ class QuoteInformationScreen extends StatelessWidget{
                               AllColors.primaryDark1,
                             ),
                           ),
-                          onPressed: ()  {
-                            saleCycleController.index.value=index;
-                            saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[index].itemCode!, "BmGMUpdate");
+                          onPressed: () {
+                            saleCycleController.index.value = index;
+                            saleCycleController.quoteLineCreateFunction(
+                                saleCycleController
+                                    .quoteLinedata[index].itemCode!,
+                                "BmGMUpdate");
                             Get.back();
                           },
-                          child: Text('Update',
+                          child: Text(
+                            'Update',
                             style: GoogleFonts.poppins(
                               color: AllColors.whiteColor,
                               fontSize: AllFontSize.fourtine,
@@ -5091,20 +5417,19 @@ class QuoteInformationScreen extends StatelessWidget{
                         )
                       ],
                     ),
-
-                    SizedBox(height: 10,),
-
+                    SizedBox(
+                      height: 10,
+                    ),
                   ],
                 ),
-              )
-          ),
-        ),
-      );
-    });
+              )),
+            ),
+          );
+        });
   }
 
   bindApprovedDiscountPer(BuildContext context) {
-    return  TextField(
+    return TextField(
       cursorColor: AllColors.primaryDark1,
       controller: saleCycleController.updateDiscountAmountController.value,
       decoration: InputDecoration(
@@ -5125,13 +5450,12 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
   bindGmDiscountPer(BuildContext context) {
-     return  TextField(
+    return TextField(
       cursorColor: AllColors.primaryDark1,
       controller: saleCycleController.gmDiscountPerContoller.value,
       decoration: InputDecoration(
@@ -5152,14 +5476,12 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
 
-
   bindSalesCreditPer(BuildContext context) {
-    return  TextField(
+    return TextField(
       cursorColor: AllColors.primaryDark1,
       controller: saleCycleController.salesCreditPerContoller.value,
       decoration: InputDecoration(
@@ -5180,14 +5502,7 @@ class QuoteInformationScreen extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
+          )),
     );
   }
-
 }
-
-
-
-
-

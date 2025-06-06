@@ -162,6 +162,15 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
         },
+        onChanged: (value) {
+          final parts = value.split('.');
+          if (parts.length == 2 && parts[1].length > 2) {
+            String trimmed = '${parts[0]}.${parts[1].substring(0, 2)}';
+            saleCycleController.updateManualPriceController.value.text = trimmed;
+            saleCycleController.updateManualPriceController.value.selection =
+                TextSelection.fromPosition(TextPosition(offset: trimmed.length));
+          }
+        },
         cursorColor:AllColors.primaryDark1 ,
         controller: saleCycleController.updateManualPriceController.value,
         keyboardType: TextInputType.number,
