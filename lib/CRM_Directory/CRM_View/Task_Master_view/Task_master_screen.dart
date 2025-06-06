@@ -1752,7 +1752,7 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
-                              filterWithTaskCreationOn(context),
+                              bindCreatedOn(context),
                               SizedBox(height: 10,),
 
                               filterAccountOwner(),
@@ -3407,6 +3407,69 @@ class TaskMasterScreen extends StatelessWidget {
             ],
           ),
         );
+      },
+    );
+  }
+
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+          start: DateTime.now(),
+          end: DateTime.now().add(Duration(days: 7)),
+        ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          TaskMaster_page_controller.createdOnStartToEnd.value="$startDate@$endDate";
+          TaskMaster_page_controller.filterTaskCreationOnController.value.text = '$startDate - $endDate';
+        } else {
+          TaskMaster_page_controller.filterTaskCreationOnController.value.text = '';
+          TaskMaster_page_controller.createdOnStartToEnd.value="";
+        }
       },
     );
   }

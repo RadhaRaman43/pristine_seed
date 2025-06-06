@@ -56,6 +56,7 @@ class Taskmastervm extends GetxController{
     RxBool isInfraLeadValueSubmit=false.obs;
     RxString date_filter="Today".obs;
     RxString filter="Running".obs;
+    RxString createdOnStartToEnd="".obs;
     RxInt is_done = 0.obs;
 
     int Active = 0;
@@ -244,7 +245,7 @@ class Taskmastervm extends GetxController{
                 "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
                 "filter_created_by": email,
                 "filter_approved_by": "",
-                "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
+                "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
                 "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
                 "filter_is_closed_completed": is_done,
@@ -1432,6 +1433,7 @@ class Taskmastervm extends GetxController{
        Task_status_controller.clear();
        filterTaskDuedateController.value.clear();
        filterTaskCreationOnController.value.clear();
+       createdOnStartToEnd.value = "";
   }
 
 }
