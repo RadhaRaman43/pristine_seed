@@ -62,6 +62,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           //saleCycleController.contactNameController.value.clear();
           saleCycleController.ApprovalStatusController.value.clear();*/
           saleCycleController.pageNumber = 0;
+          saleCycleController.filterQuoteAcceptedFlag.value="Open";
           saleCycleController.getsalesCycleData(
               saleCycleController.pageNumber, "", "", 'Sales');
           Get.toNamed(RoutesName.salesCycleScreen);
@@ -90,9 +91,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         }
 
         else {
-          saleCycleController.accountNameController.value.clear();
-          saleCycleController.contactNameController.value.clear();
-          saleCycleController.ApprovalStatusController.value.clear();
+          saleCycleController.clearAllFieldOfFilter();
+          saleCycleController.filterQuoteAcceptedFlag.value="Open";
           //saleCycleController.getsalesCycleData(0, "", "",'');
           Get.toNamed(RoutesName.salesCycleScreen);
         }
@@ -136,6 +136,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     visible: saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase()=='rejected',
                     child: GestureDetector(
                       onTap: (){
+                          saleCycleController.reOpenRemarksController.value.text="";
                            reOpenSalesCycle(context, saleCycleController.saleCycleList[0]);
                       },
                       child: Container(
@@ -1047,122 +1048,128 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
                 ),
               ),
-              Visibility(
-                  visible: (saleCycleController.saleCycleList[0].createdBy
-                      ?.toLowerCase() == saleCycleController.email.toLowerCase() && (saleCycleController
-                      .saleCycleList[0].salesCycleStatus!
-                      .toLowerCase() == "prospect")) &&
-                      saleCycleController.saleCycleList[0].quoteAccepted
-                          ?.toUpperCase() != "LOSS" && !(saleCycleController.FromPage.value=="FromDashboard")? true : false,
-                  child: Stack(
-                    children: [
-                      Obx(() {
-                        return Visibility(
-                          // visible: saleCycleController.saleCycleList[0].createdBy==saleCycleController.email,
-                          visible: ((saleCycleController.saleCycleList[0]
-                              .salesCycleApprovalStatus?.toLowerCase() ==
-                              "pending")
-                              && (saleCycleController.saleCycleList[0]
-                                  .isReadySendForApproval == 1)
-                              && (saleCycleController.ischangeNeedIdentity
-                                  .value && saleCycleController
-                                  .ischangesolutionAccepted.value)) &&
-                              saleCycleController.filter.value ==
-                                  'Solution Accepted' ? true : false,
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<
-                                    Color>(
-                                  AllColors.primaryDark1,
+              Obx((){
+                return   Visibility(
+                    visible: (saleCycleController.saleCycleList[0].createdBy
+                        ?.toLowerCase() == saleCycleController.email.toLowerCase() && (saleCycleController
+                        .saleCycleList[0].salesCycleStatus!
+                        .toLowerCase() == "prospect")) &&
+                        saleCycleController.saleCycleList[0].quoteAccepted
+                            ?.toUpperCase() != "LOSS" && !(saleCycleController.FromPage.value=="FromDashboard")? true : false,
+                    child: Stack(
+                      children: [
+                        Obx(() {
+                          return Visibility(
+                            visible: ((saleCycleController.saleCycleList[0]
+                                .actualSalesCycleApprovalStatus?.toLowerCase() ==
+                                "pending")
+                                && (saleCycleController.saleCycleList[0]
+                                    .isReadySendForApproval == 1)
+                                && (saleCycleController.ischangeNeedIdentity
+                                    .value && saleCycleController
+                                    .ischangesolutionAccepted.value)) &&
+                                saleCycleController.filter.value ==
+                                    'Solution Accepted' ? true : false,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<
+                                      Color>(
+                                    AllColors.primaryDark1,
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {
-                                saleCycleController.solutionRejectedRemarkController.value.text="";
-                                saleCycleController.getSalesCycleMstUpdateProposedSolution(saleCycleController.saleCycleList[0]
-                                     ,"Approved");
-                               /* saleCycleController.salesCycleMstUpdateApiHit(
+                                onPressed: () {
+                                  saleCycleController.purchaseProcessController.value.text="";
+                                  saleCycleController.solutionRejectedRemarkController.value.text="";
+                                  saleCycleController.getSalesCycleMstUpdateProposedSolution(saleCycleController.saleCycleList[0]
+                                      ,"Approved");
+                                  /* saleCycleController.salesCycleMstUpdateApiHit(
                                     saleCycleController.saleCycleList[0],
                                     saleCycleController
                                         .proposedSolutionController.value.text,
                                     "", "", "", "Approved");*/
-                              },
-                              child: Container(
-                                width: size.width,
-                                child: Center(
-                                  child: Text('Next',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.whiteColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
+                                },
+                                child: Container(
+                                  width: size.width,
+                                  child: Center(
+                                    child: Text('Next',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.whiteColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }
-                      ),
-                      Obx(() {
-                        return Visibility(
-                          visible: /*(saleCycleController.saleCycleList[0]
+                          );
+                        }
+                        ),
+                        Obx(() {
+                          return Visibility(
+                            visible: /*(saleCycleController.saleCycleList[0]
                               .salesCycleStatus?.toLowerCase() == "prospect") &&*/
-                              (saleCycleController.ischangeNeedIdentity
-                                  .isFalse ||
-                                  saleCycleController.ischangesolutionAccepted
-                                      .isFalse) &&
-                              (saleCycleController.saleCycleList[0]
-                                  .actualSalesCycleApprovalStatus
-                                  ?.toLowerCase() != "rejected")
-                              && saleCycleController.filter.value ==
-                                  'Solution Accepted'
-                              ? true : false,
-                          /* visible:saleCycleController.saleCycleList[0].salesCycleStatus=="Prospect" &&
+                            (saleCycleController.ischangeNeedIdentity
+                                .isFalse ||
+                                saleCycleController.ischangesolutionAccepted
+                                    .isFalse) &&
+                                (saleCycleController.saleCycleList[0]
+                                    .actualSalesCycleApprovalStatus
+                                    ?.toLowerCase() != "rejected")
+                                && saleCycleController.filter.value ==
+                                'Solution Accepted'
+                                ? true : false,
+                            /* visible:saleCycleController.saleCycleList[0].salesCycleStatus=="Prospect" &&
                  saleCycleController.ischangeNeedIdentity.value && saleCycleController.ischangesolutionAccepted.value?false:true,*/
-                          child: Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<
-                                    Color>(
-                                  AllColors.redColor,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all<
+                                      Color>(
+                                    AllColors.redColor,
+                                  ),
                                 ),
-                              ),
-                              onPressed: () {
-                                /*saleCycleController.salesCycleMstUpdateApiHit(
+                                onPressed: () {
+                                  /*saleCycleController.salesCycleMstUpdateApiHit(
                                     saleCycleController.saleCycleList[0],
                                     "", "", "", "", "Rejected");*/
-                                saleCycleController.getSalesCycleMstUpdateProposedSolution( saleCycleController.saleCycleList[0]
-                                    , "Rejected" );
-                              },
-                              child: Container(
-                                width: size.width,
-                                child: Center(
-                                  child: Text('Reject',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
+                                  saleCycleController.getSalesCycleMstUpdateProposedSolution( saleCycleController.saleCycleList[0]
+                                      , "Rejected" );
+                                },
+                                child: Container(
+                                  width: size.width,
+                                  child: Center(
+                                    child: Text('Reject',
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }
-                      ),
-                    ],
-                  )),
+                          );
+                        }
+                        ),
+                      ],
+                    ));
+              }),
+
 
 
               Wrap(
                 children: [
                   Obx(() {
                     return Visibility(
-                      visible: (saleCycleController.saleCycleList[0]
+                      visible: (
+                          saleCycleController.saleCycleList[0]
+                              .actualSalesCycleApprovalStatus?.toUpperCase() != "rejected" &&
+                          saleCycleController.saleCycleList[0]
                           .quoteAccepted?.toUpperCase() != "LOSS" &&
                           saleCycleController.saleCycleList[0]
                               .salesCycleStatus!.toUpperCase() == "SUSPECT" &&

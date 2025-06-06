@@ -378,6 +378,7 @@ class _Drawer extends State<CustomDrawer> {
                                               //Get.offAllNamed(RoutesName.salesCycleScreen,);
                                               accountMaster_page_controller.FromPage.value = '';
                                               contact_vm_controller.FromPage.value ='';
+                                              saleCycleController.filterQuoteAcceptedFlag.value="Open";
                                               /*saleCycleController.accountNameController.value.clear();
                                               saleCycleController.contactNameController.value.clear();
                                               saleCycleController.ApprovalStatusController.value.clear();*/

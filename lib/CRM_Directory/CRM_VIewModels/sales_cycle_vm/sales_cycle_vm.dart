@@ -536,6 +536,7 @@ class SalesCycleVm extends GetxController{
               }
               filterQuoteAcceptedFlag.value="";
                pageNumber = 0;
+               clearAllFieldOfFilter();
                getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
                Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               loading.value = false;
@@ -564,9 +565,6 @@ class SalesCycleVm extends GetxController{
 
   salesCycleMstApprovereject(SalesCycleModal saleCycleList, String reason, String saleCycleapprovalStatus){
     print(saleCycleapprovalStatus);
-    print("Reason Of reject..${reason}");
-
-    print("est date ${closureDateController.value.text}");
     loading.value = true;
     Map data={
       "sales_cycle_id": saleCycleList.salesCycleId,
@@ -585,9 +583,9 @@ class SalesCycleVm extends GetxController{
             Utils.showToastification("Message !", response[0].message.toString());
             filterQuoteAcceptedFlag.value="";
             pageNumber=0;
+            clearAllFieldOfFilter();
             getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
             isApprovalVisible.value=false;
-            Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             loading.value = false;
           }else {
             print("message ${response[0].message.toString()}");
@@ -910,9 +908,10 @@ class SalesCycleVm extends GetxController{
           Utils.showToastification("Success!", response[0].message.toString());
           getItemCategoryMstApi(SalesId,TaskID);
           filterQuoteAcceptedFlag.value="";
+          clearAllFieldOfFilter();
           pageNumber = 0;
           getsalesCycleData(pageNumber, SalesId, "ViewHeader", 'Sales');
-          Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+          //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
 
         } else {
           loading.value = false;
@@ -3468,7 +3467,9 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition!.toLowerCase()=="true"){
             Utils.showToastification("Message !", response[0].message.toString());
             filterQuoteAcceptedFlag.value="";
-            getsalesCycleData(0, saleCycleList.salesCycleId.toString(), "", FromPage.value);
+            clearAllFieldOfFilter();
+            pageNumber=0;
+            getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "", FromPage.value);
             loading.value = false;
           }else {
             print("message ${response[0].message.toString()}");
@@ -3512,6 +3513,7 @@ class SalesCycleVm extends GetxController{
             Utils.showToastification("Message !", response[0].message.toString());
             pageNumber=0;
             filterQuoteAcceptedFlag.value = 'Loss';
+            clearAllFieldOfFilter();
             getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
             loading.value = false;
           }else {
@@ -3635,6 +3637,7 @@ class SalesCycleVm extends GetxController{
             Utils.showToastification("Success !", response[0].message.toString());
             loading.value = false;
             pageNumber = 0;
+            clearAllFieldOfFilter();
             getsalesCycleData(pageNumber, salesId, "ViewHeader", 'Sales');
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
           }else {
@@ -3778,6 +3781,7 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
             filterQuoteAcceptedFlag.value="";
+            clearAllFieldOfFilter();
             pageNumber = 0;
             getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
             //salesCycleMstApprovereject(saleCycleList,solutionRejectedRemarkController.value.text,approRejeStatus);
@@ -3902,6 +3906,7 @@ class SalesCycleVm extends GetxController{
             Utils.showToastification("Message !", response[0].message.toString());
             filterQuoteAcceptedFlag.value="";
             pageNumber = 0;
+            clearAllFieldOfFilter();
             getsalesCycleData(pageNumber, salesCycleId, "ViewHeader", 'Sales');
             loading.value = false;
           }else {
