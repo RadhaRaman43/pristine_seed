@@ -253,6 +253,7 @@ class SalesCycleScreen extends StatelessWidget{
 
   Widget BindCustomerRequestListView(context, int position) {
     var createdOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].createdOn??"");
+    var approvedOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].approvedOn??"");
     String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
       switch (status) {
@@ -369,7 +370,7 @@ class SalesCycleScreen extends StatelessWidget{
                 value: salesCycleController.saleCycleList[position].proposedSolution,
               ),*/
               _buildLabelWithValue(
-                label: "Post Code : ",
+                label: "Pin Code : ",
                 value: salesCycleController.saleCycleList[position].postCode,
               ),
 
@@ -418,7 +419,7 @@ class SalesCycleScreen extends StatelessWidget{
               ),
               _buildLabelWithValue(
                 label: "Approved On: ",
-                value: salesCycleController.saleCycleList[position].approvedOn,
+                value: approvedOn,
                 width: size.width * 0.4,
               ),
 
@@ -1757,8 +1758,8 @@ class SalesCycleScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Postal Code',
-          hintText: 'Postal Code',
+          labelText: 'Pin Code',
+          hintText: 'Pin Code',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

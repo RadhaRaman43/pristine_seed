@@ -1987,8 +1987,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Postal Code',
-          hintText: 'Postal Code',
+          labelText: 'Pin Code',
+          hintText: 'Pin Code',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

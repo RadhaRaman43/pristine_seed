@@ -158,6 +158,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
+           // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
             saleCycleController.getQuoteHeaderInformation(quoteApprovalController.quoteApprovalList[position].quoteId, "quoteApprovalScreen");
           },
           subtitle: Column(

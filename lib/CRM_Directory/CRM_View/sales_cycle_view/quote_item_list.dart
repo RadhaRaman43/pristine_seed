@@ -492,8 +492,8 @@ class QuoteItemList extends StatelessWidget{
             Obx((){
               return Checkbox(
                 value: saleCycleController.itemMstGetByQuoteIdList[index].isSelected==1?true:false,
-                onChanged: (bool? value) {
-                  saleCycleController.toggleCheckbox(index);
+                onChanged: (bool? value)  {
+                   saleCycleController.toggleCheckbox(index);
                 },
               );
             }),
@@ -519,8 +519,8 @@ class QuoteItemList extends StatelessWidget{
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Container(
-                          width: size.width*.2,
+                        Flexible(
+                          //width: size.width*.2,
                           child: Tooltip(
                             message: saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -544,15 +544,15 @@ class QuoteItemList extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "Category Name : ",
+                          "Category  : ",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twelve,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        Container(
-                          width: size.width*.15,
+                        Flexible(
+                          //width: size.width*.15,
                           child: Tooltip(
                             message: saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -687,8 +687,8 @@ class QuoteItemList extends StatelessWidget{
                           ),
                         ),
 
-                        Container(
-                          width: size.width*.12,
+                        Flexible(
+                          //width: size.width*.12,
                           child: Tooltip(
                             message: saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -736,9 +736,9 @@ class QuoteItemList extends StatelessWidget{
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: size.width*.17,
+
+                        Flexible(
+                          //width: size.width*.17,
                           child: Tooltip(
                             message:  saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -764,7 +764,6 @@ class QuoteItemList extends StatelessWidget{
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-
                       children: [
                         Text(
                           "MRP: ",
@@ -774,9 +773,9 @@ class QuoteItemList extends StatelessWidget{
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: size.width*.2,
+
+                        Flexible(
+
                           child: Tooltip(
                             message:  saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -903,16 +902,16 @@ class QuoteItemList extends StatelessWidget{
 
                       children: [
                         Text(
-                          "List Selling Price:",
+                          "LSP:",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twelve,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 5),
-                        Container(
-                          width: size.width*.1,
+
+                        Flexible(
+
                           child: Tooltip(
                             message:saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -943,9 +942,8 @@ class QuoteItemList extends StatelessWidget{
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: size.width*.2,
+
+                        Flexible(
                           child: Tooltip(
                             message: saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -977,9 +975,8 @@ class QuoteItemList extends StatelessWidget{
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: size.width*.2,
+
+                        Flexible(
                           child: Tooltip(
                             message: saleCycleController
                                 .itemMstGetByQuoteIdList[index]
@@ -1010,9 +1007,8 @@ class QuoteItemList extends StatelessWidget{
                             fontWeight: FontWeight.w500,
                           ),
                         ),
-                        SizedBox(width: 10),
-                        Container(
-                          width: size.width*.06,
+
+                        Flexible(
                           child: Tooltip(
                             message: saleCycleController
                                 .itemMstGetByQuoteIdList[index]

@@ -2186,7 +2186,7 @@ class AddNewAccountMaster extends StatelessWidget{
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w300),
         ),
-        initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        initialSelection:accountMaster_page_controller.get_Gst_Registration_list.length>0?accountMaster_page_controller.get_Gst_Registration_list[1]:null,
         inputDecorationTheme: const InputDecorationTheme(
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
@@ -2764,8 +2764,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code*',
-              labelText: 'Post Code*',
+              hintText: 'Pin Code*',
+              labelText: 'Pin Code*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2898,8 +2898,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code',
-              labelText: 'Post Code',
+              hintText: 'Pin Code',
+              labelText: 'Pin Code',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

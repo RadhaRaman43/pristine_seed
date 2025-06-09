@@ -32,6 +32,7 @@ class QuoteInformationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        print("Satus ${saleCycleController.quoteApprovalPage.value}");
         if (saleCycleController.quoteApprovalPage.value ==
             "quoteApprovalScreen") {
           quoteApprovalController.getQuoteHeaderData(0);
@@ -112,7 +113,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             ],
                           ),
                           onTap: () {
-                            saleCycleController.reportDownload("quoteReport");
+                            showDialoGWithWithoudQuoteReport(context);
+                            //saleCycleController.reportDownload("quoteReport");
                           },
                         ),
                         if (saleCycleController.quoteHeaderdata[0]
@@ -168,11 +170,15 @@ class QuoteInformationScreen extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.only(right: 0.0),
                             child: Visibility(
-                              visible: (saleCycleController.FromPage ==
+                              visible:saleCycleController
+                                  .quoteHeaderdata[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()
+                              && saleCycleController
+                                      .quoteHeaderdata[0].isReadyForApprove==1
+                              /*visible: (saleCycleController.FromPage ==
                                           "QuoteApprovalPage" ||
                                       saleCycleController
                                               .quoteApprovalPage.value ==
-                                          "quoteApprovalScreen")
+                                          "quoteApprovalScreen")*/
                                   ? true
                                   : false,
                               child: Row(
@@ -949,38 +955,35 @@ class QuoteInformationScreen extends StatelessWidget {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
+              Row(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Item Name: ",
+                  Text(
+                    "Item Name: ",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  Container(
+                    width: size.width * .5,
+                    child: Tooltip(
+                      message:
+                          "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
+                      child: Text(
+                        "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
+                        overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
+                          color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      Container(
-                        width: size.width * .4,
-                        child: Tooltip(
-                          message:
-                              "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
-                          child: Text(
-                            "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
+              Spacer(),
               Obx(() {
                 return Visibility(
                   visible: saleCycleController.showBranchHead.value ||
@@ -1072,15 +1075,15 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "Cate. Name: ",
+                              "Category: ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Container(
-                              width: size.width * .16,
+                            Flexible(
+                             // width: size.width * .16,
                               child: Tooltip(
                                 message: saleCycleController
                                         .quoteLinedata[index].categoryName ??
@@ -1948,7 +1951,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               "draft" &&
                           saleCycleController.quoteHeaderdata[0].quoteAccepted
                                   ?.toLowerCase() ==
-                              "open"
+                              "open" && saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
                       ? true
                       : false,
                   child: Row(
@@ -5504,5 +5507,76 @@ class QuoteInformationScreen extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(10)),
           )),
     );
+  }
+  void showDialoGWithWithoudQuoteReport(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (
+            BuildContext context,
+            ) {
+          return Container(
+            child: AlertDialog(
+              title: Text(
+                "Download Report",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.eighteen,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: 5),
+                        GestureDetector(
+                          onTap: (){
+                            saleCycleController.reportwithDownload();
+                            Get.back();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.download_for_offline_outlined, color: AllColors.blackColor,),
+                              SizedBox(width: 10),
+                              Text(
+                                "Download With Discount",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 10),
+
+                        GestureDetector(
+                          onTap: (){
+                            saleCycleController.reportDownload("quoteReport");
+                            Get.back();
+                          },
+                          child: Row(
+                            children: [
+                              Icon(Icons.download_for_offline_outlined,color: AllColors.blackColor,),
+                              SizedBox(width: 10),
+                              Text(
+                                "Download Without Discount",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.textColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          );
+        });
   }
 }

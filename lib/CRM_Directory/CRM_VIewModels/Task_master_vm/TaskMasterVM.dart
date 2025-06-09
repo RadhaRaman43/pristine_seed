@@ -175,7 +175,7 @@ class Taskmastervm extends GetxController{
         CallStatusMasterApiHit('Call');
         MethodOfCallMasterApiHit();
         CallDSARsMasterApiHit();
-        TaskStatusListTypeList.value = ['All', 'Pending','Pending For Approval', 'Approved', 'Rejected'];
+        TaskStatusListTypeList.value = ['All','Pending For Approval', 'Approved', 'Rejected'];
         SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
         approveRejectList.value = ['Approve', 'Reject'];
         Item_Category_Selected_list.value = [];
