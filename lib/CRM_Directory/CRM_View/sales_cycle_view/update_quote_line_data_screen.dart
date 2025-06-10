@@ -73,7 +73,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         body: SingleChildScrollView(
           child: Column(
             children: [
-
+              SizedBox(height: 10,),
               updateItemDescriptionLine(context),
               SizedBox(height: 10,),
               updateItemDescription2Line(context),
@@ -176,8 +176,8 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            hintText: 'Manual Price',
-            labelText: 'Manual Price',
+            hintText: 'Price Per Unit',
+            labelText: 'Price Per Unit',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,

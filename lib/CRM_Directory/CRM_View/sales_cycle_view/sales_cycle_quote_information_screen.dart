@@ -1127,7 +1127,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "Manual Price : ",
+                              "Price Per Unit : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1768,21 +1768,29 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "Amount : ",
+                              "App. Amt. per Unit : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              saleCycleController
-                                  .quoteLinedata[index].totalPrice
-                                  .toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
+                            Flexible(
+                              child: Tooltip(
+                                 message:  saleCycleController
+                                      .quoteLinedata[index].totalPrice
+                                      .toString(),
+                                child: Text(
+                                  saleCycleController
+                                      .quoteLinedata[index].totalPrice
+                                      .toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],
@@ -1811,7 +1819,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "GST Amount:",
+                              "GST Amt.:",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -2853,7 +2861,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Remarks",
+                        "FrontLiner Remarks",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,

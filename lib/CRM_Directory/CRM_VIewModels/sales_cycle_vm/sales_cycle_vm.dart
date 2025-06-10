@@ -225,11 +225,13 @@ class SalesCycleVm extends GetxController{
  //todo new filter on sales cycle screen
   var createdOnCnontroller=TextEditingController().obs;
   RxString createdOnStartToEnd="".obs;
+  RxString extClosureStartToEnd="".obs;
+  RxString quoteValidityStartToEnd="".obs;
   var isCommitController=TextEditingController().obs;
   var branch_head_value_controller=TextEditingController().obs;
-  var zone_head_value_controller=TextEditingController().obs;
+  //var zone_head_value_controller=TextEditingController().obs;
   var cluster_head_value_controller=TextEditingController().obs;
-  var frontliner_controller=TextEditingController().obs;
+  //var frontliner_controller=TextEditingController().obs;
   var createdByController=TextEditingController().obs;
   var district_controller=TextEditingController().obs;
   var postalCodeController=TextEditingController().obs;
@@ -304,11 +306,11 @@ class SalesCycleVm extends GetxController{
     if(item.isSelected==1)
     {
       SalesCycleLineCreateApiHit(itemMstGetBySalesIdList[index].itemCode!,
-          salesCycleId.value, 0,"Add");
+          salesCycleId.value, itemMstGetBySalesIdList[index].lineNo??0,"Add");
       itemMstGetBySalesIdList[index] = item;
     }
     else{
-      SalesCycleLineDeleteApiHit(itemMstGetBySalesIdList[index].lineNo!, salesCycleId.value);
+      SalesCycleLineDeleteApiHit(itemMstGetBySalesIdList[index].lineNo??0, salesCycleId.value);
       itemMstGetBySalesIdList[index] = item;
     }
     // itemMstGetByQuoteIdList[index] = item;
@@ -342,7 +344,7 @@ class SalesCycleVm extends GetxController{
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty?"":purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty?"":proposedSolutionController.value.text,
-        "filter_expected_closure_date": filterExpectedClosuredateController.value.text.isEmpty?"": filterExpectedClosuredateController.value.text,
+        "filter_expected_closure_date": extClosureStartToEnd.value.isEmpty?"": extClosureStartToEnd.value,
         "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All'?'':SaleCycleStatusController.value.text,
         "filter_sales_cycle_approval_status": ApprovalStatusController.value.text.isEmpty || ApprovalStatusController.value.text == 'All'?'':ApprovalStatusController.value.text,
         "filter_sales_cycle_quote_accepted": filterQuoteAcceptedFlag.value,
@@ -354,9 +356,9 @@ class SalesCycleVm extends GetxController{
         "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"": companyProfileTypeController.value.text,
         "filter_postal_code": postalCodeController.value.text.isEmpty?"": postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty?"": district_controller.value.text,
-        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_frontliner_value": "",
         "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
-        "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+        "filter_zone_head_value": "",
         "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": page_no
@@ -623,15 +625,15 @@ class SalesCycleVm extends GetxController{
         "filter_category_approval": category_Approval_controller.value.text.isEmpty?"": category_Approval_controller.value.text,
         "filter_gm_approval": gm_Approval_controller.value.text.isEmpty?"": gm_Approval_controller.value.text,
         "filter_quote_version": -1,
-        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty?filterQuoteValidityController.value.text:"",
-        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
+        "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty?quoteValidityStartToEnd.value:"",
+        "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty?extClosureStartToEnd.value:"",
         "filter_quote_status": filterQuoteStatusController.value.text.isNotEmpty? filterQuoteStatusController.value.text:status,
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_created_by": FromPage=="QuoteApprovalPage"?"":email,
         "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
-        "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+        "filter_frontliner_value": "",
         "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
-        "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+        "filter_zone_head_value": "",
         "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
@@ -1728,6 +1730,16 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition=="True"){
             Utils.showToastification("Message !", response[0].message.toString());
              pageNumber=0;
+             pageNumberForItem=0;
+             if(flag=="Add"){
+               String ProductCategory = saleCycleList[0].productCategoryCode??"";
+               String PipeProdCate = ProductCategory.replaceAll(', ', '|');
+               itemMstGetBySalesIdApiHit(
+                   pageNumberForItem,
+                   SalesId,
+                   PipeProdCate
+               );
+             }
             getSaleCycleProductByIdList(pageNumber,SalesId);
             loading.value = false;
 
@@ -2266,8 +2278,6 @@ class SalesCycleVm extends GetxController{
               ],
             ),
             content: Container(
-              /*height: size.height*.3,
-                width: size.width*4,*/
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -3043,143 +3053,146 @@ class SalesCycleVm extends GetxController{
 
 
   Widget bindUpdateSalesCycle(BuildContext context) {
-    return Autocomplete<String>(
-      displayStringForOption: _displayCustomerNeedIdentityStatusForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return quoteAcceptedList;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return quoteAcceptedList
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        updateQuoteAccetedCycleController.value.text =
-            _displayCustomerNeedIdentityStatusForOption(selection!).toString();
-      //  print('IsActive.....${saleCycleController.updateQuoteAccetedCycleController.value.text}');
-        if(updateQuoteAccetedCycleController.value.text=="WON"){
-         selectedQuotationIdController.value.clear();
-          filterQuoteAcceptedFlag.value = 'Won';
-          isChooseQuote.value = true;
-          isApprove.value=true;
-          isReject.value=false;
-        }
-        else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
-         competitorNameController.value.clear();
-          quoteRejectReasonController.value.clear();
-          filterQuoteAcceptedFlag.value = 'Loss';
-          isReject.value=true;
-          isApprove.value=false;
-          isChooseQuote.value = false;
-        }
-        else{
-          filterQuoteAcceptedFlag.value = 'Open';
-          isApprove.value=false;
-          isReject.value=false;
-          isChooseQuote.value = false;
-        }
-        FocusNode().unfocus();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          readOnly: saleCycleList[0].salesCycleStatus !="Propose"?true:false,
-          onTap: (){
-            updateQuoteAccetedCycleController.value.clear();
-          },
-          onChanged: (value){
-            if(updateQuoteAccetedCycleController.value.text=="WON"){
-              selectedQuotationIdController.value.clear();
-              isChooseQuote.value = true;
-              isApprove.value=true;
-              isReject.value=false;
-            }
-            else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
-              competitorNameController.value.clear();
-              quoteRejectReasonController.value.clear();
-              isReject.value=true;
-              isApprove.value=false;
-              isChooseQuote.value = false;
-            }
-            else{
-              isApprove.value=false;
-              isReject.value=false;
-              isChooseQuote.value = false;
-            }
-          },
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text =  updateQuoteAccetedCycleController.value.text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down_sharp),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Quote Accepted',
-              labelText: 'Quote Accepted',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.5,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+    return IgnorePointer(
+      ignoring: saleCycleList[0].salesCycleStatus?.toLowerCase()!="propose",
+      child: Autocomplete<String>(
+        displayStringForOption: _displayCustomerNeedIdentityStatusForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if (textEditingValue.text.isEmpty) {
+            return quoteAcceptedList;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return quoteAcceptedList
+              .where((String option) {
+            return option
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (String selection) {
+          print(selection);
+          updateQuoteAccetedCycleController.value.text =
+              _displayCustomerNeedIdentityStatusForOption(selection!).toString();
+        //  print('IsActive.....${saleCycleController.updateQuoteAccetedCycleController.value.text}');
+          if(updateQuoteAccetedCycleController.value.text=="WON"){
+           selectedQuotationIdController.value.clear();
+            filterQuoteAcceptedFlag.value = 'Won';
+            isChooseQuote.value = true;
+            isApprove.value=true;
+            isReject.value=false;
+          }
+          else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
+           competitorNameController.value.clear();
+            quoteRejectReasonController.value.clear();
+            filterQuoteAcceptedFlag.value = 'Loss';
+            isReject.value=true;
+            isApprove.value=false;
+            isChooseQuote.value = false;
+          }
+          else{
+            filterQuoteAcceptedFlag.value = 'Open';
+            isApprove.value=false;
+            isReject.value=false;
+            isChooseQuote.value = false;
+          }
+          FocusNode().unfocus();
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextField(
+            readOnly: saleCycleList[0].salesCycleStatus !="Propose"?true:false,
+            onTap: (){
+              updateQuoteAccetedCycleController.value.clear();
+            },
+            onChanged: (value){
+              if(updateQuoteAccetedCycleController.value.text=="WON"){
+                selectedQuotationIdController.value.clear();
+                isChooseQuote.value = true;
+                isApprove.value=true;
+                isReject.value=false;
+              }
+              else if(updateQuoteAccetedCycleController.value.text=="LOSS"){
+                competitorNameController.value.clear();
+                quoteRejectReasonController.value.clear();
+                isReject.value=true;
+                isApprove.value=false;
+                isChooseQuote.value = false;
+              }
+              else{
+                isApprove.value=false;
+                isReject.value=false;
+                isChooseQuote.value = false;
+              }
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text =  updateQuoteAccetedCycleController.value.text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+                suffixIcon:  saleCycleList[0].salesCycleStatus!.toLowerCase() =="propose"?Icon(Icons.arrow_drop_down_sharp):null,
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Quote Accepted',
+                labelText: 'Quote Accepted',
+                hintStyle: GoogleFonts.poppins(
+                    color: AllColors.lightblackColor,
+                    fontWeight: FontWeight.w300,
+                    fontSize: AllFontSize.ten),
+                labelStyle: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontWeight: FontWeight.w500,
+                    fontSize: AllFontSize.sisxteen),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                )
+            ),
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<String> onSelected,
+            Iterable<String> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.5,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final String option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child: Text(
+                          option,
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
 
   }
@@ -3863,12 +3876,13 @@ class SalesCycleVm extends GetxController{
     postalCodeController.value.clear();
     district_controller.value.clear();
     branch_head_value_controller.value.clear();
-    zone_head_value_controller.value.clear();
+    //zone_head_value_controller.value.clear();
     cluster_head_value_controller.value.clear();
     createdByController.value.clear();
     filterExpectedClosuredateController.value.clear();
     createdOnCnontroller.value.clear();
     createdOnStartToEnd.value="";
+    extClosureStartToEnd.value="";
 
   }
 
@@ -3889,11 +3903,13 @@ class SalesCycleVm extends GetxController{
     gm_Approval_controller.value.clear();
     productCategoryController.value.clear();
     createdOnCnontroller.value.clear();
-    frontliner_controller.value.clear();
+   // frontliner_controller.value.clear();
     branch_head_value_controller.value.clear();
-    zone_head_value_controller.value.clear();
+    //zone_head_value_controller.value.clear();
     cluster_head_value_controller.value.clear();
     createdOnStartToEnd.value="";
+    extClosureStartToEnd.value="";
+    quoteValidityStartToEnd.value="";
   }
 
   getSalesCycleMstRejectReopen(String salesCycleId,String remarks){
