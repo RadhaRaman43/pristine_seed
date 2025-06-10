@@ -500,7 +500,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                   ),
                 ],
               ),
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -522,7 +522,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                     ),
                   ),
                 ],
-              ),
+              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -715,21 +715,15 @@ class TaskApprovalListScreen extends StatelessWidget{
                                 height: 10,
                               ),
                               bindCompProfileTypeDropDown(),
+                              SizedBox(height: 10,),
+                              /*bindIsInfraLeadDropDown(context),
                               SizedBox(
                                 height: 10,
-                              ),
-                              bindIsInfraLeadDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              ),*/
                               bindLastActivityStatus(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindSaleCycleActiveDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindSaleCycleId(),
                               SizedBox(height: 10,),

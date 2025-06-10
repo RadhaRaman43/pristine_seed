@@ -1041,7 +1041,7 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -1063,7 +1063,7 @@ class TaskMasterScreen extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1734,10 +1734,10 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
-                              bindIsInfraLeadDropDown(context),
+                             /* bindIsInfraLeadDropDown(context),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindLastActivityStatus(),
                               SizedBox(
                                 height: 10,

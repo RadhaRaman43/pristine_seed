@@ -1240,41 +1240,44 @@ class UpdateAccountMaster extends StatelessWidget{
 
                SizedBox(height: 15,),
 
-               Obx(() => CheckboxListTile(
-                 controlAffinity: ListTileControlAffinity.leading,
-                 enabled: accountMaster_page_controller.view=='Account'?true:false,
-                 title: Text("Shipping address same as billing address",
-                     style: GoogleFonts.poppins(
-                       color: AllColors.primaryDark1,
-                       fontWeight: FontWeight.w400,
-                       fontSize: AllFontSize.twelve,
-                     )
+               Obx(() => Visibility(
+                 visible: accountMaster_page_controller.view=='Account'?true:false,
+                 child: CheckboxListTile(
+                   controlAffinity: ListTileControlAffinity.leading,
+                   enabled: accountMaster_page_controller.view=='Account'?true:false,
+                   title: Text("Shipping address same as billing address",
+                       style: GoogleFonts.poppins(
+                         color: AllColors.primaryDark1,
+                         fontWeight: FontWeight.w400,
+                         fontSize: AllFontSize.twelve,
+                       )
+                   ),
+                   value: accountMaster_page_controller.isChecked.value,
+                   onChanged: (bool? value) {
+                     accountMaster_page_controller.toggleCheckbox();
+                     if(value == true){
+                       accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
+                       accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
+                       accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
+                       accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
+                       accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
+                       accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
+                       accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
+                       accountMaster_page_controller.ShowState.value=false;
+                       accountMaster_page_controller.ShowState.value=true;
+                     }else{
+                       accountMaster_page_controller.Shipping_Address_controller.value.clear();
+                       accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_City_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_District_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                       accountMaster_page_controller.ShowState.value=false;
+                       accountMaster_page_controller.ShowState.value=true;
+                     }
+                   },
                  ),
-                 value: accountMaster_page_controller.isChecked.value,
-                 onChanged: (bool? value) {
-                   accountMaster_page_controller.toggleCheckbox();
-                   if(value == true){
-                     accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
-                     accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
-                     accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
-                     accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
-                     accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
-                     accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
-                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
-                     accountMaster_page_controller.ShowState.value=false;
-                     accountMaster_page_controller.ShowState.value=true;
-                   }else{
-                     accountMaster_page_controller.Shipping_Address_controller.value.clear();
-                     accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_City_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_District_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
-                     accountMaster_page_controller.ShowState.value=false;
-                     accountMaster_page_controller.ShowState.value=true;
-                   }
-                 },
                )),
 
                Container(

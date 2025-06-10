@@ -49,6 +49,7 @@ class TaskMasterDetails extends StatelessWidget{
 
     return WillPopScope(
         onWillPop: () async {
+          print('fromPageName.....${account_vm_controller.view}');
           if(account_vm_controller.view=='Sales'){
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             //account_vm_controller.view='';
@@ -115,7 +116,7 @@ class TaskMasterDetails extends StatelessWidget{
                       child: IconButton(onPressed: () {
                         //createDSARDialog(context);
                         TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
-                        TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
+                       // TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
                         TaskMaster_page_controller.NextInterdate_controller.clear();
                         TaskMaster_page_controller.NextInterTime_controller.clear();
                         TaskMaster_page_controller.DSAR_Remarks_controller.clear();
@@ -151,7 +152,14 @@ class TaskMasterDetails extends StatelessWidget{
                       visible: TaskMaster_page_controller
                           .Task_Master_list[0]
                           .taskStatus!.toLowerCase() == 'rejected' ?true:false,
-                      child: ActionChip(
+                      child: IconButton(
+                        icon: Icon(Icons.lock_open_rounded),
+                        onPressed: (){
+                          showTaskReopenDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
+                        },
+                      )
+
+                      /*ActionChip(
                         elevation: 2,
                         padding: EdgeInsets.all(5),
                         backgroundColor: AllColors.primaryDark1,
@@ -162,9 +170,9 @@ class TaskMasterDetails extends StatelessWidget{
                         //CircleAvatar
                         label: Row(
                           children: [
-                            //Icon(Icons.undo_sharp),
+                            Icon(Icons.lock_open_rounded),
                             //SizedBox(width: 5,),
-                            Tooltip(
+                            *//*Tooltip(
                               message: "Reopen task ",
                               child: Text('Reopen',
                                   style: GoogleFonts.poppins(
@@ -172,13 +180,13 @@ class TaskMasterDetails extends StatelessWidget{
                                     fontSize: AllFontSize.ten,
                                     fontWeight: FontWeight.w400,
                                   )),
-                            ),
+                            ),*//*
                           ],
                         ),
                         onPressed: () async {
                           showTaskReopenDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
                         }, //Text
-                      ),
+                      ),*/
                     );
                   })
 
@@ -405,7 +413,7 @@ class TaskMasterDetails extends StatelessWidget{
 
             SizedBox(height: 5,),
         
-            Card(
+           /* Card(
               color: AllColors.whiteColor,
               elevation: 10,
               margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
@@ -468,7 +476,7 @@ class TaskMasterDetails extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 5,),
+            SizedBox(height: 5,),*/
 
             Card(
               color: AllColors.whiteColor,
@@ -2631,7 +2639,7 @@ class TaskMasterDetails extends StatelessWidget{
             SizedBox(
               height: 3,
             ),
-            Row(
+            /*Row(
               children: [
                 Text(
                   "Is Infra Lead",
@@ -2663,7 +2671,7 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             SizedBox(
               height: 3,
-            ),
+            ),*/
             Row(
               children: [
                 Text(

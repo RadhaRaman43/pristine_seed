@@ -164,7 +164,7 @@ class AddNewDsarScreen extends StatelessWidget{
             if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == ""){
               Utils.sanckBarError("Message", "Please select DSAR Status");
             }
-            else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
+            /*else if(TaskMaster_page_controller.isInfraLeadValueSubmit.value) {
               //Utils.sanckBarError("Message", "Created");
             //  TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
               TaskMaster_page_controller.TaskDSARMasterCreate();
@@ -174,9 +174,8 @@ class AddNewDsarScreen extends StatelessWidget{
 
               Utils.sanckBarError("Message", "Is Infra Lead is Yes Please Add Infra Details");
 
-            }else{
-              //Utils.sanckBarError("Message", "Created2");
-              //TaskMaster_page_controller.TaskSaleCatCreateApiHit("DSAR");
+            }*/
+            else{
               TaskMaster_page_controller.TaskDSARMasterCreate();
 
             }
@@ -199,7 +198,7 @@ class AddNewDsarScreen extends StatelessWidget{
 
               SizedBox(height: 20),
 
-              Obx((){
+              /*Obx((){
                 return Visibility(
                   visible: TaskMaster_page_controller.DSARStatus.value,
                   child: Column(
@@ -209,7 +208,7 @@ class AddNewDsarScreen extends StatelessWidget{
                     ],
                   ),
                 );
-              }),
+              }),*/
               Obx((){
                 return Visibility(
                   visible: TaskMaster_page_controller.typeOfCall.value,

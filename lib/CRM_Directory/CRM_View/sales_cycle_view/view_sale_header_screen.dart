@@ -54,6 +54,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        print('fromPageNameSales.....${saleCycleController.FromPage}');
         if (saleCycleController.FromPage == 'Sales') {
           print('Yaha Se1...');
           saleCycleController.clearAllFieldOfFilter();
