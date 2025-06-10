@@ -3608,8 +3608,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code*',
-              labelText: 'Post Code*',
+              hintText: 'Pin Code*',
+              labelText: 'Pin Code*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -3743,8 +3743,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code',
-              labelText: 'Post Code',
+              hintText: 'Pin Code',
+              labelText: 'Pin Code',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

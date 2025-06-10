@@ -268,6 +268,7 @@ class AppUrl {
      static const String SalesCycleMstUpdateProposedSolution = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdateProposedSolution";
      static const String SalesCycleMstUpdatePropose = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdatePropose";
      static const String SalesCycleMstRejectReopen = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstRejectReopen";
+     static const String QuotationDiscountReport = "$BASE_URL/api/CRM/Quote/QuotationDiscountReport";
 
 
 

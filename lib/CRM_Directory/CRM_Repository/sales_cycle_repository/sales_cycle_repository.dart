@@ -173,10 +173,14 @@ class SalesCycleRepository{
   Future<String> SalesCycleMstUpdateProposeApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesCycleMstUpdatePropose,sessionManagement);
   }
+
   Future<String> SalesCycleMstRejectReopenApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesCycleMstRejectReopen,sessionManagement);
   }
 
+  Future<String> quotationDiscountReportApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.QuotationDiscountReport, sessionManagement, data);
+  }
 
 
 }

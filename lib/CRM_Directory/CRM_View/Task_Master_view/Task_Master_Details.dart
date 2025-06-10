@@ -712,7 +712,7 @@ class TaskMasterDetails extends StatelessWidget{
         }
         return TaskMaster_page_controller.AlongPersonWith_list
             .where((AlongWithPersonModel option) {
-          return option.firstName
+          return option.name
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
@@ -725,7 +725,7 @@ class TaskMasterDetails extends StatelessWidget{
 
         if (!TaskMaster_page_controller.SelectedAlongPersonWith_list.contains(selection)) {
           TaskMaster_page_controller.SelectedAlongPersonWith_list.add(selection);
-          Utils.showToastification('Success', 'Add Successfully');
+         // Utils.showToastification('Success', 'Add Successfully');
         }else{
           Utils.showErrorToastification('Error', 'Already Selected');
         }
@@ -852,7 +852,7 @@ class TaskMasterDetails extends StatelessWidget{
         if (!TaskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
           //TaskMaster_page_controller.Item_Category_code_list.add(selection.categoryCode!);
           TaskMaster_page_controller.Item_Category_Selected_list.add(selection);
-          Utils.showToastification('Success', 'Add Successfully ${selection.categoryCode}');
+         // Utils.showToastification('Success', 'Add Successfully ${selection.categoryCode}');
           print('CateCode....${TaskMaster_page_controller.Item_Category_code_list.length}');
         }else{
           Utils.showErrorToastification('Error', 'Already Selected');
@@ -1031,6 +1031,20 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget viewTasketails(BuildContext context) {
+    String taskStatus = TaskMaster_page_controller.Task_Master_list[0]
+        .taskStatus?.toLowerCase()??"";
+    Color getStatusColor(String status) {
+      switch (status.toLowerCase()) {
+        case 'approved':
+          return Colors.green;
+        case 'rejected':
+          return Colors.red;
+        case 'pending for approval':
+          return Colors.yellow[700]!;
+        default:
+          return Colors.black;
+      }
+    }
     String? dateTimeCreatedOn=StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].dateOfVisit ?? "");
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDetails.value == true ? true : false,
@@ -1250,9 +1264,7 @@ class TaskMasterDetails extends StatelessWidget{
                       .Task_Master_list[0]
                       .taskStatus ?? "",
                   style: GoogleFonts.poppins(
-                    color:TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .taskStatus?.toLowerCase()=='rejected'?Colors.red: Colors.green,
+                    color: getStatusColor(taskStatus),
                     fontSize: AllFontSize.fourtine,
                     fontWeight: FontWeight.w500,
                   ),

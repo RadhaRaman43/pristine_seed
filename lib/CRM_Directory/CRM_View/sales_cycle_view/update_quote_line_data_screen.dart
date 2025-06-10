@@ -86,8 +86,8 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
               updateDiscountPerLine(context),
               SizedBox(height: 10,),
               updateDiscountAmount(context),
-              SizedBox(height: 10,),
-              GmDiscountAmount(context),
+              /*SizedBox(height: 10,),
+              GmDiscountAmount(context),*/
               SizedBox(height: 10,),
               SalesCreditAmount(context),
               SizedBox(height: 10,),
@@ -103,7 +103,6 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
                 child: DefaultButton(
                   press: (){
                     saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update" );
-
                   },
                   text: "Update",
                 ),

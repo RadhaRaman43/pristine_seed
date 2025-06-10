@@ -280,16 +280,17 @@ class SalesCycleVm extends GetxController{
 
   void toggleCheckbox(int index) {
     var item = itemMstGetByQuoteIdList[index];
+    print("${ item.isSelected}");
     print("Check1");
     item.isSelected = item.isSelected == 1 ? 0 : 1;
-    print("Check2");
     if(item.isSelected==1)
       {
-        quoteLineCreateFunction(itemMstGetByQuoteIdList[index].itemCode!, "CheckBox");
+        print("Check2");
+        quoteLineCreateFunction(itemMstGetByQuoteIdList[index].itemCode!, "CheckBox" );
         itemMstGetByQuoteIdList[index] = item;
       }
     else{
-      quoteLineDeleteApiHit(itemMstGetByQuoteIdList[index].lineNo!, "fromCheckBox");
+      quoteLineDeleteApiHit(itemMstGetByQuoteIdList[index].lineNo??0, "fromCheckBox");
       itemMstGetByQuoteIdList[index] = item;
     }
    // itemMstGetByQuoteIdList[index] = item;
@@ -1219,7 +1220,7 @@ class SalesCycleVm extends GetxController{
           if(response[0].condition?.toLowerCase()=="true"){
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
-            getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
+
             if(flag!="BmGMUpdate"){
               if(quoteHeaderdata.length>0){
                 String ProductCategory = quoteHeaderdata[0].productCategoryCode??"";
@@ -1227,7 +1228,9 @@ class SalesCycleVm extends GetxController{
                 pageNumber=0;
                 itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", PipeProdCate);
               }
-            }/*else{
+            }
+            getQuoteHeaderInformation(quoteHeaderdata[0].quoteId,  quoteApprovalPage.value);
+            /*else{
 
               //getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, "Add");
             }*/
@@ -1581,7 +1584,7 @@ class SalesCycleVm extends GetxController{
         print(onValue);
         if(jsonResponse is List){
           List<ItemQuoteModal> response = jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
-          if(response[0].condition=="True"){
+          if(response[0].condition?.toLowerCase()=="true"){
             Utils.showToastification("Message !", response[0].message.toString());
             loading.value = false;
             pageNumber=0;
@@ -1906,6 +1909,8 @@ class SalesCycleVm extends GetxController{
         String baseName="";
         if(flag=="quoteReport"){
           baseName = 'Report${quoteHeaderdata[0].quoteId}';
+        }else if(flag=="quoteWithReport"){
+          baseName='QuoteWithDiscount${quoteHeaderdata[0].quoteId}';
         }
         else if(flag=="reportSpr"){
           baseName = 'SPRReport${quoteHeaderdata[0].quoteId}';
@@ -1933,6 +1938,8 @@ class SalesCycleVm extends GetxController{
           File file = File('${dir.path}/QuoteReport.pdf');
           if(flag=="quoteReport"){
              file = File('${dir.path}/QuoteReport.pdf');
+          }else if(flag=="quoteWithReport"){
+            file = File('${dir.path}/QuoteWithDiscount.pdf');
           }
           else if(flag=="reportSpr"){
              file = File('${dir.path}/SrpReport.pdf');
@@ -3928,7 +3935,48 @@ class SalesCycleVm extends GetxController{
       loading.value = false;
       print(e);
     }
+  }
 
-
+  Future<void> reportwithDownload() async {
+    try{
+      var company_id = await sessionManagement.getCompanyId();
+      Map<String, String> data = {
+        "company_id":company_id.toString(),
+        "quote_id":quoteHeaderdata[0].quoteId!,
+      };
+      print(data);
+      loading.value=true;
+      _api.quotationDiscountReportApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          print('ifff......');
+          List<ItemQouteWithReportModal> response = jsonResponse.map((e) => ItemQouteWithReportModal.fromJson(e)).toList();
+          if(response.isNotEmpty && response.length>0 && response[0].condition=="True"){
+            // Utils.sanckBarSuccess("Message !", response[0].message.toString());
+            loading.value = false;
+            itemQuoteReportList.value=response;
+            fileDownload(itemQuoteReportList[0].quoteReportUrl!, "quoteWithReport");
+          }else {
+            print("Else....");
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
   }
 }
