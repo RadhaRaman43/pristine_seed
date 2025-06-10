@@ -354,10 +354,10 @@ class ContactMasterVM extends GetxController{
       }
 
     }
-    if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
+    /*if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
       Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
       return  ;
-    }
+    }*/
 
     try{
       Map<String, dynamic> data={

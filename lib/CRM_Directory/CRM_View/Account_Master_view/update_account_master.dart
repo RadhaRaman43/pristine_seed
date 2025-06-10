@@ -164,7 +164,7 @@ class UpdateAccountMaster extends StatelessWidget{
            PopupMenuButton(itemBuilder: (BuildContext context){
              List<PopupMenuEntry>  items= [];
 
-             if(accountMaster_page_controller.view!="VIEW" && accountMaster_page_controller.view!="ALLContactList" && accountMaster_page_controller.view!="FromTaskMainScreen" && accountMaster_page_controller.view!="Task"){
+             if(accountMaster_page_controller.view == 'Account'){
                items.add(
                  PopupMenuItem(
                    child: Row(
@@ -1788,7 +1788,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    child: Column(
                      children: [
 
-                       Container(
+                       /*Container(
                          decoration: BoxDecoration(
                              color: Colors.white,
                              borderRadius: BorderRadius.circular(10)
@@ -1818,7 +1818,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                        ),
 
-                       SizedBox(height: 15,),
+                       SizedBox(height: 15,),*/
 
                        Container(
                          decoration: BoxDecoration(
@@ -1832,8 +1832,8 @@ class UpdateAccountMaster extends StatelessWidget{
                            controller: accountMaster_page_controller
                                .BranchHead_Controller,
                            decoration: InputDecoration(
-                               hintText: "Branch Head",
-                               labelText: "Branch Head",
+                               hintText: "Region Name",
+                               labelText: "Region Name",
                                //suffixIcon: Icon(Icons.email),
                                contentPadding: EdgeInsets.symmetric(
                                    vertical: AllFontSize.ten,
@@ -1853,7 +1853,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
+                       /*Container(
                    decoration: BoxDecoration(
                        color: Colors.white,
                        borderRadius: BorderRadius.circular(10)
@@ -1882,9 +1882,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    ),
                  ),
 
-
-
-                       SizedBox(height: 15,),
+                       SizedBox(height: 15,),*/
 
                        Container(
                    decoration: BoxDecoration(
@@ -1897,8 +1895,8 @@ class UpdateAccountMaster extends StatelessWidget{
                      controller: accountMaster_page_controller
                          .ClusterHead_Controller,
                      decoration: InputDecoration(
-                         hintText: "Cluster Head",
-                         labelText: "Cluster Head",
+                         hintText: "Cluster Name",
+                         labelText: "Cluster Name",
                          //suffixIcon: Icon(Icons.email),
                          contentPadding: EdgeInsets.symmetric(
                              vertical: AllFontSize.ten,

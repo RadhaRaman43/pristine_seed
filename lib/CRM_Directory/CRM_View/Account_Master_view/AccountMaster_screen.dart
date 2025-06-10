@@ -205,9 +205,9 @@ class AccountmasterScreen extends StatelessWidget{
               buildInfoRow("Phone No.", controller.phoneNo),
               buildInfoRow("Created By", controller.createdBy),
              // buildInfoRow("Frontliner Value", controller.frontlinerValue),
-              buildInfoRow("Branch Head Value", controller.branchHeadValue),
+              buildInfoRow("Region Name", controller.branchHeadValue),
              // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-              buildInfoRow("Cluster Head Value", controller.clustureHeadValue),
+              buildInfoRow("Cluster Name", controller.clustureHeadValue),
               //buildInfoRow("Address", controller.permanentAddress!.address! + ","+ controller.permanentAddress!.address2! + ", " + controller.permanentAddress!.city! + ","+ "\n" + controller.permanentAddress!.district! + ","+ controller.permanentAddress!.stateName! + ","+  controller.permanentAddress!.postCode!),
               buildInfoRow("Address", fullAddress),
              // buildInfoRow("Shipping Address", fullAddress),
@@ -917,18 +917,18 @@ class AccountmasterScreen extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindFrontLinerValue(),
+                              /*bindFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindBranchHead(),
                               SizedBox(
                                 height: 10,
                               ),
-                              bindZoneHead(),
+                             /* bindZoneHead(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindClusterHead(),
                     
                               SizedBox(
@@ -2001,8 +2001,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -2061,8 +2061,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Region Name',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

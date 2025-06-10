@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
 
 
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
@@ -53,6 +54,7 @@ class _Drawer extends State<CustomDrawer> {
   final accountMaster_page_controller=Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
   final TaskMaster_page_controller=Get.put(Taskmastervm());
+  final TaskApproval_page_controller=Get.put(TaskApprovalvm());
   final saleCycleController=Get.put(SalesCycleVm());
   final quoteApprovalController=Get.put(QuoteApprovalListVm());
   var allContactMastercontroller=Get.put(AllContactMasterVm());
@@ -369,6 +371,15 @@ class _Drawer extends State<CustomDrawer> {
                                               TaskMaster_page_controller.pageNumber = 0;
                                               Get.toNamed(RoutesName.taskMaster_screen);
                                               TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                                              Navigator.of(context);
+                                              break;
+                                            case 'Task Approval List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              TaskApproval_page_controller.resetAllFieldOfFilter();
+                                              TaskApproval_page_controller.pageNumber = 0;
+                                              Get.toNamed(RoutesName.taskApproval_List);
+                                              TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '',);
                                               Navigator.of(context);
                                               break;
                                             case 'Sales Cycle':

@@ -2000,7 +2000,7 @@ class TaskMasterDetails extends StatelessWidget{
         margin: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
           children: [
-            Row(
+            /*Row(
               children: [
                 Text(
                   "Frontliner ",
@@ -2022,14 +2022,14 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                 ),
               ],
-            ),
+            ),*/
             SizedBox(
               height: 3,
             ),
             Row(
               children: [
                 Text(
-                  "Branch Head",
+                  "Region Name",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -2053,7 +2053,7 @@ class TaskMasterDetails extends StatelessWidget{
             SizedBox(
               height: 3,
             ),
-            Row(
+            /*Row(
               children: [
                 Text(
                   "Zone Head",
@@ -2078,11 +2078,11 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             SizedBox(
               height: 3,
-            ),
+            ),*/
             Row(
               children: [
                 Text(
-                  "Cluster Head",
+                  "Cluster Name",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,

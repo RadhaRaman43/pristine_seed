@@ -253,9 +253,9 @@ class Taskmastervm extends GetxController{
                 "filter_day_flag": date_filter.toString(),
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
                 "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
-                "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+                "filter_frontliner_value": "",
                 "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
-                "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+                "filter_zone_head_value": "",
                 "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
