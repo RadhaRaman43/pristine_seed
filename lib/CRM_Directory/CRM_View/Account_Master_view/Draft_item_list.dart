@@ -162,10 +162,10 @@ class DraftItemList extends StatelessWidget{
             buildInfoRow("Email Id", controller.emailId),
             buildInfoRow("Phone No.", controller.phoneNo),
             buildInfoRow("Created By", controller.createdBy),
-            buildInfoRow("Frontliner Value", controller.frontlinerValue),
-            buildInfoRow("Branch Head Value", controller.branchHeadValue),
-            buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-            buildInfoRow("Cluster Head Value", controller.clustureHeadValue),
+           // buildInfoRow("Frontliner Value", controller.frontlinerValue),
+            buildInfoRow("Region Name", controller.branchHeadValue),
+           // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
+            buildInfoRow("Cluster Name", controller.clustureHeadValue),
             buildInfoRow("Address", controller.permanentAddress?.address ?? ""),
           ],
         ),
@@ -552,20 +552,21 @@ class DraftItemList extends StatelessWidget{
                                 height: 10,
                               ),*/
 
-                              bindFrontLinerValue(),
+                              /*bindFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),
-                              bindClusterHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindZoneHead(),
+                              ),*/
+                              bindBranchHead(),
 
                               SizedBox(
                                 height: 10,
                               ),
-                              bindBranchHead(),
+                              /*bindZoneHead(),
+
+                              SizedBox(
+                                height: 10,
+                              ),*/
+                              bindClusterHead(),
                               SizedBox(
                                 height: 10,
                               ),
@@ -893,8 +894,8 @@ class DraftItemList extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1093,8 +1094,8 @@ class DraftItemList extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Region Name',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

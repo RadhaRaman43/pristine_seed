@@ -354,10 +354,10 @@ class ContactMasterVM extends GetxController{
       }
 
     }
-    if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
+    /*if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
       Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
       return  ;
-    }
+    }*/
 
     try{
       Map<String, dynamic> data={
@@ -511,6 +511,17 @@ class ContactMasterVM extends GetxController{
       loading.value = false;
       print(e);
     }
+  }
+
+
+  clearAllFilterContoller(){
+    filterIconColor.value=false;
+    account_name_controller.clear();
+    account_code_controller.clear();
+    contact_name_controller.clear();
+    depart_name_controller.clear();
+    emailId_controller.clear();
+    phone_no_controller.clear();
   }
 
 

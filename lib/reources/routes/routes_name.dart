@@ -107,6 +107,7 @@ class RoutesName{
 
   //todo Task Master Screen....
   static const taskMaster_screen="/Task_master_screen";
+  static const taskApproval_List="/Task_Approval_List_Screen";
   static const addNewTaskMaster_screen="/Add_new_Task_Screen";
   static const taskMasterDetails_screen="/Task_Master_Details";
   static const addNewDSARTask_screen="/Add_new_DSAR_screen";

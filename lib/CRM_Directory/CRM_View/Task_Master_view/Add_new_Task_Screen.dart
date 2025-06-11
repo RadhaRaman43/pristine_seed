@@ -283,8 +283,8 @@ class AddNewTaskScreen extends StatelessWidget{
 
               ),
 
-              SizedBox(height: 15,),
-              bindIsInfraLeadDropDown(context),
+              /*SizedBox(height: 15,),
+              bindIsInfraLeadDropDown(context),*/
 
               SizedBox(height: 15,),
 
@@ -427,10 +427,10 @@ class AddNewTaskScreen extends StatelessWidget{
                       return  ;
                     }
 
-                    if(taskMaster_page_controller.isInfraLeadFilterController.text.isEmpty || taskMaster_page_controller.isInfraLeadFilterController == null){
+                    /*if(taskMaster_page_controller.isInfraLeadFilterController.text.isEmpty || taskMaster_page_controller.isInfraLeadFilterController == null){
                       Utils.sanckBarError('Is Infra Lead!', "Please Enter Is Infra Lead");
                       return  ;
-                    }
+                    }*/
 
                     if(taskMaster_page_controller.DataOFVisitController.value.text.isEmpty || taskMaster_page_controller.DataOFVisitController == null){
                       Utils.sanckBarError('Date Of Visit!', "Please Enter Date Of Visit");

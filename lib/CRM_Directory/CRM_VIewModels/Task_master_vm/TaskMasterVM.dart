@@ -241,7 +241,8 @@ class Taskmastervm extends GetxController{
                 "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
                 "filter_last_activity_status": "",
                 "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
-                "filter_is_infra_lead": infraLeadValue.value,
+                //"filter_is_infra_lead": infraLeadValue.value,
+                "filter_is_infra_lead": 0,
                 "filter_is_sales_cycle_active": is_Active.toString(),
                 "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
                 "filter_created_by": email,
@@ -253,9 +254,9 @@ class Taskmastervm extends GetxController{
                 "filter_day_flag": date_filter.toString(),
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
                 "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
-                "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
+                "filter_frontliner_value": "",
                 "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
-                "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
+                "filter_zone_head_value": "",
                 "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
@@ -338,7 +339,8 @@ class Taskmastervm extends GetxController{
                 "payment_sale_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
                 "date_of_visit": todayDate.isEmpty?"":todayDate,
                 "time_of_visit": VisitTime_controller.value.text.isEmpty?"":VisitTime_controller.value.text,
-                "is_infra_lead": isInfraLeadFilterController.text =='Yes'?1:0,
+                //"is_infra_lead": isInfraLeadFilterController.text =='Yes'?1:0,
+                "is_infra_lead": 0,
                 "lines": lines.map((line) => line.toJson()).toList(),
                 "person_name": personName.map((line) => line.toJson()).toList(),
             };
@@ -397,7 +399,8 @@ class Taskmastervm extends GetxController{
         try{
             Map data={
                 "task_id": TaskID,
-                "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
+               // "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
+                "is_infra_lead": 0,
                 "dsar_status": DSAR_Status_type_controller.value.text.isEmpty?'':DSAR_Status_type_controller.value.text,
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "next_interaction_date": NextInterDate.isEmpty?'':NextInterDate,

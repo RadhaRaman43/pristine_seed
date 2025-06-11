@@ -164,7 +164,7 @@ class UpdateAccountMaster extends StatelessWidget{
            PopupMenuButton(itemBuilder: (BuildContext context){
              List<PopupMenuEntry>  items= [];
 
-             if(accountMaster_page_controller.view!="VIEW" && accountMaster_page_controller.view!="ALLContactList" && accountMaster_page_controller.view!="FromTaskMainScreen" && accountMaster_page_controller.view!="Task"){
+             if(accountMaster_page_controller.view == 'Account'){
                items.add(
                  PopupMenuItem(
                    child: Row(
@@ -1240,41 +1240,44 @@ class UpdateAccountMaster extends StatelessWidget{
 
                SizedBox(height: 15,),
 
-               Obx(() => CheckboxListTile(
-                 controlAffinity: ListTileControlAffinity.leading,
-                 enabled: accountMaster_page_controller.view=='Account'?true:false,
-                 title: Text("Shipping address same as billing address",
-                     style: GoogleFonts.poppins(
-                       color: AllColors.primaryDark1,
-                       fontWeight: FontWeight.w400,
-                       fontSize: AllFontSize.twelve,
-                     )
+               Obx(() => Visibility(
+                 visible: accountMaster_page_controller.view=='Account'?true:false,
+                 child: CheckboxListTile(
+                   controlAffinity: ListTileControlAffinity.leading,
+                   enabled: accountMaster_page_controller.view=='Account'?true:false,
+                   title: Text("Shipping address same as billing address",
+                       style: GoogleFonts.poppins(
+                         color: AllColors.primaryDark1,
+                         fontWeight: FontWeight.w400,
+                         fontSize: AllFontSize.twelve,
+                       )
+                   ),
+                   value: accountMaster_page_controller.isChecked.value,
+                   onChanged: (bool? value) {
+                     accountMaster_page_controller.toggleCheckbox();
+                     if(value == true){
+                       accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
+                       accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
+                       accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
+                       accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
+                       accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
+                       accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
+                       accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
+                       accountMaster_page_controller.ShowState.value=false;
+                       accountMaster_page_controller.ShowState.value=true;
+                     }else{
+                       accountMaster_page_controller.Shipping_Address_controller.value.clear();
+                       accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_City_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_District_Controller.value.clear();
+                       accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                       accountMaster_page_controller.ShowState.value=false;
+                       accountMaster_page_controller.ShowState.value=true;
+                     }
+                   },
                  ),
-                 value: accountMaster_page_controller.isChecked.value,
-                 onChanged: (bool? value) {
-                   accountMaster_page_controller.toggleCheckbox();
-                   if(value == true){
-                     accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
-                     accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
-                     accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
-                     accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
-                     accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
-                     accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
-                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
-                     accountMaster_page_controller.ShowState.value=false;
-                     accountMaster_page_controller.ShowState.value=true;
-                   }else{
-                     accountMaster_page_controller.Shipping_Address_controller.value.clear();
-                     accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_City_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_District_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
-                     accountMaster_page_controller.ShowState.value=false;
-                     accountMaster_page_controller.ShowState.value=true;
-                   }
-                 },
                )),
 
                Container(
@@ -1314,7 +1317,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                child: Icon(Icons.add),
                                onTap: (){
                                  accountMaster_page_controller.pageNumber = 0;
-                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
+                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text, accountMaster_page_controller.account_name_controller.text);
                                  accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
 
@@ -1788,7 +1791,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    child: Column(
                      children: [
 
-                       Container(
+                       /*Container(
                          decoration: BoxDecoration(
                              color: Colors.white,
                              borderRadius: BorderRadius.circular(10)
@@ -1818,7 +1821,7 @@ class UpdateAccountMaster extends StatelessWidget{
                          ),
                        ),
 
-                       SizedBox(height: 15,),
+                       SizedBox(height: 15,),*/
 
                        Container(
                          decoration: BoxDecoration(
@@ -1832,8 +1835,8 @@ class UpdateAccountMaster extends StatelessWidget{
                            controller: accountMaster_page_controller
                                .BranchHead_Controller,
                            decoration: InputDecoration(
-                               hintText: "Branch Head",
-                               labelText: "Branch Head",
+                               hintText: "Region Name",
+                               labelText: "Region Name",
                                //suffixIcon: Icon(Icons.email),
                                contentPadding: EdgeInsets.symmetric(
                                    vertical: AllFontSize.ten,
@@ -1853,7 +1856,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                        SizedBox(height: 15,),
 
-                       Container(
+                       /*Container(
                    decoration: BoxDecoration(
                        color: Colors.white,
                        borderRadius: BorderRadius.circular(10)
@@ -1882,9 +1885,7 @@ class UpdateAccountMaster extends StatelessWidget{
                    ),
                  ),
 
-
-
-                       SizedBox(height: 15,),
+                       SizedBox(height: 15,),*/
 
                        Container(
                    decoration: BoxDecoration(
@@ -1897,8 +1898,8 @@ class UpdateAccountMaster extends StatelessWidget{
                      controller: accountMaster_page_controller
                          .ClusterHead_Controller,
                      decoration: InputDecoration(
-                         hintText: "Cluster Head",
-                         labelText: "Cluster Head",
+                         hintText: "Cluster Name",
+                         labelText: "Cluster Name",
                          //suffixIcon: Icon(Icons.email),
                          contentPadding: EdgeInsets.symmetric(
                              vertical: AllFontSize.ten,

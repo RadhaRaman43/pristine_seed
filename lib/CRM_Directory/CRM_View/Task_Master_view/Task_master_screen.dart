@@ -1041,7 +1041,7 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -1063,7 +1063,7 @@ class TaskMasterScreen extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1229,6 +1229,7 @@ class TaskMasterScreen extends StatelessWidget {
   showApprovRejectDialog(context, String TaskId) {
     TaskMaster_page_controller.ApproveReject_Controller.clear();
     TaskMaster_page_controller.RejectReason_Controller.clear();
+    TaskMaster_page_controller.managerRemarksController.value.clear();
     TaskMaster_page_controller.ApproveBool.value = false;
     TaskMaster_page_controller.RejectBool.value = false;
     showDialog(
@@ -1733,10 +1734,10 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(
                                 height: 10,
                               ),
-                              bindIsInfraLeadDropDown(context),
+                             /* bindIsInfraLeadDropDown(context),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindLastActivityStatus(),
                               SizedBox(
                                 height: 10,
@@ -1792,20 +1793,20 @@ class TaskMasterScreen extends StatelessWidget {
                                 height: 10,
                               ),
 
-                              bindFrontLinerValue(),
+                             /* bindFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
 
                               bindBranchHead(),
                               SizedBox(
                                 height: 10,
                               ),
 
-                              bindZoneHead(),
+                             /* bindZoneHead(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
 
                               bindClusterHead(),
                               SizedBox(
@@ -2108,8 +2109,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -2168,8 +2169,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Region Nane',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
