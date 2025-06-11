@@ -2,6 +2,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/all_contact_master_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/Task_Approval_List_Screen.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_screen.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/check_in_approval/check_in_approval_screen.dart';
@@ -33,6 +34,7 @@ import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_master_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/update_task_mst_infra_screen.dart';
 import '../../CRM_Directory/CRM_View/quote_approval_list/quote_approval_list_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_advise_view/sales_advise_create_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approval_person_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.dart';
@@ -610,6 +612,17 @@ class AppRoutes{
     ),
 
 
+    GetPage(name: RoutesName.salesAdviseCreateScreen,
+        page: ()=>SalesAdviseCreateScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.salesAdviseHeaderScreen,
+        page: ()=>SalesAdviseHeaderScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
 
 //todo image not found....
 

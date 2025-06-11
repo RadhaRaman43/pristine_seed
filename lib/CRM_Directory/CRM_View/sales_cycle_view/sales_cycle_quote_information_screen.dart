@@ -166,6 +166,70 @@ class QuoteInformationScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
+                        Obx((){
+                          return Visibility(
+                            visible: saleCycleController
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected",
+                            child: Tooltip(
+                              message: "Reopen",
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(color: AllColors.primaryDark1)
+                                ),
+                                child: IconButton(
+                                    onPressed: (){
+                                      saleCycleController.reOpenRemarksController.value.text =
+                                      "";
+                                      reOpenSalesCycle(
+                                          context);
+                                    },
+                                    icon: Icon(Icons.lock_open)),
+                              ),
+                            ),);
+                        }),
+                        Obx((){
+                              return Visibility(
+                                visible: saleCycleController
+                                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
+                                child: Tooltip(
+                                  message: "Sale Advise Create",
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        border: Border.all(color: AllColors.primaryDark1)
+                                    ),
+                                    child: IconButton(
+                                        onPressed: (){
+                                          saleCycleController.salesAdviseCheckedList.value =
+                                              List.generate(saleCycleController.quoteLinedata.length, (_) => false);
+                                          Get.toNamed(RoutesName.salesAdviseCreateScreen);
+                                    },
+                                        icon: Icon(Icons.add)),
+                                  ),
+                                ),);
+                            }),
+                        Obx((){
+                          return Visibility(
+                            visible: saleCycleController
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
+                            child: Tooltip(
+                              message: "View Sale Advise",
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(color: AllColors.primaryDark1)
+                                ),
+                                child: IconButton(onPressed: (){
+                                   saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise,saleCycleController
+                                       .quoteHeaderdata[0].salesCycleId??"",saleCycleController
+                                       .quoteHeaderdata[0].quoteId??"");
+                                   //Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+                                },
+                                    icon: Icon(Icons.remove_red_eye_rounded)),
+                              ),
+                            ),);
+                        }),
                         Obx(() {
                           return Padding(
                             padding: const EdgeInsets.only(right: 0.0),
@@ -539,6 +603,45 @@ class QuoteInformationScreen extends StatelessWidget {
                                     SizedBox(
                                       width: 10,
                                     ),
+                                    Obx(() {
+                                      String ProductCategory =
+                                          saleCycleController.quoteHeaderdata[0]
+                                              .productCategoryCode ??
+                                              "";
+                                      String PipeProdCate =
+                                      ProductCategory.replaceAll(', ', '|');
+                                      return GestureDetector(
+                                        onTap: () {
+                                          saleCycleController.pageNumber = 0;
+                                          saleCycleController
+                                              .itemMstGetByQuoteIdApiHit(
+                                              0,
+                                              saleCycleController
+                                                  .quoteHeaderdata[0]
+                                                  .quoteId,
+                                              "Add",
+                                              PipeProdCate);
+                                        },
+                                        child: Container(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(7.0),
+                                            child: Icon(
+                                              Icons.add,
+                                              color: AllColors.primaryDark1,
+                                            ),
+                                          ),
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                              BorderRadius.circular(30),
+                                              border: Border.all(
+                                                  color:
+                                                  AllColors.primaryDark1)),
+                                        ),
+                                      );
+                                    }),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
                                     GestureDetector(
                                         child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
@@ -572,45 +675,6 @@ class QuoteInformationScreen extends StatelessWidget {
                                         ),
                                       ),
                                     )),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Obx(() {
-                                      String ProductCategory =
-                                          saleCycleController.quoteHeaderdata[0]
-                                                  .productCategoryCode ??
-                                              "";
-                                      String PipeProdCate =
-                                          ProductCategory.replaceAll(', ', '|');
-                                      return GestureDetector(
-                                        onTap: () {
-                                          saleCycleController.pageNumber = 0;
-                                          saleCycleController
-                                              .itemMstGetByQuoteIdApiHit(
-                                                  0,
-                                                  saleCycleController
-                                                      .quoteHeaderdata[0]
-                                                      .quoteId,
-                                                  "Add",
-                                                  PipeProdCate);
-                                        },
-                                        child: Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(7.0),
-                                            child: Icon(
-                                              Icons.add,
-                                              color: AllColors.primaryDark1,
-                                            ),
-                                          ),
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(30),
-                                              border: Border.all(
-                                                  color:
-                                                      AllColors.primaryDark1)),
-                                        ),
-                                      );
-                                    }),
                                   ],
                                 ),
                               );
@@ -2619,6 +2683,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               fontSize: AllFontSize.fourtine,
                               fontWeight: FontWeight.w500,
                             ),
+                            textAlign: TextAlign.end,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -2885,7 +2950,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                             overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.right,
+                            textAlign: TextAlign.end,
                           ),
                         ),
                       ),
@@ -5584,6 +5649,194 @@ class QuoteInformationScreen extends StatelessWidget {
                     ),
                   )),
             ),
+          );
+        });
+  }
+  void reOpenSalesCycle(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Container(
+                  width: size.width * 0.5,
+                  child: Text(
+                    'Reopen Quote',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ),
+                    //overflow: TextOverflow.ellipsis,
+                  ),
+                )
+              ],
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  bindOpenRemarks(context),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(
+                        AllColors.greenblue,
+                      ),
+                    ),
+                    onPressed: () {
+                      showDialogConfirmation(
+                          context);
+                    },
+                    child: Container(
+                      width: size.width,
+                      child: Center(
+                        child: Text(
+                          'Submit',
+                          style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+  bindOpenRemarks(BuildContext context) {
+    return TextField(
+      maxLines: 3,
+      maxLength: 500,
+      controller: saleCycleController.reOpenRemarksController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Reopen Remarks*',
+          hintText: 'Reopen Remarks*',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      cursorColor: AllColors.primaryDark1,
+    );
+  }
+  showDialogConfirmation(context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Re-Open',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to Reopen this Quotation?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.lightredColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.getquotationMstRejectReopen(
+                              saleCycleController
+                                  .quoteHeaderdata[0].quoteId??"",
+                              saleCycleController
+                                  .reOpenRemarksController.value.text);
+                          Get.back();
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Confirm',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
           );
         });
   }

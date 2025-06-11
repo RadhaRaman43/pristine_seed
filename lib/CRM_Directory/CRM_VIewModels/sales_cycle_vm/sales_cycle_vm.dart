@@ -72,6 +72,7 @@ class SalesCycleVm extends GetxController{
   int pageNumber = 0;
   int pageNumberForItem = 0;
   int pageNumberForQuote = 0;
+  int pageNumberSalesAdvise = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
   int total_rows_items = 0;
@@ -106,6 +107,7 @@ class SalesCycleVm extends GetxController{
   RxList<CustomList> get_PurchaseTimeFrame_list=<CustomList>[].obs;
   RxList<SalesCycleByIdModel> get_SalesCycleProductById_List=<SalesCycleByIdModel>[].obs;
 
+  RxList<SalesCycleQuoteHeaderModal> salesAdviseHeaderList=<SalesCycleQuoteHeaderModal>[].obs;
 
   var closureDateController=TextEditingController().obs;
   var budgetAmountController=TextEditingController().obs;
@@ -3992,6 +3994,119 @@ class SalesCycleVm extends GetxController{
       print(e);
     }
     finally{
+      loading.value = false;
+    }
+  }
+
+  var salesAdviseCheckedList = <bool>[].obs;
+  void toggleSalesAdviseCheckbox(int index) {
+    salesAdviseCheckedList[index] = !salesAdviseCheckedList[index];
+  }
+
+  void selectAllSalesAdvise(bool select) {
+    for (int i = 0; i < salesAdviseCheckedList.length; i++) {
+      salesAdviseCheckedList[i] = select;
+    }
+  }
+
+  getquotationMstRejectReopen(String quoteid,String remarks){
+    loading.value = true;
+    Map data={
+      "quote_id": quoteid,
+      "created_by": email,
+      "reopen_remarks": remarks
+    };
+    try{
+      _api.QuoteMstRejectReopenApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition?.toLowerCase()=="true"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            filterQuoteAcceptedFlag.value="";
+            getQuoteHeaderInformation(
+                quoteid, "");
+            loading.value = false;
+          }else {
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          loading.value = false;
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.showErrorToastification("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+  getSalesAdviseData(int pageNumber, String saleCycleId, String quoteId){
+    try{
+      Map data= {
+      "filter_sales_advice_id": "",
+      "filter_quote_id": quoteId,
+      "filter_sales_cycle_id": saleCycleId,
+      "filter_account_code": "",
+      "filter_account_name": "",
+      "filter_rh_approval": "",
+      "filter_cbh_approval": "",
+      "filter_category_approval": "",
+      "filter_gm_approval": "",
+      "filter_quote_version": 0,
+      "filter_quote_validity": "",
+      "filter_exp_closure_date": "",
+      "filter_quote_status": "",
+      "filter_product_category": "",
+      "filter_created_by": email,
+      "filter_created_on": "",
+      "filter_frontliner_value": "",
+      "filter_branch_head_value": "",
+      "filter_zone_head_value": "",
+      "filter_clusture_head_value": "",
+      "row_per_page": rowsPerPage,
+      "page_number": pageNumber
+      };
+      loading.value=true;
+      _api.salesAdviceHeaderGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleQuoteHeaderModal> response = jsonResponse.map((e) => SalesCycleQuoteHeaderModal.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
+            loading.value = false;
+            if(pageNumberForQuote==0){
+              salesAdviseHeaderList.clear();
+            }
+            salesAdviseHeaderList.addAll(response);
+            total_rows=int.parse(salesAdviseHeaderList[0].totalRows!);
+            Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+          }else {
+            salesAdviseHeaderList.value=[];
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
       loading.value = false;
     }
   }
