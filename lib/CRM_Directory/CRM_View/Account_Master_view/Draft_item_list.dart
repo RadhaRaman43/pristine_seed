@@ -1159,7 +1159,7 @@ class DraftItemList extends StatelessWidget{
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.sisxteen,
-              fontWeight: FontWeight.w300),
+              fontWeight: FontWeight.w500),
         ),
         //initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
         inputDecorationTheme: const InputDecorationTheme(

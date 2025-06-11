@@ -143,6 +143,7 @@ class Accountmastervm extends GetxController{
   var Shipping_State_Controller = TextEditingController().obs;
   var Shipping_City_Controller = TextEditingController().obs;
   var Shipping_District_Controller = TextEditingController().obs;
+  var AddressContactFilter_Controller = TextEditingController().obs;
 
    int InActive=0;
 
@@ -1229,7 +1230,8 @@ class Accountmastervm extends GetxController{
           "account_name": account_name_controller.text.isEmpty?'':account_name_controller.text ,
           "account_owner": AccountOwner,
           "account_title": AccountTitle_Controller.text.isEmpty?'':AccountTitle_Controller.text,
-          "account_type": flag=='Create'?'New Account':'Existing Account',
+          //"account_type": flag=='Create'?'New Account':'Existing Account',
+          "account_type": account_type_controller.value.text.isEmpty?'':account_type_controller.value.text,
           "referral_by": ReferralByName_Controller.text.isEmpty?'':ReferralByName_Controller.text,
           "phone_no": PhoneNo_Controller.text.isEmpty?'':PhoneNo_Controller.text,
           "email_id": EmailId_Controller.text.isEmpty?'':EmailId_Controller.text,
@@ -1420,7 +1422,7 @@ class Accountmastervm extends GetxController{
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
             getDraftAccountMaster(pageNumber,is_Active.toString());
-            Get.toNamed(RoutesName.accountMaster_screen);
+            Get.toNamed(RoutesName.Draft_item_list);
           }
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
           //viewRequestDetails(response);
@@ -1726,6 +1728,7 @@ class Accountmastervm extends GetxController{
       SalesRepresentativeEmail = "";
       Regional_service_head_Controller.value.clear();
       RegionalHeadEmail = "";
+      AddressContactFilter_Controller.value.clear();
 
     }catch(e){
 
@@ -1766,7 +1769,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             view_contract_list.value=[];
             Get.toNamed(RoutesName.viewContacts_screen);
-            Utils.showToastification('No Data Found', 'No Data Found');
+           // Utils.showToastification('No Data Found', 'No Data Found');
 
           }
         } else {
@@ -2259,13 +2262,13 @@ class Accountmastervm extends GetxController{
     }
   }
 
-  void getAddressMasterList(int pageNumber, String account_Code, String account_name) {
+  void getAddressMasterList(int pageNumber, String account_Code, String account_name, String contactName) {
     try{
       Map data={
         "consignee_id": "",
         "account_code":account_Code,
         "account_name": account_name,
-        "contact_name": "",
+        "contact_name": contactName,
         "email_id": "",
         "phone_no": "",
         "rowsPerPage": rowsPerPage,
@@ -2295,7 +2298,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             address_master_list.value=[];
             // Get.toNamed(RoutesName.viewAddress_screen);
-            Utils.showToastification('No date Found', 'No Data Found');
+           // Utils.showToastification('No date Found', 'No Data Found');
 
           }
         } else {
@@ -2315,6 +2318,7 @@ class Accountmastervm extends GetxController{
   }
 
   void showConsigneeAddressList(BuildContext context, RxList<AddressMasterModel> address_master_list) {
+    AddressContactFilter_Controller.value.clear();
     showDialog(
       // barrierDismissible: false,
         context: context,
@@ -2344,10 +2348,46 @@ class Accountmastervm extends GetxController{
                     thickness: 1,
                   ),
                   SizedBox(height: 15,),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: TextFormField(
+                      controller: AddressContactFilter_Controller.value,
+                      //maxLength: 150,
+                      onChanged: (value){
+                        pageNumber=0;
+                        getAddressMasterList(pageNumber,account_code_controller.text, account_name_controller.text, AddressContactFilter_Controller.value.text);
+                      },
+                      decoration: InputDecoration(
+                          suffixIcon: InkWell(
+                            child: Icon(Icons.search, color: Colors.black),
+                          ),
+                          hintText: "Search Address",
+                          labelText: "Search Address",
+                          //suffixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: AllFontSize.ten,
+                              horizontal: AllFontSize.ten),
+
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AllColors.primaryDark1)
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          )
+                      ),
+
+                    ),
+                  ),
+                  SizedBox(height: 15,),
+
                   Flexible(
                     fit: FlexFit.loose,
                     child: Container(
-                      padding: EdgeInsets.only(left: 2.0, top: 5.0, right: 2.0, bottom: 5.0),
+                      padding: EdgeInsets.only(left: 0.0, top: 5.0, right: 0.0, bottom: 5.0),
                       child: Obx(() {
                         return BindAddressListView(context);
                       }),
@@ -2491,7 +2531,7 @@ class Accountmastervm extends GetxController{
           //print("last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
 
           if (pageNumber + 1 < total_page) {
-            getAddressMasterList(pageNumber, "", "");
+            getAddressMasterList(pageNumber, "", "", "");
             this.pageNumber += 1;
           }
         }

@@ -60,11 +60,13 @@ class AccountmasterScreen extends StatelessWidget{
               Spacer(),
               IconButton(onPressed: () {
                 accountMaster_page_controller.DraftId = '';
+                accountMaster_page_controller.account_type_controller.text='New Account';
                 accountMaster_page_controller.clearController();
                 accountMaster_page_controller.getCompanyProfileTypeApi("");
                 accountMaster_page_controller.getGeoPostalCodeApi();
                 Get.toNamed(RoutesName.add_New_AccountMaster_screen);
               }, icon: Icon(Icons.add)),
+
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
               }, icon: Icon(Icons.filter_alt_sharp))
@@ -1030,7 +1032,59 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-  Widget bindAccountTypeDropDown(context){
+  Widget bindAccountTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-18,
+        controller:  accountMaster_page_controller.account_type_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+       // initialSelection:accountMaster_page_controller.get_Acc_type_list.length>0?accountMaster_page_controller.get_Acc_type_list[1]:null,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.account_type_controller.text =
+              _displayAccTypeForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Acc_type_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+
+ /* Widget bindAccountTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayAccTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -1136,7 +1190,7 @@ class AccountmasterScreen extends StatelessWidget{
         );
       },
     );
-  }
+  }*/
 
   Widget bindAccCatogeryTypeDropDown(context){
     return Autocomplete<GetMasterTypeModel>(
@@ -1259,8 +1313,61 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-
   Widget bindIsActiveDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        width: size.width-18,
+        controller:  accountMaster_page_controller.IsActive_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+         initialSelection:"All",
+       /* enableFilter: true,
+        requestFocusOnTap: true,*/
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          accountMaster_page_controller.IsActive_controller.text =
+              _displayIsActiveForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.IsActiveTypeAllList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+
+ /* Widget bindIsActiveDropDown(context) {
     return Autocomplete<String>(
       displayStringForOption: _displayIsActiveForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -1364,7 +1471,7 @@ class AccountmasterScreen extends StatelessWidget{
         );
       },
     );
-  }
+  }*/
 
   Widget bindAnualRevenueDropDown(context) {
     return Autocomplete<String>(

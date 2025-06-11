@@ -504,10 +504,9 @@ class UpdateAccountMaster extends StatelessWidget{
                    ),
                    child: Column(
                      children: [
-                       /*bindAccountTypeDropDown(context),
+                       bindAccountTypeDropDown(context),
 
                        SizedBox(height: 15,),
-*/
                        Form(
                          key: _formKey,
                          child: Container(
@@ -650,13 +649,13 @@ class UpdateAccountMaster extends StatelessWidget{
                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                      children: [
                                        Container(
-                                         margin: EdgeInsets.only(right: 10),
+                                         //margin: EdgeInsets.only(right: 10),
                                          decoration: BoxDecoration(
                                            //color: AllColors.whiteColor,
                                              borderRadius: BorderRadius.circular(10)
                                          ),
                                          //height: size.height*10,
-                                         width: size.width*.65,
+                                         width: accountMaster_page_controller.view=="Account"?size.width*.65:size.width*.85,
                                          child:bindComProfSubTypeDropDown(context) ,
                                        ),
                                        Visibility(
@@ -1317,7 +1316,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                child: Icon(Icons.add),
                                onTap: (){
                                  accountMaster_page_controller.pageNumber = 0;
-                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text, accountMaster_page_controller.account_name_controller.text);
+                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text, accountMaster_page_controller.account_name_controller.text, "");
                                  accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
 
@@ -2364,7 +2363,59 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
-  Widget bindAccountTypeDropDown(context){
+  Widget bindAccountTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.account_type_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: 15,
+              fontWeight: FontWeight.w300),
+        ),
+        enabled: accountMaster_page_controller.view=='Account'?true:false,
+        //initialSelection:accountMaster_page_controller.get_Acc_type_list.length>0?accountMaster_page_controller.get_Acc_type_list[1]:null,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.account_type_controller.text =
+              _displayAccTypeForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Acc_type_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+  /*Widget bindAccountTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayAccTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -2399,11 +2450,11 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextField(
             readOnly: accountMaster_page_controller.view=='Account'?false:true,
-           /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+           *//* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
                 || accountMaster_page_controller.view=='VIEW' ||
                 accountMaster_page_controller.view=='Task'||
                 accountMaster_page_controller.view=='FromSaleCycleMainScreen' ||
-                accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = accountMaster_page_controller.account_type_controller
@@ -2420,19 +2471,19 @@ class UpdateAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Account Type*',
               labelText: 'Account Type*',
-              /*hintStyle: GoogleFonts.poppins(
+              *//*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
                   fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
+              ),*//*
+              *//*labelStyle: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
+                  fontSize: AllFontSize.sisxteen),*//*
+              *//*focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              ),*//*
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2481,7 +2532,7 @@ class UpdateAccountMaster extends StatelessWidget{
         );
       },
     );
-  }
+  }*/
 
   Widget bindAccCatogeryTypeDropDown(context){
     return Autocomplete<GetMasterTypeModel>(

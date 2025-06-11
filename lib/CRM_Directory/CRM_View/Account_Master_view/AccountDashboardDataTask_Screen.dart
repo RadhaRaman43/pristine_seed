@@ -482,7 +482,7 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
                 ),
               ],
             ),
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
@@ -493,9 +493,9 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
                       fontWeight: FontWeight.w500),
                 ),
                 InkWell(
-                  /*onTap: (){
+                  *//*onTap: (){
                       showInfraLeadDetails(context,  position);
-                    },*/
+                    },*//*
                   child: Text(
                     accountMaster_page_controller.AccountDashboardDataList[position].isInfraLead==1?"Yes":"No",
                     style: GoogleFonts.poppins(
@@ -507,7 +507,7 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
                   ),
                 ),
               ],
-            ),
+            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
