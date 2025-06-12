@@ -4,12 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
+import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
 import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class SalesAdviseCreateScreen extends StatelessWidget {
@@ -44,7 +46,6 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-
               ],
             )
         ),
@@ -63,39 +64,63 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                   ),
                 );
               }),
-
-
               Obx(() {
                 return BindSalesData(context);
               }),
-              Obx((){
-                bool allSelected = saleCycleController.salesAdviseCheckedList
-                    .every((element) => element == true);
-                return Padding(
-                  padding: const EdgeInsets.only(right: 10.0),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ActionChip(
-                          label: Text(
-                            allSelected ? "Deselect All" : "Select All",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.whiteColor,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          onPressed: () {
-                            saleCycleController.selectAllSalesAdvise(!allSelected);
-                          },
-                          backgroundColor: AllColors.primaryDark1,
-                          shape: StadiumBorder(
-                            side: BorderSide.none,
-                          ),
-                        ),
+             Row(
+               mainAxisAlignment: MainAxisAlignment.end,
+               children: [
+                 GestureDetector(
+                   onTap: () {
+                     saleCycleController.bindAddress();
+                     showDialogForAddressUpdate(context);
+                   },
+                   child: Container(
+                     child: Padding(
+                       padding: const EdgeInsets.all(7.0),
+                       child: Icon(
+                         Icons.update,
+                         color: AllColors.primaryDark1,
+                       ),
+                     ),
+                     decoration: BoxDecoration(
+                         borderRadius: BorderRadius.circular(30),
+                         border: Border.all(
+                             color: AllColors.primaryDark1)),
+                   ),
+                 ),
+                 SizedBox(width: 10,),
+                 Obx((){
+                   bool allSelected = saleCycleController.salesAdviseCheckedList
+                       .every((element) => element == true);
+                   return Padding(
+                     padding: const EdgeInsets.only(right: 10.0),
+                     child: Row(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         children: [
+                           ActionChip(
+                             label: Text(
+                               allSelected ? "Unselect All" : "Select All",
+                               style: GoogleFonts.poppins(
+                                 color: AllColors.whiteColor,
+                                 fontWeight: FontWeight.w500,
+                               ),
+                             ),
+                             onPressed: () {
+                               saleCycleController.selectAllSalesAdvise(!allSelected);
+                             },
+                             backgroundColor: AllColors.primaryDark1,
+                             shape: StadiumBorder(
+                               side: BorderSide.none,
+                             ),
+                           ),
 
-                      ]),
-                );
-              }),
+                         ]),
+                   );
+                 }),
+               ],
+             ),
+
               Divider(
                 height: 1,
                 color: AllColors.grayColor,
@@ -117,7 +142,18 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                       EdgeInsets.only(left: 15, right: 15, bottom: 10),
                       child: DefaultButton(
                         press: () {
+                          List<QuoteItems> selectedJsonList = saleCycleController.getSelectedQuoteItemsAsJson();
+                          if(selectedJsonList.length>0){
+                            saleCycleController.getSalesAdviceCreate(selectedJsonList,saleCycleController.quoteHeaderdata[0].quoteId??"");
+                          }else{
+                            Utils.showErrorToastification("Error", "Please select at least one quote item.");
+                          }
 
+
+
+                         /* saleCycleController.getSalesAdviceCreate(
+
+                          );*/
                         },
                         text: "Create",
                       ),
@@ -622,7 +658,6 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                                   if(isSelected){
                                     updateQtySalesCycleProduct(context, index);
                                   }
-
                                 },
                                 child: Row(
                                   children: [
@@ -1089,5 +1124,310 @@ class SalesAdviseCreateScreen extends StatelessWidget {
         });
   }
 
+  Future showDialogForAddressUpdate(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: AlertDialog(
+              title: Text(
+                "Address Update",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              content: Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        bindShippingAddress(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: size.width,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: () {
+                              saleCycleController.quoteHeaderUpdateApiHit();
+                              Get.back();
+                            },
+                            child: Container(
+                              child: Text(
+                                'Update Address',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.whiteColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: size.width,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: () {
+                              saleCycleController.pageNumber = 0;
+                              saleCycleController.getAddressMasterList(
+                                  saleCycleController.pageNumber,
+                                  saleCycleController.quoteHeaderdata[0].accountCode!);
+                              saleCycleController.showConsigneeAddressList(
+                                  context, saleCycleController.address_master_list);
+                            },
+                            child: Container(
+                              child: Text(
+                                'Change Address',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.whiteColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          );
+        });
+  }
+  Widget bindShippingAddress(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: AllColors.grayColor, // Set the border color here
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: 'Shipping Address',
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w700,
+              fontSize: AllFontSize.sisxteen),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController.shippingController.value,
+                decoration: InputDecoration(
+                    hintText: "Address",
+                    labelText: "Address",
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: TextFormField(
+                readOnly: true,
+                controller:
+                saleCycleController.shippingAddress2Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Address 2",
+                    labelText: "Address 2",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
 
+              child: TextFormField(
+                readOnly: true,
+                keyboardType: TextInputType.number,
+                controller:
+                saleCycleController.Shipping_PostCode_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Pin Code",
+                    labelText: "Pin Code",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController.Shipping_City_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "City",
+                    labelText: "City",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller:
+                saleCycleController.Shipping_District_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "District",
+                    labelText: "District",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController.Shipping_State_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "State",
+                    labelText: "State",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+
+            /* SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController
+                    .Shipping_phone_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Phone No.",
+                    labelText: "Phone No.",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+
+            SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController
+                    .Shipping_email_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Email Id",
+                    labelText: "Email Id",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),*/
+          ],
+        ),
+      ),
+    );
+  }
 }

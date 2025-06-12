@@ -272,13 +272,13 @@ class AppUrl {
      static const String QuoteMstRejectReopen = "$BASE_URL/api/CRM/Quote/QuoteMstRejectReopen";
 
    //todo SalesAdvise
-     static const String salesAdviceHeaderGet="$BASE_URL/api/SalesAdvice/SalesAdviceHeaderGet";
-     static const String salesAdviceHeaderGetBySalesAdviceId="$BASE_URL/api/SalesAdvice/SalesAdviceHeaderGetBySalesAdviceId";
-     static const String salesAdviceCreate="$BASE_URL/api/SalesAdvice/SalesAdviceCreate";
-     static const String salesAdviceLineUpdate="$BASE_URL/api/SalesAdvice/SalesAdviceLineUpdate";
-     static const String salesAdviceHeaderUpdate="$BASE_URL/api/SalesAdvice/SalesAdviceHeaderUpdate";
-     static const String salesAdviceLineDelete="$BASE_URL/api/SalesAdvice/SalesAdviceLineDelete";
-     static const String salesAdviceComplete="$BASE_URL/api/SalesAdvice/SalesAdviceComplete";
+     static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";
+     static const String salesAdviceHeaderGetBySalesAdviceId="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGetBySalesAdviceId";
+     static const String salesAdviceCreate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceCreate";
+     static const String salesAdviceLineUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineUpdate";
+     static const String salesAdviceHeaderUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderUpdate";
+     static const String salesAdviceLineDelete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineDelete";
+     static const String salesAdviceComplete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceComplete";
 
 
 }

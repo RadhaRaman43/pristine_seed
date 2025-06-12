@@ -201,6 +201,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     ),
                                     child: IconButton(
                                         onPressed: (){
+                                          saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
                                           saleCycleController.salesAdviseCheckedList.value =
                                               List.generate(saleCycleController.quoteLinedata.length, (_) => false);
                                           Get.toNamed(RoutesName.salesAdviseCreateScreen);
@@ -327,9 +328,9 @@ class QuoteInformationScreen extends StatelessWidget {
                                               .UpdateBussinessTermPage);
                                           //openConfirmationDialog(context,   'Do you want to send this Quote for Approval?', "");
                                         },
-                                        text: "Sent For Approval",
+                                        text: "Send For Approval",
                                       ),
-                                      width: size.width * .49,
+                                      width: size.width * .5,
                                       //margin: EdgeInsets.only(right: 10),
                                     ),
                                   ]),
@@ -353,68 +354,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 : false,
                             child: GestureDetector(
                               onTap: () {
-                                saleCycleController.accountCode.value =
-                                    saleCycleController
-                                            .quoteHeaderdata[0].accountCode ??
-                                        "";
-                                saleCycleController
-                                        .updateQuoteValidityController
-                                        .value
-                                        .text =
-                                    saleCycleController
-                                        .quoteHeaderdata[0].quoteValidity!;
-                                saleCycleController
-                                        .updateExpectedClosureDateController
-                                        .value
-                                        .text =
-                                    saleCycleController
-                                        .quoteHeaderdata[0].expClosureDate!;
-                                //saleCycleController.updatecontactpersonNameController.value.text=saleCycleController.quoteHeaderdata[0].contactPersonName.toString();
-                                saleCycleController.activeController.value
-                                    .text = saleCycleController
-                                            .quoteHeaderdata[0].isActive ==
-                                        1
-                                    ? "Yes"
-                                    : "No";
-                                saleCycleController.quoteCommitController.value
-                                    .text = saleCycleController
-                                            .quoteHeaderdata[0].quoteCommit ==
-                                        1
-                                    ? "Yes"
-                                    : "No";
-                                saleCycleController.shippingController.value
-                                    .text = saleCycleController
-                                        .quoteHeaderdata[0].shippingAddress ??
-                                    "";
-                                saleCycleController.shippingAddress2Controller
-                                    .value.text = saleCycleController
-                                        .quoteHeaderdata[0].shippingAddress2 ??
-                                    "";
-                                saleCycleController.Shipping_PostCode_Controller
-                                    .value.text = saleCycleController
-                                        .quoteHeaderdata[0].shippingPostCode ??
-                                    "";
-                                saleCycleController.Shipping_City_Controller
-                                    .value.text = saleCycleController
-                                        .quoteHeaderdata[0].shippingCity ??
-                                    "";
-                                saleCycleController.Shipping_District_Controller
-                                    .value.text = saleCycleController
-                                        .quoteHeaderdata[0].shippingDistrict ??
-                                    "";
-                                saleCycleController.Shipping_State_Controller
-                                    .value.text = saleCycleController
-                                        .quoteHeaderdata[0].shippingStateName ??
-                                    "";
-                                saleCycleController.Shipping_phone_Controller
-                                    .value.text = saleCycleController
-                                        .quoteHeaderdata[0].shippingPhoneNo ??
-                                    "";
-                                saleCycleController.Shipping_email_Controller
-                                    .value.text = saleCycleController
-                                        .quoteHeaderdata[0].shippingEmailId ??
-                                    "";
-
+                                saleCycleController.bindAddress();
                                 showDialogForHeaderUpdate(context);
                               },
                               child: Container(

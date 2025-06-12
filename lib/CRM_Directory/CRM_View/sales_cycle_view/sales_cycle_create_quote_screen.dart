@@ -755,7 +755,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               _displayItemCatMasterForOption(selection).toString();
           if (!saleCycleController.itemCategorySelectedlist.contains(selection)) {
             saleCycleController.itemCategorySelectedlist.add(selection);
-            Utils.showToastification('Success', 'Add Successfully');
+            //Utils.showToastification('Success', 'Add Successfully');
           }else{
             Utils.showErrorToastification('Error', 'Already Selected');
           }
