@@ -50,6 +50,12 @@ class AddNewConsigneeadd extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
+           address_vm_controller.contact_name_controller.clear();
+           address_vm_controller.Consignee_controller.value.clear();
+           address_vm_controller.phone_no_controller.clear();
+           address_vm_controller.emailId_controller.clear();
+           address_vm_controller.pageNumber = 0;
+           address_vm_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
       Get.back();
       return false;},
       child: Scaffold(

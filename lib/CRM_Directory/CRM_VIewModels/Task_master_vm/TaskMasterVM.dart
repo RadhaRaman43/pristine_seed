@@ -183,7 +183,7 @@ class Taskmastervm extends GetxController{
     }
 
     Future<void>refreshList() async{
-        getTaskMaster(pageNumber, is_Active.toString(), '', '','',date_filter, is_done.value);
+        //getTaskMaster(pageNumber, is_Active.toString(), '', '','',date_filter, is_done.value);
 
 
     }

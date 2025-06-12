@@ -2742,7 +2742,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         ),
                       ),
                       Spacer(),
-                      InkWell(
+                      /*InkWell(
                         onTap: () {
                           accountMaster_page_controller.view = 'Sales';
                           TaskMaster_page_controller.getTaskMaster(
@@ -2755,7 +2755,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               TaskMaster_page_controller.is_done.value);
                           Get.toNamed(RoutesName.taskMasterDetails_screen);
                         },
-                        child: Text(
+                        child:
+                        Text(
                           saleCycleController.saleCycleList[0].taskId ?? "",
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
@@ -2764,6 +2765,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.wavy,
                           ),
+                        ),
+                      ),*/
+                      Text(
+                        saleCycleController.saleCycleList[0].taskId ?? "",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w500,
+                          decoration: TextDecoration.underline,
+                          //decorationStyle: TextDecorationStyle.wavy,
                         ),
                       ),
                     ],
