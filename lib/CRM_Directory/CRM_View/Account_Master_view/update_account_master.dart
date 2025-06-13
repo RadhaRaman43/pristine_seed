@@ -133,7 +133,7 @@ class UpdateAccountMaster extends StatelessWidget{
          else{
            accountMaster_page_controller.clearController();
            accountMaster_page_controller.pageNumber = 0;
-           accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
+           accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.IsActive_controller.text);
            Get.toNamed(RoutesName.accountMaster_screen);
          }
      return false;

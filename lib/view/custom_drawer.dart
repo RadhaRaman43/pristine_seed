@@ -317,7 +317,7 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.toNamed(RoutesName.accountMaster_screen,);
                                               accountMaster_page_controller.clearController();
                                               accountMaster_page_controller.pageNumber = 0;
-                                              accountMaster_page_controller.getAccountMaster(0 ,accountMaster_page_controller.is_Active.toString());
+                                              accountMaster_page_controller.getAccountMaster(0 ,accountMaster_page_controller.IsActive_controller.text);
                                               Navigator.of(context);
                                               break;
 
