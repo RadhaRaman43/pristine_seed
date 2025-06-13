@@ -39,6 +39,7 @@ import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_update_status_modal.dart';
+import '../../CRM_Models/sales_advise_modal/sales_advise_header_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
 class SalesCycleVm extends GetxController{
@@ -107,7 +108,7 @@ class SalesCycleVm extends GetxController{
   RxList<CustomList> get_PurchaseTimeFrame_list=<CustomList>[].obs;
   RxList<SalesCycleByIdModel> get_SalesCycleProductById_List=<SalesCycleByIdModel>[].obs;
 
-  RxList<SalesCycleQuoteHeaderModal> salesAdviseHeaderList=<SalesCycleQuoteHeaderModal>[].obs;
+  RxList<SalesAdviseHeaderModal> salesAdviseHeaderList=<SalesAdviseHeaderModal>[].obs;
 
   var closureDateController=TextEditingController().obs;
   var budgetAmountController=TextEditingController().obs;
@@ -4053,35 +4054,31 @@ class SalesCycleVm extends GetxController{
   getSalesAdviseData(int pageNumber, String saleCycleId, String quoteId){
     try{
       Map data= {
-          "filter_sales_advice_id": "",
-          "filter_quote_id": quoteId,
-          "filter_sales_cycle_id": saleCycleId,
-          "filter_account_code": "",
-          "filter_account_name": "",
-          "filter_rh_approval": "",
-          "filter_cbh_approval": "",
-          "filter_category_approval": "",
-          "filter_gm_approval": "",
-          "filter_quote_version": -1,
-          "filter_quote_validity": "",
-          "filter_exp_closure_date": "",
-          "filter_quote_status": "",
-          "filter_product_category": "",
-          "filter_created_by": email,
-          "filter_created_on": "",
-          "filter_frontliner_value": "",
-          "filter_branch_head_value": "",
-          "filter_zone_head_value": "",
-          "filter_clusture_head_value": "",
-          "row_per_page": rowsPerPage,
-          "page_number": pageNumber
+        "filter_sales_advice_id": "",
+        "filter_quote_id":quoteId,
+        "filter_sales_cycle_id": saleCycleId,
+        "filter_account_code": "",
+        "filter_account_name": "",
+        "filter_quote_version": -1,
+        "filter_quote_validity": "",
+        "filter_exp_closure_date": "",
+        "filter_sales_advice_status": "",
+        "filter_product_category": "",
+        "filter_created_by": email,
+        "filter_created_on": "",
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": "",
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": "",
+        "row_per_page":rowsPerPage,
+        "page_number":pageNumber
       };
       loading.value=true;
       _api.salesAdviceHeaderGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
         if(jsonResponse is List){
-          List<SalesCycleQuoteHeaderModal> response = jsonResponse.map((e) => SalesCycleQuoteHeaderModal.fromJson(e)).toList();
+          List<SalesAdviseHeaderModal> response = jsonResponse.map((e) => SalesAdviseHeaderModal.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
             loading.value = false;
             if(pageNumberForQuote==0){
@@ -4238,7 +4235,5 @@ class SalesCycleVm extends GetxController{
         "";
    Shipping_email_Controller.value.text = quoteHeaderdata[0].shippingEmailId ?? "";
   }
-
-
 
 }

@@ -148,11 +148,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                           }else{
                             Utils.showErrorToastification("Error", "Please select at least one quote item.");
                           }
-
-
-
                          /* saleCycleController.getSalesAdviceCreate(
-
                           );*/
                         },
                         text: "Create",

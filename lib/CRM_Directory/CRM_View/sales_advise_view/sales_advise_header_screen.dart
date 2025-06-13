@@ -44,10 +44,10 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                Spacer(),
+               /* Spacer(),
                 IconButton(onPressed: () {
                   //showDialogForFilter(context);
-                }, icon: Icon(Icons.filter_alt_sharp))
+                }, icon: Icon(Icons.filter_alt_sharp))*/
               ],
             )
         ),
@@ -129,18 +129,16 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
     String? quoteValidityDate=StaticMethod.convertDateFormat1(saleCycleController.salesAdviseHeaderList[position].quoteValidity ?? "");
     String? expectedClosuredateDate=StaticMethod.convertDateFormat1(saleCycleController.salesAdviseHeaderList[position].expClosureDate ?? "");
     String? createdOn=StaticMethod.dateTimeToDate(saleCycleController.salesAdviseHeaderList[position].createdOn ?? "");
-    String saleCycleStatus = saleCycleController.salesAdviseHeaderList[position].quoteStatus??"";
+    String saleAdviseStatus = saleCycleController.salesAdviseHeaderList[position].salesAdviceStatus?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'PENDING':
-          return Colors.brown[900]!;
-        case 'Rejected':
-          return Colors.red;
+        case 'draft':
+          return Colors.red[900]!;
         case 'rejected':
-          return Colors.red;
-        case 'APPROVED':
+          return AllColors.redColor;
+        case 'approved':
           return Colors.green;
-        case 'PENDING FOR APPROVAL':
+        case 'pending for approval':
           return Colors.yellow[700]!;
         default:
           return Colors.black;
@@ -151,13 +149,62 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
       child: Container(
         width: size.width,
         child: ListTile(
-          onTap: () {
-            // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
-            saleCycleController.getQuoteHeaderInformation(saleCycleController.salesAdviseHeaderList[position].quoteId, "quoteApprovalScreen");
-          },
           subtitle: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Sales Advise Id: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    child: Tooltip(
+                      message: saleCycleController.salesAdviseHeaderList[position].salesAdviceId?? "",
+                      child: Text(
+                        saleCycleController.salesAdviseHeaderList[position].salesAdviceId?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color:Colors.blue,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Sales Advise Status: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    child: Tooltip(
+                      message: saleCycleController.salesAdviseHeaderList[position].salesAdviceStatus?? "",
+                      child: Text(
+                        saleCycleController.salesAdviseHeaderList[position].salesAdviceStatus?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color:getStatusColor(saleAdviseStatus),
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      textAlign: TextAlign.end,
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Id : ",
@@ -166,8 +213,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .33,
+                  Flexible(
+                    //width: size.width * .33,
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position].quoteId?? "",
                       child: Text(
@@ -178,11 +225,13 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Version: ",
@@ -198,80 +247,12 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.end,
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Quote Status : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .36,
-                    child: Tooltip(
-                      message: saleCycleController.salesAdviseHeaderList[position]
-                          .quoteStatus ?? "",
-                      child: Text(saleCycleController.salesAdviseHeaderList[position]
-                          .quoteStatus ?? "",
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(saleCycleStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        overflow: TextOverflow.ellipsis,
-
-                      ),
-
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Sale Cycle Id : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      saleCycleController.pageNumber = 0;
-                      saleCycleController.filterQuoteAcceptedFlag.value="";
-                      saleCycleController.getsalesCycleData(saleCycleController.pageNumber, saleCycleController.salesAdviseHeaderList[position]
-                          .salesCycleId!, "ViewHeader", "QuoteApprovalPage");
-                    },
-                    child: Container(
-                      width: size.width * .36,
-                      child: Tooltip(
-                        message: saleCycleController.salesAdviseHeaderList[position]
-                            .salesCycleId ?? "",
-                        child: Text(saleCycleController.salesAdviseHeaderList[position]
-                            .salesCycleId ?? "",
-                          style: GoogleFonts.poppins(
-                            color: Colors.blueAccent,
-                            fontSize: AllFontSize.sisxteen,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-
-                        ),
-
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+            /*  Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Account Name : ",
@@ -281,8 +262,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   InkWell(
-                    child: Container(
-                      width: size.width*0.4,
+                    child: Flexible(
+                     // width: size.width*0.4,
                       child: Tooltip(
                         message: saleCycleController.salesAdviseHeaderList[position]
                             .accountName  ?? "",
@@ -299,20 +280,21 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.wavy,),
                         ),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                     onTap: (){
-                    /*  account_vm_controller.view='FromQuoteApproval';
+                    *//*  account_vm_controller.view='FromQuoteApproval';
                       contact_vm_controller.view='FromQuoteVIEW';
                       account_vm_controller.getAccMasterBuyCodeApi(quoteApprovalController.quoteApprovalList[position]
-                          .accountCode!);*/
+                          .accountCode!);*//*
                     },
                   ),
 
                 ],
-              ),
+              ),*/
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Contact Name : ",
@@ -321,8 +303,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .4,
+                  Flexible(
+                    //width: size.width * .4,
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position]
                           .contactName ?? "",
@@ -335,12 +317,13 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Validity : ",
@@ -349,8 +332,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .35,
+                  Flexible(
+                    //width: size.width * .35,
                     child: Tooltip(
                       message: quoteValidityDate.toString(),
                       child: Text(
@@ -361,12 +344,13 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Expected Closure Date: ",
@@ -381,12 +365,13 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.end,
                   ),
                 ],
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Total Amt : ",
@@ -395,8 +380,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .37,
+                  Flexible(
+                    //width: size.width * .37,
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position]
                           .quoteTotalAmount.toString(),
@@ -407,13 +392,14 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gst Amt. : ",
@@ -422,8 +408,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .4,
+                  Flexible(
+                   // width: size.width * .4,
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position]
                           .quoteGstAmount.toString(),
@@ -434,13 +420,14 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gross Amt. : ",
@@ -449,8 +436,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .35,
+                  Flexible(
+                    //width: size.width * .35,
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position]
                           .quoteGrossAmount.toString(),
@@ -461,6 +448,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
@@ -468,7 +456,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Spr No. : ",
@@ -477,8 +465,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .4,
+                  Flexible(
+                    //width: size.width * .4,
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position].sprNo ?? "",
                       child: Text(saleCycleController.salesAdviseHeaderList[position].sprNo ?? "",
@@ -487,13 +475,14 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created By : ",
@@ -502,8 +491,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .4,
+                  Flexible(
+                    //width: size.width * .4,
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position]
                           .createdBy?? "",
@@ -515,13 +504,14 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created On : ",
@@ -530,8 +520,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .4,
+                  Flexible(
+                    //width: size.width * .4,
                     child: Tooltip(
                       message: createdOn.toString(),
                       child: Text(
@@ -541,6 +531,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
                       ),
                     ),
                   ),
@@ -567,7 +558,6 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
               ),
             ],
           ),
-          trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
     );

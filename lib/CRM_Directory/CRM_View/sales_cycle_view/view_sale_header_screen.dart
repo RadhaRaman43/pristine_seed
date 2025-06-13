@@ -89,7 +89,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           //saleCycleController.getsalesCycleData(0, "", "",'');
           Get.toNamed(RoutesName.salesCycleScreen);
         }
-
         return false;
       },
       child: Scaffold(
@@ -223,14 +222,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible: saleCycleController.saleCycleList[0].quoteAccepted
-                              ?.toUpperCase() !=
-                          "LOSS" &&
-                      saleCycleController
-                              .saleCycleList[0].actualSalesCycleApprovalStatus
-                              ?.toLowerCase() !=
-                          "rejected" &&
-                      !(saleCycleController.FromPage.value == "FromDashboard"),
+                  visible:saleCycleController
+                      .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" && saleCycleController
+                      .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss"?false:true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       List<PopupMenuEntry> items = [];
@@ -241,7 +235,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           saleCycleController.saleCycleList[0]
                                   .actualSalesCycleApprovalStatus
                                   ?.toLowerCase() ==
-                              "pending for approval") {
+                              "pending for approval"  &&
+                      saleCycleController.saleCycleList[0]
+                          .salesCycleStatus
+                          ?.toLowerCase() !=
+                      "rejected" &&  saleCycleController.saleCycleList[0]
+                          .quoteAccepted
+                          ?.toLowerCase() ==
+                          "open") {
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -374,7 +375,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       }
                       if (saleCycleController.saleCycleList[0].quoteAccepted
                               ?.toLowerCase() ==
-                          "open") {
+                          "open"&& saleCycleController.saleCycleList[0].quoteAccepted
+                          ?.toLowerCase() !=
+                          "rejected") {
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -4060,560 +4063,560 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         saleCycleController.get_SalesCycleProductById_List[index].createdOn ??
             "");
     return Card(
-      child: IgnorePointer(
-        ignoring:
-            saleCycleController.saleCycleList[0].salesCycleStatus == 'Propose',
-        child: ListTile(
-          /*onTap: () {
-            if (flag == "Update") {
-              saleCycleController.updateCompetitorNameProductController.value
-                  .text =
-                  saleCycleController.get_SalesCycleProductById_List[index]
-                      .competitorName ?? "";
-              saleCycleController.updateCompetitorPriceProductController.value
-                  .text =
-                  (saleCycleController.get_SalesCycleProductById_List[index]
-                      .competitorPrice ?? 0).toString();
-              saleCycleController.updateLossReasonProductController.value.text =
-                  saleCycleController.get_SalesCycleProductById_List[index]
-                      .lossReason ?? "";
-              showDialogSalesCycleProductModify(context, index);
-            }
-          },*/
-          contentPadding: EdgeInsets.only(left: 5, right: 10),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Item Code:  ${saleCycleController.get_SalesCycleProductById_List[index].itemCode ?? ""}",
-                style: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w800,
+      child: ListTile(
+        /*onTap: () {
+          if (flag == "Update") {
+            saleCycleController.updateCompetitorNameProductController.value
+                .text =
+                saleCycleController.get_SalesCycleProductById_List[index]
+                    .competitorName ?? "";
+            saleCycleController.updateCompetitorPriceProductController.value
+                .text =
+                (saleCycleController.get_SalesCycleProductById_List[index]
+                    .competitorPrice ?? 0).toString();
+            saleCycleController.updateLossReasonProductController.value.text =
+                saleCycleController.get_SalesCycleProductById_List[index]
+                    .lossReason ?? "";
+            showDialogSalesCycleProductModify(context, index);
+          }
+        },*/
+        contentPadding: EdgeInsets.only(left: 5, right: 10),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Item Code:  ${saleCycleController.get_SalesCycleProductById_List[index].itemCode ?? ""}",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            Spacer(),
+
+            Visibility(
+              visible: flag == "Update" &&
+                  saleCycleController.saleCycleList[0].salesCycleStatus
+                      ?.toLowerCase() !=
+                      "suspect" &&   saleCycleController.saleCycleList[0].quoteAccepted
+                  ?.toLowerCase() == "open" &&  saleCycleController
+                  .saleCycleList[0].actualSalesCycleApprovalStatus
+                  ?.toLowerCase() !=
+                  "rejected" ,
+              child: GestureDetector(
+                onTap: () {
+                  saleCycleController.updateCompetitorNameProductController
+                      .value.text = saleCycleController
+                          .get_SalesCycleProductById_List[index]
+                          .competitorName ??
+                      "";
+                  saleCycleController.updateCompetitorPriceProductController
+                      .value.text = (saleCycleController
+                              .get_SalesCycleProductById_List[index]
+                              .competitorPrice ??
+                          0)
+                      .toString();
+                  saleCycleController.updateLossReasonProductController.value
+                      .text = saleCycleController
+                          .get_SalesCycleProductById_List[index].lossReason ??
+                      "";
+                  showDialogSalesCycleProductModify(context, index);
+                },
+                child: Icon(
+                  Icons.update_outlined,
+                  color: AllColors.textColor,
                 ),
               ),
-              Spacer(),
-
-              Visibility(
-                visible: flag == "Update" &&
-                    saleCycleController.saleCycleList[0].salesCycleStatus
-                        ?.toLowerCase() ==
-                        "prospect",
+            ),
+            Visibility(
+                visible: !(saleCycleController.FromPage.value ==
+                        "FromDashboard") &&
+                    flag == "Add" &&
+                    saleCycleController
+                            .saleCycleList[0].actualSalesCycleApprovalStatus
+                            ?.toLowerCase() !=
+                        "rejected" && saleCycleController
+                    .saleCycleList[0].quoteAccepted
+                    ?.toLowerCase() ==
+                    "open",
                 child: GestureDetector(
                   onTap: () {
-                    saleCycleController.updateCompetitorNameProductController
-                        .value.text = saleCycleController
-                            .get_SalesCycleProductById_List[index]
-                            .competitorName ??
-                        "";
-                    saleCycleController.updateCompetitorPriceProductController
-                        .value.text = (saleCycleController
-                                .get_SalesCycleProductById_List[index]
-                                .competitorPrice ??
-                            0)
-                        .toString();
-                    saleCycleController.updateLossReasonProductController.value
-                        .text = saleCycleController
-                            .get_SalesCycleProductById_List[index].lossReason ??
-                        "";
-                    showDialogSalesCycleProductModify(context, index);
+                    showSalesProductConfirmationDialog(
+                      context,
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index].salesCycleId
+                          .toString(),
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index].lineNo!,
+                    );
                   },
                   child: Icon(
-                    Icons.update_outlined,
-                    color: AllColors.textColor,
+                    Icons.delete_forever,
+                    color: AllColors.redColor,
                   ),
-                ),
-              ),
-              Visibility(
-                  visible: !(saleCycleController.FromPage.value ==
-                          "FromDashboard") &&
-                      flag == "Add" &&
-                      saleCycleController
-                              .saleCycleList[0].actualSalesCycleApprovalStatus
-                              ?.toLowerCase() !=
-                          "rejected" && saleCycleController
-                      .saleCycleList[0].quoteAccepted
-                      ?.toLowerCase() ==
-                      "open",
-                  child: GestureDetector(
-                    onTap: () {
-                      showSalesProductConfirmationDialog(
-                        context,
-                        saleCycleController
-                            .get_SalesCycleProductById_List[index].salesCycleId
-                            .toString(),
-                        saleCycleController
-                            .get_SalesCycleProductById_List[index].lineNo!,
-                      );
-                    },
-                    child: Icon(
-                      Icons.delete_forever,
-                      color: AllColors.redColor,
-                    ),
-                  ))
+                ))
 
-              /* Text(
-                saleCycleController
-                    .get_SalesCycleProductById_List[index]
-                    .itemCode ?? "",
-                style: GoogleFonts.poppins(
-                  color: AllColors.textColor,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),*/
-            ],
-          ),
-          subtitle: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Item Description : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+            /* Text(
+              saleCycleController
+                  .get_SalesCycleProductById_List[index]
+                  .itemCode ?? "",
+              style: GoogleFonts.poppins(
+                color: AllColors.textColor,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w800,
+              ),
+            ),*/
+          ],
+        ),
+        subtitle: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Item Description : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Flexible(
-                    child: Tooltip(
-                      message: saleCycleController
+                ),
+                Flexible(
+                  child: Tooltip(
+                    message: saleCycleController
+                            .get_SalesCycleProductById_List[index]
+                            .itemDescription ??
+                        "",
+                    child: Text(
+                      saleCycleController
                               .get_SalesCycleProductById_List[index]
                               .itemDescription ??
                           "",
-                      child: Text(
-                        saleCycleController
-                                .get_SalesCycleProductById_List[index]
-                                .itemDescription ??
-                            "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
                     ),
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Category  : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Category  : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    saleCycleController.get_SalesCycleProductById_List[index]
-                            .categoryName ??
-                        "",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                Text(
+                  saleCycleController.get_SalesCycleProductById_List[index]
+                          .categoryName ??
+                      "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Qty : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Qty : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  IgnorePointer(
-                    ignoring: flag == "Update" ||
-                        saleCycleController
-                                .saleCycleList[0].actualSalesCycleApprovalStatus
-                                ?.toLowerCase() ==
-                            "rejected" || saleCycleController
-                          .saleCycleList[0].actualSalesCycleApprovalStatus
-                          ?.toLowerCase() !=
-                      "open",
-                    child: InkWell(
-                      onTap: () {
-                        saleCycleController.qtyUpdateLineController.value.text =
-                            saleCycleController
-                                        .get_SalesCycleProductById_List[index]
-                                        .qty ==
-                                    null
-                                ? "0"
-                                : saleCycleController
-                                    .get_SalesCycleProductById_List[index].qty
-                                    .toString();
-                        updateQtySalesCycleProduct(context, index);
-                      },
-                      child: Text(
-                        saleCycleController
-                            .get_SalesCycleProductById_List[index].qty
-                            .toString(),
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                          decoration: flag == "Update" ||
-                                  saleCycleController.saleCycleList[0]
-                                          .actualSalesCycleApprovalStatus
-                                          ?.toLowerCase() ==
-                                      "rejected" || saleCycleController
+                ),
+                IgnorePointer(
+                  ignoring: flag == "Update" ||
+                      saleCycleController
                               .saleCycleList[0].actualSalesCycleApprovalStatus
-                              ?.toLowerCase() !=
-                              "open"
-                              ? TextDecoration.none
-                              : TextDecoration.underline,
-                        ),
+                              ?.toLowerCase() ==
+                          "rejected" || saleCycleController
+                        .saleCycleList[0].actualSalesCycleApprovalStatus
+                        ?.toLowerCase() !=
+                    "open",
+                  child: InkWell(
+                    onTap: () {
+                      saleCycleController.qtyUpdateLineController.value.text =
+                          saleCycleController
+                                      .get_SalesCycleProductById_List[index]
+                                      .qty ==
+                                  null
+                              ? "0"
+                              : saleCycleController
+                                  .get_SalesCycleProductById_List[index].qty
+                                  .toString();
+                      updateQtySalesCycleProduct(context, index);
+                    },
+                    child: Text(
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index].qty
+                          .toString(),
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                        decoration: flag == "Update" ||
+                                saleCycleController.saleCycleList[0]
+                                        .actualSalesCycleApprovalStatus
+                                        ?.toLowerCase() ==
+                                    "rejected" || saleCycleController
+                            .saleCycleList[0].actualSalesCycleApprovalStatus
+                            ?.toLowerCase() !=
+                            "open"
+                            ? TextDecoration.none
+                            : TextDecoration.underline,
                       ),
                     ),
                   ),
-                ],
-              ),
-              /* Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Unit Price : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+              ],
+            ),
+            /* Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Unit Price : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
+                ),
 
-                  Text(
-                    saleCycleController
-                        .get_SalesCycleProductById_List[index]
-                        .unitPrice.toString(),
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                Text(
+                  saleCycleController
+                      .get_SalesCycleProductById_List[index]
+                      .unitPrice.toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),*/
+                ),
+              ],
+            ),*/
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Unit Price : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Unit Price : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    saleCycleController
-                        .get_SalesCycleProductById_List[index].mrpPrice
-                        .toString(),
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                Text(
+                  saleCycleController
+                      .get_SalesCycleProductById_List[index].mrpPrice
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Total Price : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Total Price : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    saleCycleController
-                        .get_SalesCycleProductById_List[index].totalPrice
-                        .toString(),
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                Text(
+                  saleCycleController
+                      .get_SalesCycleProductById_List[index].totalPrice
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Line Status : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Line Status : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    saleCycleController
-                            .get_SalesCycleProductById_List[index].lineStatus ??
-                        "",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                Text(
+                  saleCycleController
+                          .get_SalesCycleProductById_List[index].lineStatus ??
+                      "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Created By : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    saleCycleController
-                        .get_SalesCycleProductById_List[index].createdBy
-                        .toString(),
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                Text(
+                  saleCycleController
+                      .get_SalesCycleProductById_List[index].createdBy
+                      .toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created On : ",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Created On : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                  Text(
-                    dateCreatedOn.toString(),
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.twelve,
-                      fontWeight: FontWeight.w500,
-                    ),
+                ),
+                Text(
+                  dateCreatedOn.toString(),
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Competitor Name : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                        ),
+                ),
+              ],
+            ),
+            Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Competitor Name : ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
                       ),
-                      Flexible(
-                        //width: size.width * 0.4,
-                        child: Tooltip(
-                          message: saleCycleController
+                    ),
+                    Flexible(
+                      //width: size.width * 0.4,
+                      child: Tooltip(
+                        message: saleCycleController
+                                .get_SalesCycleProductById_List[index]
+                                .competitorName ??
+                            "",
+                        child: Text(
+                          saleCycleController
                                   .get_SalesCycleProductById_List[index]
                                   .competitorName ??
                               "",
-                          child: Text(
-                            saleCycleController
-                                    .get_SalesCycleProductById_List[index]
-                                    .competitorName ??
-                                "",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Competitor Price : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Competitor Price : ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
                       ),
-                      Text(
-                        saleCycleController
-                                    .get_SalesCycleProductById_List[index]
-                                    .competitorPrice ==
-                                null
-                            ? ""
-                            : saleCycleController
+                    ),
+                    Text(
+                      saleCycleController
+                                  .get_SalesCycleProductById_List[index]
+                                  .competitorPrice ==
+                              null
+                          ? ""
+                          : saleCycleController
+                              .get_SalesCycleProductById_List[index]
+                              .competitorPrice
+                              .toString(),
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Loss Reason : ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Flexible(
+                      //width: size.width * 0.5,
+                      child: Tooltip(
+                        message: saleCycleController
                                 .get_SalesCycleProductById_List[index]
-                                .competitorPrice
-                                .toString(),
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Loss Reason : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Flexible(
-                        //width: size.width * 0.5,
-                        child: Tooltip(
-                          message: saleCycleController
+                                .lossReason ??
+                            "",
+                        child: Text(
+                          saleCycleController
                                   .get_SalesCycleProductById_List[index]
                                   .lossReason ??
                               "",
-                          child: Text(
-                            saleCycleController
-                                    .get_SalesCycleProductById_List[index]
-                                    .lossReason ??
-                                "",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Loss On : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Loss On : ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
                       ),
-                      Flexible(
-                        //width: size.width * 0.5,
-                        child: Tooltip(
-                          message: saleCycleController
+                    ),
+                    Flexible(
+                      //width: size.width * 0.5,
+                      child: Tooltip(
+                        message: saleCycleController
+                                .get_SalesCycleProductById_List[index]
+                                .lossOn ??
+                            "",
+                        child: Text(
+                          saleCycleController
                                   .get_SalesCycleProductById_List[index]
                                   .lossOn ??
                               "",
-                          child: Text(
-                            saleCycleController
-                                    .get_SalesCycleProductById_List[index]
-                                    .lossOn ??
-                                "",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
                         ),
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Loss By : ",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.twelve,
-                          fontWeight: FontWeight.w500,
-                        ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Loss By : ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
                       ),
-                      Flexible(
-                       // width: size.width * 0.5,
-                        child: Tooltip(
-                          message: saleCycleController
+                    ),
+                    Flexible(
+                     // width: size.width * 0.5,
+                      child: Tooltip(
+                        message: saleCycleController
+                                .get_SalesCycleProductById_List[index]
+                                .lossBy ??
+                            "",
+                        child: Text(
+                          saleCycleController
                                   .get_SalesCycleProductById_List[index]
                                   .lossBy ??
                               "",
-                          child: Text(
-                            saleCycleController
-                                    .get_SalesCycleProductById_List[index]
-                                    .lossBy ??
-                                "",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.twelve,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
+                          style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500,
                           ),
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              )
+                    ),
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
+
+        /* trailing: Visibility(
+          visible: !(saleCycleController.FromPage.value=="FromDashboard") && flag == "Add" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase()!="rejected" ,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              InkWell(
+                  onTap: () {
+                    showSalesProductConfirmationDialog(
+                      context, saleCycleController
+                        .get_SalesCycleProductById_List[index]
+                        .salesCycleId.toString(), saleCycleController
+                        .get_SalesCycleProductById_List[index]
+                        .lineNo!,);
+                  },
+                  child: Icon(Icons.delete_forever, color: Colors.red,)),
             ],
           ),
-
-          /* trailing: Visibility(
-            visible: !(saleCycleController.FromPage.value=="FromDashboard") && flag == "Add" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase()!="rejected" ,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                InkWell(
-                    onTap: () {
-                      showSalesProductConfirmationDialog(
-                        context, saleCycleController
-                          .get_SalesCycleProductById_List[index]
-                          .salesCycleId.toString(), saleCycleController
-                          .get_SalesCycleProductById_List[index]
-                          .lineNo!,);
-                    },
-                    child: Icon(Icons.delete_forever, color: Colors.red,)),
-              ],
-            ),
-          ),*/
-        ),
+        ),*/
       ),
     );
   }

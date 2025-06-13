@@ -215,7 +215,7 @@ class QuoteInformationScreen extends StatelessWidget {
                             visible: saleCycleController
                                 .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
                             child: Tooltip(
-                              message: "View Sale Advise",
+                              message: "View Sales Advise",
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30),
@@ -227,7 +227,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                        .quoteHeaderdata[0].quoteId??"");
                                    //Get.toNamed(RoutesName.salesAdviseHeaderScreen);
                                 },
-                                    icon: Icon(Icons.remove_red_eye_rounded)),
+                                    icon: Icon(Icons.article)),
                               ),
                             ),);
                         }),
@@ -2153,6 +2153,7 @@ class QuoteInformationScreen extends StatelessWidget {
               child: Column(
                 children: [
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Sales Cycle Id",
@@ -2171,6 +2172,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontSize: AllFontSize.sisxteen,
                           fontWeight: FontWeight.w500,
                         ),
+                        textAlign: TextAlign.end,
                       ),
                     ],
                   ),
@@ -2178,6 +2180,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Account Name",
@@ -2187,17 +2190,16 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
                       InkWell(
-                        child: Container(
-                          width: size.width * .4,
+                        child: Flexible(
+                         // width: size.width * .4,
                           child: Tooltip(
                             message: saleCycleController
                                     .quoteHeaderdata[0].accountName ??
                                 "",
                             child: Text(
                               saleCycleController
-                                      .quoteHeaderdata[0].accountName ??
+                                  .quoteHeaderdata[0].accountName ??
                                   "",
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
@@ -2227,6 +2229,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Contact Name',
@@ -2236,7 +2239,6 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
                       Text(
                         saleCycleController.quoteHeaderdata[0].contactName ??
                             "",
@@ -2252,6 +2254,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Product Category",
@@ -2261,9 +2264,9 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Container(
-                        width: size.width * .4,
+
+                      Flexible(
+                        //width: size.width * .4,
                         child: Tooltip(
                           message: saleCycleController
                                   .quoteHeaderdata[0].productCategory ??
@@ -2287,6 +2290,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Quote Status",
@@ -2296,9 +2300,9 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Container(
-                        width: size.width * .3,
+
+                      Flexible(
+                        //width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
                             message: saleCycleController
@@ -2324,6 +2328,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Expected Closure Date",
@@ -2333,7 +2338,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
+
                       Text(
                         expectedclosuredate.toString(),
                         style: GoogleFonts.poppins(
@@ -2348,6 +2353,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Quote Validity",
@@ -2357,9 +2363,9 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Container(
-                        width: size.width * .3,
+
+                      Flexible(
+                        //width: size.width * .3,
                         child: Tooltip(
                           message: quoteValidityDate.toString(),
                           child: Text(
@@ -2379,6 +2385,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Quote Commit",
@@ -2388,9 +2395,9 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Container(
-                        width: size.width * .3,
+
+                      Flexible(
+                        //width: size.width * .3,
                         child: Obx(() {
                           return Tooltip(
                             message: saleCycleController
@@ -2744,6 +2751,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500),
+
+
                           );
                         }),
                       )
@@ -2771,6 +2780,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
+                        textAlign: TextAlign.end,
                       ),
                     ],
                   ),
@@ -2797,6 +2807,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
+                        textAlign: TextAlign.end,
                       ),
                     ],
                   ),
@@ -2827,6 +2838,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
+                        textAlign: TextAlign.end,
                       ),
                     ],
                   ),
@@ -2834,6 +2846,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Advance Payment Amt",
@@ -2843,7 +2856,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
+
                       Text(
                         saleCycleController
                                     .quoteHeaderdata[0].advancePaymentAmt ==
@@ -2857,6 +2870,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
+                        textAlign: TextAlign.end,
                       ),
                     ],
                   ),
@@ -2864,6 +2878,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "FrontLiner Remarks",
@@ -2873,9 +2888,8 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Container(
-                        width: size.width * 0.5,
+                      Flexible(
+                        //width: size.width * 0.5,
                         child: Tooltip(
                           message: saleCycleController
                                   .quoteHeaderdata[0].otherRemarks ??
