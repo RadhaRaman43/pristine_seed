@@ -742,6 +742,12 @@ class TaskApprovalListScreen extends StatelessWidget{
                               filterAccountOwner(),
                               SizedBox(height: 10,),
 
+                              filterPinCode(),
+                              SizedBox(height: 10,),
+
+                              filterDistrict(),
+                              SizedBox(height: 10,),
+
                               filterWithTaskDueDate(context),
                               SizedBox(height: 10,),
 
@@ -1387,14 +1393,68 @@ class TaskApprovalListScreen extends StatelessWidget{
     );
   }
 
+  filterPinCode() {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: TaskMaster_page_controller.postalCodeController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Pin Code',
+          hintText: 'Pin Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  filterDistrict() {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: TaskMaster_page_controller.district_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'District',
+          hintText: 'District',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
   bindBranchHead() {
     return TextField(
       controller: TaskMaster_page_controller.branch_head_value_controller.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region & Zone',
-          hintText: 'Region & Zone',
+          labelText: 'Region Name',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

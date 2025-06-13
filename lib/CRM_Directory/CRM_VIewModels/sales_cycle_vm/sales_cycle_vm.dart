@@ -2328,6 +2328,11 @@ class SalesCycleVm extends GetxController{
                                 ),
                               ),
                               onPressed: ()  {
+                                if (Quote_Selected_list.isEmpty) {
+                                  for (int i = 0; i < quoteList.length; i++) {
+                                    checkBoxValues[i] = false;
+                                  }
+                                }
                                 pageNumberForQuote = 0;
                                 getQuoteHeaderData(pageNumberForQuote,saleCycleList.salesCycleId!, "Approved");
                                 Get.toNamed(RoutesName.approvedQuotationListScreen);
@@ -3347,6 +3352,9 @@ class SalesCycleVm extends GetxController{
       checkBoxValues[index] = true;
     }
 
+    // After toggle, if the selected list is empty -> uncheck all checkboxes
+
+
   }
 
 
@@ -3864,8 +3872,8 @@ class SalesCycleVm extends GetxController{
     saleCycleController.value.clear();
     salesCycleOwnerController.value.clear();
     filterTask_Id_controller.value.clear();
-    SaleCycleStatusController.value.clear();
-    ApprovalStatusController.value.clear();
+    //SaleCycleStatusController.value.clear();
+    //ApprovalStatusController.value.clear();
     accountNameController.value.clear();
     accountCodeController.value.clear();
     salesCycleOwnerController.value.clear();
@@ -3885,6 +3893,8 @@ class SalesCycleVm extends GetxController{
     createdOnCnontroller.value.clear();
     createdOnStartToEnd.value="";
     extClosureStartToEnd.value="";
+    SaleCycleStatusController.value.text = 'All';
+    ApprovalStatusController.value.text = 'All';
 
   }
 

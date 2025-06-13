@@ -59,8 +59,8 @@ class SalesCycleScreen extends StatelessWidget{
                 ),
                 Spacer(),
                 IconButton(onPressed: () {
-                  salesCycleController.SaleCycleStatusController.value.text = 'All';
-                  salesCycleController.ApprovalStatusController.value.text = 'All';
+                  /*salesCycleController.SaleCycleStatusController.value.text = 'All';
+                  salesCycleController.ApprovalStatusController.value.text = 'All';*/
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
               ],
@@ -315,6 +315,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
           salesCycleController.pageNumber=0;
           salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
+          salesCycleController.clearAllFieldOfQuoteFilter();
 
           },
           subtitle:Column(

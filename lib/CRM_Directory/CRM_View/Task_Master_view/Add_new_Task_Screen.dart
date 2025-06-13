@@ -1281,8 +1281,8 @@ class AddNewTaskScreen extends StatelessWidget{
               vertical: AllFontSize.two, horizontal: AllFontSize.ten
           ),
           //contentPadding: EdgeInsets.symmetric(vertical:5,horizontal:5),
-          hintText: "Next Interaction Time",
-          labelText: 'Next Interaction Time',
+          hintText: "Time Of Visit",
+          labelText: 'Time Of Visit',
           hintStyle: TextStyle(color: AllColors.blackColor),
           labelStyle: TextStyle(color: AllColors.blackColor),
           suffixIcon: Icon(

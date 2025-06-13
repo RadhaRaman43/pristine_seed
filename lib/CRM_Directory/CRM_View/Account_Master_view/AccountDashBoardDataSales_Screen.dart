@@ -346,7 +346,7 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                 ),
               ],
             ),
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
@@ -367,14 +367,14 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                       decorationStyle: TextDecorationStyle.wavy,
                     ),
                   ),
-                  /*onTap: (){
+                  *//*onTap: (){
                       salesCycleController.getsalesCycleData(0, TaskMaster_page_controller
                           .Task_Master_list[position]
                           .salesCycleId!, "ViewHeader", 'FromTaskScreen');
-                    },*/
+                    },*//*
                 ),
               ],
-            ),
+            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

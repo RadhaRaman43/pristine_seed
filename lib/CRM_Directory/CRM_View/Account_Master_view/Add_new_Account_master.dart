@@ -87,6 +87,8 @@ class AddNewAccountMaster extends StatelessWidget{
         onWillPop: () async {
           if(accountMaster_page_controller.view == 'FromDraft'){
             accountMaster_page_controller.clearFilterController();
+            accountMaster_page_controller.pageNumber = 0;
+            accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
             Get.toNamed(RoutesName.Draft_item_list);
           }else if(accountMaster_page_controller.FromPage == "Task"){
             print('FromPage....${accountMaster_page_controller.FromPage == "Task"}');
@@ -159,7 +161,7 @@ class AddNewAccountMaster extends StatelessWidget{
                      // await updateAccountData(accountMaster_page_controller.DraftId);
                       accountMaster_page_controller.DraftAccountMstUploaderApiHit('Update');
                       accountMaster_page_controller.clearController();
-                      Get.toNamed(RoutesName.accountMaster_screen);
+                      Get.toNamed(RoutesName.Draft_item_list);
                     }
                     try {
                      // accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
@@ -419,9 +421,9 @@ class AddNewAccountMaster extends StatelessWidget{
                       ),
                       child: Column(
                         children: [
-                         /* bindAccountTypeDropDown(context),
+                          bindAccountTypeDropDown(context),
 
-                          SizedBox(height: 15,),*/
+                          SizedBox(height: 15,),
 
                           Form(
                             key: _formKey,
@@ -978,7 +980,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
                               },
-
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address",
                                   labelText: "Address",
@@ -1024,7 +1026,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
                               },
-
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address2",
                                   labelText: "Address2",
@@ -1184,7 +1186,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                 child: Icon(Icons.add),
                                 onTap: (){
                                   accountMaster_page_controller.pageNumber = 0;
-                                  accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,"","");
+                                  accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,"","", "");
                                   accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
                                 },
@@ -1237,6 +1239,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                               },
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address",
                                   labelText: "Address",
@@ -1282,6 +1285,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                               },
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address2",
                                   labelText: "Address2",
@@ -1728,7 +1732,7 @@ class AddNewAccountMaster extends StatelessWidget{
     );
   }
 
-  Widget bindAccountTypeDropDown(context){
+  /*Widget bindAccountTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayAccTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -1771,19 +1775,19 @@ class AddNewAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Account Type*',
               labelText: 'Account Type*',
-              /*hintStyle: GoogleFonts.poppins(
+              *//*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
                   fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
+              ),*//*
+              *//*labelStyle: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
+                  fontSize: AllFontSize.sisxteen),*//*
+              *//*focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              ),*//*
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -1831,6 +1835,57 @@ class AddNewAccountMaster extends StatelessWidget{
           ),
         );
       },
+    );
+  }*/
+
+  Widget bindAccountTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.account_type_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: 15,
+              fontWeight: FontWeight.w300),
+        ),
+         initialSelection:accountMaster_page_controller.get_Acc_type_list.length>0?accountMaster_page_controller.get_Acc_type_list[1]:null,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.account_type_controller.text =
+              _displayAccTypeForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Acc_type_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 
