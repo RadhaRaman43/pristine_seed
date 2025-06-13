@@ -126,8 +126,9 @@ class RoutesName{
   static const approvedQuotationListScreen="/approved_quotation_list.dart";
   static const ItemListBySalesCycle_Screen="/ItemListBySalesCycle_Screen.dart";
 
-
-
+  //todo sales advise
+  static const salesAdviseCreateScreen="/sales_advise_create_screen";
+  static const salesAdviseHeaderScreen="/sales_advise_header_screen";
   //todo image not found...
 
 

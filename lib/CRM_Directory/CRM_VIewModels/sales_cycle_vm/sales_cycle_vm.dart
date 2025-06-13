@@ -39,6 +39,7 @@ import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_update_status_modal.dart';
+import '../../CRM_Models/sales_advise_modal/sales_advise_header_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
 class SalesCycleVm extends GetxController{
@@ -72,6 +73,7 @@ class SalesCycleVm extends GetxController{
   int pageNumber = 0;
   int pageNumberForItem = 0;
   int pageNumberForQuote = 0;
+  int pageNumberSalesAdvise = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
   int total_rows_items = 0;
@@ -106,6 +108,7 @@ class SalesCycleVm extends GetxController{
   RxList<CustomList> get_PurchaseTimeFrame_list=<CustomList>[].obs;
   RxList<SalesCycleByIdModel> get_SalesCycleProductById_List=<SalesCycleByIdModel>[].obs;
 
+  RxList<SalesAdviseHeaderModal> salesAdviseHeaderList=<SalesAdviseHeaderModal>[].obs;
 
   var closureDateController=TextEditingController().obs;
   var budgetAmountController=TextEditingController().obs;
@@ -2437,7 +2440,6 @@ class SalesCycleVm extends GetxController{
 
   void showConsigneeAddressList(BuildContext context, RxList<AddressMasterModel> address_master_list) {
     showDialog(
-      // barrierDismissible: false,
         context: context,
         builder: (context){
           return AlertDialog(
@@ -4005,4 +4007,243 @@ class SalesCycleVm extends GetxController{
       loading.value = false;
     }
   }
+
+  var salesAdviseCheckedList = <bool>[].obs;
+
+  void toggleSalesAdviseCheckbox(int index) {
+    salesAdviseCheckedList[index] = !salesAdviseCheckedList[index];
+  }
+
+  void selectAllSalesAdvise(bool select) {
+    for (int i = 0; i < salesAdviseCheckedList.length; i++) {
+      salesAdviseCheckedList[i] = select;
+    }
+  }
+
+  getquotationMstRejectReopen(String quoteid,String remarks){
+    loading.value = true;
+    Map data={
+      "quote_id": quoteid,
+      "created_by": email,
+      "reopen_remarks": remarks
+    };
+    try{
+      _api.QuoteMstRejectReopenApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition?.toLowerCase()=="true"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            filterQuoteAcceptedFlag.value="";
+            getQuoteHeaderInformation(
+                quoteid, "");
+            loading.value = false;
+          }else {
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          loading.value = false;
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.showErrorToastification("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
+
+
+  getSalesAdviseData(int pageNumber, String saleCycleId, String quoteId){
+    try{
+      Map data= {
+        "filter_sales_advice_id": "",
+        "filter_quote_id":quoteId,
+        "filter_sales_cycle_id": saleCycleId,
+        "filter_account_code": "",
+        "filter_account_name": "",
+        "filter_quote_version": -1,
+        "filter_quote_validity": "",
+        "filter_exp_closure_date": "",
+        "filter_sales_advice_status": "",
+        "filter_product_category": "",
+        "filter_created_by": email,
+        "filter_created_on": "",
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": "",
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": "",
+        "row_per_page":rowsPerPage,
+        "page_number":pageNumber
+      };
+      loading.value=true;
+      _api.salesAdviceHeaderGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesAdviseHeaderModal> response = jsonResponse.map((e) => SalesAdviseHeaderModal.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
+            loading.value = false;
+            if(pageNumberForQuote==0){
+              salesAdviseHeaderList.clear();
+            }
+            salesAdviseHeaderList.addAll(response);
+            total_rows=int.parse(salesAdviseHeaderList[0].totalRows!);
+            Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+          }else {
+            salesAdviseHeaderList.value=[];
+            loading.value = false;
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+  getSalesAdviceCreate(List<QuoteItems> selectedJsonList, /*String flagAll,*/ String quoteId){
+    loading.value = true;
+    List<Map<String, dynamic>> lineData = [];
+    //if (flagAll == "All") {
+      for (int i = 0; i < selectedJsonList.length; i++) {
+        final item = selectedJsonList[i];
+        lineData.add({
+          "line_no": item.lineNo,
+          "item_code": item.itemCode,
+          "item_description": item.itemDescription,
+          "qty": qtyUpdateLineController.value.text.isNotEmpty?item.qty:qtyUpdateLineController.value,
+          "quote_line_price": item.quoteLinePrice,
+          "discount_per": item.discountPer,
+          "bm_discount_per": item.bmDiscountPer,
+          "gm_discount_per": item.gmDiscountPer,
+          "gm_discount_amount": item.gmDiscountAmount,
+          "approved_discount_per": item.approvedDiscountPer,
+          "sales_credit": item.salesCredit,
+          "line_status": "Pending"
+        });
+      }
+   /* } else if (selectedIndex != null && selectedIndex >= 0 && selectedIndex < quoteLinedata.length) {
+      final item = quoteLinedata[selectedIndex];
+      lineData.add({
+        "line_no": item.lineNo,
+        "item_code": item.itemCode,
+        "item_description": item.itemDescription,
+        "qty": item.qty,
+        "quote_line_price": item.quoteLinePrice,
+        "discount_per": item.discountPer,
+        "bm_discount_per": item.bmDiscountPer,
+        "gm_discount_per": item.gmDiscountPer,
+        "gm_discount_amount": item.gmDiscountAmount,
+        "approved_discount_per": item.approvedDiscountPer,
+        "sales_credit": item.salesCredit,
+        "line_status": "Pending"
+      });
+    }*/
+
+    Map<String, dynamic> data = {
+      "quote_id": quoteId,
+      "consignee_id": consigneeId,
+      "created_by": email,
+      "lines": lineData,
+    };
+    try{
+      print(data);
+      _api.salesAdviceCreateApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
+          if(response[0].condition!.toLowerCase()=="true"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            pageNumber=0;
+            clearSaleProductListController();
+            Get.toNamed(RoutesName.quoteInformationScreen);
+            getQuoteHeaderInformation(
+                quoteId, "");
+            loading.value = false;
+          }else {
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
+
+  RxList<QuoteItems> salesAdviceItemList=<QuoteItems>[].obs;
+
+
+  List<QuoteItems> getSelectedQuoteItemsAsJson() {
+    List<QuoteItems> selected = [];
+
+    int minLength = salesAdviceItemList.length < salesAdviseCheckedList.length
+        ? salesAdviceItemList.length
+        : salesAdviseCheckedList.length;
+
+    for (int i = 0; i < minLength; i++) {
+      if (salesAdviseCheckedList[i]) {
+        selected.add(salesAdviceItemList[i]);
+      }
+    }
+    return selected;
+  }
+
+  void bindAddress() {
+    accountCode.value = quoteHeaderdata[0].accountCode ?? "";
+    updateQuoteValidityController.value.text = quoteHeaderdata[0].quoteValidity!;
+    updateExpectedClosureDateController.value.text = quoteHeaderdata[0].expClosureDate!;
+    //saleCycleController.updatecontactpersonNameController.value.text=saleCycleController.quoteHeaderdata[0].contactPersonName.toString();
+   activeController.value.text = quoteHeaderdata[0].isActive == 1? "Yes"
+        : "No";
+    quoteCommitController.value.text = quoteHeaderdata[0].quoteCommit == 1? "Yes"
+        : "No";
+    shippingController.value.text = quoteHeaderdata[0].shippingAddress ??
+        "";
+    shippingAddress2Controller.value.text = quoteHeaderdata[0].shippingAddress2 ??
+        "";
+   Shipping_PostCode_Controller.value.text = quoteHeaderdata[0].shippingPostCode ??
+        "";
+    Shipping_City_Controller.value.text = quoteHeaderdata[0].shippingCity ??
+        "";
+   Shipping_District_Controller.value.text = quoteHeaderdata[0].shippingDistrict ??
+        "";
+    Shipping_State_Controller.value.text = quoteHeaderdata[0].shippingStateName ??
+        "";
+    Shipping_phone_Controller.value.text = quoteHeaderdata[0].shippingPhoneNo ??
+        "";
+   Shipping_email_Controller.value.text = quoteHeaderdata[0].shippingEmailId ?? "";
+  }
+
 }
