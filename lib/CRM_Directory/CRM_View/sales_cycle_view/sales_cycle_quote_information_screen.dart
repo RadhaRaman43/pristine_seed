@@ -57,6 +57,7 @@ class QuoteInformationScreen extends StatelessWidget {
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
               "",
               saleCycleController.FromPage.value);
+          saleCycleController.clearAllFieldOfQuoteFilter();
           saleCycleController.getQuoteHeaderData(
               saleCycleController.pageNumberForQuote,
               saleCycleController.quoteHeaderdata[0].salesCycleId!,

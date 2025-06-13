@@ -164,7 +164,7 @@ class UpdateAccountMaster extends StatelessWidget{
            PopupMenuButton(itemBuilder: (BuildContext context){
              List<PopupMenuEntry>  items= [];
 
-             if(accountMaster_page_controller.view == 'Account'){
+             /*if(accountMaster_page_controller.view == 'Account'){
                items.add(
                  PopupMenuItem(
                    child: Row(
@@ -180,7 +180,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                    },
                  ),);
-             }
+             }*/
              items.add( PopupMenuItem(
                child: Row(
                  children: [
@@ -1385,6 +1385,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                            },
+                           maxLength: 500,
                            decoration: InputDecoration(
                                hintText: "Address",
                                labelText: "Address",
@@ -1432,6 +1433,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                              accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                            },
+                           maxLength: 500,
                            decoration: InputDecoration(
                                hintText: "Address2",
                                labelText: "Address2",

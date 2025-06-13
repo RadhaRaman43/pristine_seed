@@ -980,7 +980,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
                               },
-
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address",
                                   labelText: "Address",
@@ -1026,7 +1026,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
                               },
-
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address2",
                                   labelText: "Address2",
@@ -1239,6 +1239,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                               },
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address",
                                   labelText: "Address",
@@ -1284,6 +1285,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
                               },
+                              maxLength: 500,
                               decoration: InputDecoration(
                                   hintText: "Address2",
                                   labelText: "Address2",

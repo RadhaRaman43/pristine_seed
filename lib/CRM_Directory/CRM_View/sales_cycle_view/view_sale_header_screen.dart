@@ -384,30 +384,19 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               ],
                             ),
                             onTap: () {
-                              saleCycleController
-                                  .updateQuoteAccetedCycleController.value
-                                  .clear();
-                              saleCycleController.saleCycleController.value
-                                  .clear();
+                              saleCycleController.updateQuoteAccetedCycleController.value.clear();
+                              saleCycleController.saleCycleController.value.clear();
                               saleCycleController.isChooseQuote.value = false;
                               saleCycleController.isApprove.value = false;
                               saleCycleController.isReject.value = false;
                               saleCycleController.isCheck.value = -1;
-                              saleCycleController.checkBoxValues
-                                  .updateAll((key, value) => false);
+                              saleCycleController.checkBoxValues.updateAll((key, value) => false);
                               saleCycleController.Quote_Selected_list.clear();
-                              if (saleCycleController
-                                      .saleCycleList[0].salesCycleStatus !=
-                                  "Propose") {
-                                saleCycleController
-                                    .updateQuoteAccetedCycleController
-                                    .value
-                                    .text = "LOSS";
+                              if (saleCycleController.saleCycleList[0].salesCycleStatus != "Propose") {
+                                saleCycleController.updateQuoteAccetedCycleController.value.text = "LOSS";
                                 saleCycleController.isReject.value = true;
                               }
-                              saleCycleController.showDialogForsalescycleUpdate(
-                                  context,
-                                  saleCycleController.saleCycleList[0]);
+                              saleCycleController.showDialogForsalescycleUpdate(context, saleCycleController.saleCycleList[0]);
                             },
                           ),
                         );

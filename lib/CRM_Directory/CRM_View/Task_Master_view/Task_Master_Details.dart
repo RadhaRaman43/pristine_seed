@@ -59,7 +59,7 @@ class TaskMasterDetails extends StatelessWidget{
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
           }
           else {
-
+            TaskMaster_page_controller.resetAllFieldOfFilter();
             TaskMaster_page_controller.pageNumber = 0;
             TaskMaster_page_controller
                 .date_filter.value = "Today";
@@ -75,7 +75,7 @@ class TaskMasterDetails extends StatelessWidget{
                     .toString(),
                 '',
                 '',
-                '',
+                TaskMaster_page_controller.Task_status_controller.value.text,
                 TaskMaster_page_controller.date_filter,
                 TaskMaster_page_controller.is_done.value);
 
@@ -151,7 +151,9 @@ class TaskMasterDetails extends StatelessWidget{
                     return Visibility(
                       visible: TaskMaster_page_controller
                           .Task_Master_list[0]
-                          .taskStatus!.toLowerCase() == 'rejected' ?true:false,
+                          .taskStatus!.toLowerCase() == 'rejected' && TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .createdBy==TaskMaster_page_controller.email?true:false,
                       child: IconButton(
                         icon: Icon(Icons.lock_open_rounded),
                         onPressed: (){

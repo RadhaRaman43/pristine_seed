@@ -77,12 +77,9 @@ class TaskMasterScreen extends StatelessWidget {
 
 
                 IconButton(onPressed: () {
-                  TaskMaster_page_controller.Task_status_controller.text =
-                  "All";
-                  TaskMaster_page_controller.isInfraLeadFilterController.text =
-                  "All";
-                  TaskMaster_page_controller.SaleCycleActive_Controller.text =
-                  "All";
+                  /*TaskMaster_page_controller.Task_status_controller.text = "All";
+                  //TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                  TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";*/
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
               ],
@@ -149,7 +146,7 @@ class TaskMasterScreen extends StatelessWidget {
                                       .toString(),
                                   '',
                                   '',
-                                  '',
+                                  TaskMaster_page_controller.Task_status_controller.value.text,
                                   TaskMaster_page_controller.date_filter,
                                   TaskMaster_page_controller.is_done.value);
                             }, //Text
@@ -203,7 +200,7 @@ class TaskMasterScreen extends StatelessWidget {
                                       .toString(),
                                   '',
                                   '',
-                                  '',
+                                  TaskMaster_page_controller.Task_status_controller.value.text,
                                   TaskMaster_page_controller.date_filter,
                                   TaskMaster_page_controller.is_done.value);
                             }, //Text
@@ -312,7 +309,7 @@ class TaskMasterScreen extends StatelessWidget {
                                       .toString(),
                                   '',
                                   '',
-                                  '',
+                                  TaskMaster_page_controller.Task_status_controller.value.text,
                                   TaskMaster_page_controller.date_filter,
                                   TaskMaster_page_controller.is_done.value);
                             }, //Text
@@ -372,7 +369,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           .toString(),
                                       '',
                                       '',
-                                      '',
+                                      TaskMaster_page_controller.Task_status_controller.value.text,
                                       TaskMaster_page_controller.date_filter,
                                       TaskMaster_page_controller.is_done.value);
                                 }, //Text
@@ -421,7 +418,7 @@ class TaskMasterScreen extends StatelessWidget {
                                             .toString(),
                                         '',
                                         '',
-                                        '',
+                                        TaskMaster_page_controller.Task_status_controller.value.text,
                                         TaskMaster_page_controller.date_filter,
                                         TaskMaster_page_controller.is_done
                                             .value);
@@ -472,7 +469,7 @@ class TaskMasterScreen extends StatelessWidget {
                                             .toString(),
                                         '',
                                         '',
-                                        '',
+                                        TaskMaster_page_controller.Task_status_controller.value.text,
                                         TaskMaster_page_controller.date_filter,
                                         TaskMaster_page_controller.is_done
                                             .value);
@@ -524,7 +521,7 @@ class TaskMasterScreen extends StatelessWidget {
                                             .toString(),
                                         '',
                                         '',
-                                        '',
+                                        TaskMaster_page_controller.Task_status_controller.value.text,
                                         TaskMaster_page_controller.date_filter,
                                         TaskMaster_page_controller.is_done
                                             .value);

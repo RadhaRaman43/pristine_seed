@@ -1435,10 +1435,12 @@ class Taskmastervm extends GetxController{
        Sale_cycle_Id_controller.clear();
        filterTask_Id_controller.clear();
        isInfraLeadFilterController.text = "No";
-       Task_status_controller.clear();
+       //Task_status_controller.clear();
        filterTaskDuedateController.value.clear();
        filterTaskCreationOnController.value.clear();
        createdOnStartToEnd.value = "";
+       Task_status_controller.text = "All";
+       SaleCycleActive_Controller.text = "All";
   }
 
 }
