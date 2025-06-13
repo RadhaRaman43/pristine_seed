@@ -193,8 +193,28 @@ class QuoteInformationScreen extends StatelessWidget {
                               return Visibility(
                                 visible: saleCycleController
                                     .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
-                                child: Tooltip(
-                                  message: "Sale Advise Create",
+                                child: ActionChip(
+                                  label: Text(
+                                    "Sales Advise Create",
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.whiteColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
+                                    saleCycleController.salesAdviseCheckedList.value =
+                                        List.generate(saleCycleController.quoteLinedata.length, (_) => false);
+                                    Get.toNamed(RoutesName.salesAdviseCreateScreen);
+                                  },
+                                  backgroundColor: AllColors.primaryDark1,
+                                  shape: StadiumBorder(
+                                    side: BorderSide.none,
+                                  ),
+                                ),
+
+                               /* Tooltip(
+                                  message: "Sales Advise Create",
                                   child: Container(
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(30),
@@ -209,13 +229,33 @@ class QuoteInformationScreen extends StatelessWidget {
                                     },
                                         icon: Icon(Icons.add)),
                                   ),
-                                ),);
+                                ),*/
+                              );
                             }),
                         Obx((){
                           return Visibility(
                             visible: saleCycleController
                                 .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
-                            child: Tooltip(
+                            child: ActionChip(
+                              label: Text(
+                                "View Sales Advise",
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.whiteColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise,saleCycleController
+                                    .quoteHeaderdata[0].salesCycleId??"",saleCycleController
+                                    .quoteHeaderdata[0].quoteId??"");
+                              },
+                              backgroundColor: AllColors.primaryDark1,
+                              shape: StadiumBorder(
+                                side: BorderSide.none,
+                              ),
+                            ),
+
+                            /*Tooltip(
                               message: "View Sales Advise",
                               child: Container(
                                 decoration: BoxDecoration(
@@ -230,7 +270,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 },
                                     icon: Icon(Icons.article)),
                               ),
-                            ),);
+                            )*/);
                         }),
                         Obx(() {
                           return Padding(
@@ -2192,8 +2232,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                       ),
                       InkWell(
-                        child: Flexible(
-                         // width: size.width * .4,
+                        child: Container(
+                          width: size.width * .4,
                           child: Tooltip(
                             message: saleCycleController
                                     .quoteHeaderdata[0].accountName ??
@@ -5462,6 +5502,7 @@ class QuoteInformationScreen extends StatelessWidget {
   bindApprovedDiscountPer(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
+      keyboardType: TextInputType.number,
       controller: saleCycleController.updateDiscountAmountController.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
@@ -5487,6 +5528,7 @@ class QuoteInformationScreen extends StatelessWidget {
 
   bindGmDiscountPer(BuildContext context) {
     return TextField(
+      keyboardType: TextInputType.number,
       cursorColor: AllColors.primaryDark1,
       controller: saleCycleController.gmDiscountPerContoller.value,
       decoration: InputDecoration(
@@ -5513,6 +5555,7 @@ class QuoteInformationScreen extends StatelessWidget {
 
   bindSalesCreditPer(BuildContext context) {
     return TextField(
+      keyboardType: TextInputType.number,
       cursorColor: AllColors.primaryDark1,
       controller: saleCycleController.salesCreditPerContoller.value,
       decoration: InputDecoration(
@@ -5568,7 +5611,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               Icon(Icons.download_for_offline_outlined, color: AllColors.blackColor,),
                               SizedBox(width: 10),
                               Text(
-                                "Download With Discount",
+                                "Download With Dis.",
                                 style: GoogleFonts.poppins(
                                   color: AllColors.textColor,
                                   fontSize: AllFontSize.fourtine,
@@ -5590,7 +5633,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               Icon(Icons.download_for_offline_outlined,color: AllColors.blackColor,),
                               SizedBox(width: 10),
                               Text(
-                                "Download Without Discount",
+                                "Download Without Dis.",
                                 style: GoogleFonts.poppins(
                                   color: AllColors.textColor,
                                   fontSize: AllFontSize.fourtine,

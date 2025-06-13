@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -44,10 +45,15 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-               /* Spacer(),
-                IconButton(onPressed: () {
-                  //showDialogForFilter(context);
-                }, icon: Icon(Icons.filter_alt_sharp))*/
+                Spacer(),
+                IconButton(
+                    onPressed: () {
+                      saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
+                      saleCycleController.salesAdviseCheckedList.value =
+                          List.generate(saleCycleController.quoteLinedata.length, (_) => false);
+                      Get.toNamed(RoutesName.salesAdviseCreateScreen);
+                     },
+                    icon: Icon(Icons.add_circle, size: 30,)),
               ],
             )
         ),
@@ -149,19 +155,22 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
       child: Container(
         width: size.width,
         child: ListTile(
-          subtitle: Column(
+          onTap: (){
+            saleCycleController.getSalesAdviseHeaderLine(saleCycleController.salesAdviseHeaderList[position].salesAdviceId?? "");
+          },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Advise Id: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
+                        fontWeight: FontWeight.w700),
                   ),
-                  Flexible(
+                  Container(
                     child: Tooltip(
                       message: saleCycleController.salesAdviseHeaderList[position].salesAdviceId?? "",
                       child: Text(
@@ -170,13 +179,18 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         style: GoogleFonts.poppins(
                             color:Colors.blue,
                             fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
+                            fontWeight: FontWeight.w700),
                       ),
                       textAlign: TextAlign.end,
                     ),
                   ),
                 ],
               ),
+               Icon(Icons.remove_red_eye, size: 30,color: AllColors.textColor,)
+            ],
+          ),
+          subtitle: Column(
+            children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -221,7 +235,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                         saleCycleController.salesAdviseHeaderList[position].quoteId?? "",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                            color:Colors.blue,
+                            color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),

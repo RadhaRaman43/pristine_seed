@@ -129,6 +129,7 @@ class RoutesName{
   //todo sales advise
   static const salesAdviseCreateScreen="/sales_advise_create_screen";
   static const salesAdviseHeaderScreen="/sales_advise_header_screen";
+  static const salesAdviseHeaderLineScreen="/sales_advise_header_line_screen";
   //todo image not found...
 
 

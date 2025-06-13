@@ -12,6 +12,7 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sales_advise_modal/sales_advise_header_line_modal.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -41,6 +42,8 @@ import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.da
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_update_status_modal.dart';
 import '../../CRM_Models/sales_advise_modal/sales_advise_header_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart' as salesCycle;
+import '../../CRM_Models/sales_advise_modal/sales_advise_header_line_modal.dart' as advise;
 
 class SalesCycleVm extends GetxController{
 
@@ -95,7 +98,7 @@ class SalesCycleVm extends GetxController{
   RxList<QuoteWonModel> quoteWonList=<QuoteWonModel>[].obs;
   RxList<getApprovalPersonMadol> approvalPersonList=<getApprovalPersonMadol>[].obs;
   RxList<SalesCycleQuoteInformationModal> quoteHeaderdata=<SalesCycleQuoteInformationModal>[].obs;
-  RxList<QuoteItems> quoteLinedata=<QuoteItems>[].obs;
+  RxList<salesCycle.QuoteItems> quoteLinedata=<salesCycle.QuoteItems>[].obs;
   RxList<ItemQuoteModal> itemMstGetByQuoteIdList=<ItemQuoteModal>[].obs;
   RxList<ItemMasterBySalesId_Model> itemMstGetBySalesIdList=<ItemMasterBySalesId_Model>[].obs;
   RxList<SalesCycleUpdateStatusModal> quoteLineCreate=<SalesCycleUpdateStatusModal>[].obs;
@@ -109,6 +112,7 @@ class SalesCycleVm extends GetxController{
   RxList<SalesCycleByIdModel> get_SalesCycleProductById_List=<SalesCycleByIdModel>[].obs;
 
   RxList<SalesAdviseHeaderModal> salesAdviseHeaderList=<SalesAdviseHeaderModal>[].obs;
+  RxList<SalesAdviseHeaderLineModal> salesAdviseHeaderLineList=<SalesAdviseHeaderLineModal>[].obs;
 
   var closureDateController=TextEditingController().obs;
   var budgetAmountController=TextEditingController().obs;
@@ -4118,7 +4122,7 @@ class SalesCycleVm extends GetxController{
     }
   }
 
-  getSalesAdviceCreate(List<QuoteItems> selectedJsonList, /*String flagAll,*/ String quoteId){
+  getSalesAdviceCreate(List<salesCycle.QuoteItems> selectedJsonList, /*String flagAll,*/ String quoteId){
     loading.value = true;
     List<Map<String, dynamic>> lineData = [];
     //if (flagAll == "All") {
@@ -4202,11 +4206,11 @@ class SalesCycleVm extends GetxController{
     }
   }
 
-  RxList<QuoteItems> salesAdviceItemList=<QuoteItems>[].obs;
+  RxList<salesCycle.QuoteItems> salesAdviceItemList=<salesCycle.QuoteItems>[].obs;
 
 
-  List<QuoteItems> getSelectedQuoteItemsAsJson() {
-    List<QuoteItems> selected = [];
+  List<salesCycle.QuoteItems> getSelectedQuoteItemsAsJson() {
+    List<salesCycle.QuoteItems> selected = [];
 
     int minLength = salesAdviceItemList.length < salesAdviseCheckedList.length
         ? salesAdviceItemList.length
@@ -4244,6 +4248,44 @@ class SalesCycleVm extends GetxController{
     Shipping_phone_Controller.value.text = quoteHeaderdata[0].shippingPhoneNo ??
         "";
    Shipping_email_Controller.value.text = quoteHeaderdata[0].shippingEmailId ?? "";
+  }
+
+  getSalesAdviseHeaderLine(String salesAdviseId){
+    loading.value = true;
+    Map data={
+      "sales_advice_id": salesAdviseId,
+      "created_by": email
+    };
+    try{
+      _api.salesAdviceHeaderGetBySalesAdviceIdApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<SalesAdviseHeaderLineModal> response = jsonResponse.map((e) => SalesAdviseHeaderLineModal.fromJson(e)).toList();
+          if(response.length>0 && response.isNotEmpty && response[0].condition?.toLowerCase()=="true"){
+            Utils.showToastification("Message !", response[0].message.toString());
+            salesAdviseHeaderLineList.value=response;
+            Get.toNamed(RoutesName.salesAdviseHeaderLineScreen);
+            loading.value = false;
+          }else {
+            loading.value = false;
+            Utils.showErrorToastification("False Message !", response[0].message.toString());
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          loading.value = false;
+          print(error);
+        },
+      );
+    }catch(e){
+      Utils.showErrorToastification("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
   }
 
 }

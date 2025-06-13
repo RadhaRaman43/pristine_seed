@@ -223,8 +223,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               Obx(() {
                 return Visibility(
                   visible:saleCycleController
-                      .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" && saleCycleController
-                      .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss"?false:true,
+                      .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" && (saleCycleController
+                      .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss" || saleCycleController
+                      .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected")?false:true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       List<PopupMenuEntry> items = [];
