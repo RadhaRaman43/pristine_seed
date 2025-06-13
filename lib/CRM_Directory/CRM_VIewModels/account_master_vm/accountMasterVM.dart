@@ -1531,6 +1531,11 @@ class Accountmastervm extends GetxController{
       AccountTitle_Controller.text = response[0].accountTitle??"";
       account_type_controller.text = response[0].accountType??"";
       ReferralBy_Controller.text = response[0].isReferral==1?"Yes":"No";
+      if(response[0].isReferral==1){
+        isReferral.value=true;
+      }else{
+        isReferral.value=false;
+      }
       PhoneNo_Controller.text= response[0].phoneNo??"";
       EmailId_Controller.text = response[0].emailId??"";
       account_cat_type_controller.text = response[0].accountCategoryType??"";
