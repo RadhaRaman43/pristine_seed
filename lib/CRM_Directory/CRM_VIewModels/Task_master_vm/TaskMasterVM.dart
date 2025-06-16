@@ -42,6 +42,7 @@ class Taskmastervm extends GetxController{
     int pageNumber = 0;
     int rowsPerPage = 10;
     int total_rows = 0;
+    String isAdminWritePermission = "";
     String email="";
     int is_Active = -1;
     String ApproveReject = '';
@@ -167,6 +168,7 @@ class Taskmastervm extends GetxController{
       super.onInit();
 
         email=await sessionManagement.getEmail() ?? '';
+        isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
         getMenuList();
         print("List${userGeoHierarchyy.length}");
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
@@ -245,7 +247,7 @@ class Taskmastervm extends GetxController{
                 "filter_is_infra_lead": 0,
                 "filter_is_sales_cycle_active": is_Active.toString(),
                 "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
-                "filter_created_by": email,
+                "filter_created_by": isAdminWritePermission == "0"?email:"",
                 "filter_approved_by": "",
                 "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
@@ -287,7 +289,7 @@ class Taskmastervm extends GetxController{
 
                             getTaskMstDSARList(taskId);
                             getItemCategoryMstApi(taskId);
-                            getTaskPersonMstByTaskIdApi(taskId!);
+                            getTaskPersonMstByTaskIdApi(taskId);
                             Get.toNamed(RoutesName.taskMasterDetails_screen);
 
                         }

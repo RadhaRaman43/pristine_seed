@@ -58,14 +58,17 @@ class AccountmasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {
-                accountMaster_page_controller.DraftId = '';
-                accountMaster_page_controller.account_type_controller.text='New Account';
-                accountMaster_page_controller.clearController();
-                accountMaster_page_controller.getCompanyProfileTypeApi("");
-                accountMaster_page_controller.getGeoPostalCodeApi();
-                Get.toNamed(RoutesName.add_New_AccountMaster_screen);
-              }, icon: Icon(Icons.add)),
+              Visibility(
+                visible: accountMaster_page_controller.isAdminWritePermission=="0"?true:false,
+                child: IconButton(onPressed: () {
+                  accountMaster_page_controller.DraftId = '';
+                  accountMaster_page_controller.account_type_controller.text='New Account';
+                  accountMaster_page_controller.clearController();
+                  accountMaster_page_controller.getCompanyProfileTypeApi("");
+                  accountMaster_page_controller.getGeoPostalCodeApi();
+                  Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                }, icon: Icon(Icons.add)),
+              ),
 
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);

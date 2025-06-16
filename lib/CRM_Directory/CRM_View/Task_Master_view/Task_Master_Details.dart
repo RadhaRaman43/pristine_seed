@@ -132,7 +132,7 @@ class TaskMasterDetails extends StatelessWidget{
                         TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
                         TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
                       }, icon: Visibility(
-                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? true : false,
+                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 && TaskMaster_page_controller.isAdminWritePermission == "0" ? true : false,
                           child: Icon(Icons.add))),
                     );
                   }),
@@ -1328,6 +1328,55 @@ class TaskMasterDetails extends StatelessWidget{
             SizedBox(
               height: 3,
             ),
+
+            Visibility(
+              visible: TaskMaster_page_controller
+                  .Task_Master_list[0]
+                  .taskStatus!.toLowerCase() == 'rejected',
+              child: Row(
+                children: [
+                  Text(
+                    "Reject Remarks",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .rejectReason == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .rejectReason,
+                      child: Text(
+                        TaskMaster_page_controller
+                            .Task_Master_list[0]
+                            .rejectReason == null
+                            ? ''
+                            : TaskMaster_page_controller
+                            .Task_Master_list[0]
+                            .rejectReason ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 3,
+            ),
             Row(
               children: [
                 Text(
@@ -1885,7 +1934,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
                 Spacer(),
                 Text(
-                  StaticMethod.onlyDate(
+                  StaticMethod.formatDateWithTime(
                       TaskMaster_page_controller
                           .Task_Master_list[0]
                           .createdOn!) ?? "",
@@ -1928,9 +1977,7 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             Row(
               children: [
-                Text( TaskMaster_page_controller
-                    .Task_Master_list[0]
-                    .taskStatus?.toLowerCase()=="rejected"? "Rejected On":"Approved On",
+                Text("Approved/Rejected On",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1939,7 +1986,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
                 Spacer(),
                 Text(
-                  StaticMethod.onlyDate(
+                  StaticMethod.formatDateWithTime(
                       TaskMaster_page_controller
                           .Task_Master_list[0]
                           .approvedOn??"") ?? "",

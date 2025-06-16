@@ -16,6 +16,7 @@ class TaskApprovalvm extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   String email="";
+  String isAdminWritePermission = "";
   int is_Active = -1;
   RxString createdOnStartToEnd="".obs;
 
@@ -53,6 +54,7 @@ class TaskApprovalvm extends GetxController{
     // TODO: implement onInit
     super.onInit();
     email=await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
 
     getTaskMaster(pageNumber, is_Active.toString(), '',);
@@ -100,7 +102,7 @@ class TaskApprovalvm extends GetxController{
         "filter_is_infra_lead": 0,
         "filter_is_sales_cycle_active": is_Active.toString(),
         "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
-        "filter_created_by": email,
+        "filter_created_by": isAdminWritePermission == "0"?email:"",
         "filter_approved_by": "",
         "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,

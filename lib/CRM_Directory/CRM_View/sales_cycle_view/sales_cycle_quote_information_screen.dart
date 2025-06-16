@@ -170,6 +170,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx((){
                           return Visibility(
                             visible: saleCycleController
+                                .quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() && saleCycleController
                                 .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected",
                             child: Tooltip(
                               message: "Reopen",
@@ -1031,9 +1032,9 @@ class QuoteInformationScreen extends StatelessWidget {
               Spacer(),
               Obx(() {
                 return Visibility(
-                  visible: saleCycleController.showBranchHead.value ||
+                  visible: (saleCycleController.showBranchHead.value ||
                       saleCycleController.showClusterHead.value ||
-                      saleCycleController.showGeneralManager.value,
+                      saleCycleController.showGeneralManager.value ) && saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() != 'rejected',
                   child: GestureDetector(
                       onTap: () {
                         saleCycleController.bmDiscountPerController.value.text =

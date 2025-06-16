@@ -70,6 +70,7 @@ class SalesCycleVm extends GetxController{
   RxString Total_Expected_Amount="0".obs;
   RxBool loading=false.obs;
   String email="";
+  String isAdminWritePermission = "";
   String consigneeId="";
   RxString FromPage="Sales".obs;
   RxString quoteApprovalPage="".obs;
@@ -274,6 +275,7 @@ class SalesCycleVm extends GetxController{
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     clearAllFieldOfFilter();
     getsalesCycleData(pageNumber, "", "",'');
     itemCategorySelectedlist.value=[];
@@ -335,8 +337,8 @@ class SalesCycleVm extends GetxController{
   }
   getsalesCycleData(int page_no, String saleCycleId, String flag, String fromPage){
     FromPage.value = fromPage;
-    print("frompage${FromPage.value}");
-    print("frompage${fromPage}");
+   // print("frompage${FromPage.value}");
+   // print("frompage${fromPage}");
     String emailForUpdate="";
     if(salesCycleOwnerController.value.text.isNotEmpty){
        emailForUpdate=extractEmail(salesCycleOwnerController.value.text);
@@ -347,7 +349,8 @@ class SalesCycleVm extends GetxController{
         "filter_task_id": filterTask_Id_controller.value.text.isEmpty?"":filterTask_Id_controller.value.text,
         "filter_account_code": accountCodeController.value.text.isEmpty?"":accountCodeController.value.text,
         "filter_account_name": accountNameController.value.text.isEmpty?"":accountNameController.value.text,
-        "filter_sales_cycle_owner": salesCycleOwnerController.value.text.isEmpty?email:emailForUpdate.toLowerCase(),
+        //"filter_sales_cycle_owner": salesCycleOwnerController.value.text.isEmpty?email:emailForUpdate.toLowerCase(),
+        "filter_sales_cycle_owner": isAdminWritePermission == "0"?(salesCycleOwnerController.value.text.isEmpty?email:emailForUpdate.toLowerCase()):"",
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty?"":purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty?"":proposedSolutionController.value.text,

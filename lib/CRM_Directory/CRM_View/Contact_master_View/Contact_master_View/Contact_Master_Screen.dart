@@ -48,24 +48,24 @@ class ContactMasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {
-                contact_vm_controller.resetAllContactCreativeField('Icon');
-                contact_vm_controller.insideOut = true;
-                //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                contact_vm_controller.getAccountMaster("");
-                contact_vm_controller.getDecisionRoleMaster();
-                Get.toNamed(RoutesName.addNewContactMaster_screen);
-              }, icon: Icon(Icons.add)),
+              Visibility(
+                visible: contact_vm_controller.isAdminWritePermission=='0'?true:false,
+                child: IconButton(onPressed: () {
+                  contact_vm_controller.resetAllContactCreativeField('Icon');
+                  contact_vm_controller.insideOut = true;
+                  //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                  contact_vm_controller.getAccountMaster("");
+                  contact_vm_controller.getDecisionRoleMaster();
+                  Get.toNamed(RoutesName.addNewContactMaster_screen);
+                }, icon: Icon(Icons.add)),
+              ),
 
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  child: IconButton(onPressed: () {
-                    showFilterBottomSheet(context);
-                  },
-                      icon: Icon(Icons.filter_alt_sharp,
-                          color: AllColors.whiteColor)),
-                ),
+              Container(
+                child: IconButton(onPressed: () {
+                  showFilterBottomSheet(context);
+                },
+                    icon: Icon(Icons.filter_alt_sharp,
+                        color: AllColors.whiteColor)),
               )
             ],
           )
