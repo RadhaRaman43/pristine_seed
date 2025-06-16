@@ -532,18 +532,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 //bindBudgetAmount(context),
                                 bindExpectedAmount(context),
                                 Visibility(
-                                  visible: saleCycleController.saleCycleList[0]
-                                                  .quoteAccepted
-                                                  ?.toUpperCase() !=
-                                              "OPEN" ||
-                                      saleCycleController
-                                          .saleCycleList[0].isReadySendForApproval==0 ||
-                                          saleCycleController.saleCycleList[0]
-                                                  .salesCycleApprovalStatus
-                                                  ?.toLowerCase() ==
-                                              "rejected" ||
-                                          (saleCycleController.FromPage.value ==
-                                              "FromDashboard")
+                                  visible: saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() != "OPEN" ||
+                                      saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()||
+                                          saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() == "rejected" ||
+                                          (saleCycleController.FromPage.value == "FromDashboard")
                                       ? false
                                       : true,
                                   child: Container(
@@ -566,44 +558,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             ? true
                                             : false,*/
                                       ignoring: ( saleCycleController
-                                          .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
-                                              saleCycleController
-                                                      .saleCycleList[0]
-                                                      .quoteAccepted
-                                                      ?.toUpperCase() !=
-                                                  "OPEN")
-                                          ? true
-                                          : false,
+                                          .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() || saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() != "OPEN") ? true : false,
                                       child: DefaultButton(
                                         press: () {
-                                          if (saleCycleController
-                                                  .productCategoryController
-                                                  .value
-                                                  .text
-                                                  .isEmpty ||
-                                              saleCycleController
-                                                      .productCategoryController
-                                                      .value
-                                                      .text ==
-                                                  "") {
-                                            Utils.showErrorToastification(
-                                                "Product Category",
-                                                "Please select product category");
+                                          if (saleCycleController.productCategoryController.value.text.isEmpty ||
+                                              saleCycleController.productCategoryController.value.text == "") {
+                                            Utils.showErrorToastification("Product Category", "Please select product category");
                                             return;
                                           }
-                                          if (saleCycleController
-                                                  .expectedAmountController
-                                                  .value
-                                                  .text
-                                                  .isEmpty ||
-                                              saleCycleController
-                                                      .expectedAmountController
-                                                      .value
-                                                      .text ==
-                                                  "") {
-                                            Utils.showErrorToastification(
-                                                "Expected Amount",
-                                                "Please enter expected amount");
+                                          if (saleCycleController.expectedAmountController.value.text.isEmpty ||
+                                              saleCycleController.expectedAmountController.value.text == "") {
+                                            Utils.showErrorToastification("Expected Amount", "Please enter expected amount");
                                             return;
                                           }
 
@@ -2899,8 +2864,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           Visibility(
                             visible: saleCycleController.FromPage.value ==
                                         "FromDashboard" ||
-                                saleCycleController
-                                    .saleCycleList[0].isReadySendForApproval==0 ||
+                                saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
                                     saleCycleController
                                             .saleCycleList[0].quoteAccepted
                                             ?.toLowerCase() !=
@@ -7507,8 +7471,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               .saleCycleList[0].quoteAccepted
                                               ?.toUpperCase() !=
                                           "OPEN" ||
-                                  saleCycleController
-                                      .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
+                                  saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
                                       (saleCycleController.FromPage.value ==
                                           "FromDashboard")
                                   ? false
@@ -8266,8 +8229,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           "rejected" ||
                                       (saleCycleController.FromPage.value ==
                                           "FromDashboard") ||
-                                  saleCycleController
-                                      .saleCycleList[0].isReadySendForApproval==0
+                                  saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()
                                   ? false
                                   : true,
                               child: Container(

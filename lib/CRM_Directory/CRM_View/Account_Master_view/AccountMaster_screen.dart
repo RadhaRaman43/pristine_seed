@@ -134,7 +134,7 @@ class AccountmasterScreen extends StatelessWidget{
               "last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
 
           if (accountMaster_page_controller.pageNumber + 1 < total_page) {
-            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber + 1,accountMaster_page_controller.is_Active.toString());
+            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber + 1,accountMaster_page_controller.IsActive_controller.text);
             this.accountMaster_page_controller.pageNumber += 1;
           }
         }
@@ -759,7 +759,7 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
   void showFilterBottomSheet(BuildContext context) {
-    accountMaster_page_controller.IsActive_controller.clear();
+    //accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1321,13 +1321,13 @@ class AccountmasterScreen extends StatelessWidget{
         width: size.width-18,
         controller:  accountMaster_page_controller.IsActive_controller,
         label: Text(
-          "Account Type",
+          "Active",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w500),
         ),
-         initialSelection:"All",
+         //initialSelection:"All",
        /* enableFilter: true,
         requestFocusOnTap: true,*/
         inputDecorationTheme: const InputDecorationTheme(

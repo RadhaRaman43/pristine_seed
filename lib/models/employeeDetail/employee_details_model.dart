@@ -35,10 +35,17 @@ class EmployeeDetailsGetResponse {
   String? level;
   String? geoName;
   String? geoValue;
+  int? isAdminWritePermission;
+  String? clusterName;
+  String? regionName;
+  String? salesPersonEmpCode;
+  String? salesPersonName;
   int? checkIn;
   String? shiftStartTime;
   String? shiftEndTime;
   int? navSync;
+  String? locationName;
+  String? userFullName;
   List<UserGeoHierarchy>? userGeoHierarchy;
 
   EmployeeDetailsGetResponse(
@@ -78,10 +85,17 @@ class EmployeeDetailsGetResponse {
         this.level,
         this.geoName,
         this.geoValue,
+        this.isAdminWritePermission,
+        this.clusterName,
+        this.regionName,
+        this.salesPersonEmpCode,
+        this.salesPersonName,
         this.checkIn,
         this.shiftStartTime,
         this.shiftEndTime,
         this.navSync,
+        this.locationName,
+        this.userFullName,
         this.userGeoHierarchy});
 
   EmployeeDetailsGetResponse.fromJson(Map<String, dynamic> json) {
@@ -121,10 +135,17 @@ class EmployeeDetailsGetResponse {
     level = json['level'];
     geoName = json['geo_name'];
     geoValue = json['geo_value'];
+    isAdminWritePermission = json['is_admin_write_permission'];
+    clusterName = json['cluster_name'];
+    regionName = json['region_name'];
+    salesPersonEmpCode = json['sales_person_emp_code'];
+    salesPersonName = json['sales_person_name'];
     checkIn = json['check_in'];
     shiftStartTime = json['shift_start_time'];
     shiftEndTime = json['shift_end_time'];
     navSync = json['nav_sync'];
+    locationName = json['location_name'];
+    userFullName = json['user_full_name'];
     if (json['user_geo_hierarchy'] != null) {
       userGeoHierarchy = <UserGeoHierarchy>[];
       json['user_geo_hierarchy'].forEach((v) {
@@ -171,10 +192,17 @@ class EmployeeDetailsGetResponse {
     data['level'] = this.level;
     data['geo_name'] = this.geoName;
     data['geo_value'] = this.geoValue;
+    data['is_admin_write_permission'] = this.isAdminWritePermission;
+    data['cluster_name'] = this.clusterName;
+    data['region_name'] = this.regionName;
+    data['sales_person_emp_code'] = this.salesPersonEmpCode;
+    data['sales_person_name'] = this.salesPersonName;
     data['check_in'] = this.checkIn;
     data['shift_start_time'] = this.shiftStartTime;
     data['shift_end_time'] = this.shiftEndTime;
     data['nav_sync'] = this.navSync;
+    data['location_name'] = this.locationName;
+    data['user_full_name'] = this.userFullName;
     if (this.userGeoHierarchy != null) {
       data['user_geo_hierarchy'] =
           this.userGeoHierarchy!.map((v) => v.toJson()).toList();

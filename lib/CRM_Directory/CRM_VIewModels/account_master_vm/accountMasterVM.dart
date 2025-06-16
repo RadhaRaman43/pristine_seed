@@ -245,8 +245,7 @@ class Accountmastervm extends GetxController{
     isExpandDSARHistory.value = !isExpandDSARHistory.value;
   }
 
-  void
-  clearAccoundController(){
+  void clearAccoundController(){
     account_name_controller.text = '';
     account_type_controller.text = '';
     account_cat_type_controller.text = '';
@@ -285,12 +284,12 @@ class Accountmastervm extends GetxController{
 
   Future<void>refreshList() async{
     clearAccoundController();
-    getAccountMaster(pageNumber ,is_Active.toString());
+    getAccountMaster(pageNumber ,'All');
   }
 
   Future<void>refreshDraftList() async{
     clearAccoundController();
-    getDraftAccountMaster(pageNumber ,is_Active.toString());
+    getDraftAccountMaster(pageNumber ,'All');
   }
 
    getAccountMaster(int page_no, String IsActive){
@@ -1286,7 +1285,7 @@ class Accountmastervm extends GetxController{
 
      //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
           if(flag == 'Create'){
-            Utils.showToastification("Success!", "Account Create Successful");
+            Utils.showToastification("Success!", response[0].message??"Account Create Successful");
             if(FromPage == "Task"){
               clearController();
               TaskMaster_page_controller.clearCreateTaskController();
@@ -1304,15 +1303,17 @@ class Accountmastervm extends GetxController{
             }else{
               clearAccoundController();
               //deleteAccountData(DraftId);
+              IsActive_controller.text = 'All';
               pageNumber=0;
               getAccountMaster(pageNumber ,is_Active.toString());
               getDraftAccountMaster(pageNumber,is_Active.toString());
               Get.toNamed(RoutesName.accountMaster_screen);
             }
           }else if(flag == 'Update'){
-            Utils.showToastification("Success!", "Account Update Successful");
+            Utils.showToastification("Success!", response[0].message??"Account Update Successful");
             viewRequestDetails(response);
             clearAccoundController();
+            IsActive_controller.text = 'All';
             pageNumber=0;
             getAccountMaster(pageNumber ,is_Active.toString());
             getDraftAccountMaster(pageNumber,is_Active.toString());
@@ -1530,6 +1531,11 @@ class Accountmastervm extends GetxController{
       AccountTitle_Controller.text = response[0].accountTitle??"";
       account_type_controller.text = response[0].accountType??"";
       ReferralBy_Controller.text = response[0].isReferral==1?"Yes":"No";
+      if(response[0].isReferral==1){
+        isReferral.value=true;
+      }else{
+        isReferral.value=false;
+      }
       PhoneNo_Controller.text= response[0].phoneNo??"";
       EmailId_Controller.text = response[0].emailId??"";
       account_cat_type_controller.text = response[0].accountCategoryType??"";
@@ -1704,7 +1710,7 @@ class Accountmastervm extends GetxController{
       GstNo_Controller.clear();
       PanNo_Controller.clear();
       IfscCode_Controller.clear();
-      IsActive_controller.text = '-1';
+      IsActive_controller.text = 'All';
       ReferralBy_Controller.text="No";
       Address_controller.clear();
       Address2_Controller.clear();
