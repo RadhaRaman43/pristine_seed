@@ -1030,9 +1030,11 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                     child: TextFormField(
                       controller:
                       saleCycleController.qtyUpdateLineController.value,
+                      keyboardType: TextInputType.number,
                       decoration: InputDecoration(
                           hintText: "Enter Qty",
                           labelText: "Enter Qty",
+
                           //suffixIcon: Icon(Icons.email),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: AllFontSize.ten,
