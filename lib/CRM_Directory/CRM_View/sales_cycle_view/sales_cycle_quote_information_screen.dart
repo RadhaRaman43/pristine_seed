@@ -169,7 +169,7 @@ class QuoteInformationScreen extends StatelessWidget {
                       children: [
                         Obx((){
                           return Visibility(
-                            visible: saleCycleController
+                            visible:  saleCycleController
                                 .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected",
                             child: Tooltip(
                               message: "Reopen",

@@ -222,17 +222,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible:saleCycleController
+                  visible:(saleCycleController
                       .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" && (saleCycleController
                       .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss" || saleCycleController
-                      .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected")?false:true,
+                      .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected")||
+                      saleCycleController
+                          .saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" && saleCycleController
+                          .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase())?false:true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       List<PopupMenuEntry> items = [];
-                      // Conditionally add the first item
-                      //if (saleCycleController.saleCycleList[0].salesCycleStatus == "Prospect") {
-                      if (saleCycleController
-                          .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
+                      if (saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
                           saleCycleController.saleCycleList[0]
                                   .actualSalesCycleApprovalStatus
                                   ?.toLowerCase() ==
@@ -832,6 +832,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Obx(() {
                     return Visibility(
                         visible: saleCycleController
+                            .saleCycleList[0].createdBy?.toLowerCase() ==
+                            saleCycleController.email.toLowerCase() && saleCycleController
                                         .saleCycleList[0].salesCycleStatus!
                                         .toUpperCase() ==
                                     "PROSPECT" &&

@@ -77,13 +77,19 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                    },
                    child: Container(
                      child: Padding(
-                       padding: const EdgeInsets.all(7.0),
-                       child: Icon(
+                       padding: const EdgeInsets.only(left: 10.0, right: 10, top: 7, bottom: 7),
+                       child: Text("Change Address",
+                         style: GoogleFonts.poppins(
+                           color: AllColors.whiteColor,
+                           fontWeight: FontWeight.w500,
+                         ),)
+                       /*Icon(
                          Icons.update,
                          color: AllColors.primaryDark1,
-                       ),
+                       ),*/
                      ),
                      decoration: BoxDecoration(
+                       color: AllColors.primaryDark1,
                          borderRadius: BorderRadius.circular(30),
                          border: Border.all(
                              color: AllColors.primaryDark1)),
