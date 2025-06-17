@@ -1134,13 +1134,24 @@ class SalesAdviseCreateScreen extends StatelessWidget {
         builder: (BuildContext context) {
           return Container(
             child: AlertDialog(
-              title: Text(
-                "Address Update",
-                style: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w700,
-                ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Address Update",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  
+                  GestureDetector(
+                      onTap: (){
+                        Get.back();
+                      },
+                      child: Icon(Icons.close_outlined, size: 25, color: AllColors.primaryDark1,))
+                ],
               ),
               content: Container(
                   child: SingleChildScrollView(
@@ -1148,7 +1159,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         bindShippingAddress(context),
-                        SizedBox(
+                      /*  SizedBox(
                           height: 10,
                         ),
                         Container(
@@ -1174,7 +1185,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
+                        ),*/
                         SizedBox(
                           height: 10,
                         ),
@@ -1213,6 +1224,8 @@ class SalesAdviseCreateScreen extends StatelessWidget {
           );
         });
   }
+
+
   Widget bindShippingAddress(BuildContext context) {
     return Container(
       decoration: BoxDecoration(

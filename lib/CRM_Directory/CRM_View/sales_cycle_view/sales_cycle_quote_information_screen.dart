@@ -245,9 +245,10 @@ class QuoteInformationScreen extends StatelessWidget {
                                 ),
                               ),
                               onPressed: () {
+                                saleCycleController.pageNumberSalesAdvise=0;
                                 saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise,saleCycleController
                                     .quoteHeaderdata[0].salesCycleId??"",saleCycleController
-                                    .quoteHeaderdata[0].quoteId??"");
+                                    .quoteHeaderdata[0].quoteId??"","");
                               },
                               backgroundColor: AllColors.primaryDark1,
                               shape: StadiumBorder(
@@ -2080,7 +2081,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                 .warrantyPeriod.toString();
                             saleCycleController.deliveryWeeksController.value.text= saleCycleController.quoteLinedata[index]
                                 .deliveryInWeeks.toString();*/
-
+                            saleCycleController.routingForQuoteUpdate.value="Quote";
                             saleCycleController.index.value = index;
                             Get.toNamed(RoutesName.updatequoteLineData);
                           },

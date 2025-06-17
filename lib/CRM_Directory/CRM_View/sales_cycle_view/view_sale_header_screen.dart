@@ -264,7 +264,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.isCheck.value = -1;
                               saleCycleController.checkBoxValues
                                   .updateAll((key, value) => false);
-                              saleCycleController.Quote_Selected_list.clear();
+                              saleCycleController.selection_sales_advise_won_list.clear();
 
                               saleCycleController
                                       .closureDateController.value.text =
@@ -395,7 +395,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.isReject.value = false;
                               saleCycleController.isCheck.value = -1;
                               saleCycleController.checkBoxValues.updateAll((key, value) => false);
-                              saleCycleController.Quote_Selected_list.clear();
+                              saleCycleController.selection_sales_advise_won_list.clear();
                               if (saleCycleController.saleCycleList[0].salesCycleStatus != "Propose") {
                                 saleCycleController.updateQuoteAccetedCycleController.value.text = "LOSS";
                                 saleCycleController.isReject.value = true;

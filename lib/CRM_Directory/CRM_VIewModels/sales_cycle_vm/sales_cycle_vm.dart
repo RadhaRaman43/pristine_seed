@@ -48,6 +48,8 @@ import '../../CRM_Models/sales_advise_modal/sales_advise_header_line_modal.dart'
     as advise;
 
 class SalesCycleVm extends GetxController {
+
+
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
@@ -65,6 +67,7 @@ class SalesCycleVm extends GetxController {
   final _api = SalesCycleRepository();
   SessionManagement sessionManagement = SessionManagement();
   var selectedItem = (-1).obs;
+  RxString routingForQuoteUpdate="Quote".obs;
   RxString accountCode = "".obs;
   RxString contactCode = "".obs;
   RxString ProductCategoryCode = "".obs;
@@ -110,8 +113,10 @@ class SalesCycleVm extends GetxController {
       <ItemMasterBySalesId_Model>[].obs;
   RxList<SalesCycleUpdateStatusModal> quoteLineCreate =
       <SalesCycleUpdateStatusModal>[].obs;
-  RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list =
-      <SalesCycleQuoteHeaderModal>[].obs;
+  /*RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list =
+      <SalesCycleQuoteHeaderModal>[].obs;*/
+  RxList<SalesAdviseHeaderModal> selection_sales_advise_won_list =
+      <SalesAdviseHeaderModal>[].obs;
   RxList<ItemCategoryMstModel> productCategoryList =
       <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> itemCategorySelectedlist =
@@ -270,6 +275,7 @@ class SalesCycleVm extends GetxController {
   var reOpenRemarksController = TextEditingController().obs;
 
   RxInt index = 0.obs;
+  RxInt saleAdviseindex = 0.obs;
   final qtyFocusNode = FocusNode();
   RxString quoteId = "".obs;
   RxString salesCycleId = "".obs;
@@ -2645,7 +2651,7 @@ class SalesCycleVm extends GetxController {
                 ),
                 Obx(() {
                   return Visibility(
-                    visible: isApprove.value && Quote_Selected_list.length > 0,
+                    visible: isApprove.value && selection_sales_advise_won_list.length > 0,
                     child: Container(
                       height: 150,
                       child: SingleChildScrollView(
@@ -2654,13 +2660,13 @@ class SalesCycleVm extends GetxController {
                         child: Wrap(
                           spacing: 3.0,
                           // runSpacing: 3.0, // Optional: Adds space between rows
-                          children: Quote_Selected_list.map((category) {
+                          children: selection_sales_advise_won_list.map((category) {
                             return Chip(
-                              label: Text(category.quoteId!),
+                              label: Text(category.salesAdviceId!),
                               onDeleted: () {
-                                int index = quoteList.indexWhere(
-                                    (item) => item.quoteId == category.quoteId);
-                                Quote_Selected_list.remove(category);
+                                int index = salesAdviseHeaderList.indexWhere(
+                                    (item) => item.salesAdviceId == category.salesAdviceId);
+                                selection_sales_advise_won_list.remove(category);
                                 checkBoxValues[index] = false;
                               },
                             );
@@ -2687,15 +2693,16 @@ class SalesCycleVm extends GetxController {
                             ),
                           ),
                           onPressed: () {
-                            if (Quote_Selected_list.isEmpty) {
-                              for (int i = 0; i < quoteList.length; i++) {
+                            if (selection_sales_advise_won_list.isEmpty) {
+                              for (int i = 0; i < salesAdviseHeaderList.length; i++) {
                                 checkBoxValues[i] = false;
                               }
                             }
-                            pageNumberForQuote = 0;
-                            getQuoteHeaderData(pageNumberForQuote,
-                                saleCycleList.salesCycleId!, "Approved");
-                            Get.toNamed(RoutesName.approvedQuotationListScreen);
+                            pageNumberSalesAdvise = 0;
+                            getSalesAdviseData(pageNumberSalesAdvise, saleCycleList.salesCycleId??"", "", "completed");
+                           /* getQuoteHeaderData(pageNumberForQuote,
+                                saleCycleList.salesCycleId!, "Approved");*/
+                           // Get.toNamed(RoutesName.approvedQuotationListScreen);
                           },
                           child: Container(
                             child: Text(
@@ -2712,7 +2719,7 @@ class SalesCycleVm extends GetxController {
                       Obx(() {
                         return Visibility(
                           visible:
-                              isApprove.value && Quote_Selected_list.isNotEmpty
+                              isApprove.value && selection_sales_advise_won_list.isNotEmpty
                                   ? true
                                   : false,
                           // visible: saleCycleController.selectedQuotationIdController.value.text == '' ? false:true,
@@ -2870,7 +2877,7 @@ class SalesCycleVm extends GetxController {
                             onPressed: () {
                               selectedItem.value = -1;
 
-                              //todo commented by nirupma
+
                               shippingController.value.text = "";
                               shippingAddress2Controller.value.text = "";
                               Shipping_PostCode_Controller.value.text = "";
@@ -2879,7 +2886,7 @@ class SalesCycleVm extends GetxController {
                               Shipping_State_Controller.value.text = "";
                               Shipping_phone_Controller.value.text = "";
                               Shipping_email_Controller.value.text = "";
-
+                              //todo commented by nirupma
                               /*   shippingController.value.text=saleCycleList[0].shippingAddress??"";
                               shippingAddress2Controller.value.text=saleCycleList[0].shippingAddress2??"";
                               Shipping_PostCode_Controller.value.text=saleCycleList[0].shippingPostCode??"";
@@ -3749,13 +3756,13 @@ class SalesCycleVm extends GetxController {
   void toggleMultiCheckbox(int index) {
     final bool isChecked = checkBoxValues[index] ?? false;
     if (isChecked) {
-      Quote_Selected_list.removeWhere(
-          (item) => item.quoteId == quoteList[index].quoteId);
+      selection_sales_advise_won_list.removeWhere(
+          (item) => item.salesAdviceId == salesAdviseHeaderList[index].salesAdviceId);
       checkBoxValues[index] = false;
     } else {
-      if (!Quote_Selected_list.any(
-          (item) => item.quoteId == quoteList[index].quoteId)) {
-        Quote_Selected_list.add(quoteList[index]);
+      if (!selection_sales_advise_won_list.any(
+          (item) => item.salesAdviceId == salesAdviseHeaderList[index].salesAdviceId)) {
+        selection_sales_advise_won_list.add(salesAdviseHeaderList[index]);
       }
       checkBoxValues[index] = true;
     }
@@ -4227,9 +4234,9 @@ class SalesCycleVm extends GetxController {
       SalesCycleModal saleCycleList, String quote_accepted) {
     loading.value = true;
     List<Map<String, dynamic>> lineData = [];
-    if (Quote_Selected_list.isNotEmpty) {
-      for (int i = 0; i < Quote_Selected_list.length; i++) {
-        var item = Quote_Selected_list[i];
+    if (selection_sales_advise_won_list.isNotEmpty) {
+      for (int i = 0; i < selection_sales_advise_won_list.length; i++) {
+        var item = selection_sales_advise_won_list[i];
         lineData.add({"quote_id": item.quoteId});
       }
     }
@@ -4517,7 +4524,7 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  getSalesAdviseData(int pageNumber, String saleCycleId, String quoteId) {
+  getSalesAdviseData(int pageNumber, String saleCycleId, String quoteId, flagStatus) {
     try {
       Map data = {
         "filter_sales_advice_id": "",
@@ -4528,7 +4535,7 @@ class SalesCycleVm extends GetxController {
         "filter_quote_version": -1,
         "filter_quote_validity": "",
         "filter_exp_closure_date": "",
-        "filter_sales_advice_status": "",
+        "filter_sales_advice_status": flagStatus,
         "filter_product_category": "",
         "filter_created_by": email,
         "filter_created_on": "",
@@ -4557,7 +4564,12 @@ class SalesCycleVm extends GetxController {
               }
               salesAdviseHeaderList.addAll(response);
               total_rows = int.parse(salesAdviseHeaderList[0].totalRows!);
-              Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+              if(flagStatus=="completed"){
+                Get.toNamed(RoutesName.approvedQuotationListScreen);
+              }else{
+                Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+              }
+
             } else {
               salesAdviseHeaderList.value = [];
               loading.value = false;
@@ -4773,9 +4785,9 @@ class SalesCycleVm extends GetxController {
       "line_no": salesAdviseLinesDataList.lineNo,
       "item_code": salesAdviseLinesDataList.itemCode,
       "item_description": salesAdviseLinesDataList.itemDescription,
-      "qty": salesAdviseLinesDataList.qty,
-      "quote_line_price": salesAdviseLinesDataList.quoteLinePrice,
-      "discount_per": salesAdviseLinesDataList.discountPer,
+      "qty": qtyUpdateLineController.value.text.isNotEmpty?qtyUpdateLineController.value.text:salesAdviseLinesDataList.qty,
+      "quote_line_price":salesAdviseLinesDataList.quoteLinePrice,
+      "discount_per":salesAdviseLinesDataList.discountPer,
       "bm_discount_per": salesAdviseLinesDataList.bmDiscountPer,
       "gm_discount_per": salesAdviseLinesDataList.gmDiscountPer,
       "gm_discount_amount": salesAdviseLinesDataList.gmDiscountAmount,
@@ -4829,13 +4841,13 @@ class SalesCycleVm extends GetxController {
   getSalesAdviseHeaderUpdate(String salesAdviseId) {
     loading.value = true;
     Map data = {
-      "sales_advice_id": "string",
-      "created_by": "string",
-      "consignee_id": "string"
+      "sales_advice_id": salesAdviseId,
+      "created_by": email,
+      "consignee_id": consigneeId
     };
     try {
       _api
-          .salesAdviceHeaderGetBySalesAdviceIdApiHit(data, sessionManagement)
+          .salesAdviceHeaderUpdateApiHit(data, sessionManagement)
           .then(
         (onValue) {
           final jsonResponse = json.decode(onValue);
@@ -4844,13 +4856,10 @@ class SalesCycleVm extends GetxController {
             List<SalesAdviseHeaderLineModal> response = jsonResponse
                 .map((e) => SalesAdviseHeaderLineModal.fromJson(e))
                 .toList();
-            if (response.length > 0 &&
-                response.isNotEmpty &&
-                response[0].condition?.toLowerCase() == "true") {
-              salesAdviseHeaderLineList.value = response;
-              salesAdviseLinesDataList.value =
-                  salesAdviseHeaderLineList[0].quoteItems ?? [];
-              Get.toNamed(RoutesName.salesAdviseHeaderLineScreen);
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.showToastification(
+                  "Message", response[0].message.toString());
+              getSalesAdviseHeaderLine(salesAdviseHeaderLineList[0].salesAdviceId??"");
               loading.value = false;
             } else {
               loading.value = false;
@@ -4893,7 +4902,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesAdviseHeaderLineModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showErrorToastification(
+              Utils.showToastification(
                   "Message", response[0].message.toString());
               getSalesAdviseHeaderLine(salesAdviseHeaderLineList[0].salesAdviceId??"");
             } else {
@@ -4926,8 +4935,7 @@ class SalesCycleVm extends GetxController {
       "sales_advice_id": salesAdviseId,
       "created_by": email};
     try {
-      _api
-          .salesAdviceHeaderGetBySalesAdviceIdApiHit(data, sessionManagement)
+      _api.salesAdviceCompleteApiHit(data, sessionManagement)
           .then(
         (onValue) {
           final jsonResponse = json.decode(onValue);
@@ -4936,13 +4944,11 @@ class SalesCycleVm extends GetxController {
             List<SalesAdviseHeaderLineModal> response = jsonResponse
                 .map((e) => SalesAdviseHeaderLineModal.fromJson(e))
                 .toList();
-            if (response.length > 0 &&
-                response.isNotEmpty &&
-                response[0].condition?.toLowerCase() == "true") {
-              salesAdviseHeaderLineList.value = response;
-              salesAdviseLinesDataList.value =
-                  salesAdviseHeaderLineList[0].quoteItems ?? [];
-              Get.toNamed(RoutesName.salesAdviseHeaderLineScreen);
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.showToastification(
+                  "Message", response[0].message.toString());
+              pageNumberSalesAdvise=0;
+              getSalesAdviseData(pageNumberSalesAdvise,salesAdviseHeaderList[0].salesCycleId??"",salesAdviseHeaderList[0].quoteId??"","");
               loading.value = false;
             } else {
               loading.value = false;
@@ -4963,6 +4969,34 @@ class SalesCycleVm extends GetxController {
       Utils.showErrorToastification("Message !", e.toString());
       loading.value = false;
       print(e);
+    }finally{
+      loading.value = false;
     }
   }
+
+
+  Future<void> refreshListOfSalesAdvise() async {
+    pageNumberSalesAdvise=0;
+    getSalesAdviseData(pageNumberSalesAdvise, quoteHeaderdata[0].salesCycleId??"", quoteHeaderdata[0].quoteId??"","");
+  }
+
+  void bindSalesAdviseAddress(SalesAdviseHeaderLineModal salesAdviseHeaderLineList) {
+
+    shippingController.value.text = salesAdviseHeaderLineList.shippingAddress ?? "";
+    shippingAddress2Controller.value.text =
+        salesAdviseHeaderLineList.shippingAddress2 ?? "";
+    Shipping_PostCode_Controller.value.text =
+        salesAdviseHeaderLineList.shippingPostCode ?? "";
+    Shipping_City_Controller.value.text = salesAdviseHeaderLineList.shippingCity ?? "";
+    Shipping_District_Controller.value.text =
+        salesAdviseHeaderLineList.shippingDistrict ?? "";
+    Shipping_State_Controller.value.text =
+        salesAdviseHeaderLineList.shippingStateName ?? "";
+    Shipping_phone_Controller.value.text =
+        salesAdviseHeaderLineList.shippingPhoneNo ?? "";
+    Shipping_email_Controller.value.text =
+        salesAdviseHeaderLineList.shippingEmailId ?? "";
+
+  }
+
 }

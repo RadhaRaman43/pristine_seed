@@ -26,6 +26,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        saleCycleController.getQuoteHeaderInformation(
+            saleCycleController.quoteHeaderdata[0].quoteId, "");
         Get.toNamed(RoutesName.quoteInformationScreen);
         return false;
       },
@@ -58,29 +60,32 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              Obx((){
-                return Visibility(
-                  visible:saleCycleController.loading.value ,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.primaryDark1,
-                    color: AllColors.textColor,
+        body: RefreshIndicator(
+          onRefresh: saleCycleController.refreshListOfSalesAdvise,
+          child: Container(
+            width: double.infinity,
+            height: double.infinity,
+            child: Column(
+              children: [
+                Obx((){
+                  return Visibility(
+                    visible:saleCycleController.loading.value ,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Container(
+                    child: Obx(() {
+                      return BindCustomerListView(context);
+                    }),
                   ),
-                );
-              }),
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  child: Obx(() {
-                    return BindCustomerListView(context);
-                  }),
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -106,7 +111,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
           print(
               "last index ${saleCycleController.pageNumberSalesAdvise} ${saleCycleController.total_rows} ${saleCycleController.rowsPerPage} ${total_page}");
           if (saleCycleController.pageNumberSalesAdvise + 1 < total_page) {
-            saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise+1,"","");
+            saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise+1,"","","");
             saleCycleController.pageNumberSalesAdvise += 1;
           }
         }
@@ -140,12 +145,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
       switch (status) {
         case 'draft':
           return Colors.red[900]!;
-        case 'rejected':
-          return AllColors.redColor;
-        case 'approved':
+        case 'completed':
           return Colors.green;
-        case 'pending for approval':
-          return Colors.yellow[700]!;
         default:
           return Colors.black;
       }
