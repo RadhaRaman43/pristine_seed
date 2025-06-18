@@ -13,6 +13,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
 import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../../CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
@@ -22,6 +23,7 @@ class QuoteInformationScreen extends StatelessWidget {
   final saleCycleController = Get.put(SalesCycleVm());
   final accountMaster_page_controller = Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
+  final address_vm_controller = Get.put(Addressmastervm());
   final quoteApprovalController = Get.put(QuoteApprovalListVm());
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
@@ -169,7 +171,8 @@ class QuoteInformationScreen extends StatelessWidget {
                       children: [
                         Obx((){
                           return Visibility(
-                            visible:  saleCycleController
+                            visible:  saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
+                            saleCycleController
                                 .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected",
                             child: Tooltip(
                               message: "Reopen",
@@ -1032,9 +1035,10 @@ class QuoteInformationScreen extends StatelessWidget {
               Spacer(),
               Obx(() {
                 return Visibility(
-                  visible: saleCycleController.showBranchHead.value ||
+                  visible:( saleCycleController.showBranchHead.value ||
                       saleCycleController.showClusterHead.value ||
-                      saleCycleController.showGeneralManager.value,
+                      saleCycleController.showGeneralManager.value)&&  saleCycleController
+                      .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="rejected",
                   child: GestureDetector(
                       onTap: () {
                         saleCycleController.bmDiscountPerController.value.text =
@@ -3232,7 +3236,63 @@ class QuoteInformationScreen extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
+                    /*Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AllColors.primaryDark1,
+                            ),
+                          ),
+                          onPressed: () {
+                            address_vm_controller.clearController();
+                            accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                            address_vm_controller.getGeoPostalCodeApi();
+                            Get.toNamed(RoutesName.addNewAddress_screen);
+                          },
+                          child: Container(
+                            child: Text(
+                              'Add Address',
+                              style: GoogleFonts.poppins(
+                                color: AllColors.whiteColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                              AllColors.primaryDark1,
+                            ),
+                          ),
+                          onPressed: () {
+                            saleCycleController.pageNumber = 0;
+                            saleCycleController.getAddressMasterList(
+                                saleCycleController.pageNumber,
+                                saleCycleController.accountCode.value);
+                            saleCycleController.showConsigneeAddressList(
+                                context, saleCycleController.address_master_list);
+                          },
+                          child: Container(
+                            child: Text(
+                              'Change Address',
+                              style: GoogleFonts.poppins(
+                                color: AllColors.whiteColor,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),*/
+                    /*Container(
                       width: size.width,
                       child: ElevatedButton(
                         style: ButtonStyle(
@@ -3259,7 +3319,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                    )
+                    )*/
                   ],
                 ),
               )),
@@ -3708,11 +3768,7 @@ class QuoteInformationScreen extends StatelessWidget {
 
   Widget bindShippingAddress(BuildContext context) {
     return Container(
-      //margin: EdgeInsets.only(left: 15.0, right: 15.0),
-      //color: AllColors.Card1Color,
-      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
       decoration: BoxDecoration(
-        //color: AllColors.Card2Color, // Set the inside color here
         border: Border.all(
           color: AllColors.grayColor, // Set the border color here
           width: 1.0, // Adjust the border width if necessary
@@ -3866,68 +3922,65 @@ class QuoteInformationScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10))),
               ),
             ),
-
-            /* SizedBox(height: 15,),
-
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: saleCycleController
-                    .Shipping_phone_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Phone No.",
-                    labelText: "Phone No.",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      AllColors.primaryDark1,
                     ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
+                  ),
+                  onPressed: () {
+                    address_vm_controller.FromPage.value="SalesCycleQuotation";
+                    address_vm_controller.clearController();
+                    accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                    address_vm_controller.getGeoPostalCodeApi();
+                    Get.toNamed(RoutesName.addNewAddress_screen);
+                  },
+                  child: Container(
+                    child: Text(
+                      'Add  New',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
                 ),
-
-              ),
+                Spacer(),
+                ElevatedButton(
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all<Color>(
+                      AllColors.primaryDark1,
+                    ),
+                  ),
+                  onPressed: () {
+                    saleCycleController.pageNumber = 0;
+                    saleCycleController.getAddressMasterList(
+                        saleCycleController.pageNumber,
+                        saleCycleController.accountCode.value);
+                    saleCycleController.showConsigneeAddressList(
+                        context, saleCycleController.address_master_list);
+                  },
+                  child: Container(
+                    child: Text(
+                      'Change ',
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
 
-            SizedBox(height: 15,),
-
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: saleCycleController
-                    .Shipping_email_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Email Id",
-                    labelText: "Email Id",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
-              ),
-            ),*/
           ],
         ),
       ),

@@ -39,7 +39,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                   'Sales Advise(${saleCycleController.salesAdviseHeaderLineList[0].salesAdviceId.toString()})',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
-                    fontSize: 18.0,
+                    fontSize: 16.0,
                     fontWeight: FontWeight.w700,
                   ),
                   overflow: TextOverflow.ellipsis,

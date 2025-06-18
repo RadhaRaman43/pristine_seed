@@ -75,6 +75,7 @@ class SalesCycleVm extends GetxController {
   RxString Total_Expected_Amount = "0".obs;
   RxBool loading = false.obs;
   String email = "";
+  String isAdminWritePermission = "";
   String consigneeId = "";
   RxString FromPage = "Sales".obs;
   RxString quoteApprovalPage = "".obs;
@@ -296,6 +297,7 @@ class SalesCycleVm extends GetxController {
   @override
   Future<void> onInit() async {
     email = await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     clearAllFieldOfFilter();
     getsalesCycleData(pageNumber, "", "", '');
     itemCategorySelectedlist.value = [];
@@ -2706,7 +2708,7 @@ class SalesCycleVm extends GetxController {
                           },
                           child: Container(
                             child: Text(
-                              'Select Quotation',
+                              'Select Sales Advise',
                               style: GoogleFonts.poppins(
                                 color: AllColors.blackColor,
                                 fontSize: AllFontSize.fourtine,
@@ -4237,7 +4239,7 @@ class SalesCycleVm extends GetxController {
     if (selection_sales_advise_won_list.isNotEmpty) {
       for (int i = 0; i < selection_sales_advise_won_list.length; i++) {
         var item = selection_sales_advise_won_list[i];
-        lineData.add({"quote_id": item.quoteId});
+        lineData.add({"quote_id": item.salesAdviceId});
       }
     }
     Map data = {
@@ -4257,15 +4259,11 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response[0].condition == "True") {
               Utils.showToastification(
-                  "Message !", response[0].message.toString());
+                  "Message", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               clearAllFieldOfFilter();
               pageNumber = 0;
-              getsalesCycleData(
-                  pageNumber,
-                  saleCycleList.salesCycleId.toString(),
-                  "ViewHeader",
-                  FromPage.value);
+              getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "ViewHeader", FromPage.value);
               //salesCycleMstApprovereject(saleCycleList,solutionRejectedRemarkController.value.text,approRejeStatus);
               loading.value = false;
             } else {
