@@ -31,6 +31,7 @@ class ContactMasterVM extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   String email="";
+  String isAdminWritePermission = "";
   bool updateContact=false;
   bool insideOut=false;
   RxString FromPage="".obs;
@@ -69,6 +70,7 @@ class ContactMasterVM extends GetxController{
     super.onInit();
 
     email=await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     getContactMasterList(pageNumber,"","","");
     getDecisionRoleMaster();
 
@@ -119,7 +121,7 @@ class ContactMasterVM extends GetxController{
         "filter_department_name": depart_name,
         "email_id": emailId_controller.value.text.isEmpty?"":emailId_controller.value.text,
         "phone_no": phone_no_controller.value.text.isEmpty?"":phone_no_controller.value.text,
-        "created_by": email,
+        "created_by": isAdminWritePermission == "0"?email:"",
         "row_per_page": rowsPerPage.toString(),
         "page_number": pageNumber.toString()
       };

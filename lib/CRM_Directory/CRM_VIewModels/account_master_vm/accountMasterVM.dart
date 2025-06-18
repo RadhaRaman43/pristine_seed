@@ -57,6 +57,7 @@ class Accountmastervm extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   RxString FromPage="".obs;
+  String isAdminWritePermission = "";
   String email="";
   String UserName="";
   String accountName='';
@@ -204,6 +205,7 @@ class Accountmastervm extends GetxController{
 
     email=await sessionManagement.getEmail() ?? '';
     UserName=await sessionManagement.getName() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     getAccountMaster(pageNumber ,is_Active.toString());
     getDraftAccountMaster(pageNumber ,is_Active.toString());
     getAccCategoryApi();
@@ -292,7 +294,7 @@ class Accountmastervm extends GetxController{
     getDraftAccountMaster(pageNumber ,'All');
   }
 
-   getAccountMaster(int page_no, String IsActive){
+   getAccountMaster(int page_no, String IsActive)  {
     if(IsActive == 'All'){
       is_Active = -1;
     }else if( IsActive == 'Yes'){
@@ -301,6 +303,7 @@ class Accountmastervm extends GetxController{
       is_Active = 0;
     }
     print('isActiveInAPi...${is_Active}');
+    print('is Admin.....${isAdminWritePermission}');
     try{
       Map<String, String> data={
         "filter_account_code":account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
@@ -313,7 +316,7 @@ class Accountmastervm extends GetxController{
         "filter_postal_code": postal_code_controller.value.text.isEmpty?"":postal_code_controller.value.text,
         "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
         "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
-        "filter_account_owner": email,
+        "filter_account_owner": isAdminWritePermission == '0'?email:'',
         "filter_frontliner_value": "",
         "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
         "filter_zone_head_value": "",
@@ -446,7 +449,7 @@ class Accountmastervm extends GetxController{
         "filter_postal_code": postal_code_controller.value.text.isEmpty?"":postal_code_controller.value.text,
         "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
         "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
-        "filter_account_owner":email ,
+        "filter_account_owner":isAdminWritePermission == '0'?email:'' ,
         "filter_frontliner_value": "",
         "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
         "filter_zone_head_value": "",
@@ -2185,7 +2188,7 @@ class Accountmastervm extends GetxController{
       account_code_controller.text = response[position].accountCode??"";
       account_name_controller.text = response[position].accountName??"";
       EmployeeMember_Controller.text = response[position].accountOwnerFullName??"";
-      AccountOwner = response[0].accountOwner??"";
+      AccountOwner = response[position].accountOwner??"";
       print('Onwer...${EmployeeMember_Controller.text}');
      // AccountOwner = employee_Member_list[position].loginEmailId??"";
       AccountTitle_Controller.text = response[position].accountTitle??"";

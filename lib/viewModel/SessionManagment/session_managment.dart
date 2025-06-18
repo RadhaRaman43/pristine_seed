@@ -130,6 +130,22 @@ class SessionManagement {
     }
   }
 
+
+  Future<void> setIsAdminPermission(String Is_Admin_Permission) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('Is_Admin_Permission', Is_Admin_Permission);
+  }
+  Future<String?> getIsAdminPermission() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var Is_Admin_Permission = prefs.getString('Is_Admin_Permission');
+      if (Is_Admin_Permission == null || Is_Admin_Permission == "") return null;
+      return Is_Admin_Permission;
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<void> setEmpId(String emp_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('emp_id', emp_id);

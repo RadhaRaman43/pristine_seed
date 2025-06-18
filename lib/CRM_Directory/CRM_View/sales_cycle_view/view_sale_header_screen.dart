@@ -56,7 +56,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       onWillPop: () async {
         print('fromPageNameSales.....${saleCycleController.FromPage}');
         if (saleCycleController.FromPage == 'Sales') {
-          print('Yaha Se1...');
+         // print('Yaha Se1...');
           saleCycleController.clearAllFieldOfFilter();
           /*  saleCycleController.accountNameController.value.clear();
           //saleCycleController.contactNameController.value.clear();
@@ -374,11 +374,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         );
                       }
-                      if (saleCycleController.saleCycleList[0].quoteAccepted
-                              ?.toLowerCase() ==
-                          "open"&& saleCycleController.saleCycleList[0].quoteAccepted
-                          ?.toLowerCase() !=
-                          "rejected") {
+                      if (saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "open" &&
+                          saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() != "rejected") {
                         items.add(
                           PopupMenuItem(
                             child: Row(
