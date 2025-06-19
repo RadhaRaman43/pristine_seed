@@ -179,32 +179,25 @@ class Addressmastervm extends GetxController{
       loading.value=true;
       _api.ConsigneeAddMstUploader(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
+        print(onValue);
         if(jsonResponse is List){
           List<AddressMasterModel> response = jsonResponse.map((e) => AddressMasterModel.fromJson(e)).toList();
-          if(response!= null && response.length>0 && response[0].condition=="True"){
+          if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
             print("created data is ${response}");
             loading.value = false;
             address_master_list.value=response;
            // resetAllContactCreativeField('Icon');
             Utils.showToastification('Address add successfully', response[0].message!);
             if(FromPage=="SalesCycleQuotation"){
-              sales_cycle_vm_controller.consigneeId=address_master_list[0].consigneeId??"";
-              sales_cycle_vm_controller.shippingController.value.text = address_master_list[0].address ?? "";
-              sales_cycle_vm_controller.shippingAddress2Controller.value.text =
-                  address_master_list[0].address2 ?? "";
-              sales_cycle_vm_controller.Shipping_PostCode_Controller.value.text =
-                  address_master_list[0].postCode ?? "";
-              sales_cycle_vm_controller.Shipping_City_Controller.value.text = address_master_list[0].city ?? "";
-              sales_cycle_vm_controller.Shipping_District_Controller.value.text =
-                  address_master_list[0].district ?? "";
-              sales_cycle_vm_controller.Shipping_State_Controller.value.text =
-                  address_master_list[0].stateName ?? "";
-              sales_cycle_vm_controller.Shipping_phone_Controller.value.text =
-                  address_master_list[0].phoneNo ?? "";
-              sales_cycle_vm_controller.Shipping_email_Controller.value.text =
-                  address_master_list[0].emailId ?? "";
+              //bindSalesCycleAdress(address_master_list);
               Get.toNamed(RoutesName.quoteInformationScreen);
-            }else{
+            }else if(FromPage=="AddQuote"){
+              //bindSalesCycleAdress(address_master_list);
+              Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
+            }else if(FromPage.value=="AddSalesAdvise"){
+              Get.toNamed(RoutesName.salesAdviseHeaderLineScreen);
+            }
+            else{
               clearController();
               Get.toNamed(RoutesName.viewAddress_screen);
               getAddressMasterList(0, account_code_controller.value.text);
@@ -439,5 +432,24 @@ class Addressmastervm extends GetxController{
     City_Controller.clear();
     District_Controller.clear();
   }
+
+ /* bindSalesCycleAdress(RxList<AddressMasterModel> address_master_list){
+    print("Address${address_master_list[0].address} and ${ sales_cycle_vm_controller.shippingController.value.text}");
+    sales_cycle_vm_controller.consigneeId=address_master_list[0].consigneeId??"";
+    sales_cycle_vm_controller.shippingController.value.text = address_master_list[0].address ?? "";
+    sales_cycle_vm_controller.shippingAddress2Controller.value.text =
+        address_master_list[0].address2 ?? "";
+    sales_cycle_vm_controller.Shipping_PostCode_Controller.value.text =
+        address_master_list[0].postCode ?? "";
+    sales_cycle_vm_controller.Shipping_City_Controller.value.text = address_master_list[0].city ?? "";
+    sales_cycle_vm_controller.Shipping_District_Controller.value.text =
+        address_master_list[0].district ?? "";
+    sales_cycle_vm_controller.Shipping_State_Controller.value.text =
+        address_master_list[0].stateName ?? "";
+    sales_cycle_vm_controller.Shipping_phone_Controller.value.text =
+        address_master_list[0].phoneNo ?? "";
+    sales_cycle_vm_controller.Shipping_email_Controller.value.text =
+        address_master_list[0].emailId ?? "";
+  }*/
 
 }

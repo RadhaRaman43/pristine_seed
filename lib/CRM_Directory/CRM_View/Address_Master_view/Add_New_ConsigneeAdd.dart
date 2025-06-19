@@ -53,6 +53,10 @@ class AddNewConsigneeadd extends StatelessWidget{
         onWillPop: () async {
           if(address_vm_controller.FromPage.value=="SalesCycleQuotation"){
             Get.toNamed(RoutesName.quoteInformationScreen);
+          }else if(address_vm_controller.FromPage.value=="AddQuote") {
+            Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
+          }else if(address_vm_controller.FromPage.value=="AddSalesAdvise"){
+            Get.toNamed(RoutesName.salesAdviseHeaderLineScreen);
           }else{
             address_vm_controller.contact_name_controller.clear();
             address_vm_controller.Consignee_controller.value.clear();
@@ -60,6 +64,7 @@ class AddNewConsigneeadd extends StatelessWidget{
             address_vm_controller.emailId_controller.clear();
             address_vm_controller.pageNumber = 0;
             address_vm_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
+            Get.back();
           }
       //Get.back();
       return false;
@@ -985,8 +990,8 @@ class AddNewConsigneeadd extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code*',
-              labelText: 'Post Code*',
+              hintText: 'Pin Code*',
+              labelText: 'Pin Code*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

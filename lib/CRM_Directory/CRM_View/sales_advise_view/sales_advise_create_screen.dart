@@ -22,7 +22,11 @@ class SalesAdviseCreateScreen extends StatelessWidget {
     print("List...${saleCycleController.quoteLinedata.length}");
     return WillPopScope(
       onWillPop: () async {
-        Get.toNamed(RoutesName.quoteInformationScreen);
+        if(saleCycleController.routingForSalesAdvise.value=="SalesAdvise"){
+          Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+        }else{
+          Get.toNamed(RoutesName.quoteInformationScreen);
+        }
         return false;
       }, child: Scaffold(
         appBar:  AppBar(
@@ -73,7 +77,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                  GestureDetector(
                    onTap: () {
                      saleCycleController.bindAddress();
-                     showDialogForAddressUpdate(context);
+                     saleCycleController.showDialogForAddressUpdate(context);
                    },
                    child: Container(
                      child: Padding(
@@ -655,34 +659,40 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                             ),
                             Obx((){
                               bool isSelected = saleCycleController.salesAdviseCheckedList[index];
-                              return GestureDetector(
-                                onTap: (){
-                                  if(isSelected){
-                                    updateQtySalesCycleProduct(context, index);
-                                  }
-                                },
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Qty : ",
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontSize: AllFontSize.twelve,
-                                        fontWeight: FontWeight.w500,
-                                        decoration: isSelected?TextDecoration.underline:TextDecoration.none,
+                              bool isEditingThisIndex = saleCycleController.editingIndex.value == index;
+                              return Visibility(
+                                visible: saleCycleController.qtyUpdateBool.value,
+                                child: GestureDetector(
+                                  onTap: (){
+                                    if(isSelected){
+                                      saleCycleController.qtyUpdateLineController.value.text = saleCycleController.quoteLinedata[index].qty.toString();
+                                      updateQtySalesCycleProduct(context, index);
+                                    }
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Qty : ",
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.twelve,
+                                          fontWeight: FontWeight.w500,
+                                          decoration: isSelected?TextDecoration.underline:TextDecoration.none,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      saleCycleController.quoteLinedata[index].qty
-                                          .toString(),
-                                      style: GoogleFonts.poppins(
-                                        color: AllColors.textColor,
-                                        fontSize: AllFontSize.twelve,
-                                        fontWeight: FontWeight.w500,
-                                        decoration: isSelected?TextDecoration.underline:TextDecoration.none,
+                                      Text(
+                                        isEditingThisIndex &&saleCycleController.qtyUpdateLineController.value.text.isNotEmpty?
+                                        saleCycleController.qtyUpdateLineController.value.text:saleCycleController.quoteLinedata[index].qty
+                                            .toString(),
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.textColor,
+                                          fontSize: AllFontSize.twelve,
+                                          fontWeight: FontWeight.w500,
+                                          decoration: isSelected?TextDecoration.underline:TextDecoration.none,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               );
                             }),
@@ -1005,6 +1015,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
 
 
   void updateQtySalesCycleProduct(BuildContext context,  int position) {
+    saleCycleController.editingIndex.value = position;
     showDialog(
         barrierDismissible: false,
         context: context,
@@ -1066,21 +1077,13 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          saleCycleController.SalesCycleLineCreateApiHit(
-                              saleCycleController
-                                  .get_SalesCycleProductById_List[position]
-                                  .itemCode!,
-                              saleCycleController
-                                  .get_SalesCycleProductById_List[position]
-                                  .salesCycleId!,
-                              saleCycleController
-                                  .get_SalesCycleProductById_List[position]
-                                  .lineNo!,
-                              "Update");
+                          saleCycleController.quoteLinedata[position].qty =
+                              double.tryParse(saleCycleController
+                                  .qtyUpdateLineController.value.text) ??
+                                  saleCycleController.quoteLinedata[position].qty;
+                          saleCycleController.qtyUpdateBool.value=false;
+                          saleCycleController.qtyUpdateBool.value=true;
                           Get.back();
-                          /*  saleCycleController
-                              .ProductCategoryWiseAmtCreateApiHit(id!);
-                          Get.back();*/
                         },
                         child: Container(
                           width: 60,
@@ -1128,7 +1131,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
         });
   }
 
-  Future showDialogForAddressUpdate(BuildContext context) {
+ /* Future showDialogForAddressUpdate(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1159,7 +1162,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         bindShippingAddress(context),
-                      /*  SizedBox(
+                      *//*  SizedBox(
                           height: 10,
                         ),
                         Container(
@@ -1185,7 +1188,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),*/
+                        ),*//*
                         SizedBox(
                           height: 10,
                         ),
@@ -1203,7 +1206,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                                   saleCycleController.pageNumber,
                                   saleCycleController.quoteHeaderdata[0].accountCode!);
                               saleCycleController.showConsigneeAddressList(
-                                  context, saleCycleController.address_master_list);
+                                  context, saleCycleController.address_master_list,saleCycleController.quoteHeaderdata[0].accountCode!);
                             },
                             child: Container(
                               child: Text(
@@ -1381,7 +1384,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
               ),
             ),
 
-            /* SizedBox(height: 15,),
+            *//* SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -1441,10 +1444,10 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                 ),
 
               ),
-            ),*/
+            ),*//*
           ],
         ),
       ),
     );
-  }
+  }*/
 }

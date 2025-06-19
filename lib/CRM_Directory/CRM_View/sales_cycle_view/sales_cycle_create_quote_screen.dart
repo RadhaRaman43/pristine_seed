@@ -117,10 +117,26 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: DefaultButton(
                     press: (){
+                      address_vm_controller.FromPage.value="AddQuote";
+                      address_vm_controller.clearController();
+                      address_vm_controller.account_code_controller.text=saleCycleController.saleCycleList[0].accountCode??"";
+                      address_vm_controller.account_name_controller.text=saleCycleController.saleCycleList[0].accountName??"";
+                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                      address_vm_controller.getGeoPostalCodeApi();
+                      Get.toNamed(RoutesName.addNewAddress_screen);
+                    },
+                    text: "Add New Address",
+                  ),
+                ),
+                SizedBox(height: 5,),
+                Container(
+                  margin: EdgeInsets.only(left: 15, right: 15, top: 15),
+                  child: DefaultButton(
+                    press: (){
                      // address_vm_controller.clearController();
                       saleCycleController.pageNumber = 0;
                       saleCycleController.getAddressMasterList(saleCycleController.pageNumber,saleCycleController.accountCode.value);
-                      saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list);
+                      saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
 
 
                     },
@@ -335,8 +351,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 controller: saleCycleController
                     .Shipping_PostCode_Controller.value,
                 decoration: InputDecoration(
-                    hintText: "Post Code",
-                    labelText: "Post Code",
+                    hintText: "Pin Code",
+                    labelText: "Pin Code",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
                         vertical: AllFontSize.ten,

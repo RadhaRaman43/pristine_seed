@@ -3937,7 +3937,9 @@ class QuoteInformationScreen extends StatelessWidget {
                   onPressed: () {
                     address_vm_controller.FromPage.value="SalesCycleQuotation";
                     address_vm_controller.clearController();
-                    accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                    address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
+                    address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
+                    address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
                     address_vm_controller.getGeoPostalCodeApi();
                     Get.toNamed(RoutesName.addNewAddress_screen);
                   },
@@ -3965,7 +3967,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         saleCycleController.pageNumber,
                         saleCycleController.accountCode.value);
                     saleCycleController.showConsigneeAddressList(
-                        context, saleCycleController.address_master_list);
+                        context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
                   },
                   child: Container(
                     child: Text(
@@ -5665,7 +5667,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               Icon(Icons.download_for_offline_outlined, color: AllColors.blackColor,),
                               SizedBox(width: 10),
                               Text(
-                                "Download With Dis.",
+                                "Download With Disc.",
                                 style: GoogleFonts.poppins(
                                   color: AllColors.textColor,
                                   fontSize: AllFontSize.fourtine,
@@ -5675,7 +5677,12 @@ class QuoteInformationScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        SizedBox(height: 10),
+                        SizedBox(height: 5),
+                        Divider(
+                          height: 1,
+                          thickness: 1,
+                        ),
+                        SizedBox(height: 5),
 
                         GestureDetector(
                           onTap: (){
@@ -5687,7 +5694,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               Icon(Icons.download_for_offline_outlined,color: AllColors.blackColor,),
                               SizedBox(width: 10),
                               Text(
-                                "Download Without Dis.",
+                                "Download Without Disc.",
                                 style: GoogleFonts.poppins(
                                   color: AllColors.textColor,
                                   fontSize: AllFontSize.fourtine,

@@ -50,6 +50,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                 Spacer(),
                 IconButton(
                     onPressed: () {
+                      saleCycleController.routingForSalesAdvise.value="SalesAdvise";
                       saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
                       saleCycleController.salesAdviseCheckedList.value =
                           List.generate(saleCycleController.quoteLinedata.length, (_) => false);

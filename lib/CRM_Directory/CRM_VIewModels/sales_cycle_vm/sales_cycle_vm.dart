@@ -78,6 +78,7 @@ class SalesCycleVm extends GetxController {
   String isAdminWritePermission = "";
   String consigneeId = "";
   RxString FromPage = "Sales".obs;
+  RxString routingForSalesAdvise = "".obs;
   RxString quoteApprovalPage = "".obs;
   int pageNumber = 0;
   int pageNumberForItem = 0;
@@ -89,6 +90,7 @@ class SalesCycleVm extends GetxController {
   int total_rows_sales = 0;
   int total_rows_sale_cyle_item = 0;
   RxBool isDeleteBtn = true.obs;
+  RxBool qtyUpdateBool = true.obs;
   RxBool isApprovalVisible = false.obs;
   RxBool isPropectfieldVisible = false.obs;
   RxBool ischackValueofSolution = false.obs;
@@ -96,6 +98,7 @@ class SalesCycleVm extends GetxController {
   RxBool isChooseQuote = false.obs;
   RxBool isReject = false.obs;
   var isCheck = (-1).obs;
+  var editingIndex = (-1).obs;
   RxBool BusinessTerm = false.obs;
   RxString filter = "Sales cycle".obs;
   RxList<SalesCycleModal> saleCycleList = <SalesCycleModal>[].obs;
@@ -241,6 +244,7 @@ class SalesCycleVm extends GetxController {
   var Shipping_State_Controller = TextEditingController().obs;
   var Shipping_phone_Controller = TextEditingController().obs;
   var Shipping_email_Controller = TextEditingController().obs;
+  var searchAddressController = TextEditingController().obs;
 
   //todo update sales cycle product competitor name, loss reason etc ...
   var updateCompetitorNameProductController = TextEditingController().obs;
@@ -2817,7 +2821,7 @@ class SalesCycleVm extends GetxController {
   }
 
   void showConsigneeAddressList(
-      BuildContext context, RxList<AddressMasterModel> address_master_list) {
+      BuildContext context, RxList<AddressMasterModel> address_master_list, String AccountCode) {
     showDialog(
         context: context,
         builder: (context) {
@@ -2844,6 +2848,7 @@ class SalesCycleVm extends GetxController {
               height: size.height * .6,
               width: size.width * 45,
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Divider(
                     height: 1,
@@ -2851,6 +2856,41 @@ class SalesCycleVm extends GetxController {
                   ),
                   SizedBox(
                     height: 15,
+                  ),
+                  Container(
+                    child: TextFormField(
+                      onChanged: (value){
+                        pageNumber=0;
+                        getAddressMasterList(
+                            pageNumber, AccountCode);
+                      },
+                      controller: searchAddressController.value,
+                      decoration: InputDecoration(
+                          hintText: "Search Address",
+                          labelText: "Search Address",
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AllColors.textColor),
+                            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomRight:Radius.circular(10),  )
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        prefixIcon: Icon(Icons.search),
+                        suffixIcon: GestureDetector(
+                          onTap: (){
+                            searchAddressController.value.text="";
+                            pageNumber=0;
+                            getAddressMasterList(
+                                pageNumber, AccountCode);
+                          },
+                            child: Icon(Icons.close_outlined, color: AllColors.redColor,))
+                      ),
+
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
                   ),
                   Flexible(
                     fit: FlexFit.loose,
@@ -2878,8 +2918,6 @@ class SalesCycleVm extends GetxController {
                             ),
                             onPressed: () {
                               selectedItem.value = -1;
-
-
                               shippingController.value.text = "";
                               shippingAddress2Controller.value.text = "";
                               Shipping_PostCode_Controller.value.text = "";
@@ -3252,7 +3290,7 @@ class SalesCycleVm extends GetxController {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Post Code : ",
+                    "Pin Code : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.twelve,
@@ -3689,7 +3727,7 @@ class SalesCycleVm extends GetxController {
         "consignee_id": "",
         "account_code": account_Code,
         "account_name": "",
-        "contact_name": "",
+        "contact_name": searchAddressController.value.text.isNotEmpty?searchAddressController.value.text:"",
         "email_id": "",
         "phone_no": "",
         "rowsPerPage": rowsPerPage,
@@ -4997,4 +5035,326 @@ class SalesCycleVm extends GetxController {
 
   }
 
+
+
+
+  Future showDialogForAddressUpdate(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return Container(
+            child: AlertDialog(
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Address Update",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+
+                  GestureDetector(
+                      onTap: (){
+                        Get.back();
+                      },
+                      child: Icon(Icons.close_outlined, size: 25, color: AllColors.primaryDark1,))
+                ],
+              ),
+              content: Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        bindShippingAddress(context),
+                        /*  SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: size.width,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: () {
+                              saleCycleController.quoteHeaderUpdateApiHit();
+                              Get.back();
+                            },
+                            child: Container(
+                              child: Text(
+                                'Update Address',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.whiteColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),*/
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: size.width,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: () {
+                              pageNumber = 0;
+                             getAddressMasterList(
+                                  pageNumber,
+                                  quoteHeaderdata[0].accountCode!);
+                             showConsigneeAddressList(
+                                  context, address_master_list,quoteHeaderdata[0].accountCode!);
+                            },
+                            child: Container(
+                              child: Text(
+                                'Change Address',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.whiteColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )),
+            ),
+          );
+        });
+  }
+
+
+  Widget bindShippingAddress(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: AllColors.grayColor, // Set the border color here
+          width: 1.0,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: 'Shipping Address',
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w700,
+              fontSize: AllFontSize.sisxteen),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(),
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: shippingController.value,
+                decoration: InputDecoration(
+                    hintText: "Address",
+                    labelText: "Address",
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              child: TextFormField(
+                readOnly: true,
+                controller:
+                shippingAddress2Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Address 2",
+                    labelText: "Address 2",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+
+              child: TextFormField(
+                readOnly: true,
+                keyboardType: TextInputType.number,
+                controller:
+                Shipping_PostCode_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Pin Code",
+                    labelText: "Pin Code",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: Shipping_City_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "City",
+                    labelText: "City",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller:
+                Shipping_District_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "District",
+                    labelText: "District",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: Shipping_State_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "State",
+                    labelText: "State",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10))),
+              ),
+            ),
+
+            /* SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController
+                    .Shipping_phone_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Phone No.",
+                    labelText: "Phone No.",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+
+            SizedBox(height: 15,),
+
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                readOnly: true,
+                controller: saleCycleController
+                    .Shipping_email_Controller.value,
+                decoration: InputDecoration(
+                    hintText: "Email Id",
+                    labelText: "Email Id",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.blue)
+                    ),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),*/
+          ],
+        ),
+      ),
+    );
+  }
 }

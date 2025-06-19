@@ -13,9 +13,11 @@ import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
+import '../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
 
 class SalesAdviseHeaderLineScreen extends StatelessWidget{
   var saleCycleController=Get.put(SalesCycleVm());
+  final address_vm_controller = Get.put(Addressmastervm());
   Size size=Get.size;
   @override
   Widget build(BuildContext context) {
@@ -52,7 +54,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                     child: GestureDetector(
                         onTap: (){
                           saleCycleController.bindSalesAdviseAddress(saleCycleController.salesAdviseHeaderLineList[0]);
-                          showDialogForAddressUpdate(context);
+                          saleCycleController.showDialogForAddressUpdate(context);
                         },
                         child: Tooltip(
                             message: "Update Sales Advise Header",
@@ -1424,7 +1426,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
         });
   }
 
-  Future showDialogForAddressUpdate(BuildContext context) {
+/*  Future showDialogForAddressUpdate(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1475,7 +1477,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                       saleCycleController.pageNumber,
                                       saleCycleController.quoteHeaderdata[0].accountCode!);
                                   saleCycleController.showConsigneeAddressList(
-                                      context, saleCycleController.address_master_list);
+                                      context, saleCycleController.address_master_list,saleCycleController.quoteHeaderdata[0].accountCode!);
                                 },
                                 child: Container(
                                   child: Text(
@@ -1510,6 +1512,38 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                 ),
                               ),
                             ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Container(
+                          width: size.width,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.primaryDark1,
+                              ),
+                            ),
+                            onPressed: () {
+                              address_vm_controller.FromPage.value="AddSalesAdvise";
+                              address_vm_controller.clearController();
+                              address_vm_controller.account_code_controller.text=saleCycleController.saleCycleList[0].accountCode??"";
+                              address_vm_controller.account_name_controller.text=saleCycleController.saleCycleList[0].accountName??"";
+                              address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                              address_vm_controller.getGeoPostalCodeApi();
+                              Get.toNamed(RoutesName.addNewAddress_screen);
+                            },
+                            child: Container(
+                              child: Text(
+                                'Add New Address',
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.whiteColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
 
@@ -1676,7 +1710,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
               ),
             ),
 
-            /* SizedBox(height: 15,),
+            *//* SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -1736,10 +1770,10 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                 ),
 
               ),
-            ),*/
+            ),*//*
           ],
         ),
       ),
     );
-  }
+  }*/
 }

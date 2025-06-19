@@ -2730,7 +2730,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           color: AllColors.textColor,
                           fontSize: AllFontSize.sisxteen,
                           fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
                           //decorationStyle: TextDecorationStyle.wavy,
                         ),
                       ),
