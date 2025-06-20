@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
@@ -16,6 +17,7 @@ import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class SalesAdviseCreateScreen extends StatelessWidget {
   final saleCycleController = Get.put(SalesCycleVm());
+  final address_vm_controller = Get.put(Addressmastervm());
   Size size=Get.size;
   @override
   Widget build(BuildContext context) {
@@ -77,7 +79,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                  GestureDetector(
                    onTap: () {
                      saleCycleController.bindAddress();
-                     saleCycleController.showDialogForAddressUpdate(context);
+                     showDialogForAddressUpdate(context,);
                    },
                    child: Container(
                      child: Padding(
@@ -1131,7 +1133,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
         });
   }
 
- /* Future showDialogForAddressUpdate(BuildContext context) {
+  Future showDialogForAddressUpdate(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1148,7 +1150,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  
+
                   GestureDetector(
                       onTap: (){
                         Get.back();
@@ -1162,7 +1164,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         bindShippingAddress(context),
-                      *//*  SizedBox(
+                        SizedBox(
                           height: 10,
                         ),
                         Container(
@@ -1174,12 +1176,17 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                               ),
                             ),
                             onPressed: () {
-                              saleCycleController.quoteHeaderUpdateApiHit();
-                              Get.back();
+                              address_vm_controller.FromPage.value="CreateSalesAdvise";
+                              address_vm_controller.clearController();
+                              address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
+                              address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
+                              address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                              address_vm_controller.getGeoPostalCodeApi();
+                              Get.toNamed(RoutesName.addNewAddress_screen);
                             },
                             child: Container(
                               child: Text(
-                                'Update Address',
+                                'Add New Address',
                                 style: GoogleFonts.poppins(
                                   color: AllColors.whiteColor,
                                   fontSize: AllFontSize.fourtine,
@@ -1188,7 +1195,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),*//*
+                        ),
                         SizedBox(
                           height: 10,
                         ),
@@ -1384,7 +1391,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
               ),
             ),
 
-            *//* SizedBox(height: 15,),
+            /* SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -1444,10 +1451,12 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                 ),
 
               ),
-            ),*//*
+            ),*/
           ],
         ),
       ),
     );
-  }*/
+  }
+
+
 }

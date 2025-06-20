@@ -54,10 +54,13 @@ class AddNewConsigneeadd extends StatelessWidget{
           if(address_vm_controller.FromPage.value=="SalesCycleQuotation"){
             Get.toNamed(RoutesName.quoteInformationScreen);
           }else if(address_vm_controller.FromPage.value=="AddQuote") {
-            Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
+            Get.offNamed(RoutesName.salesCycleCreateQuoteScreen);
           }else if(address_vm_controller.FromPage.value=="AddSalesAdvise"){
-            Get.toNamed(RoutesName.salesAdviseHeaderLineScreen);
-          }else{
+            Get.offNamed(RoutesName.salesAdviseHeaderLineScreen);
+          }else if(address_vm_controller.FromPage.value=="CreateSalesAdvise"){
+            Get.offNamed(RoutesName.salesAdviseCreateScreen);
+          }
+          else{
             address_vm_controller.contact_name_controller.clear();
             address_vm_controller.Consignee_controller.value.clear();
             address_vm_controller.phone_no_controller.clear();

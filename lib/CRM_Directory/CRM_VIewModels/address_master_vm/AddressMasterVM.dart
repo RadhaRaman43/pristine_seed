@@ -69,7 +69,6 @@ class Addressmastervm extends GetxController{
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
-
     email=await sessionManagement.getEmail() ?? '';
     //getAddressMasterList(pageNumber,account_vm_controller.account_code_controller.value.text);
 
@@ -189,13 +188,13 @@ class Addressmastervm extends GetxController{
            // resetAllContactCreativeField('Icon');
             Utils.showToastification('Address add successfully', response[0].message!);
             if(FromPage=="SalesCycleQuotation"){
-              //bindSalesCycleAdress(address_master_list);
-              Get.toNamed(RoutesName.quoteInformationScreen);
+              Get.offNamed(RoutesName.quoteInformationScreen);
             }else if(FromPage=="AddQuote"){
-              //bindSalesCycleAdress(address_master_list);
-              Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
+              Get.offNamed(RoutesName.salesCycleCreateQuoteScreen);
             }else if(FromPage.value=="AddSalesAdvise"){
-              Get.toNamed(RoutesName.salesAdviseHeaderLineScreen);
+              Get.offNamed(RoutesName.salesAdviseHeaderLineScreen);
+            }else if(FromPage.value=="CreateSalesAdvise"){
+              Get.toNamed(RoutesName.salesAdviseCreateScreen);
             }
             else{
               clearController();

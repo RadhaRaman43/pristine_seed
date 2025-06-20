@@ -1005,9 +1005,10 @@ class QuoteInformationScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Item Name: ",
+                    "Item Code: ",
                     style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -1018,9 +1019,9 @@ class QuoteInformationScreen extends StatelessWidget {
                     width: size.width * .5,
                     child: Tooltip(
                       message:
-                          "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
+                          "${saleCycleController.quoteLinedata[index].itemCode}",
                       child: Text(
-                        "${saleCycleController.quoteLinedata[index].itemName ?? ""}(${saleCycleController.quoteLinedata[index].itemCode})",
+                        "${saleCycleController.quoteLinedata[index].itemCode}",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
@@ -1082,6 +1083,34 @@ class QuoteInformationScreen extends StatelessWidget {
           ),
           subtitle: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Item Name: ",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.twelve,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Flexible(
+                    //width: size.width * .5,
+                    child: Tooltip(
+                      message:
+                      saleCycleController.quoteLinedata[index].itemName ?? "",
+                      child: Text(saleCycleController.quoteLinedata[index].itemName ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.twelve,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1660,7 +1689,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "Approved Price :",
+                              "App. Amt. per Unit : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1668,24 +1697,14 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
                             Flexible(
-                              fit: FlexFit.loose,
                               child: Tooltip(
-                                message: saleCycleController
-                                            .quoteLinedata[index]
-                                            .approvedAmount ==
-                                        null
-                                    ? "0"
-                                    : saleCycleController
-                                        .quoteLinedata[index].approvedAmount
-                                        .toString(),
+                                message:  saleCycleController
+                                    .quoteLinedata[index].totalPrice
+                                    .toString(),
                                 child: Text(
-                                  saleCycleController.quoteLinedata[index]
-                                              .approvedAmount ==
-                                          null
-                                      ? ""
-                                      : saleCycleController
-                                          .quoteLinedata[index].approvedAmount
-                                          .toString(),
+                                  saleCycleController
+                                      .quoteLinedata[index].totalPrice
+                                      .toString(),
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -1818,7 +1837,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "App. Amt. per Unit : ",
+                              "Approved Price :",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1826,13 +1845,23 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
                             Flexible(
+                              fit: FlexFit.loose,
                               child: Tooltip(
-                                 message:  saleCycleController
-                                      .quoteLinedata[index].totalPrice
-                                      .toString(),
+                                message: saleCycleController
+                                    .quoteLinedata[index]
+                                    .approvedAmount ==
+                                    null
+                                    ? "0"
+                                    : saleCycleController
+                                    .quoteLinedata[index].approvedAmount
+                                    .toString(),
                                 child: Text(
-                                  saleCycleController
-                                      .quoteLinedata[index].totalPrice
+                                  saleCycleController.quoteLinedata[index]
+                                      .approvedAmount ==
+                                      null
+                                      ? ""
+                                      : saleCycleController
+                                      .quoteLinedata[index].approvedAmount
                                       .toString(),
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
@@ -1845,6 +1874,7 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                           ],
                         ),
+
                         Row(
                           children: [
                             Text(

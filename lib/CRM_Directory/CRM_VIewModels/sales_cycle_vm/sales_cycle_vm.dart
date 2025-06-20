@@ -46,22 +46,14 @@ import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.da
     as salesCycle;
 import '../../CRM_Models/sales_advise_modal/sales_advise_header_line_modal.dart'
     as advise;
+import '../address_master_vm/AddressMasterVM.dart';
 
 class SalesCycleVm extends GetxController {
 
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
-
-/*  static String _displayDecisionMakerForOption(String option) => option;
-
-  static String _displayPurchaseProcessForOption(CustomList option) => option.value!;
-
-  static String _displayPurchaseTimeFrameForOption(CustomList option) => option.value!;
-
-
-  static String _displayUpdateSalesCycleForOption(String option) => option;*/
-
+  //Addressmastervm address_vm_controller = Get.find();
   Size size = Get.size;
 
   final _api = SalesCycleRepository();
@@ -246,6 +238,10 @@ class SalesCycleVm extends GetxController {
   var Shipping_email_Controller = TextEditingController().obs;
   var searchAddressController = TextEditingController().obs;
 
+  //todo sales advise filter
+  var salesAdviseIdController=TextEditingController().obs;
+  var salesAdviseStatusController=TextEditingController().obs;
+
   //todo update sales cycle product competitor name, loss reason etc ...
   var updateCompetitorNameProductController = TextEditingController().obs;
   var updateCompetitorPriceProductController = TextEditingController().obs;
@@ -287,6 +283,7 @@ class SalesCycleVm extends GetxController {
   RxList<String> customerNeedIdentityList = ["Yes", "No"].obs;
   RxList<String> quoteAcceptedList = ["WON", "LOSS"].obs;
   RxList<String> statusList = ["Approve", "Reject"].obs;
+  RxList<String> salesAdviseStatusList = ["Draft", "Completed"].obs;
   RxList<String> SaleCycleStatusList =
       ["All", "Suspect", "Prospect", "Propose"].obs;
   RxList<String> ApprovalStatusList =
@@ -4387,6 +4384,8 @@ class SalesCycleVm extends GetxController {
   }
 
   void clearAllFieldOfQuoteFilter() {
+    salesAdviseStatusController.value.clear();
+    salesAdviseIdController.value.clear();
     filterQuoteIdController.value.clear();
     filterQuoteStatusController.value.clear();
     filterExpectedClosuredateController.value.clear();
@@ -4563,22 +4562,22 @@ class SalesCycleVm extends GetxController {
   getSalesAdviseData(int pageNumber, String saleCycleId, String quoteId, flagStatus) {
     try {
       Map data = {
-        "filter_sales_advice_id": "",
+        "filter_sales_advice_id": salesAdviseIdController.value.text.isNotEmpty?salesAdviseIdController.value.text:"",
         "filter_quote_id": quoteId,
         "filter_sales_cycle_id": saleCycleId,
-        "filter_account_code": "",
-        "filter_account_name": "",
+        "filter_account_code": accountCodeController.value.text.isNotEmpty?accountCodeController.value.text:"",
+        "filter_account_name": accountNameController.value.text.isNotEmpty?accountNameController.value.text:"",
         "filter_quote_version": -1,
-        "filter_quote_validity": "",
-        "filter_exp_closure_date": "",
+        "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty?quoteValidityStartToEnd.value:"",
+        "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty?extClosureStartToEnd.value:"",
         "filter_sales_advice_status": flagStatus,
-        "filter_product_category": "",
+        "filter_product_category": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
         "filter_created_by": email,
-        "filter_created_on": "",
+        "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
         "filter_frontliner_value": "",
-        "filter_branch_head_value": "",
+        "filter_branch_head_value": branch_head_value_controller.value.text.isNotEmpty?branch_head_value_controller.value.text:"",
         "filter_zone_head_value": "",
-        "filter_clusture_head_value": "",
+        "filter_clusture_head_value": cluster_head_value_controller.value.text.isNotEmpty?cluster_head_value_controller.value.text:"",
         "row_per_page": rowsPerPage,
         "page_number": pageNumber
       };
@@ -5017,7 +5016,6 @@ class SalesCycleVm extends GetxController {
   }
 
   void bindSalesAdviseAddress(SalesAdviseHeaderLineModal salesAdviseHeaderLineList) {
-
     shippingController.value.text = salesAdviseHeaderLineList.shippingAddress ?? "";
     shippingAddress2Controller.value.text =
         salesAdviseHeaderLineList.shippingAddress2 ?? "";
@@ -5038,323 +5036,4 @@ class SalesCycleVm extends GetxController {
 
 
 
-  Future showDialogForAddressUpdate(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            child: AlertDialog(
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Address Update",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.sisxteen,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-
-                  GestureDetector(
-                      onTap: (){
-                        Get.back();
-                      },
-                      child: Icon(Icons.close_outlined, size: 25, color: AllColors.primaryDark1,))
-                ],
-              ),
-              content: Container(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        bindShippingAddress(context),
-                        /*  SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: size.width,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.primaryDark1,
-                              ),
-                            ),
-                            onPressed: () {
-                              saleCycleController.quoteHeaderUpdateApiHit();
-                              Get.back();
-                            },
-                            child: Container(
-                              child: Text(
-                                'Update Address',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.whiteColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),*/
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          width: size.width,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.primaryDark1,
-                              ),
-                            ),
-                            onPressed: () {
-                              pageNumber = 0;
-                             getAddressMasterList(
-                                  pageNumber,
-                                  quoteHeaderdata[0].accountCode!);
-                             showConsigneeAddressList(
-                                  context, address_master_list,quoteHeaderdata[0].accountCode!);
-                            },
-                            child: Container(
-                              child: Text(
-                                'Change Address',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.whiteColor,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )),
-            ),
-          );
-        });
-  }
-
-
-  Widget bindShippingAddress(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: AllColors.grayColor, // Set the border color here
-          width: 1.0,
-        ),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: 'Shipping Address',
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w700,
-              fontSize: AllFontSize.sisxteen),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-        child: Column(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: shippingController.value,
-                decoration: InputDecoration(
-                    hintText: "Address",
-                    labelText: "Address",
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              child: TextFormField(
-                readOnly: true,
-                controller:
-                shippingAddress2Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Address 2",
-                    labelText: "Address 2",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-
-              child: TextFormField(
-                readOnly: true,
-                keyboardType: TextInputType.number,
-                controller:
-                Shipping_PostCode_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Pin Code",
-                    labelText: "Pin Code",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: Shipping_City_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "City",
-                    labelText: "City",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller:
-                Shipping_District_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "District",
-                    labelText: "District",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white, borderRadius: BorderRadius.circular(10)),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: Shipping_State_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "State",
-                    labelText: "State",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10))),
-              ),
-            ),
-
-            /* SizedBox(height: 15,),
-
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: saleCycleController
-                    .Shipping_phone_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Phone No.",
-                    labelText: "Phone No.",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
-              ),
-            ),
-
-            SizedBox(height: 15,),
-
-            Container(
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-              child: TextFormField(
-                readOnly: true,
-                controller: saleCycleController
-                    .Shipping_email_Controller.value,
-                decoration: InputDecoration(
-                    hintText: "Email Id",
-                    labelText: "Email Id",
-                    //suffixIcon: Icon(Icons.email),
-                    contentPadding: EdgeInsets.symmetric(
-                        vertical: AllFontSize.ten,
-                        horizontal: AllFontSize.ten),
-
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.blue)
-                    ),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10)
-                    )
-                ),
-
-              ),
-            ),*/
-          ],
-        ),
-      ),
-    );
-  }
 }

@@ -54,17 +54,13 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                     child: GestureDetector(
                         onTap: (){
                           saleCycleController.bindSalesAdviseAddress(saleCycleController.salesAdviseHeaderLineList[0]);
-                          saleCycleController.showDialogForAddressUpdate(context);
+                          showDialogForAddressUpdate(context, );
                         },
                         child: Tooltip(
                             message: "Update Sales Advise Header",
                             child: Icon(Icons.update_sharp))),
                   );
                 })
-
-
-
-
               ],
             ),
 
@@ -155,14 +151,11 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
   Widget BindSalesAdviseHeaderData(BuildContext context) {
     String? dateTimeCreatedOn = StaticMethod.dateTimeToDate(
         saleCycleController.salesAdviseHeaderLineList[0].createdOn ?? "");
-    String? dateTimeApprovedOn = StaticMethod.dateTimeToDate(
-        saleCycleController.salesAdviseHeaderLineList[0].approvedOn ?? "");
     String? expectedclosuredate = StaticMethod.convertDateFormat1(
         saleCycleController.salesAdviseHeaderLineList[0].expClosureDate ?? "");
     String? quoteValidityDate = StaticMethod.convertDateFormat1(
         saleCycleController.salesAdviseHeaderLineList[0].quoteValidity ?? "");
-    String? regretOn = StaticMethod.dateTimeToDate(
-        saleCycleController.salesAdviseHeaderLineList[0].regretOn ?? "");
+    String? completedOn=StaticMethod.dateTimeToDate(saleCycleController.salesAdviseHeaderLineList[0].completedOn ?? "");
     String saleCycleQuoteStatus =
         saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase() ?? "";
     Color getStatusColor(String status) {
@@ -211,7 +204,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         "Sales Quote Id",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
+                          fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -221,7 +214,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                             "",
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
-                          fontSize: AllFontSize.sisxteen,
+                          fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
                         textAlign: TextAlign.end,
@@ -238,7 +231,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         "Sales Cycle Id",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
+                          fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -248,7 +241,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                             "",
                         style: GoogleFonts.poppins(
                           color: AllColors.textColor,
-                          fontSize: AllFontSize.sisxteen,
+                          fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
                         textAlign: TextAlign.end,
@@ -273,8 +266,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
 
                       Flexible(
                         //width: size.width * .3,
-                        child: Obx(() {
-                          return Tooltip(
+                        child:  Tooltip(
                             message: saleCycleController
                                 .salesAdviseHeaderLineList[0].salesAdviceStatus ??
                                 '',
@@ -289,9 +281,75 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500),
                             ),
-                          );
-                        }),
+                          )
                       )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Account Code : ",
+                        style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Flexible(
+                        child: Tooltip(
+                          message: saleCycleController.salesAdviseHeaderLineList[0]
+                              .accountCode  ?? "",
+                          child: Text(
+                            saleCycleController.salesAdviseHeaderLineList[0]
+                                .accountCode ??
+                                "",
+                            overflow: TextOverflow.ellipsis,
+                            //textAlign: TextAlign.end,
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,),
+                          ),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Account Name : ",
+                        style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Flexible(
+                        child: Tooltip(
+                          message: saleCycleController.salesAdviseHeaderLineList[0]
+                              .accountName  ?? "",
+                          child: Text(
+                            saleCycleController.salesAdviseHeaderLineList[0]
+                                .accountName ??
+                                "",
+                            overflow: TextOverflow.ellipsis,
+                            //textAlign: TextAlign.end,
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,),
+                          ),
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(
@@ -460,9 +518,10 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Quote Total Amt.",
+                        "Sales Advise Total Amt.",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -470,10 +529,9 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Container(
-                        width: size.width * .3,
-                        child: Obx(() {
-                          return Tooltip(
+                      Flexible(
+                        //width: size.width * .3,
+                        child:  Tooltip(
                             message: saleCycleController
                                 .salesAdviseHeaderLineList[0].quoteTotalAmount
                                 .toString() ??
@@ -490,8 +548,8 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500),
                             ),
-                          );
-                        }),
+                          )
+
                       )
                     ],
                   ),
@@ -499,9 +557,10 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Quote GST Amt.",
+                        "Sales Advise GST Amt.",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -509,10 +568,9 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Container(
-                        width: size.width * .3,
-                        child: Obx(() {
-                          return Tooltip(
+                      Flexible(
+                        //width: size.width * .3,
+                        child:Tooltip(
                             message: saleCycleController
                                 .salesAdviseHeaderLineList[0].quoteGstAmount
                                 .toString() ??
@@ -529,8 +587,8 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500),
                             ),
-                          );
-                        }),
+                          )
+
                       )
                     ],
                   ),
@@ -538,9 +596,10 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Quote Gross Amt.",
+                        "Sales Advise Gross Amt.",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -548,10 +607,9 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Container(
-                        width: size.width * .3,
-                        child: Obx(() {
-                          return Tooltip(
+                      Flexible(
+                       // width: size.width * .3,
+                        child:  Tooltip(
                             message: saleCycleController
                                 .salesAdviseHeaderLineList[0].quoteGrossAmount
                                 .toString() ??
@@ -568,8 +626,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500),
                             ),
-                          );
-                        }),
+                          )
                       )
                     ],
                   ),
@@ -577,6 +634,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Created By",
@@ -587,8 +645,8 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         ),
                       ),
                       Spacer(),
-                      Container(
-                        width: size.width * .4,
+                      Flexible(
+                       // width: size.width * .4,
                         child: Tooltip(
                           message: saleCycleController
                               .salesAdviseHeaderLineList[0].createdFullName ??
@@ -636,6 +694,99 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                   SizedBox(
                     height: 3,
                   ),
+
+                  Obx((){
+                    return Visibility(
+                      visible: saleCycleController.salesAdviseHeaderLineList[0]
+                          .salesAdviceStatus?.toLowerCase()=="completed",
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Completed by : ",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Flexible(
+                                child: Tooltip(
+                                  message: saleCycleController.salesAdviseHeaderLineList[0]
+                                      .completedBy??"",
+                                  child: Text(
+                                    saleCycleController.salesAdviseHeaderLineList[0]
+                                        .completedBy??"",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Completed Full Name : ",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Flexible(
+                                child: Tooltip(
+                                  message: saleCycleController.salesAdviseHeaderLineList[0]
+                                      .completedFullName??"",
+                                  child: Text(
+                                    saleCycleController.salesAdviseHeaderLineList[0]
+                                        .completedFullName??"",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                "Completed On : ",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                              Flexible(
+                                child: Tooltip(
+                                  message: completedOn.toString(),
+                                  child: Text(
+                                    completedOn.toString(),
+                                    overflow: TextOverflow.ellipsis,
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500),
+                                    textAlign: TextAlign.end,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
 
                 ],
               ),
@@ -1426,7 +1577,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
         });
   }
 
-/*  Future showDialogForAddressUpdate(BuildContext context) {
+ Future showDialogForAddressUpdate(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1710,7 +1861,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
               ),
             ),
 
-            *//* SizedBox(height: 15,),
+             SizedBox(height: 15,),
 
             Container(
               decoration: BoxDecoration(
@@ -1770,10 +1921,10 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                 ),
 
               ),
-            ),*//*
+            ),
           ],
         ),
       ),
     );
-  }*/
+  }
 }

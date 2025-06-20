@@ -24,6 +24,9 @@ class SalesAdviseHeaderLineModal {
   String? createdOn;
   String? updatedBy;
   String? updatedOn;
+  String? completedBy;
+  String? completedFullName;
+  String? completedOn;
   String? regretBy;
   String? regretOn;
   String? regretReason;
@@ -83,6 +86,9 @@ class SalesAdviseHeaderLineModal {
         this.createdOn,
         this.updatedBy,
         this.updatedOn,
+        this.completedBy,
+        this.completedFullName,
+        this.completedOn,
         this.regretBy,
         this.regretOn,
         this.regretReason,
@@ -141,6 +147,9 @@ class SalesAdviseHeaderLineModal {
     createdOn = json['created_on'];
     updatedBy = json['updated_by'];
     updatedOn = json['updated_on'];
+    completedBy = json['completed_by'];
+    completedFullName = json['completed_full_name'];
+    completedOn = json['completed_on'];
     regretBy = json['regret_by'];
     regretOn = json['regret_on'];
     regretReason = json['regret_reason'];
@@ -207,6 +216,9 @@ class SalesAdviseHeaderLineModal {
     data['created_on'] = this.createdOn;
     data['updated_by'] = this.updatedBy;
     data['updated_on'] = this.updatedOn;
+    data['completed_by'] = this.completedBy;
+    data['completed_full_name'] = this.completedFullName;
+    data['completed_on'] = this.completedOn;
     data['regret_by'] = this.regretBy;
     data['regret_on'] = this.regretOn;
     data['regret_reason'] = this.regretReason;

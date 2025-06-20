@@ -41,6 +41,7 @@ class Accountmastervm extends GetxController{
 
   final _api=AccountMasterRepo();
   final salesCycleController=Get.put(SalesCycleVm());
+
   final TaskMaster_page_controller=Get.put(Taskmastervm());
   DatabaseHelper crmDatabase = DatabaseHelper();
   SessionManagement sessionManagement = SessionManagement();

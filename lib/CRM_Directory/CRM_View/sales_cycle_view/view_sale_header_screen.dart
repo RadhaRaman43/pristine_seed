@@ -233,10 +233,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context) {
                       List<PopupMenuEntry> items = [];
                       if (saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
-                          saleCycleController.saleCycleList[0]
+                          (saleCycleController.saleCycleList[0]
                                   .actualSalesCycleApprovalStatus
                                   ?.toLowerCase() ==
-                              "pending for approval"  &&
+                              "pending for approval" && saleCycleController.saleCycleList[0]
+                              .salesCycleStatus
+                              ?.toLowerCase() ==
+                              "suspect" ) || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'prospect' || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'propose' &&
                       saleCycleController.saleCycleList[0]
                           .salesCycleStatus
                           ?.toLowerCase() !=
@@ -626,7 +629,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   shape: StadiumBorder(
                                       side: BorderSide(
                                           color: AllColors.grayColor)),
-                                  label: Text('Sales Cycle Products',
+                                  label: Text('Proposed Solution',
                                       style: GoogleFonts.poppins(
                                         color:
                                             saleCycleController.filter.value ==
