@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,8 +19,7 @@ class TaskApprovalListScreen extends StatelessWidget{
   Size size = Get.size;
 
 
-  static String _displayIsInfraLeadForOption(String option) =>
-      option;
+
 
   static String _displaySaleCycleActiveForOption(String option) =>
       option;
@@ -118,7 +118,7 @@ class TaskApprovalListScreen extends StatelessWidget{
             TaskMaster_page_controller.getTaskMaster(
                 TaskMaster_page_controller.pageNumber + 1,
                 TaskMaster_page_controller.is_Active.toString(),
-                '',);
+                '','');
             TaskMaster_page_controller.pageNumber += 1;
           }
         }
@@ -170,20 +170,69 @@ class TaskApprovalListScreen extends StatelessWidget{
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
-          /*onTap: () {
-            print('task id......${TaskMaster_page_controller.Task_Master_list[position].taskId}');
+          onTap: () {
+            TaskMaster_page_controller.pageNumber=0;
             TaskMaster_page_controller.getTaskMaster(
-                0,
+              TaskMaster_page_controller.pageNumber,
                 TaskMaster_page_controller.is_Active.toString(),
-                TaskMaster_page_controller.Task_Master_list[position].taskId,
-                'View',
-                'GET FROM TASK ID',
-                TaskMaster_page_controller.date_filter,
-                TaskMaster_page_controller.is_done.value);
-          },*/
-          subtitle: Column(
+                TaskMaster_page_controller.Task_Master_list[position].taskId,'View');
+
+          },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Task Status : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width*0.34,
+                    child: Tooltip(
+                      message: TaskMaster_page_controller
+                          .Task_Master_list[position]
+                          .taskStatus!,
+                      child: Text(
+                        TaskMaster_page_controller
+                            .Task_Master_list[position]
+                            .taskStatus!,
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: getStatusColor(taskStatus),
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Spacer(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Obx((){
+                    return  Visibility(
+                      visible: TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .isReadyForApprove.toString()=='1'?true:false,
+                      child: IconButton(onPressed: () {
+                        TaskMaster_page_controller.showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
+                      }, icon: Icon(Icons.update)),
+                    );
+                  }),
+                ],
+              ),
+              Icon(Icons.remove_red_eye, color: AllColors.textColor,),
+            ],
+          ),
+          subtitle: Column(
+            children: [
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
@@ -212,7 +261,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                     ),
                   ),
                 ],
-              ),
+              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -619,6 +668,7 @@ class TaskApprovalListScreen extends StatelessWidget{
             ),*/
             ],
           ),
+          /*trailing: Icon(Icons.remove_red_eye, color: AllColors.textColor,),*/
       ),
     );
   }
@@ -791,7 +841,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                               TaskMaster_page_controller.getTaskMaster(
                                   TaskMaster_page_controller.pageNumber,
                                   TaskMaster_page_controller.SaleCycleActive_Controller.text,
-                                  '',);
+                                  '','');
                               //TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.IsActive_controller.text);
                             },
                             child: Text(
@@ -822,7 +872,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                                   TaskMaster_page_controller.pageNumber,
                                   TaskMaster_page_controller.is_Active
                                       .toString(),
-                                  '');
+                                  '','');
                             },
                             child: Text(
                               'Reset',
@@ -1020,55 +1070,6 @@ class TaskApprovalListScreen extends StatelessWidget{
     );
   }
 
-  Widget bindIsInfraLeadDropDown(BuildContext context) {
-    return DropdownMenu<String>(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width - 15,
-      controller: TaskMaster_page_controller.isInfraLeadFilterController,
-      label: Text(
-        "Is Infra Lead",
-        style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.sisxteen,
-            fontWeight: FontWeight.w500),
-      ),
-
-      inputDecorationTheme: const InputDecorationTheme(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: AllColors.primaryDark1,),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-        filled: false,
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-      ),
-      onSelected: (String? selection) {
-        print(selection);
-        TaskMaster_page_controller.isInfraLeadFilterController.text =
-            _displayIsInfraLeadForOption(selection!).toString();
-      },
-
-      dropdownMenuEntries: TaskMaster_page_controller.SaleCycleActiveTypeList
-          .map<DropdownMenuEntry<String>>((String e) {
-        return DropdownMenuEntry<String>(
-            value: e, label: e!, style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(
-              AllColors.primaryDark1),));
-      }).toList(),
-    );
-  }
 
   bindLastActivityStatus() {
     return TextField(

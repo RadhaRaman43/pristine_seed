@@ -2063,7 +2063,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindQuoteSubmitted(BuildContext context) {
     return IgnorePointer(
-      ignoring: saleCycleController.FromPage.value == "FromDashboard",
+      ignoring:true,
       child: Container(
         padding: const EdgeInsets.only(left: 10, bottom: 10),
         child: DropdownMenu<String>(
@@ -2098,7 +2098,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           ),
 
           //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-          enabled:
+          /*enabled:
           saleCycleController
               .saleCycleList[0].isReadySendForApproval==0 ||
                       saleCycleController
@@ -2108,8 +2108,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       saleCycleController.saleCycleList[0].quoteAccepted
                               ?.toUpperCase() !=
                           "OPEN"
-                  /*| | saleCycleController.FromPage != 'Sales'*/ ? false
-                  : true,
+               ? false
+                  : true,*/
           onSelected: (String? selection) {
             print(selection);
 

@@ -147,6 +147,7 @@ class SalesCycleVm extends GetxController {
   var quoteValidityController = TextEditingController().obs;
   var expectedClosuredateController = TextEditingController().obs;
   var contactQuoteCommitController = TextEditingController().obs;
+  var kindAttentionController = TextEditingController().obs;
 
   var QuoteSubmittedController = TextEditingController().obs;
   var ConfirmDecisionDateController = TextEditingController().obs;
@@ -1040,7 +1041,8 @@ class SalesCycleVm extends GetxController {
         "quote_commit":
             contactQuoteCommitController.value.text == "Yes" ? 1 : 0,
         "consignee_id": consigneeId,
-        "created_by": email
+        "created_by": email,
+        "kind_attention": kindAttentionController.value.text
       };
 
       loading.value = true;
@@ -1054,7 +1056,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
               ProductCatCreateApiHit(response[0].quoteId!);
               /*getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!);

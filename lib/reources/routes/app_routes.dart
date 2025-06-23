@@ -2,6 +2,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/all_contact_master_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/Task_Approval_List_Screen.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_line_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_screen.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
@@ -466,6 +467,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.addNewDSARTask_screen,
         page: ()=>AddNewDsarScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.taslMasterApprovalDetailsScreen,
+        page: ()=>TaskMasterApprovalDetails(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

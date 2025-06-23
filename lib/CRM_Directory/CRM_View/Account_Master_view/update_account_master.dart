@@ -123,6 +123,8 @@ class UpdateAccountMaster extends StatelessWidget{
            accountMaster_page_controller.pageNumber = 0;
            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
            Get.toNamed(RoutesName.accountMaster_screen);
+         }else if(accountMaster_page_controller.view=="fromtaskapprovaldetailspage"){
+           Get.toNamed(RoutesName.taslMasterApprovalDetailsScreen);
          }
          else if(accountMaster_page_controller.view=="ALLContactList"){
            Get.toNamed(RoutesName.allContactMasterScreen);

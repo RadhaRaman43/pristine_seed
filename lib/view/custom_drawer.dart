@@ -379,7 +379,7 @@ class _Drawer extends State<CustomDrawer> {
                                               TaskApproval_page_controller.resetAllFieldOfFilter();
                                               TaskApproval_page_controller.pageNumber = 0;
                                               Get.toNamed(RoutesName.taskApproval_List);
-                                              TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '',);
+                                              TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '','');
                                               Navigator.of(context);
                                               break;
                                             case 'Sales Cycle':

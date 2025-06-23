@@ -3771,7 +3771,7 @@ class QuoteInformationScreen extends StatelessWidget {
       ),
       child: InputDecorator(
         decoration: InputDecoration(
-          labelText: 'General Address',
+          labelText: 'Address',
           labelStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontWeight: FontWeight.w700,

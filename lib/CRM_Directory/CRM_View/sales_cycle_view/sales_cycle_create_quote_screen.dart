@@ -78,6 +78,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 SizedBox(height: 10,),
                 bindProductCategoryDropDown(context),
                 SizedBox(height: 10,),
+                bindKindAttention(context),
+                SizedBox(height: 10,),
                 Obx(() {
                   return
                     Wrap(
@@ -146,6 +148,48 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget bindKindAttention(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15,),
+      child: TextField(
+        onChanged: (value){
+          final words = value.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).toList();
+
+          if (words.length > 500) {
+            final limitedText = words.take(500).join(' ');
+            saleCycleController.kindAttentionController.value.text = limitedText;
+            saleCycleController.kindAttentionController.value.selection =
+                TextSelection.fromPosition(TextPosition(offset: limitedText.length));
+          }
+        },
+        maxLength: 500,
+        cursorColor:AllColors.primaryDark1 ,
+        controller: saleCycleController.kindAttentionController.value,
+
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            hintText: 'Kind Attention*',
+            labelText: 'Kind Attention*',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
         ),
       ),
     );

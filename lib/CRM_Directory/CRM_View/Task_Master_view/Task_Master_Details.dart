@@ -1285,185 +1285,7 @@ class TaskMasterDetails extends StatelessWidget{
               height: 3,
             ),
 
-            Row(
-              children: [
-                Text(
-                  "Task Remarks",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .taskRemarks == null
-                        ? ''
-                        : TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .taskRemarks,
-                    child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .taskRemarks == null
-                          ? ''
-                          : TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .taskRemarks ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
 
-            Visibility(
-              visible: TaskMaster_page_controller
-                  .Task_Master_list[0]
-                  .taskStatus!.toLowerCase() == 'rejected',
-              child: Row(
-                children: [
-                  Text(
-                    "Reject Remarks",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Spacer(),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .rejectReason == null
-                          ? ''
-                          : TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .rejectReason,
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[0]
-                            .rejectReason == null
-                            ? ''
-                            : TaskMaster_page_controller
-                            .Task_Master_list[0]
-                            .rejectReason ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Row(
-              children: [
-                Text(
-                  "Manager Remarks",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .managerRemarks == null
-                        ? ''
-                        : TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .managerRemarks,
-                    child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .managerRemarks == null
-                          ? ''
-                          : TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .managerRemarks ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-
-            Row(
-              children: [
-                Text(
-                  "Reopen Remarks",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .reopenRemarks == null
-                        ? ''
-                        : TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .reopenRemarks,
-                    child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .reopenRemarks == null
-                          ? ''
-                          : TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .reopenRemarks ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -1882,6 +1704,185 @@ class TaskMasterDetails extends StatelessWidget{
                 )
 
               ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Task Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .taskRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .taskRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .taskRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .taskRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+
+            Visibility(
+              visible: TaskMaster_page_controller
+                  .Task_Master_list[0]
+                  .taskStatus!.toLowerCase() == 'rejected',
+              child: Row(
+                children: [
+                  Text(
+                    "Reject Remarks",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .rejectReason == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .rejectReason,
+                      child: Text(
+                        TaskMaster_page_controller
+                            .Task_Master_list[0]
+                            .rejectReason == null
+                            ? ''
+                            : TaskMaster_page_controller
+                            .Task_Master_list[0]
+                            .rejectReason ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Manager Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .managerRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .managerRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .managerRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .managerRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+
+            Row(
+              children: [
+                Text(
+                  "Reopen Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .reopenRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .reopenRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .reopenRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .reopenRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
             ),
           ],
         ),

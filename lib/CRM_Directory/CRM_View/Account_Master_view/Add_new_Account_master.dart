@@ -60,7 +60,7 @@ class AddNewAccountMaster extends StatelessWidget{
       option.value!;
 
   static String _displayCompProfSubForOption(CompanyProfileMstModel option) =>
-      option.description!;
+      option.code??"";
 
   static String _displayStateListForOption(PincodeMasterModel option) =>
       option.stateName!;
@@ -564,8 +564,19 @@ class AddNewAccountMaster extends StatelessWidget{
                             SizedBox(height: 15,),
 
                             bindComProfTypeDropDown(context),
+                            SizedBox(height: 15,),
 
-                            Obx(() {
+                            Obx((){
+                              return Visibility(
+                                  visible:accountMaster_page_controller
+                                      .compProfileRemrk.isFalse ? true : false ,
+                                  child: bindComProfSubTypeDropDown(context)
+                              );
+                            }),
+
+
+
+                     /*       Obx(() {
                               return
                                 Visibility(
                                   visible: accountMaster_page_controller
@@ -575,7 +586,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                       SizedBox(height: 15,),
                                       Container(
                                           height: 50,
-                                          width: size.width * 7,
+                                          width: size.width ,
                                           child: Row(
                                             mainAxisAlignment: MainAxisAlignment
                                                 .spaceBetween,
@@ -617,7 +628,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                     ],
                                   ),
                                 );
-                            }),
+                            }),*/
 
 
                             Visibility(
@@ -2059,7 +2070,6 @@ class AddNewAccountMaster extends StatelessWidget{
               ..text = accountMaster_page_controller.comp_prof_type_controller
                   .text,
             focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 color: AllColors.primaryDark1,
@@ -2216,7 +2226,7 @@ class AddNewAccountMaster extends StatelessWidget{
                      child: Container(
                        padding: EdgeInsets.all(8.0),
                        child: Text(
-                         option.description.toString(),
+                         option.code.toString(),
                          style: GoogleFonts.poppins(
                              color: AllColors.blackColor,
                              fontWeight: FontWeight.w300,
