@@ -2053,7 +2053,7 @@ class AddNewAccountMaster extends StatelessWidget{
           accountMaster_page_controller.compProfileRemrk.value = true;
         }else{
           accountMaster_page_controller.compProfileRemrk.value = false;
-          accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.comp_prof_type_controller.value.text);
+         // accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.comp_prof_type_controller.value.text);
 
         }
       },
@@ -2103,7 +2103,7 @@ class AddNewAccountMaster extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
             elevation: 4.0,
             child: Container(
-              width: size.width*.75,
+              width: size.width*.86,
               constraints: BoxConstraints(maxHeight: 200),
               child: ListView.builder(
                 shrinkWrap: true,
@@ -2211,7 +2211,7 @@ class AddNewAccountMaster extends StatelessWidget{
              borderRadius: BorderRadius.all(Radius.circular(10)),
              elevation: 4.0,
              child: Container(
-               width: size.width*.7,
+               width: size.width*.9,
                constraints: BoxConstraints(maxHeight: 200),
                child: ListView.builder(
                  shrinkWrap: true,

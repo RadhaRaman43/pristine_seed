@@ -64,6 +64,7 @@ class AccountmasterScreen extends StatelessWidget{
                   accountMaster_page_controller.DraftId = '';
                   accountMaster_page_controller.account_type_controller.text='New Account';
                   accountMaster_page_controller.clearController();
+                  accountMaster_page_controller.getCompanyProfileSubTypeApi();
                   accountMaster_page_controller.getCompanyProfileTypeApi("");
                   accountMaster_page_controller.getGeoPostalCodeApi();
                   Get.toNamed(RoutesName.add_New_AccountMaster_screen);
@@ -194,7 +195,7 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.view = 'Account';
             accountMaster_page_controller.getEmployeeMemberApi();
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
-            accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
+            accountMaster_page_controller.getCompanyProfileSubTypeApi(/*accountMaster_page_controller.Account_Master_list[position].companyProfileType*/);
             accountMaster_page_controller.getGeoPostalCodeApi();
 
           },

@@ -685,9 +685,9 @@ class Accountmastervm extends GetxController{
   }
 
 
-  getCompanyProfileSubTypeApi(String? companyProfileType) {
+  getCompanyProfileSubTypeApi(/*String? companyProfileType*/) {
     Map data = {
-      "filter_company_type":comp_prof_type_controller.value.text.isEmpty ? companyProfileType : comp_prof_type_controller.value.text,
+      "filter_company_type":comp_prof_type_controller.value.text.isEmpty ? "" : comp_prof_type_controller.value.text,
       "filter_description": "",
       "row_per_page": 1000,
       "page_number": 0
@@ -1483,7 +1483,7 @@ class Accountmastervm extends GetxController{
             if(page == 'New'){
               print("ttttttttttt");
               Utils.showToastification("Success!", "Add Successful");
-              getCompanyProfileSubTypeApi(comp_prof_type_controller.value.text);
+              getCompanyProfileSubTypeApi(/*comp_prof_type_controller.value.text*/);
               compProfileRemrk.value = true;
               compProfileRemrk.value = false;
               comp_prof_sub_type_controller.value.text = CompProfileDescription_Controller.value.text;
@@ -1492,7 +1492,7 @@ class Accountmastervm extends GetxController{
             }else if(page == 'Update'){
               Utils.showToastification("Success!", "Add Successful");
               getAccMasterBuyCodeApi(AccountCode);
-              getCompanyProfileSubTypeApi(comp_prof_type_controller.value.text);
+              getCompanyProfileSubTypeApi(/*comp_prof_type_controller.value.text*/);
               compProfileRemrk.value = true;
               compProfileRemrk.value = false;
               comp_prof_sub_type_controller.value.text = CompProfileDescription_Controller.value.text;

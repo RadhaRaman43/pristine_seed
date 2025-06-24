@@ -831,9 +831,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   }),
                   Obx(() {
                     return Visibility(
-                        visible: saleCycleController
+                        visible: /*saleCycleController
                             .saleCycleList[0].createdBy?.toLowerCase() ==
-                            saleCycleController.email.toLowerCase() && saleCycleController
+                            saleCycleController.email.toLowerCase() &&*/ saleCycleController
                                         .saleCycleList[0].salesCycleStatus!
                                         .toUpperCase() ==
                                     "PROSPECT" &&
@@ -3154,22 +3154,30 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
 
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Approved On",
+                        "Approved/Rejected On",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Text(
-                        dateTimeApprovedOn.toString(),
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
+                      
+                      Flexible(
+                        child: Tooltip(
+                          message: dateTimeApprovedOn.toString(),
+                          child: Text(
+                            dateTimeApprovedOn.toString(),
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ],
@@ -4104,7 +4112,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         "rejected" && saleCycleController
                     .saleCycleList[0].quoteAccepted
                     ?.toLowerCase() ==
-                    "open",
+                    "open" && saleCycleController
+                    .saleCycleList[0].createdBy?.toLowerCase() ==
+                    saleCycleController.email.toLowerCase(),
                 child: GestureDetector(
                   onTap: () {
                     showSalesProductConfirmationDialog(

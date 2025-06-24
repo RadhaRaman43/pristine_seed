@@ -131,6 +131,9 @@ class RoutesName{
   static const salesAdviseCreateScreen="/sales_advise_create_screen";
   static const salesAdviseHeaderScreen="/sales_advise_header_screen";
   static const salesAdviseHeaderLineScreen="/sales_advise_header_line_screen";
+
+  static const empMarkLeaveScreen="/emp_mark_leave_screen";
+  static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";
   //todo image not found...
 
 

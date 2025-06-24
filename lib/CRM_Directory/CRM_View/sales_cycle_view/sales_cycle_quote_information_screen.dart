@@ -281,14 +281,10 @@ class QuoteInformationScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 0.0),
                             child: Visibility(
                               visible:saleCycleController
-                                  .quoteHeaderdata[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()
+                                  .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval"
                               && saleCycleController
-                                      .quoteHeaderdata[0].isReadyForApprove==1
-                              /*visible: (saleCycleController.FromPage ==
-                                          "QuoteApprovalPage" ||
-                                      saleCycleController
-                                              .quoteApprovalPage.value ==
-                                          "quoteApprovalScreen")*/
+                                      .quoteHeaderdata[0].isReadyForApprove==1 && saleCycleController
+                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open"
                                   ? true
                                   : false,
                               child: Row(
@@ -1039,7 +1035,8 @@ class QuoteInformationScreen extends StatelessWidget {
                   visible:( saleCycleController.showBranchHead.value ||
                       saleCycleController.showClusterHead.value ||
                       saleCycleController.showGeneralManager.value)&&  saleCycleController
-                      .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="rejected",
+                      .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="rejected" && saleCycleController
+                      .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open",
                   child: GestureDetector(
                       onTap: () {
                         saleCycleController.bmDiscountPerController.value.text =
@@ -2200,6 +2197,9 @@ class QuoteInformationScreen extends StatelessWidget {
       }
     }
 
+
+
+
     return Container(
       width: double.infinity,
       child: Column(
@@ -2423,6 +2423,50 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Quote Accepted",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+
+                      Flexible(
+                        child: Obx(() {
+                          return Tooltip(
+                            message: saleCycleController
+                                .quoteHeaderdata[0].quoteAccepted ??
+                                '',
+                            child:Text(
+                              saleCycleController
+                                  .quoteHeaderdata[0].quoteAccepted ??
+                                  "",
+                              style: GoogleFonts.poppins(
+                                color: saleCycleController
+                                    .quoteHeaderdata[0].quoteAccepted
+                                    ?.toLowerCase() ==
+                                    "loss"
+                                    ? AllColors.redColor
+                                    : Colors.blueAccent,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                                decorationStyle: TextDecorationStyle.wavy,
+                              ),
+                              textAlign: TextAlign.end,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          );
+                        }),
+                      )
                     ],
                   ),
                   SizedBox(
