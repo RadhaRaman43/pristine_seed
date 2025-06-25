@@ -346,7 +346,7 @@ class SalesCycleScreen extends StatelessWidget{
               _buildClickableLabel(
                 label: "Account Name : ",
                 value: salesCycleController.saleCycleList[position].accountName,
-                //width: size.width * 0.4,
+                width: size.width * 0.4,
                 onTap: () {
                   account_vm_controller.view = 'FromSaleCycleMainScreen';
                   contact_vm_controller.view = 'FromSaleCycleMainScreen';

@@ -177,7 +177,7 @@ class DashboardCrmVm extends GetxController{
           sessionManagement.setUserGeoHierarchy(response[0].userGeoHierarchy ?? []);
           getDataFromSession();
           // service_installation_list.value=response;
-          print("Success");
+          print("isadminwritepermission....${response[0].isAdminWritePermission.toString()}");
         }else {
           loading.value=false;
         }

@@ -4,6 +4,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
 import '../../../reources/routes/routes_name.dart';
@@ -344,6 +346,28 @@ class MarkAttendanceViewmodel extends GetxController{
     babyGender_controller.clear();
     babyBirthDate_controller.clear();
     babyLeaveRerason_controller.clear();
+  }
+
+  Future<void> refreshList() async {
+    getEmployeeLeaveData(filterStatus.value);
+  }
+
+  void bindData(AttendanceLeaveModal employee_leave_data_list) {
+    StartDate_controller.text=employee_leave_data_list.workingDate??"";
+    EndDate_controller.text=employee_leave_data_list.workingDate??"";
+    isDateDifferenceShow.value = false;
+    employee_leave_data_list.isHalfDay==1?isHalfDay.value = true:isHalfDay.value = false;
+    employee_leave_data_list.isShortLeave==1?isShortLeave.value = true:isShortLeave.value = false;
+   // selectedRadio = 0.obs;
+    leaveCode_controller.text=employee_leave_data_list.leaveDescription??"";
+    isComprehensiveLeave.value = false;
+    isPaternityLeave.value = false;
+    CompOffDate_controller.text=employee_leave_data_list.compOffDate??"";
+    isTwinBabies_cobtroller.text=employee_leave_data_list.isTwinBabies==1?"Yes":"No";
+    babyName_controller.text=employee_leave_data_list.babyName??"";
+    babyGender_controller.text=employee_leave_data_list.babyGender??"";
+    babyBirthDate_controller.text=employee_leave_data_list.babyBirthDate??"";
+    babyLeaveRerason_controller.text=employee_leave_data_list.leaveReason??"";
   }
 }
 
