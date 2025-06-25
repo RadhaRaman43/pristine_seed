@@ -221,12 +221,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible:(/*saleCycleController
-                      .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" && */(saleCycleController
+                  visible:((saleCycleController
                       .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss" || saleCycleController
                       .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected")||
-                      saleCycleController
-                          .saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" && saleCycleController
+                      /*saleCycleController
+                          .saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&*/ saleCycleController
                           .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase())?false:true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {

@@ -135,7 +135,7 @@ class TaskMasterDetails extends StatelessWidget{
                         TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
                         TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
                       }, icon: Visibility(
-                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 && TaskMaster_page_controller.isAdminWritePermission == "0" ? true : false,
+                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 && TaskMaster_page_controller.isAdminWritePermission != "1" ? true : false,
                           child: Icon(Icons.add))),
                     );
                   }),
