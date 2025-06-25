@@ -78,6 +78,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 SizedBox(height: 10,),
                 bindProductCategoryDropDown(context),
                 SizedBox(height: 10,),
+                bindKindAttention(context),
+                SizedBox(height: 10,),
                 Obx(() {
                   return
                     Wrap(
@@ -117,10 +119,26 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: DefaultButton(
                     press: (){
+                      address_vm_controller.FromPage.value="AddQuote";
+                      address_vm_controller.clearController();
+                      address_vm_controller.account_code_controller.text=saleCycleController.saleCycleList[0].accountCode??"";
+                      address_vm_controller.account_name_controller.text=saleCycleController.saleCycleList[0].accountName??"";
+                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                      address_vm_controller.getGeoPostalCodeApi();
+                      Get.toNamed(RoutesName.addNewAddress_screen);
+                    },
+                    text: "Add New Address",
+                  ),
+                ),
+                SizedBox(height: 5,),
+                Container(
+                  margin: EdgeInsets.only(left: 15, right: 15, top: 15),
+                  child: DefaultButton(
+                    press: (){
                      // address_vm_controller.clearController();
                       saleCycleController.pageNumber = 0;
                       saleCycleController.getAddressMasterList(saleCycleController.pageNumber,saleCycleController.accountCode.value);
-                      saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list);
+                      saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
 
 
                     },
@@ -130,6 +148,48 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget bindKindAttention(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 15.0, right: 15,),
+      child: TextField(
+        onChanged: (value){
+          final words = value.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).toList();
+
+          if (words.length > 500) {
+            final limitedText = words.take(500).join(' ');
+            saleCycleController.kindAttentionController.value.text = limitedText;
+            saleCycleController.kindAttentionController.value.selection =
+                TextSelection.fromPosition(TextPosition(offset: limitedText.length));
+          }
+        },
+        maxLength: 500,
+        cursorColor:AllColors.primaryDark1 ,
+        controller: saleCycleController.kindAttentionController.value,
+
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            hintText: 'Kind Attention*',
+            labelText: 'Kind Attention*',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
         ),
       ),
     );
@@ -335,8 +395,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 controller: saleCycleController
                     .Shipping_PostCode_Controller.value,
                 decoration: InputDecoration(
-                    hintText: "Post Code",
-                    labelText: "Post Code",
+                    hintText: "Pin Code",
+                    labelText: "Pin Code",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
                         vertical: AllFontSize.ten,

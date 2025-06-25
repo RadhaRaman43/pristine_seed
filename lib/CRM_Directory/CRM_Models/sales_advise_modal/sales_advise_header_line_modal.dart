@@ -24,22 +24,25 @@ class SalesAdviseHeaderLineModal {
   String? createdOn;
   String? updatedBy;
   String? updatedOn;
+  String? completedBy;
+  String? completedFullName;
+  String? completedOn;
   String? regretBy;
   String? regretOn;
   String? regretReason;
   int? isActive;
-  int? installationCharges;
-  int? otherCharges;
+  double? installationCharges;
+  double? otherCharges;
   String? warrantyPeriod;
   String? deliveryInWeeks;
-  int? advancePaymentPer;
-  int? advancePaymentAmt;
+  double? advancePaymentPer;
+  double? advancePaymentAmt;
   String? otherRemarks;
   int? isSpr;
   String? sprNo;
   String? quoteAccepted;
   int? isReadySendForApproval;
-  int? quoteTotalQty;
+  double? quoteTotalQty;
   double? quoteTotalAmount;
   double? quoteTotalApprovedDiscountAmount;
   double? quoteTotalGmDiscountAmount;
@@ -83,6 +86,9 @@ class SalesAdviseHeaderLineModal {
         this.createdOn,
         this.updatedBy,
         this.updatedOn,
+        this.completedBy,
+        this.completedFullName,
+        this.completedOn,
         this.regretBy,
         this.regretOn,
         this.regretReason,
@@ -141,6 +147,9 @@ class SalesAdviseHeaderLineModal {
     createdOn = json['created_on'];
     updatedBy = json['updated_by'];
     updatedOn = json['updated_on'];
+    completedBy = json['completed_by'];
+    completedFullName = json['completed_full_name'];
+    completedOn = json['completed_on'];
     regretBy = json['regret_by'];
     regretOn = json['regret_on'];
     regretReason = json['regret_reason'];
@@ -207,6 +216,9 @@ class SalesAdviseHeaderLineModal {
     data['created_on'] = this.createdOn;
     data['updated_by'] = this.updatedBy;
     data['updated_on'] = this.updatedOn;
+    data['completed_by'] = this.completedBy;
+    data['completed_full_name'] = this.completedFullName;
+    data['completed_on'] = this.completedOn;
     data['regret_by'] = this.regretBy;
     data['regret_on'] = this.regretOn;
     data['regret_reason'] = this.regretReason;
@@ -254,42 +266,42 @@ class QuoteItems {
   String? itemCode;
   String? itemName;
   String? itemDescription;
-  int? qty;
+  double? qty;
   double? unitPrice;
   double? mrpPrice;
   double? quoteLinePrice;
   double? totalPrice;
-  int? discountPer;
+  double? discountPer;
   double? bmDiscountPer;
   double? gmDiscountPer;
   double? gmDiscountAmount;
-  int? approvedDiscountPer;
+  double? approvedDiscountPer;
   double? approvedAmount;
   double? approvedAmountPerUnit;
-  int? discountAmt;
+  double? discountAmt;
   double? standardCost;
   double? branchTransferPrice;
   double? minimalAcceptablePrice;
   double? listSellingPrice;
   int? isSprRequired;
   String? sprNo;
-  int? sgstPer;
-  int? cgstPer;
-  int? igstPer;
+  double? sgstPer;
+  double? cgstPer;
+  double? igstPer;
   double? sgstAmt;
   double? cgstAmt;
-  int? igstAmt;
+  double? igstAmt;
   double? gstAmount;
   double? grossAmount;
-  int? salesCredit;
+  double? salesCredit;
   String? createdBy;
   String? createdOn;
   String? lineStatus;
-  Null? updatedBy;
-  Null? updatedOn;
-  Null? regretBy;
-  Null? regretOn;
-  Null? regretReason;
+  String? updatedBy;
+  String? updatedOn;
+  String? regretBy;
+  String? regretOn;
+  String? regretReason;
   String? categoryCode;
   String? categoryName;
 

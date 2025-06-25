@@ -2,6 +2,8 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/all_contact_master_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/Task_Approval_List_Screen.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_add_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_line_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_screen.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
@@ -34,6 +36,7 @@ import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_Task_Screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_master_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/update_task_mst_infra_screen.dart';
+import '../../CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
 import '../../CRM_Directory/CRM_View/quote_approval_list/quote_approval_list_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_advise_view/sales_advise_create_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Screen.dart';
@@ -470,6 +473,12 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
+    GetPage(name: RoutesName.taslMasterApprovalDetailsScreen,
+        page: ()=>TaskMasterApprovalDetails(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
     GetPage(name: RoutesName.taskMasterDetails_screen,
         page: ()=>TaskMasterDetails(),
         transitionDuration: Duration(microseconds: 180),
@@ -630,6 +639,20 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.empMarkLeaveScreen,
+        page: ()=>EmpMarkLeaveScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.empMarkLeaveAddScreen,
+        page: ()=>EmpMarkLeaveAddScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
 //todo image not found....
 

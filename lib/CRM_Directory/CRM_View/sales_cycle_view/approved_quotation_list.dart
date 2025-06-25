@@ -127,7 +127,7 @@ class ApprovedQuotationList extends StatelessWidget{
 
   Widget BindAprovedQuotationList(context){
 
-    if (saleCycleController.quoteList.value.isNotEmpty && saleCycleController.quoteList.value.length > 0) {
+    if (saleCycleController.salesAdviseHeaderList.value.isNotEmpty && saleCycleController.salesAdviseHeaderList.value.length > 0) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
         print("ghdjhgf");
@@ -142,10 +142,10 @@ class ApprovedQuotationList extends StatelessWidget{
               0) total_page += 1;
 
           print(
-              "last index ${saleCycleController.pageNumberForQuote} ${saleCycleController.total_rows} ${saleCycleController.rowsPerPage} ${total_page}");
-          if (saleCycleController.pageNumberForQuote + 1 < total_page) {
-            saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote + 1,saleCycleController.salesCycleId.value, '');
-            saleCycleController.pageNumberForQuote += 1;
+              "last index ${saleCycleController.pageNumberSalesAdvise} ${saleCycleController.total_rows} ${saleCycleController.rowsPerPage} ${total_page}");
+          if (saleCycleController.pageNumberSalesAdvise + 1 < total_page) {
+            saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise + 1,saleCycleController.saleCycleList[0].salesCycleId??"", '','completed');
+            saleCycleController.pageNumberSalesAdvise += 1;
           }
         }
       });
@@ -158,7 +158,7 @@ class ApprovedQuotationList extends StatelessWidget{
             color: Colors.transparent,
           ),
           shrinkWrap: true,
-          itemCount: saleCycleController.quoteList.value.length,
+          itemCount: saleCycleController.salesAdviseHeaderList.value.length,
           itemBuilder: (BuildContext context, int index) {
             return BindListView(context, index);
           });
@@ -171,24 +171,18 @@ class ApprovedQuotationList extends StatelessWidget{
 
 
   Widget BindListView(BuildContext context, int index) {
-    String? expClosureDate=StaticMethod.convertDateFormat1(saleCycleController.quoteList[index].expClosureDate ?? "");
-    String? quoteValidity=StaticMethod.convertDateFormat1(saleCycleController.quoteList[index].quoteValidity ?? "");
-    String saleCycleStatus = saleCycleController.quoteList[index].quoteStatus??"";
+    String? expClosureDate=StaticMethod.convertDateFormat1(saleCycleController.salesAdviseHeaderList[index].expClosureDate ?? "");
+    String? quoteValidity=StaticMethod.convertDateFormat1(saleCycleController.salesAdviseHeaderList[index].quoteValidity ?? "");
+    String saleCycleStatus = saleCycleController.salesAdviseHeaderList[index].salesAdviceStatus?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'Pending':
-          return Colors.yellow[700]!;
-        case 'REGRET':
-          return Colors.red;
-        case 'Approved':
-          return Colors.green;
-        case 'PENDING FOR APPROVAL':
-          return Colors.yellow[700]!;
+        case 'completed':
+          return Colors.green[700]!;
         default:
           return Colors.black;
       }
     }
-    String? dateCreatedOn=StaticMethod.dateTimeToDate(saleCycleController.quoteList[index].createdOn??"");
+    String? dateCreatedOn=StaticMethod.dateTimeToDate(saleCycleController.salesAdviseHeaderList[index].createdOn??"");
     return Card(
       //margin: EdgeInsets.all(5),
       child: ListTile(
@@ -196,7 +190,7 @@ class ApprovedQuotationList extends StatelessWidget{
         title:Row(
           children: [
             Text(
-              "Quote Id : ",
+              "Sales Advise Id : ",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1,
                 fontSize: AllFontSize.fourtine,
@@ -205,8 +199,8 @@ class ApprovedQuotationList extends StatelessWidget{
             ),
             Text(
               saleCycleController
-                  .quoteList[index]
-                  .quoteId??"",
+                  .salesAdviseHeaderList[index]
+                  .salesAdviceId??"",
               style: GoogleFonts.poppins(
                 color: AllColors.textColor,
                 fontSize: AllFontSize.fourtine,
@@ -221,6 +215,50 @@ class ApprovedQuotationList extends StatelessWidget{
             Row(
               children: [
                 Text(
+                  "Sales Cycle Id : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  saleCycleController
+                      .salesAdviseHeaderList[index]
+                      .salesCycleId??"",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "Sales Advise Status : ",
+                  style: GoogleFonts.poppins(
+                    color:AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  saleCycleController
+                      .salesAdviseHeaderList[index]
+                      .salesAdviceStatus??"",
+                  style: GoogleFonts.poppins(
+                    color: getStatusColor(saleCycleStatus),
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
                   "Quote Version : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
@@ -230,7 +268,7 @@ class ApprovedQuotationList extends StatelessWidget{
                 ),
                 Text(
                   (saleCycleController
-                      .quoteList[index]
+                      .salesAdviseHeaderList[index]
                       .quoteVersion.toString()) ,
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -256,11 +294,11 @@ class ApprovedQuotationList extends StatelessWidget{
                   width: size.width*.3,
                   child: Tooltip(
                     message:  saleCycleController
-                        .quoteList[index]
+                        .salesAdviseHeaderList[index]
                         .productCategory ?? "",
                     child: Text(
                       saleCycleController
-                          .quoteList[index]
+                          .salesAdviseHeaderList[index]
                           .productCategory ??"",
                       style: GoogleFonts.poppins(
                         color: AllColors.textColor,
@@ -274,29 +312,7 @@ class ApprovedQuotationList extends StatelessWidget{
                 ),
               ],
             ),
-            Row(
 
-              children: [
-                Text(
-                  "Quote Status : ",
-                  style: GoogleFonts.poppins(
-                    color:AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  saleCycleController
-                      .quoteList[index]
-                      .quoteStatus??"",
-                  style: GoogleFonts.poppins(
-                    color: getStatusColor(saleCycleStatus),
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
             Row(
               children: [
                 Text(
@@ -353,7 +369,7 @@ class ApprovedQuotationList extends StatelessWidget{
 
                 Text(
                   saleCycleController
-                      .quoteList[index]
+                      .salesAdviseHeaderList[index]
                       .quoteTotalAmount.toString()??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -376,7 +392,7 @@ class ApprovedQuotationList extends StatelessWidget{
 
                 Text(
                   saleCycleController
-                      .quoteList[index]
+                      .salesAdviseHeaderList[index]
                       .quoteGrossAmount.toString()??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -399,7 +415,7 @@ class ApprovedQuotationList extends StatelessWidget{
 
                 Text(
                   saleCycleController
-                      .quoteList[index]
+                      .salesAdviseHeaderList[index]
                       .quoteGrossAmount.toString()??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -423,7 +439,7 @@ class ApprovedQuotationList extends StatelessWidget{
 
                 Text(
                   saleCycleController
-                      .quoteList[index]
+                      .salesAdviseHeaderList[index]
                       .createdFullName??"",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -469,7 +485,7 @@ class ApprovedQuotationList extends StatelessWidget{
                 SizedBox(width: 10),
                 Text(
                   saleCycleController
-                      .quoteList[index]
+                      .salesAdviseHeaderList[index]
                       .isActive==0?"No":"Yes",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,

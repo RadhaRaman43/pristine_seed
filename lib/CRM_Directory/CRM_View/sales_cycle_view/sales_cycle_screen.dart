@@ -307,7 +307,8 @@ class SalesCycleScreen extends StatelessWidget{
             salesCycleController.extClosureStartToEnd.value="";
             salesCycleController.filter.value = "Sales cycle";salesCycleController.clearSaleProductListController();
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
-          salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
+          salesCycleController.pageNumber=0;
+          salesCycleController.getsalesCycleData(salesCycleController.pageNumber, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];
           salesCycleController.getPurchaseProcessApi();
           salesCycleController.getPurchaseTimeFrameApi();
@@ -324,7 +325,7 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Sales Cycle Stage : ",
                 value: salesCycleController.saleCycleList[position].salesCycleStatus,
-                width: size.width * 0.33,
+                //width: size.width * 0.33,
                 color: Colors.blue,
               ),
               _buildLabelWithValue(
@@ -334,18 +335,18 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Task Id : ",
                 value: salesCycleController.saleCycleList[position].taskId,
-                width: size.width * 0.36,
+                //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
                 label: "Approval Status : ",
                 value: salesCycleController.saleCycleList[position].salesCycleApprovalStatus,
-                width: size.width * 0.36,
+               // width: size.width * 0.36,
                 color: getStatusColor(saleCycleStatus),
               ),
               _buildClickableLabel(
                 label: "Account Name : ",
                 value: salesCycleController.saleCycleList[position].accountName,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
                 onTap: () {
                   account_vm_controller.view = 'FromSaleCycleMainScreen';
                   contact_vm_controller.view = 'FromSaleCycleMainScreen';
@@ -357,37 +358,37 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Account Code : ",
                 value: salesCycleController.saleCycleList[position].accountCode,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
                 label: "Sales Cycle Owner : ",
                 value: salesCycleController.saleCycleList[position].salesCycleOwnerName,
-                width: size.width * 0.33,
+                //width: size.width * 0.33,
               ),
               _buildLabelWithValue(
                 label: "Contact Name : ",
                 value: salesCycleController.saleCycleList[position].contactName,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
                 label: "Product Category : ",
                 value: salesCycleController.saleCycleList[position].productCategory,
-                width: size.width * 0.35,
+                //width: size.width * 0.35,
               ),
               _buildLabelWithValue(
                 label: "Purchase Process : ",
                 value: salesCycleController.saleCycleList[position].purchaseProcess,
-                width: size.width * 0.35,
+                //width: size.width * 0.35,
               ),
               _buildLabelWithValue(
                 label: "Company Pro. Type : ",
                 value: salesCycleController.saleCycleList[position].companyProfileType,
-                width: size.width * 0.3,
+                //width: size.width * 0.3,
               ),
               _buildLabelWithValue(
                 label: "Is Commit : ",
                 value: salesCycleController.saleCycleList[position].commit==1?"Yes":"No",
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
              /* _buildLabelWithValue(
                 label: "Is Infra Lead : ",
@@ -432,35 +433,35 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Created By : ",
                 value: salesCycleController.saleCycleList[position].createdFullName,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
                 label: "Approved By : ",
                 value: salesCycleController.saleCycleList[position].approvedBy == ""
                     ? ""
                     : salesCycleController.saleCycleList[position].approvedFullName,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
                 label: "Exp. Closure Date : ",
                 value: salesCycleController.saleCycleList[position].estClosureDate,
-                width: size.width * 0.3,
+                //width: size.width * 0.3,
               ),
               _buildLabelWithValue(
                 label: "Created On: ",
                 value: createdOn,
-                width: size.width * 0.33,
+                //: size.width * 0.33,
               ),
               _buildLabelWithValue(
-                label: "Approved On: ",
+                label: "Approved/Rejected On: ",
                 value: approvedOn,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
 
               _buildLabelWithValue(
                 label: "Reject Reason : ",
                 value: salesCycleController.saleCycleList[position].rejectReason,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
             ],
           ),
@@ -782,7 +783,7 @@ class SalesCycleScreen extends StatelessWidget{
             fontWeight: FontWeight.w500,
           ),
         ),
-        width != null
+       /* width != null
             ? Container(
           width: width,
           child: Tooltip(
@@ -798,14 +799,17 @@ class SalesCycleScreen extends StatelessWidget{
             ),
           ),
         )
-            : Expanded(
-          child: Text(
-            value ?? "",
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.poppins(
-              color: color,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w500,
+            :*/ Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),

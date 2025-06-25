@@ -1,8 +1,7 @@
 class CompanyProfileMstModel {
   String? condition;
   String? totalRows;
-  int? id;
-  String? typeOfCompany;
+  String? code;
   String? description;
   String? createdBy;
   String? createdOn;
@@ -12,8 +11,7 @@ class CompanyProfileMstModel {
   CompanyProfileMstModel(
       {this.condition,
         this.totalRows,
-        this.id,
-        this.typeOfCompany,
+        this.code,
         this.description,
         this.createdBy,
         this.createdOn,
@@ -23,8 +21,7 @@ class CompanyProfileMstModel {
   CompanyProfileMstModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
     totalRows = json['total_rows'];
-    id = json['id'];
-    typeOfCompany = json['type_of_company'];
+    code = json['code'];
     description = json['description'];
     createdBy = json['created_by'];
     createdOn = json['created_on'];
@@ -36,8 +33,7 @@ class CompanyProfileMstModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
     data['total_rows'] = this.totalRows;
-    data['id'] = this.id;
-    data['type_of_company'] = this.typeOfCompany;
+    data['code'] = this.code;
     data['description'] = this.description;
     data['created_by'] = this.createdBy;
     data['created_on'] = this.createdOn;

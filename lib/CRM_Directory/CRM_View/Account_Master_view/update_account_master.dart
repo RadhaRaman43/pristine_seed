@@ -123,6 +123,8 @@ class UpdateAccountMaster extends StatelessWidget{
            accountMaster_page_controller.pageNumber = 0;
            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
            Get.toNamed(RoutesName.accountMaster_screen);
+         }else if(accountMaster_page_controller.view=="fromtaskapprovaldetailspage"){
+           Get.toNamed(RoutesName.taslMasterApprovalDetailsScreen);
          }
          else if(accountMaster_page_controller.view=="ALLContactList"){
            Get.toNamed(RoutesName.allContactMasterScreen);
@@ -636,9 +638,15 @@ class UpdateAccountMaster extends StatelessWidget{
                          SizedBox(height: 15,),
 
                          bindComProfTypeDropDown(context),
-
+                         SizedBox(height: 15,),
 
                          Obx((){
+                           return Visibility(
+                             visible: accountMaster_page_controller.compProfileRemrk.isFalse ? true : false,
+                             child:bindComProfSubTypeDropDown(context), );
+                         }),
+
+                        /* Obx((){
                            return  Visibility(
                              visible: accountMaster_page_controller.compProfileRemrk.isFalse ? true : false,
                              child: Column(
@@ -662,11 +670,11 @@ class UpdateAccountMaster extends StatelessWidget{
                                          ),
                                          Visibility(
                                            visible: accountMaster_page_controller.view=="Account"?true:false,
-                                           /* visible: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                           *//* visible: accountMaster_page_controller.view=='FromTaskMainScreen'
                                              || accountMaster_page_controller.view=='VIEW' ||
                                              accountMaster_page_controller.view=='Task'
                                              ||accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                              || accountMaster_page_controller.view=="FromQuoteApproval"?false:true,*/
+                                              || accountMaster_page_controller.view=="FromQuoteApproval"?false:true,*//*
                                            child: Container(
                                              decoration: BoxDecoration(
                                                color: AllColors.whiteColor,
@@ -682,14 +690,14 @@ class UpdateAccountMaster extends StatelessWidget{
                                                  }, icon: Icon(Icons.add)),
                                            ),
                                          )
-                                         /*Container(
+                                         *//*Container(
                                          height: 25,
                                          width: 25,
                                          decoration: BoxDecoration(
                                            color: AllColors.whiteColor,
                                              borderRadius: BorderRadius.circular(10)
                                          ),
-                                          child: Icon(Icons.add,color: AllColors.primaryDark1,))*/
+                                          child: Icon(Icons.add,color: AllColors.primaryDark1,))*//*
                                        ],
                                      )
 
@@ -708,7 +716,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                ],
                              ),
                            );
-                         }),
+                         }),*/
 
                          /*Visibility(
                            visible: accountMaster_page_controller.Account_Master_list[0].isManager == 1 ? true:false,
@@ -2698,7 +2706,7 @@ class UpdateAccountMaster extends StatelessWidget{
           accountMaster_page_controller.compProfileRemrk.value = true;
         }else{
           accountMaster_page_controller.compProfileRemrk.value = false;
-          accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.comp_prof_type_controller.value.text);
+          //accountMaster_page_controller.getCompanyProfileSubTypeApi(/*accountMaster_page_controller.comp_prof_type_controller.value.text*/);
 
         }
         //accountMaster_page_controller.getCompanyProfileSubTypeApi();
@@ -2884,7 +2892,7 @@ class UpdateAccountMaster extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
             elevation: 4.0,
             child: Container(
-              width: size.width*.7,
+              width: size.width*.85,
               constraints: BoxConstraints(maxHeight: 200),
 
               child: ListView.builder(

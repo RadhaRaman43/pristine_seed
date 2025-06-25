@@ -222,21 +222,24 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible:saleCycleController
+                  visible:(saleCycleController
                       .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" && (saleCycleController
                       .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss" || saleCycleController
-                      .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected")?false:true,
+                      .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected")||
+                      saleCycleController
+                          .saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" && saleCycleController
+                          .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase())?false:true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       List<PopupMenuEntry> items = [];
-                      // Conditionally add the first item
-                      //if (saleCycleController.saleCycleList[0].salesCycleStatus == "Prospect") {
-                      if (saleCycleController
-                          .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
-                          saleCycleController.saleCycleList[0]
+                      if (saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
+                          (saleCycleController.saleCycleList[0]
                                   .actualSalesCycleApprovalStatus
                                   ?.toLowerCase() ==
-                              "pending for approval"  &&
+                              "pending for approval" && saleCycleController.saleCycleList[0]
+                              .salesCycleStatus
+                              ?.toLowerCase() ==
+                              "suspect" ) || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'prospect' || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'propose' &&
                       saleCycleController.saleCycleList[0]
                           .salesCycleStatus
                           ?.toLowerCase() !=
@@ -264,7 +267,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.isCheck.value = -1;
                               saleCycleController.checkBoxValues
                                   .updateAll((key, value) => false);
-                              saleCycleController.Quote_Selected_list.clear();
+                              saleCycleController.selection_sales_advise_won_list.clear();
 
                               saleCycleController
                                       .closureDateController.value.text =
@@ -392,7 +395,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.isReject.value = false;
                               saleCycleController.isCheck.value = -1;
                               saleCycleController.checkBoxValues.updateAll((key, value) => false);
-                              saleCycleController.Quote_Selected_list.clear();
+                              saleCycleController.selection_sales_advise_won_list.clear();
                               if (saleCycleController.saleCycleList[0].salesCycleStatus != "Propose") {
                                 saleCycleController.updateQuoteAccetedCycleController.value.text = "LOSS";
                                 saleCycleController.isReject.value = true;
@@ -626,7 +629,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   shape: StadiumBorder(
                                       side: BorderSide(
                                           color: AllColors.grayColor)),
-                                  label: Text('Sales Cycle Products',
+                                  label: Text('Proposed Solution',
                                       style: GoogleFonts.poppins(
                                         color:
                                             saleCycleController.filter.value ==
@@ -828,7 +831,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   }),
                   Obx(() {
                     return Visibility(
-                        visible: saleCycleController
+                        visible: /*saleCycleController
+                            .saleCycleList[0].createdBy?.toLowerCase() ==
+                            saleCycleController.email.toLowerCase() &&*/ saleCycleController
                                         .saleCycleList[0].salesCycleStatus!
                                         .toUpperCase() ==
                                     "PROSPECT" &&
@@ -2058,7 +2063,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindQuoteSubmitted(BuildContext context) {
     return IgnorePointer(
-      ignoring: saleCycleController.FromPage.value == "FromDashboard",
+      ignoring:true,
       child: Container(
         padding: const EdgeInsets.only(left: 10, bottom: 10),
         child: DropdownMenu<String>(
@@ -2093,7 +2098,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           ),
 
           //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-          enabled:
+          /*enabled:
           saleCycleController
               .saleCycleList[0].isReadySendForApproval==0 ||
                       saleCycleController
@@ -2103,8 +2108,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       saleCycleController.saleCycleList[0].quoteAccepted
                               ?.toUpperCase() !=
                           "OPEN"
-                  /*| | saleCycleController.FromPage != 'Sales'*/ ? false
-                  : true,
+               ? false
+                  : true,*/
           onSelected: (String? selection) {
             print(selection);
 
@@ -2728,7 +2733,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           color: AllColors.textColor,
                           fontSize: AllFontSize.sisxteen,
                           fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
                           //decorationStyle: TextDecorationStyle.wavy,
                         ),
                       ),
@@ -3150,22 +3154,30 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
 
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Approved On",
+                        "Approved/Rejected On",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Text(
-                        dateTimeApprovedOn.toString(),
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
+                      
+                      Flexible(
+                        child: Tooltip(
+                          message: dateTimeApprovedOn.toString(),
+                          child: Text(
+                            dateTimeApprovedOn.toString(),
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            textAlign: TextAlign.end,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ),
                     ],
@@ -4100,7 +4112,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         "rejected" && saleCycleController
                     .saleCycleList[0].quoteAccepted
                     ?.toLowerCase() ==
-                    "open",
+                    "open" && saleCycleController
+                    .saleCycleList[0].createdBy?.toLowerCase() ==
+                    saleCycleController.email.toLowerCase(),
                 child: GestureDetector(
                   onTap: () {
                     showSalesProductConfirmationDialog(

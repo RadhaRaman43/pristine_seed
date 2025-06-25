@@ -5,12 +5,14 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
 
 
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/all_contact_master_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
@@ -379,31 +381,36 @@ class _Drawer extends State<CustomDrawer> {
                                               TaskApproval_page_controller.resetAllFieldOfFilter();
                                               TaskApproval_page_controller.pageNumber = 0;
                                               Get.toNamed(RoutesName.taskApproval_List);
-                                              TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '',);
+                                              TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '','');
                                               Navigator.of(context);
                                               break;
                                             case 'Sales Cycle':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
-                                              //Get.offAllNamed(RoutesName.salesCycleScreen,);
                                               accountMaster_page_controller.FromPage.value = '';
                                               contact_vm_controller.FromPage.value ='';
                                               saleCycleController.filterQuoteAcceptedFlag.value="Open";
-                                              /*saleCycleController.accountNameController.value.clear();
-                                              saleCycleController.contactNameController.value.clear();
-                                              saleCycleController.ApprovalStatusController.value.clear();*/
                                               saleCycleController.clearAllFieldOfFilter();
                                               saleCycleController.pageNumber = 0;
                                               Get.toNamed(RoutesName.salesCycleScreen,);
                                               saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
                                               Navigator.of(context);
                                               break;
+
                                             case 'Quote Approval List':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               quoteApprovalController.pageNumberForQuote = 0;
                                               quoteApprovalController.getQuoteHeaderData(0);
                                               Get.toNamed(RoutesName.quoteApprovalListScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Mark Leave':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              MarkAttendanceViewmodel employeeMarkLeaveController=Get.put(MarkAttendanceViewmodel());
+                                              Get.toNamed(RoutesName.empMarkLeaveScreen,);
                                               Navigator.of(context);
                                               break;
 

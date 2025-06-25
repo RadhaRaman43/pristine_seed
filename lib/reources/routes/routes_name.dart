@@ -111,6 +111,7 @@ class RoutesName{
   static const addNewTaskMaster_screen="/Add_new_Task_Screen";
   static const taskMasterDetails_screen="/Task_Master_Details";
   static const addNewDSARTask_screen="/Add_new_DSAR_screen";
+  static const taslMasterApprovalDetailsScreen="/task_master_approval_details";
 
   //todo Sales cycle Screen....
   static const salesCycleScreen="/sales_cycle_screen";
@@ -130,6 +131,9 @@ class RoutesName{
   static const salesAdviseCreateScreen="/sales_advise_create_screen";
   static const salesAdviseHeaderScreen="/sales_advise_header_screen";
   static const salesAdviseHeaderLineScreen="/sales_advise_header_line_screen";
+
+  static const empMarkLeaveScreen="/emp_mark_leave_screen";
+  static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";
   //todo image not found...
 
 
