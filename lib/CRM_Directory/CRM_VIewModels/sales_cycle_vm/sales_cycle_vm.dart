@@ -109,10 +109,10 @@ class SalesCycleVm extends GetxController {
       <ItemMasterBySalesId_Model>[].obs;
   RxList<SalesCycleUpdateStatusModal> quoteLineCreate =
       <SalesCycleUpdateStatusModal>[].obs;
-  /*RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list =
-      <SalesCycleQuoteHeaderModal>[].obs;*/
-  RxList<SalesAdviseHeaderModal> selection_sales_advise_won_list =
-      <SalesAdviseHeaderModal>[].obs;
+  RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list =
+      <SalesCycleQuoteHeaderModal>[].obs;
+ /* RxList<SalesAdviseHeaderModal> selection_sales_advise_won_list =
+      <SalesAdviseHeaderModal>[].obs;*/
   RxList<ItemCategoryMstModel> productCategoryList =
       <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> itemCategorySelectedlist =
@@ -182,6 +182,7 @@ class SalesCycleVm extends GetxController {
   RxBool showBranchHead = false.obs;
   RxBool showClusterHead = false.obs;
   RxBool showGeneralManager = false.obs;
+  RxBool showApprovalBtn = false.obs;
 
   // todo update quote controller
   var updateItemDescriptionController = TextEditingController().obs;
@@ -360,8 +361,6 @@ class SalesCycleVm extends GetxController {
   getsalesCycleData(
       int page_no, String saleCycleId, String flag, String fromPage) {
     FromPage.value = fromPage;
-    print("frompage${FromPage.value}");
-    print("frompage${fromPage}");
     String emailForUpdate = "";
     if (salesCycleOwnerController.value.text.isNotEmpty) {
       emailForUpdate = extractEmail(salesCycleOwnerController.value.text);
@@ -381,7 +380,7 @@ class SalesCycleVm extends GetxController {
             ? ""
             : accountNameController.value.text,
         "filter_sales_cycle_owner": salesCycleOwnerController.value.text.isEmpty
-            ? email
+            ? (isAdminWritePermission=="1"?"":email)
             : emailForUpdate.toLowerCase(),
         "filter_product_category": productCategoryController.value.text.isEmpty
             ? ""
@@ -790,7 +789,7 @@ class SalesCycleVm extends GetxController {
         "filter_product_category": productCategoryController.value.text.isEmpty
             ? ""
             : productCategoryController.value.text,
-        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" : email,
+        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission=="1"?"":email),
         "filter_created_on":
             createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
         "filter_frontliner_value": "",
@@ -830,7 +829,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
               if (pageNumberForQuote == 0) {
                 quoteList.clear();
@@ -927,7 +926,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               approvalPersonList.value = response;
               print("Index..${index.value}");
               findquotationUserType(approvalPersonList.value);
@@ -1193,7 +1192,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
               quoteHeaderdata.value = response;
               quoteLinedata.value = quoteHeaderdata[0].quoteItems ?? [];
@@ -2656,7 +2655,7 @@ class SalesCycleVm extends GetxController {
                 ),
                 Obx(() {
                   return Visibility(
-                    visible: isApprove.value && selection_sales_advise_won_list.length > 0,
+                    visible: isApprove.value && Quote_Selected_list.length > 0,
                     child: Container(
                       height: 150,
                       child: SingleChildScrollView(
@@ -2665,13 +2664,13 @@ class SalesCycleVm extends GetxController {
                         child: Wrap(
                           spacing: 3.0,
                           // runSpacing: 3.0, // Optional: Adds space between rows
-                          children: selection_sales_advise_won_list.map((category) {
+                          children: Quote_Selected_list.map((category) {
                             return Chip(
-                              label: Text(category.salesAdviceId!),
+                              label: Text(category.quoteId!),
                               onDeleted: () {
-                                int index = salesAdviseHeaderList.indexWhere(
-                                    (item) => item.salesAdviceId == category.salesAdviceId);
-                                selection_sales_advise_won_list.remove(category);
+                                int index = quoteList.indexWhere(
+                                    (item) => item.quoteId == category.quoteId);
+                                Quote_Selected_list.remove(category);
                                 checkBoxValues[index] = false;
                               },
                             );
@@ -2698,20 +2697,20 @@ class SalesCycleVm extends GetxController {
                             ),
                           ),
                           onPressed: () {
-                            if (selection_sales_advise_won_list.isEmpty) {
-                              for (int i = 0; i < salesAdviseHeaderList.length; i++) {
+                            if (Quote_Selected_list.isEmpty) {
+                              for (int i = 0; i < quoteList.length; i++) {
                                 checkBoxValues[i] = false;
                               }
                             }
-                            pageNumberSalesAdvise = 0;
-                            getSalesAdviseData(pageNumberSalesAdvise, saleCycleList.salesCycleId??"", "", "completed");
-                           /* getQuoteHeaderData(pageNumberForQuote,
-                                saleCycleList.salesCycleId!, "Approved");*/
-                           // Get.toNamed(RoutesName.approvedQuotationListScreen);
+                            pageNumberForQuote = 0;
+                           // getSalesAdviseData(pageNumberSalesAdvise, saleCycleList.salesCycleId??"", "", "completed");
+                            getQuoteHeaderData(pageNumberForQuote,
+                                saleCycleList.salesCycleId!, "Approved");
+                            Get.toNamed(RoutesName.approvedQuotationListScreen);
                           },
                           child: Container(
                             child: Text(
-                              'Select Sales Advise',
+                              'Select Quotation',
                               style: GoogleFonts.poppins(
                                 color: AllColors.blackColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2724,7 +2723,7 @@ class SalesCycleVm extends GetxController {
                       Obx(() {
                         return Visibility(
                           visible:
-                              isApprove.value && selection_sales_advise_won_list.isNotEmpty
+                              isApprove.value && Quote_Selected_list.isNotEmpty
                                   ? true
                                   : false,
                           // visible: saleCycleController.selectedQuotationIdController.value.text == '' ? false:true,
@@ -2735,9 +2734,9 @@ class SalesCycleVm extends GetxController {
                               ),
                             ),
                             onPressed: () {
-                              navigator?.pop(context);
                               showWonLossConfirmationDialog(
                                   context, saleCycleList, "propose");
+                             // navigator?.pop(context);
                             },
                             child: Container(
                               child: Text(
@@ -3795,13 +3794,13 @@ class SalesCycleVm extends GetxController {
   void toggleMultiCheckbox(int index) {
     final bool isChecked = checkBoxValues[index] ?? false;
     if (isChecked) {
-      selection_sales_advise_won_list.removeWhere(
-          (item) => item.salesAdviceId == salesAdviseHeaderList[index].salesAdviceId);
+      Quote_Selected_list.removeWhere(
+          (item) => item.quoteId == quoteList[index].quoteId);
       checkBoxValues[index] = false;
     } else {
-      if (!selection_sales_advise_won_list.any(
-          (item) => item.salesAdviceId == salesAdviseHeaderList[index].salesAdviceId)) {
-        selection_sales_advise_won_list.add(salesAdviseHeaderList[index]);
+      if (!Quote_Selected_list.any(
+          (item) => item.quoteId == quoteList[index].quoteId)) {
+        Quote_Selected_list.add(quoteList[index]);
       }
       checkBoxValues[index] = true;
     }
@@ -4273,10 +4272,10 @@ class SalesCycleVm extends GetxController {
       SalesCycleModal saleCycleList, String quote_accepted) {
     loading.value = true;
     List<Map<String, dynamic>> lineData = [];
-    if (selection_sales_advise_won_list.isNotEmpty) {
-      for (int i = 0; i < selection_sales_advise_won_list.length; i++) {
-        var item = selection_sales_advise_won_list[i];
-        lineData.add({"quote_id": item.salesAdviceId});
+    if (Quote_Selected_list.isNotEmpty) {
+      for (int i = 0; i < Quote_Selected_list.length; i++) {
+        var item = Quote_Selected_list[i];
+        lineData.add({"quote_id": item.quoteId});
       }
     }
     Map data = {
@@ -4307,6 +4306,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               Utils.showErrorToastification(
                   "False Message !", response[0].message.toString());
+              print("False Message......");
             }
           } else {
             loading.value = false;
@@ -4326,10 +4326,12 @@ class SalesCycleVm extends GetxController {
   }
 
   void findquotationUserType(List<getApprovalPersonMadol> approvalPersonList) {
+    showApprovalBtn.value=false;
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
         if (email.toLowerCase() ==
             approvalPersonList[i].approvedBy?.toLowerCase()) {
+           showApprovalBtn.value=true;
           if (approvalPersonList[i].userType?.toLowerCase() == 'branch head') {
             showBranchHead.value = true;
           } else {

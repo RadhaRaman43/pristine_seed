@@ -169,6 +169,7 @@ class Taskmastervm extends GetxController{
 
         email=await sessionManagement.getEmail() ?? '';
         isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+        print("isadminwritepermissionTask....${isAdminWritePermission.toString()}");
         getMenuList();
         print("List${userGeoHierarchyy.length}");
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
@@ -183,6 +184,7 @@ class Taskmastervm extends GetxController{
         Item_Category_Selected_list.value = [];
 
     }
+
 
     Future<void>refreshList() async{
         //getTaskMaster(pageNumber, is_Active.toString(), '', '','',date_filter, is_done.value);
@@ -244,10 +246,10 @@ class Taskmastervm extends GetxController{
                 "filter_last_activity_status": "",
                 "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
                 //"filter_is_infra_lead": infraLeadValue.value,
-                "filter_is_infra_lead": 0,
+                "filter_is_infra_lead": -1,
                 "filter_is_sales_cycle_active": is_Active.toString(),
                 "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
-                "filter_created_by": isAdminWritePermission == "0"?email:"",
+                "filter_created_by": isAdminWritePermission == "1"?"":email,
                 "filter_approved_by": "",
                 "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
@@ -277,7 +279,7 @@ class Taskmastervm extends GetxController{
                         }
                         Task_Master_list.addAll(response);
                         total_rows=int.parse(Task_Master_list[0].totalRows!);
-
+                      print("gggg...${Task_Master_list[0].isCreateTaskDsar}");
                         print('flag data...$flag');
                         if(flag == 'View'){
                             Active = Task_Master_list[0].isSalesCycleActive!;

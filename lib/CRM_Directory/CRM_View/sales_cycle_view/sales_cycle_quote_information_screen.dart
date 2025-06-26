@@ -171,7 +171,8 @@ class QuoteInformationScreen extends StatelessWidget {
                       children: [
                         Obx((){
                           return Visibility(
-                            visible:  saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
+                            visible:  (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
+                                saleCycleController.isAdminWritePermission=="1")&&
                             saleCycleController
                                 .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected",
                             child: Tooltip(
@@ -192,7 +193,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),);
                         }),
-                        Obx((){
+                        /*Obx((){
                               return Visibility(
                                 visible: saleCycleController
                                     .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
@@ -216,7 +217,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                               /* Tooltip(
+                               *//* Tooltip(
                                   message: "Sales Advise Create",
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -232,7 +233,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     },
                                         icon: Icon(Icons.add)),
                                   ),
-                                ),*/
+                                ),*//*
                               );
                             }),
                         Obx((){
@@ -259,7 +260,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
 
-                            /*Tooltip(
+                            *//*Tooltip(
                               message: "View Sales Advise",
                               child: Container(
                                 decoration: BoxDecoration(
@@ -274,8 +275,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                 },
                                     icon: Icon(Icons.article)),
                               ),
-                            )*/);
-                        }),
+                            )*//*);
+                        }),*/
                         Obx(() {
                           return Padding(
                             padding: const EdgeInsets.only(right: 0.0),
@@ -284,7 +285,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval"
                               && saleCycleController
                                       .quoteHeaderdata[0].isReadyForApprove==1 && saleCycleController
-                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open"
+                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" &&saleCycleController.showApprovalBtn.value
                                   ? true
                                   : false,
                               child: Row(
@@ -2441,8 +2442,7 @@ class QuoteInformationScreen extends StatelessWidget {
                       ),
 
                       Flexible(
-                        child: Obx(() {
-                          return Tooltip(
+                          child:Tooltip(
                             message: saleCycleController
                                 .quoteHeaderdata[0].quoteAccepted ??
                                 '',
@@ -2464,8 +2464,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               textAlign: TextAlign.end,
                               overflow: TextOverflow.ellipsis,
                             ),
-                          );
-                        }),
+                          )
                       )
                     ],
                   ),

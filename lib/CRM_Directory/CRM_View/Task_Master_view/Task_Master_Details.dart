@@ -110,8 +110,11 @@ class TaskMasterDetails extends StatelessWidget{
               Row(
                 children: [
                   Obx((){
+                    print("dfdgcvxvdf1..${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar}");
+                    print("sdafsfffd2..${TaskMaster_page_controller.TaskDSAR_Master_list.length}");
+                    print("isadminskjdghius3..${TaskMaster_page_controller.isAdminWritePermission.toString()}");
                     return  Visibility(
-                      visible: TaskMaster_page_controller.TaskDSAR_Master_list.isNotEmpty?false:true,
+                      visible: TaskMaster_page_controller.TaskDSAR_Master_list.isEmpty?true:false,
                       //visible: account_vm_controller.view=='Sales'?false:true,
                       child: IconButton(onPressed: () {
                         //createDSARDialog(context);
@@ -132,7 +135,7 @@ class TaskMasterDetails extends StatelessWidget{
                         TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
                         TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
                       }, icon: Visibility(
-                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 && TaskMaster_page_controller.isAdminWritePermission == "0" ? true : false,
+                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 && TaskMaster_page_controller.isAdminWritePermission != "1" ? true : false,
                           child: Icon(Icons.add))),
                     );
                   }),
@@ -151,9 +154,7 @@ class TaskMasterDetails extends StatelessWidget{
                     return Visibility(
                       visible: TaskMaster_page_controller
                           .Task_Master_list[0]
-                          .taskStatus!.toLowerCase() == 'rejected' && TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .createdBy==TaskMaster_page_controller.email?true:false,
+                          .taskStatus?.toLowerCase() == 'rejected' && TaskMaster_page_controller.isAdminWritePermission=="1"?true:false,
                       child: IconButton(
                         icon: Icon(Icons.lock_open_rounded),
                         onPressed: (){

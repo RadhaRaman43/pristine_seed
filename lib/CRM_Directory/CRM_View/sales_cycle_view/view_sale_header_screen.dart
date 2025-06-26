@@ -126,8 +126,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     visible: saleCycleController
                             .saleCycleList[0].actualSalesCycleApprovalStatus
                             ?.toLowerCase() ==
-                        'rejected' &&  saleCycleController
-                        .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase(),
+                        'rejected' && saleCycleController.isAdminWritePermission=="1"?true:false,
                     child: GestureDetector(
                       onTap: () {
                         saleCycleController.reOpenRemarksController.value.text =
@@ -222,24 +221,23 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible:(saleCycleController
-                      .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" && (saleCycleController
+                  visible:((saleCycleController
                       .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss" || saleCycleController
                       .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected")||
-                      saleCycleController
-                          .saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" && saleCycleController
+                      /*saleCycleController
+                          .saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&*/ saleCycleController
                           .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase())?false:true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       List<PopupMenuEntry> items = [];
                       if (saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
-                          (saleCycleController.saleCycleList[0]
+                          ((saleCycleController.saleCycleList[0]
                                   .actualSalesCycleApprovalStatus
                                   ?.toLowerCase() ==
                               "pending for approval" && saleCycleController.saleCycleList[0]
                               .salesCycleStatus
                               ?.toLowerCase() ==
-                              "suspect" ) || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'prospect' || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'propose' &&
+                              "suspect" ) || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'prospect' || saleCycleController.saleCycleList[0]?.salesCycleStatus?.toLowerCase() == 'propose') &&
                       saleCycleController.saleCycleList[0]
                           .salesCycleStatus
                           ?.toLowerCase() !=
@@ -267,7 +265,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.isCheck.value = -1;
                               saleCycleController.checkBoxValues
                                   .updateAll((key, value) => false);
-                              saleCycleController.selection_sales_advise_won_list.clear();
+                              saleCycleController.Quote_Selected_list.clear();
 
                               saleCycleController
                                       .closureDateController.value.text =
@@ -352,7 +350,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       // Always add the second item
                       if (saleCycleController.saleCycleList[0].salesCycleStatus
                               ?.toLowerCase() !=
-                          "suspect") {
+                          "suspect" && saleCycleController.saleCycleList[0]
+                          .salesCycleStatus
+                          ?.toLowerCase() !=
+                          "rejected" &&  saleCycleController.saleCycleList[0]
+                          .quoteAccepted
+                          ?.toLowerCase() ==
+                          "open") {
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -395,7 +399,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.isReject.value = false;
                               saleCycleController.isCheck.value = -1;
                               saleCycleController.checkBoxValues.updateAll((key, value) => false);
-                              saleCycleController.selection_sales_advise_won_list.clear();
+                              saleCycleController.Quote_Selected_list.clear();
                               if (saleCycleController.saleCycleList[0].salesCycleStatus != "Propose") {
                                 saleCycleController.updateQuoteAccetedCycleController.value.text = "LOSS";
                                 saleCycleController.isReject.value = true;
