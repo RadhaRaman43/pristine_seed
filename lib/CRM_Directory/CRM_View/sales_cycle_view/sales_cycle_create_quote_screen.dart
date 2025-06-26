@@ -76,10 +76,11 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 SizedBox(height: 10,),
                 bindExpectedClosureDate(context),
                 SizedBox(height: 10,),
-                bindProductCategoryDropDown(context),
-                SizedBox(height: 10,),
                 bindKindAttention(context),
                 SizedBox(height: 10,),
+                bindProductCategoryDropDown(context),
+                SizedBox(height: 10,),
+
                 Obx(() {
                   return
                     Wrap(

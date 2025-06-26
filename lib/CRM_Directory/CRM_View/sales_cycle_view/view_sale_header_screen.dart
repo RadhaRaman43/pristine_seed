@@ -481,12 +481,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           saleCycleController.saleCycleList[0]
                                                   .salesCycleStatus!
                                                   .toUpperCase() ==
-                                              "SUSPECT" &&
-                                          saleCycleController.saleCycleList[0]
-                                                  .isReadySendForApproval ==
-                                              1) &&
+                                              "SUSPECT") &&
                                       !(saleCycleController.FromPage.value ==
-                                          "FromDashboard")
+                                          "FromDashboard") && saleCycleController.email.toLowerCase()==saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()
                                   ? true
                                   : false,
                               child: Column(
@@ -496,31 +493,23 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                   Container(
                                     padding: EdgeInsets.fromLTRB(15, 5, 15, 10),
-                                    child: IgnorePointer(
-                                      ignoring: saleCycleController
-                                                  .saleCycleList[0]
-                                                  .isReadySendForApproval ==
-                                              0
-                                          ? true
-                                          : false,
-                                      child: DefaultButton(
-                                        press: () {
-                                          saleCycleController
-                                              .salesCycleMstUpdateApiHit(
-                                                  saleCycleController
-                                                      .saleCycleList[0],
-                                                  saleCycleController
-                                                      .proposedSolutionController
-                                                      .value
-                                                      .text,
-                                                  "",
-                                                  "",
-                                                  "",
-                                                  "save");
-                                          //saleCycleController.ProductCategoryWiseAmtCreateApiHit(0);
-                                        },
-                                        text: "Save",
-                                      ),
+                                    child: DefaultButton(
+                                      press: () {
+                                        saleCycleController
+                                            .salesCycleMstUpdateApiHit(
+                                                saleCycleController
+                                                    .saleCycleList[0],
+                                                saleCycleController
+                                                    .proposedSolutionController
+                                                    .value
+                                                    .text,
+                                                "",
+                                                "",
+                                                "",
+                                                "save");
+                                        //saleCycleController.ProductCategoryWiseAmtCreateApiHit(0);
+                                      },
+                                      text: "Save",
                                     ),
                                   ),
                                 ],
@@ -1410,9 +1399,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .saleCycleList[0].salesCycleStatus!
                                       .toUpperCase() ==
                                   "SUSPECT" &&
-                              saleCycleController.saleCycleList[0]
+                          saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="pending"
+                          &&  saleCycleController
+                              .saleCycleList[0].salesCycleOwner?.toLowerCase()==saleCycleController.email.toLowerCase()
+                          /*saleCycleController.saleCycleList[0]
                                       .isReadySendForApproval ==
-                                  1)
+                                  1*/)
                           ? true
                           : false,
                       child: Container(
@@ -1441,9 +1433,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   }),
                   Obx(() {
                     return Visibility(
-                      visible: saleCycleController
-                                  .saleCycleList[0].isReadyForApprove ==
-                              1
+                      visible:  saleCycleController
+                          .saleCycleList[0].salesCycleOwner?.toLowerCase()!=saleCycleController.email.toLowerCase() && saleCycleController
+                          .saleCycleList[0].salesCycleStatus?.toLowerCase()=="suspect" &&saleCycleController
+                          .saleCycleList[0].quoteAccepted?.toLowerCase()=="open" && saleCycleController
+                          .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="pending for approval"
                           ? true
                           : false,
                       child: Container(
@@ -1650,7 +1644,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 15, right: 15),
       child: IgnorePointer(
-        ignoring: saleCycleController.FromPage.value == "FromDashboard",
+        ignoring: saleCycleController.saleCycleList[0].salesCycleStatus
+            ?.toLowerCase() ==
+            'suspect' &&
+            (saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() != saleCycleController.email.toLowerCase() ||
+                saleCycleController.saleCycleList[0].quoteAccepted
+                    ?.toLowerCase() ==
+                    "loss" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                ?.toLowerCase() ==
+                "rejected")
+            ? true
+            : false,
         child: TextField(
           cursorColor: AllColors.primaryDark1,
           /* readOnly: (saleCycleController.saleCycleList[0].quoteAccepted ==
@@ -1663,19 +1667,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               (saleCycleController.FromPage.value == 'FromTaskScreen')
               ? true
               : false,*/
-          readOnly: ( saleCycleController
-              .saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
-                      (saleCycleController.saleCycleList[0]
-                                  .actualSalesCycleApprovalStatus
-                                  ?.toLowerCase() !=
-                              'pending' &&
-                          saleCycleController.saleCycleList[0].salesCycleStatus
-                                  ?.toLowerCase() ==
-                              'suspect') ||
-                      saleCycleController.saleCycleList[0].quoteAccepted
-                              ?.toLowerCase() ==
-                          "loss") &&
-                  !(saleCycleController.FromPage.value == "FromDashboard")
+          readOnly: (saleCycleController.FromPage.value == "FromDashboard")
               ? true
               : false,
           controller: saleCycleController.closureDateController.value,
@@ -1700,9 +1692,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               )),
           onTap: () async {
-            if (saleCycleController.saleCycleList[0].quoteAccepted != "LOSS" &&
-                saleCycleController.saleCycleList[0].isReadySendForApproval ==
-                    1) {
+            if (saleCycleController.saleCycleList[0].quoteAccepted != "LOSS") {
               DateTime? initialDate;
               if (saleCycleController
                   .closureDateController.value.text.isNotEmpty) {
@@ -6723,20 +6713,18 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   saleCycleController.FromPage.value == 'Task'))
           || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-      ignoring: (saleCycleController.saleCycleList[0].isReadySendForApproval ==
-                  0 /*saleCycleController.saleCycleList[0].createdBy != saleCycleController.email*/ ||
-              (saleCycleController
-                          .saleCycleList[0].actualSalesCycleApprovalStatus
-                          ?.toLowerCase() !=
-                      'pending' &&
-                  saleCycleController.saleCycleList[0].salesCycleStatus
-                          ?.toLowerCase() ==
-                      'suspect') ||
+      ignoring: saleCycleController.saleCycleList[0].salesCycleStatus
+          ?.toLowerCase() ==
+          'suspect' &&
+          (saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() != saleCycleController.email.toLowerCase() ||
               saleCycleController.saleCycleList[0].quoteAccepted
-                      ?.toLowerCase() ==
-                  "loss")
+                  ?.toLowerCase() ==
+                  "loss" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+              ?.toLowerCase() ==
+              "rejected")
           ? true
           : false,
+
       child: Container(
         margin: const EdgeInsets.only(left: 15.0),
         width: double.infinity,
@@ -6857,19 +6845,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               saleCycleController.FromPage.value == 'FromTaskScreen'
           )) || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
-      ignoring:
-          ( saleCycleController
-              .saleCycleList[0].isReadySendForApproval==0||
-                  (saleCycleController
-                              .saleCycleList[0].actualSalesCycleApprovalStatus
-                              ?.toLowerCase() !=
-                          'pending' &&
-                      saleCycleController.saleCycleList[0].salesCycleStatus
-                              ?.toLowerCase() ==
-                          'suspect') ||
-                  saleCycleController.saleCycleList[0].quoteAccepted
-                          ?.toLowerCase() ==
-                      "loss")
+      ignoring:saleCycleController.saleCycleList[0].salesCycleStatus
+          ?.toLowerCase() ==
+          'suspect' &&
+      (saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() != saleCycleController.email.toLowerCase() ||
+          saleCycleController.saleCycleList[0].quoteAccepted
+              ?.toLowerCase() ==
+              "loss" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+          ?.toLowerCase() ==
+          "rejected")
               ? true
               : false,
       child: Container(
@@ -6992,18 +6976,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               )) || saleCycleController.FromPage.value == 'Task' ||
           saleCycleController.FromPage.value == 'FromTaskScreen' ? true : false,*/
       ignoring:
-          ( saleCycleController
-              .saleCycleList[0].isReadySendForApproval==0 ||
-                  (saleCycleController
-                              .saleCycleList[0].actualSalesCycleApprovalStatus
-                              ?.toLowerCase() !=
-                          'pending' &&
-                      saleCycleController.saleCycleList[0].salesCycleStatus
-                              ?.toLowerCase() ==
-                          'suspect') ||
-                  saleCycleController.saleCycleList[0].quoteAccepted
-                          ?.toLowerCase() ==
-                      "loss")
+      saleCycleController.saleCycleList[0].salesCycleStatus
+          ?.toLowerCase() ==
+          'suspect' &&(saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() != saleCycleController.email.toLowerCase() ||
+          saleCycleController.saleCycleList[0].quoteAccepted
+              ?.toLowerCase() ==
+              "loss" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+          ?.toLowerCase() ==
+          "rejected")
               ? true
               : false,
       child: Container(
