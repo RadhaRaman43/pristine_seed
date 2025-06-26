@@ -132,6 +132,19 @@ class StaticMethod{
     }
   }
 
+  static String? formatDateWithTime(String inputDate) {
+    final inputFormat = DateFormat('yyyy-MM-ddTHH:mm:ss');
+    final outputFormat = DateFormat('dd-MM-yyyy hh:mm a'); // Include time here
+
+    try {
+      final date = inputFormat.parse(inputDate);
+      return outputFormat.format(date);
+    } catch (e) {
+      print("Error parsing date: $e");
+      return inputDate; // Fallback in case of error
+    }
+  }
+
 
 
   /*static Future<void> strintToDecadeBase64()async{

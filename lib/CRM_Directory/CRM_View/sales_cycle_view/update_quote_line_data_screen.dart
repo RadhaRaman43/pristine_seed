@@ -1,11 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:toastification/toastification.dart';
 import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
@@ -70,7 +73,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         body: SingleChildScrollView(
           child: Column(
             children: [
-
+              SizedBox(height: 10,),
               updateItemDescriptionLine(context),
               SizedBox(height: 10,),
               updateItemDescription2Line(context),
@@ -83,8 +86,8 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
               updateDiscountPerLine(context),
               SizedBox(height: 10,),
               updateDiscountAmount(context),
-              SizedBox(height: 10,),
-              GmDiscountAmount(context),
+              /*SizedBox(height: 10,),
+              GmDiscountAmount(context),*/
               SizedBox(height: 10,),
               SalesCreditAmount(context),
               SizedBox(height: 10,),
@@ -100,7 +103,6 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
                 child: DefaultButton(
                   press: (){
                     saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update" );
-
                   },
                   text: "Update",
                 ),
@@ -159,14 +161,23 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
         },
+        onChanged: (value) {
+          final parts = value.split('.');
+          if (parts.length == 2 && parts[1].length > 2) {
+            String trimmed = '${parts[0]}.${parts[1].substring(0, 2)}';
+            saleCycleController.updateManualPriceController.value.text = trimmed;
+            saleCycleController.updateManualPriceController.value.selection =
+                TextSelection.fromPosition(TextPosition(offset: trimmed.length));
+          }
+        },
         cursorColor:AllColors.primaryDark1 ,
         controller: saleCycleController.updateManualPriceController.value,
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            hintText: 'Manual Price',
-            labelText: 'Manual Price',
+            hintText: 'Price Per Unit',
+            labelText: 'Price Per Unit',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,
@@ -185,6 +196,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
       ),
     );
   }
+
   Widget updateDiscountPerLine(BuildContext context) {
     return  Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, ),
@@ -192,6 +204,21 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         onSubmitted: (value){
           saleCycleController.quoteLineCreateFunction(saleCycleController.quoteLinedata[saleCycleController.index.value].itemCode!, "Update");
         },
+        onChanged: (value) {
+          final parts = value.split('.');
+          if (parts.length == 2 && parts[1].length > 4) {
+            // Auto-trim to 4 digits after decimal
+            String trimmed = '${parts[0]}.${parts[1].substring(0, 4)}';
+            saleCycleController.updateDiscountPerController.value.text = trimmed;
+            saleCycleController.updateDiscountPerController.value.selection =
+                TextSelection.fromPosition(TextPosition(offset: trimmed.length));
+          }
+        },
+        /*inputFormatters: [
+          FilteringTextInputFormatter.allow(
+            RegExp(r'^\d*\.?\d{0,4}$'),
+          ),
+        ],*/
         cursorColor:AllColors.primaryDark1 ,
         controller: saleCycleController.updateDiscountPerController.value,
         keyboardType: TextInputType.number,
@@ -218,6 +245,7 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
       ),
     );
   }
+
   Widget updateqtyLine(BuildContext context) {
     return  Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15,),

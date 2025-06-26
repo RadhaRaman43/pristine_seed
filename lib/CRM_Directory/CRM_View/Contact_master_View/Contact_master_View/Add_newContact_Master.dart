@@ -127,20 +127,23 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      floatingActionButton:  Container(
-        margin: EdgeInsets.only(left: 30),
-        child: DefaultButton(
-          press: (){
-            if(contact_vm_controller.updateContact){
-              contact_vm_controller.createNewContactMstApi("Update");
-            }
-            else{
-              contact_vm_controller.contact_code="";
-              contact_vm_controller.createNewContactMstApi("Create");
-            }
+      floatingActionButton:  Visibility(
+        visible:  accountMaster_page_controller.isAdminWritePermission=="0"?true:false,
+        child: Container(
+          margin: EdgeInsets.only(left: 30),
+          child: DefaultButton(
+            press: (){
+              if(contact_vm_controller.updateContact){
+                contact_vm_controller.createNewContactMstApi("Update");
+              }
+              else{
+                contact_vm_controller.contact_code="";
+                contact_vm_controller.createNewContactMstApi("Create");
+              }
 
-          },
-          text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
+            },
+            text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
+          ),
         ),
       ),
       body: Container(
@@ -148,171 +151,136 @@ class AddNewcontactMasterContact extends StatelessWidget{
           height: size.height,
           width: size.width,
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Obx((){
-                return Visibility(
-                  visible:contact_vm_controller.loading.value ,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.primaryDark1,
-                    color: AllColors.textColor,
-                  ),
-                );
-              }),
-              SizedBox(height: 20,),
-              Visibility(
-                visible: contact_vm_controller.updateContact,
-                child: Container(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: TextFormField(
-                    readOnly: contact_vm_controller.updateContact,
-                    controller: contact_vm_controller.contact_code_controller,
-                    decoration: InputDecoration(
-                      //hintText: "Alternate No",
-                        labelText: "Contact Code",
-                        //suffixIcon: Icon(Icons.email),
-                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue)
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        )
+          child: IgnorePointer(
+            ignoring:  accountMaster_page_controller.isAdminWritePermission=="1"?true:false,
+            child: Column(
+              children: [
+                Obx((){
+                  return Visibility(
+                    visible:contact_vm_controller.loading.value ,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.primaryDark1,
+                      color: AllColors.textColor,
                     ),
+                  );
+                }),
+                SizedBox(height: 20,),
+                Visibility(
+                  visible: contact_vm_controller.updateContact,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: TextFormField(
+                      readOnly: contact_vm_controller.updateContact,
+                      controller: contact_vm_controller.contact_code_controller,
+                      decoration: InputDecoration(
+                        //hintText: "Alternate No",
+                          labelText: "Contact Code",
+                          //suffixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-                  ),
-                ),
-              ),
-              SizedBox(height: 15,),
-
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                height: 50,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        //color: AllColors.whiteColor,
-                          borderRadius: BorderRadius.circular(10)
-                      ),
-                      //height: size.height*10,
-                      width: contact_vm_controller.updateContact?size.width*.92:size.width*.7,
-                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: bindAccountOwnerDropDown(context),
-                    ),
-                    Visibility(
-                      visible: contact_vm_controller.updateContact==true?false:true,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AllColors.whiteColor,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: AllColors.lightblackColor, // Set the border color to black
-                            width: 1.0, // You can adjust the width of the border as needed
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)
                           ),
-                        ),
-                        child: IconButton(
-                            onPressed: (){
-                              if( contact_vm_controller.FromPage.value=="AccountUpdate"){
-                                accountMaster_page_controller.FromPage.value = "AccountUpdate";
-                              }else{
-                                accountMaster_page_controller.FromPage.value = "Contact";
-                              }
-                              accountMaster_page_controller.DraftId = '';
-                              accountMaster_page_controller.clearController();
-                              accountMaster_page_controller.getEmployeeMemberApi();
-                              accountMaster_page_controller.getCompanyProfileTypeApi("");
-                              accountMaster_page_controller.getGeoPostalCodeApi();
-                              Get.toNamed(RoutesName.add_New_AccountMaster_screen);
-                            }, icon: Icon(Icons.add)),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          )
                       ),
-                    )
-                  ],
-                ),
-              ),
 
-              SizedBox(height: 15,),
-
-              Obx((){
-                return Container(
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10)
-                  ),
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: TextFormField(
-                    //readOnly: true,
-                    maxLength: 500,
-                    maxLines: 3,
-                    controller: contact_vm_controller
-                        .FullAddress_Controller.value,
-                    decoration: InputDecoration(
-                        hintText: "Full Address",
-                        labelText: "Full Address",
-                        //suffixIcon: Icon(Icons.email),
-                        contentPadding: EdgeInsets.symmetric(
-                            vertical: AllFontSize.ten,
-                            horizontal: AllFontSize.ten),
-
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.blue)
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                        )
                     ),
-
                   ),
-                );
-              }),
-
-              SizedBox(height: 15,),
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: TextFormField(
-                  controller: contact_vm_controller.contact_name_controller,
-                  decoration: InputDecoration(
-                      hintText: "Contact Name*",
-                      labelText: "Contact Name*",
-                      //suffixIcon: Icon(Icons.email),
-                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-          
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
-                  ),
-          
                 ),
-              ),
-              SizedBox(height: 15,),
-              Form(
-                key: _formKey,
-                child: Container(
+                SizedBox(height: 15,),
+
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          //color: AllColors.whiteColor,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        //height: size.height*10,
+                        width: contact_vm_controller.updateContact?size.width*.92:size.width*.7,
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: bindAccountOwnerDropDown(context),
+                      ),
+                      Visibility(
+                        visible: contact_vm_controller.updateContact==true?false:true,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: AllColors.whiteColor,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: AllColors.lightblackColor, // Set the border color to black
+                              width: 1.0, // You can adjust the width of the border as needed
+                            ),
+                          ),
+                          child: IconButton(
+                              onPressed: (){
+                                if( contact_vm_controller.FromPage.value=="AccountUpdate"){
+                                  accountMaster_page_controller.FromPage.value = "AccountUpdate";
+                                }else{
+                                  accountMaster_page_controller.FromPage.value = "Contact";
+                                }
+                                accountMaster_page_controller.DraftId = '';
+                                accountMaster_page_controller.clearController();
+                                accountMaster_page_controller.getEmployeeMemberApi();
+                                accountMaster_page_controller.getCompanyProfileTypeApi("");
+                                accountMaster_page_controller.getGeoPostalCodeApi();
+                                Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                              }, icon: Icon(Icons.add)),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 15,),
+
+                Obx((){
+                  return Container(
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10)
+                    ),
+                    padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: TextFormField(
+                      //readOnly: true,
+                      maxLength: 500,
+                      maxLines: 3,
+                      controller: contact_vm_controller
+                          .FullAddress_Controller.value,
+                      decoration: InputDecoration(
+                          hintText: "Full Address",
+                          labelText: "Full Address",
+                          //suffixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: AllFontSize.ten,
+                              horizontal: AllFontSize.ten),
+
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          )
+                      ),
+
+                    ),
+                  );
+                }),
+
+                SizedBox(height: 15,),
+                Container(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
                   child: TextFormField(
-                    maxLength: 10,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return null; // No error when the field is empty
-                      } else if (value.length != 10) {
-                        return 'Phone No. should be exactly 10 digits';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      // Trigger validation when the value changes
-                      _formKey.currentState?.validate();
-                    },
-                    keyboardType: TextInputType.number,
-                    controller: contact_vm_controller.phone_no_controller,
+                    controller: contact_vm_controller.contact_name_controller,
                     decoration: InputDecoration(
-                        hintText: "Phone No.",
-                        labelText: "Phone No.",
+                        hintText: "Contact Name*",
+                        labelText: "Contact Name*",
                         //suffixIcon: Icon(Icons.email),
                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -326,54 +294,53 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
                   ),
                 ),
-              ),
-              SizedBox(height: 15,),
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: TextFormField(
-                  keyboardType: TextInputType.number,
-                  controller: contact_vm_controller.alternate_no_controller,
-                  decoration: InputDecoration(
-                      hintText: "Alternate Phone No.",
-                      labelText: "Alternate Phone No.",
-                      //suffixIcon: Icon(Icons.email),
-                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-          
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
-                  ),
-          
-                ),
-              ),
-              SizedBox(height: 15,),
-              Form(
-                key: _formKeyEmail,
-                child: Container(
-                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: TextFormField(
-                    validator: (value) {
-                      // If the field is empty, no error is shown
-                      if (value == null || value.isEmpty) {
+                SizedBox(height: 15,),
+                Form(
+                  key: _formKey,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: TextFormField(
+                      maxLength: 10,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return null; // No error when the field is empty
+                        } else if (value.length != 10) {
+                          return 'Phone No. should be exactly 10 digits';
+                        }
                         return null;
-                      }
-                      // If the email is invalid, show an error
-                      else if (!EmailValidator.validate(value)) {
-                        return 'Please Enter A Valid Email Id';
-                      }
-                      return null;
-                    },
-                    onChanged: (value) {
-                      // Trigger validation when the value changes
-                      _formKeyEmail.currentState?.validate();
-                    },
-                    controller: contact_vm_controller.emailId_controller,
+                      },
+                      onChanged: (value) {
+                        // Trigger validation when the value changes
+                        _formKey.currentState?.validate();
+                      },
+                      keyboardType: TextInputType.number,
+                      controller: contact_vm_controller.phone_no_controller,
+                      decoration: InputDecoration(
+                          hintText: "Phone No.*",
+                          labelText: "Phone No.*",
+                          //suffixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          )
+                      ),
+
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15,),
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: TextFormField(
+                    keyboardType: TextInputType.number,
+                    controller: contact_vm_controller.alternate_no_controller,
                     decoration: InputDecoration(
-                        hintText: "Email Id",
-                        labelText: "Email Id",
+                        hintText: "Alternate Phone No.",
+                        labelText: "Alternate Phone No.",
                         //suffixIcon: Icon(Icons.email),
                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -387,108 +354,147 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
                   ),
                 ),
-              ),
-              SizedBox(height: 15,),
-             /* Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: bindDepartNameDropDown(context),
-              ),*/
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: TextFormField(
-                  controller: contact_vm_controller.depart_name_controller,
-                  decoration: InputDecoration(
-                      hintText: "Department Name",
-                      labelText: "Department Name",
-                      //suffixIcon: Icon(Icons.email),
-                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+                SizedBox(height: 15,),
+                Form(
+                  key: _formKeyEmail,
+                  child: Container(
+                    padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        // If the field is empty, no error is shown
+                        if (value == null || value.isEmpty) {
+                          return null;
+                        }
+                        // If the email is invalid, show an error
+                        else if (!EmailValidator.validate(value)) {
+                          return 'Please Enter A Valid Email Id';
+                        }
+                        return null;
+                      },
+                      onChanged: (value) {
+                        // Trigger validation when the value changes
+                        _formKeyEmail.currentState?.validate();
+                      },
+                      controller: contact_vm_controller.emailId_controller,
+                      decoration: InputDecoration(
+                          hintText: "Email Id",
+                          labelText: "Email Id",
+                          //suffixIcon: Icon(Icons.email),
+                          contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)
+                          )
                       ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
-                  ),
 
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(height: 15,),
-               /*Container(
+                SizedBox(height: 15,),
+               /* Container(
                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                  child: bindDesignationDropDown(context),
+                  child: bindDepartNameDropDown(context),
+                ),*/
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: TextFormField(
+                    controller: contact_vm_controller.depart_name_controller,
+                    decoration: InputDecoration(
+                        hintText: "Department Name",
+                        labelText: "Department Name",
+                        //suffixIcon: Icon(Icons.email),
+                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-              ),*/
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: TextFormField(
-                  controller: contact_vm_controller.designation_name_controller,
-                  decoration: InputDecoration(
-                      hintText: "Designation Name",
-                      labelText: "Designation Name",
-                      //suffixIcon: Icon(Icons.email),
-                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue)
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        )
+                    ),
 
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
                   ),
+                ),
+                SizedBox(height: 15,),
+                 /*Container(
+                    padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                    child: bindDesignationDropDown(context),
 
-                ),
-              ),
-              SizedBox(height: 15,),
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: TextFormField(
-                  controller: contact_vm_controller.reporting_person_controller,
-                  decoration: InputDecoration(
-                      hintText: "Reporting Person",
-                      labelText: "Reporting Person",
-                      //suffixIcon: Icon(Icons.email),
-                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-          
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
-                  ),
-          
-                ),
-              ),
-              SizedBox(height: 15,),
-              bindIsDecisionDropDown(context),
-              SizedBox(height: 15,),
-              Container(
-                padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                child: TextFormField(
-                  maxLength: 500,
-                  maxLines: 2,
-                  controller: contact_vm_controller.contact_title_controller,
-                  decoration: InputDecoration(
-                      hintText: "Contact Title",
-                      labelText: "Contact Title",
-                      //suffixIcon: Icon(Icons.email),
-                      contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-          
-                      focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue)
-                      ),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10)
-                      )
-                  ),
-          
-                ),
-              ),
-              /*SizedBox(height: 10,),*/
+                ),*/
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: TextFormField(
+                    controller: contact_vm_controller.designation_name_controller,
+                    decoration: InputDecoration(
+                        hintText: "Designation Name",
+                        labelText: "Designation Name",
+                        //suffixIcon: Icon(Icons.email),
+                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-          
-            ],
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue)
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        )
+                    ),
+
+                  ),
+                ),
+                SizedBox(height: 15,),
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: TextFormField(
+                    controller: contact_vm_controller.reporting_person_controller,
+                    decoration: InputDecoration(
+                        hintText: "Reporting Person",
+                        labelText: "Reporting Person",
+                        //suffixIcon: Icon(Icons.email),
+                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue)
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        )
+                    ),
+
+                  ),
+                ),
+                SizedBox(height: 15,),
+                bindIsDecisionDropDown(context),
+                SizedBox(height: 15,),
+                Container(
+                  padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                  child: TextFormField(
+                    maxLength: 500,
+                    maxLines: 2,
+                    controller: contact_vm_controller.contact_title_controller,
+                    decoration: InputDecoration(
+                        hintText: "Contact Title",
+                        labelText: "Contact Title",
+                        //suffixIcon: Icon(Icons.email),
+                        contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                        focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.blue)
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10)
+                        )
+                    ),
+
+                  ),
+                ),
+                /*SizedBox(height: 10,),*/
+
+
+              ],
+            ),
           ),
         ),
       ),
@@ -498,136 +504,139 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
 
   Widget bindAccountOwnerDropDown(context){
-    return Autocomplete<AccountMasterModel>(
-      displayStringForOption: _displayAccNameForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if(contact_vm_controller.updateContact){
-          contact_vm_controller.Account_Master_list.value=[];
-        }
-        if (textEditingValue.text.isEmpty) {
-          return contact_vm_controller.Account_Master_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        /*return contact_vm_controller.Account_Master_list
-            .where((AccountMasterModel option) {
-          return option.accountName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();*/
-        return await contact_vm_controller.getAccountMaster(textEditingValue.text);
-      },
-      onSelected: (AccountMasterModel selection) {
-        print(selection.accountName);
-        // Update the TextField with the selected
-        contact_vm_controller.account_name_controller.text =
-            _displayAccNameForOption(selection).toString();
-        contact_vm_controller.accountName.value=selection.accountName??"";
-        contact_vm_controller.accountCode.value=selection.accountCode??"";
-        contact_vm_controller.getAccMasterBuyCodeApi(selection.accountCode??"");
+    return IgnorePointer(
+      ignoring: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+      child: Autocomplete<AccountMasterModel>(
+        displayStringForOption: _displayAccNameForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) async {
+          if(contact_vm_controller.updateContact){
+            contact_vm_controller.Account_Master_list.value=[];
+          }
+          if (textEditingValue.text.isEmpty) {
+            return contact_vm_controller.Account_Master_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          /*return contact_vm_controller.Account_Master_list
+              .where((AccountMasterModel option) {
+            return option.accountName
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();*/
+          return await contact_vm_controller.getAccountMaster(textEditingValue.text);
+        },
+        onSelected: (AccountMasterModel selection) {
+          print(selection.accountName);
+          // Update the TextField with the selected
+          contact_vm_controller.account_name_controller.text =
+              _displayAccNameForOption(selection).toString();
+          contact_vm_controller.accountName.value=selection.accountName??"";
+          contact_vm_controller.accountCode.value=selection.accountCode??"";
+          contact_vm_controller.getAccMasterBuyCodeApi(selection.accountCode??"");
 
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextFormField(
-          readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = contact_vm_controller.account_name_controller.text,
-          focusNode: focusNode,
-          onTapOutside: (value){
-            FocusNode().unfocus();
-          },
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return TextFormField(
+            readOnly: contact_vm_controller.updateContact || contact_vm_controller.insideOut == false,
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = contact_vm_controller.account_name_controller.text,
+            focusNode: focusNode,
+            onTapOutside: (value){
+              FocusNode().unfocus();
+            },
 
-          decoration: InputDecoration(
-            suffixIcon: IconButton(
-              color: AllColors.primaryDark1,
-              onPressed: (){
-                if(focusNode.hasFocus){
-                  focusNode.unfocus();
-                }else{
-                  focusNode.requestFocus();
-                }
-              },
-              icon: Icon(Icons.arrow_drop_down),
-            ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Name',
-            labelText: 'Account Name',
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<AccountMasterModel> onSelected,
-          Iterable<AccountMasterModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.9,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final AccountMasterModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child:
-                        RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:  option.accountName!,
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
-                                ),
-                              ),
-                              TextSpan(
-                                text: " (${option.accountCode!})",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.redColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
-                                ),
-                              ),
-                            ],
-                          ),
-                          softWrap: true,
-                        )
-
-                      /*Text(
-                        option.accountName! + " (${option.accountCode!})",
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),*/
-                    ),
-                  );
+            decoration: InputDecoration(
+              suffixIcon: IconButton(
+                color: AllColors.primaryDark1,
+                onPressed: (){
+                  if(focusNode.hasFocus){
+                    focusNode.unfocus();
+                  }else{
+                    focusNode.requestFocus();
+                  }
                 },
+                icon: Icon(Icons.arrow_drop_down),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Account Name',
+              labelText: 'Account Name',
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<AccountMasterModel> onSelected,
+            Iterable<AccountMasterModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.9,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final AccountMasterModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child:
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:  option.accountName!,
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                  ),
+                                ),
+                                TextSpan(
+                                  text: " (${option.accountCode!})",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.redColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                  ),
+                                ),
+                              ],
+                            ),
+                            softWrap: true,
+                          )
+
+                        /*Text(
+                          option.accountName! + " (${option.accountCode!})",
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),*/
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 

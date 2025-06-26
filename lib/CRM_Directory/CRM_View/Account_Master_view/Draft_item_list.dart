@@ -147,6 +147,7 @@ class DraftItemList extends StatelessWidget{
         onTap: () {
           accountMaster_page_controller.view = 'FromDraft';
          // print('Adreesss..${accountMaster_page_controller.Account_Master_Draft_list[position].address}');
+          accountMaster_page_controller.getEmployeeMemberApi();
           accountMaster_page_controller.fillDraftDetails(accountMaster_page_controller.Account_Master_Draft_list1, position);
           Get.toNamed(RoutesName.add_New_AccountMaster_screen);
          // accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
@@ -162,10 +163,10 @@ class DraftItemList extends StatelessWidget{
             buildInfoRow("Email Id", controller.emailId),
             buildInfoRow("Phone No.", controller.phoneNo),
             buildInfoRow("Created By", controller.createdBy),
-            buildInfoRow("Frontliner Value", controller.frontlinerValue),
-            buildInfoRow("Branch Head Value", controller.branchHeadValue),
-            buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-            buildInfoRow("Cluster Head Value", controller.clustureHeadValue),
+           // buildInfoRow("Frontliner Value", controller.frontlinerValue),
+            buildInfoRow("Region Name", controller.branchHeadValue),
+           // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
+            buildInfoRow("Cluster Name", controller.clustureHeadValue),
             buildInfoRow("Address", controller.permanentAddress?.address ?? ""),
           ],
         ),
@@ -518,19 +519,23 @@ class DraftItemList extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
+                              bindCompanyProfileType(),
+                              SizedBox(
+                                height: 10,
+                              ),
 
-                              bindEmailId(),
+                             /* bindEmailId(),
                               SizedBox(
                                 height: 10,
-                              ),
-                              bindPhoneNo(),
+                              ),*/
+                              /*bindPhoneNo(),
                               SizedBox(
                                 height: 10,
-                              ),
-                              bindCompProfileTypeDropDown(context),
+                              ),*/
+                              /*bindCompProfileTypeDropDown(context),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindSateName(),
                               SizedBox(
                                 height: 10,
@@ -547,27 +552,30 @@ class DraftItemList extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),*/
-                              /*bindCreatedBy(),
+
+                              /*bindFrontLinerValue(),
                               SizedBox(
                                 height: 10,
                               ),*/
-                              bindFrontLinerValue(),
-                              SizedBox(
-                                height: 10,
-                              ),
                               bindBranchHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindZoneHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindClusterHead(),
 
                               SizedBox(
                                 height: 10,
                               ),
+                              /*bindZoneHead(),
+
+                              SizedBox(
+                                height: 10,
+                              ),*/
+                              bindClusterHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              bindCreatedBy(),
+                              SizedBox(
+                                height: 10,
+                              ),
+
 
                             ],
                           ),
@@ -615,29 +623,7 @@ class DraftItemList extends StatelessWidget{
                             )),
                             onPressed: () {
                               Get.back();
-                              accountMaster_page_controller.account_code_controller.clear();
-                              accountMaster_page_controller.account_name_controller.clear();
-                              accountMaster_page_controller.account_type_controller.clear();
-                              accountMaster_page_controller.comp_prof_type_controller.clear();
-                              accountMaster_page_controller.stateName_controller.clear();
-                              //accountMaster_page_controller.IsActive_controller.clear();
-                              accountMaster_page_controller.PhoneNo_Controller.clear();
-                              accountMaster_page_controller.EmailId_Controller.clear();
-                              accountMaster_page_controller.postal_code_controller.value.clear();
-                              accountMaster_page_controller.district_controller.value.clear();
-                              accountMaster_page_controller.created_by_controller.value.clear();
-                              accountMaster_page_controller.frontliner_controller.value.clear();
-                              accountMaster_page_controller.branch_head__value_controller.value.clear();
-                              accountMaster_page_controller.zone_head__value_controller.value.clear();
-                              accountMaster_page_controller.cluster_head__value_controller.value.clear();
-                              //accountMaster_page_controller.Address_controller.clear();
-                              // accountMaster_page_controller.Annual_Revenue_Controller.clear();
-                              //accountMaster_page_controller.No_Of_Emp_Controller.clear();
-                              //accountMaster_page_controller.no_of_employees_min = '';
-                              // accountMaster_page_controller.no_of_employees_max = '';
-                              // accountMaster_page_controller.annual_revenue_min = '';
-                              //accountMaster_page_controller.annual_revenue_max = '';
-                              //accountMaster_page_controller.account_cat_type_controller.clear();
+                              accountMaster_page_controller.clearFilterController();
                               accountMaster_page_controller.pageNumber=0;
                               accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
 
@@ -909,8 +895,8 @@ class DraftItemList extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1071,14 +1057,15 @@ class DraftItemList extends StatelessWidget{
     );
   }
 
-  bindBranchHead() {
-    return   TextField(
-      controller: accountMaster_page_controller.branch_head__value_controller.value,
+
+  bindCreatedBy() {
+    return  TextField(
+      controller: accountMaster_page_controller.created_by_controller.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Created By',
+          hintText: 'Created By',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1100,7 +1087,38 @@ class DraftItemList extends StatelessWidget{
       },
     );
   }
-  bindAccountTypeDropDown() {
+
+
+  bindBranchHead() {
+    return   TextField(
+      controller: accountMaster_page_controller.branch_head__value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Region Name',
+          hintText: 'Region Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+  bindCompanyProfileType() {
     return   TextField(
       controller: accountMaster_page_controller.comp_prof_type_controller,
       decoration: InputDecoration(
@@ -1127,6 +1145,58 @@ class DraftItemList extends StatelessWidget{
       onChanged: (value) {
         // Handle the text field value changes if needed
       },
+    );
+  }
+
+  Widget bindAccountTypeDropDown() {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-18,
+        controller:  accountMaster_page_controller.account_type_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+        //initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.account_type_controller.text =
+              _displayAccTypeForOption(selection!).toString();
+
+          accountMaster_page_controller. custome_selection.value=selection;
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Acc_type_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 

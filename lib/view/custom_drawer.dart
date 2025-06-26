@@ -4,12 +4,15 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
 
 
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/all_contact_master_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
@@ -53,6 +56,7 @@ class _Drawer extends State<CustomDrawer> {
   final accountMaster_page_controller=Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
   final TaskMaster_page_controller=Get.put(Taskmastervm());
+  final TaskApproval_page_controller=Get.put(TaskApprovalvm());
   final saleCycleController=Get.put(SalesCycleVm());
   final quoteApprovalController=Get.put(QuoteApprovalListVm());
   var allContactMastercontroller=Get.put(AllContactMasterVm());
@@ -315,7 +319,7 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.toNamed(RoutesName.accountMaster_screen,);
                                               accountMaster_page_controller.clearController();
                                               accountMaster_page_controller.pageNumber = 0;
-                                              accountMaster_page_controller.getAccountMaster(0 ,accountMaster_page_controller.is_Active.toString());
+                                              accountMaster_page_controller.getAccountMaster(0 ,accountMaster_page_controller.IsActive_controller.text);
                                               Navigator.of(context);
                                               break;
 
@@ -323,8 +327,7 @@ class _Drawer extends State<CustomDrawer> {
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               //Get.offAllNamed(RoutesName.contactMaster_screen);
-                                              contact_vm_controller.emailId_controller.clear();
-                                              contact_vm_controller.phone_no_controller.clear();
+                                              contact_vm_controller.clearAllFilterContoller();
                                               contact_vm_controller.pageNumber = 0;
                                               Get.toNamed(RoutesName.contactMaster_screen);
                                               contact_vm_controller.getContactMasterList(0,"","","");
@@ -336,6 +339,7 @@ class _Drawer extends State<CustomDrawer> {
                                               home_vm.openMenu(cTitle, iconData);
                                               //accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
                                               // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
+                                              accountMaster_page_controller.clearFilterController();
                                               accountMaster_page_controller.pageNumber = 0;
                                               accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
                                               Get.toNamed(RoutesName.Draft_item_list);
@@ -358,6 +362,12 @@ class _Drawer extends State<CustomDrawer> {
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               //Get.offAllNamed(RoutesName.taskMaster_screen);
+                                             // TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                                              TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
+                                              TaskMaster_page_controller.date_filter.value = "Today";
+                                              TaskMaster_page_controller.is_done.value = 0;
+                                              TaskMaster_page_controller.filter.value = "Running";
+                                              TaskMaster_page_controller.resetAllFieldOfFilter();
                                               accountMaster_page_controller.FromPage.value = '';
                                               contact_vm_controller.FromPage.value ='';
                                               TaskMaster_page_controller.pageNumber = 0;
@@ -365,26 +375,42 @@ class _Drawer extends State<CustomDrawer> {
                                               TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
                                               Navigator.of(context);
                                               break;
+                                            case 'Task Approval List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              TaskApproval_page_controller.resetAllFieldOfFilter();
+                                              TaskApproval_page_controller.pageNumber = 0;
+                                              Get.toNamed(RoutesName.taskApproval_List);
+                                              TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '','');
+                                              Navigator.of(context);
+                                              break;
                                             case 'Sales Cycle':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
-                                              //Get.offAllNamed(RoutesName.salesCycleScreen,);
                                               accountMaster_page_controller.FromPage.value = '';
                                               contact_vm_controller.FromPage.value ='';
-                                              saleCycleController.accountNameController.value.clear();
-                                              saleCycleController.contactNameController.value.clear();
-                                              saleCycleController.ApprovalStatusController.value.clear();
+                                              saleCycleController.filterQuoteAcceptedFlag.value="Open";
+                                              saleCycleController.clearAllFieldOfFilter();
                                               saleCycleController.pageNumber = 0;
                                               Get.toNamed(RoutesName.salesCycleScreen,);
                                               saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
                                               Navigator.of(context);
                                               break;
+
                                             case 'Quote Approval List':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               quoteApprovalController.pageNumberForQuote = 0;
                                               quoteApprovalController.getQuoteHeaderData(0);
                                               Get.toNamed(RoutesName.quoteApprovalListScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Mark Leave':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              MarkAttendanceViewmodel employeeMarkLeaveController=Get.put(MarkAttendanceViewmodel());
+                                              Get.toNamed(RoutesName.empMarkLeaveScreen,);
                                               Navigator.of(context);
                                               break;
 

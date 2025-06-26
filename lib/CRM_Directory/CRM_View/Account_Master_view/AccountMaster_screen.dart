@@ -20,8 +20,8 @@ class AccountmasterScreen extends StatelessWidget{
   static String _displayAccTypeForOption(CustomList option) =>
       option.value!;
 
-  static String _displayAccCategoryForOption(CustomList option) =>
-      option.value!;
+  static String _displayAccCategoryForOption(GetMasterTypeModel option) =>
+      option.code! + " (" + option.description! + ")";
 
   static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
       option.description!;
@@ -58,13 +58,19 @@ class AccountmasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {
-                accountMaster_page_controller.DraftId = '';
-                accountMaster_page_controller.clearController();
-                accountMaster_page_controller.getCompanyProfileTypeApi("");
-                accountMaster_page_controller.getGeoPostalCodeApi();
-                Get.toNamed(RoutesName.add_New_AccountMaster_screen);
-              }, icon: Icon(Icons.add)),
+              Visibility(
+                visible: accountMaster_page_controller.isAdminWritePermission=="0"?true:false,
+                child: IconButton(onPressed: () {
+                  accountMaster_page_controller.DraftId = '';
+                  accountMaster_page_controller.account_type_controller.text='New Account';
+                  accountMaster_page_controller.clearController();
+                  accountMaster_page_controller.getCompanyProfileSubTypeApi();
+                  accountMaster_page_controller.getCompanyProfileTypeApi("");
+                  accountMaster_page_controller.getGeoPostalCodeApi();
+                  Get.toNamed(RoutesName.add_New_AccountMaster_screen);
+                }, icon: Icon(Icons.add)),
+              ),
+
               IconButton(onPressed: () {
                 showFilterBottomSheet(context);
               }, icon: Icon(Icons.filter_alt_sharp))
@@ -132,7 +138,7 @@ class AccountmasterScreen extends StatelessWidget{
               "last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
 
           if (accountMaster_page_controller.pageNumber + 1 < total_page) {
-            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber + 1,accountMaster_page_controller.is_Active.toString());
+            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber + 1,accountMaster_page_controller.IsActive_controller.text);
             this.accountMaster_page_controller.pageNumber += 1;
           }
         }
@@ -167,6 +173,20 @@ class AccountmasterScreen extends StatelessWidget{
     }else{
       isActive = "No";
     }
+    final parts = [
+      controller.permanentAddress!.address!,
+      controller.permanentAddress!.address2!,
+      controller.permanentAddress!.city!,
+      controller.permanentAddress!.district!,
+      controller.permanentAddress!.stateName!,
+      controller.permanentAddress!.postCode!,
+
+    ];
+
+    // Filter out empty strings and join with commas
+    final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+   // accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -175,12 +195,8 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.view = 'Account';
             accountMaster_page_controller.getEmployeeMemberApi();
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
-            accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
+            accountMaster_page_controller.getCompanyProfileSubTypeApi(/*accountMaster_page_controller.Account_Master_list[position].companyProfileType*/);
             accountMaster_page_controller.getGeoPostalCodeApi();
-            //todo for state , city and district....
-            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'state');
-            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'city');
-            accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.PostCode_Controller.text,'district');
 
           },
           subtitle:Column(
@@ -194,11 +210,13 @@ class AccountmasterScreen extends StatelessWidget{
               buildInfoRow("Email Id", controller.emailId),
               buildInfoRow("Phone No.", controller.phoneNo),
               buildInfoRow("Created By", controller.createdBy),
-              buildInfoRow("Frontliner Value", controller.frontlinerValue),
-              buildInfoRow("Branch Head Value", controller.branchHeadValue),
-              buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-              buildInfoRow("Cluster Head Value", controller.clustureHeadValue),
-              buildInfoRow("Address", controller.permanentAddress?.address ?? ""),
+             // buildInfoRow("Frontliner Value", controller.frontlinerValue),
+              buildInfoRow("Region Name", controller.branchHeadValue),
+             // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
+              buildInfoRow("Cluster Name", controller.clustureHeadValue),
+              //buildInfoRow("Address", controller.permanentAddress!.address! + ","+ controller.permanentAddress!.address2! + ", " + controller.permanentAddress!.city! + ","+ "\n" + controller.permanentAddress!.district! + ","+ controller.permanentAddress!.stateName! + ","+  controller.permanentAddress!.postCode!),
+              buildInfoRow("Address", fullAddress),
+             // buildInfoRow("Shipping Address", fullAddress),
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -745,7 +763,7 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
   void showFilterBottomSheet(BuildContext context) {
-    accountMaster_page_controller.IsActive_controller.clear();
+    //accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -905,18 +923,18 @@ class AccountmasterScreen extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindFrontLinerValue(),
+                              /*bindFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindBranchHead(),
                               SizedBox(
                                 height: 10,
                               ),
-                              bindZoneHead(),
+                             /* bindZoneHead(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindClusterHead(),
                     
                               SizedBox(
@@ -1018,7 +1036,59 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-  Widget bindAccountTypeDropDown(context){
+  Widget bindAccountTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-18,
+        controller:  accountMaster_page_controller.account_type_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+       // initialSelection:accountMaster_page_controller.get_Acc_type_list.length>0?accountMaster_page_controller.get_Acc_type_list[1]:null,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.account_type_controller.text =
+              _displayAccTypeForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Acc_type_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+
+ /* Widget bindAccountTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayAccTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -1124,10 +1194,10 @@ class AccountmasterScreen extends StatelessWidget{
         );
       },
     );
-  }
+  }*/
 
   Widget bindAccCatogeryTypeDropDown(context){
-    return Autocomplete<CustomList>(
+    return Autocomplete<GetMasterTypeModel>(
       displayStringForOption: _displayAccCategoryForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
@@ -1135,15 +1205,15 @@ class AccountmasterScreen extends StatelessWidget{
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return accountMaster_page_controller.get_Acc_category_list
-            .where((CustomList option) {
-          return option.value
+            .where((GetMasterTypeModel option) {
+          return option.code
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
-      onSelected: (CustomList selection) {
-        print(selection.value);
+      onSelected: (GetMasterTypeModel selection) {
+        print(selection.code);
         // Update the TextField with the selected
         accountMaster_page_controller.account_cat_type_controller.text =
             _displayAccCategoryForOption(selection).toString();
@@ -1191,8 +1261,8 @@ class AccountmasterScreen extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
+          AutocompleteOnSelected<GetMasterTypeModel> onSelected,
+          Iterable<GetMasterTypeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -1203,7 +1273,7 @@ class AccountmasterScreen extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final CustomList option =
+                  final GetMasterTypeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -1211,15 +1281,31 @@ class AccountmasterScreen extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.value.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.code!,
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                              TextSpan(
+                                text: " (${option.description!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
                     ),
                   );
                 },
@@ -1231,8 +1317,61 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-
   Widget bindIsActiveDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        width: size.width-18,
+        controller:  accountMaster_page_controller.IsActive_controller,
+        label: Text(
+          "Active",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+         //initialSelection:"All",
+       /* enableFilter: true,
+        requestFocusOnTap: true,*/
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          accountMaster_page_controller.IsActive_controller.text =
+              _displayIsActiveForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.IsActiveTypeAllList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+
+ /* Widget bindIsActiveDropDown(context) {
     return Autocomplete<String>(
       displayStringForOption: _displayIsActiveForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -1336,7 +1475,7 @@ class AccountmasterScreen extends StatelessWidget{
         );
       },
     );
-  }
+  }*/
 
   Widget bindAnualRevenueDropDown(context) {
     return Autocomplete<String>(
@@ -1853,8 +1992,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Postal Code',
-          hintText: 'Postal Code',
+          labelText: 'Pin Code',
+          hintText: 'Pin Code',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1973,8 +2112,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -2033,8 +2172,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Region Name',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

@@ -158,6 +158,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
+           // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
             saleCycleController.getQuoteHeaderInformation(quoteApprovalController.quoteApprovalList[position].quoteId, "quoteApprovalScreen");
           },
           subtitle: Column(
@@ -248,6 +249,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   InkWell(
                     onTap: (){
                       saleCycleController.pageNumber = 0;
+                      saleCycleController.filterQuoteAcceptedFlag.value="";
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position]
                           .salesCycleId!, "ViewHeader", "QuoteApprovalPage");
                     },
@@ -295,7 +297,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                               .accountName ??
                               "",
                           overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
+                          //textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
                             fontSize: AllFontSize.fourtine,

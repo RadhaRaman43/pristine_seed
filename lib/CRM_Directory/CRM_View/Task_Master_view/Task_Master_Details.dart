@@ -49,6 +49,7 @@ class TaskMasterDetails extends StatelessWidget{
 
     return WillPopScope(
         onWillPop: () async {
+          print('fromPageName.....${account_vm_controller.view}');
           if(account_vm_controller.view=='Sales'){
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             //account_vm_controller.view='';
@@ -58,7 +59,7 @@ class TaskMasterDetails extends StatelessWidget{
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
           }
           else {
-
+            TaskMaster_page_controller.resetAllFieldOfFilter();
             TaskMaster_page_controller.pageNumber = 0;
             TaskMaster_page_controller
                 .date_filter.value = "Today";
@@ -74,7 +75,7 @@ class TaskMasterDetails extends StatelessWidget{
                     .toString(),
                 '',
                 '',
-                '',
+                TaskMaster_page_controller.Task_status_controller.value.text,
                 TaskMaster_page_controller.date_filter,
                 TaskMaster_page_controller.is_done.value);
 
@@ -109,13 +110,16 @@ class TaskMasterDetails extends StatelessWidget{
               Row(
                 children: [
                   Obx((){
+                    print("dfdgcvxvdf1..${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar}");
+                    print("sdafsfffd2..${TaskMaster_page_controller.TaskDSAR_Master_list.length}");
+                    print("isadminskjdghius3..${TaskMaster_page_controller.isAdminWritePermission.toString()}");
                     return  Visibility(
-                      visible: TaskMaster_page_controller.TaskDSAR_Master_list.isNotEmpty?false:true,
+                      visible: TaskMaster_page_controller.TaskDSAR_Master_list.isEmpty?true:false,
                       //visible: account_vm_controller.view=='Sales'?false:true,
                       child: IconButton(onPressed: () {
                         //createDSARDialog(context);
                         TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
-                        TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
+                       // TaskMaster_page_controller.isInfraLead.value.text=TaskMaster_page_controller.Task_Master_list[0].isInfraLead == 1 ?"Yes":"No";
                         TaskMaster_page_controller.NextInterdate_controller.clear();
                         TaskMaster_page_controller.NextInterTime_controller.clear();
                         TaskMaster_page_controller.DSAR_Remarks_controller.clear();
@@ -131,7 +135,7 @@ class TaskMasterDetails extends StatelessWidget{
                         TaskMaster_page_controller.isInfraLeadValueSubmit.value = false;
                         TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? Get.toNamed(RoutesName.addNewDSARTask_screen): "";
                       }, icon: Visibility(
-                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 ? true : false,
+                          visible: TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar == 1 && TaskMaster_page_controller.isAdminWritePermission != "1" ? true : false,
                           child: Icon(Icons.add))),
                     );
                   }),
@@ -145,6 +149,51 @@ class TaskMasterDetails extends StatelessWidget{
                       }, icon: Icon(Icons.update)),
                     );
                   }),
+
+                  Obx((){
+                    return Visibility(
+                      visible: TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .taskStatus?.toLowerCase() == 'rejected' && TaskMaster_page_controller.isAdminWritePermission=="1"?true:false,
+                      child: IconButton(
+                        icon: Icon(Icons.lock_open_rounded),
+                        onPressed: (){
+                          showTaskReopenDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
+                        },
+                      )
+
+                      /*ActionChip(
+                        elevation: 2,
+                        padding: EdgeInsets.all(5),
+                        backgroundColor: AllColors.primaryDark1,
+                        shadowColor: Colors.black,
+                        shape: StadiumBorder(
+                            side: BorderSide(color: AllColors.whiteColor)),
+                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                        //CircleAvatar
+                        label: Row(
+                          children: [
+                            Icon(Icons.lock_open_rounded),
+                            //SizedBox(width: 5,),
+                            *//*Tooltip(
+                              message: "Reopen task ",
+                              child: Text('Reopen',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.whiteColor,
+                                    fontSize: AllFontSize.ten,
+                                    fontWeight: FontWeight.w400,
+                                  )),
+                            ),*//*
+                          ],
+                        ),
+                        onPressed: () async {
+                          showTaskReopenDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
+                        }, //Text
+                      ),*/
+                    );
+                  })
+
+
                 ],
               )
 
@@ -367,7 +416,7 @@ class TaskMasterDetails extends StatelessWidget{
 
             SizedBox(height: 5,),
         
-            Card(
+           /* Card(
               color: AllColors.whiteColor,
               elevation: 10,
               margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
@@ -430,7 +479,7 @@ class TaskMasterDetails extends StatelessWidget{
               ),
             ),
 
-            SizedBox(height: 5,),
+            SizedBox(height: 5,),*/
 
             Card(
               color: AllColors.whiteColor,
@@ -674,7 +723,7 @@ class TaskMasterDetails extends StatelessWidget{
         }
         return TaskMaster_page_controller.AlongPersonWith_list
             .where((AlongWithPersonModel option) {
-          return option.firstName
+          return option.name
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
@@ -687,7 +736,7 @@ class TaskMasterDetails extends StatelessWidget{
 
         if (!TaskMaster_page_controller.SelectedAlongPersonWith_list.contains(selection)) {
           TaskMaster_page_controller.SelectedAlongPersonWith_list.add(selection);
-          Utils.showToastification('Success', 'Add Successfully');
+         // Utils.showToastification('Success', 'Add Successfully');
         }else{
           Utils.showErrorToastification('Error', 'Already Selected');
         }
@@ -814,7 +863,7 @@ class TaskMasterDetails extends StatelessWidget{
         if (!TaskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
           //TaskMaster_page_controller.Item_Category_code_list.add(selection.categoryCode!);
           TaskMaster_page_controller.Item_Category_Selected_list.add(selection);
-          Utils.showToastification('Success', 'Add Successfully ${selection.categoryCode}');
+         // Utils.showToastification('Success', 'Add Successfully ${selection.categoryCode}');
           print('CateCode....${TaskMaster_page_controller.Item_Category_code_list.length}');
         }else{
           Utils.showErrorToastification('Error', 'Already Selected');
@@ -993,6 +1042,20 @@ class TaskMasterDetails extends StatelessWidget{
   }
 
   Widget viewTasketails(BuildContext context) {
+    String taskStatus = TaskMaster_page_controller.Task_Master_list[0]
+        .taskStatus?.toLowerCase()??"";
+    Color getStatusColor(String status) {
+      switch (status.toLowerCase()) {
+        case 'approved':
+          return Colors.green;
+        case 'rejected':
+          return Colors.red;
+        case 'pending for approval':
+          return Colors.yellow[700]!;
+        default:
+          return Colors.black;
+      }
+    }
     String? dateTimeCreatedOn=StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].dateOfVisit ?? "");
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDetails.value == true ? true : false,
@@ -1212,9 +1275,7 @@ class TaskMasterDetails extends StatelessWidget{
                       .Task_Master_list[0]
                       .taskStatus ?? "",
                   style: GoogleFonts.poppins(
-                    color:TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .taskStatus?.toLowerCase()=='rejected'?Colors.red: Colors.green,
+                    color: getStatusColor(taskStatus),
                     fontSize: AllFontSize.fourtine,
                     fontWeight: FontWeight.w500,
                   ),
@@ -1225,49 +1286,7 @@ class TaskMasterDetails extends StatelessWidget{
               height: 3,
             ),
 
-            Row(
-              children: [
-                Text(
-                  "Task Remarks",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .taskRemarks == null
-                        ? ''
-                        : TaskMaster_page_controller
-                        .Task_Master_list[0]
-                        .taskRemarks,
-                    child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .taskRemarks == null
-                          ? ''
-                          : TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .taskRemarks ?? "",
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                )
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -1471,7 +1490,9 @@ class TaskMasterDetails extends StatelessWidget{
                   onTap: (){
                     salesCycleController.pageNumber = 0;
                     salesCycleController.clearSaleProductListController();
-                    salesCycleController.getsalesCycleData(0, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!, "ViewHeader", 'Task');
+                    salesCycleController.filterQuoteAcceptedFlag.value="";
+                    salesCycleController.pageNumber=0;
+                    salesCycleController.getsalesCycleData( salesCycleController.pageNumber, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!, "ViewHeader", 'Task');
                     salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber, TaskMaster_page_controller
                         .Task_Master_list[0].salesCycleId??"" );
                     salesCycleController.itemCategorySelectedlist.value = [];
@@ -1685,6 +1706,185 @@ class TaskMasterDetails extends StatelessWidget{
 
               ],
             ),
+            Row(
+              children: [
+                Text(
+                  "Task Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .taskRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .taskRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .taskRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .taskRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+
+            Visibility(
+              visible: TaskMaster_page_controller
+                  .Task_Master_list[0]
+                  .taskStatus!.toLowerCase() == 'rejected',
+              child: Row(
+                children: [
+                  Text(
+                    "Reject Remarks",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Spacer(),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .rejectReason == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .rejectReason,
+                      child: Text(
+                        TaskMaster_page_controller
+                            .Task_Master_list[0]
+                            .rejectReason == null
+                            ? ''
+                            : TaskMaster_page_controller
+                            .Task_Master_list[0]
+                            .rejectReason ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 3,
+            ),
+            Row(
+              children: [
+                Text(
+                  "Manager Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .managerRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .managerRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .managerRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .managerRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
+
+            Row(
+              children: [
+                Text(
+                  "Reopen Remarks",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Spacer(),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .reopenRemarks == null
+                        ? ''
+                        : TaskMaster_page_controller
+                        .Task_Master_list[0]
+                        .reopenRemarks,
+                    child: Text(
+                      TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .reopenRemarks == null
+                          ? ''
+                          : TaskMaster_page_controller
+                          .Task_Master_list[0]
+                          .reopenRemarks ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(
+              height: 3,
+            ),
           ],
         ),
       ),
@@ -1736,7 +1936,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
                 Spacer(),
                 Text(
-                  StaticMethod.onlyDate(
+                  StaticMethod.formatDateWithTime(
                       TaskMaster_page_controller
                           .Task_Master_list[0]
                           .createdOn!) ?? "",
@@ -1779,9 +1979,7 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             Row(
               children: [
-                Text( TaskMaster_page_controller
-                    .Task_Master_list[0]
-                    .taskStatus?.toLowerCase()=="rejected"? "Rejected On":"Approved On",
+                Text("Approved/Rejected On",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1790,7 +1988,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
                 Spacer(),
                 Text(
-                  StaticMethod.onlyDate(
+                  StaticMethod.formatDateWithTime(
                       TaskMaster_page_controller
                           .Task_Master_list[0]
                           .approvedOn??"") ?? "",
@@ -1861,7 +2059,7 @@ class TaskMasterDetails extends StatelessWidget{
         margin: EdgeInsets.only(left: 10.0, right: 10.0),
         child: Column(
           children: [
-            Row(
+            /*Row(
               children: [
                 Text(
                   "Frontliner ",
@@ -1883,14 +2081,14 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                 ),
               ],
-            ),
+            ),*/
             SizedBox(
               height: 3,
             ),
             Row(
               children: [
                 Text(
-                  "Branch Head",
+                  "Region Name",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1902,7 +2100,7 @@ class TaskMasterDetails extends StatelessWidget{
                   StaticMethod.onlyDate(
                       TaskMaster_page_controller
                           .Task_Master_list[0]
-                          .branchHeadValue!) ?? "",
+                          .branchHeadValue??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,
@@ -1914,7 +2112,7 @@ class TaskMasterDetails extends StatelessWidget{
             SizedBox(
               height: 3,
             ),
-            Row(
+            /*Row(
               children: [
                 Text(
                   "Zone Head",
@@ -1939,11 +2137,11 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             SizedBox(
               height: 3,
-            ),
+            ),*/
             Row(
               children: [
                 Text(
-                  "Cluster Head",
+                  "Cluster Name",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -2492,7 +2690,7 @@ class TaskMasterDetails extends StatelessWidget{
             SizedBox(
               height: 3,
             ),
-            Row(
+            /*Row(
               children: [
                 Text(
                   "Is Infra Lead",
@@ -2524,7 +2722,7 @@ class TaskMasterDetails extends StatelessWidget{
             ),
             SizedBox(
               height: 3,
-            ),
+            ),*/
             Row(
               children: [
                 Text(
@@ -3085,9 +3283,98 @@ class TaskMasterDetails extends StatelessWidget{
     );
   }
 
+  showTaskReopenDialog(context, String TaskId){
+    TaskMaster_page_controller.taskReopenRemarksController.value.clear();
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+              title:  Text(
+                'Reopen Task',
+                style: GoogleFonts.poppins(
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700,
+                  color: AllColors.primaryDark1,
+                ),
+              ),
+              content: Wrap(
+                children: [
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  SizedBox(height: 15,),
+                  Container(
+                  decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10)
+              ),
+              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: TextFormField(
+                controller: TaskMaster_page_controller
+                    .taskReopenRemarksController.value,
+                decoration: InputDecoration(
+                    hintText: "Reopen Remarks",
+                    labelText: "Reopen Remarks",
+                    //suffixIcon: Icon(Icons.email),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten,
+                        horizontal: AllFontSize.ten),
+
+                    /*focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.blue)
+                            ),*/
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                    )
+                ),
+
+              ),
+            ),
+                  SizedBox(height: 55,),
+
+                   Center(
+                     child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: ()  {
+                          if(TaskMaster_page_controller.taskReopenRemarksController.value.text.isEmpty || TaskMaster_page_controller.taskReopenRemarksController.value.text == null) {
+                            Utils.sanckBarError(
+                                'Error : ', 'Please enter reopen remarks.');
+                            return;
+                          }
+                          TaskMaster_page_controller.taskReopenApiHit(TaskId);
+                          Navigator.pop(context);
+
+
+                        },
+                        child: Container(
+                          width: 80,
+                          alignment: Alignment.center,
+                          child: Text('Submit',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ),
+                   ),
+
+                ],
+              )
+          );
+        });
+  }
+
   showApprovRejectDialog(context, String TaskId){
     TaskMaster_page_controller.ApproveReject_Controller.clear();
     TaskMaster_page_controller.RejectReason_Controller.clear();
+    TaskMaster_page_controller.managerRemarksController.value.clear();
     TaskMaster_page_controller.ApproveBool.value = false;
     TaskMaster_page_controller.RejectBool.value = false;
     showDialog(
@@ -3110,6 +3397,40 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                   SizedBox(height: 15,),
                   bindApprovRejectDropDown(context),
+                  SizedBox(height: 55,),
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.ApproveBool
+                          .value,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          controller: TaskMaster_page_controller
+                              .managerRemarksController.value,
+                          decoration: InputDecoration(
+                              hintText: "Manager Remarks",
+                              labelText: "Manager Remarks",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+
+                              /*focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),*/
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+                    );
+                  }),
                   SizedBox(height: 55,),
                   Obx(() {
                     return Visibility(

@@ -380,13 +380,14 @@ class ApprovalPersonList extends StatelessWidget{
               detailRow("Approver Order", item.approverOrder.toString(), ),
               detailRow("Is SPR", item.isSpr.toString() == '1' ? "Yes" : "No", ),
               detailRow("SPR No", item.sprNo ?? "",),
-              detailRow("SPR Category Name", item.sprCategoryName ?? "", ),
+              detailRow("SPR Category", item.sprCategoryName ?? "", ),
               detailRow("User Type", item.userType ?? "", ),
-              detailRow("Approver Geo Name", item.approverGeoName ?? "", ),
-              detailRow("Approver Geo Value", item.approverGeoValue ?? "", ),
+             /* detailRow("Approver Geo Name", item.approverGeoName ?? "", ),
+              detailRow("Approver Geo Value", item.approverGeoValue ?? "", ),*/
               detailRow("Quote Status", item.quoteStatus ?? "", ),
               detailRow("Approved By", item.approvedFullName ?? "", ),
               detailRow("Approved On", dateApprovedOn ?? "", ),
+              detailRow("Manager Remarks", item.managerRemarks ?? "",),
               detailRow("Reject Reason", item.rejectReason ?? "",),
             ],
           ),
@@ -397,9 +398,9 @@ class ApprovalPersonList extends StatelessWidget{
   Widget detailRow(String label, String? value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Expanded(
-          flex: 6,
+        Flexible(
           child: Text(
             "$label  :",
             style: GoogleFonts.poppins(
@@ -409,19 +410,20 @@ class ApprovalPersonList extends StatelessWidget{
             ),
           ),
         ),
-        Expanded(
-          flex: 4,
+        Flexible(
           child: Tooltip(
             message: value ?? '',
             child: Text(
               value ?? '',
               overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
               //maxLines: 2,
               style: GoogleFonts.poppins(
                 color: AllColors.textColor,
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w500,
               ),
+
             ),
           ),
         ),

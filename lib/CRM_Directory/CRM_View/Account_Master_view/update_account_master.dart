@@ -53,8 +53,8 @@ class UpdateAccountMaster extends StatelessWidget{
   static String _displayAccTypeForOption(CustomList option) =>
       option.value!;
 
-  static String _displayAccCategoryForOption(CustomList option) =>
-      option.value!;
+  static String _displayAccCategoryForOption(GetMasterTypeModel option) =>
+      option.code! + " (" + option.description! + ")";
 
   static String _displayCompProfileTypeForOption(CompanyTypeModel option) =>
       option.description!;
@@ -88,6 +88,7 @@ class UpdateAccountMaster extends StatelessWidget{
   Widget build(BuildContext context) {
    return WillPopScope(
        onWillPop: () async {
+         print("account view...${accountMaster_page_controller.view}");
          if(accountMaster_page_controller.view=='VIEW'){
            accountMaster_page_controller.view='';
            Get.toNamed(RoutesName.contactMaster_screen);
@@ -104,10 +105,12 @@ class UpdateAccountMaster extends StatelessWidget{
            Get.toNamed(RoutesName.taskMaster_screen);
          }else if(accountMaster_page_controller.view=='FromSaleCycleMainScreen'){
            saleCycleController.pageNumber=0;
+           saleCycleController.filterQuoteAcceptedFlag.value="";
            saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
            Get.toNamed(RoutesName.salesCycleScreen);
          }
          else if(accountMaster_page_controller.view=="FromQuoteApproval"){
+           print("view..");
            Get.offAllNamed(RoutesName.quoteApprovalListScreen);
          }
          else if(accountMaster_page_controller.view=='FromSaleDetailsScreen'){
@@ -120,19 +123,20 @@ class UpdateAccountMaster extends StatelessWidget{
            accountMaster_page_controller.pageNumber = 0;
            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
            Get.toNamed(RoutesName.accountMaster_screen);
+         }else if(accountMaster_page_controller.view=="fromtaskapprovaldetailspage"){
+           Get.toNamed(RoutesName.taslMasterApprovalDetailsScreen);
          }
-         if(accountMaster_page_controller.view=="ALLContactList"){
+         else if(accountMaster_page_controller.view=="ALLContactList"){
            Get.toNamed(RoutesName.allContactMasterScreen);
          }
          else if(accountMaster_page_controller.view=="Sales"){
            Get.toNamed(RoutesName.taskMasterDetails_screen);
          }
-
          else{
            accountMaster_page_controller.clearController();
            accountMaster_page_controller.pageNumber = 0;
-           accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString());
-         Get.toNamed(RoutesName.accountMaster_screen);
+           accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.IsActive_controller.text);
+           Get.toNamed(RoutesName.accountMaster_screen);
          }
      return false;
    },
@@ -162,7 +166,7 @@ class UpdateAccountMaster extends StatelessWidget{
            PopupMenuButton(itemBuilder: (BuildContext context){
              List<PopupMenuEntry>  items= [];
 
-             if(accountMaster_page_controller.view!="ALLContactList"){
+             /*if(accountMaster_page_controller.view == 'Account'){
                items.add(
                  PopupMenuItem(
                    child: Row(
@@ -178,7 +182,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                    },
                  ),);
-             }
+             }*/
              items.add( PopupMenuItem(
                child: Row(
                  children: [
@@ -269,7 +273,7 @@ class UpdateAccountMaster extends StatelessWidget{
      ),
        drawer: CustomDrawer(),
        floatingActionButton: Visibility(
-         visible:accountMaster_page_controller.view=='Account'?true:false ,
+         visible:accountMaster_page_controller.view=='Account' && accountMaster_page_controller.isAdminWritePermission=="0"?true:false ,
          child: Container(
            margin: EdgeInsets.only(left: 30),
            child: DefaultButton(
@@ -299,10 +303,10 @@ class UpdateAccountMaster extends StatelessWidget{
                  return  ;
                }
 
-               /*if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
+               if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
                      Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
                      return  ;
-                   }*/
+                   }
                if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
                  Utils.sanckBarError('Company profile Type!', "Please Enter Company profile Type");
                  return  ;
@@ -363,256 +367,212 @@ class UpdateAccountMaster extends StatelessWidget{
          width: double.infinity,
          height: double.infinity,
          child: SingleChildScrollView(
-           child: Column(
-             children: [
-               SizedBox(height: 10),
-               DottedBorder(
-                 color: Colors.blue,
-                 strokeWidth: 2,
-                 borderType: BorderType.RRect,
-                 radius: Radius.circular(8),
-                 dashPattern: [20, 10, 20, 10],
-                 child: Container(
-                   width: size.height * 0.4,
-                   height: size.height * 0.2,
-                   child:
+           child: IgnorePointer(
+             ignoring: accountMaster_page_controller.isAdminWritePermission=="1"?true:false,
+             child: Column(
+               children: [
+                 SizedBox(height: 10),
+                 DottedBorder(
+                   color: Colors.blue,
+                   strokeWidth: 2,
+                   borderType: BorderType.RRect,
+                   radius: Radius.circular(8),
+                   dashPattern: [20, 10, 20, 10],
+                   child: Container(
+                     width: size.height * 0.4,
+                     height: size.height * 0.2,
+                     child:
 
-                   BindImage(context)
+                     BindImage(context)
 
-                 ),
-               ),
-               SizedBox(height: 15,),
-
-               Container(
-                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 child: TextFormField(
-                   readOnly: true,
-                   //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode,
-                   controller: accountMaster_page_controller.account_code_controller,
-                   decoration: InputDecoration(
-                       hintText: "Account Code",
-                       labelText: "Account Code",
-                       //suffixIcon: Icon(Icons.email),
-                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                       focusedBorder: OutlineInputBorder(
-                           borderSide: BorderSide(color: Colors.blue)
-                       ),
-                       border: OutlineInputBorder(
-                           borderRadius: BorderRadius.circular(10)
-                       )
                    ),
-
                  ),
-               ),
+                 SizedBox(height: 15,),
 
-               SizedBox(height: 15,),
+                 Container(
+                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   child: TextFormField(
+                     readOnly: true,
+                     //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode,
+                     controller: accountMaster_page_controller.account_code_controller,
+                     decoration: InputDecoration(
+                         hintText: "Account Code",
+                         labelText: "Account Code",
+                         //suffixIcon: Icon(Icons.email),
+                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-               Container(
-                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 child:   TextFormField(
-                   /*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                       || accountMaster_page_controller.view=='VIEW' ||
-                       accountMaster_page_controller.view=='Task'||
-                       accountMaster_page_controller.view=='FromSaleCycleMainScreen' ||
-                       accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                  readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                   //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountName!,
-                   controller: accountMaster_page_controller.account_name_controller,
-                   decoration: InputDecoration(
-                       hintText: "Account Name*",
-                       labelText: "Account Name*",
-                       //suffixIcon: Icon(Icons.email),
-                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                       focusedBorder: OutlineInputBorder(
-                           borderSide: BorderSide(color: Colors.blue)
-                       ),
-                       border: OutlineInputBorder(
-                           borderRadius: BorderRadius.circular(10)
-                       )
-                   ),
-
-                 ),
-               ),
-
-               SizedBox(height: 15,),
-               Container(
-                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 child: bindAccountOwnerDropDown(context),
-               ),
-
-               SizedBox(height: 15,),
-
-               Container(
-                 padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 child: TextFormField(
-                 /*  readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                       || accountMaster_page_controller.view=='VIEW' ||
-                       accountMaster_page_controller.view=='Task'||
-                       accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                       || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                   readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                   maxLength: 500,
-                   maxLines: 2,
-                   controller: accountMaster_page_controller.AccountTitle_Controller,
-                   decoration: InputDecoration(
-                       hintText: "Account Title",
-                       labelText: "Account Title",
-                       //suffixIcon: Icon(Icons.email),
-                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                       focusedBorder: OutlineInputBorder(
-                           borderSide: BorderSide(color: Colors.blue)
-                       ),
-                       border: OutlineInputBorder(
-                           borderRadius: BorderRadius.circular(10)
-                       )
-                   ),
-
-                 ),
-               ),
-               SizedBox(height: 15,),
-
-               Container(
-                 margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                 //color: AllColors.Card1Color,
-                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 decoration: BoxDecoration(
-                   //color: AllColors.Card1Color, // Set the inside color here
-                   border: Border.all(
-                     color: AllColors.grayColor, // Set the border color here
-                     width: 1.0, // Adjust the border width if necessary
-                   ),
-                   borderRadius: BorderRadius.circular(10.0),
-                 ),
-                 child: InputDecorator(
-                   decoration: InputDecoration(
-                     labelText: 'General Information',
-                     labelStyle: GoogleFonts.poppins(
-                         color: AllColors.primaryDark1,
-                         fontWeight: FontWeight.w700,
-                         fontSize: AllFontSize.sisxteen),
-                     border: OutlineInputBorder(
-                       borderSide: BorderSide(
-
-                       ),
-                       borderRadius: BorderRadius.circular(10.0),
-                     ),
-                   ),
-                   child: Column(
-                     children: [
-                       /*bindAccountTypeDropDown(context),
-
-                       SizedBox(height: 15,),
-*/
-                       Form(
-                         key: _formKey,
-                         child: Container(
-                           decoration: BoxDecoration(
-                               color: Colors.white,
-                               borderRadius: BorderRadius.circular(10)
-                           ),
-                           child: TextFormField(
-                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                             maxLength: 10,
-                             validator: (value){
-                               if (value == null || value.isEmpty) {
-                                 return null; // No error when the field is empty
-                               } else if (value.length != 10) {
-                                 return 'Phone No. should be exactly 10 digits';
-                               }
-                               return null;
-                             },
-                             onChanged: (value) {
-                               // Trigger validation when the value changes
-                               _formKey.currentState?.validate();
-                             },
-                             keyboardType: TextInputType.number,
-                             controller: accountMaster_page_controller.PhoneNo_Controller,
-                             decoration: InputDecoration(
-                                 hintText: "Phone No.",
-                                 labelText: "Phone No.",
-                                 //suffixIcon: Icon(Icons.email),
-                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                                 focusedBorder: OutlineInputBorder(
-                                     borderSide: BorderSide(color: Colors.blue)
-                                 ),
-                                 border: OutlineInputBorder(
-                                     borderRadius: BorderRadius.circular(10)
-                                 )
-                             ),
-
-                           ),
+                         focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: Colors.blue)
                          ),
-                       ),
-
-                       SizedBox(height: 15,),
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
+                         border: OutlineInputBorder(
                              borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           keyboardType: TextInputType.number,
-                           controller: accountMaster_page_controller
-                               .Alternate_PhoneNo_Controller,
-                           decoration: InputDecoration(
-                               hintText: "Alternate Phone No.",
-                               labelText: "Alternate Phone No.",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
+                         )
+                     ),
 
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
+                   ),
+                 ),
+
+                 SizedBox(height: 15,),
+
+                 Container(
+                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   child:   TextFormField(
+                     /*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                         || accountMaster_page_controller.view=='VIEW' ||
+                         accountMaster_page_controller.view=='Task'||
+                         accountMaster_page_controller.view=='FromSaleCycleMainScreen' ||
+                         accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                    readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                     //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountName!,
+                     controller: accountMaster_page_controller.account_name_controller,
+                     decoration: InputDecoration(
+                         hintText: "Account Name*",
+                         labelText: "Account Name*",
+                         //suffixIcon: Icon(Icons.email),
+                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                         focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: Colors.blue)
+                         ),
+                         border: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(10)
+                         )
+                     ),
+
+                   ),
+                 ),
+
+                 SizedBox(height: 15,),
+                 Container(
+                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   child: bindAccountOwnerDropDown(context),
+                 ),
+
+                 SizedBox(height: 15,),
+
+                 Container(
+                   padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   child: TextFormField(
+                   /*  readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                         || accountMaster_page_controller.view=='VIEW' ||
+                         accountMaster_page_controller.view=='Task'||
+                         accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                         || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                     readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                     maxLength: 500,
+                     maxLines: 2,
+                     controller: accountMaster_page_controller.AccountTitle_Controller,
+                     decoration: InputDecoration(
+                         hintText: "Branch Name",
+                         labelText: "Branch Name",
+                         //suffixIcon: Icon(Icons.email),
+                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                         focusedBorder: OutlineInputBorder(
+                             borderSide: BorderSide(color: Colors.blue)
+                         ),
+                         border: OutlineInputBorder(
+                             borderRadius: BorderRadius.circular(10)
+                         )
+                     ),
+
+                   ),
+                 ),
+                 SizedBox(height: 15,),
+
+                 Container(
+                   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                   //color: AllColors.Card1Color,
+                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   decoration: BoxDecoration(
+                     //color: AllColors.Card1Color, // Set the inside color here
+                     border: Border.all(
+                       color: AllColors.grayColor, // Set the border color here
+                       width: 1.0, // Adjust the border width if necessary
+                     ),
+                     borderRadius: BorderRadius.circular(10.0),
+                   ),
+                   child: InputDecorator(
+                     decoration: InputDecoration(
+                       labelText: 'General Information',
+                       labelStyle: GoogleFonts.poppins(
+                           color: AllColors.primaryDark1,
+                           fontWeight: FontWeight.w700,
+                           fontSize: AllFontSize.sisxteen),
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(
 
                          ),
+                         borderRadius: BorderRadius.circular(10.0),
                        ),
+                     ),
+                     child: Column(
+                       children: [
+                         bindAccountTypeDropDown(context),
 
-                       SizedBox(height: 15,),
+                         SizedBox(height: 15,),
+                         Form(
+                           key: _formKey,
+                           child: Container(
+                             decoration: BoxDecoration(
+                                 color: Colors.white,
+                                 borderRadius: BorderRadius.circular(10)
+                             ),
+                             child: TextFormField(
+                               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                               maxLength: 10,
+                               validator: (value){
+                                 if (value == null || value.isEmpty) {
+                                   return null; // No error when the field is empty
+                                 } else if (value.length != 10) {
+                                   return 'Phone No. should be exactly 10 digits';
+                                 }
+                                 return null;
+                               },
+                               onChanged: (value) {
+                                 // Trigger validation when the value changes
+                                 _formKey.currentState?.validate();
+                               },
+                               keyboardType: TextInputType.number,
+                               controller: accountMaster_page_controller.PhoneNo_Controller,
+                               decoration: InputDecoration(
+                                   hintText: "Phone No.",
+                                   labelText: "Phone No.",
+                                   //suffixIcon: Icon(Icons.email),
+                                   contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-                       Form(
-                         key: _formKeyEmail,
-                         child: Container(
+                                   focusedBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.blue)
+                                   ),
+                                   border: OutlineInputBorder(
+                                       borderRadius: BorderRadius.circular(10)
+                                   )
+                               ),
+
+                             ),
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
                            decoration: BoxDecoration(
                                color: Colors.white,
                                borderRadius: BorderRadius.circular(10)
                            ),
                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                            child: TextFormField(
-                             validator: (value) {
-                               // If the field is empty, no error is shown
-                               if (value == null || value.isEmpty) {
-                                 return null;
-                               }
-                               // If the email is invalid, show an error
-                               else if (!EmailValidator.validate(value)) {
-                                 return 'Please Enter A Valid Email Id';
-                               }
-                               return null;
-                             },
-                             onChanged: (value) {
-                               // Trigger validation when the value changes
-                               _formKeyEmail.currentState?.validate();
-                             },
                              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                             controller: accountMaster_page_controller.EmailId_Controller,
+                             keyboardType: TextInputType.number,
+                             controller: accountMaster_page_controller
+                                 .Alternate_PhoneNo_Controller,
                              decoration: InputDecoration(
-                                 hintText: "Email Id*",
-                                 labelText: "Email Id*",
+                                 hintText: "Alternate Phone No.",
+                                 labelText: "Alternate Phone No.",
                                  //suffixIcon: Icon(Icons.email),
-                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
 
                                  focusedBorder: OutlineInputBorder(
                                      borderSide: BorderSide(color: Colors.blue)
@@ -624,228 +584,358 @@ class UpdateAccountMaster extends StatelessWidget{
 
                            ),
                          ),
-                       ),
 
-                       SizedBox(height: 15,),
+                         SizedBox(height: 15,),
 
-                       bindAccCatogeryTypeDropDown(context),
+                         Form(
+                           key: _formKeyEmail,
+                           child: Container(
+                             decoration: BoxDecoration(
+                                 color: Colors.white,
+                                 borderRadius: BorderRadius.circular(10)
+                             ),
+                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                             child: TextFormField(
+                               validator: (value) {
+                                 // If the field is empty, no error is shown
+                                 if (value == null || value.isEmpty) {
+                                   return null;
+                                 }
+                                 // If the email is invalid, show an error
+                                 else if (!EmailValidator.validate(value)) {
+                                   return 'Please Enter A Valid Email Id';
+                                 }
+                                 return null;
+                               },
+                               onChanged: (value) {
+                                 // Trigger validation when the value changes
+                                 _formKeyEmail.currentState?.validate();
+                               },
+                               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                               controller: accountMaster_page_controller.EmailId_Controller,
+                               decoration: InputDecoration(
+                                   hintText: "Email Id*",
+                                   labelText: "Email Id*",
+                                   //suffixIcon: Icon(Icons.email),
+                                   contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-                       SizedBox(height: 15,),
-
-                       bindComProfTypeDropDown(context),
-
-
-                       Obx((){
-                         return  Visibility(
-                           visible: accountMaster_page_controller.compProfileRemrk.isFalse ? true : false,
-                           child: Column(
-                             children: [
-                               SizedBox(height: 15,),
-                               Container(
-                                   height: 50,
-                                   width: size.width*7,
-                                   child:Row(
-                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                     children: [
-                                       Container(
-                                         margin: EdgeInsets.only(right: 10),
-                                         decoration: BoxDecoration(
-                                           //color: AllColors.whiteColor,
-                                             borderRadius: BorderRadius.circular(10)
-                                         ),
-                                         //height: size.height*10,
-                                         width: size.width*.65,
-                                         child:bindComProfSubTypeDropDown(context) ,
-                                       ),
-                                       Visibility(
-                                         visible: accountMaster_page_controller.view=="Account"?true:false,
-                                         /* visible: accountMaster_page_controller.view=='FromTaskMainScreen'
-                                           || accountMaster_page_controller.view=='VIEW' ||
-                                           accountMaster_page_controller.view=='Task'
-                                           ||accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                            || accountMaster_page_controller.view=="FromQuoteApproval"?false:true,*/
-                                         child: Container(
-                                           decoration: BoxDecoration(
-                                             color: AllColors.whiteColor,
-                                             borderRadius: BorderRadius.circular(10),
-                                             border: Border.all(
-                                               color: AllColors.lightblackColor, // Set the border color to black
-                                               width: 1.0, // You can adjust the width of the border as needed
-                                             ),
-                                           ),
-                                           child: IconButton(
-                                               onPressed: (){
-                                                 AddCompSubProTypeDailog(context);
-                                               }, icon: Icon(Icons.add)),
-                                         ),
-                                       )
-                                       /*Container(
-                                       height: 25,
-                                       width: 25,
-                                       decoration: BoxDecoration(
-                                         color: AllColors.whiteColor,
-                                           borderRadius: BorderRadius.circular(10)
-                                       ),
-                                        child: Icon(Icons.add,color: AllColors.primaryDark1,))*/
-                                     ],
-                                   )
-
-
-
-
-                                 //bindComProfSubTypeDropDown(context)
-
-
-
-
-
-
-
-                               ),
-                             ],
-                           ),
-                         );
-                       }),
-
-                       /*Visibility(
-                         visible: accountMaster_page_controller.Account_Master_list[0].isManager == 1 ? true:false,
-                         child: Column(
-                           children: [
-                             SizedBox(height: 15,),
-                             bindIsActiveDropDown(context)
-
-                           ],
-                         ),
-                         // child: bindIsActiveDropDown(context)
-                       ),*/
-
-                       SizedBox(height: 15,),
-
-                       Obx((){
-                         return Visibility(
-                           visible:  accountMaster_page_controller.compProfileRemrk.value,
-                           child: Column(
-                             children: [
-                               Container(
-                                 decoration: BoxDecoration(
-                                     color: Colors.white,
-                                     borderRadius: BorderRadius.circular(10)
-                                 ),
-                                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                 child: TextFormField(
-                                   readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                                   controller: accountMaster_page_controller.comp_prof_remarks_controller,
-                                   decoration: InputDecoration(
-                                       hintText: "Company Profile Remarks",
-                                       labelText: "Company Profile Remarks",
-                                       //suffixIcon: Icon(Icons.email),
-                                       contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                                       focusedBorder: OutlineInputBorder(
-                                           borderSide: BorderSide(color: Colors.blue)
-                                       ),
-                                       border: OutlineInputBorder(
-                                           borderRadius: BorderRadius.circular(10)
-                                       )
+                                   focusedBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.blue)
                                    ),
-
-                                 ),
+                                   border: OutlineInputBorder(
+                                       borderRadius: BorderRadius.circular(10)
+                                   )
                                ),
-                               SizedBox(height: 15,),
 
-                             ],
+                             ),
                            ),
-                         );
-                       }),
+                         ),
 
-                       bindGstRegistrationTypeDropDown(context),
+                         SizedBox(height: 15,),
 
-                       SizedBox(height: 15,),
+                         bindAccCatogeryTypeDropDown(context),
 
-                       Obx(() {
-                         return
-                           Visibility(
-                             visible: accountMaster_page_controller.GstRegistration.value,
+                         SizedBox(height: 15,),
+
+                         bindComProfTypeDropDown(context),
+                         SizedBox(height: 15,),
+
+                         Obx((){
+                           return Visibility(
+                             visible: accountMaster_page_controller.compProfileRemrk.isFalse ? true : false,
+                             child:bindComProfSubTypeDropDown(context), );
+                         }),
+
+                        /* Obx((){
+                           return  Visibility(
+                             visible: accountMaster_page_controller.compProfileRemrk.isFalse ? true : false,
                              child: Column(
                                children: [
-                                 Form(
-                                   key: _formKeyGst,
-                                   child: Container(
-                                     decoration: BoxDecoration(
-                                         color: Colors.white,
-                                         borderRadius: BorderRadius.circular(10)
-                                     ),
-                                     //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                     child: TextFormField(
-                                       maxLength: 15,
-                                       readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                                       validator: (value){
-                                         if(value == null || value.isEmpty){
-                                           return null;
-                                         }else if (!GSTValidator.validate(value)) {
-                                           return 'Invalid GST No.';
-                                         }
-                                         else if(value.length != 15){
-                                           return 'GST No. Should be exactly 15 digit';
-                                         }else {
-                                           return null;
-                                         }
-                                       },
-                                       onChanged: (value) {
-                                         // Clear the error when the user enters a value
-                                           _formKeyGst.currentState?.validate();
-
-                                         if(value.length >= 2){
-                                           accountMaster_page_controller.GstStateCode.value = value.substring(0, 2);
-                                           print('First two digits: ${accountMaster_page_controller.GstStateCode}');
-
-                                           /*for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
-                                             if(accountMaster_page_controller.GstStateCode == accountMaster_page_controller.StateMaster_list[i].governmentStateCode){
-                                               accountMaster_page_controller.GstStateList.clear();
-                                               accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
-                                               print('GstStae....${accountMaster_page_controller.GstStateList[0].stateName}');
-                                             }
-                                           }*/
-                                         }
-                                         if (value.length >= 12) {
-                                           accountMaster_page_controller.GstPanNo.value = value.substring(2, 12);
-                                           print('Next ten digits: ${accountMaster_page_controller.GstPanNo}');
-                                           // You can save nextTenDigits to a variable or perform other operations
-                                         }
-                                       },
-                                       controller: accountMaster_page_controller
-                                           .GstNo_Controller,
-                                       decoration: InputDecoration(
-                                           hintText: "GST No.",
-                                           labelText: "GST No.",
-                                           //suffixIcon: Icon(Icons.email),
-                                           contentPadding: EdgeInsets.symmetric(
-                                               vertical: AllFontSize.ten,
-                                               horizontal: AllFontSize.ten),
-
-                                           focusedBorder: OutlineInputBorder(
-                                               borderSide: BorderSide(
-                                                   color: Colors.blue)
-                                           ),
-                                           border: OutlineInputBorder(
-                                               borderRadius: BorderRadius.circular(10)
-                                           )
-                                       ),
-
-                                     ),
-                                   ),
-                                 ),
                                  SizedBox(height: 15,),
+                                 Container(
+                                     height: 50,
+                                     width: size.width*7,
+                                     child:Row(
+                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                       children: [
+                                         Container(
+                                           //margin: EdgeInsets.only(right: 10),
+                                           decoration: BoxDecoration(
+                                             //color: AllColors.whiteColor,
+                                               borderRadius: BorderRadius.circular(10)
+                                           ),
+                                           //height: size.height*10,
+                                           width: accountMaster_page_controller.view=="Account"?size.width*.65:size.width*.85,
+                                           child:bindComProfSubTypeDropDown(context) ,
+                                         ),
+                                         Visibility(
+                                           visible: accountMaster_page_controller.view=="Account"?true:false,
+                                           *//* visible: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                             || accountMaster_page_controller.view=='VIEW' ||
+                                             accountMaster_page_controller.view=='Task'
+                                             ||accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                                              || accountMaster_page_controller.view=="FromQuoteApproval"?false:true,*//*
+                                           child: Container(
+                                             decoration: BoxDecoration(
+                                               color: AllColors.whiteColor,
+                                               borderRadius: BorderRadius.circular(10),
+                                               border: Border.all(
+                                                 color: AllColors.lightblackColor, // Set the border color to black
+                                                 width: 1.0, // You can adjust the width of the border as needed
+                                               ),
+                                             ),
+                                             child: IconButton(
+                                                 onPressed: (){
+                                                   AddCompSubProTypeDailog(context);
+                                                 }, icon: Icon(Icons.add)),
+                                           ),
+                                         )
+                                         *//*Container(
+                                         height: 25,
+                                         width: 25,
+                                         decoration: BoxDecoration(
+                                           color: AllColors.whiteColor,
+                                             borderRadius: BorderRadius.circular(10)
+                                         ),
+                                          child: Icon(Icons.add,color: AllColors.primaryDark1,))*//*
+                                       ],
+                                     )
+
+
+
+
+                                   //bindComProfSubTypeDropDown(context)
+
+
+
+
+
+
+
+                                 ),
                                ],
                              ),
                            );
-                       } ),
+                         }),*/
+
+                         /*Visibility(
+                           visible: accountMaster_page_controller.Account_Master_list[0].isManager == 1 ? true:false,
+                           child: Column(
+                             children: [
+                               SizedBox(height: 15,),
+                               bindIsActiveDropDown(context)
+
+                             ],
+                           ),
+                           // child: bindIsActiveDropDown(context)
+                         ),*/
+
+                         SizedBox(height: 15,),
+
+                         Obx((){
+                           return Visibility(
+                             visible:  accountMaster_page_controller.compProfileRemrk.value,
+                             child: Column(
+                               children: [
+                                 Container(
+                                   decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(10)
+                                   ),
+                                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                   child: TextFormField(
+                                     readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                                     controller: accountMaster_page_controller.comp_prof_remarks_controller,
+                                     decoration: InputDecoration(
+                                         hintText: "Company Profile Remarks",
+                                         labelText: "Company Profile Remarks",
+                                         //suffixIcon: Icon(Icons.email),
+                                         contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                         focusedBorder: OutlineInputBorder(
+                                             borderSide: BorderSide(color: Colors.blue)
+                                         ),
+                                         border: OutlineInputBorder(
+                                             borderRadius: BorderRadius.circular(10)
+                                         )
+                                     ),
+
+                                   ),
+                                 ),
+                                 SizedBox(height: 15,),
+
+                               ],
+                             ),
+                           );
+                         }),
+
+                         bindGstRegistrationTypeDropDown(context),
+
+                         SizedBox(height: 15,),
+
+                         Obx(() {
+                           return
+                             Visibility(
+                               visible: accountMaster_page_controller.GstRegistration.value,
+                               child: Column(
+                                 children: [
+                                   Form(
+                                     key: _formKeyGst,
+                                     child: Container(
+                                       decoration: BoxDecoration(
+                                           color: Colors.white,
+                                           borderRadius: BorderRadius.circular(10)
+                                       ),
+                                       //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                       child: TextFormField(
+                                         maxLength: 15,
+                                         readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                                         validator: (value){
+                                           if(value == null || value.isEmpty){
+                                             return null;
+                                           }else if (!GSTValidator.validate(value)) {
+                                             return 'Invalid GST No.';
+                                           }
+                                           else if(value.length != 15){
+                                             return 'GST No. Should be exactly 15 digit';
+                                           }else {
+                                             return null;
+                                           }
+                                         },
+                                         onChanged: (value) {
+                                           // Clear the error when the user enters a value
+                                             _formKeyGst.currentState?.validate();
+
+                                           if(value.length >= 2){
+                                             accountMaster_page_controller.GstStateCode.value = value.substring(0, 2);
+                                             print('First two digits: ${accountMaster_page_controller.GstStateCode}');
+
+                                             /*for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
+                                               if(accountMaster_page_controller.GstStateCode == accountMaster_page_controller.StateMaster_list[i].governmentStateCode){
+                                                 accountMaster_page_controller.GstStateList.clear();
+                                                 accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
+                                                 print('GstStae....${accountMaster_page_controller.GstStateList[0].stateName}');
+                                               }
+                                             }*/
+                                           }
+                                           if (value.length >= 12) {
+                                             accountMaster_page_controller.GstPanNo.value = value.substring(2, 12);
+                                             print('Next ten digits: ${accountMaster_page_controller.GstPanNo}');
+                                             // You can save nextTenDigits to a variable or perform other operations
+                                           }
+                                         },
+                                         controller: accountMaster_page_controller
+                                             .GstNo_Controller,
+                                         decoration: InputDecoration(
+                                             hintText: "GST No.",
+                                             labelText: "GST No.",
+                                             //suffixIcon: Icon(Icons.email),
+                                             contentPadding: EdgeInsets.symmetric(
+                                                 vertical: AllFontSize.ten,
+                                                 horizontal: AllFontSize.ten),
+
+                                             focusedBorder: OutlineInputBorder(
+                                                 borderSide: BorderSide(
+                                                     color: Colors.blue)
+                                             ),
+                                             border: OutlineInputBorder(
+                                                 borderRadius: BorderRadius.circular(10)
+                                             )
+                                         ),
+
+                                       ),
+                                     ),
+                                   ),
+                                   SizedBox(height: 15,),
+                                 ],
+                               ),
+                             );
+                         } ),
 
 
 
-                       Form(
-                         key: _formKeyPanNo,
-                         child: Container(
+                         Form(
+                           key: _formKeyPanNo,
+                           child: Container(
+                             decoration: BoxDecoration(
+                                 color: Colors.white,
+                                 borderRadius: BorderRadius.circular(10)
+                             ),
+                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                             child: TextFormField(
+                               readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                               validator: (value){
+                                 if(value == null || value.isEmpty){
+                                   return null;
+                                 }
+                                 else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && value != accountMaster_page_controller.GstPanNo.value){
+                                   return 'Please Enter Valid Pan No.';
+                                 }else {
+                                   return null;
+                                 }
+                               },
+
+                               onChanged: (value) {
+                                 // Clear the error when the user enters a value
+                                 if (value.isNotEmpty) {
+                                   _formKeyPanNo.currentState?.validate();
+                                 }
+                               },
+                               controller: accountMaster_page_controller.PanNo_Controller,
+                               decoration: InputDecoration(
+                                   hintText: "Customer PAN No.",
+                                   labelText: "Customer PAN No.",
+                                   //suffixIcon: Icon(Icons.email),
+                                   contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                   focusedBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.blue)
+                                   ),
+                                   border: OutlineInputBorder(
+                                       borderRadius: BorderRadius.circular(10)
+                                   )
+                               ),
+
+                             ),
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             maxLength: 11,
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             controller: accountMaster_page_controller
+                                 .IfscCode_Controller,
+                             decoration: InputDecoration(
+                                 hintText: "Customer IFSC Code",
+                                 labelText: "Customer IFSC Code",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+
+                         Container(
                            decoration: BoxDecoration(
                                color: Colors.white,
                                borderRadius: BorderRadius.circular(10)
@@ -853,27 +943,15 @@ class UpdateAccountMaster extends StatelessWidget{
                            //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                            child: TextFormField(
                              readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                             validator: (value){
-                               if(value == null || value.isEmpty){
-                                 return null;
-                               }
-                               else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && value != accountMaster_page_controller.GstPanNo.value){
-                                 return 'Please Enter Valid Pan No.';
-                               }else {
-                                 return null;
-                               }
-                             },
-
-                             onChanged: (value) {
-                               // Clear the error when the user enters a value
-                               if (value.isNotEmpty) {
-                                 _formKeyPanNo.currentState?.validate();
-                               }
-                             },
-                             controller: accountMaster_page_controller.PanNo_Controller,
+                            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'
+                                 ||accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                             || accountMaster_page_controller.view=="FromQuoteApproval",*/
+                             controller: accountMaster_page_controller.Website_Controller,
                              decoration: InputDecoration(
-                                 hintText: "PAN No.",
-                                 labelText: "PAN No.",
+                                 hintText: "Website",
+                                 labelText: "Website",
                                  //suffixIcon: Icon(Icons.email),
                                  contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -887,319 +965,589 @@ class UpdateAccountMaster extends StatelessWidget{
 
                            ),
                          ),
-                       ),
 
-                       SizedBox(height: 15,),
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           maxLength: 11,
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller
-                               .IfscCode_Controller,
-                           decoration: InputDecoration(
-                               hintText: "IFSC Code",
-                               labelText: "IFSC Code",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-                       SizedBox(height: 15,),
+                         SizedBox(height: 15,),
 
 
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                          /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'
-                               ||accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                           || accountMaster_page_controller.view=="FromQuoteApproval",*/
-                           controller: accountMaster_page_controller.Website_Controller,
-                           decoration: InputDecoration(
-                               hintText: "Website",
-                               labelText: "Website",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+                         bindIsReferralDropDown(context),
 
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-                       SizedBox(height: 15,),
-
-
-                       bindIsReferralDropDown(context),
-
-                       Obx(() {
-                         return Visibility(
-                           visible: accountMaster_page_controller
-                               .isReferral.value,
-                           child: Column(
-                             children: [
-                               SizedBox(height: 15,),
-                               Container(
-                                 decoration: BoxDecoration(
-                                     color: Colors.white,
-                                     borderRadius: BorderRadius.circular(10)
-                                 ),
-                                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                 child: TextFormField(
-                                   readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                                   controller: accountMaster_page_controller
-                                       .ReferralByName_Controller,
-                                   decoration: InputDecoration(
-                                       hintText: "Referral By",
-                                       labelText: "Referral By",
-                                       //suffixIcon: Icon(Icons.email),
-                                       contentPadding: EdgeInsets.symmetric(
-                                           vertical: AllFontSize.ten,
-                                           horizontal: AllFontSize.ten),
-
-                                       focusedBorder: OutlineInputBorder(
-                                           borderSide: BorderSide(
-                                               color: Colors.blue)
-                                       ),
-                                       border: OutlineInputBorder(
-                                           borderRadius: BorderRadius
-                                               .circular(10)
-                                       )
+                         Obx(() {
+                           return Visibility(
+                             visible: accountMaster_page_controller
+                                 .isReferral.value,
+                             child: Column(
+                               children: [
+                                 SizedBox(height: 15,),
+                                 Container(
+                                   decoration: BoxDecoration(
+                                       color: Colors.white,
+                                       borderRadius: BorderRadius.circular(10)
                                    ),
+                                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                   child: TextFormField(
+                                     readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                                     controller: accountMaster_page_controller
+                                         .ReferralByName_Controller,
+                                     decoration: InputDecoration(
+                                         hintText: "Referral By",
+                                         labelText: "Referral By",
+                                         //suffixIcon: Icon(Icons.email),
+                                         contentPadding: EdgeInsets.symmetric(
+                                             vertical: AllFontSize.ten,
+                                             horizontal: AllFontSize.ten),
 
+                                         focusedBorder: OutlineInputBorder(
+                                             borderSide: BorderSide(
+                                                 color: Colors.blue)
+                                         ),
+                                         border: OutlineInputBorder(
+                                             borderRadius: BorderRadius
+                                                 .circular(10)
+                                         )
+                                     ),
+
+                                   ),
                                  ),
-                               ),
 
 
-                             ],
-                           ),
-                         );
-                       }),
+                               ],
+                             ),
+                           );
+                         }),
 
-                     ],
-                   ),
-                 ),
-               ),
-
-               SizedBox(height: 15,),
-
-               Container(
-                 margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                 //color: AllColors.Card1Color,
-                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 decoration: BoxDecoration(
-                   //color: AllColors.Card2Color, // Set the inside color here
-                   border: Border.all(
-                     color: AllColors.grayColor, // Set the border color here
-                     width: 1.0, // Adjust the border width if necessary
-                   ),
-                   borderRadius: BorderRadius.circular(10.0),
-                 ),
-                 child: InputDecorator(
-                   decoration: InputDecoration(
-                     labelText: 'Billing Address',
-                     labelStyle: GoogleFonts.poppins(
-                         color: AllColors.primaryDark1,
-                         fontWeight: FontWeight.w700,
-                         fontSize: AllFontSize.sisxteen),
-                     border: OutlineInputBorder(
-                       borderSide: BorderSide(
-
-                       ),
-                       borderRadius: BorderRadius.circular(10.0),
+                       ],
                      ),
                    ),
-                   child: Column(
-                     children: [
+                 ),
 
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
+                 SizedBox(height: 15,),
+
+                 Container(
+                   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                   //color: AllColors.Card1Color,
+                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   decoration: BoxDecoration(
+                     //color: AllColors.Card2Color, // Set the inside color here
+                     border: Border.all(
+                       color: AllColors.grayColor, // Set the border color here
+                       width: 1.0, // Adjust the border width if necessary
+                     ),
+                     borderRadius: BorderRadius.circular(10.0),
+                   ),
+                   child: InputDecorator(
+                     decoration: InputDecoration(
+                       labelText: 'Billing Address',
+                       labelStyle: GoogleFonts.poppins(
+                           color: AllColors.primaryDark1,
+                           fontWeight: FontWeight.w700,
+                           fontSize: AllFontSize.sisxteen),
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(
+
                          ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                          /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'||
-                               accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller.Address_controller,
-                           //maxLength: 150,
-                           onChanged: (value){
-                             final parts = [
-                               value,
-                               accountMaster_page_controller.Address2_Controller.text,
-                               accountMaster_page_controller.City_Controller.text,
-                               accountMaster_page_controller.District_Controller.text,
-                               accountMaster_page_controller.State_Controller.text,
-                               accountMaster_page_controller.PostCode_Controller.text,
-                             ];
+                         borderRadius: BorderRadius.circular(10.0),
+                       ),
+                     ),
+                     child: Column(
+                       children: [
 
-                             // Filter out empty strings and join with commas
-                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                             accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-                           },
-                           decoration: InputDecoration(
-                               hintText: "Address",
-                               labelText: "Address",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
                            ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'||
+                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'||
+                                 accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             controller: accountMaster_page_controller.Address_controller,
+                             //maxLength: 150,
+                             onChanged: (value){
+                               final parts = [
+                                 value,
+                                 accountMaster_page_controller.Address2_Controller.text,
+                                 accountMaster_page_controller.City_Controller.text,
+                                 accountMaster_page_controller.District_Controller.text,
+                                 accountMaster_page_controller.State_Controller.text,
+                                 accountMaster_page_controller.PostCode_Controller.text,
+                               ];
 
-                         ),
-                       ),
+                               // Filter out empty strings and join with commas
+                               final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
 
-                       SizedBox(height: 15,),
+                               accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+                             },
+                             decoration: InputDecoration(
+                                 hintText: "Address",
+                                 labelText: "Address",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                         /*  readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller.Address2_Controller,
-                          // maxLength: 150,
-                           onChanged: (value){
-                             final parts = [
-                               accountMaster_page_controller.Address_controller.text,
-                               value,
-                               accountMaster_page_controller.City_Controller.text,
-                               accountMaster_page_controller.District_Controller.text,
-                               accountMaster_page_controller.State_Controller.text,
-                               accountMaster_page_controller.PostCode_Controller.text,
-                             ];
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
 
-                             // Filter out empty strings and join with commas
-                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                             accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-                           },
-                           decoration: InputDecoration(
-                               hintText: "Address2",
-                               labelText: "Address2",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
                            ),
-
                          ),
-                       ),
 
-                       SizedBox(height: 15,),
+                         SizedBox(height: 15,),
 
-                       /*Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           *//*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           keyboardType: TextInputType.number,
-                           controller: accountMaster_page_controller.PostCode_Controller,
-                           decoration: InputDecoration(
-                               hintText: "Post Code",
-                               labelText: "Post Code",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
                            ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                           /*  readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'||
+                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             controller: accountMaster_page_controller.Address2_Controller,
+                            // maxLength: 150,
+                             onChanged: (value){
+                               final parts = [
+                                 accountMaster_page_controller.Address_controller.text,
+                                 value,
+                                 accountMaster_page_controller.City_Controller.text,
+                                 accountMaster_page_controller.District_Controller.text,
+                                 accountMaster_page_controller.State_Controller.text,
+                                 accountMaster_page_controller.PostCode_Controller.text,
+                               ];
+
+                               // Filter out empty strings and join with commas
+                               final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                               accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+                             },
+                             decoration: InputDecoration(
+                                 hintText: "Address2",
+                                 labelText: "Address2",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         /*Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             *//*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'||
+                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             keyboardType: TextInputType.number,
+                             controller: accountMaster_page_controller.PostCode_Controller,
+                             decoration: InputDecoration(
+                                 hintText: "Post Code",
+                                 labelText: "Post Code",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),*/
+
+                         Container(
+
+                             child: bindPostalCodeDropDown(context)
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: bindStateDropDown(context),
+                         ),
+
+
+                         SizedBox(height: 15,),
+
+                         Container(
+
+                             child: bindCityDropDown(context)
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
+                             child: bindDistrictDropDown(context)
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Obx(() {
+                           return Container(
+                             decoration: BoxDecoration(
+                                 color: Colors.white,
+                                 borderRadius: BorderRadius.circular(10)
+                             ),
+                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                             child: TextFormField(
+                               //maxLength: 500,
+                               readOnly: true,
+                               maxLines: 3,
+                               controller: accountMaster_page_controller
+                                   .FullAddress_Controller.value,
+                               decoration: InputDecoration(
+                                   hintText: "Full Address",
+                                   labelText: "Full Address",
+                                   //suffixIcon: Icon(Icons.email),
+                                   contentPadding: EdgeInsets.symmetric(
+                                       vertical: AllFontSize.ten,
+                                       horizontal: AllFontSize.ten),
+
+                                   focusedBorder: OutlineInputBorder(
+                                       borderSide: BorderSide(color: Colors.blue)
+                                   ),
+                                   border: OutlineInputBorder(
+                                       borderRadius: BorderRadius.circular(10)
+                                   )
+                               ),
+
+                             ),
+                           );
+                         },)
+
+                       ],
+                     ),
+                   ),
+                 ),
+
+                 SizedBox(height: 15,),
+
+                 Obx(() => Visibility(
+                   visible: accountMaster_page_controller.view=='Account'?true:false,
+                   child: CheckboxListTile(
+                     controlAffinity: ListTileControlAffinity.leading,
+                     enabled: accountMaster_page_controller.view=='Account'?true:false,
+                     title: Text("Shipping address same as billing address",
+                         style: GoogleFonts.poppins(
+                           color: AllColors.primaryDark1,
+                           fontWeight: FontWeight.w400,
+                           fontSize: AllFontSize.twelve,
+                         )
+                     ),
+                     value: accountMaster_page_controller.isChecked.value,
+                     onChanged: (bool? value) {
+                       accountMaster_page_controller.toggleCheckbox();
+                       if(value == true){
+                         accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
+                         accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
+                         accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
+                         accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
+                         accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
+                         accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
+                         accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
+                         accountMaster_page_controller.ShowState.value=false;
+                         accountMaster_page_controller.ShowState.value=true;
+                       }else{
+                         accountMaster_page_controller.Shipping_Address_controller.value.clear();
+                         accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
+                         accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
+                         accountMaster_page_controller.Shipping_City_Controller.value.clear();
+                         accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                         accountMaster_page_controller.Shipping_District_Controller.value.clear();
+                         accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                         accountMaster_page_controller.ShowState.value=false;
+                         accountMaster_page_controller.ShowState.value=true;
+                       }
+                     },
+                   ),
+                 )),
+
+                 Container(
+                   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                   //color: AllColors.Card1Color,
+                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   decoration: BoxDecoration(
+                     //color: AllColors.Card2Color, // Set the inside color here
+                     border: Border.all(
+                       color: AllColors.grayColor, // Set the border color here
+                       width: 1.0, // Adjust the border width if necessary
+                     ),
+                     borderRadius: BorderRadius.circular(10.0),
+                   ),
+                   child: InputDecorator(
+                     decoration: InputDecoration(
+                       labelText: 'Shipping Address',
+                       labelStyle: GoogleFonts.poppins(
+                           color: AllColors.primaryDark1,
+                           fontWeight: FontWeight.w700,
+                           fontSize: AllFontSize.sisxteen),
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(
 
                          ),
-                       ),*/
-
-                       Container(
-
-                           child: bindPostalCodeDropDown(context)
+                         borderRadius: BorderRadius.circular(10.0),
                        ),
+                     ),
+                     child: Column(
+                       children: [
 
-                       SizedBox(height: 15,),
+                         Row(
+                           mainAxisAlignment: MainAxisAlignment.end,
+                           children: [
+                             Visibility(
+                               child: InkWell(
+                                 child: Icon(Icons.add),
+                                 onTap: (){
+                                   accountMaster_page_controller.pageNumber = 0;
+                                   accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text, accountMaster_page_controller.account_name_controller.text, "");
+                                   accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
 
-                       Container(
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: bindStateDropDown(context),
-                       ),
+
+                                 },
+                               ),
+                               visible:accountMaster_page_controller.view=='Account'?true:false ,
+                             ),
+                             SizedBox(width: 15,),
+                             Visibility(
+                               visible:accountMaster_page_controller.view=='Account'?true:false ,
+                               child: InkWell(
+                                 onTap: (){
+                                   /*accountMaster_page_controller.selectedItem.value = -1;
+                                   accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress??"";
+                                   accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress2??"";
+                                   accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingPostCode??"";
+                                   accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingCity??"" ;
+                                   accountMaster_page_controller.Shipping_State_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingStateName??"";
+                                   accountMaster_page_controller.ShowState.value=false;
+                                   accountMaster_page_controller.ShowState.value=true;
+                                   accountMaster_page_controller.Shipping_District_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingDistrict??"";
+                                   accountMaster_page_controller.consigneeId = '';*/
+                                   accountMaster_page_controller.selectedItem.value = -1;
+                                   accountMaster_page_controller.Shipping_Address_controller.value.text="";
+                                   accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
+                                   accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
+                                   accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
+                                   accountMaster_page_controller.Shipping_State_Controller.value.clear();
+                                   accountMaster_page_controller.ShowState.value=false;
+                                   accountMaster_page_controller.ShowState.value=true;
+                                   accountMaster_page_controller.Shipping_District_Controller.value.text="";
+                                   accountMaster_page_controller.consigneeId = '';
+                                   accountMaster_page_controller.isChecked.value=false;
+                                   accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
+                                 },
+                                 child: Icon(Icons.update),
+                               ),
+                             )
+                           ],
+                         ),
+                         SizedBox(height: 15,),
+
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             //maxLength: 150,
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             controller: accountMaster_page_controller
+                                 .Shipping_Address_controller.value,
+                             onChanged: (value){
+                               final parts = [
+                                 value,
+                                 accountMaster_page_controller.Shipping_Address2_Controller.value.text,
+                                 accountMaster_page_controller.Shipping_City_Controller.value.text,
+                                 accountMaster_page_controller.Shipping_District_Controller.value.text,
+                                 accountMaster_page_controller.Shipping_State_Controller.value.text,
+                                 accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                               ];
+
+                               // Filter out empty strings and join with commas
+                               final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                               accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                             },
+                             maxLength: 500,
+                             decoration: InputDecoration(
+                                 hintText: "Address",
+                                 labelText: "Address",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             //maxLength: 150,
+                             controller: accountMaster_page_controller
+                                 .Shipping_Address2_Controller.value,
+                             onChanged: (value){
+                               final parts = [
+                                 accountMaster_page_controller.Shipping_Address_controller.value.text,
+                                 value,
+                                 accountMaster_page_controller.Shipping_City_Controller.value.text,
+                                 accountMaster_page_controller.Shipping_District_Controller.value.text,
+                                 accountMaster_page_controller.Shipping_State_Controller.value.text,
+                                 accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
+                               ];
+
+                               // Filter out empty strings and join with commas
+                               final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+
+                               accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
+                             },
+                             maxLength: 500,
+                             decoration: InputDecoration(
+                                 hintText: "Address2",
+                                 labelText: "Address2",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         /*Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             keyboardType: TextInputType.number,
+                             controller: accountMaster_page_controller
+                                 .Shipping_PostCode_Controller.value,
+                             decoration: InputDecoration(
+                                 hintText: "Post Code",
+                                 labelText: "Post Code",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),*/
+
+                         Obx((){
+                           return Visibility(
+                             visible:accountMaster_page_controller.ShowState.value,
+                             child: Container(
+                                 child: bindShippingPostalCodeDropDown(context)
+                             ),
+                           );
+                         }),
 
 
-                       SizedBox(height: 15,),
+                         SizedBox(height: 15,),
 
-                       Container(
+                         Obx(() {
+                           return Visibility(
+                             visible:accountMaster_page_controller.ShowState.value,
+                             child: Container(
+                               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                               child: bindShippingStateDropDown(context),
+                             ),
+                           );
+                         }
 
-                           child: bindCityDropDown(context)
-                       ),
+                         ),
 
-                       SizedBox(height: 15,),
+                         SizedBox(height: 15,),
 
-                       Container(
-                           child: bindDistrictDropDown(context)
-                       ),
+                         Obx(() {
+                           return Visibility(
+                             visible:accountMaster_page_controller.ShowState.value,
+                             child: Container(
+                                 child: bindShippingCityDropDown(context)
+                             ),
+                           );
+                         }
 
-                       SizedBox(height: 15,),
+                         ),
 
-                       Obx(() {
-                         return Container(
+                         SizedBox(height: 15,),
+
+                         Obx(() {
+                           return Visibility(
+                             visible:accountMaster_page_controller.ShowState.value,
+                             child: Container(
+                                 child: bindShippingDistrictDropDown(context)
+                             ),
+                           );
+                         }
+
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
                            decoration: BoxDecoration(
                                color: Colors.white,
                                borderRadius: BorderRadius.circular(10)
@@ -1210,7 +1558,7 @@ class UpdateAccountMaster extends StatelessWidget{
                              readOnly: true,
                              maxLines: 3,
                              controller: accountMaster_page_controller
-                                 .FullAddress_Controller.value,
+                                 .Shipping_FullAddress_Controller.value,
                              decoration: InputDecoration(
                                  hintText: "Full Address",
                                  labelText: "Full Address",
@@ -1228,704 +1576,371 @@ class UpdateAccountMaster extends StatelessWidget{
                              ),
 
                            ),
-                         );
-                       },)
+                         ),
 
-                     ],
-                   ),
-                 ),
-               ),
 
-               SizedBox(height: 15,),
-
-               Obx(() => CheckboxListTile(
-                 controlAffinity: ListTileControlAffinity.leading,
-                 enabled: accountMaster_page_controller.view=='Account'?true:false,
-                 title: Text("Shipping address same as billing address",
-                     style: GoogleFonts.poppins(
-                       color: AllColors.primaryDark1,
-                       fontWeight: FontWeight.w400,
-                       fontSize: AllFontSize.twelve,
-                     )
-                 ),
-                 value: accountMaster_page_controller.isChecked.value,
-                 onChanged: (bool? value) {
-                   accountMaster_page_controller.toggleCheckbox();
-                   if(value == true){
-                     accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.Address_controller.value.text;
-                     accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.Address2_Controller.value.text;
-                     accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.PostCode_Controller.value.text;
-                     accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.City_Controller.value.text ;
-                     accountMaster_page_controller.Shipping_State_Controller.value.text = accountMaster_page_controller.State_Controller.value.text;
-                     accountMaster_page_controller.Shipping_District_Controller.value.text = accountMaster_page_controller.District_Controller.value.text;
-                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = accountMaster_page_controller.FullAddress_Controller.value.text;
-                     accountMaster_page_controller.ShowState.value=false;
-                     accountMaster_page_controller.ShowState.value=true;
-                   }else{
-                     accountMaster_page_controller.Shipping_Address_controller.value.clear();
-                     accountMaster_page_controller.Shipping_Address2_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_PostCode_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_City_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_District_Controller.value.clear();
-                     accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
-                     accountMaster_page_controller.ShowState.value=false;
-                     accountMaster_page_controller.ShowState.value=true;
-                   }
-                 },
-               )),
-
-               Container(
-                 margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                 //color: AllColors.Card1Color,
-                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 decoration: BoxDecoration(
-                   //color: AllColors.Card2Color, // Set the inside color here
-                   border: Border.all(
-                     color: AllColors.grayColor, // Set the border color here
-                     width: 1.0, // Adjust the border width if necessary
-                   ),
-                   borderRadius: BorderRadius.circular(10.0),
-                 ),
-                 child: InputDecorator(
-                   decoration: InputDecoration(
-                     labelText: 'Shipping Address',
-                     labelStyle: GoogleFonts.poppins(
-                         color: AllColors.primaryDark1,
-                         fontWeight: FontWeight.w700,
-                         fontSize: AllFontSize.sisxteen),
-                     border: OutlineInputBorder(
-                       borderSide: BorderSide(
-
-                       ),
-                       borderRadius: BorderRadius.circular(10.0),
+                       ],
                      ),
                    ),
-                   child: Column(
-                     children: [
+                 ),
 
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         children: [
-                           Visibility(
-                             child: InkWell(
-                               child: Icon(Icons.add),
-                               onTap: (){
-                                 accountMaster_page_controller.pageNumber = 0;
-                                 accountMaster_page_controller.getAddressMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.account_code_controller.text);
-                                 accountMaster_page_controller.showConsigneeAddressList(context, accountMaster_page_controller.address_master_list);
+                 SizedBox(height: 15,),
 
+                 Container(
+                   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                   //color: AllColors.Card1Color,
+                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   decoration: BoxDecoration(
+                     //color: AllColors.Card3Color, // Set the inside color here
+                     border: Border.all(
+                       color: AllColors.grayColor, // Set the border color here
+                       width: 1.0, // Adjust the border width if necessary
+                     ),
+                     borderRadius: BorderRadius.circular(10.0),
+                   ),
+                   child: InputDecorator(
+                     decoration: InputDecoration(
+                       labelText: 'Company Information',
+                       labelStyle: GoogleFonts.poppins(
+                           color: AllColors.primaryDark1,
+                           fontWeight: FontWeight.w700,
+                           fontSize: AllFontSize.sisxteen),
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(
 
-                               },
-                             ),
-                             visible:accountMaster_page_controller.view=='Account'?true:false ,
+                         ),
+                         borderRadius: BorderRadius.circular(10.0),
+                       ),
+                     ),
+                     child: Column(
+                       children: [
+
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
                            ),
-                           SizedBox(width: 15,),
-                           Visibility(
-                             visible:accountMaster_page_controller.view=='Account'?true:false ,
-                             child: InkWell(
-                               onTap: (){
-                                 /*accountMaster_page_controller.selectedItem.value = -1;
-                                 accountMaster_page_controller.Shipping_Address_controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress??"";
-                                 accountMaster_page_controller.Shipping_Address2_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingAddress2??"";
-                                 accountMaster_page_controller.Shipping_PostCode_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingPostCode??"";
-                                 accountMaster_page_controller.Shipping_City_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingCity??"" ;
-                                 accountMaster_page_controller.Shipping_State_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingStateName??"";
-                                 accountMaster_page_controller.ShowState.value=false;
-                                 accountMaster_page_controller.ShowState.value=true;
-                                 accountMaster_page_controller.Shipping_District_Controller.value.text=accountMaster_page_controller.AccountMasterGetCode_list[0].shippingDistrict??"";
-                                 accountMaster_page_controller.consigneeId = '';*/
-                                 accountMaster_page_controller.selectedItem.value = -1;
-                                 accountMaster_page_controller.Shipping_Address_controller.value.text="";
-                                 accountMaster_page_controller.Shipping_Address2_Controller.value.text="";
-                                 accountMaster_page_controller.Shipping_PostCode_Controller.value.text="";
-                                 accountMaster_page_controller.Shipping_City_Controller.value.text="" ;
-                                 accountMaster_page_controller.Shipping_State_Controller.value.clear();
-                                 accountMaster_page_controller.ShowState.value=false;
-                                 accountMaster_page_controller.ShowState.value=true;
-                                 accountMaster_page_controller.Shipping_District_Controller.value.text="";
-                                 accountMaster_page_controller.consigneeId = '';
-                                 accountMaster_page_controller.isChecked.value=false;
-                                 accountMaster_page_controller.Shipping_FullAddress_Controller.value.clear();
-                               },
-                               child: Icon(Icons.update),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'||
+                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             keyboardType: TextInputType.number,
+                             controller: accountMaster_page_controller.No_Of_Emp_Controller,
+                             decoration: InputDecoration(
+                                 hintText: "No. Of Employees",
+                                 labelText: "No. Of Employees",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
                              ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             /*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'||
+                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                                  || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             keyboardType: TextInputType.number,
+                             controller: accountMaster_page_controller.Annual_Revenue_Controller,
+                             inputFormatters: [
+                               FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
+                               FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
+                             ],
+                             decoration: InputDecoration(
+                                 hintText: "Customer Annual Turnover",
+                                 labelText: "Customer Annual Turnover",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
+                         Container(
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: bindTatResponseTypeDropDown(context),
+                         ),
+
+
+                         SizedBox(height: 15,),
+
+                         /*Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                           *//*  readOnly:accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'||
+                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
+                             readOnly:  accountMaster_page_controller.view=='Account'?false:true,
+                             controller: accountMaster_page_controller.Sale_Representative_Controller.value,
+                             decoration: InputDecoration(
+                                 hintText: "Sale Representative",
+                                 labelText: "Sale Representative",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),*/
+
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                                 || accountMaster_page_controller.view=='VIEW' ||
+                                 accountMaster_page_controller.view=='Task'||
+                                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                             readOnly:  true,
+                             controller: accountMaster_page_controller.Regional_service_head_Controller.value,
+                             decoration: InputDecoration(
+                                 hintText: "Reporting manager",
+                                 labelText: "Reporting manager",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+
+
+
+
+
+
+                       ],
+                     ),
+                   ),
+                 ),
+
+                 SizedBox(height: 15,),
+
+
+                 Container(
+                   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                   //color: AllColors.Card1Color,
+                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                   decoration: BoxDecoration(
+                     //color: AllColors.Card3Color, // Set the inside color here
+                     border: Border.all(
+                       color: AllColors.grayColor, // Set the border color here
+                       width: 1.0, // Adjust the border width if necessary
+                     ),
+                     borderRadius: BorderRadius.circular(10.0),
+                   ),
+                   child: InputDecorator(
+                     decoration: InputDecoration(
+                       labelText: 'Geo Information',
+                       labelStyle: GoogleFonts.poppins(
+                           color: AllColors.primaryDark1,
+                           fontWeight: FontWeight.w700,
+                           fontSize: AllFontSize.sisxteen),
+                       border: OutlineInputBorder(
+                         borderSide: BorderSide(
+
+                         ),
+                         borderRadius: BorderRadius.circular(10.0),
+                       ),
+                     ),
+                     child: Column(
+                       children: [
+
+                         /*Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             readOnly: true,
+                             keyboardType: TextInputType.number,
+                             controller: accountMaster_page_controller
+                                 .Frontliner_Controller,
+                             decoration: InputDecoration(
+                                 hintText: "Frontliner",
+                                 labelText: "Frontliner",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),*/
+
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             readOnly: true,
+                             keyboardType: TextInputType.number,
+                             controller: accountMaster_page_controller
+                                 .BranchHead_Controller,
+                             decoration: InputDecoration(
+                                 hintText: "Region Name",
+                                 labelText: "Region Name",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+
+                         SizedBox(height: 15,),
+
+                         /*Container(
+                     decoration: BoxDecoration(
+                         color: Colors.white,
+                         borderRadius: BorderRadius.circular(10)
+                     ),
+                     //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                     child: TextFormField(
+                       readOnly: true,
+                       controller: accountMaster_page_controller
+                           .ZoneHead_Controller,
+                       decoration: InputDecoration(
+                           hintText: "Zone Head",
+                           labelText: "Zone Head",
+                           //suffixIcon: Icon(Icons.email),
+                           contentPadding: EdgeInsets.symmetric(
+                               vertical: AllFontSize.ten,
+                               horizontal: AllFontSize.ten),
+
+                           focusedBorder: OutlineInputBorder(
+                               borderSide: BorderSide(color: Colors.blue)
+                           ),
+                           border: OutlineInputBorder(
+                               borderRadius: BorderRadius.circular(10)
                            )
-                         ],
-                       ),
-                       SizedBox(height: 15,),
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           //maxLength: 150,
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller
-                               .Shipping_Address_controller.value,
-                           onChanged: (value){
-                             final parts = [
-                               value,
-                               accountMaster_page_controller.Shipping_Address2_Controller.value.text,
-                               accountMaster_page_controller.Shipping_City_Controller.value.text,
-                               accountMaster_page_controller.Shipping_District_Controller.value.text,
-                               accountMaster_page_controller.Shipping_State_Controller.value.text,
-                               accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                             ];
-
-                             // Filter out empty strings and join with commas
-                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-                           },
-                           decoration: InputDecoration(
-                               hintText: "Address",
-                               labelText: "Address",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
                        ),
 
-                       SizedBox(height: 15,),
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           //maxLength: 150,
-                           controller: accountMaster_page_controller
-                               .Shipping_Address2_Controller.value,
-                           onChanged: (value){
-                             final parts = [
-                               accountMaster_page_controller.Shipping_Address_controller.value.text,
-                               value,
-                               accountMaster_page_controller.Shipping_City_Controller.value.text,
-                               accountMaster_page_controller.Shipping_District_Controller.value.text,
-                               accountMaster_page_controller.Shipping_State_Controller.value.text,
-                               accountMaster_page_controller.Shipping_PostCode_Controller.value.text,
-                             ];
-
-                             // Filter out empty strings and join with commas
-                             final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                             accountMaster_page_controller.Shipping_FullAddress_Controller.value.text = fullAddress;
-                           },
-                           decoration: InputDecoration(
-                               hintText: "Address2",
-                               labelText: "Address2",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-                       SizedBox(height: 15,),
-
-                       /*Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           keyboardType: TextInputType.number,
-                           controller: accountMaster_page_controller
-                               .Shipping_PostCode_Controller.value,
-                           decoration: InputDecoration(
-                               hintText: "Post Code",
-                               labelText: "Post Code",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),*/
-
-                       Obx((){
-                         return Visibility(
-                           visible:accountMaster_page_controller.ShowState.value,
-                           child: Container(
-                               child: bindShippingPostalCodeDropDown(context)
-                           ),
-                         );
-                       }),
-
-
-                       SizedBox(height: 15,),
-
-                       Obx(() {
-                         return Visibility(
-                           visible:accountMaster_page_controller.ShowState.value,
-                           child: Container(
-                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                             child: bindShippingStateDropDown(context),
-                           ),
-                         );
-                       }
-
-                       ),
-
-                       SizedBox(height: 15,),
-
-                       Obx(() {
-                         return Visibility(
-                           visible:accountMaster_page_controller.ShowState.value,
-                           child: Container(
-                               child: bindShippingCityDropDown(context)
-                           ),
-                         );
-                       }
-
-                       ),
-
-                       SizedBox(height: 15,),
-
-                       Obx(() {
-                         return Visibility(
-                           visible:accountMaster_page_controller.ShowState.value,
-                           child: Container(
-                               child: bindShippingDistrictDropDown(context)
-                           ),
-                         );
-                       }
-
-                       ),
-
-                       SizedBox(height: 15,),
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           //maxLength: 500,
-                           readOnly: true,
-                           maxLines: 3,
-                           controller: accountMaster_page_controller
-                               .Shipping_FullAddress_Controller.value,
-                           decoration: InputDecoration(
-                               hintText: "Full Address",
-                               labelText: "Full Address",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-
-                     ],
-                   ),
-                 ),
-               ),
-
-               SizedBox(height: 15,),
-
-               Container(
-                 margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                 //color: AllColors.Card1Color,
-                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 decoration: BoxDecoration(
-                   //color: AllColors.Card3Color, // Set the inside color here
-                   border: Border.all(
-                     color: AllColors.grayColor, // Set the border color here
-                     width: 1.0, // Adjust the border width if necessary
-                   ),
-                   borderRadius: BorderRadius.circular(10.0),
-                 ),
-                 child: InputDecorator(
-                   decoration: InputDecoration(
-                     labelText: 'Company Information',
-                     labelStyle: GoogleFonts.poppins(
-                         color: AllColors.primaryDark1,
-                         fontWeight: FontWeight.w700,
-                         fontSize: AllFontSize.sisxteen),
-                     border: OutlineInputBorder(
-                       borderSide: BorderSide(
-
-                       ),
-                       borderRadius: BorderRadius.circular(10.0),
                      ),
                    ),
-                   child: Column(
-                     children: [
 
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                          /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           keyboardType: TextInputType.number,
-                           controller: accountMaster_page_controller.No_Of_Emp_Controller,
-                           decoration: InputDecoration(
-                               hintText: "No. Of Employees",
-                               labelText: "No. Of Employees",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
+                         SizedBox(height: 15,),*/
 
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
+                         Container(
+                     decoration: BoxDecoration(
+                         color: Colors.white,
+                         borderRadius: BorderRadius.circular(10)
+                     ),
+                     //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                     child: TextFormField(
+                       readOnly: true,
+                       controller: accountMaster_page_controller
+                           .ClusterHead_Controller,
+                       decoration: InputDecoration(
+                           hintText: "Cluster Name",
+                           labelText: "Cluster Name",
+                           //suffixIcon: Icon(Icons.email),
+                           contentPadding: EdgeInsets.symmetric(
+                               vertical: AllFontSize.ten,
+                               horizontal: AllFontSize.ten),
+
+                           focusedBorder: OutlineInputBorder(
+                               borderSide: BorderSide(color: Colors.blue)
                            ),
-
-                         ),
+                           border: OutlineInputBorder(
+                               borderRadius: BorderRadius.circular(10)
+                           )
                        ),
 
-                       SizedBox(height: 15,),
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           /*readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           keyboardType: TextInputType.number,
-                           controller: accountMaster_page_controller.Annual_Revenue_Controller,
-                           inputFormatters: [
-                             FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
-                             FilteringTextInputFormatter.deny(RegExp(r',')), // Block commas
-                           ],
-                           decoration: InputDecoration(
-                               hintText: "Annual Revenue",
-                               labelText: "Annual Revenue",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-                       SizedBox(height: 15,),
-
-                       Container(
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: bindTatResponseTypeDropDown(context),
-                       ),
-
-
-                       SizedBox(height: 15,),
-
-                       /*Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                         *//*  readOnly:accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
-                           readOnly:  accountMaster_page_controller.view=='Account'?false:true,
-                           controller: accountMaster_page_controller.Sale_Representative_Controller.value,
-                           decoration: InputDecoration(
-                               hintText: "Sale Representative",
-                               labelText: "Sale Representative",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-                       SizedBox(height: 15,),*/
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                          /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                               || accountMaster_page_controller.view=='VIEW' ||
-                               accountMaster_page_controller.view=='Task'||
-                               accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                               || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-                           readOnly:  true,
-                           controller: accountMaster_page_controller.Regional_service_head_Controller.value,
-                           decoration: InputDecoration(
-                               hintText: "Reporting manager",
-                               labelText: "Reporting manager",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-
-
-
-
-
-
-                     ],
-                   ),
-                 ),
-               ),
-
-               SizedBox(height: 15,),
-
-
-               Container(
-                 margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                 //color: AllColors.Card1Color,
-                 //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                 decoration: BoxDecoration(
-                   //color: AllColors.Card3Color, // Set the inside color here
-                   border: Border.all(
-                     color: AllColors.grayColor, // Set the border color here
-                     width: 1.0, // Adjust the border width if necessary
-                   ),
-                   borderRadius: BorderRadius.circular(10.0),
-                 ),
-                 child: InputDecorator(
-                   decoration: InputDecoration(
-                     labelText: 'Geo Information',
-                     labelStyle: GoogleFonts.poppins(
-                         color: AllColors.primaryDark1,
-                         fontWeight: FontWeight.w700,
-                         fontSize: AllFontSize.sisxteen),
-                     border: OutlineInputBorder(
-                       borderSide: BorderSide(
-
-                       ),
-                       borderRadius: BorderRadius.circular(10.0),
                      ),
                    ),
-                   child: Column(
-                     children: [
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly: true,
-                           keyboardType: TextInputType.number,
-                           controller: accountMaster_page_controller
-                               .Frontliner_Controller,
-                           decoration: InputDecoration(
-                               hintText: "Frontliner",
-                               labelText: "Frontliner",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
-
-                       SizedBox(height: 15,),
-
-                       Container(
-                         decoration: BoxDecoration(
-                             color: Colors.white,
-                             borderRadius: BorderRadius.circular(10)
-                         ),
-                         //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                         child: TextFormField(
-                           readOnly: true,
-                           keyboardType: TextInputType.number,
-                           controller: accountMaster_page_controller
-                               .BranchHead_Controller,
-                           decoration: InputDecoration(
-                               hintText: "Branch Head",
-                               labelText: "Branch Head",
-                               //suffixIcon: Icon(Icons.email),
-                               contentPadding: EdgeInsets.symmetric(
-                                   vertical: AllFontSize.ten,
-                                   horizontal: AllFontSize.ten),
-
-                               focusedBorder: OutlineInputBorder(
-                                   borderSide: BorderSide(color: Colors.blue)
-                               ),
-                               border: OutlineInputBorder(
-                                   borderRadius: BorderRadius.circular(10)
-                               )
-                           ),
-
-                         ),
-                       ),
 
 
-                       SizedBox(height: 15,),
 
-                       Container(
-                   decoration: BoxDecoration(
-                       color: Colors.white,
-                       borderRadius: BorderRadius.circular(10)
-                   ),
-                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                   child: TextFormField(
-                     readOnly: true,
-                     controller: accountMaster_page_controller
-                         .ZoneHead_Controller,
-                     decoration: InputDecoration(
-                         hintText: "Zone Head",
-                         labelText: "Zone Head",
-                         //suffixIcon: Icon(Icons.email),
-                         contentPadding: EdgeInsets.symmetric(
-                             vertical: AllFontSize.ten,
-                             horizontal: AllFontSize.ten),
-
-                         focusedBorder: OutlineInputBorder(
-                             borderSide: BorderSide(color: Colors.blue)
-                         ),
-                         border: OutlineInputBorder(
-                             borderRadius: BorderRadius.circular(10)
-                         )
+                       ],
                      ),
-
                    ),
                  ),
 
-
-
-                       SizedBox(height: 15,),
-
-                       Container(
-                   decoration: BoxDecoration(
-                       color: Colors.white,
-                       borderRadius: BorderRadius.circular(10)
-                   ),
-                   //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                   child: TextFormField(
-                     readOnly: true,
-                     controller: accountMaster_page_controller
-                         .ClusterHead_Controller,
-                     decoration: InputDecoration(
-                         hintText: "Cluster Head",
-                         labelText: "Cluster Head",
-                         //suffixIcon: Icon(Icons.email),
-                         contentPadding: EdgeInsets.symmetric(
-                             vertical: AllFontSize.ten,
-                             horizontal: AllFontSize.ten),
-
-                         focusedBorder: OutlineInputBorder(
-                             borderSide: BorderSide(color: Colors.blue)
-                         ),
-                         border: OutlineInputBorder(
-                             borderRadius: BorderRadius.circular(10)
-                         )
-                     ),
-
-                   ),
-                 ),
-
-
-
-                     ],
-                   ),
-                 ),
-               ),
-
-               SizedBox(height: 100,),
+                 SizedBox(height: 100,),
 
 
 
 
-             ],
+               ],
+             ),
            ),
          ),
        ),
@@ -2361,7 +2376,59 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
-  Widget bindAccountTypeDropDown(context){
+  Widget bindAccountTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.account_type_controller,
+        label: Text(
+          "Account Type",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: 15,
+              fontWeight: FontWeight.w300),
+        ),
+        enabled: accountMaster_page_controller.view=='Account'?true:false,
+        //initialSelection:accountMaster_page_controller.get_Acc_type_list.length>0?accountMaster_page_controller.get_Acc_type_list[1]:null,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.account_type_controller.text =
+              _displayAccTypeForOption(selection!).toString();
+
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Acc_type_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+  /*Widget bindAccountTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayAccTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -2396,11 +2463,11 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextField(
             readOnly: accountMaster_page_controller.view=='Account'?false:true,
-           /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+           *//* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
                 || accountMaster_page_controller.view=='VIEW' ||
                 accountMaster_page_controller.view=='Task'||
                 accountMaster_page_controller.view=='FromSaleCycleMainScreen' ||
-                accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = accountMaster_page_controller.account_type_controller
@@ -2417,19 +2484,19 @@ class UpdateAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Account Type*',
               labelText: 'Account Type*',
-              /*hintStyle: GoogleFonts.poppins(
+              *//*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
                   fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
+              ),*//*
+              *//*labelStyle: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
+                  fontSize: AllFontSize.sisxteen),*//*
+              *//*focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              ),*//*
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2478,10 +2545,10 @@ class UpdateAccountMaster extends StatelessWidget{
         );
       },
     );
-  }
+  }*/
 
   Widget bindAccCatogeryTypeDropDown(context){
-    return Autocomplete<CustomList>(
+    return Autocomplete<GetMasterTypeModel>(
       displayStringForOption: _displayAccCategoryForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if(accountMaster_page_controller.view=='VIEW'){
@@ -2493,15 +2560,15 @@ class UpdateAccountMaster extends StatelessWidget{
           // return const Iterable<VehicleTypeResponse>.empty();
         }
         return accountMaster_page_controller.get_Acc_category_list
-            .where((CustomList option) {
-          return option.value
+            .where((GetMasterTypeModel option) {
+          return option.code
               .toString()
               .toLowerCase()
               .contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
-      onSelected: (CustomList selection) {
-        print(selection.value);
+      onSelected: (GetMasterTypeModel selection) {
+        print(selection.code);
         // Update the TextField with the selected
         accountMaster_page_controller.account_cat_type_controller.text =
             _displayAccCategoryForOption(selection).toString();
@@ -2540,21 +2607,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type',
-              labelText: 'Account Category Type',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              hintText: 'Account Category Type*',
+              labelText: 'Account Category Type*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2563,8 +2617,8 @@ class UpdateAccountMaster extends StatelessWidget{
         );
       },
       optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
+          AutocompleteOnSelected<GetMasterTypeModel> onSelected,
+          Iterable<GetMasterTypeModel> suggestions) {
         return Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -2577,7 +2631,7 @@ class UpdateAccountMaster extends StatelessWidget{
                 shrinkWrap: true,
                 itemCount: suggestions.length,
                 itemBuilder: (context, index) {
-                  final CustomList option =
+                  final GetMasterTypeModel option =
                   suggestions.elementAt(index);
                   return GestureDetector(
                     onTap: () {
@@ -2585,15 +2639,31 @@ class UpdateAccountMaster extends StatelessWidget{
                     },
                     child: Container(
                       padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.value.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.code!,
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                              TextSpan(
+                                text: " (${option.description!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
+                              ),
+                            ],
+                          ),
+                          softWrap: true,
+                        )
                     ),
                   );
                 },
@@ -2636,7 +2706,7 @@ class UpdateAccountMaster extends StatelessWidget{
           accountMaster_page_controller.compProfileRemrk.value = true;
         }else{
           accountMaster_page_controller.compProfileRemrk.value = false;
-          accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.comp_prof_type_controller.value.text);
+          //accountMaster_page_controller.getCompanyProfileSubTypeApi(/*accountMaster_page_controller.comp_prof_type_controller.value.text*/);
 
         }
         //accountMaster_page_controller.getCompanyProfileSubTypeApi();
@@ -2822,7 +2892,7 @@ class UpdateAccountMaster extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
             elevation: 4.0,
             child: Container(
-              width: size.width*.7,
+              width: size.width*.85,
               constraints: BoxConstraints(maxHeight: 200),
 
               child: ListView.builder(
@@ -2859,7 +2929,7 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
 
-  Widget bindGstRegistrationTypeDropDown(context){
+  /*Widget bindGstRegistrationTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayGstRegisterTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -2922,19 +2992,19 @@ class UpdateAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'GST Registration Type*',
               labelText: 'GST Registration Type*',
-              /*hintStyle: GoogleFonts.poppins(
+              *//*hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
                   fontSize: AllFontSize.ten
-              ),*/
-              /*labelStyle: GoogleFonts.poppins(
+              ),*//*
+              *//*labelStyle: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*/
-              /*focusedBorder: UnderlineInputBorder(
+                  fontSize: AllFontSize.sisxteen),*//*
+              *//*focusedBorder: UnderlineInputBorder(
                 borderSide: BorderSide(
                     color: AllColors.primaryDark1), // Change the color to green
-              ),*/
+              ),*//*
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2982,6 +3052,63 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
         );
       },
+    );
+  }*/
+
+  Widget bindGstRegistrationTypeDropDown(context) {
+    return Container(
+      //margin: const EdgeInsets.only(right: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<CustomList>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.gst_registration_type_controller.value,
+        label: Text(
+          "GST Registration Type*",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        enabled: accountMaster_page_controller.view=='Account'?true:false,
+        //initialSelection: accountMaster_page_controller.get_Gst_Registration_list[1],
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (CustomList? selection) {
+          print(selection);
+          accountMaster_page_controller.gst_registration_type_controller.value.text =
+              _displayGstRegisterTypeForOption(selection!).toString();
+          if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered'){
+            accountMaster_page_controller.GstRegistration.value = true;
+          }else{
+            // accountMaster_page_controller.GstStateList.addAll(accountMaster_page_controller.StateMaster_list);
+            accountMaster_page_controller.GstRegistration.value = false;
+          }
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.get_Gst_Registration_list.map<DropdownMenuEntry<CustomList>>((CustomList e) {
+          return DropdownMenuEntry<CustomList>(value: e, label: e.value!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 
@@ -3119,7 +3246,7 @@ class UpdateAccountMaster extends StatelessWidget{
     );
   }
 
-  Widget bindIsReferralDropDown(context) {
+  /*Widget bindIsReferralDropDown(context) {
     return Autocomplete<String>(
       displayStringForOption: _displayIsActiveForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
@@ -3159,11 +3286,11 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
           child: TextField(
             readOnly: accountMaster_page_controller.view=='Account'?false:true,
-            /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+            *//* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
                 || accountMaster_page_controller.view=='VIEW' ||
                 accountMaster_page_controller.view=='Task'||
                 accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
             cursorColor: AllColors.primaryDark1,
             controller: controller
               ..text = accountMaster_page_controller.ReferralBy_Controller
@@ -3235,6 +3362,62 @@ class UpdateAccountMaster extends StatelessWidget{
           ),
         );
       },
+    );
+  }*/
+
+  Widget bindIsReferralDropDown(context) {
+    return Container(
+      // margin: const EdgeInsets.only(left: 15.0),
+      width: double.infinity,
+      child: DropdownMenu<String>(
+        width: size.width-55,
+        controller:  accountMaster_page_controller.ReferralBy_Controller,
+        label: Text(
+          "Is Referral",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w300),
+        ),
+        //initialSelection: "No",
+        enabled: accountMaster_page_controller.view=='Account'?true:false,
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten
+          ),
+        ),
+        onSelected: (String? selection) {
+          print(selection);
+          accountMaster_page_controller.ReferralBy_Controller.text =
+              _displayIsActiveForOption(selection!).toString();
+          if(accountMaster_page_controller.ReferralBy_Controller.text == 'Yes'){
+            accountMaster_page_controller.isReferral.value = true;
+          }else{
+            accountMaster_page_controller.isReferral.value = false;
+          }
+
+        },
+
+        dropdownMenuEntries: accountMaster_page_controller.IsActiveTypeList.map<DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(value: e, label: e!,style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
   }
 
@@ -3490,8 +3673,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code*',
-              labelText: 'Post Code*',
+              hintText: 'Pin Code*',
+              labelText: 'Pin Code*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -3625,8 +3808,8 @@ class UpdateAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Post Code',
-              labelText: 'Post Code',
+              hintText: 'Pin Code',
+              labelText: 'Pin Code',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

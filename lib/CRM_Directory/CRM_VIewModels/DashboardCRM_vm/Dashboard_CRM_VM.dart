@@ -173,10 +173,11 @@ class DashboardCrmVm extends GetxController{
           sessionManagement.setShiftCode(response[0].shiftCode ?? '');
           sessionManagement.setState(response[0].state ?? '');
           sessionManagement.setCountry(response[0].country ?? '');
+          sessionManagement.setIsAdminPermission(response[0].isAdminWritePermission.toString());
           sessionManagement.setUserGeoHierarchy(response[0].userGeoHierarchy ?? []);
           getDataFromSession();
           // service_installation_list.value=response;
-          print("Success");
+          print("isadminwritepermission....${response[0].isAdminWritePermission.toString()}");
         }else {
           loading.value=false;
         }

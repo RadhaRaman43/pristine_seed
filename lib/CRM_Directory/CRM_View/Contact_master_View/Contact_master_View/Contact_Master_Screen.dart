@@ -48,28 +48,24 @@ class ContactMasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {
-                contact_vm_controller.resetAllContactCreativeField('Icon');
-                contact_vm_controller.insideOut = true;
-                //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                contact_vm_controller.getAccountMaster("");
-                contact_vm_controller.getDecisionRoleMaster();
-                Get.toNamed(RoutesName.addNewContactMaster_screen);
-              }, icon: Icon(Icons.add)),
+              Visibility(
+                visible: contact_vm_controller.isAdminWritePermission=='0'?true:false,
+                child: IconButton(onPressed: () {
+                  contact_vm_controller.resetAllContactCreativeField('Icon');
+                  contact_vm_controller.insideOut = true;
+                  //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                  contact_vm_controller.getAccountMaster("");
+                  contact_vm_controller.getDecisionRoleMaster();
+                  Get.toNamed(RoutesName.addNewContactMaster_screen);
+                }, icon: Icon(Icons.add)),
+              ),
 
-              Flexible(
-                fit: FlexFit.loose,
-                child: Container(
-                  child: Obx(() {
-                    //child:
-                    return IconButton(onPressed: () {
-                      showFilterBottomSheet(context);
-                    },
-                        icon: Icon(Icons.filter_alt_sharp,
-                            color: contact_vm_controller.filterIconColor.value ? AllColors.redColor : AllColors.whiteColor));
-                  }
-                  ),
-                ),
+              Container(
+                child: IconButton(onPressed: () {
+                  showFilterBottomSheet(context);
+                },
+                    icon: Icon(Icons.filter_alt_sharp,
+                        color: AllColors.whiteColor)),
               )
             ],
           )
@@ -227,12 +223,12 @@ class ContactMasterScreen extends StatelessWidget{
                           height: 10,
                         ),
                         TextField(
-                          controller: contact_vm_controller.depart_name_controller,
+                          controller: contact_vm_controller.account_code_controller,
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Department Name',
-                            hintText: 'Department Name',
+                              labelText: 'Account Code',
+                              hintText: 'Account Code',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -254,8 +250,9 @@ class ContactMasterScreen extends StatelessWidget{
                           },
                         ),
                         SizedBox(
-                          height: 5,
+                          height: 10,
                         ),
+
 
                         TextField(
                           controller: contact_vm_controller.emailId_controller,
@@ -285,7 +282,7 @@ class ContactMasterScreen extends StatelessWidget{
                           },
                         ),
                         SizedBox(
-                          height: 5,
+                          height: 10,
                         ),
 
                         TextField(
@@ -293,8 +290,39 @@ class ContactMasterScreen extends StatelessWidget{
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Mobile No',
-                              hintText: 'Mobile No',
+                              labelText: 'Phone No',
+                              hintText: 'Phone No',
+                              hintStyle: GoogleFonts.poppins(
+                                  color: AllColors.lightblackColor,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: AllFontSize.ten),
+                              labelStyle: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: AllFontSize.sisxteen),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(10)),
+                              )
+                          ),
+                          cursorColor: AllColors.primaryDark1,
+                          onChanged: (value) {
+                            // Handle the text field value changes if needed
+                          },
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+
+                        TextField(
+                          controller: contact_vm_controller.depart_name_controller,
+                          decoration: InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                              labelText: 'Department Name',
+                              hintText: 'Department Name',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -371,12 +399,7 @@ class ContactMasterScreen extends StatelessWidget{
                                 onPressed: () {
                                   Get.back();
                                   contact_vm_controller.pageNumber=0;
-                                  contact_vm_controller.filterIconColor.value=false;
-                                  contact_vm_controller.account_name_controller.clear();
-                                  contact_vm_controller.contact_name_controller.clear();
-                                  contact_vm_controller.depart_name_controller.clear();
-                                  contact_vm_controller.emailId_controller.clear();
-                                  contact_vm_controller.phone_no_controller.clear();
+                                  contact_vm_controller.clearAllFilterContoller();
                                   contact_vm_controller.getContactMasterList(contact_vm_controller.pageNumber, '', '', '');
 
 
@@ -654,7 +677,7 @@ class ContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Designation Name : ",
+                  "Reporting Person : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,

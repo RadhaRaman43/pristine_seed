@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -17,6 +18,7 @@ class Addressmastervm extends GetxController{
   final _api=AddressConsigneeRepo();
   SessionManagement sessionManagement = SessionManagement();
   final account_vm_controller = Get.put(Accountmastervm());
+  final sales_cycle_vm_controller = Get.put(SalesCycleVm());
   RxBool loading=false.obs;
 
   RxString accountName="".obs;
@@ -67,7 +69,6 @@ class Addressmastervm extends GetxController{
   void onInit() async{
     // TODO: implement onInit
     super.onInit();
-
     email=await sessionManagement.getEmail() ?? '';
     //getAddressMasterList(pageNumber,account_vm_controller.account_code_controller.value.text);
 
@@ -177,17 +178,29 @@ class Addressmastervm extends GetxController{
       loading.value=true;
       _api.ConsigneeAddMstUploader(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
+        print(onValue);
         if(jsonResponse is List){
           List<AddressMasterModel> response = jsonResponse.map((e) => AddressMasterModel.fromJson(e)).toList();
-          if(response!= null && response.length>0 && response[0].condition=="True"){
+          if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
             print("created data is ${response}");
             loading.value = false;
             address_master_list.value=response;
-            clearController();
-            Get.toNamed(RoutesName.viewAddress_screen);
-            getAddressMasterList(0, account_code_controller.value.text);
            // resetAllContactCreativeField('Icon');
             Utils.showToastification('Address add successfully', response[0].message!);
+            if(FromPage=="SalesCycleQuotation"){
+              Get.offNamed(RoutesName.quoteInformationScreen);
+            }else if(FromPage=="AddQuote"){
+              Get.offNamed(RoutesName.salesCycleCreateQuoteScreen);
+            }else if(FromPage.value=="AddSalesAdvise"){
+              Get.offNamed(RoutesName.salesAdviseHeaderLineScreen);
+            }else if(FromPage.value=="CreateSalesAdvise"){
+              Get.toNamed(RoutesName.salesAdviseCreateScreen);
+            }
+            else{
+              clearController();
+              Get.toNamed(RoutesName.viewAddress_screen);
+              getAddressMasterList(0, account_code_controller.value.text);
+            }
             //Get.offAllNamed(RoutesName.contactMaster_screen);
 
           }else {
@@ -418,5 +431,24 @@ class Addressmastervm extends GetxController{
     City_Controller.clear();
     District_Controller.clear();
   }
+
+ /* bindSalesCycleAdress(RxList<AddressMasterModel> address_master_list){
+    print("Address${address_master_list[0].address} and ${ sales_cycle_vm_controller.shippingController.value.text}");
+    sales_cycle_vm_controller.consigneeId=address_master_list[0].consigneeId??"";
+    sales_cycle_vm_controller.shippingController.value.text = address_master_list[0].address ?? "";
+    sales_cycle_vm_controller.shippingAddress2Controller.value.text =
+        address_master_list[0].address2 ?? "";
+    sales_cycle_vm_controller.Shipping_PostCode_Controller.value.text =
+        address_master_list[0].postCode ?? "";
+    sales_cycle_vm_controller.Shipping_City_Controller.value.text = address_master_list[0].city ?? "";
+    sales_cycle_vm_controller.Shipping_District_Controller.value.text =
+        address_master_list[0].district ?? "";
+    sales_cycle_vm_controller.Shipping_State_Controller.value.text =
+        address_master_list[0].stateName ?? "";
+    sales_cycle_vm_controller.Shipping_phone_Controller.value.text =
+        address_master_list[0].phoneNo ?? "";
+    sales_cycle_vm_controller.Shipping_email_Controller.value.text =
+        address_master_list[0].emailId ?? "";
+  }*/
 
 }

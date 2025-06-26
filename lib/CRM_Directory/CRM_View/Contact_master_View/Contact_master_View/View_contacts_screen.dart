@@ -77,8 +77,8 @@ class ViewContactsScreen extends StatelessWidget{
                 );
               }),
               Visibility(
-                visible: contact_vm_controller.FromPage.value == 'Contact' ||
-                    accountMaster_page_controller.FromPage.value == 'Account' || contact_vm_controller.FromPage.value == 'AccountUpdate'?true:false,
+                //visible: contact_vm_controller.FromPage.value == 'Contact' || accountMaster_page_controller.FromPage.value == 'Account' || contact_vm_controller.FromPage.value == 'AccountUpdate'?true:false,
+                visible: (accountMaster_page_controller.FromPage.value == 'Contact' || accountMaster_page_controller.FromPage.value == 'Account') && accountMaster_page_controller.isAdminWritePermission=="0"?true:false,
                 child: Container(
                   width: double.infinity,
                   height: 150,
@@ -155,7 +155,8 @@ class ViewContactsScreen extends StatelessWidget{
 
           if (accountMaster_page_controller.pageNumber + 1 != total_page) {
             this.accountMaster_page_controller.pageNumber += 1;
-            accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber, '', '', '');
+            accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber,accountMaster_page_controller.accountName, '', accountMaster_page_controller.account_code_controller.text);
+            //accountMaster_page_controller.getContactMasterList(accountMaster_page_controller.pageNumber, '', '', '');
 
           }
         }
@@ -526,6 +527,7 @@ class ViewContactsScreen extends StatelessWidget{
                           onPressed: (){
                             Navigator.pop(context, false);
                             contact_vm_controller.contact_name_controller.clear();
+                            contact_vm_controller.pageNumber = 0;
                             accountMaster_page_controller.getContactMasterList(
                               contact_vm_controller.pageNumber, accountMaster_page_controller.accountName, contact_vm_controller.contact_name_controller.text,contact_vm_controller.accountCode.value.toString());
                           },
@@ -553,6 +555,7 @@ class ViewContactsScreen extends StatelessWidget{
                               Utils.showErrorToastification('Error', 'Please Enter Contact Name');
                             }else {
                               Navigator.pop(context, true);
+                              contact_vm_controller.pageNumber = 0;
                               accountMaster_page_controller.getContactMasterList(
                                 contact_vm_controller.pageNumber, accountMaster_page_controller.accountName, contact_vm_controller.contact_name_controller.text,contact_vm_controller.accountCode.value.toString());
                              // contact_vm_controller.contact_name_controller.clear();

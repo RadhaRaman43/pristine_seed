@@ -216,11 +216,17 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                     ),
                   ),
                   onTap: (){
-                    salesCycleController.getsalesCycleData(0,  accountMaster_page_controller.AccountDashboardDataSalesList[position]
+                    salesCycleController.clearAllFieldOfFilter();
+                    salesCycleController.filterQuoteAcceptedFlag.value=
+                        accountMaster_page_controller.AccountDashboardDataSalesList[position]
+                            .quoteAccepted??"";
+                    salesCycleController.pageNumber=0;
+                    salesCycleController.getsalesCycleData(salesCycleController.pageNumber,  accountMaster_page_controller.AccountDashboardDataSalesList[position]
                         .salesCycleId!, "ViewHeader", 'FromDashboard');
                     salesCycleController.pageNumber=0;
                     salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
                   },
+
                 ),
               ],
             ),
@@ -340,7 +346,7 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                 ),
               ],
             ),
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
@@ -361,14 +367,14 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                       decorationStyle: TextDecorationStyle.wavy,
                     ),
                   ),
-                  /*onTap: (){
+                  *//*onTap: (){
                       salesCycleController.getsalesCycleData(0, TaskMaster_page_controller
                           .Task_Master_list[position]
                           .salesCycleId!, "ViewHeader", 'FromTaskScreen');
-                    },*/
+                    },*//*
                 ),
               ],
-            ),
+            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [

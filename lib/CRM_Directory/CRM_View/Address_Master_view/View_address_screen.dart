@@ -33,10 +33,10 @@ class ViewAddressScreen extends StatelessWidget{
               actions: [
                 IconButton(
                   onPressed: (){
-                    address_vm_controller.contact_name_controller.clear();
-                    address_vm_controller.Consignee_controller.value.clear();
-                    address_vm_controller.phone_no_controller.clear();
-                    address_vm_controller.emailId_controller.clear();
+                    //address_vm_controller.contact_name_controller.clear();
+                   // address_vm_controller.Consignee_controller.value.clear();
+                   // address_vm_controller.phone_no_controller.clear();
+                   // address_vm_controller.emailId_controller.clear();
                     showFilterBottomSheet(context);
 
                   },
@@ -82,8 +82,8 @@ class ViewAddressScreen extends StatelessWidget{
                     );
                   }),
                   Visibility(
-                    //visible: address_vm_controller.FromPage.value == 'Address' || accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
-                    visible: accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
+                    visible: (accountMaster_page_controller.FromPage.value == 'Contact' || accountMaster_page_controller.FromPage.value == 'Account') && accountMaster_page_controller.isAdminWritePermission=="0"?true:false,
+                    //visible: accountMaster_page_controller.FromPage.value == 'Account' ?true:false,
                     child: Container(
                       width: double.infinity,
                       height: 150,
@@ -111,6 +111,7 @@ class ViewAddressScreen extends StatelessWidget{
                             Center(
                               child: IconButton(onPressed: () {
                                 address_vm_controller.clearController();
+                                accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
                                 address_vm_controller.getGeoPostalCodeApi();
                                 Get.toNamed(RoutesName.addNewAddress_screen);
                               },

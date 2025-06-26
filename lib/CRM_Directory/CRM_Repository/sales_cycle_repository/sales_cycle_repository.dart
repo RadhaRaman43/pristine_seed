@@ -174,7 +174,38 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.SalesCycleMstUpdatePropose,sessionManagement);
   }
 
+  Future<String> SalesCycleMstRejectReopenApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleMstRejectReopen,sessionManagement);
+  }
 
+  Future<String> quotationDiscountReportApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.QuotationDiscountReport, sessionManagement, data);
+  }
+  Future<String> QuoteMstRejectReopenApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteMstRejectReopen,sessionManagement);
+  }
+
+  Future<String> salesAdviceHeaderGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceHeaderGet,sessionManagement);
+  }
+  Future<String> salesAdviceHeaderGetBySalesAdviceIdApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceHeaderGetBySalesAdviceId,sessionManagement);
+  }
+  Future<String> salesAdviceCreateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceCreate,sessionManagement);
+  }
+  Future<String> salesAdviceCompleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceComplete,sessionManagement);
+  }
+  Future<String> salesAdviceHeaderUpdateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceHeaderUpdate,sessionManagement);
+  }
+  Future<String> salesAdviceLineDeleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceLineDelete,sessionManagement);
+  }
+  Future<String> salesAdviceLineUpdateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceLineUpdate,sessionManagement);
+  }
 
 
 }

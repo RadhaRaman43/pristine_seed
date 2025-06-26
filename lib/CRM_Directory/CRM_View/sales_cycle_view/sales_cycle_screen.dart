@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -58,8 +59,8 @@ class SalesCycleScreen extends StatelessWidget{
                 ),
                 Spacer(),
                 IconButton(onPressed: () {
-                  salesCycleController.SaleCycleStatusController.value.text = 'All';
-                  salesCycleController.ApprovalStatusController.value.text = 'All';
+                  /*salesCycleController.SaleCycleStatusController.value.text = 'All';
+                  salesCycleController.ApprovalStatusController.value.text = 'All';*/
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
               ],
@@ -180,6 +181,37 @@ class SalesCycleScreen extends StatelessWidget{
                               },
                             );
                           }),
+                          SizedBox(width: 8),
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                              backgroundColor:
+                              salesCycleController.filterQuoteAcceptedFlag.value == ''
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                side: BorderSide(color: AllColors.grayColor),
+                              ),
+                              label: Text(
+                                'All',
+                                style: GoogleFonts.poppins(
+                                  color: salesCycleController.filterQuoteAcceptedFlag.value == ''
+                                      ? AllColors.whiteColor
+                                      : AllColors.primaryDark1,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              onPressed: () {
+                                salesCycleController.filterQuoteAcceptedFlag.value = '';
+                                salesCycleController.pageNumber=0;
+                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                              },
+                            );
+                          }),
+                          SizedBox(width: 8),
                         ],
                       ),
                     ),
@@ -251,6 +283,8 @@ class SalesCycleScreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
+    var createdOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].createdOn??"");
+    var approvedOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].approvedOn??"");
     String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
       switch (status) {
@@ -269,9 +303,12 @@ class SalesCycleScreen extends StatelessWidget{
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
-          onTap: () {salesCycleController.filter.value = "Sales cycle";salesCycleController.clearSaleProductListController();
+          onTap: () {
+            salesCycleController.extClosureStartToEnd.value="";
+            salesCycleController.filter.value = "Sales cycle";salesCycleController.clearSaleProductListController();
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
-          salesCycleController.getsalesCycleData(0, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
+          salesCycleController.pageNumber=0;
+          salesCycleController.getsalesCycleData(salesCycleController.pageNumber, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
           salesCycleController.itemCategorySelectedlist.value = [];
           salesCycleController.getPurchaseProcessApi();
           salesCycleController.getPurchaseTimeFrameApi();
@@ -279,15 +316,16 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
           salesCycleController.pageNumber=0;
           salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
+          salesCycleController.clearAllFieldOfQuoteFilter();
 
           },
           subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildLabelWithValue(
-                label: "Sales Cycle Status : ",
+                label: "Sales Cycle Stage : ",
                 value: salesCycleController.saleCycleList[position].salesCycleStatus,
-                width: size.width * 0.33,
+                //width: size.width * 0.33,
                 color: Colors.blue,
               ),
               _buildLabelWithValue(
@@ -295,9 +333,14 @@ class SalesCycleScreen extends StatelessWidget{
                 value: salesCycleController.saleCycleList[position].salesCycleId,
               ),
               _buildLabelWithValue(
+                label: "Task Id : ",
+                value: salesCycleController.saleCycleList[position].taskId,
+                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
                 label: "Approval Status : ",
                 value: salesCycleController.saleCycleList[position].salesCycleApprovalStatus,
-                width: size.width * 0.36,
+               // width: size.width * 0.36,
                 color: getStatusColor(saleCycleStatus),
               ),
               _buildClickableLabel(
@@ -315,54 +358,54 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Account Code : ",
                 value: salesCycleController.saleCycleList[position].accountCode,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
                 label: "Sales Cycle Owner : ",
                 value: salesCycleController.saleCycleList[position].salesCycleOwnerName,
-                width: size.width * 0.33,
+                //width: size.width * 0.33,
               ),
               _buildLabelWithValue(
                 label: "Contact Name : ",
                 value: salesCycleController.saleCycleList[position].contactName,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
                 label: "Product Category : ",
                 value: salesCycleController.saleCycleList[position].productCategory,
-                width: size.width * 0.35,
+                //width: size.width * 0.35,
               ),
               _buildLabelWithValue(
                 label: "Purchase Process : ",
                 value: salesCycleController.saleCycleList[position].purchaseProcess,
-                width: size.width * 0.35,
+                //width: size.width * 0.35,
               ),
               _buildLabelWithValue(
-                label: "Company Profile Type : ",
+                label: "Company Pro. Type : ",
                 value: salesCycleController.saleCycleList[position].companyProfileType,
-                width: size.width * 0.33,
+                //width: size.width * 0.3,
               ),
               _buildLabelWithValue(
                 label: "Is Commit : ",
                 value: salesCycleController.saleCycleList[position].commit==1?"Yes":"No",
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
-              _buildLabelWithValue(
+             /* _buildLabelWithValue(
                 label: "Is Infra Lead : ",
                 value: salesCycleController.saleCycleList[position].isInfraLead == 1 ? "Yes" : "No",
-              ),
+              ),*/
               _buildLabelWithValue(
                 label: "Solution Accepted : ",
                 value: salesCycleController.saleCycleList[position].isSolutionAccepted == 1 ? "Yes" : "No",
               ),
 
 
-              _buildLabelWithValue(
+              /*_buildLabelWithValue(
                 label: "Proposed Solution: ",
                 value: salesCycleController.saleCycleList[position].proposedSolution,
-              ),
+              ),*/
               _buildLabelWithValue(
-                label: "Post Code : ",
+                label: "Pin Code : ",
                 value: salesCycleController.saleCycleList[position].postCode,
               ),
 
@@ -370,55 +413,55 @@ class SalesCycleScreen extends StatelessWidget{
                 label: "District : ",
                 value: salesCycleController.saleCycleList[position].district,
               ),
-              _buildLabelWithValue(
+              /*_buildLabelWithValue(
                 label: "FrontLiner Value : ",
                 value: salesCycleController.saleCycleList[position].frontlinerValue,
-              ),
+              ),*/
               _buildLabelWithValue(
-                label: "Branch Head Value : ",
+                label: "Region Name : ",
                 value: salesCycleController.saleCycleList[position].branchHeadValue,
               ),
-              _buildLabelWithValue(
+              /*_buildLabelWithValue(
                 label: "Zone Head Value: ",
                 value: salesCycleController.saleCycleList[position].zoneHeadValue,
-              ),
+              ),*/
               _buildLabelWithValue(
-                label: "Cluster Head Value : ",
+                label: "Cluster Name : ",
                 value: salesCycleController.saleCycleList[position].clustureHeadValue,
               ),
 
               _buildLabelWithValue(
                 label: "Created By : ",
                 value: salesCycleController.saleCycleList[position].createdFullName,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
                 label: "Approved By : ",
                 value: salesCycleController.saleCycleList[position].approvedBy == ""
                     ? ""
                     : salesCycleController.saleCycleList[position].approvedFullName,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
               _buildLabelWithValue(
-                label: "Expected Closure Date : ",
+                label: "Exp. Closure Date : ",
                 value: salesCycleController.saleCycleList[position].estClosureDate,
-                width: size.width * 0.3,
+                //width: size.width * 0.3,
               ),
               _buildLabelWithValue(
                 label: "Created On: ",
-                value: salesCycleController.saleCycleList[position].createdOn,
-                width: size.width * 0.33,
+                value: createdOn,
+                //: size.width * 0.33,
               ),
               _buildLabelWithValue(
-                label: "Approved On: ",
-                value: salesCycleController.saleCycleList[position].approvedOn,
-                width: size.width * 0.4,
+                label: "Approved/Rejected On: ",
+                value: approvedOn,
+                //width: size.width * 0.4,
               ),
 
               _buildLabelWithValue(
                 label: "Reject Reason : ",
                 value: salesCycleController.saleCycleList[position].rejectReason,
-                width: size.width * 0.4,
+                //width: size.width * 0.4,
               ),
             ],
           ),
@@ -740,7 +783,7 @@ class SalesCycleScreen extends StatelessWidget{
             fontWeight: FontWeight.w500,
           ),
         ),
-        width != null
+       /* width != null
             ? Container(
           width: width,
           child: Tooltip(
@@ -756,14 +799,17 @@ class SalesCycleScreen extends StatelessWidget{
             ),
           ),
         )
-            : Expanded(
-          child: Text(
-            value ?? "",
-            overflow: TextOverflow.ellipsis,
-            style: GoogleFonts.poppins(
-              color: color,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w500,
+            :*/ Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
         ),
@@ -992,10 +1038,10 @@ class SalesCycleScreen extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindProposedSolution(context),
+                            /*  bindProposedSolution(context),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
 
 
                               bindPostalCode(),
@@ -1008,18 +1054,18 @@ class SalesCycleScreen extends StatelessWidget{
                               ),
 
 
-                              bindFrontLinerValue(),
+                             /* bindFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindBranchHead(),
                               SizedBox(
                                 height: 10,
                               ),
-                              bindZoneHead(),
+                             /* bindZoneHead(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               bindClusterHead(),
                               SizedBox(
                                 height: 10,
@@ -1337,7 +1383,7 @@ class SalesCycleScreen extends StatelessWidget{
             .width-15,
         controller: salesCycleController.SaleCycleStatusController.value,
         label: Text(
-          "Sale Cycle Status",
+          "Sales Cycle Stage",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
@@ -1750,8 +1796,8 @@ class SalesCycleScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Postal Code',
-          hintText: 'Postal Code',
+          labelText: 'Pin Code',
+          hintText: 'Pin Code',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1834,7 +1880,7 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
-  bindFrontLinerValue() {
+/*  bindFrontLinerValue() {
     return TextField(
       controller: salesCycleController.frontliner_controller.value,
       decoration: InputDecoration(
@@ -1862,7 +1908,7 @@ class SalesCycleScreen extends StatelessWidget{
         // Handle the text field value changes if needed
       },
     );
-  }
+  }*/
 
   bindClusterHead() {
     return TextField(
@@ -1870,8 +1916,8 @@ class SalesCycleScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1894,7 +1940,7 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
-  bindZoneHead() {
+  /*bindZoneHead() {
     return TextField(
       controller: salesCycleController.zone_head_value_controller.value,
       decoration: InputDecoration(
@@ -1922,7 +1968,7 @@ class SalesCycleScreen extends StatelessWidget{
         // Handle the text field value changes if needed
       },
     );
-  }
+  }*/
 
   bindBranchHead() {
     return TextField(
@@ -1930,8 +1976,8 @@ class SalesCycleScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Region Name',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -2183,6 +2229,67 @@ class SalesCycleScreen extends StatelessWidget{
 
   bindExpectedClosureDate(BuildContext context) {
     return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller:salesCycleController.filterExpectedClosuredateController
+          .value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Expected Closure Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          salesCycleController.extClosureStartToEnd.value="$startDate@$endDate";
+          salesCycleController.filterExpectedClosuredateController.value.text = '$startDate - $endDate';
+        } else {
+          salesCycleController.filterExpectedClosuredateController.value.text = '';
+          salesCycleController.extClosureStartToEnd.value="";
+        }
+      },
+    );
+    return TextField(
         cursorColor: AllColors.primaryDark1,
         controller: salesCycleController.filterExpectedClosuredateController
             .value,
@@ -2244,7 +2351,7 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
-  bindCreatedOn(BuildContext context) {
+ /* bindCreatedOn(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,
         controller: salesCycleController.createdOnCnontroller.value,
@@ -2304,5 +2411,69 @@ class SalesCycleScreen extends StatelessWidget{
 
 
     );
+  }*/
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: salesCycleController.createdOnCnontroller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+         /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          salesCycleController.createdOnStartToEnd.value="$startDate@$endDate";
+          salesCycleController.createdOnCnontroller.value.text = '$startDate - $endDate';
+        } else {
+          salesCycleController.createdOnCnontroller.value.text = '';
+          salesCycleController.createdOnStartToEnd.value="";
+        }
+      },
+    );
   }
+
+
 }

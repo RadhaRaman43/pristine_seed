@@ -31,6 +31,7 @@ class ContactMasterVM extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   String email="";
+  String isAdminWritePermission = "";
   bool updateContact=false;
   bool insideOut=false;
   RxString FromPage="".obs;
@@ -40,6 +41,7 @@ class ContactMasterVM extends GetxController{
   String view ="";
 
   var account_name_controller = TextEditingController();
+  var account_code_controller = TextEditingController();
   var FullAddress_Controller = TextEditingController().obs;
   var contact_name_controller = TextEditingController();
   var depart_name_controller = TextEditingController();
@@ -68,6 +70,7 @@ class ContactMasterVM extends GetxController{
     super.onInit();
 
     email=await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     getContactMasterList(pageNumber,"","","");
     getDecisionRoleMaster();
 
@@ -113,12 +116,12 @@ class ContactMasterVM extends GetxController{
 
       Map<String, String> data={
         "filter_contact_name": contact_name,
-        "filter_account_code":"",
+        "filter_account_code":account_code_controller.text.isEmpty?"":account_code_controller.value.text,
         "filter_account_name": account_name,
         "filter_department_name": depart_name,
         "email_id": emailId_controller.value.text.isEmpty?"":emailId_controller.value.text,
         "phone_no": phone_no_controller.value.text.isEmpty?"":phone_no_controller.value.text,
-        "created_by": email,
+        "created_by": isAdminWritePermission == "0"?email:"",
         "row_per_page": rowsPerPage.toString(),
         "page_number": pageNumber.toString()
       };
@@ -353,10 +356,10 @@ class ContactMasterVM extends GetxController{
       }
 
     }
-    if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
+    /*if(emailId_controller.text.isNotEmpty && EmailValidator.validate(emailId_controller.text) == false){
       Utils.sanckBarError('Email ID!', "Please Enter A valid Email ID");
       return  ;
-    }
+    }*/
 
     try{
       Map<String, dynamic> data={
@@ -510,6 +513,17 @@ class ContactMasterVM extends GetxController{
       loading.value = false;
       print(e);
     }
+  }
+
+
+  clearAllFilterContoller(){
+    filterIconColor.value=false;
+    account_name_controller.clear();
+    account_code_controller.clear();
+    contact_name_controller.clear();
+    depart_name_controller.clear();
+    emailId_controller.clear();
+    phone_no_controller.clear();
   }
 
 

@@ -83,8 +83,9 @@ class UpdateBussinessTermPage extends StatelessWidget{
                 bindAdvancPaymentAmt(context),
                 bindFinalAmt(context),
                 bindPendingAmt(context),
+                bindTermCondition(context),
                 bindRemarks(context),
-                bindTermCondotion(context),
+
             SizedBox(height: 10,),
             Visibility(
               visible: saleCycleController.BusinessTerm.value == true ? false : true,
@@ -180,6 +181,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
   }
 
   Widget bindWarrentyPeriod(BuildContext context) {
+    saleCycleController.warrentyPeriodController.value.text="12";
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: TextField(
@@ -340,10 +342,13 @@ class UpdateBussinessTermPage extends StatelessWidget{
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Obx(() {
         return TextField(
-          readOnly: true,
           cursorColor: AllColors.primaryDark1,
           controller: saleCycleController.advncPaymentAmountController.value,
           keyboardType: TextInputType.number,
+          onChanged: (value){
+            calculatePer();
+          },
+
           decoration: InputDecoration(
               suffixIcon: Icon(Icons.currency_rupee),
               contentPadding: EdgeInsets.symmetric(
@@ -487,15 +492,20 @@ class UpdateBussinessTermPage extends StatelessWidget{
   checkPertageValue(BuildContext context) {
     final text = saleCycleController.advncPaymentPerController.value.text;
     final percentageValue = int.tryParse(text);
-
     if (percentageValue == null) {
-      Utils.showErrorToastification('Error', 'Please enter a valid number');
       saleCycleController.advncPaymentAmountController.value.clear();
     } else if (percentageValue > 100) {
       Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
     } else if(percentageValue <= 100){
          final advanceAmt = (saleCycleController.quoteHeaderdata[0].quoteTotalAmount! * percentageValue) / 100;
          saleCycleController.advncPaymentAmountController.value.text = advanceAmt.toString();
+         final parts=saleCycleController.advncPaymentAmountController.value.text.split('.');
+         if(parts.length==2 && parts[1].length>4){
+           String trimmed = '${parts[0]}.${parts[1].substring(0, 4)}';
+           saleCycleController.advncPaymentAmountController.value.text=trimmed;
+           saleCycleController.advncPaymentAmountController.value.selection =
+               TextSelection.fromPosition(TextPosition(offset: trimmed.length));
+         }
     }
 
     double? advcAmount = double.tryParse(saleCycleController.advncPaymentAmountController.value.text);
@@ -604,21 +614,20 @@ class UpdateBussinessTermPage extends StatelessWidget{
         });
 
   }
-  Widget bindTermCondotion(BuildContext context) {
+
+  Widget bindTermCondition(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
       child: Obx(() {
         return TextField(
-          maxLines: 2,
-          maxLength: 500,
           readOnly:  saleCycleController.BusinessTerm.value,
           cursorColor: AllColors.primaryDark1,
           controller: saleCycleController.termConditionController.value,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-              hintText: 'Term & Condition',
-              labelText: 'Term & Condition',
+              hintText: 'Term & Condition *',
+              labelText: 'Term & Condition *',
               hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
@@ -640,4 +649,23 @@ class UpdateBussinessTermPage extends StatelessWidget{
     );
   }
 
+  void calculatePer() {
+    if(saleCycleController.advncPaymentAmountController.value.text.isEmpty){
+      saleCycleController.advncPaymentPerController.value.clear();
+    }else{
+      final text = double.parse(saleCycleController.advncPaymentAmountController.value.text);
+      double percantage=0.0;
+      if(saleCycleController.quoteTotAmountController.value.text.isNotEmpty){
+        percantage=(text/double.parse(saleCycleController.quoteTotAmountController.value.text))*100;
+        print("Percentage.${percantage}");
+      }
+      if(percantage<=100){
+        saleCycleController.advncPaymentPerController.value.text = percantage.toStringAsFixed(2);
+
+      }else{
+        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
+      }
+
+    }
+  }
 }

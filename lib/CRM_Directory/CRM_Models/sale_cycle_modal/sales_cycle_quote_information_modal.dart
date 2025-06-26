@@ -37,6 +37,8 @@ class SalesCycleQuoteInformationModal {
   int? isSpr;
   String? quoteAccepted;
   String? sprNo;
+  int? noOfSalesAdvice;
+  int? isSalesAdviceCreated;
   int? isReadyForApprove;
   int? isReadySendForApproval;
   double? quoteTotalQty;
@@ -95,6 +97,8 @@ class SalesCycleQuoteInformationModal {
         this.otherRemarks,
         this.isSpr,
         this.quoteAccepted,
+        this.noOfSalesAdvice,
+        this.isSalesAdviceCreated,
         this.sprNo,
         this.isReadyForApprove,
         this.isReadySendForApproval,
@@ -153,6 +157,8 @@ class SalesCycleQuoteInformationModal {
     otherRemarks = json['other_remarks'];
     isSpr = json['is_spr'];
     quoteAccepted = json['quote_accepted'];
+    noOfSalesAdvice = json['no_of_sales_advice'];
+    isSalesAdviceCreated = json['is_sales_advice_created'];
     sprNo = json['spr_no'];
     isReadyForApprove = json['is_ready_for_approve'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
@@ -219,6 +225,8 @@ class SalesCycleQuoteInformationModal {
     data['is_spr'] = this.isSpr;
     data['spr_no'] = this.sprNo;
     data['quote_accepted'] = this.quoteAccepted;
+    data['no_of_sales_advice'] = this.noOfSalesAdvice;
+    data['is_sales_advice_created'] = this.isSalesAdviceCreated;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
     data['quote_total_qty'] = this.quoteTotalQty;

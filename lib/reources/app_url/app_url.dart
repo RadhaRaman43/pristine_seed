@@ -196,6 +196,7 @@ class AppUrl {
      static const String DraftAccountMstUploader = "$BASE_URL/api/CRM/Account/DraftAccountMstUploader";
      static const String CompanyTypeMstGet = "$BASE_URL/api/CRM/Master/CompanyTypeMstGet";
      static const String ContactMstGetAll = "$BASE_URL/api/CRM/Contact/ContactMstGetAll";
+     static const String AccountCategoryTypeMstGet = "$BASE_URL/api/CRM/Master/AccountCategoryTypeMstGet";
 
      //todo contact master repo.....
      static const String ContactMstGet = "$BASE_URL/api/CRM/Contact/ContactMstGet";
@@ -223,6 +224,7 @@ class AppUrl {
      static const String taskPersonMstCreate = "$BASE_URL/api/CRM/Task/task_person_mst_create";
      static const String GeoGetPincodeHierarchy = "$BASE_URL/api/GeographicalSetup/GeoGetPincodeHierarchy";
      static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
+     static const String TaskMstRejectReopen = "$BASE_URL/api/CRM/Task/TaskMstRejectReopen";
 
 
      //todo sales cycle
@@ -265,8 +267,25 @@ class AppUrl {
      static const String SalesCycleMstUpdateProposeConfirmDecision = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdateProposeConfirmDecision";
      static const String SalesCycleMstUpdateProposedSolution = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdateProposedSolution";
      static const String SalesCycleMstUpdatePropose = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdatePropose";
+     static const String SalesCycleMstRejectReopen = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstRejectReopen";
+     static const String QuotationDiscountReport = "$BASE_URL/api/CRM/Quote/QuotationDiscountReport";
+     static const String QuoteMstRejectReopen = "$BASE_URL/api/CRM/Quote/QuoteMstRejectReopen";
 
+   //todo SalesAdvise
+     static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";
+     static const String salesAdviceHeaderGetBySalesAdviceId="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGetBySalesAdviceId";
+     static const String salesAdviceCreate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceCreate";
+     static const String salesAdviceLineUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineUpdate";
+     static const String salesAdviceHeaderUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderUpdate";
+     static const String salesAdviceLineDelete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineDelete";
+     static const String salesAdviceComplete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceComplete";
 
+     //todo employee information
+     static const String employeeLeaveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveDataGet";
+     static const String leaveTypesGet="$BASE_URL/api/CRM/EmployeeAttendance/LeaveTypesGet";
+     static const String shiftDetailsByEmailGet="$BASE_URL/api/CRM/EmployeeAttendance/ShiftDetailsByEmailGet";
+     static const String getEmployeeHolidays="$BASE_URL/api/CRM/EmployeeAttendance/GetEmployeeHolidays";
+     static const String employeeLeaveMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveMark";
 
 
 }
