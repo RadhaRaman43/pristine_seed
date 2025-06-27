@@ -137,8 +137,6 @@ class RoutesName{
   static const empMarkLeaveScreen="/emp_mark_leave_screen";
   static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";
 
-  //todo Pending Draft Quote
-  static const pendingDraftQuoteScreen="/pending_Draft_Quote";
 
   //todo image not found...
 
