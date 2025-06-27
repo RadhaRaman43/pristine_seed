@@ -270,6 +270,7 @@ class AppUrl {
      static const String SalesCycleMstRejectReopen = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstRejectReopen";
      static const String QuotationDiscountReport = "$BASE_URL/api/CRM/Quote/QuotationDiscountReport";
      static const String QuoteMstRejectReopen = "$BASE_URL/api/CRM/Quote/QuoteMstRejectReopen";
+     static const String QuoteHeaderGetNew="$BASE_URL/api/CRM/Quote/QuoteHeaderGetNew";
 
    //todo SalesAdvise
      static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";

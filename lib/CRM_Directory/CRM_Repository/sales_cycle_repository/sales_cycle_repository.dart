@@ -206,6 +206,8 @@ class SalesCycleRepository{
   Future<String> salesAdviceLineUpdateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.salesAdviceLineUpdate,sessionManagement);
   }
-
+  Future<String> QuoteHeaderGetNewApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteHeaderGetNew,sessionManagement);
+  }
 
 }

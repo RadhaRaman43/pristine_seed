@@ -16,6 +16,7 @@ import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
 import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../../CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
+import '../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class QuoteInformationScreen extends StatelessWidget {
@@ -25,6 +26,7 @@ class QuoteInformationScreen extends StatelessWidget {
   final contact_vm_controller = Get.put(ContactMasterVM());
   final address_vm_controller = Get.put(Addressmastervm());
   final quoteApprovalController = Get.put(QuoteApprovalListVm());
+  final pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
@@ -39,7 +41,13 @@ class QuoteInformationScreen extends StatelessWidget {
             "quoteApprovalScreen") {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
-        } else if (saleCycleController.quoteApprovalPage.value ==
+        }else if (saleCycleController.quoteApprovalPage.value == "pendingDraftQuote") {
+          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(0);
+          Get.toNamed(RoutesName.pendingDraftQuoteScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value ==
             "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.getQuoteHeaderData(
