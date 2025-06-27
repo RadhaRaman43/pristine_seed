@@ -43,6 +43,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Scree
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approval_person_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_item_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sale_cycle_pending_for_approval_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_create_quote_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_quote_information_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_screen.dart';
@@ -652,6 +653,14 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.salesCyclePendingForApprovalListScreen,
+        page: ()=>SaleCyclePendingForApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
 
 
 //todo image not found....
