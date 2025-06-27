@@ -10,7 +10,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/Pending_Draft_Quote_vm/pending_Draft_Quote_vm.dart';
+import '../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class PendingDraftQuote extends StatelessWidget{

@@ -127,6 +127,7 @@ class RoutesName{
   static const approvedQuotationListScreen="/approved_quotation_list.dart";
   static const ItemListBySalesCycle_Screen="/ItemListBySalesCycle_Screen.dart";
   static const salesCyclePendingForApprovalListScreen="/sale_cycle_pending_for_approval_list";
+  static const pendingDraftQuoteScreen="/pending_Draft_Quote";
 
   //todo sales advise
   static const salesAdviseCreateScreen="/sales_advise_create_screen";
