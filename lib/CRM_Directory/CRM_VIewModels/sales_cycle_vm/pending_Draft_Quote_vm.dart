@@ -16,6 +16,7 @@ class PendingDraftQuoteVm extends GetxController{
   int pageNumberForQuote = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
+  String isAdminWritePermission = "";
 
   var filterQuoteIdController=TextEditingController().obs;
   var filterQuoteVersionController=TextEditingController().obs;
@@ -40,6 +41,7 @@ class PendingDraftQuoteVm extends GetxController{
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     getPendingDraftQuoteList(pageNumberForQuote);
     super.onInit();
   }
@@ -66,7 +68,7 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_quote_status": quoteStatusController.value.text.isEmpty?"":quoteStatusController.value.text,
           "filter_flag": "PENDING & PENDING FOR APPROVAL",
           "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
-          "filter_created_by": email,
+          "filter_created_by": isAdminWritePermission == '0'?email:'',
           "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
           "filter_frontliner_value": "",
           "filter_branch_head_value": region_name_controller.value.text.isEmpty?"":region_name_controller.value.text,
