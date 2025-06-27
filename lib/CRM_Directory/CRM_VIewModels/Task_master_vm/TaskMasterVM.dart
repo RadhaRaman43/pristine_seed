@@ -169,6 +169,7 @@ class Taskmastervm extends GetxController{
 
         email=await sessionManagement.getEmail() ?? '';
         isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+        print("emais...${email}");
         print("isadminwritepermissionTask....${isAdminWritePermission.toString()}");
         getMenuList();
         print("List${userGeoHierarchyy.length}");
@@ -781,7 +782,7 @@ class Taskmastervm extends GetxController{
                 final jsonResponse = json.decode(onValue);
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
-                    if(response!= null && response.length>0 && response[0].condition=="True"){
+                    if(response != null && response.length>0 && response[0].condition=="True"){
                         loading.value = false;
                         MethodOfCall_Master_list.addAll(response);
 

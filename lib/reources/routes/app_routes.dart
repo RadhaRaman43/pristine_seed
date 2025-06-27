@@ -31,7 +31,6 @@ import '../../CRM_Directory/CRM_View/Address_Master_view/View_address_screen.dar
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
-import '../../CRM_Directory/CRM_View/Pending_Draft_Quote_view/pending_Draft_Quote.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_DSAR_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_Task_Screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
@@ -44,6 +43,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Scree
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approval_person_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_item_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sale_cycle_pending_for_approval_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_create_quote_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_quote_information_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_screen.dart';
@@ -654,13 +654,13 @@ class AppRoutes{
         transition: Transition.rightToLeftWithFade
     ),
 
-    //todo pending draft quote
-
-    GetPage(name: RoutesName.pendingDraftQuoteScreen,
-        page: ()=>PendingDraftQuote(),
+    GetPage(name: RoutesName.salesCyclePendingForApprovalListScreen,
+        page: ()=>SaleCyclePendingForApprovalList(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+
 
 
 //todo image not found....

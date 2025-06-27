@@ -737,18 +737,18 @@ class QuoteApprovalListScreen extends StatelessWidget{
                                 height: 10,
                               ),
 
-                              filterWithQuoteFrontLinerValue(),
+                            /*  filterWithQuoteFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               filterWithQuoteBranchHead(),
                               SizedBox(
                                 height: 10,
                               ),
-                              filterWithQuoteZoneHead(),
+                             /* filterWithQuoteZoneHead(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               filterWithQuoteClusterHead(),
                               SizedBox(
                                 height: 10,
@@ -1047,8 +1047,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1107,8 +1107,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Region Name',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

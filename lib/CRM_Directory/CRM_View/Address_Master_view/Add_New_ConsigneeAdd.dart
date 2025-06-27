@@ -127,7 +127,7 @@ class AddNewConsigneeadd extends StatelessWidget{
         ),
         drawer: CustomDrawer(),
         floatingActionButton:  Visibility(
-          visible: accountMaster_page_controller.isAdminWritePermission=="0"?true:false,
+          visible: accountMaster_page_controller.isAdminWritePermission=="1"?false:true,
           child: Container(
             margin: EdgeInsets.only(left: 30),
             child: DefaultButton(
@@ -138,9 +138,6 @@ class AddNewConsigneeadd extends StatelessWidget{
                 else{
                   address_vm_controller.consignee_code="";
                   address_vm_controller.createNewAddressMstApi("Create");
-
-
-
                 }
 
               },
