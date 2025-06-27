@@ -31,6 +31,7 @@ import '../../CRM_Directory/CRM_View/Address_Master_view/View_address_screen.dar
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
+import '../../CRM_Directory/CRM_View/Pending_Draft_Quote_view/pending_Draft_Quote.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_DSAR_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_Task_Screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
@@ -649,6 +650,14 @@ class AppRoutes{
 
     GetPage(name: RoutesName.empMarkLeaveAddScreen,
         page: ()=>EmpMarkLeaveAddScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    //todo pending draft quote
+
+    GetPage(name: RoutesName.pendingDraftQuoteScreen,
+        page: ()=>PendingDraftQuote(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

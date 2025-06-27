@@ -8,6 +8,7 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_mast
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
 
 
+import '../CRM_Directory/CRM_VIewModels/Pending_Draft_Quote_vm/pending_Draft_Quote_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
@@ -60,6 +61,7 @@ class _Drawer extends State<CustomDrawer> {
   final saleCycleController=Get.put(SalesCycleVm());
   final quoteApprovalController=Get.put(QuoteApprovalListVm());
   var allContactMastercontroller=Get.put(AllContactMasterVm());
+  final pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   DatabaseHelper crmDatabase = DatabaseHelper();
 
   @override
@@ -411,6 +413,15 @@ class _Drawer extends State<CustomDrawer> {
                                               home_vm.openMenu(cTitle, iconData);
                                               MarkAttendanceViewmodel employeeMarkLeaveController=Get.put(MarkAttendanceViewmodel());
                                               Get.toNamed(RoutesName.empMarkLeaveScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Pending Draft Quote':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              pendingDraftQuoteController.pageNumberForQuote=0;
+                                              pendingDraftQuoteController.getPendingDraftQuoteList(0);
+                                              Get.toNamed(RoutesName.pendingDraftQuoteScreen,);
                                               Navigator.of(context);
                                               break;
 
