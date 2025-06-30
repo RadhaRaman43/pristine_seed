@@ -446,10 +446,28 @@ class _Drawer extends State<CustomDrawer> {
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               Get.delete<PendingDraftQuoteVm>();
-                                              PendingDraftQuoteVm employeeMarkLeaveController=Get.put(PendingDraftQuoteVm());
+                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("PENDING & PENDING FOR APPROVAL"));
                                             /*  pendingDraftQuoteController.pageNumberForQuote=0;
                                               pendingDraftQuoteController.getPendingDraftQuoteList(0);*/
                                               Get.toNamed(RoutesName.pendingDraftQuoteScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Approved / Rejected Quote':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<PendingDraftQuoteVm>();
+                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("APPROVED & REJECTED"));
+                                              Get.toNamed(RoutesName.approvedRejectedQuoteScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'All Quote':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<PendingDraftQuoteVm>();
+                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("All"));
+                                              Get.toNamed(RoutesName.allQuoteScreenScreen,);
                                               Navigator.of(context);
                                               break;
 

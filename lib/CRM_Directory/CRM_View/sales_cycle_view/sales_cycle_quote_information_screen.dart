@@ -26,7 +26,7 @@ class QuoteInformationScreen extends StatelessWidget {
   final contact_vm_controller = Get.put(ContactMasterVM());
   final address_vm_controller = Get.put(Addressmastervm());
   final quoteApprovalController = Get.put(QuoteApprovalListVm());
-  final pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
+  final pendingDraftQuoteController=Get.put(PendingDraftQuoteVm("APPROVED & REJECTED"));
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
@@ -42,10 +42,21 @@ class QuoteInformationScreen extends StatelessWidget {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
         }else if (saleCycleController.quoteApprovalPage.value == "pendingDraftQuote") {
-          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(0);
-          Get.toNamed(RoutesName.pendingDraftQuoteScreen);
+          pendingDraftQuoteController.getPendingDraftQuoteList(0, "PENDING & PENDING FOR APPROVAL");*/
+          Get.offNamed(RoutesName.pendingDraftQuoteScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "approvedRejectedQuote") {
+          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(0, "APPROVED & REJECTED");*/
+          Get.offNamed(RoutesName.approvedRejectedQuoteScreen);
+        }else if (saleCycleController.quoteApprovalPage.value == "AllQuoteList") {
+          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(0, "All");*/
+          Get.offNamed(RoutesName.allQuoteScreenScreen);
         }
         else if (saleCycleController.quoteApprovalPage.value ==
             "approvedQuotationScreen") {

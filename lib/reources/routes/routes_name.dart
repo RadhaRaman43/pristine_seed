@@ -128,6 +128,8 @@ class RoutesName{
   static const ItemListBySalesCycle_Screen="/ItemListBySalesCycle_Screen.dart";
   static const salesCyclePendingForApprovalListScreen="/sale_cycle_pending_for_approval_list";
   static const pendingDraftQuoteScreen="/pending_Draft_Quote";
+  static const approvedRejectedQuoteScreen="/quote_approve_reject_screen";
+  static const allQuoteScreenScreen="/All_Quote_Screen";
 
   //todo sales advise
   static const salesAdviseCreateScreen="/sales_advise_create_screen";

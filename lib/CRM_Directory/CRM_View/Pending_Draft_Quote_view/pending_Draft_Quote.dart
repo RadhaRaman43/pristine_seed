@@ -101,7 +101,7 @@ class PendingDraftQuote extends StatelessWidget{
 
          // print("last index ${pendingDraftQuoteController.pageNumberForQuote} ${pendingDraftQuoteController.total_rows} ${pendingDraftQuoteController.rowsPerPage} ${total_page}");
           if (pendingDraftQuoteController.pageNumberForQuote + 1 < total_page) {
-            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1);
+            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1, "PENDING & PENDING FOR APPROVAL");
             pendingDraftQuoteController.pageNumberForQuote += 1;
           }
         }
@@ -816,7 +816,7 @@ class PendingDraftQuote extends StatelessWidget{
                             onPressed: () {
 
                               pendingDraftQuoteController.pageNumberForQuote = 0;
-                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote);
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "PENDING & PENDING FOR APPROVAL");
                               Get.back();
                             },
                             child: Text(
@@ -841,7 +841,7 @@ class PendingDraftQuote extends StatelessWidget{
 
                               pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
                               pendingDraftQuoteController.pageNumberForQuote = 0;
-                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote,);
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "PENDING & PENDING FOR APPROVAL");
                               Get.back();
 
                             },
