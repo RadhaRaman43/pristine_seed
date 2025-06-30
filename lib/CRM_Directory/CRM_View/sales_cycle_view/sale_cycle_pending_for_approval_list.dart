@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -29,6 +30,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
   Widget build(BuildContext context) {
    return WillPopScope(
      onWillPop: () async{
+       Get.toNamed(RoutesName.homeScreen);
        return false;
      },
      child: Scaffold(
@@ -90,7 +92,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
 
   Widget BindCustomerListView(context) {
-
     if (salesCyclePendingForApprovalController.saleCyclePendingForApprovalList.value.isNotEmpty && salesCyclePendingForApprovalController.saleCyclePendingForApprovalList.value.length > 0) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
@@ -676,7 +677,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
   }
   Widget bindSaleCycleStatusDropDown(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only( bottom: 10, right: 15),
+      padding: const EdgeInsets.only(  right: 15),
       child: DropdownMenu<String>(
         width: MediaQuery
             .of(context)
@@ -687,8 +688,8 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           "Sales Cycle Stage",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
         ),
 
         inputDecorationTheme: const InputDecorationTheme(
@@ -1127,7 +1128,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
   Widget bindSolutionAccepted(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only( bottom: 10, right: 15),
+      padding: const EdgeInsets.only( right: 15),
       child: DropdownMenu<String>(
         width: MediaQuery
             .of(context)
@@ -1138,7 +1139,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           "Solution Accepted",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
+              fontSize: AllFontSize.sisxteen,
               fontWeight: FontWeight.w500),
         ),
 
@@ -1193,7 +1194,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
         "Is Commit",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
+            fontSize: AllFontSize.sisxteen,
             fontWeight: FontWeight.w500),
       ),
 

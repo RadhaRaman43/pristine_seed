@@ -131,6 +131,8 @@ class UpdateAccountMaster extends StatelessWidget{
          }
          else if(accountMaster_page_controller.view=="Sales"){
            Get.toNamed(RoutesName.taskMasterDetails_screen);
+         }else if(accountMaster_page_controller.view=="FromQuoteDraftScreen"){
+           Get.toNamed(RoutesName.pendingDraftQuoteScreen);
          }
          else{
            accountMaster_page_controller.clearController();
@@ -1687,11 +1689,7 @@ class UpdateAccountMaster extends StatelessWidget{
 
                          SizedBox(height: 15,),
 
-                         Container(
-                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                           child: bindTatResponseTypeDropDown(context),
-                         ),
-
+                         bindTatResponseTypeDropDown(context),
 
                          SizedBox(height: 15,),
 
@@ -2548,130 +2546,133 @@ class UpdateAccountMaster extends StatelessWidget{
   }*/
 
   Widget bindAccCatogeryTypeDropDown(context){
-    return Autocomplete<GetMasterTypeModel>(
-      displayStringForOption: _displayAccCategoryForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if(accountMaster_page_controller.view=='VIEW'){
-          accountMaster_page_controller.get_Acc_category_list.value=[];
-          return accountMaster_page_controller.get_Acc_category_list;
-        }
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Acc_category_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.get_Acc_category_list
-            .where((GetMasterTypeModel option) {
-          return option.code
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (GetMasterTypeModel selection) {
-        print(selection.code);
-        // Update the TextField with the selected
-        accountMaster_page_controller.account_cat_type_controller.text =
-            _displayAccCategoryForOption(selection).toString();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            // readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-            //     || accountMaster_page_controller.view=='VIEW' ||
-            //     accountMaster_page_controller.view=='Task'||
-            //     accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-            //     || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,
-            readOnly: accountMaster_page_controller.view=='Account'?false:true,
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.account_cat_type_controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type*',
-              labelText: 'Account Category Type*',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
+    return IgnorePointer(
+      ignoring: accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<GetMasterTypeModel>(
+        displayStringForOption: _displayAccCategoryForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if(accountMaster_page_controller.view=='VIEW'){
+            accountMaster_page_controller.get_Acc_category_list.value=[];
+            return accountMaster_page_controller.get_Acc_category_list;
+          }
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.get_Acc_category_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return accountMaster_page_controller.get_Acc_category_list
+              .where((GetMasterTypeModel option) {
+            return option.code
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (GetMasterTypeModel selection) {
+          print(selection.code);
+          // Update the TextField with the selected
+          accountMaster_page_controller.account_cat_type_controller.text =
+              _displayAccCategoryForOption(selection).toString();
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextField(
+              // readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+              //     || accountMaster_page_controller.view=='VIEW' ||
+              //     accountMaster_page_controller.view=='Task'||
+              //     accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+              //     || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,
+              readOnly: accountMaster_page_controller.view=='Account'?false:true,
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.account_cat_type_controller
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Account Category Type*',
+                labelText: 'Account Category Type*',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
               ),
             ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<GetMasterTypeModel> onSelected,
-          Iterable<GetMasterTypeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-                width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final GetMasterTypeModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                text:  option.code!,
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<GetMasterTypeModel> onSelected,
+            Iterable<GetMasterTypeModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                  width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final GetMasterTypeModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  text:  option.code!,
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                  ),
                                 ),
-                              ),
-                              TextSpan(
-                                text: " (${option.description!})",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.redColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
+                                TextSpan(
+                                  text: " (${option.description!})",
+                                  style: GoogleFonts.poppins(
+                                      color: AllColors.redColor,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: AllFontSize
+                                          .sisxteen // Change the text color here
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          softWrap: true,
-                        )
-                    ),
-                  );
-                },
+                              ],
+                            ),
+                            softWrap: true,
+                          )
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 
@@ -4533,143 +4534,146 @@ class UpdateAccountMaster extends StatelessWidget{
   }
 
   Widget bindTatResponseTypeDropDown(context){
-    return Autocomplete<TatResponseModel>(
-      displayStringForOption: _displayTatResponseListForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if(accountMaster_page_controller.view=='VIEW'){
-          accountMaster_page_controller.TatResponseMaster_list.value=[];
-          return accountMaster_page_controller.TatResponseMaster_list;
-        }
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.TatResponseMaster_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.TatResponseMaster_list
-            .where((TatResponseModel option) {
-          return option.responseType
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (TatResponseModel selection) {
-        print(selection.responseType);
-        // Update the TextField with the selected
-        accountMaster_page_controller.TatResponse_Controller.text =
-            _displayTatResponseListForOption(selection).toString();
-        //accountMaster_page_controller.getCompanyProfileTypeApi();
-        accountMaster_page_controller.tatResponseType = selection.responseType!;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            readOnly: accountMaster_page_controller.view=='Account'?false:true,
-           /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
-                || accountMaster_page_controller.view=='VIEW' ||
-                accountMaster_page_controller.view=='Task'||
-                accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.TatResponse_Controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Tat Response Type',
-              labelText: 'Tat Response Type',
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
+    return IgnorePointer(
+      ignoring:  accountMaster_page_controller.view=='Account'?false:true,
+      child: Autocomplete<TatResponseModel>(
+        displayStringForOption: _displayTatResponseListForOption,
+        optionsBuilder: (TextEditingValue textEditingValue) {
+          if(accountMaster_page_controller.view=='VIEW'){
+            accountMaster_page_controller.TatResponseMaster_list.value=[];
+            return accountMaster_page_controller.TatResponseMaster_list;
+          }
+          if (textEditingValue.text.isEmpty) {
+            return accountMaster_page_controller.TatResponseMaster_list;
+            // return const Iterable<VehicleTypeResponse>.empty();
+          }
+          return accountMaster_page_controller.TatResponseMaster_list
+              .where((TatResponseModel option) {
+            return option.responseType
+                .toString()
+                .toLowerCase()
+                .contains(textEditingValue.text.toLowerCase());
+          }).toList();
+        },
+        onSelected: (TatResponseModel selection) {
+          print(selection.responseType);
+          // Update the TextField with the selected
+          accountMaster_page_controller.TatResponse_Controller.text =
+              _displayTatResponseListForOption(selection).toString();
+          //accountMaster_page_controller.getCompanyProfileTypeApi();
+          accountMaster_page_controller.tatResponseType = selection.responseType!;
+        },
+        fieldViewBuilder: (BuildContext context, TextEditingController controller,
+            FocusNode focusNode, VoidCallback onFieldSubmitted) {
+          return Container(
+            decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10)
+            ),
+            child: TextField(
+              readOnly: accountMaster_page_controller.view=='Account'?false:true,
+             /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                  || accountMaster_page_controller.view=='VIEW' ||
+                  accountMaster_page_controller.view=='Task'||
+                  accountMaster_page_controller.view=='FromSaleCycleMainScreen'
+                  || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+              cursorColor: AllColors.primaryDark1,
+              controller: controller
+                ..text = accountMaster_page_controller.TatResponse_Controller
+                    .text,
+              focusNode: focusNode,
+              //onSubmitted: onFieldSubmitted,
+              decoration: InputDecoration(
+                suffixIcon: IconButton(
+                  color: AllColors.primaryDark1,
+                  onPressed: (){
+                    if(focusNode.hasFocus){
+                      focusNode.unfocus();
+                    }else{
+                      focusNode.requestFocus();
+                    }
+                  },
+                  icon: Icon(Icons.arrow_drop_down),
+                ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                hintText: 'Tat Response Type',
+                labelText: 'Tat Response Type',
+                border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ),
               ),
             ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<TatResponseModel> onSelected,
-          Iterable<TatResponseModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final TatResponseModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child:
-                      RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text:  option.responseType!,
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.blackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize
-                                      .sisxteen // Change the text color here
+          );
+        },
+        optionsViewBuilder: (BuildContext context,
+            AutocompleteOnSelected<TatResponseModel> onSelected,
+            Iterable<TatResponseModel> suggestions) {
+          return Align(
+            alignment: Alignment.topLeft,
+            child: Material(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              elevation: 4.0,
+              child: Container(
+                width: size.width*.85,
+                constraints: BoxConstraints(maxHeight: 200),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: suggestions.length,
+                  itemBuilder: (context, index) {
+                    final TatResponseModel option =
+                    suggestions.elementAt(index);
+                    return GestureDetector(
+                      onTap: () {
+                        onSelected(option);
+                      },
+                      child: Container(
+                        padding: EdgeInsets.all(8.0),
+                        child:
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text:  option.responseType!,
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
                               ),
-                            ),
-                            TextSpan(
-                              text: " (${option.responseDescription!})",
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize
-                                      .sisxteen // Change the text color here
+                              TextSpan(
+                                text: " (${option.responseDescription!})",
+                                style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontWeight: FontWeight.w300,
+                                    fontSize: AllFontSize
+                                        .sisxteen // Change the text color here
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                        softWrap: true,
-                      )
+                            ],
+                          ),
+                          softWrap: true,
+                        )
 
-                     /* Text(
-                        option.responseType.toString() + ' (${option.responseDescription.toString()})',
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),*/
-                    ),
-                  );
-                },
+                       /* Text(
+                          option.responseType.toString() + ' (${option.responseDescription.toString()})',
+                          style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize
+                                  .sisxteen // Change the text color here
+                          ),
+                        ),*/
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 

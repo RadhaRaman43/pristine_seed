@@ -103,6 +103,42 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                 SizedBox(height: 10,),*/
                 bindShippingAddress(context),
                 SizedBox(height: 10,),
+                Container(
+                  margin: EdgeInsets.only(left: 15, right: 15, top: 15),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: DefaultButton(
+                          press: (){
+                            address_vm_controller.FromPage.value="AddQuote";
+                            address_vm_controller.clearController();
+                            address_vm_controller.account_code_controller.text=saleCycleController.saleCycleList[0].accountCode??"";
+                            address_vm_controller.account_name_controller.text=saleCycleController.saleCycleList[0].accountName??"";
+                            address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                            address_vm_controller.getGeoPostalCodeApi();
+                            Get.toNamed(RoutesName.addNewAddress_screen);
+                          },
+                          text: "Add New Address",
+                        ),
+                      ),
+                      SizedBox(width: 10,),
+                      Expanded(
+                        child: DefaultButton(
+                          press: (){
+                            // address_vm_controller.clearController();
+                            saleCycleController.pageNumber = 0;
+                            saleCycleController.getAddressMasterList(saleCycleController.pageNumber,saleCycleController.accountCode.value);
+                            saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
+
+
+                          },
+                          text: "Change Address",
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 5,),
                  Container(
                   margin: EdgeInsets.only(left: 15, right: 15, top: 15),
                   child: DefaultButton(
@@ -115,37 +151,9 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                     text: "Add Quote",
                   ),
                 ),
-                SizedBox(height: 5,),
-                Container(
-                  margin: EdgeInsets.only(left: 15, right: 15, top: 15),
-                  child: DefaultButton(
-                    press: (){
-                      address_vm_controller.FromPage.value="AddQuote";
-                      address_vm_controller.clearController();
-                      address_vm_controller.account_code_controller.text=saleCycleController.saleCycleList[0].accountCode??"";
-                      address_vm_controller.account_name_controller.text=saleCycleController.saleCycleList[0].accountName??"";
-                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                      address_vm_controller.getGeoPostalCodeApi();
-                      Get.toNamed(RoutesName.addNewAddress_screen);
-                    },
-                    text: "Add New Address",
-                  ),
-                ),
-                SizedBox(height: 5,),
-                Container(
-                  margin: EdgeInsets.only(left: 15, right: 15, top: 15),
-                  child: DefaultButton(
-                    press: (){
-                     // address_vm_controller.clearController();
-                      saleCycleController.pageNumber = 0;
-                      saleCycleController.getAddressMasterList(saleCycleController.pageNumber,saleCycleController.accountCode.value);
-                      saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
 
 
-                    },
-                    text: "Change Address",
-                  ),
-                ),
+                
               ],
             ),
           ),

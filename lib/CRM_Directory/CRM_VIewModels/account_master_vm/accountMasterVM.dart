@@ -89,6 +89,7 @@ class Accountmastervm extends GetxController{
   //String view ="";
   String view ="Account";
 
+
   RxString upLoadLocalImages="".obs;
   RxString ImageString=''.obs;
   final ImagePicker _picker = ImagePicker();
