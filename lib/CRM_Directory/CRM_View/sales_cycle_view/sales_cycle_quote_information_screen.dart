@@ -4020,56 +4020,34 @@ class QuoteInformationScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      AllColors.primaryDark1,
-                    ),
-                  ),
-                  onPressed: () {
-                    address_vm_controller.FromPage.value="SalesCycleQuotation";
-                    address_vm_controller.clearController();
-                    address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
-                    address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
-                    address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                    address_vm_controller.getGeoPostalCodeApi();
-                    Get.toNamed(RoutesName.addNewAddress_screen);
-                  },
-                  child: Container(
-                    child: Text(
-                      'Add  New',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.whiteColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                Expanded(
+                  child: DefaultButton(
+                    press:(){
+                      address_vm_controller.FromPage.value="SalesCycleQuotation";
+                      address_vm_controller.clearController();
+                      address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
+                      address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
+                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                      address_vm_controller.getGeoPostalCodeApi();
+                      Get.toNamed(RoutesName.addNewAddress_screen);
+                    },
+                    text:
+                    'Add New',
                   ),
                 ),
-                Spacer(),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      AllColors.primaryDark1,
-                    ),
-                  ),
-                  onPressed: () {
-                    saleCycleController.pageNumber = 0;
-                    saleCycleController.getAddressMasterList(
-                        saleCycleController.pageNumber,
-                        saleCycleController.accountCode.value);
-                    saleCycleController.showConsigneeAddressList(
-                        context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
-                  },
-                  child: Container(
-                    child: Text(
-                      'Change ',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.whiteColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
+                SizedBox(width: 10,),
+                Expanded(
+                  child: DefaultButton(
+                    press: (){
+                      saleCycleController.pageNumber = 0;
+                      saleCycleController.getAddressMasterList(
+                          saleCycleController.pageNumber,
+                          saleCycleController.accountCode.value);
+                      saleCycleController.showConsigneeAddressList(
+                          context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
+                    },
+                    text: 'Change ',
+
                   ),
                 ),
               ],

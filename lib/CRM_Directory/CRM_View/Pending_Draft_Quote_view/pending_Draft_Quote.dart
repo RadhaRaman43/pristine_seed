@@ -10,6 +10,8 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
@@ -17,8 +19,9 @@ class PendingDraftQuote extends StatelessWidget{
   PendingDraftQuote({super.key});
   PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
+  final account_vm_controller = Get.put(Accountmastervm());
+  final contact_vm_controller = Get.put(ContactMasterVM());
   Size size=Get.size;
-
   static String _displayQuoteStatusForOption(String option) =>
       option;
 
@@ -230,30 +233,38 @@ class PendingDraftQuote extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Sale Cycle Id : ",
+                    "Sales Cycle Id : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .36,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .salesCycleId ?? "",
-                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .salesCycleId ?? "",
-                        style: GoogleFonts.poppins(
-                          color: Colors.blueAccent,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                          decorationStyle: TextDecorationStyle.wavy,
+                  InkWell(
+                    onTap: (){
+                      saleCycleController.pageNumber = 0;
+                      saleCycleController.filterQuoteAcceptedFlag.value="";
+                      saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .salesCycleId!, "ViewHeader", "QuotePendingPage");
+                    },
+                    child: Container(
+                      width: size.width * .36,
+                      child: Tooltip(
+                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .salesCycleId ?? "",
+                        child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .salesCycleId ?? "",
+                          style: GoogleFonts.poppins(
+                            color: Colors.blueAccent,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.wavy,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+
                         ),
-                        overflow: TextOverflow.ellipsis,
 
                       ),
-
                     ),
                   ),
                 ],
@@ -268,25 +279,35 @@ class PendingDraftQuote extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width*0.4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .accountCode  ?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountCode ??
+                  InkWell(
+                    child: Container(
+                      width: size.width * .4,
+                      child: Tooltip(
+                        message:pendingDraftQuoteController
+                            .PendingDraftQuoteList[position].accountCode ??
                             "",
-                        overflow: TextOverflow.ellipsis,
-                        //textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                          color: Colors.blueAccent,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                          decorationStyle: TextDecorationStyle.wavy,),
+                        child: Text(
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode ??
+                              "",
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(
+                            color: Colors.blueAccent,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.wavy,
+                          ),
+                        ),
                       ),
                     ),
+                    onTap: () {
+                      account_vm_controller.view = 'FromQuoteDraftScreen';
+                      contact_vm_controller.view = 'FromQuoteDraftScreen';
+                      account_vm_controller.getAccMasterBuyCodeApi(
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode!);
+                    },
                   ),
 
                 ],
@@ -302,22 +323,18 @@ class PendingDraftQuote extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width*0.4,
+                    width: size.width * .4,
                     child: Tooltip(
                       message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .accountName  ?? "",
+                          .accountName ?? "",
                       child: Text(
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountName ??
-                            "",
+                            .accountName ?? "",
                         overflow: TextOverflow.ellipsis,
-                        //textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
-                          color: Colors.blueAccent,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                          decoration: TextDecoration.underline,
-                          decorationStyle: TextDecorationStyle.wavy,),
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
                   ),
