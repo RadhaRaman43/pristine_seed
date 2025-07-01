@@ -3051,6 +3051,43 @@ class QuoteInformationScreen extends StatelessWidget {
                   SizedBox(
                     height: 3,
                   ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Kind Attention",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Flexible(
+                        //width: size.width * 0.5,
+                        child: Tooltip(
+                          message: saleCycleController
+                              .quoteHeaderdata[0].kindAttention ??
+                              "",
+                          child: Text(
+                            saleCycleController
+                                .quoteHeaderdata[0].kindAttention ??
+                                "",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
                 ],
               ),
             ),

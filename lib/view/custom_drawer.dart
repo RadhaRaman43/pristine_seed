@@ -471,6 +471,15 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
+                                            case 'All Quote Line Items':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<PendingDraftQuoteVm>();
+                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLQuoteLineItems"));
+                                              Get.toNamed(RoutesName.allQuoteLineItemScreen,);
+                                              Navigator.of(context);
+                                              break;
+
                                           }
                                         },
                                         leading: Icon(

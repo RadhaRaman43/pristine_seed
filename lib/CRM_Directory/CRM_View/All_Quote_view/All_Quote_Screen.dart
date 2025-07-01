@@ -10,6 +10,8 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
@@ -19,6 +21,8 @@ class AllQuoteScreen extends StatelessWidget{
   PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
+  final account_vm_controller = Get.put(Accountmastervm());
+  final contact_vm_controller = Get.put(ContactMasterVM());
 
   static String _displayQuoteStatusForOption(String option) =>
       option;
@@ -101,7 +105,7 @@ class AllQuoteScreen extends StatelessWidget{
 
           // print("last index ${pendingDraftQuoteController.pageNumberForQuote} ${pendingDraftQuoteController.total_rows} ${pendingDraftQuoteController.rowsPerPage} ${total_page}");
           if (pendingDraftQuoteController.pageNumberForQuote + 1 < total_page) {
-            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1, "APPROVED & REJECTED");
+            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1, "All");
             pendingDraftQuoteController.pageNumberForQuote += 1;
           }
         }
@@ -239,21 +243,33 @@ class AllQuoteScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .36,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .salesCycleId ?? "",
-                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .salesCycleId ?? "",
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        overflow: TextOverflow.ellipsis,
+                  InkWell(
+                    onTap: (){
+                      saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
+                      saleCycleController.pageNumber = 0;
+                      saleCycleController.filterQuoteAcceptedFlag.value="";
+                      saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .salesCycleId!, "ViewHeader", "FromAllQuotePage");
+                    },
+                    child: Container(
+                      width: size.width * .36,
+                      child: Tooltip(
+                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .salesCycleId ?? "",
+                        child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .salesCycleId ?? "",
+                          style: GoogleFonts.poppins(
+                            color: Colors.blueAccent,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.wavy,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+
+                        ),
 
                       ),
-
                     ),
                   ),
                 ],
@@ -268,21 +284,33 @@ class AllQuoteScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width*0.4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .accountCode  ?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountCode ??
-                            "",
-                        overflow: TextOverflow.ellipsis,
-                        //textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
+                  InkWell(
+                    onTap: () {
+                      account_vm_controller.view = 'FromAllQuotePage';
+                      contact_vm_controller.view = 'FromAllQuotePage';
+                      account_vm_controller.getAccMasterBuyCodeApi(
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode!);
+                    },
+                    child: Container(
+                      width: size.width*0.4,
+                      child: Tooltip(
+                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .accountCode  ?? "",
+                        child: Text(
+                          pendingDraftQuoteController.PendingDraftQuoteList[position]
+                              .accountCode ??
+                              "",
+                          overflow: TextOverflow.ellipsis,
+                          //textAlign: TextAlign.end,
+                          style: GoogleFonts.poppins(
+                            color: Colors.blueAccent,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.wavy,
+                          ),
+                        ),
                       ),
                     ),
                   ),

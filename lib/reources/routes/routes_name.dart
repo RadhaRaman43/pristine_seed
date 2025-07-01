@@ -130,6 +130,7 @@ class RoutesName{
   static const pendingDraftQuoteScreen="/pending_Draft_Quote";
   static const approvedRejectedQuoteScreen="/quote_approve_reject_screen";
   static const allQuoteScreenScreen="/All_Quote_Screen";
+  static const allQuoteLineItemScreen="/All_Quote_Line_Item_Screen";
 
   //todo sales advise
   static const salesAdviseCreateScreen="/sales_advise_create_screen";

@@ -136,7 +136,12 @@ class UpdateAccountMaster extends StatelessWidget{
          }
          else if(accountMaster_page_controller.view=="ApprovedRejectedQuotePage"){
            Get.toNamed(RoutesName.approvedRejectedQuoteScreen);
+         }else if(accountMaster_page_controller.view=="FromAllQuotePage"){
+           Get.toNamed(RoutesName.allQuoteScreenScreen);
+         }else if(accountMaster_page_controller.view=="FromALLQuoteLineItems"){
+           Get.toNamed(RoutesName.allQuoteLineItemScreen);
          }
+
          else{
            accountMaster_page_controller.clearController();
            accountMaster_page_controller.pageNumber = 0;

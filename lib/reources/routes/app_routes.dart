@@ -28,6 +28,7 @@ import '../../CRM_Directory/CRM_View/Account_Master_view/Draft_item_list.dart';
 import '../../CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
 import '../../CRM_Directory/CRM_View/Address_Master_view/Add_New_ConsigneeAdd.dart';
 import '../../CRM_Directory/CRM_View/Address_Master_view/View_address_screen.dart';
+import '../../CRM_Directory/CRM_View/All_Quote_Line_Item_View/All_Quote_Line_Item_Screen.dart';
 import '../../CRM_Directory/CRM_View/All_Quote_view/All_Quote_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
@@ -676,6 +677,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.allQuoteScreenScreen,
         page: ()=>AllQuoteScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.allQuoteLineItemScreen,
+        page: ()=>AllQuoteLineItemScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

@@ -242,6 +242,7 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: (){
+                      saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
                       saleCycleController.pageNumber = 0;
                       saleCycleController.filterQuoteAcceptedFlag.value="";
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]

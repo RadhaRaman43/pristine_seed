@@ -323,7 +323,7 @@ class SalesCycleScreen extends StatelessWidget{
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildLabelWithValue(
-                label: "Sales Cycle Stage : ",
+                label: "Sales Cycle Status : ",
                 value: salesCycleController.saleCycleList[position].salesCycleStatus,
                 //width: size.width * 0.33,
                 color: Colors.blue,
@@ -1383,7 +1383,7 @@ class SalesCycleScreen extends StatelessWidget{
             .width-15,
         controller: salesCycleController.SaleCycleStatusController.value,
         label: Text(
-          "Sales Cycle Stage",
+          "Sales Cycle Status",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
