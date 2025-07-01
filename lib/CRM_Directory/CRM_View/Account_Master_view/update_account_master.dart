@@ -134,6 +134,9 @@ class UpdateAccountMaster extends StatelessWidget{
          }else if(accountMaster_page_controller.view=="FromQuoteDraftScreen"){
            Get.toNamed(RoutesName.pendingDraftQuoteScreen);
          }
+         else if(accountMaster_page_controller.view=="ApprovedRejectedQuotePage"){
+           Get.toNamed(RoutesName.approvedRejectedQuoteScreen);
+         }
          else{
            accountMaster_page_controller.clearController();
            accountMaster_page_controller.pageNumber = 0;
@@ -510,6 +513,37 @@ class UpdateAccountMaster extends StatelessWidget{
                      ),
                      child: Column(
                        children: [
+                         Container(
+                           decoration: BoxDecoration(
+                               color: Colors.white,
+                               borderRadius: BorderRadius.circular(10)
+                           ),
+                           //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                           child: TextFormField(
+                             readOnly: true,
+                             controller: accountMaster_page_controller
+                                 .OldCRMAccountNo_Controller,
+                             decoration: InputDecoration(
+                                 hintText: "Old Crm Account No.",
+                                 labelText: "Old Crm Account No.",
+                                 //suffixIcon: Icon(Icons.email),
+                                 contentPadding: EdgeInsets.symmetric(
+                                     vertical: AllFontSize.ten,
+                                     horizontal: AllFontSize.ten),
+
+                                 focusedBorder: OutlineInputBorder(
+                                     borderSide: BorderSide(color: Colors.blue)
+                                 ),
+                                 border: OutlineInputBorder(
+                                     borderRadius: BorderRadius.circular(10)
+                                 )
+                             ),
+
+                           ),
+                         ),
+
+                         SizedBox(height: 15,),
+
                          bindAccountTypeDropDown(context),
 
                          SizedBox(height: 15,),

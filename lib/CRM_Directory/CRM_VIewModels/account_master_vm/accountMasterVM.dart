@@ -120,6 +120,7 @@ class Accountmastervm extends GetxController{
   var GstNo_Controller = TextEditingController();
   var PanNo_Controller = TextEditingController();
   var IfscCode_Controller = TextEditingController();
+  var OldCRMAccountNo_Controller = TextEditingController();
   var No_Of_Emp_Controller = TextEditingController();
   var Address2_Controller = TextEditingController();
   var PostCode_Controller = TextEditingController();
@@ -1541,6 +1542,7 @@ class Accountmastervm extends GetxController{
       }else{
         isReferral.value=false;
       }
+      OldCRMAccountNo_Controller.text = response[0].oldCrmAccountNo??"";
       PhoneNo_Controller.text= response[0].phoneNo??"";
       EmailId_Controller.text = response[0].emailId??"";
       account_cat_type_controller.text = response[0].accountCategoryType??"";

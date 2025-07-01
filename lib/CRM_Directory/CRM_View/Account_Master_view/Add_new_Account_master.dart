@@ -429,6 +429,37 @@ class AddNewAccountMaster extends StatelessWidget{
                         ),
                         child: Column(
                           children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: accountMaster_page_controller
+                                    .OldCRMAccountNo_Controller,
+                                decoration: InputDecoration(
+                                    hintText: "Old Crm Account No.",
+                                    labelText: "Old Crm Account No.",
+                                    //suffixIcon: Icon(Icons.email),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten,
+                                        horizontal: AllFontSize.ten),
+
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue)
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    )
+                                ),
+
+                              ),
+                            ),
+
+                            SizedBox(height: 15,),
+
                             bindAccountTypeDropDown(context),
 
                             SizedBox(height: 15,),
