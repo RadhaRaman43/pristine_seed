@@ -22,7 +22,6 @@ class PendingDraftQuote extends StatelessWidget{
   final account_vm_controller = Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
   Size size=Get.size;
-
   static String _displayQuoteStatusForOption(String option) =>
       option;
 
@@ -105,7 +104,7 @@ class PendingDraftQuote extends StatelessWidget{
 
          // print("last index ${pendingDraftQuoteController.pageNumberForQuote} ${pendingDraftQuoteController.total_rows} ${pendingDraftQuoteController.rowsPerPage} ${total_page}");
           if (pendingDraftQuoteController.pageNumberForQuote + 1 < total_page) {
-            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1);
+            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1, "PENDING & PENDING FOR APPROVAL");
             pendingDraftQuoteController.pageNumberForQuote += 1;
           }
         }
@@ -242,6 +241,7 @@ class PendingDraftQuote extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: (){
+                      saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
                       saleCycleController.pageNumber = 0;
                       saleCycleController.filterQuoteAcceptedFlag.value="";
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
@@ -280,24 +280,35 @@ class PendingDraftQuote extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container (
-                    width: size.width*0.4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .accountCode  ?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountCode ??
+                  InkWell(
+                    child: Container(
+                      width: size.width * .4,
+                      child: Tooltip(
+                        message:pendingDraftQuoteController
+                            .PendingDraftQuoteList[position].accountCode ??
                             "",
-                        overflow: TextOverflow.ellipsis,
-                        //textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
+                        child: Text(
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode ??
+                              "",
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(
+                            color: Colors.blueAccent,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            decoration: TextDecoration.underline,
+                            decorationStyle: TextDecorationStyle.wavy,
+                          ),
                         ),
                       ),
                     ),
+                    onTap: () {
+                      account_vm_controller.view = 'FromQuoteDraftScreen';
+                      contact_vm_controller.view = 'FromQuoteDraftScreen';
+                      account_vm_controller.getAccMasterBuyCodeApi(
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode!);
+                    },
                   ),
 
                 ],
@@ -312,37 +323,21 @@ class PendingDraftQuote extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  InkWell(
-                    child: Container(
-                      width: size.width * .4,
-                      child: Tooltip(
-                        message:pendingDraftQuoteController
-                            .PendingDraftQuoteList[position].accountName ??
-                            "",
-                        child: Text(
-                          pendingDraftQuoteController
-                              .PendingDraftQuoteList[position].accountName ??
-                              "",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                            color: Colors.blueAccent,
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .accountName ?? "",
+                      child: Text(
+                        pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .accountName ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,
-                          ),
-                        ),
+                            fontWeight: FontWeight.w500),
                       ),
                     ),
-                    onTap: () {
-                      account_vm_controller.view =
-                      'FromQuoteDraftScreen';
-                      contact_vm_controller.view =
-                      'FromQuoteDraftScreen';
-                      account_vm_controller.getAccMasterBuyCodeApi(
-                          pendingDraftQuoteController
-                              .PendingDraftQuoteList[position].accountCode!);
-                    },
                   ),
 
                 ],
@@ -839,7 +834,7 @@ class PendingDraftQuote extends StatelessWidget{
                             onPressed: () {
 
                               pendingDraftQuoteController.pageNumberForQuote = 0;
-                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote);
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "PENDING & PENDING FOR APPROVAL");
                               Get.back();
                             },
                             child: Text(
@@ -864,7 +859,7 @@ class PendingDraftQuote extends StatelessWidget{
 
                               pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
                               pendingDraftQuoteController.pageNumberForQuote = 0;
-                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote,);
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "PENDING & PENDING FOR APPROVAL");
                               Get.back();
 
                             },

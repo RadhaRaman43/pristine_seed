@@ -90,6 +90,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.pendingDraftQuoteScreen);
         }
+        else if(saleCycleController.FromPage.value == "ApprovedRejectedQuotePage"){
+          saleCycleController.clearAllFieldOfFilter();
+          Get.toNamed(RoutesName.approvedRejectedQuoteScreen);
+        }
+        else if(saleCycleController.FromPage.value == "FromAllQuotePage"){
+          saleCycleController.clearAllFieldOfFilter();
+          Get.toNamed(RoutesName.allQuoteScreenScreen);
+        }else if(saleCycleController.FromPage.value == "FromALLQuoteLineItems"){
+          saleCycleController.clearAllFieldOfFilter();
+          Get.toNamed(RoutesName.allQuoteLineItemScreen);
+        }
         else {
           saleCycleController.filterQuoteAcceptedFlag.value = "Open";
           //saleCycleController.getsalesCycleData(0, "", "",'');
@@ -229,7 +240,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 return Visibility(
                   visible:(saleCycleController
                       .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss" || saleCycleController
-                      .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected" ||saleCycleController.FromPage.value == "QuotePendingPage") ||
+                      .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems") ||
                       saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()!=saleCycleController.email.toLowerCase()?false:true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
@@ -532,7 +543,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   visible: saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() != "OPEN" ||
                                       saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()||
                                           saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() == "rejected" ||
-                                          (saleCycleController.FromPage.value == "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage")
+                                          (saleCycleController.FromPage.value == "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems")
                                       ? false
                                       : true,
                                   child: Container(
@@ -993,7 +1004,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                       "OPEN" ||
                                                   saleCycleController
                                                           .FromPage.value ==
-                                                      "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage"
+                                                      "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems"
                                               ? false
                                               : true,
                                           child: Container(
@@ -1091,7 +1102,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                     "OPEN" &&
                                                 !(saleCycleController
                                                         .FromPage.value ==
-                                                    "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage")
+                                                    "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems")
                                             ? true
                                             : false,
                                         child: GestureDetector(
@@ -2198,7 +2209,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindIsCommit(BuildContext context) {
     return IgnorePointer(
-      ignoring: saleCycleController.FromPage.value == "FromDashboard"||saleCycleController.FromPage.value == "QuotePendingPage",
+      ignoring: saleCycleController.FromPage.value == "FromDashboard"||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems",
       child: Container(
         padding: const EdgeInsets.only(right: 10, bottom: 10),
         child: DropdownMenu<String>(
@@ -2268,7 +2279,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindConfirmExpectedRevenue(BuildContext context) {
     return IgnorePointer(
-      ignoring: saleCycleController.FromPage.value == "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage",
+      ignoring: saleCycleController.FromPage.value == "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems",
       child: Container(
         padding: const EdgeInsets.only(
           left: 10,
@@ -2278,7 +2289,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           width: saleCycleController.saleCycleList[0].quoteAccepted
                           ?.toUpperCase() !=
                       "OPEN" ||
-              saleCycleController.FromPage.value == "FromDashboard"||saleCycleController.FromPage.value == "QuotePendingPage"
+              saleCycleController.FromPage.value == "FromDashboard"||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems"
               || saleCycleController.saleCycleList[0].isReadySendForApproval==0
           ? size.width - 20
               : size.width / 2 - 16,
@@ -2859,7 +2870,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                           Visibility(
                             visible: saleCycleController.FromPage.value ==
-                                        "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage"||
+                                        "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage"|| saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems" ||
                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
                                     saleCycleController
                                             .saleCycleList[0].quoteAccepted
@@ -4711,7 +4722,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             ),
             Spacer(),
             Visibility(
-              visible: saleCycleController.FromPage.value != "QuotePendingPage",
+              visible: saleCycleController.FromPage.value != "QuotePendingPage" && saleCycleController.FromPage.value != "ApprovedRejectedQuotePage" && saleCycleController.FromPage.value != "FromAllQuotePage" && saleCycleController.FromPage.value != "FromALLQuoteLineItems",
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -7119,7 +7130,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ?.toLowerCase() !=
               "open" ||saleCycleController.saleCycleList[0].salesCycleApprovalStatus
           ?.toLowerCase() ==
-          "rejected" ||saleCycleController.FromPage.value == "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage"
+          "rejected" ||saleCycleController.FromPage.value == "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems"
        ,
       child: Container(
         padding: const EdgeInsets.only(left: 15, right: 15),
@@ -7252,7 +7263,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                   ?.toLowerCase() ==
               "rejected" ||
-          (saleCycleController.FromPage.value == "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage"),
+          (saleCycleController.FromPage.value == "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems"),
       child: Container(
         padding: EdgeInsets.fromLTRB(15, 5, 0, 10),
         width: size.width / 2,
@@ -7438,7 +7449,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                           onTap: () {
                             if (!(saleCycleController.FromPage.value ==
-                                    "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage") &&
+                                    "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems") &&
                                 saleCycleController
                                         .saleCycleList[0].quoteAccepted
                                         ?.toUpperCase() ==
@@ -7472,7 +7483,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           "OPEN" ||
                                   saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
                                       (saleCycleController.FromPage.value ==
-                                          "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage")
+                                          "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems")
                                   ? false
                                   : true,
                           child: InkWell(
@@ -8227,7 +8238,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               .toLowerCase() ==
                                           "rejected" ||
                                       (saleCycleController.FromPage.value ==
-                                          "FromDashboard") ||saleCycleController.FromPage.value == "QuotePendingPage"||
+                                          "FromDashboard") ||saleCycleController.FromPage.value == "QuotePendingPage"|| saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems" ||
                                   saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()!=saleCycleController.email.toLowerCase()
                                   ? false
                                   : true,

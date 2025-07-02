@@ -288,5 +288,4 @@ class AppUrl {
      static const String getEmployeeHolidays="$BASE_URL/api/CRM/EmployeeAttendance/GetEmployeeHolidays";
      static const String employeeLeaveMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveMark";
 
-
 }

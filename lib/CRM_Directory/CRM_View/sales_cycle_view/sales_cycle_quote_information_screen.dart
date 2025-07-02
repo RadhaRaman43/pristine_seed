@@ -26,7 +26,7 @@ class QuoteInformationScreen extends StatelessWidget {
   final contact_vm_controller = Get.put(ContactMasterVM());
   final address_vm_controller = Get.put(Addressmastervm());
   final quoteApprovalController = Get.put(QuoteApprovalListVm());
-  final pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
+  final pendingDraftQuoteController=Get.put(PendingDraftQuoteVm("APPROVED & REJECTED"));
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
@@ -42,10 +42,21 @@ class QuoteInformationScreen extends StatelessWidget {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
         }else if (saleCycleController.quoteApprovalPage.value == "pendingDraftQuote") {
-          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(0);
-          Get.toNamed(RoutesName.pendingDraftQuoteScreen);
+          pendingDraftQuoteController.getPendingDraftQuoteList(0, "PENDING & PENDING FOR APPROVAL");*/
+          Get.offNamed(RoutesName.pendingDraftQuoteScreen);
+        }
+        else if (saleCycleController.quoteApprovalPage.value == "approvedRejectedQuote") {
+          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(0, "APPROVED & REJECTED");*/
+          Get.offNamed(RoutesName.approvedRejectedQuoteScreen);
+        }else if (saleCycleController.quoteApprovalPage.value == "AllQuoteList") {
+          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(0, "All");*/
+          Get.offNamed(RoutesName.allQuoteScreenScreen);
         }
         else if (saleCycleController.quoteApprovalPage.value ==
             "approvedQuotationScreen") {
@@ -3040,6 +3051,43 @@ class QuoteInformationScreen extends StatelessWidget {
                   SizedBox(
                     height: 3,
                   ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Kind Attention",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Flexible(
+                        //width: size.width * 0.5,
+                        child: Tooltip(
+                          message: saleCycleController
+                              .quoteHeaderdata[0].kindAttention ??
+                              "",
+                          child: Text(
+                            saleCycleController
+                                .quoteHeaderdata[0].kindAttention ??
+                                "",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
                 ],
               ),
             ),
@@ -4020,9 +4068,9 @@ class QuoteInformationScreen extends StatelessWidget {
                       address_vm_controller.getGeoPostalCodeApi();
                       Get.toNamed(RoutesName.addNewAddress_screen);
                     },
-                    text: 
-                      'Add New',
-                    ),
+                    text:
+                    'Add New',
+                  ),
                 ),
                 SizedBox(width: 10,),
                 Expanded(
@@ -4036,7 +4084,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
                     },
                     text: 'Change ',
-                     
+
                   ),
                 ),
               ],

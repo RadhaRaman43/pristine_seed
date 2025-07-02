@@ -49,6 +49,7 @@ class AccountMasterGetByCodeModel {
   String? zoneHeadValue;
   String? clustureHeadValue;
   int? isAccountFixed;
+  String? oldCrmAccountNo;
 
   AccountMasterGetByCodeModel(
       {this.condition,
@@ -100,7 +101,8 @@ class AccountMasterGetByCodeModel {
         this.branchHeadValue,
         this.zoneHeadValue,
         this.clustureHeadValue,
-        this.isAccountFixed});
+        this.isAccountFixed,
+        this.oldCrmAccountNo});
 
   AccountMasterGetByCodeModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -155,6 +157,7 @@ class AccountMasterGetByCodeModel {
     zoneHeadValue = json['zone_head_value'];
     clustureHeadValue = json['clusture_head_value'];
     isAccountFixed = json['is_account_fixed'];
+    oldCrmAccountNo = json['old_crm_account_no'];
   }
 
   Map<String, dynamic> toJson() {
@@ -211,6 +214,7 @@ class AccountMasterGetByCodeModel {
     data['zone_head_value'] = this.zoneHeadValue;
     data['clusture_head_value'] = this.clustureHeadValue;
     data['is_account_fixed'] = this.isAccountFixed;
+    data['old_crm_account_no'] = this.oldCrmAccountNo;
     return data;
   }
 }

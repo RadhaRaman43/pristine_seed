@@ -28,6 +28,8 @@ import '../../CRM_Directory/CRM_View/Account_Master_view/Draft_item_list.dart';
 import '../../CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
 import '../../CRM_Directory/CRM_View/Address_Master_view/Add_New_ConsigneeAdd.dart';
 import '../../CRM_Directory/CRM_View/Address_Master_view/View_address_screen.dart';
+import '../../CRM_Directory/CRM_View/All_Quote_Line_Item_View/All_Quote_Line_Item_Screen.dart';
+import '../../CRM_Directory/CRM_View/All_Quote_view/All_Quote_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
@@ -43,6 +45,7 @@ import '../../CRM_Directory/CRM_View/sales_advise_view/sales_advise_create_scree
 import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approval_person_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_approve_reject_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_item_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sale_cycle_pending_for_approval_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_create_quote_screen.dart';
@@ -662,6 +665,24 @@ class AppRoutes{
     ),
     GetPage(name: RoutesName.pendingDraftQuoteScreen,
         page: ()=>PendingDraftQuote(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.approvedRejectedQuoteScreen,
+        page: ()=>QuoteApproveRejectScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.allQuoteScreenScreen,
+        page: ()=>AllQuoteScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.allQuoteLineItemScreen,
+        page: ()=>AllQuoteLineItemScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

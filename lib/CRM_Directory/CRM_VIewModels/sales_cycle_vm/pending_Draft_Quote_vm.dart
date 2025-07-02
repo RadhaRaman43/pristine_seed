@@ -8,7 +8,10 @@ import '../../CRM_Models/sale_cycle_modal/Pending_Draft_Quote_model.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
 class PendingDraftQuoteVm extends GetxController{
-
+  String filterFlag="";
+  PendingDraftQuoteVm([String? flag]){
+    this.filterFlag = flag??"";
+  }
   final _api = SalesCycleRepository();
   SessionManagement sessionManagement = SessionManagement();
   RxBool loading=false.obs;
@@ -16,6 +19,8 @@ class PendingDraftQuoteVm extends GetxController{
   int pageNumberForQuote = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
+  String isAdminWritePermission = "";
+
 
   var filterQuoteIdController=TextEditingController().obs;
   var filterQuoteVersionController=TextEditingController().obs;
@@ -37,19 +42,22 @@ class PendingDraftQuoteVm extends GetxController{
 
   RxList<Pending_Draft_Quote_Model> PendingDraftQuoteList=<Pending_Draft_Quote_Model>[].obs;
   RxList<String> QuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", ].obs;
+  RxList<String> approvedRejectedStatusList = ["All", "APPROVED", "REJECTED", ].obs;
+  RxList<String> AllQuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", "APPROVED", "REJECTED", ].obs;
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
-    getPendingDraftQuoteList(pageNumberForQuote);
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
     super.onInit();
   }
 
   Future<void>refreshList() async{
-    getPendingDraftQuoteList(pageNumberForQuote);
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
   }
 
 
-  getPendingDraftQuoteList(int pageNumberForQuote){
+  getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter){
     try{
       Map data={
           "filter_quote_id": filterQuoteIdController.value.text.isEmpty?"":filterQuoteIdController.value.text,
@@ -64,9 +72,9 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_quote_validity": filterQuoteValidityController.value.text.isEmpty?"":filterQuoteValidityController.value.text,
           "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isEmpty?"":filterExpectedClosuredateController.value.text,
           "filter_quote_status": quoteStatusController.value.text.isEmpty?"":quoteStatusController.value.text,
-          "filter_flag": "PENDING & PENDING FOR APPROVAL",
+          "filter_flag": flagFilter,
           "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
-          "filter_created_by": email,
+          "filter_created_by": isAdminWritePermission == '0'?email:'',
           "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
           "filter_frontliner_value": "",
           "filter_branch_head_value": region_name_controller.value.text.isEmpty?"":region_name_controller.value.text,
