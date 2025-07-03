@@ -141,9 +141,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 Obx(() {
                   return Visibility(
                     visible: saleCycleController
-                            .saleCycleList[0].actualSalesCycleApprovalStatus
+                            .saleCycleList[0].quoteAccepted
                             ?.toLowerCase() ==
-                        'rejected' && saleCycleController.isAdminWritePermission=="1"?true:false,
+                        'loss' && saleCycleController.isAdminWritePermission=="1"?true:false,
                     child: GestureDetector(
                       onTap: () {
                         saleCycleController.reOpenRemarksController.value.text =
@@ -238,8 +238,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible:(saleCycleController
-                      .saleCycleList[0].quoteAccepted?.toLowerCase()=="loss" || saleCycleController
+                  visible:( saleCycleController
                       .saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="rejected" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems") ||
                       saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()!=saleCycleController.email.toLowerCase()?false:true,
                   child: PopupMenuButton(
@@ -368,10 +367,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           "suspect" && saleCycleController.saleCycleList[0]
                           .salesCycleStatus
                           ?.toLowerCase() !=
-                          "rejected" &&  saleCycleController.saleCycleList[0]
-                          .quoteAccepted
-                          ?.toLowerCase() ==
-                          "open") {
+                          "rejected") {
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -623,74 +619,106 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
-                              Obx(() {
-                                return ActionChip(
-                                  elevation: 2,
-                                  padding: EdgeInsets.only(
-                                      right: 15, top: 2, left: 10, bottom: 2),
-                                  backgroundColor:
+                              ActionChip(
+                                elevation: 2,
+                                padding: EdgeInsets.only(
+                                    right: 15, top: 2, left: 10, bottom: 2),
+                                backgroundColor:
+                                saleCycleController.filter.value ==
+                                    'Customer Need Identity'
+                                    ? AllColors.primaryDark1
+                                    : AllColors.grayColor,
+                                shadowColor: Colors.black,
+                                shape: StadiumBorder(
+                                    side: BorderSide(
+                                        color: AllColors.grayColor)),
+                                label: Text('Customer Need Identity',
+                                    style: GoogleFonts.poppins(
+                                      color:
                                       saleCycleController.filter.value ==
-                                              'Sales cycle'
-                                          ? AllColors.primaryDark1
-                                          : AllColors.grayColor,
-                                  shadowColor: Colors.black,
-                                  shape: StadiumBorder(
-                                      side: BorderSide(
-                                          color: AllColors.grayColor)),
-                                  label: Text('Proposed Solution',
-                                      style: GoogleFonts.poppins(
-                                        color:
-                                            saleCycleController.filter.value ==
-                                                    'Sales cycle'
-                                                ? AllColors.whiteColor
-                                                : AllColors.primaryDark1,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  onPressed: () {
-                                    saleCycleController.filter.value =
-                                        'Sales cycle';
-                                  }, //Text
-                                );
-                              }),
+                                          'Customer Need Identity'
+                                          ? AllColors.whiteColor
+                                          : AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                                onPressed: () {
+                                 saleCycleController.filter.value =
+                                  'Customer Need Identity';
+                                }, //Text
+                              ),
                               SizedBox(
                                 width: size.width * 0.02,
                               ),
-                              Obx(() {
-                                return ActionChip(
-                                  elevation: 2,
-                                  padding: EdgeInsets.only(
-                                      right: 15, top: 2, left: 15, bottom: 2),
-                                  backgroundColor:
-                                      saleCycleController.filter.value ==
-                                              'Solution Accepted'
-                                          ? AllColors.primaryDark1
-                                          : AllColors.grayColor,
-                                  shadowColor: Colors.black,
-                                  shape: StadiumBorder(
-                                      side: BorderSide(
-                                          color: AllColors.grayColor)),
-                                  label: Text('Solution Accepted',
-                                      style: GoogleFonts.poppins(
-                                        color:
-                                            saleCycleController.filter.value ==
-                                                    'Solution Accepted'
-                                                ? AllColors.whiteColor
-                                                : AllColors.primaryDark1,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  onPressed: () {
-                                    saleCycleController.filter.value =
-                                        'Solution Accepted';
-                                  }, //Text
-                                );
-                              }),
+                              IgnorePointer(
+                                ignoring: saleCycleController.saleCycleList[0].isCustomerNeedIdentify==0,
+                                child: ActionChip(
+                                    elevation: 2,
+                                    padding: EdgeInsets.only(
+                                        right: 15, top: 2, left: 10, bottom: 2),
+                                    backgroundColor:
+                                        saleCycleController.filter.value ==
+                                                'Sales cycle'
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                    shadowColor: Colors.black,
+                                    shape: StadiumBorder(
+                                        side: BorderSide(
+                                            color: AllColors.grayColor)),
+                                    label: Text('Proposed Solution',
+                                        style: GoogleFonts.poppins(
+                                          color:
+                                              saleCycleController.filter.value ==
+                                                      'Sales cycle'
+                                                  ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                    onPressed: () {
+                                      saleCycleController.filter.value =
+                                          'Sales cycle';
+                                    }, //Text
+                                  ),
+                              ),
                               SizedBox(
                                 width: size.width * 0.02,
                               ),
-                              Obx(() {
-                                return Visibility(
+                              IgnorePointer(
+                                ignoring: saleCycleController.saleCycleList[0].isCustomerNeedIdentify==0,
+                                child: ActionChip(
+                                    elevation: 2,
+                                    padding: EdgeInsets.only(
+                                        right: 15, top: 2, left: 15, bottom: 2),
+                                    backgroundColor:
+                                        saleCycleController.filter.value ==
+                                                'Solution Accepted'
+                                            ? AllColors.primaryDark1
+                                            : AllColors.grayColor,
+                                    shadowColor: Colors.black,
+                                    shape: StadiumBorder(
+                                        side: BorderSide(
+                                            color: AllColors.grayColor)),
+                                    label: Text('Solution Accepted',
+                                        style: GoogleFonts.poppins(
+                                          color:
+                                              saleCycleController.filter.value ==
+                                                      'Solution Accepted'
+                                                  ? AllColors.whiteColor
+                                                  : AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                    onPressed: () {
+                                      saleCycleController.filter.value =
+                                          'Solution Accepted';
+                                    }, //Text
+                                  ),
+                              ),
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              Visibility(
                                   visible: (saleCycleController.saleCycleList[0]
                                       .createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
                                       saleCycleController.filter.value ==
@@ -729,13 +757,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       child: Icon(Icons.add),
                                     ),
                                   ),
-                                );
-                              }),
+                                ),
+
                               SizedBox(
                                 width: size.width * 0.02,
                               ),
-                              Obx(() {
-                                return Visibility(
+
+                                Visibility(
                                   visible: saleCycleController.filter.value ==
                                       'Sales cycle',
                                   child: CircleAvatar(
@@ -746,8 +774,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       child: Icon(Icons.filter_alt_rounded),
                                     ),
                                   ),
-                                );
-                              }),
+                                ),
+
                             ],
                           ),
                         ),
@@ -775,34 +803,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           Container(
-                            child: Row(
-                              children: [
-                                /*child: Visibility(
-                                          visible: saleCycleController
-                                              .saleCycleList[0]
-                                              .salesCycleStatus!
-                                              .toUpperCase() == "PROSPECT"
-                                              ? true
-                                              : false,*/
-                                Obx(() {
-                                  return bindCustomerNeedIdentity(context);
-                                }),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Obx(() {
-                                  return Expanded(
-                                      child: Visibility(
-                                          visible: saleCycleController
-                                              .ischangeNeedIdentity.value,
-                                          child:
-                                              bindSolutionAccepted(context)));
-                                })
-                              ],
-                            ),
+                            child: bindSolutionAccepted(context),
                           ),
-                          Obx(() {
-                            return Visibility(
+                          Visibility(
                                 visible: (saleCycleController.saleCycleList[0]
                                                 .salesCycleStatus!
                                                 .toUpperCase() ==
@@ -814,8 +817,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 .isFalse)
                                     ? true
                                     : false,
-                                child: bindSolutionRejectedRemarks(context));
-                          }),
+                                child: bindSolutionRejectedRemarks(context)),
+
                           /*   Obx(() {
                                 return Visibility(
                                     visible: saleCycleController
@@ -961,6 +964,18 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 ))
                           ],
                         ));
+                  }),
+                  Obx(() {
+                    return Visibility(
+                        visible: saleCycleController
+                            .saleCycleList[0].salesCycleStatus!
+                            .toUpperCase() ==
+                            "PROSPECT" &&
+                            saleCycleController.filter.value ==
+                                'Customer Need Identity'
+                            ? true
+                            : false,
+                        child: bindCustomerNeedIdentity(context));
                   }),
                   Obx(() {
                     return Visibility(
@@ -1283,20 +1298,18 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       children: [
                         Obx(() {
                           return Visibility(
-                            visible: ((saleCycleController.saleCycleList[0]
+                            visible: (saleCycleController.saleCycleList[0]
                                                 .actualSalesCycleApprovalStatus
                                                 ?.toLowerCase() ==
-                                            "pending") &&
-                                        (saleCycleController.saleCycleList[0]
+                                            "pending" &&
+                                        saleCycleController.saleCycleList[0]
                                                 .isReadySendForApproval ==
-                                            1) &&
-                                        (saleCycleController
-                                                .ischangeNeedIdentity.value &&
-                                            saleCycleController
+                                            1 &&
+                                        ((saleCycleController.filter.value ==
+                                            'Solution Accepted' && saleCycleController
                                                 .ischangesolutionAccepted
-                                                .value)) &&
-                                    saleCycleController.filter.value ==
-                                        'Solution Accepted'
+                                                .value) || saleCycleController.filter.value ==
+                                'Customer Need Identity'))
                                 ? true
                                 : false,
                             child: Padding(
@@ -1309,6 +1322,32 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                 ),
                                 onPressed: () {
+                                  if( saleCycleController.filter.value ==
+                                      'Customer Need Identity'){
+                                    showDialog(context: context, builder: (ctx)=>AlertDialog(
+                                      title: Text("Update"),
+                                      content: Text("Do you want to save details?",
+                                          style: GoogleFonts.poppins(
+                                            fontSize: AllFontSize.fourtine,
+                                            fontWeight: FontWeight.w500,
+                                            color: AllColors.primaryDark1,
+                                          )),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            saleCycleController.proposedSolutionController.value.text="";
+                                            saleCycleController.solutionRejectedRemarkController.value.text="";
+                                            saleCycleController
+                                                .getSalesCycleMstUpdateProposedSolution(
+                                                saleCycleController.saleCycleList[0],
+                                                "Update");
+                                            Navigator.of(ctx).pop();
+                                          },
+                                          child: const Text("Confirm"),
+                                        ),
+                                      ],
+                                    ));
+                                  }else{
                                   saleCycleController.purchaseProcessController
                                       .value.text = "";
                                   saleCycleController
@@ -1319,6 +1358,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .getSalesCycleMstUpdateProposedSolution(
                                           saleCycleController.saleCycleList[0],
                                           "Approved");
+                                  }
                                   /* saleCycleController.salesCycleMstUpdateApiHit(
                                     saleCycleController.saleCycleList[0],
                                     saleCycleController
@@ -1329,7 +1369,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   width: size.width,
                                   child: Center(
                                     child: Text(
-                                      'Next',
+                                      saleCycleController.filter.value ==
+                                          'Customer Need Identity'?'Save':'Next',
                                       style: GoogleFonts.poppins(
                                         color: AllColors.whiteColor,
                                         fontSize: AllFontSize.fourtine,
@@ -2454,7 +2495,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(left: 15, bottom: 10),
       child: DropdownMenu<String>(
-        width: MediaQuery.of(context).size.width / 2 - 16,
+        width: MediaQuery.of(context).size.width - 30,
         controller: saleCycleController.customerNeedIdetityController.value,
         label: Text(
           "Customer Need Identity",
@@ -2532,9 +2573,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
   Widget bindSolutionAccepted(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(left: 15, bottom: 10),
+      padding: const EdgeInsets.only(bottom: 10),
       child: DropdownMenu<String>(
-        width: MediaQuery.of(context).size.width * .94 / 2 - 30,
+        width: MediaQuery.of(context).size.width -30,
         controller: saleCycleController.solutionAcceptedController.value,
         label: Text(
           "Solution Accepted",
@@ -3684,7 +3725,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     : Colors.blueAccent,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
+                                decoration: saleCycleController
+                                    .saleCycleList[0].quoteAccepted
+                                    ?.toLowerCase() ==
+                                    "won"?TextDecoration.underline:TextDecoration.none,
                                 decorationStyle: TextDecorationStyle.wavy,
                               ),
                               textAlign: TextAlign.end,
@@ -4078,8 +4122,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               visible: flag == "Update" &&
                   saleCycleController.saleCycleList[0].salesCycleStatus
                       ?.toLowerCase() !=
-                      "suspect" &&   saleCycleController.saleCycleList[0].quoteAccepted
-                  ?.toLowerCase() == "open" &&  saleCycleController
+                      "suspect" && saleCycleController
+                  .saleCycleList[0].quoteAccepted
+                  ?.toUpperCase() !=
+                  "WON" &&  saleCycleController
                   .saleCycleList[0].actualSalesCycleApprovalStatus
                   ?.toLowerCase() !=
                   "rejected"  && flagView!="View",

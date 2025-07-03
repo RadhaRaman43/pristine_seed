@@ -304,7 +304,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval"
                               && saleCycleController
                                       .quoteHeaderdata[0].isReadyForApprove==1 && saleCycleController
-                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" &&saleCycleController.showApprovalBtn.value
+                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && (saleCycleController.showApprovalBtn.value|| saleCycleController.isAdminWritePermission=="1")
                                   ? true
                                   : false,
                               child: Row(
@@ -3889,8 +3889,50 @@ class QuoteInformationScreen extends StatelessWidget {
             /* quoteCommitDropDown(context),
                         SizedBox(height: 10),*/
             bindActive(context),
+            SizedBox(height: 10,),
+            bindKindAttention(context),
+
           ],
         ),
+      ),
+    );
+  }
+
+  Widget bindKindAttention(BuildContext context) {
+    return TextField(
+      onChanged: (value){
+        final words = value.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).toList();
+
+        if (words.length > 500) {
+          final limitedText = words.take(500).join(' ');
+          saleCycleController.kindAttentionController.value.text = limitedText;
+          saleCycleController.kindAttentionController.value.selection =
+              TextSelection.fromPosition(TextPosition(offset: limitedText.length));
+        }
+      },
+      maxLength: 500,
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.kindAttentionController.value,
+
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Kind Attention*',
+          labelText: 'Kind Attention*',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
       ),
     );
   }
