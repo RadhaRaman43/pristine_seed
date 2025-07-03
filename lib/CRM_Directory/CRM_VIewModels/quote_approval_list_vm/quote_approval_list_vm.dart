@@ -18,6 +18,10 @@ class QuoteApprovalListVm extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
 
+  RxString createdOnStartToEnd = "".obs;
+  RxString extClosureStartToEnd = "".obs;
+  RxString quoteValidityStartToEnd = "".obs;
+
 
   var filterQuoteIdController=TextEditingController().obs;
   var filterQuoteAccountNameController=TextEditingController().obs;
@@ -68,12 +72,12 @@ class QuoteApprovalListVm extends GetxController{
         "filter_category_approval":  category_Approval_controller.value.text.isEmpty?"": category_Approval_controller.value.text,
         "filter_gm_approval":  gm_Approval_controller.value.text.isEmpty?"": gm_Approval_controller.value.text,
         "filter_quote_version": -1,
-        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty?filterQuoteValidityController.value.text:"",
-        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
+        "filter_quote_validity": quoteValidityStartToEnd.value.isNotEmpty?quoteValidityStartToEnd.value:"",
+        "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty?extClosureStartToEnd.value:"",
         "filter_quote_status":"Under Approval",
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_created_by": email,
-        "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+        "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
         "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
         "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
         "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
@@ -153,6 +157,9 @@ class QuoteApprovalListVm extends GetxController{
     zone_head_value_controller.value.clear();
     cluster_head_value_controller.value.clear();
     filterQuoteSaleCycleController.value.clear();
+    createdOnStartToEnd.value = "";
+    extClosureStartToEnd.value = "";
+    quoteValidityStartToEnd.value = "";
 
 
   }

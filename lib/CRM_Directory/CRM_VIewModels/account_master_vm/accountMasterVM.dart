@@ -58,7 +58,7 @@ class Accountmastervm extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   RxString FromPage="".obs;
-  String isAdminWritePermission = "";
+  RxString isAdminWritePermission = "".obs;
   String email="";
   String UserName="";
   String accountName='';
@@ -208,7 +208,7 @@ class Accountmastervm extends GetxController{
 
     email=await sessionManagement.getEmail() ?? '';
     UserName=await sessionManagement.getName() ?? '';
-    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     getAccountMaster(pageNumber ,is_Active.toString());
     getDraftAccountMaster(pageNumber ,is_Active.toString());
     getAccCategoryApi();

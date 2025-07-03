@@ -165,6 +165,7 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
+    print('isadminpermosdsdkf....${accountMaster_page_controller.isAdminWritePermission}');
     int? IsActive = accountMaster_page_controller.Account_Master_list[position].isActive;
     var controller=accountMaster_page_controller.Account_Master_list[position];
     String isActive = "";
@@ -687,7 +688,7 @@ class AccountmasterScreen extends StatelessWidget{
           ],
         ),*/
          trailing: InkWell(
-           child: Icon(Icons.update),
+           child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
          ),
       ),
     );

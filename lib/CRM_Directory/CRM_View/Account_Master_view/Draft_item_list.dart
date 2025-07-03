@@ -364,7 +364,7 @@ class DraftItemList extends StatelessWidget{
           ],
         ),*/
         trailing: InkWell(
-          child: Icon(Icons.update),
+          child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
         ),
       ),
     );

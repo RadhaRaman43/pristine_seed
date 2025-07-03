@@ -20,6 +20,9 @@ class PendingDraftQuoteVm extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   String isAdminWritePermission = "";
+  RxString createdOnStartToEnd = "".obs;
+  RxString extClosureStartToEnd = "".obs;
+  RxString quoteValidityStartToEnd = "".obs;
 
 
   var filterQuoteIdController=TextEditingController().obs;
@@ -69,13 +72,13 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_category_approval": category_Approval_controller.value.text.isEmpty?"":category_Approval_controller.value.text,
           "filter_gm_approval": gm_Approval_controller.value.text.isEmpty?"":gm_Approval_controller.value.text,
           "filter_quote_version": filterQuoteVersionController.value.text.isEmpty?"-1":filterQuoteVersionController.value.text,
-          "filter_quote_validity": filterQuoteValidityController.value.text.isEmpty?"":filterQuoteValidityController.value.text,
-          "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isEmpty?"":filterExpectedClosuredateController.value.text,
-          "filter_quote_status": quoteStatusController.value.text.isEmpty?"":quoteStatusController.value.text,
+          "filter_quote_validity": quoteValidityStartToEnd.value.isEmpty?"":quoteValidityStartToEnd.value,
+          "filter_exp_closure_date": extClosureStartToEnd.value.isEmpty?"":extClosureStartToEnd.value,
+          "filter_quote_status": quoteStatusController.value.text.isEmpty || quoteStatusController.value.text == 'All'?"":quoteStatusController.value.text,
           "filter_flag": flagFilter,
           "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
           "filter_created_by": isAdminWritePermission == '0'?email:'',
-          "filter_created_on": createdOnCnontroller.value.text.isEmpty?"":createdOnCnontroller.value.text,
+          "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
           "filter_frontliner_value": "",
           "filter_branch_head_value": region_name_controller.value.text.isEmpty?"":region_name_controller.value.text,
           "filter_zone_head_value": "",
@@ -149,6 +152,9 @@ class PendingDraftQuoteVm extends GetxController{
     createdByCnontroller.value.clear();
     region_name_controller.value.clear();
     quoteStatusController.value.clear();
+    createdOnStartToEnd.value = "";
+    extClosureStartToEnd.value = "";
+    quoteValidityStartToEnd.value = "";
 
 
   }
