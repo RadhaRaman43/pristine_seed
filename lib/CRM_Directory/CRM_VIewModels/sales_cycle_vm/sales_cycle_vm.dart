@@ -92,7 +92,8 @@ class SalesCycleVm extends GetxController {
   var isCheck = (-1).obs;
   var editingIndex = (-1).obs;
   RxBool BusinessTerm = false.obs;
-  RxString filter = "Sales cycle".obs;
+  //RxString filter = "Sales cycle".obs;
+  RxString filter = "Customer Need Identity".obs;
   RxList<SalesCycleModal> saleCycleList = <SalesCycleModal>[].obs;
   RxList<ProductCategoryWiseAmtModel> budgetAmountList =
       <ProductCategoryWiseAmtModel>[].obs;
@@ -324,7 +325,7 @@ class SalesCycleVm extends GetxController {
       itemMstGetByQuoteIdList[index] = item;
     } else {
       quoteLineDeleteApiHit(
-          itemMstGetByQuoteIdList[index].lineNo ?? 0, "fromCheckBox");
+          itemMstGetByQuoteIdList[index].lineNo ?? 0, "fromCheckBox",quoteHeaderdata[0].salesCycleId??"", quoteHeaderdata[0].quoteId??"");
       itemMstGetByQuoteIdList[index] = item;
     }
     // itemMstGetByQuoteIdList[index] = item;
@@ -1314,7 +1315,7 @@ class SalesCycleVm extends GetxController {
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
               if (pageNumber == 0) {
                 itemMstGetByQuoteIdList.clear();
@@ -1326,8 +1327,9 @@ class SalesCycleVm extends GetxController {
                 Get.toNamed(RoutesName.quoteItemList);
               }
             } else {
-              Utils.showErrorToastification(
-                  "False Message !", response[0].message.toString());
+              itemMstGetByQuoteIdList.value=[];
+              /*Utils.showErrorToastification(
+                  "False Message !", response[0].message.toString());*/
               if (flag == "Add") {
                 Get.toNamed(RoutesName.quoteItemList);
               }
@@ -1554,12 +1556,12 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  void quoteLineDeleteApiHit(int lineNo, String flag) {
+  void quoteLineDeleteApiHit(int lineNo, String flag, String sales_Cycle_Id, String quote_id) {
     try {
       Map data = {
-        "quote_id": quoteId.toString(),
+        "quote_id": quote_id,
         "line_no": lineNo.toString(),
-        "sales_cycle_id": salesCycleId.toString(),
+        "sales_cycle_id": sales_Cycle_Id,
         "created_by": email
       };
       loading.value = true;
@@ -1742,7 +1744,8 @@ class SalesCycleVm extends GetxController {
         "exp_closure_date": updateExpectedClosureDateController.value.text,
         "is_active": activeController.value.text == "Yes" ? 1 : 0,
         "created_by": email,
-        "consignee_id": consigneeId
+        "consignee_id": consigneeId,
+        "kind_attention": kindAttentionController.value.text
       };
       loading.value = true;
       _api.quoteHeaderUpdateApiHit(data, sessionManagement).then(
@@ -1827,7 +1830,7 @@ class SalesCycleVm extends GetxController {
           if (jsonResponse is List) {
             List<ItemQuoteModal> response =
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
-            if (response[0].condition == "True") {
+            if (response[0].condition?.toLowerCase() == "true") {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               loading.value = false;
@@ -1872,7 +1875,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               itemQuoteReportList.value = response;
               print('isSPROut...${itemQuoteReportList[0].isSpr}');
-              fileDownload(
+             /* fileDownload(
                       itemQuoteReportList[0].quoteReportUrl!, "quoteReport")
                   .then((_) {
                 if (itemQuoteReportList[0].isSpr == "1") {
@@ -1881,8 +1884,10 @@ class SalesCycleVm extends GetxController {
                       itemQuoteReportList[0].quoteSpecialPriceReportUrl!,
                       "reportSpr");
                 }
-              });
+              });*/
               getQuoteHeaderInformation(quoteId.value, "");
+              Utils.showToastification(
+                  "Message", response[0].message.toString());
             } else {
               Utils.showErrorToastification(
                   "False Message !", response[0].message.toString());
@@ -2461,7 +2466,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response.isNotEmpty &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               // Utils.sanckBarSuccess("Message !", response[0].message.toString());
               loading.value = false;
               itemQuoteReportList.value = response;
@@ -3751,7 +3756,6 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
               address_master_list.value = [];
               // Get.toNamed(RoutesName.viewAddress_screen);
-              Utils.showToastification('No date', 'No Data Found');
             }
           } else {
             loading.value = false;
@@ -4187,12 +4191,12 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Success !", response[0].message.toString());
               loading.value = false;
-              getQuoteHeaderInformation(quoteId, '');
+              getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
               print("message ${response[0].message.toString()}");
               loading.value = false;
 
-              Utils.showToastification(
-                  "Success !", response[0].message.toString());
+              /*Utils.showToastification(
+                  "Success !", response[0].message.toString());*/
             } else {
               loading.value = false;
               Utils.showErrorToastification(
@@ -4237,12 +4241,21 @@ class SalesCycleVm extends GetxController {
             List<SalesCycleApproveRejectModal> response = jsonResponse
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
-            if (response[0].condition == "True") {
+            if (response[0].condition?.toLowerCase() == "true") {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
-              salesCycleMstApprovereject(saleCycleList,
-                  solutionRejectedRemarkController.value.text, approRejeStatus);
+              if(approRejeStatus=="Update"){
+                getsalesCycleData(
+                    pageNumber,
+                    saleCycleList.salesCycleId.toString(),
+                    "ViewHeader",
+                    FromPage.value);
+              }else{
+                salesCycleMstApprovereject(saleCycleList,
+                    solutionRejectedRemarkController.value.text, approRejeStatus);
+              }
+
               //getsalesCycleData(pageNumber, saleCycleList.salesCycleId!, "ViewHeader", 'Sales');
               //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
               loading.value = false;
@@ -4747,6 +4760,7 @@ class SalesCycleVm extends GetxController {
   }
 
   void bindAddress() {
+    kindAttentionController.value.text=quoteHeaderdata[0].kindAttention??"";
     accountCode.value = quoteHeaderdata[0].accountCode ?? "";
     updateQuoteValidityController.value.text =
         quoteHeaderdata[0].quoteValidity!;

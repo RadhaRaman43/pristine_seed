@@ -70,6 +70,7 @@ class QuoteInformationScreen extends StatelessWidget {
             "QuoteDashboard") {
           Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
         } else {
+          saleCycleController.clearAllFieldOfQuoteFilter();
           saleCycleController.pageNumber = 0;
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "";
@@ -78,7 +79,7 @@ class QuoteInformationScreen extends StatelessWidget {
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
               "",
               saleCycleController.FromPage.value);
-          saleCycleController.clearAllFieldOfQuoteFilter();
+
           saleCycleController.getQuoteHeaderData(
               saleCycleController.pageNumberForQuote,
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
@@ -193,7 +194,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             visible:  (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
                                 saleCycleController.isAdminWritePermission=="1")&&
                             saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected",
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected"&&
+                                saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" ,
                             child: Tooltip(
                               message: "Reopen",
                               child: Container(
@@ -304,7 +306,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval"
                               && saleCycleController
                                       .quoteHeaderdata[0].isReadyForApprove==1 && saleCycleController
-                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" &&saleCycleController.showApprovalBtn.value
+                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && (saleCycleController.showApprovalBtn.value|| saleCycleController.isAdminWritePermission=="1")
                                   ? true
                                   : false,
                               child: Row(
@@ -3164,7 +3166,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               saleCycleController.quoteLineDeleteApiHit(
                                   saleCycleController
                                       .quoteLinedata[index].lineNo!,
-                                  "");
+                                  saleCycleController.quoteApprovalPage.value,  saleCycleController.quoteHeaderdata[0].salesCycleId??"", saleCycleController.quoteHeaderdata[0].quoteId??"");
                               Navigator.pop(context);
                             },
                             child: Container(
@@ -3335,6 +3337,44 @@ class QuoteInformationScreen extends StatelessWidget {
                     bindGeneralAddress(context),
                     SizedBox(height: 10),
                     bindShippingAddress(context),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: DefaultButton(
+                            press:(){
+                              address_vm_controller.FromPage.value="SalesCycleQuotation";
+                              address_vm_controller.clearController();
+                              address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
+                              address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
+                              address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                              address_vm_controller.getGeoPostalCodeApi();
+                              Get.toNamed(RoutesName.addNewAddress_screen);
+                            },
+                            text:
+                            'Add New',
+                          ),
+                        ),
+                        SizedBox(width: 5,),
+                        Expanded(
+                          child: DefaultButton(
+                            press: (){
+                              saleCycleController.pageNumber = 0;
+                              saleCycleController.getAddressMasterList(
+                                  saleCycleController.pageNumber,
+                                  saleCycleController.accountCode.value);
+                              saleCycleController.showConsigneeAddressList(
+                                  context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
+                            },
+                            text: 'Change ',
+
+                          ),
+                        ),
+                      ],
+                    ),
                     SizedBox(
                       height: 10,
                     ),
@@ -3889,8 +3929,50 @@ class QuoteInformationScreen extends StatelessWidget {
             /* quoteCommitDropDown(context),
                         SizedBox(height: 10),*/
             bindActive(context),
+            SizedBox(height: 10,),
+            bindKindAttention(context),
+
           ],
         ),
+      ),
+    );
+  }
+
+  Widget bindKindAttention(BuildContext context) {
+    return TextField(
+      onChanged: (value){
+        final words = value.trim().split(RegExp(r'\s+')).where((word) => word.isNotEmpty).toList();
+
+        if (words.length > 500) {
+          final limitedText = words.take(500).join(' ');
+          saleCycleController.kindAttentionController.value.text = limitedText;
+          saleCycleController.kindAttentionController.value.selection =
+              TextSelection.fromPosition(TextPosition(offset: limitedText.length));
+        }
+      },
+      maxLength: 500,
+      cursorColor:AllColors.primaryDark1 ,
+      controller: saleCycleController.kindAttentionController.value,
+
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Kind Attention*',
+          labelText: 'Kind Attention*',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
       ),
     );
   }
@@ -3973,8 +4055,8 @@ class QuoteInformationScreen extends StatelessWidget {
                 controller:
                     saleCycleController.Shipping_PostCode_Controller.value,
                 decoration: InputDecoration(
-                    hintText: "Post Code",
-                    labelText: "Post Code",
+                    hintText: "Pin Code",
+                    labelText: "Pin Code",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
@@ -4054,41 +4136,7 @@ class QuoteInformationScreen extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: DefaultButton(
-                    press:(){
-                      address_vm_controller.FromPage.value="SalesCycleQuotation";
-                      address_vm_controller.clearController();
-                      address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
-                      address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
-                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                      address_vm_controller.getGeoPostalCodeApi();
-                      Get.toNamed(RoutesName.addNewAddress_screen);
-                    },
-                    text:
-                    'Add New',
-                  ),
-                ),
-                SizedBox(width: 10,),
-                Expanded(
-                  child: DefaultButton(
-                    press: (){
-                      saleCycleController.pageNumber = 0;
-                      saleCycleController.getAddressMasterList(
-                          saleCycleController.pageNumber,
-                          saleCycleController.accountCode.value);
-                      saleCycleController.showConsigneeAddressList(
-                          context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
-                    },
-                    text: 'Change ',
 
-                  ),
-                ),
-              ],
-            ),
 
           ],
         ),
@@ -4733,6 +4781,8 @@ class QuoteInformationScreen extends StatelessWidget {
               height: 1,
               color: AllColors.primaryDark1,
             )),
+
+
             Container(
               padding:
                   EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 20),
@@ -4757,26 +4807,29 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      Text(
-                        saleCycleController
-                                    .get_SalesCycleProductById_List.length >
-                                0
-                            ? (saleCycleController
-                                        .get_SalesCycleProductById_List[0]
-                                        .productTotalQty ==
-                                    null
-                                ? "0"
-                                : saleCycleController
-                                    .get_SalesCycleProductById_List[0]
-                                    .productTotalQty
-                                    .toString())
-                            : "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Obx((){
+                        return Text(
+                          saleCycleController
+                              .get_SalesCycleProductById_List.length >
+                              0
+                              ? (saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalQty ==
+                              null
+                              ? "0"
+                              : saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalQty
+                              .toString())
+                              : "",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        );
+                      }),
+
                     ],
                   ),
                   Row(
@@ -4789,26 +4842,29 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      Text(
-                        saleCycleController
-                                    .get_SalesCycleProductById_List.length >
-                                0
-                            ? (saleCycleController
-                                        .get_SalesCycleProductById_List[0]
-                                        .productTotalAmount ==
-                                    null
-                                ? "0"
-                                : saleCycleController
-                                    .get_SalesCycleProductById_List[0]
-                                    .productTotalAmount
-                                    .toString())
-                            : "0",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Obx((){
+                        return   Text(
+                          saleCycleController
+                              .get_SalesCycleProductById_List.length >
+                              0
+                              ? (saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalAmount ==
+                              null
+                              ? "0"
+                              : saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalAmount
+                              .toString())
+                              : "0",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        );
+                      })
+
                     ],
                   ),
                 ],
