@@ -717,7 +717,7 @@ class ContactMasterScreen extends StatelessWidget{
             contact_vm_controller.insideOut = true;
             contact_vm_controller.upDateContact('OutSide', position);
           },
-          child: Icon(Icons.update),
+          child: contact_vm_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
         ),
       ),
     );
