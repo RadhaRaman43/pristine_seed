@@ -3338,6 +3338,44 @@ class QuoteInformationScreen extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          child: DefaultButton(
+                            press:(){
+                              address_vm_controller.FromPage.value="SalesCycleQuotation";
+                              address_vm_controller.clearController();
+                              address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
+                              address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
+                              address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                              address_vm_controller.getGeoPostalCodeApi();
+                              Get.toNamed(RoutesName.addNewAddress_screen);
+                            },
+                            text:
+                            'Add New',
+                          ),
+                        ),
+                        SizedBox(width: 5,),
+                        Expanded(
+                          child: DefaultButton(
+                            press: (){
+                              saleCycleController.pageNumber = 0;
+                              saleCycleController.getAddressMasterList(
+                                  saleCycleController.pageNumber,
+                                  saleCycleController.accountCode.value);
+                              saleCycleController.showConsigneeAddressList(
+                                  context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
+                            },
+                            text: 'Change ',
+
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Container(
                       width: size.width,
                       child: ElevatedButton(
@@ -4015,8 +4053,8 @@ class QuoteInformationScreen extends StatelessWidget {
                 controller:
                     saleCycleController.Shipping_PostCode_Controller.value,
                 decoration: InputDecoration(
-                    hintText: "Post Code",
-                    labelText: "Post Code",
+                    hintText: "Pin Code",
+                    labelText: "Pin Code",
                     //suffixIcon: Icon(Icons.email),
                     contentPadding: EdgeInsets.symmetric(
                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
@@ -4096,41 +4134,7 @@ class QuoteInformationScreen extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: DefaultButton(
-                    press:(){
-                      address_vm_controller.FromPage.value="SalesCycleQuotation";
-                      address_vm_controller.clearController();
-                      address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
-                      address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
-                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                      address_vm_controller.getGeoPostalCodeApi();
-                      Get.toNamed(RoutesName.addNewAddress_screen);
-                    },
-                    text:
-                    'Add New',
-                  ),
-                ),
-                SizedBox(width: 10,),
-                Expanded(
-                  child: DefaultButton(
-                    press: (){
-                      saleCycleController.pageNumber = 0;
-                      saleCycleController.getAddressMasterList(
-                          saleCycleController.pageNumber,
-                          saleCycleController.accountCode.value);
-                      saleCycleController.showConsigneeAddressList(
-                          context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
-                    },
-                    text: 'Change ',
 
-                  ),
-                ),
-              ],
-            ),
 
           ],
         ),
@@ -4775,6 +4779,8 @@ class QuoteInformationScreen extends StatelessWidget {
               height: 1,
               color: AllColors.primaryDark1,
             )),
+
+
             Container(
               padding:
                   EdgeInsets.only(top: 10, bottom: 10, left: 10, right: 20),
@@ -4799,26 +4805,29 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      Text(
-                        saleCycleController
-                                    .get_SalesCycleProductById_List.length >
-                                0
-                            ? (saleCycleController
-                                        .get_SalesCycleProductById_List[0]
-                                        .productTotalQty ==
-                                    null
-                                ? "0"
-                                : saleCycleController
-                                    .get_SalesCycleProductById_List[0]
-                                    .productTotalQty
-                                    .toString())
-                            : "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Obx((){
+                        return Text(
+                          saleCycleController
+                              .get_SalesCycleProductById_List.length >
+                              0
+                              ? (saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalQty ==
+                              null
+                              ? "0"
+                              : saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalQty
+                              .toString())
+                              : "",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        );
+                      }),
+
                     ],
                   ),
                   Row(
@@ -4831,26 +4840,29 @@ class QuoteInformationScreen extends StatelessWidget {
                           fontWeight: FontWeight.w900,
                         ),
                       ),
-                      Text(
-                        saleCycleController
-                                    .get_SalesCycleProductById_List.length >
-                                0
-                            ? (saleCycleController
-                                        .get_SalesCycleProductById_List[0]
-                                        .productTotalAmount ==
-                                    null
-                                ? "0"
-                                : saleCycleController
-                                    .get_SalesCycleProductById_List[0]
-                                    .productTotalAmount
-                                    .toString())
-                            : "0",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      Obx((){
+                        return   Text(
+                          saleCycleController
+                              .get_SalesCycleProductById_List.length >
+                              0
+                              ? (saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalAmount ==
+                              null
+                              ? "0"
+                              : saleCycleController
+                              .get_SalesCycleProductById_List[0]
+                              .productTotalAmount
+                              .toString())
+                              : "0",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        );
+                      })
+
                     ],
                   ),
                 ],
