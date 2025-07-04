@@ -325,7 +325,7 @@ class SalesCycleVm extends GetxController {
       itemMstGetByQuoteIdList[index] = item;
     } else {
       quoteLineDeleteApiHit(
-          itemMstGetByQuoteIdList[index].lineNo ?? 0, "fromCheckBox");
+          itemMstGetByQuoteIdList[index].lineNo ?? 0, "fromCheckBox",quoteHeaderdata[0].salesCycleId??"", quoteHeaderdata[0].quoteId??"");
       itemMstGetByQuoteIdList[index] = item;
     }
     // itemMstGetByQuoteIdList[index] = item;
@@ -1315,7 +1315,7 @@ class SalesCycleVm extends GetxController {
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
               if (pageNumber == 0) {
                 itemMstGetByQuoteIdList.clear();
@@ -1327,8 +1327,9 @@ class SalesCycleVm extends GetxController {
                 Get.toNamed(RoutesName.quoteItemList);
               }
             } else {
-              Utils.showErrorToastification(
-                  "False Message !", response[0].message.toString());
+              itemMstGetByQuoteIdList.value=[];
+              /*Utils.showErrorToastification(
+                  "False Message !", response[0].message.toString());*/
               if (flag == "Add") {
                 Get.toNamed(RoutesName.quoteItemList);
               }
@@ -1555,12 +1556,12 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  void quoteLineDeleteApiHit(int lineNo, String flag) {
+  void quoteLineDeleteApiHit(int lineNo, String flag, String sales_Cycle_Id, String quote_id) {
     try {
       Map data = {
-        "quote_id": quoteId.toString(),
+        "quote_id": quote_id,
         "line_no": lineNo.toString(),
-        "sales_cycle_id": salesCycleId.toString(),
+        "sales_cycle_id": sales_Cycle_Id,
         "created_by": email
       };
       loading.value = true;
@@ -4190,12 +4191,12 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Success !", response[0].message.toString());
               loading.value = false;
-              getQuoteHeaderInformation(quoteId, '');
+              getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
               print("message ${response[0].message.toString()}");
               loading.value = false;
 
-              Utils.showToastification(
-                  "Success !", response[0].message.toString());
+              /*Utils.showToastification(
+                  "Success !", response[0].message.toString());*/
             } else {
               loading.value = false;
               Utils.showErrorToastification(

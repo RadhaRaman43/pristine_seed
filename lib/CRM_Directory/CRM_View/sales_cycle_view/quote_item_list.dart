@@ -17,6 +17,12 @@ class QuoteItemList extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        saleCycleController.itemCodeController.value.clear();
+        saleCycleController.nameController.value.clear();
+        saleCycleController.categoryCodeController.value.clear();
+        saleCycleController.gstGrpCodeController.value.clear();
+        saleCycleController.hsnCodeController.value.clear();
+        saleCycleController.categoryNameController.value.clear();
         Get.toNamed(RoutesName.quoteInformationScreen);
         return false;
       }, child: Scaffold(
@@ -164,6 +170,7 @@ class QuoteItemList extends StatelessWidget{
                                         saleCycleController.categoryCodeController.value.clear();
                                         saleCycleController.gstGrpCodeController.value.clear();
                                         saleCycleController.hsnCodeController.value.clear();
+                                        saleCycleController.categoryNameController.value.clear();
                                         saleCycleController.pageNumber=0;
                                         saleCycleController.itemMstGetByQuoteIdApiHit(saleCycleController.pageNumber,saleCycleController.quoteHeaderdata[0].quoteId, "", PipeProdCate);
                                         Navigator.pop(context);
@@ -197,12 +204,12 @@ class QuoteItemList extends StatelessWidget{
                                       saleCycleController.pageNumber=0;
                                       saleCycleController.itemMstGetByQuoteIdApiHit(saleCycleController.pageNumber,saleCycleController.quoteHeaderdata[0].quoteId, "", PipeProdCate);
                                       Navigator.pop(context);
-                                      saleCycleController.itemCodeController.value.clear();
-                                      saleCycleController.nameController.value.clear();
-                                      saleCycleController.categoryNameController.value.clear();
-                                      saleCycleController.categoryCodeController.value.clear();
-                                      saleCycleController.gstGrpCodeController.value.clear();
-                                      saleCycleController.hsnCodeController.value.clear();
+                                      // saleCycleController.itemCodeController.value.clear();
+                                      // saleCycleController.nameController.value.clear();
+                                      // saleCycleController.categoryNameController.value.clear();
+                                      // saleCycleController.categoryCodeController.value.clear();
+                                      // saleCycleController.gstGrpCodeController.value.clear();
+                                      // saleCycleController.hsnCodeController.value.clear();
 
                                     },
                                     child: Container(
@@ -440,6 +447,8 @@ class QuoteItemList extends StatelessWidget{
       );
     } else {
       return Center(
+        child: Image.asset("assests/images/no_data_remove.png",width: 300,height: 180,),
+      );/*Center(
         child: Padding(
           padding: const EdgeInsets.only(top: 18.0),
           child: Text(
@@ -451,7 +460,7 @@ class QuoteItemList extends StatelessWidget{
             ),
           ),
         ),
-      );
+      );*/
     }
   }
 

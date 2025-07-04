@@ -70,6 +70,7 @@ class QuoteInformationScreen extends StatelessWidget {
             "QuoteDashboard") {
           Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
         } else {
+          saleCycleController.clearAllFieldOfQuoteFilter();
           saleCycleController.pageNumber = 0;
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "";
@@ -78,7 +79,7 @@ class QuoteInformationScreen extends StatelessWidget {
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
               "",
               saleCycleController.FromPage.value);
-          saleCycleController.clearAllFieldOfQuoteFilter();
+
           saleCycleController.getQuoteHeaderData(
               saleCycleController.pageNumberForQuote,
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
@@ -193,7 +194,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             visible:  (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
                                 saleCycleController.isAdminWritePermission=="1")&&
                             saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected",
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected"&&
+                                saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" ,
                             child: Tooltip(
                               message: "Reopen",
                               child: Container(
@@ -3164,7 +3166,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               saleCycleController.quoteLineDeleteApiHit(
                                   saleCycleController
                                       .quoteLinedata[index].lineNo!,
-                                  "");
+                                  saleCycleController.quoteApprovalPage.value,  saleCycleController.quoteHeaderdata[0].salesCycleId??"", saleCycleController.quoteHeaderdata[0].quoteId??"");
                               Navigator.pop(context);
                             },
                             child: Container(
