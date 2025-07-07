@@ -1647,9 +1647,8 @@ class Accountmastervm extends GetxController{
 
 
 
-
     }catch(e){
-
+        print("Catch Block...${e}");
     }
   }
 
