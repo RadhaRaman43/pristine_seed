@@ -316,7 +316,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                       label: Text(
                                         "Approve",
                                         style: GoogleFonts.poppins(
-                                          color: AllColors.whiteColor,
+                                           color: AllColors.whiteColor,
                                           fontWeight: FontWeight.w500,
                                         ),
                                       ),
