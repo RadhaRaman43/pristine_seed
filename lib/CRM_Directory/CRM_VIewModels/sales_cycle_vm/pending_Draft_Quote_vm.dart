@@ -42,6 +42,16 @@ class PendingDraftQuoteVm extends GetxController{
   var cluster_head_value_controller=TextEditingController().obs;
   var createdOnCnontroller=TextEditingController().obs;
   var createdByCnontroller=TextEditingController().obs;
+  var itemCodeController=TextEditingController().obs;
+  var itemNameController=TextEditingController().obs;
+  var quantityFilterController=TextEditingController().obs;
+  var GmDiscountPerController=TextEditingController().obs;
+  var BmDiscountPerController=TextEditingController().obs;
+  var SalesCreditController=TextEditingController().obs;
+  var LSPFilterController=TextEditingController().obs;
+  var BTPFilterController=TextEditingController().obs;
+  var MAPFilterController=TextEditingController().obs;
+  var StandardCostController=TextEditingController().obs;
 
   RxList<Pending_Draft_Quote_Model> PendingDraftQuoteList=<Pending_Draft_Quote_Model>[].obs;
   RxList<String> QuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", ].obs;
@@ -77,23 +87,23 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_quote_status": quoteStatusController.value.text.isEmpty || quoteStatusController.value.text == 'All'?"":quoteStatusController.value.text,
           "filter_flag": flagFilter,
           "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
-          "filter_created_by": isAdminWritePermission == '0'?email:'',
+          "filter_created_by": isAdminWritePermission == '1'?'':email,
           "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
           "filter_frontliner_value": "",
           "filter_branch_head_value": region_name_controller.value.text.isEmpty?"":region_name_controller.value.text,
           "filter_zone_head_value": "",
           "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
           "filter_spr_no": "",
-          "filter_item_code": "",
-          "filter_item_name": "",
-          "filter_quantity": "",
-          "filter_gm_per": "",
-          "filter_bm_per": "",
-          "filter_sales_credit": "",
-          "filter_lsp": "",
-          "filter_map": "",
-          "filter_btp": "",
-          "filter_standard_cost": "",
+          "filter_item_code": itemCodeController.value.text.isEmpty?"":itemCodeController.value.text,
+          "filter_item_name": itemNameController.value.text.isEmpty?"":itemNameController.value.text,
+          "filter_quantity": quantityFilterController.value.text.isEmpty?"":quantityFilterController.value.text,
+          "filter_gm_per": GmDiscountPerController.value.text.isEmpty?"":GmDiscountPerController.value.text,
+          "filter_bm_per": BmDiscountPerController.value.text.isEmpty?"":BmDiscountPerController.value.text,
+          "filter_sales_credit": SalesCreditController.value.text.isEmpty?"":SalesCreditController.value.text,
+          "filter_lsp": LSPFilterController.value.text.isEmpty?"":LSPFilterController.value.text,
+          "filter_map": MAPFilterController.value.text.isEmpty?"":MAPFilterController.value.text,
+          "filter_btp": BTPFilterController.value.text.isEmpty?"":BTPFilterController.value.text,
+          "filter_standard_cost": StandardCostController.value.text.isEmpty?"":StandardCostController.value.text,
           "row_per_page": rowsPerPage,
           "page_number": pageNumberForQuote
       };
@@ -155,6 +165,16 @@ class PendingDraftQuoteVm extends GetxController{
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
     quoteValidityStartToEnd.value = "";
+    itemCodeController.value.clear();
+    itemNameController.value.clear();
+    quantityFilterController.value.clear();
+    GmDiscountPerController.value.clear();
+    BmDiscountPerController.value.clear();
+    SalesCreditController.value.clear();
+    LSPFilterController.value.clear();
+    BTPFilterController.value.clear();
+    MAPFilterController.value.clear();
+    StandardCostController.value.clear();
 
 
   }

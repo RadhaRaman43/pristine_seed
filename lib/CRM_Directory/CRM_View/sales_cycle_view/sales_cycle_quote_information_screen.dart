@@ -58,6 +58,13 @@ class QuoteInformationScreen extends StatelessWidget {
           pendingDraftQuoteController.getPendingDraftQuoteList(0, "All");*/
           Get.offNamed(RoutesName.allQuoteScreenScreen);
         }
+        else if (saleCycleController.quoteApprovalPage.value == "ALLQuoteLineItems") {
+          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(0, "All");*/
+          Get.offNamed(RoutesName.allQuoteLineItemScreen);
+        }
+
         else if (saleCycleController.quoteApprovalPage.value ==
             "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;

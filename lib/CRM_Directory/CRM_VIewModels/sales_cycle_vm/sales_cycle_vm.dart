@@ -541,8 +541,7 @@ class SalesCycleVm extends GetxController {
               if (saleCycleList[0].salesCycleStatus == "Propose") {
                 print("Sales cycle status..${saleCycleList[0].salesCycleId}");
                 pageNumberForQuote = 0;
-                getQuoteHeaderData(
-                    pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
+                getQuoteHeaderData(pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
                 getQuoteWonData(saleCycleList[0].salesCycleId!);
               }
               /* accountNameController.value.text=saleCycleList[0].accountName??"";
@@ -790,7 +789,7 @@ class SalesCycleVm extends GetxController {
         "filter_product_category": productCategoryController.value.text.isEmpty
             ? ""
             : productCategoryController.value.text,
-        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission=="1"?"":email),
+        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission=="1"?"":saleCycleList[0].salesCycleOwner),
         "filter_created_on":
             createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
         "filter_frontliner_value": "",
