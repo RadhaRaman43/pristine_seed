@@ -573,7 +573,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
               height: 3,
             ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Account Name",
@@ -582,10 +582,10 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Spacer(),
+
                 InkWell(
-                  child: Flexible(
-                   // width: size.width * .4,
+                  child: Container(
+                    width: size.width * .4,
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[0]
@@ -798,7 +798,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Spacer(),
+
                 Tooltip(
                   message: TaskMaster_page_controller
                       .Task_Master_list[0]
@@ -841,9 +841,9 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Spacer(),
-                Flexible(
-                  //width: size.width * .3,
+
+                Container(
+                  width: size.width * .3,
                   child:  Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[0]
@@ -893,9 +893,9 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Spacer(),
-                Flexible(
-                 // width: size.width * .3,
+
+                Container(
+                  width: size.width * .3,
                   child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[0]

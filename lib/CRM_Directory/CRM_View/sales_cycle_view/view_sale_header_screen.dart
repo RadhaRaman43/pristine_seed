@@ -3234,6 +3234,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
 
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Reject Reason",
@@ -3243,7 +3244,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
+
                       Container(
                         width: size.width * .4,
                         child: Tooltip(
@@ -3259,6 +3260,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                             overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
                           ),
                         ),
                       ),
