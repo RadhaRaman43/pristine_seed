@@ -87,7 +87,7 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_quote_status": quoteStatusController.value.text.isEmpty || quoteStatusController.value.text == 'All'?"":quoteStatusController.value.text,
           "filter_flag": flagFilter,
           "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
-          "filter_created_by": isAdminWritePermission == '0'?email:'',
+          "filter_created_by": isAdminWritePermission == '1'?'':email,
           "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
           "filter_frontliner_value": "",
           "filter_branch_head_value": region_name_controller.value.text.isEmpty?"":region_name_controller.value.text,
