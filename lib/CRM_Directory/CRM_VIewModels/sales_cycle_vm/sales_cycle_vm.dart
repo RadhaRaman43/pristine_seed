@@ -937,7 +937,7 @@ class SalesCycleVm extends GetxController {
             approvalPersonList.addAll(response);
             total_rows=int.parse(approvalPersonList[0].totalRows!);*/
             } else {
-              Utils.showErrorToastification("Else!", "No Record Found");
+              //Utils.showErrorToastification("Else!", "No Record Found");
               approvalPersonList.value = [];
             }
           } else {
@@ -1403,6 +1403,7 @@ class SalesCycleVm extends GetxController {
               print('Total rows ${total_rows_items}');
               Get.toNamed(RoutesName.ItemListBySalesCycle_Screen);
             } else {
+              itemMstGetBySalesIdList.value=[];
               Utils.showErrorToastification(
                   "False Message !", response[0].message.toString());
               loading.value = false;
@@ -1931,7 +1932,8 @@ class SalesCycleVm extends GetxController {
                   "Message !", response[0].message.toString());
               loading.value = false;
               pageNumber = 0;
-              Get.offAllNamed(RoutesName.quoteApprovalListScreen);
+              getQuoteHeaderInformation(quoteId, "");
+             // Get.offAllNamed(RoutesName.quoteApprovalListScreen);
               // getQuoteHeaderInformation(quoteId, "quoteApprovalScreen");
             } else {
               Utils.showErrorToastification(
@@ -4342,7 +4344,7 @@ class SalesCycleVm extends GetxController {
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
         if (email.toLowerCase() ==
-            approvalPersonList[i].approvedBy?.toLowerCase()) {
+            approvalPersonList[i].approvedBy?.toLowerCase() &&  approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval") {
            showApprovalBtn.value=true;
           if (approvalPersonList[i].userType?.toLowerCase() == 'branch head') {
             showBranchHead.value = true;

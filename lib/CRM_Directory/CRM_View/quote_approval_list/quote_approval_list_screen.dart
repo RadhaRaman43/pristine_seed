@@ -646,8 +646,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                               ),
                               filterWithQuoteId(context),
                               SizedBox(height: 10),
-                              filterWithQuoteStatus(context),
-                              SizedBox(height: 10),
+                             /* filterWithQuoteStatus(context),
+                              SizedBox(height: 10),*/
                               filterWithSaleCycle(context),
                               SizedBox(height: 10),
                               filterWithQuoteValidity(context),
@@ -1355,7 +1355,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
     );
   }
 
-  filterWithAccountName(BuildContext context) {
+/*  filterWithAccountName(BuildContext context) {
     return  TextField(
       cursorColor:AllColors.primaryDark1 ,
       controller: quoteApprovalController.filterQuoteAccountNameController.value,
@@ -1406,7 +1406,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
           )
       ),
     );
-  }
+  }*/
 
 
   filterWithQuoteValidity(BuildContext context) {

@@ -310,12 +310,21 @@ class QuoteInformationScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 0.0),
                             child: Visibility(
                               visible:saleCycleController
+                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && ((saleCycleController.showApprovalBtn.value )||
+                                  (saleCycleController.isAdminWritePermission=="0"&&
+                                      saleCycleController.showApprovalBtn.value && saleCycleController
+                                      .quoteHeaderdata[0].isReadyForApprove==1) ||
+                                  (saleCycleController.isAdminWritePermission=="1" && saleCycleController
+                                      .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval" && saleCycleController
+                                      .quoteHeaderdata[0].isReadyForApprove==1)),
+
+                             /* visible:saleCycleController
                                   .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval"
                               && saleCycleController
                                       .quoteHeaderdata[0].isReadyForApprove==1 && saleCycleController
                                   .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && (saleCycleController.showApprovalBtn.value|| saleCycleController.isAdminWritePermission=="1")
                                   ? true
-                                  : false,
+                                  : false,*/
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -1705,6 +1714,9 @@ class QuoteInformationScreen extends StatelessWidget {
                       ],
                     ),
                   )),
+                  SizedBox(
+                    width: 5,
+                  ),
                   Expanded(
                       child: Container(
                     width: size.width / 2,

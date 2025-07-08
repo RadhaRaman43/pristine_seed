@@ -39,12 +39,10 @@ class TaskMasterApprovalDetails extends StatelessWidget{
           TaskMaster_page_controller.pageNumber = 0;
           TaskMaster_page_controller.is_Active=-1;
           TaskMaster_page_controller
-              .getTaskMaster(
+              .getTaskMasterApprovalList(
               TaskMaster_page_controller.pageNumber,
               TaskMaster_page_controller.is_Active
-                  .toString(),
-              '',
-              '');
+                  .toString(),);
           Get.toNamed(RoutesName.taskApproval_List);
         return false;
       }, child: Scaffold(
@@ -69,10 +67,10 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   Obx((){
                     return  Visibility(
                       visible: TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .isReadyForApprove.toString()=='1'?true:false,
+                          .Task_Master_list_line_Wise[0]
+                          .isReadyForApprove==1,
                       child: IconButton(onPressed: () {
-                        TaskMaster_page_controller.showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
+                        TaskMaster_page_controller.showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list_line_Wise[0].taskId!);
                       }, icon: Icon(Icons.update)),
                     );
                   }),
@@ -293,70 +291,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
 
               SizedBox(height: 5,),
 
-              /* Card(
-              color: AllColors.whiteColor,
-              elevation: 10,
-              margin: EdgeInsets.only(left: 10, right: 10, bottom: 5),
-              child: Column(
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                        color: AllColors.textColor
-                    ),
-                    child:Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Icon(Icons.library_books_sharp, color: AllColors.whiteColor),
-                        ),
-                        Text(
-                          "Infra Details",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.whiteColor,
-                            fontSize: AllFontSize.twentee,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Obx(
-                              () {
-                            return IconButton(
-                              onPressed: () {
-                                TaskMaster_page_controller.toggleInfraDetails();
-                                if (TaskMaster_page_controller
-                                    .isExpandInfraDeatils.value ==
-                                    true) {
-                                  print(
-                                      "If......${TaskMaster_page_controller.isExpandInfraDeatils.value}");
-                                } else {
-                                  print(
-                                      "else......${TaskMaster_page_controller.isExpandInfraDeatils.value}");
-                                }
-                              },
-                              icon: Icon(
-                                TaskMaster_page_controller
-                                    .isExpandInfraDeatils.value
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                size: 25,
-                                color: AllColors.whiteColor,
-                              ),
-                            );
-                          },
-                        )
-
-                      ],
-                    ),
-                  ),
-                  Obx(() {
-                    return viewInfraDetails(context);
-                  }),
-                ],
-              ),
-            ),
-
-            SizedBox(height: 5,),*/
+        
 
               Card(
                 color: AllColors.whiteColor,
@@ -433,7 +368,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
   }
 
   Widget viewTasketails(BuildContext context) {
-    String taskStatus = TaskMaster_page_controller.Task_Master_list[0]
+    String taskStatus = TaskMaster_page_controller.Task_Master_list_line_Wise[0]
         .taskStatus?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status.toLowerCase()) {
@@ -447,7 +382,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
           return Colors.black;
       }
     }
-    String? dateTimeCreatedOn=StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[0].dateOfVisit ?? "");
+    String? dateTimeCreatedOn=StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list_line_Wise[0].dateOfVisit ?? "");
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDetails.value == true ? true : false,
       child: Container(
@@ -468,17 +403,17 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 InkWell(
                   onTap: () {
                     print('task....${TaskMaster_page_controller
-                        .Task_Master_list[0].taskId}');
+                        .Task_Master_list_line_Wise[0].taskId}');
                     TaskMaster_page_controller.getTaskMaster(0,
                         TaskMaster_page_controller.is_Active
                             .toString(),
                         TaskMaster_page_controller
-                            .Task_Master_list[0].previousTaskId,
-                        'View',);
+                            .Task_Master_list_line_Wise[0].previousTaskId,
+                        );
                   },
                   child: Text(
                     TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .previousTaskId ?? "",
                     style: GoogleFonts.poppins(
                       color: Colors.blueAccent,
@@ -507,7 +442,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .taskId ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -533,7 +468,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .typeOfCall ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -559,7 +494,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .methodOfCall ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -588,14 +523,14 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                     width: size.width * .4,
                     child: Tooltip(
                       message: TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .accountName ?? "",
                       child: Text(
                         TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .accountName ??
                             "" + " | ${TaskMaster_page_controller
-                                .Task_Master_list[0]
+                                .Task_Master_list_line_Wise[0]
                                 .accountName ?? ""}",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
@@ -615,7 +550,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                       account_vm_controller.view='fromtaskapprovaldetailspage';
                     }
                     contact_vm_controller.view='fromtaskapprovaldetailspage';
-                    account_vm_controller.getAccMasterBuyCodeApi(TaskMaster_page_controller.Task_Master_list[0].accountCode);
+                    account_vm_controller.getAccMasterBuyCodeApi(TaskMaster_page_controller.Task_Master_list_line_Wise[0].accountCode);
                   },
                 ),
               ],
@@ -636,7 +571,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .contactName ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -663,7 +598,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .taskStatus ?? "",
                   style: GoogleFonts.poppins(
                     color: getStatusColor(taskStatus),
@@ -724,11 +659,11 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   width: size.width * .4,
                   child: Tooltip(
                     message: TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .timeOfVisit.toString() ,
                     child: Text(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .timeOfVisit.toString() ,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
@@ -745,6 +680,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
               height: 3,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Sale Cycle Activated By",
@@ -754,24 +690,24 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Spacer(),
+
                 Container(
                   width: size.width * .4,
                   child: Tooltip(
                     message: TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .salesCycleActivatedBy == null
                         ? ''
                         : TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .salesCycleActivatedBy,
                     child: Text(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .salesCycleActivatedBy == null
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .salesCycleActivatedBy ?? "",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
@@ -789,6 +725,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
             ),
 
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   "Sale Cycle Activated on",
@@ -801,21 +738,21 @@ class TaskMasterApprovalDetails extends StatelessWidget{
 
                 Tooltip(
                   message: TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .salesCycleActivatedOn == null
                       ? ''
                       : StaticMethod.onlyDate(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .salesCycleActivatedOn!) ?? "",
                   child: Text(
                     TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .salesCycleActivatedOn == null
                         ? ''
                         : StaticMethod.onlyDate(
                         TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .salesCycleActivatedOn!) ?? "",
                     overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.end,
@@ -846,23 +783,23 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   width: size.width * .3,
                   child:  Tooltip(
                       message: TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .productCategory == null || TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .productCategory == ''
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .productCategory ?? '',
                       child: Text(
                         TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .productCategory == null || TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .productCategory == ''
                             ? ''
                             : TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .productCategory ?? "",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
@@ -898,23 +835,23 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   width: size.width * .3,
                   child: Tooltip(
                       message: TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .alongWithPersonName == null || TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .alongWithPersonName == ''
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .alongWithPersonName ?? '',
                       child: Text(
                         TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .alongWithPersonName == null || TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .alongWithPersonName == ''
                             ? ''
                             : TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .alongWithPersonName ?? "",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
@@ -944,19 +881,19 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   width: size.width * .4,
                   child: Tooltip(
                     message: TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .taskRemarks == null
                         ? ''
                         : TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .taskRemarks,
                     child: Text(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .taskRemarks == null
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .taskRemarks ?? "",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
@@ -975,7 +912,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
 
             Visibility(
               visible: TaskMaster_page_controller
-                  .Task_Master_list[0]
+                  .Task_Master_list_line_Wise[0]
                   .taskStatus!.toLowerCase() == 'rejected',
               child: Row(
                 children: [
@@ -992,19 +929,19 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                     width: size.width * .4,
                     child: Tooltip(
                       message: TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .rejectReason == null
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .rejectReason,
                       child: Text(
                         TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .rejectReason == null
                             ? ''
                             : TaskMaster_page_controller
-                            .Task_Master_list[0]
+                            .Task_Master_list_line_Wise[0]
                             .rejectReason ?? "",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
@@ -1036,19 +973,19 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   width: size.width * .4,
                   child: Tooltip(
                     message: TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .managerRemarks == null
                         ? ''
                         : TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .managerRemarks,
                     child: Text(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .managerRemarks == null
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .managerRemarks ?? "",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
@@ -1080,19 +1017,19 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   width: size.width * .4,
                   child: Tooltip(
                     message: TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .reopenRemarks == null
                         ? ''
                         : TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .reopenRemarks,
                     child: Text(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .reopenRemarks == null
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .reopenRemarks ?? "",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
@@ -1134,7 +1071,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .createdFullName ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -1161,8 +1098,8 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Text(
                   StaticMethod.formatDateWithTime(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .createdOn!) ?? "",
+                          .Task_Master_list_line_Wise[0]
+                          .createdOn??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.fourtine,
@@ -1187,7 +1124,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .approvedFullName ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -1213,7 +1150,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Text(
                   StaticMethod.formatDateWithTime(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .approvedOn??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -1241,19 +1178,19 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   width: size.width * .4,
                   child: Tooltip(
                     message: TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .purposeOfVisit == null
                         ? ''
                         : TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .purposeOfVisit,
                     child: Text(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .purposeOfVisit == null
                           ? ''
                           : TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .purposeOfVisit ?? "",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
@@ -1295,7 +1232,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .frontlinerValue ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -1322,7 +1259,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Text(
                   StaticMethod.onlyDate(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .branchHeadValue??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -1348,7 +1285,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Spacer(),
                 Text(
                   TaskMaster_page_controller
-                      .Task_Master_list[0]
+                      .Task_Master_list_line_Wise[0]
                       .zoneHeadValue ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -1375,7 +1312,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 Text(
                   StaticMethod.onlyDate(
                       TaskMaster_page_controller
-                          .Task_Master_list[0]
+                          .Task_Master_list_line_Wise[0]
                           .clustureHeadValue??"") ?? "",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -1395,9 +1332,9 @@ class TaskMasterApprovalDetails extends StatelessWidget{
   }
 
   Widget viewInfraDetails(BuildContext context) {
-    String? expOrderDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfOrder ?? "");
-    String? inaugurationDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].inaugrationDateOfProject ?? "");
-    String? expDateOfCompletion=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list[0].expectedDateOfCompletion ?? "");
+    String? expOrderDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list_line_Wise[0].expectedDateOfOrder ?? "");
+    String? inaugurationDate=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list_line_Wise[0].inaugrationDateOfProject ?? "");
+    String? expDateOfCompletion=StaticMethod.convertDateFormat1(TaskMaster_page_controller.Task_Master_list_line_Wise[0].expectedDateOfCompletion ?? "");
     return   Visibility(
         visible: TaskMaster_page_controller.isExpandInfraDeatils.value == true ? true : false,
         child:
@@ -1417,7 +1354,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].isInfraLead==1?'Yes':'No',
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].isInfraLead==1?'Yes':'No',
                     style: GoogleFonts.poppins(
                       color: Colors.blueAccent,
                       fontSize: AllFontSize.sisxteen,
@@ -1443,7 +1380,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].infraLeadNo??"",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].infraLeadNo??"",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1467,7 +1404,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].userRegion??"",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].userRegion??"",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1493,7 +1430,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].userClusture??"",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].userClusture??"",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1517,7 +1454,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].projectValue.toString(),
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].projectValue.toString(),
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1565,7 +1502,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].drawingCollected==1?"Yes":"No",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].drawingCollected==1?"Yes":"No",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1589,7 +1526,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].proposalSubmitted==1?"Yes":"No",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].proposalSubmitted==1?"Yes":"No",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1637,7 +1574,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].architect??"",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].architect??"",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1661,7 +1598,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].executiveEngineer??"",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].executiveEngineer??"",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1685,7 +1622,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].nameOfInfraDepartment??"",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].nameOfInfraDepartment??"",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1709,7 +1646,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].nameOfAgencyContrator??"",
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].nameOfAgencyContrator??"",
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1733,7 +1670,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].expectedRevenue.toString(),
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].expectedRevenue.toString(),
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1757,7 +1694,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                   ),
                   Spacer(),
                   Text(
-                    TaskMaster_page_controller.Task_Master_list[0].valueOfQuote.toString(),
+                    TaskMaster_page_controller.Task_Master_list_line_Wise[0].valueOfQuote.toString(),
                     style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
@@ -1801,7 +1738,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
 
   Widget viewDsarDetails(BuildContext context) {
     print('hcsdgyuifgy${TaskMaster_page_controller
-        .Task_Master_list[0]
+        .Task_Master_list_line_Wise[0]
         .isReadyForApprove}');
     return   Visibility(
       visible: TaskMaster_page_controller.isExpandDSAR.value == true ? true : false,
@@ -1905,11 +1842,11 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                 InkWell(
                   onTap: (){
                     showInfraLeadDetails(context,   TaskMaster_page_controller
-                        .Task_Master_list );
+                        .Task_Master_list_line_Wise );
                   },
                   child: Text(
                     TaskMaster_page_controller
-                        .Task_Master_list[0]
+                        .Task_Master_list_line_Wise[0]
                         .isInfraLead==1?"Yes":"No",
                     style: GoogleFonts.poppins(
                       color: Colors.blueAccent,
@@ -2080,7 +2017,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
     );
   }
 
-  void showInfraLeadDetails(BuildContext context, RxList<TaskMasterGetModel> task_master_list) {
+  void showInfraLeadDetails(BuildContext context, RxList<TaskMasterGetModel> Task_Master_list_line_Wise) {
     showModalBottomSheet(context: context,
       builder: (BuildContext context) {
         return  Container(
@@ -2144,7 +2081,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].userRegion??"",
+                              Task_Master_list_line_Wise[0].userRegion??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2169,7 +2106,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].userClusture??"",
+                              Task_Master_list_line_Wise[0].userClusture??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2193,7 +2130,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].projectValue.toString(),
+                              Task_Master_list_line_Wise[0].projectValue.toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2217,7 +2154,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].expectedDateOfOrder??"",
+                              Task_Master_list_line_Wise[0].expectedDateOfOrder??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2241,7 +2178,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].drawingCollected==1?"Yes":"No",
+                              Task_Master_list_line_Wise[0].drawingCollected==1?"Yes":"No",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2265,7 +2202,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].proposalSubmitted==1?"Yes":"No",
+                              Task_Master_list_line_Wise[0].proposalSubmitted==1?"Yes":"No",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2289,7 +2226,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].inaugrationDateOfProject??"",
+                              Task_Master_list_line_Wise[0].inaugrationDateOfProject??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2313,7 +2250,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].architect??"",
+                              Task_Master_list_line_Wise[0].architect??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2337,7 +2274,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].executiveEngineer??"",
+                              Task_Master_list_line_Wise[0].executiveEngineer??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2361,7 +2298,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].nameOfInfraDepartment??"",
+                              Task_Master_list_line_Wise[0].nameOfInfraDepartment??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2385,7 +2322,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].nameOfAgencyContrator??"",
+                              Task_Master_list_line_Wise[0].nameOfAgencyContrator??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2409,7 +2346,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].expectedRevenue.toString(),
+                              Task_Master_list_line_Wise[0].expectedRevenue.toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2433,7 +2370,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].valueOfQuote.toString(),
+                              Task_Master_list_line_Wise[0].valueOfQuote.toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,
@@ -2457,7 +2394,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                             ),
                             Spacer(),
                             Text(
-                              task_master_list[0].expectedDateOfCompletion??"",
+                              Task_Master_list_line_Wise[0].expectedDateOfCompletion??"",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.fourtine,

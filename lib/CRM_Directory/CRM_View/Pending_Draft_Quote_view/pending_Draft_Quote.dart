@@ -151,6 +151,7 @@ class PendingDraftQuote extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
+            saleCycleController.getApprovalPersonList(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId??"");
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
            saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "pendingDraftQuote");
           },

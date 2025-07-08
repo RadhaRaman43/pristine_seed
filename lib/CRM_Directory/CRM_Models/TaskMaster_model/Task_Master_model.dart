@@ -28,6 +28,7 @@ class TaskMasterGetModel {
   String? salesCycleId;
   String? approvedBy;
   String? approvedFullName;
+  String? finalApprovedFullName;
   String? approvedOn;
   String? rejectReason;
   String? reopenRemarks;
@@ -74,6 +75,11 @@ class TaskMasterGetModel {
   String? branchHeadValue;
   String? zoneHeadValue;
   String? clustureHeadValue;
+  String? companyProfileType;
+  String? postCode;
+  String? district;
+  String? accountOwner;
+  String? accountOwnerFullName;
 
   TaskMasterGetModel(
       {this.condition,
@@ -105,6 +111,7 @@ class TaskMasterGetModel {
         this.salesCycleId,
         this.approvedBy,
         this.approvedFullName,
+        this.finalApprovedFullName,
         this.approvedOn,
         this.rejectReason,
         this.reopenRemarks,
@@ -150,7 +157,12 @@ class TaskMasterGetModel {
         this.frontlinerValue,
         this.branchHeadValue,
         this.zoneHeadValue,
-        this.clustureHeadValue});
+        this.clustureHeadValue,
+        this.companyProfileType,
+        this.postCode,
+        this.district,
+        this.accountOwner,
+        this.accountOwnerFullName});
 
   TaskMasterGetModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -182,6 +194,7 @@ class TaskMasterGetModel {
     salesCycleId = json['sales_cycle_id'];
     approvedBy = json['approved_by'];
     approvedFullName = json['approved_full_name'];
+    finalApprovedFullName = json['final_approved_full_name'];
     approvedOn = json['approved_on'];
     rejectReason = json['reject_reason'];
     reopenRemarks = json['reopen_remarks'];
@@ -229,6 +242,11 @@ class TaskMasterGetModel {
     branchHeadValue = json['branch_head_value'];
     zoneHeadValue = json['zone_head_value'];
     clustureHeadValue = json['clusture_head_value'];
+    companyProfileType = json['company_profile_type'];
+    postCode = json['post_code'];
+    district = json['district'];
+    accountOwner = json['account_owner'];
+    accountOwnerFullName = json['account_owner_full_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -262,6 +280,7 @@ class TaskMasterGetModel {
     data['sales_cycle_id'] = this.salesCycleId;
     data['approved_by'] = this.approvedBy;
     data['approved_full_name'] = this.approvedFullName;
+    data['final_approved_full_name'] = this.finalApprovedFullName;
     data['approved_on'] = this.approvedOn;
     data['reject_reason'] = this.rejectReason;
     data['reopen_remarks'] = this.reopenRemarks;
@@ -310,6 +329,11 @@ class TaskMasterGetModel {
     data['branch_head_value'] = this.branchHeadValue;
     data['zone_head_value'] = this.zoneHeadValue;
     data['clusture_head_value'] = this.clustureHeadValue;
+    data['company_profile_type'] = this.companyProfileType;
+    data['post_code'] = this.postCode;
+    data['district'] = this.district;
+    data['account_owner'] = this.accountOwner;
+    data['account_owner_full_name'] = this.accountOwnerFullName;
     return data;
   }
 }

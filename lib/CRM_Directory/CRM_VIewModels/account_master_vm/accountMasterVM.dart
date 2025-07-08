@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:navigation_drawer_flutter/component/default_button.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../locat_database/databaseHelper.dart';
@@ -2406,9 +2407,97 @@ class Accountmastervm extends GetxController{
                     ),
                   ),
 
-                  Row(
+                  Obx((){
+                    return Visibility(
+                      visible: address_master_list.value.length > 0,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: DefaultButton(
+                                text: 'Discard',
+                                press: (){
+                                  if(account_code_controller.value.text.isEmpty){
+                                    selectedItem.value = -1;
+                                    Shipping_Address_controller.value.text="";
+                                    Shipping_Address2_Controller.value.text="";
+                                    Shipping_PostCode_Controller.value.text="";
+                                    Shipping_City_Controller.value.text="" ;
+                                    Shipping_State_Controller.value.clear();
+                                    ShowState.value=false;
+                                    ShowState.value=true;
+                                    Shipping_District_Controller.value.text="";
+                                    consigneeId = '';
+                                    Shipping_FullAddress_Controller.value.text = "";
+                                  } else{
+                                    ShowState.value=false;
+                                    ShowState.value=true;
+                                    selectedItem.value = -1;
+                                    Shipping_Address_controller.value.text=AccountMasterGetCode_list[0].shippingAddress??"";
+                                    Shipping_Address2_Controller.value.text=AccountMasterGetCode_list[0].shippingAddress2??"";
+                                    Shipping_PostCode_Controller.value.text=AccountMasterGetCode_list[0].shippingPostCode??"";
+                                    Shipping_City_Controller.value.text=AccountMasterGetCode_list[0].shippingCity??"" ;
+                                    Shipping_State_Controller.value.text=AccountMasterGetCode_list[0].shippingStateName??"";
+                                    Shipping_District_Controller.value.text=AccountMasterGetCode_list[0].shippingDistrict??"";
+                                    consigneeId = '';
+                                    Shipping_FullAddress_Controller.value.text = "";
+                                  }
+                                  isChecked.value=false;
+
+
+
+                                  // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
+                                  Get.back();
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 5,),
+                            Expanded(
+                              child: DefaultButton(
+                                text: 'Save',
+                                press: (){
+                                  try{
+                                    print("selected data..${selectedItem.value}");
+                                    if(selectedItem.value>0){
+                                      isChecked.value=false;
+                                      Shipping_Address_controller.value.text=address_master_list[selectedItem.value].address??"";
+                                      Shipping_Address2_Controller.value.text=address_master_list[selectedItem.value].address2??"";
+                                      Shipping_PostCode_Controller.value.text=address_master_list[selectedItem.value].postCode??"";
+                                      Shipping_City_Controller.value.text=address_master_list[selectedItem.value].city??"" ;
+                                      Shipping_State_Controller.value.text=address_master_list[selectedItem.value].stateName??"";
+                                      print('StatNane...${Shipping_State_Controller.value.text}');
+                                      ShowState.value=false;
+                                      ShowState.value=true;
+                                      Shipping_District_Controller.value.text=address_master_list[selectedItem.value].district??"";
+                                      consigneeId = address_master_list[selectedItem.value].consigneeId??"";
+                                      Shipping_FullAddress_Controller.value.text=Shipping_Address_controller.value.text+', '+
+                                          Shipping_Address2_Controller.value.text+', '+
+                                          Shipping_PostCode_Controller.value.text+', '+
+                                          Shipping_City_Controller.value.text+', '+
+                                          Shipping_District_Controller.value.text+', '+
+                                          Shipping_State_Controller.value.text;
+                                    }else{
+                                      print("onjghjhg");
+                                      Utils.showErrorToastification('Error ', "Please select address.");
+                                    }
+                                  }
+                                  catch(e){
+
+                                  }
+
+                                  Get.back();
+                                },
+                              ),
+                            ),
+                          ],
+                        )
+                    );
+                  })
+
+                 /* Row(
                     mainAxisAlignment:MainAxisAlignment.spaceBetween,
                     children: [
+
+
                       Obx((){
                         return Visibility(
                           visible: address_master_list.value.length > 0 ?true :false,
@@ -2455,7 +2544,7 @@ class Accountmastervm extends GetxController{
                               width: 80,
                               alignment: Alignment.center,
                               child: Text('Discard'
-                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files'*/,
+                                *//*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files'*//*,
                                 style: GoogleFonts.poppins(
                                   color: AllColors.customDarkerWhite,
                                   fontSize: AllFontSize.fourtine,
@@ -2517,7 +2606,7 @@ class Accountmastervm extends GetxController{
                         );
                       })
 
-                    ],)
+                    ],)*/
                 ],
               ),
             ),

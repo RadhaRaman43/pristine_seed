@@ -135,17 +135,7 @@ class Itemlist_by_sales_cycle_Screen extends StatelessWidget{
       );
     } else {
       return Center(
-        child: Padding(
-          padding: const EdgeInsets.only(top: 18.0),
-          child: Text(
-            'No Record Found.',
-            style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontSize: AllFontSize.twentee,
-                fontWeight: FontWeight.w700
-            ),
-          ),
-        ),
+        child: Image.asset("assests/images/no_data_remove.png",width: 300,height: 180,),
       );
     }
   }

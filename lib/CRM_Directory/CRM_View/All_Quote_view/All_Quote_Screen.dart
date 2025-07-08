@@ -155,6 +155,7 @@ class AllQuoteScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
+            saleCycleController.getApprovalPersonList(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId??"");
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
             saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "AllQuoteList");
           },
@@ -976,7 +977,7 @@ class AllQuoteScreen extends StatelessWidget{
 
   Widget filterWithQuoteStatus(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only( bottom: 10, right: 15),
+      padding: const EdgeInsets.only(  right: 15),
       child: DropdownMenu<String>(
         width: MediaQuery
             .of(context)
@@ -987,8 +988,8 @@ class AllQuoteScreen extends StatelessWidget{
           "Quote Status",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
         ),
 
         inputDecorationTheme: const InputDecorationTheme(

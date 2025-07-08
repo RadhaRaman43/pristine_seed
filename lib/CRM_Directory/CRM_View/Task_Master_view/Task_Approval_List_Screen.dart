@@ -115,10 +115,10 @@ class TaskApprovalListScreen extends StatelessWidget{
                   .rowsPerPage} ${total_page}");
 
           if (TaskMaster_page_controller.pageNumber + 1 < total_page) {
-            TaskMaster_page_controller.getTaskMaster(
+            TaskMaster_page_controller.getTaskMasterApprovalList(
                 TaskMaster_page_controller.pageNumber + 1,
                 TaskMaster_page_controller.is_Active.toString(),
-                '','');
+                );
             TaskMaster_page_controller.pageNumber += 1;
           }
         }
@@ -175,7 +175,7 @@ class TaskApprovalListScreen extends StatelessWidget{
             TaskMaster_page_controller.getTaskMaster(
               TaskMaster_page_controller.pageNumber,
                 TaskMaster_page_controller.is_Active.toString(),
-                TaskMaster_page_controller.Task_Master_list[position].taskId,'View');
+                TaskMaster_page_controller.Task_Master_list[position].taskId,);
 
           },
           title: Row(
@@ -196,11 +196,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .taskStatus!,
+                          .taskStatus??"",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .taskStatus!,
+                            .taskStatus??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: getStatusColor(taskStatus),
@@ -218,8 +218,8 @@ class TaskApprovalListScreen extends StatelessWidget{
                   Obx((){
                     return  Visibility(
                       visible: TaskMaster_page_controller
-                          .Task_Master_list[0]
-                          .isReadyForApprove.toString()=='1'?true:false,
+                          .Task_Master_list[position]
+                          .isReadyForApprove.toString()=='1' && TaskMaster_page_controller.Task_Master_list[position].createdBy?.toLowerCase()!=TaskMaster_page_controller.email.toLowerCase()?true:false,
                       child: IconButton(onPressed: () {
                         TaskMaster_page_controller.showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
                       }, icon: Icon(Icons.update)),
@@ -277,11 +277,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .taskId!,
+                          .taskId??"",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .taskId!,
+                            .taskId??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -305,7 +305,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                   Text(
                     TaskMaster_page_controller
                         .Task_Master_list[position]
-                        .approvedFullName!,
+                        .approvedFullName??"",
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
@@ -328,11 +328,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .accountName!,
+                          .accountName??"",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .accountName!,
+                            .accountName??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -358,11 +358,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .contactName!,
+                          .contactName??"",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .contactName!,
+                            .contactName??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -388,11 +388,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .typeOfCall!,
+                          .typeOfCall??"",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .typeOfCall!,
+                            .typeOfCall??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -430,11 +430,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .methodOfCall!,
+                          .methodOfCall??"",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .methodOfCall!,
+                            .methodOfCall??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -492,19 +492,19 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .createdFullName! +
+                          .createdFullName??"" +
                           "| ${StaticMethod.dateTimeToDate(
                               TaskMaster_page_controller
                                   .Task_Master_list[position]
-                                  .createdOn!)}",
+                                  .createdOn??"")}",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .createdFullName! +
+                            .createdFullName??"" +
                             "| ${StaticMethod.dateTimeToDate(
                                 TaskMaster_page_controller
                                     .Task_Master_list[position]
-                                    .createdOn!)}",
+                                    .createdOn??"")}",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -620,11 +620,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                       child: Tooltip(
                         message: TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .rejectReason!,
+                            .rejectReason??"",
                         child: Text(
                           TaskMaster_page_controller
                               .Task_Master_list[position]
-                              .methodOfCall!,
+                              .methodOfCall??"",
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
                               color: AllColors.textColor,
@@ -838,10 +838,10 @@ class TaskApprovalListScreen extends StatelessWidget{
                             onPressed: () {
                               Get.back();
                               TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.getTaskMaster(
+                              TaskMaster_page_controller.getTaskMasterApprovalList(
                                   TaskMaster_page_controller.pageNumber,
                                   TaskMaster_page_controller.SaleCycleActive_Controller.text,
-                                  '','');
+                                  );
                               //TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.IsActive_controller.text);
                             },
                             child: Text(
@@ -868,11 +868,11 @@ class TaskApprovalListScreen extends StatelessWidget{
                               Get.back();
                               TaskMaster_page_controller.resetAllFieldOfFilter();
                               TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.getTaskMaster(
+                              TaskMaster_page_controller.getTaskMasterApprovalList(
                                   TaskMaster_page_controller.pageNumber,
                                   TaskMaster_page_controller.is_Active
                                       .toString(),
-                                  '','');
+                                 );
                             },
                             child: Text(
                               'Reset',

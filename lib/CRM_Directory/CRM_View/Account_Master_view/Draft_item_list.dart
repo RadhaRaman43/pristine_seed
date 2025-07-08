@@ -148,6 +148,7 @@ class DraftItemList extends StatelessWidget{
           accountMaster_page_controller.view = 'FromDraft';
          // print('Adreesss..${accountMaster_page_controller.Account_Master_Draft_list[position].address}');
           accountMaster_page_controller.getEmployeeMemberApi();
+          accountMaster_page_controller.getCompanyProfileSubTypeApi();
           accountMaster_page_controller.fillDraftDetails(accountMaster_page_controller.Account_Master_Draft_list1, position);
           Get.toNamed(RoutesName.add_New_AccountMaster_screen);
          // accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
