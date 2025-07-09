@@ -4386,7 +4386,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
+          /*  Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -4408,7 +4408,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4422,7 +4422,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
                 Text(
                   saleCycleController
-                      .get_SalesCycleProductById_List[index].createdBy
+                      .get_SalesCycleProductById_List[index].createdFullName
                       .toString(),
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
@@ -4812,6 +4812,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         saleCycleController.quoteList[index].quoteId!;
                         saleCycleController.getQuoteHeaderInformation(
                             saleCycleController.quoteList[index].quoteId, "");
+
                       },
                       child: Icon(
                         Icons.remove_red_eye,

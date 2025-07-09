@@ -13,11 +13,12 @@ class ContactMstGetListModal {
   String? alternateNo;
   String? departmentCode;
   String? departmentName;
-  String? designationcode;
-  String? designationname;
+  String? designationCode;
+  String? designationName;
   String? reportingPerson;
   String? createdBy;
   String? createdOn;
+  String? createdFullName;
   String? updatedBy;
   String? updatedOn;
   String? contactRole;
@@ -37,11 +38,12 @@ class ContactMstGetListModal {
         this.alternateNo,
         this.departmentCode,
         this.departmentName,
-        this.designationcode,
-        this.designationname,
+        this.designationCode,
+        this.designationName,
         this.reportingPerson,
         this.createdBy,
         this.createdOn,
+        this.createdFullName,
         this.updatedBy,
         this.updatedOn,
         this.contactRole});
@@ -61,11 +63,12 @@ class ContactMstGetListModal {
     alternateNo = json['alternate_no'];
     departmentCode = json['department_code'];
     departmentName = json['department_name'];
-    designationcode = json['designation_code'];
-    designationname = json['designation_name'];
+    designationCode = json['designation_code'];
+    designationName = json['designation_name'];
     reportingPerson = json['reporting_person'];
     createdBy = json['created_by'];
     createdOn = json['created_on'];
+    createdFullName = json['created_full_name'];
     updatedBy = json['updated_by'];
     updatedOn = json['updated_on'];
     contactRole = json['contact_role'];
@@ -87,11 +90,12 @@ class ContactMstGetListModal {
     data['alternate_no'] = this.alternateNo;
     data['department_code'] = this.departmentCode;
     data['department_name'] = this.departmentName;
-    data['designation_code'] = designationcode;
-    data['designation_name'] = designationname;
+    data['designation_code'] = this.designationCode;
+    data['designation_name'] = this.designationName;
     data['reporting_person'] = this.reportingPerson;
     data['created_by'] = this.createdBy;
     data['created_on'] = this.createdOn;
+    data['created_full_name'] = this.createdFullName;
     data['updated_by'] = this.updatedBy;
     data['updated_on'] = this.updatedOn;
     data['contact_role'] = this.contactRole;

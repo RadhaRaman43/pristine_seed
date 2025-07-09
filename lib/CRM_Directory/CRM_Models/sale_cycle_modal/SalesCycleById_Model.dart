@@ -12,6 +12,7 @@ class SalesCycleByIdModel {
   double? mrpPrice;
   double? totalPrice;
   String? createdBy;
+  String? createdFullName;
   String? createdOn;
   String? lineStatus;
   String? updatedBy;
@@ -40,6 +41,7 @@ class SalesCycleByIdModel {
         this.mrpPrice,
         this.totalPrice,
         this.createdBy,
+        this.createdFullName,
         this.createdOn,
         this.lineStatus,
         this.updatedBy,
@@ -68,6 +70,7 @@ class SalesCycleByIdModel {
     mrpPrice = json['mrp_price'];
     totalPrice = json['total_price'];
     createdBy = json['created_by'];
+    createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
     lineStatus = json['line_status'];
     updatedBy = json['updated_by'];
@@ -98,6 +101,7 @@ class SalesCycleByIdModel {
     data['mrp_price'] = this.mrpPrice;
     data['total_price'] = this.totalPrice;
     data['created_by'] = this.createdBy;
+    data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
     data['line_status'] = this.lineStatus;
     data['updated_by'] = this.updatedBy;

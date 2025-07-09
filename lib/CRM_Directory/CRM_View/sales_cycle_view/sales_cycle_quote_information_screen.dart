@@ -201,7 +201,7 @@ class QuoteInformationScreen extends StatelessWidget {
                             visible:  (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
                                 saleCycleController.isAdminWritePermission=="1")&&
                             saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected"&&
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="draft"&&
                                 saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" ,
                             child: Tooltip(
                               message: "Reopen",
@@ -310,7 +310,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(right: 0.0),
                             child: Visibility(
                               visible:saleCycleController
-                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && ((saleCycleController.showApprovalBtn.value )||
+                                  .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" && saleCycleController
+                                  .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="rejected" && ((saleCycleController.showApprovalBtn.value )||
                                   (saleCycleController.isAdminWritePermission=="0"&&
                                       saleCycleController.showApprovalBtn.value && saleCycleController
                                       .quoteHeaderdata[0].isReadyForApprove==1) ||
@@ -1070,10 +1071,10 @@ class QuoteInformationScreen extends StatelessWidget {
               Spacer(),
               Obx(() {
                 return Visibility(
-                  visible:( saleCycleController.showBranchHead.value ||
+                  visible:(saleCycleController.showBranchHead.value ||
                       saleCycleController.showClusterHead.value ||
-                      saleCycleController.showGeneralManager.value)&&  saleCycleController
-                      .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="rejected" && saleCycleController
+                      saleCycleController.showGeneralManager.value) && saleCycleController
+                      .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="pending for approval" && saleCycleController
                       .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open",
                   child: GestureDetector(
                       onTap: () {

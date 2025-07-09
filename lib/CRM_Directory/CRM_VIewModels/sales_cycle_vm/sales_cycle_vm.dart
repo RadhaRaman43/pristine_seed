@@ -133,6 +133,9 @@ class SalesCycleVm extends GetxController {
   RxList<advise.QuoteItems> salesAdviseLinesDataList =
       <advise.QuoteItems>[].obs;
 
+  var filterQuoteAcceptedController = TextEditingController().obs;
+  var quoteAcceptedForFilterOnSaleCycle = "Open".obs;
+
   var closureDateController = TextEditingController().obs;
   var budgetAmountController = TextEditingController().obs;
   var expectedAmountController = TextEditingController().obs;
@@ -289,6 +292,8 @@ class SalesCycleVm extends GetxController {
   RxList<String> salesAdviseStatusList = ["Draft", "Completed"].obs;
   RxList<String> SaleCycleStatusList =
       ["All", "Suspect", "Prospect", "Propose"].obs;
+  RxList<String> qouteAcceptedList =
+      ["All", "Open", "Loss", "Won"].obs;
   RxList<String> ApprovalStatusList =
       ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
 
@@ -1232,10 +1237,11 @@ class SalesCycleVm extends GetxController {
               }
               Get.toNamed(RoutesName.quoteInformationScreen);
               quoteApprovalPage.value = flag;
-              if (flag == "quoteApprovalScreen") {
+              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
+              /*if (flag == "quoteApprovalScreen") {
                 print("Approver person");
                 getApprovalPersonList(quoteHeaderdata[0].quoteId!);
-              }
+              }*/
               /* if (flag == "") {
               quoteApprovalPage.value = flag;
                Get.toNamed(RoutesName.quoteInformationScreen);
@@ -2039,9 +2045,10 @@ class SalesCycleVm extends GetxController {
           quoteValidityController.value.clear();
           expectedClosuredateController.value.clear();
           productCategoryController.value.clear();
+          kindAttentionController.value.clear();
         } else {
           loading.value = false;
-          Utils.showErrorToastification("Error!", "Unsuccessful");
+          Utils.showErrorToastification("Error!",  response[0].message.toString());
         }
       } else {
         loading.value = false;
