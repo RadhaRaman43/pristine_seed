@@ -30,6 +30,7 @@ import '../../CRM_Directory/CRM_View/Address_Master_view/Add_New_ConsigneeAdd.da
 import '../../CRM_Directory/CRM_View/Address_Master_view/View_address_screen.dart';
 import '../../CRM_Directory/CRM_View/All_Quote_Line_Item_View/All_Quote_Line_Item_Screen.dart';
 import '../../CRM_Directory/CRM_View/All_Quote_view/All_Quote_Screen.dart';
+import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_plan_screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
@@ -683,6 +684,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.allQuoteLineItemScreen,
         page: ()=>AllQuoteLineItemScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.BusinessTourPlanScreen,
+        page: ()=>BussinessTourPlanScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

@@ -131,6 +131,7 @@ class RoutesName{
   static const approvedRejectedQuoteScreen="/quote_approve_reject_screen";
   static const allQuoteScreenScreen="/All_Quote_Screen";
   static const allQuoteLineItemScreen="/All_Quote_Line_Item_Screen";
+  static const BusinessTourPlanScreen="/bussiness_tour_plan_screen";
 
   //todo sales advise
   static const salesAdviseCreateScreen="/sales_advise_create_screen";

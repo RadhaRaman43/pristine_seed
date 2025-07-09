@@ -289,4 +289,8 @@ class AppUrl {
      static const String getEmployeeHolidays="$BASE_URL/api/CRM/EmployeeAttendance/GetEmployeeHolidays";
      static const String employeeLeaveMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveMark";
 
+     //todo business tour plan
+     static const String businessPlanListGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanListGet";
+     static const String BusinessTourPlanHeaderCreate="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanHeaderCreate";
+
 }
