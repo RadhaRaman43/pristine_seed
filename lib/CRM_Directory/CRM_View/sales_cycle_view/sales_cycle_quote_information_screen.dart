@@ -201,7 +201,8 @@ class QuoteInformationScreen extends StatelessWidget {
                             visible:  (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
                                 saleCycleController.isAdminWritePermission=="1")&&
                             saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()!="draft"&&
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected"&&saleCycleController
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved"&&
                                 saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" ,
                             child: Tooltip(
                               message: "Reopen",

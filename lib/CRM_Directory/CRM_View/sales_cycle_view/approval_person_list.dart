@@ -378,16 +378,16 @@ class ApprovalPersonList extends StatelessWidget{
               ),*/
 
               detailRow("Approver Order", item.approverOrder.toString(), ),
-              detailRow("Is SPR", item.isSpr.toString() == '1' ? "Yes" : "No", ),
+              /*detailRow("Is SPR", item.isSpr.toString() == '1' ? "Yes" : "No", ),
               detailRow("SPR No", item.sprNo ?? "",),
               detailRow("SPR Category", item.sprCategoryName ?? "", ),
-              detailRow("User Type", item.userType ?? "", ),
+              detailRow("User Type", item.userType ?? "", ),*/
              /* detailRow("Approver Geo Name", item.approverGeoName ?? "", ),
               detailRow("Approver Geo Value", item.approverGeoValue ?? "", ),*/
               detailRow("Quote Status", item.quoteStatus ?? "", ),
               detailRow("Approved By", item.approvedFullName ?? "", ),
               detailRow("Approved On", dateApprovedOn ?? "", ),
-              detailRow("Manager Remarks", item.managerRemarks ?? "",),
+              //detailRow("Manager Remarks", item.managerRemarks ?? "",),
               detailRow("Reject Reason", item.rejectReason ?? "",),
             ],
           ),

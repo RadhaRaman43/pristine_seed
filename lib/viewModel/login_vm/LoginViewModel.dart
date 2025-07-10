@@ -48,6 +48,7 @@ class LoginViewModel extends GetxController{
           sessionManagement.setName(loginResponse[0].name.toString());
           sessionManagement.setCompanyId(loginResponse[0].companyId.toString());
           sessionManagement.setEmail(loginResponse[0].email.toString());
+          sessionManagement.setUserType(loginResponse[0].userTypeName.toString());
           sessionManagement.setAuthToken(loginResponse[0].jwtToken.toString());
           sessionManagement.setRequestHostName(loginResponse[0].requestHostName.toString());
           sessionManagement.setName(loginResponse[0].name.toString());

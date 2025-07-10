@@ -67,6 +67,7 @@ class SalesCycleVm extends GetxController {
   RxString Total_Expected_Amount = "0".obs;
   RxBool loading = false.obs;
   String email = "";
+  String userType = "";
   String isAdminWritePermission = "";
   String consigneeId = "";
   RxString FromPage = "Sales".obs;
@@ -306,6 +307,7 @@ class SalesCycleVm extends GetxController {
   @override
   Future<void> onInit() async {
     email = await sessionManagement.getEmail() ?? '';
+    userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     clearAllFieldOfFilter();
     getsalesCycleData(pageNumber, "", "", '');
@@ -2034,7 +2036,7 @@ class SalesCycleVm extends GetxController {
             JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
         if (response != null &&
             response.isNotEmpty &&
-            response[0].condition == "True") {
+            response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
           Utils.showToastification("Success!", response[0].message.toString());
           pageNumberForQuote = 0;
@@ -2044,7 +2046,7 @@ class SalesCycleVm extends GetxController {
           //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
           quoteValidityController.value.clear();
           expectedClosuredateController.value.clear();
-          productCategoryController.value.clear();
+          productCategoryController .value.clear();
           kindAttentionController.value.clear();
         } else {
           loading.value = false;
