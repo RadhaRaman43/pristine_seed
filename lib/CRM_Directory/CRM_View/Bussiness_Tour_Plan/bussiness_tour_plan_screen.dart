@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../component/default_button.dart';
 import '../../../constants/app_colors.dart';
@@ -41,6 +42,9 @@ class BussinessTourPlanScreen extends StatelessWidget{
                 ),
                 Spacer(),
                 IconButton(onPressed: (){
+                  businessTourPlanController.startDateController.value.clear();
+                  businessTourPlanController.endDateController.value.clear();
+                  businessTourPlanController.touringRegionController.value.clear();
                   OpenDialogToCreateBTP(context);
                 },
                     icon: Icon(Icons.add)),
@@ -240,7 +244,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
     Color getStatusColor(String status) {
       switch (status) {
         case 'PENDING' || 'Pending':
-          return Colors.red[900]!;
+          return Colors.yellow[900]!;
         case 'Rejected' || 'REJECTED':
           return AllColors.redColor;
         case 'APPROVED' || 'Approved':
@@ -255,7 +259,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-
+          businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId);
         },
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -340,7 +344,6 @@ class BussinessTourPlanScreen extends StatelessWidget{
           ],
         ),
 
-        //todo commented by nirupma
         trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
@@ -421,6 +424,14 @@ class BussinessTourPlanScreen extends StatelessWidget{
                           hintText: "Touring Region",
                           labelText: "Touring Region",
                           //suffixIcon: Icon(Icons.email),
+                          hintStyle: GoogleFonts.poppins(
+                              color: AllColors.lightblackColor,
+                              fontWeight: FontWeight.w300,
+                              fontSize: AllFontSize.ten),
+                          labelStyle: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontWeight: FontWeight.w500,
+                              fontSize: AllFontSize.sisxteen),
                           contentPadding: EdgeInsets.symmetric(
                               vertical: AllFontSize.ten,
                               horizontal: AllFontSize.ten),
@@ -436,57 +447,9 @@ class BussinessTourPlanScreen extends StatelessWidget{
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: TextFormField(
-                      controller: businessTourPlanController.startDateController.value,
-                      decoration: InputDecoration(
-                          hintText: "Start Date",
-                          labelText: "Start Date",
-                          //suffixIcon: Icon(Icons.email),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: AllFontSize.ten,
-                              horizontal: AllFontSize.ten),
-
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1)
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          )
-                      ),
-
-                    ),
-                  ),
+                  bindStartDatePicker(context),
                   SizedBox(height: 10,),
-                  Container(
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: TextFormField(
-                      controller: businessTourPlanController.endDateController.value,
-                      decoration: InputDecoration(
-                          hintText: "End Date",
-                          labelText: "End Date",
-                          //suffixIcon: Icon(Icons.email),
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: AllFontSize.ten,
-                              horizontal: AllFontSize.ten),
-
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: AllColors.primaryDark1)
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10)
-                          )
-                      ),
-
-                    ),
-                  ),
+                  bindEndDatePicker(context),
                   SizedBox(height: 15,),
                   Row(
                 children: [
@@ -507,6 +470,167 @@ class BussinessTourPlanScreen extends StatelessWidget{
             ),
           );
         }
+    );
+  }
+
+  Widget bindStartDatePicker(context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: TextFormField(
+        controller: businessTourPlanController.startDateController.value,
+        readOnly: true,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Select Start Date',
+            labelText: 'Select Start Date',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )),
+        cursorColor: AllColors.primaryDark1,
+        onTap: () async {
+          // Check if a date is already selected and parse it
+          DateTime initialDate = DateTime.now();
+          if (businessTourPlanController.startDateController.value.text.isNotEmpty) {
+            initialDate = DateFormat('yyyy-MM-dd').parse(
+              businessTourPlanController.startDateController.value.text,
+            );
+          }
+
+          // Define the range of selectable dates
+          DateTime stating_date = DateTime(1900);
+          DateTime ending_date = DateTime(2200);
+
+          // Remove focus from the field
+          FocusScope.of(context).requestFocus(FocusNode());
+
+          // Show the date picker
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate:
+            initialDate, // Use the previously selected date or today
+            firstDate: stating_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme:
+                  ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme:
+                  ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          // Update the controller with the selected date
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null) {
+            businessTourPlanController.startDateController.value.text =
+                outputFormat.format(date);
+          }
+        },
+      ),
+    );
+  }
+
+
+  Widget bindEndDatePicker(context) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: TextFormField(
+        controller: businessTourPlanController.endDateController.value,
+        readOnly: true,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Select End Date',
+            labelText: 'Select End Date',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )),
+        cursorColor: AllColors.primaryDark1,
+        onTap: () async {
+          // Get the start date and parse it
+          String startDateText =
+              businessTourPlanController.startDateController.value.text;
+          DateTime stating_date = startDateText.isNotEmpty
+              ? DateFormat('yyyy-MM-dd').parse(startDateText)
+              : DateTime.now();
+
+          // Get the previously selected end date or use today
+          String endDateText =
+              businessTourPlanController.endDateController.value.text;
+          DateTime initialDate = endDateText.isNotEmpty
+              ? DateFormat('yyyy-MM-dd').parse(endDateText)
+              : stating_date;
+
+          // Ensure the end date cannot be earlier than the start date
+          DateTime ending_date = DateTime(2200);
+
+          // Remove focus from the field
+          FocusScope.of(context).requestFocus(FocusNode());
+
+          // Show the date picker
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: initialDate,
+            firstDate: stating_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme:
+                  ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme:
+                  ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          // Update the controller with the selected date
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null) {
+            businessTourPlanController.endDateController.value.text = outputFormat.format(date);
+
+          }
+        },
+      ),
     );
   }
 
@@ -746,5 +870,6 @@ class BussinessTourPlanScreen extends StatelessWidget{
       },
     );
   }
+
 
 }
