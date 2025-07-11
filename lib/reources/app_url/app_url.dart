@@ -298,5 +298,7 @@ class AppUrl {
      static const String BusinessTourPlanAccountGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanAccountGet";
      static const String BusinessTourPlanDistrictGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanDistrictGet";
      static const String BusinessTourPlanContactsGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanContactsGet";
+     static const String BusinessTourPlanLineCreate="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanLineCreate";
+     static const String BusinessTourPlanLineDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanLineDelete";
 
 }

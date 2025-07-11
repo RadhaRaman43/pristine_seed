@@ -98,6 +98,8 @@ class AddTourLinesPage extends StatelessWidget{
                  return  ;
                }
 
+               ConfirmationDialog(context, businessTourPlanController.Tour_Id);
+
                //accountMaster_page_controller.AccountMstUploaderApiHit('Create', "", accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
              },
              text: "Create Tour Line",
@@ -145,7 +147,27 @@ class AddTourLinesPage extends StatelessWidget{
                      SizedBox(height: 10,),
                      bindTourPlanAccountDropDown(context),
                      SizedBox(height: 10,),
-                     bindMeetingWithDropDown(context),
+                     Obx((){
+                       return Visibility(
+                           visible: businessTourPlanController.meetingWith.value,
+                           child: bindMeetingWithDropDown(context));
+                     }),
+                     SizedBox(height: 10,),
+                     Obx(() {
+                       return
+                         Wrap(
+                           spacing: 8.0,
+                           children: businessTourPlanController.SelectedMeetingWith_List.map((category) {
+                             return Chip(
+                               label: Text((category.contactName?.toString() ?? "")),
+                               onDeleted: () {
+                                 businessTourPlanController.SelectedMeetingWith_List.remove(category);
+                               },
+                             );
+                           }).toList(),
+                         );
+
+                     }),
                      SizedBox(height: 10,),
                      BindObjectiveTextField(context),
                      SizedBox(height: 10,),
@@ -231,7 +253,7 @@ class AddTourLinesPage extends StatelessWidget{
             // Update the controller with the selected date
             if (date != null) {
               var outputFormat = DateFormat('yyyy-MM-dd');
-              businessTourPlanController.startDateController.value.text =
+              businessTourPlanController.tourDate_Controller.text =
                   outputFormat.format(date);
             }
           },
@@ -468,17 +490,18 @@ class AddTourLinesPage extends StatelessWidget{
         displayStringForOption: _displayTourPlanAccountForOption,
         optionsBuilder: (TextEditingValue textEditingValue) async {
           if (textEditingValue.text.isEmpty) {
+            businessTourPlanController.TourPlanContact_List.value= [];
             return businessTourPlanController.TourPlanAccount_List;
             // return const Iterable<VehicleTypeResponse>.empty();
           }
           return await businessTourPlanController.getTourPlanAccountTypeApi(textEditingValue.text);
         },
         onSelected: (TourPlanAccountModel selection) {
-          //print(selection.loginEmailId);
-          // Update the TextField with the selected
-          businessTourPlanController.TourPlanAccount_Controller.text =
+          businessTourPlanController.TourPlanAccount_Controller.value.text =
               _displayTourPlanAccountForOption(selection).toString();
-
+          businessTourPlanController.meetingWith.value = false;
+          businessTourPlanController.meetingWith.value = true;
+          businessTourPlanController.CustomerId  = selection.accountCode??"";
           businessTourPlanController.BusinessTourPlanContactGet(selection.accountCode??"");
 
         },
@@ -494,7 +517,7 @@ class AddTourLinesPage extends StatelessWidget{
             },
             cursorColor: AllColors.primaryDark1,
             controller: controller
-              ..text = businessTourPlanController.TourPlanDistrict_Controller
+              ..text = businessTourPlanController.TourPlanAccount_Controller.value
                   .text,
             focusNode: focusNode,
             //onSubmitted: onFieldSubmitted,
@@ -565,124 +588,137 @@ class AddTourLinesPage extends StatelessWidget{
   }
 
   Widget bindMeetingWithDropDown(context){
-    return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15),
-      child: Autocomplete<TourPlanAccountModel>(
-        displayStringForOption: _displayMeetingWithForOption,
-        optionsBuilder: (TextEditingValue textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return businessTourPlanController.TourPlanContact_List;
-            // return const Iterable<VehicleTypeResponse>.empty();
-          }
-          return businessTourPlanController.TourPlanContact_List
-              .where((TourPlanAccountModel option) {
-            return option.contactName
-                .toString()
-                .toLowerCase()
-                .contains(textEditingValue.text.toLowerCase());
-          }).toList();
-        },
-        onSelected: (TourPlanAccountModel selection) {
-          print(selection.contactName);
-          // Update the TextField with the selected
-          businessTourPlanController.MeetingWith_controller.text =
-              _displayMeetingWithForOption(selection).toString();
-        },
-        fieldViewBuilder: (BuildContext context, TextEditingController controller,
-            FocusNode focusNode, VoidCallback onFieldSubmitted) {
-          return Container(
-            decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10)
-            ),
-            child: TextField(
-              cursorColor: AllColors.primaryDark1,
-              controller: controller
-                ..text = businessTourPlanController.MeetingWith_controller
-                    .text,
-              focusNode: focusNode,
-              //onSubmitted: onFieldSubmitted,
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  color: AllColors.primaryDark1,
-                  onPressed: (){
-                    if(focusNode.hasFocus){
-                      focusNode.unfocus();
-                    }else{
-                      focusNode.requestFocus();
-                    }
-                  },
-                  icon: Icon(Icons.arrow_drop_down),
+      return IgnorePointer(
+        ignoring: businessTourPlanController.TourPlanAccount_Controller.value.text == ""? true:false,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: Autocomplete<TourPlanAccountModel>(
+            displayStringForOption: _displayMeetingWithForOption,
+            optionsBuilder: (TextEditingValue textEditingValue) {
+              if (textEditingValue.text.isEmpty) {
+                return businessTourPlanController.TourPlanContact_List;
+                // return const Iterable<VehicleTypeResponse>.empty();
+              }
+              return businessTourPlanController.TourPlanContact_List
+                  .where((TourPlanAccountModel option) {
+                return option.contactName
+                    .toString()
+                    .toLowerCase()
+                    .contains(textEditingValue.text.toLowerCase());
+              }).toList();
+            },
+            onSelected: (TourPlanAccountModel selection) {
+              print(selection.contactName);
+              // Update the TextField with the selected
+              businessTourPlanController.MeetingWith_controller.value.text =
+                  _displayMeetingWithForOption(selection).toString();
+
+              if (!businessTourPlanController.SelectedMeetingWith_List.contains(selection)) {
+                businessTourPlanController.SelectedMeetingWith_List.add(selection);
+                businessTourPlanController.SelectedMeetingWith_List1.add(selection.contactName??"");
+
+                Utils.showToastification('Success', 'Add Successfully');
+              }else{
+                Utils.showErrorToastification('Error', 'Already Selected');
+              }
+            },
+            fieldViewBuilder: (BuildContext context, TextEditingController controller,
+                FocusNode focusNode, VoidCallback onFieldSubmitted) {
+              return Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10)
                 ),
-                contentPadding: EdgeInsets.symmetric(
-                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'Meeting With*',
-                labelText: 'Meeting With*',
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-              ),
-            ),
-          );
-        },
-        optionsViewBuilder: (BuildContext context,
-            AutocompleteOnSelected<TourPlanAccountModel> onSelected,
-            Iterable<TourPlanAccountModel> suggestions) {
-          return Align(
-            alignment: Alignment.topLeft,
-            child: Material(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              elevation: 4.0,
-              child: Container(
-                width: size.width*.85,
-                constraints: BoxConstraints(maxHeight: 200),
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: suggestions.length,
-                  itemBuilder: (context, index) {
-                    final TourPlanAccountModel option =
-                    suggestions.elementAt(index);
-                    return GestureDetector(
-                      onTap: () {
-                        onSelected(option);
+                child: TextField(
+                  cursorColor: AllColors.primaryDark1,
+                  controller: controller
+                    ..text = businessTourPlanController.MeetingWith_controller.value
+                        .text,
+                  focusNode: focusNode,
+                  //onSubmitted: onFieldSubmitted,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      color: AllColors.primaryDark1,
+                      onPressed: (){
+                        if(focusNode.hasFocus){
+                          focusNode.unfocus();
+                        }else{
+                          focusNode.requestFocus();
+                        }
                       },
-                      child: Container(
-                          padding: EdgeInsets.all(8.0),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text:  option.contactName??"",
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.blackColor,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: AllFontSize
-                                          .sisxteen // Change the text color here
-                                  ),
-                                ),
-                                /*TextSpan(
-                                  text: " (${option.contactName!})",
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.redColor,
-                                      fontWeight: FontWeight.w300,
-                                      fontSize: AllFontSize
-                                          .sisxteen // Change the text color here
-                                  ),
-                                ),*/
-                              ],
-                            ),
-                            softWrap: true,
-                          )
-                      ),
-                    );
-                  },
+                      icon: Icon(Icons.arrow_drop_down),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                    hintText: 'Meeting With*',
+                    labelText: 'Meeting With*',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10))
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
+              );
+            },
+            optionsViewBuilder: (BuildContext context,
+                AutocompleteOnSelected<TourPlanAccountModel> onSelected,
+                Iterable<TourPlanAccountModel> suggestions) {
+              return Align(
+                alignment: Alignment.topLeft,
+                child: Material(
+                  borderRadius: BorderRadius.all(Radius.circular(10)),
+                  elevation: 4.0,
+                  child: Container(
+                    width: size.width*.85,
+                    constraints: BoxConstraints(maxHeight: 200),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: suggestions.length,
+                      itemBuilder: (context, index) {
+                        final TourPlanAccountModel option =
+                        suggestions.elementAt(index);
+                        return GestureDetector(
+                          onTap: () {
+                            onSelected(option);
+                          },
+                          child: Container(
+                              padding: EdgeInsets.all(8.0),
+                              child: RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text:  option.contactName??"",
+                                      style: GoogleFonts.poppins(
+                                          color: AllColors.blackColor,
+                                          fontWeight: FontWeight.w300,
+                                          fontSize: AllFontSize
+                                              .sisxteen // Change the text color here
+                                      ),
+                                    ),
+                                    /*TextSpan(
+                                    text: " (${option.contactName!})",
+                                    style: GoogleFonts.poppins(
+                                        color: AllColors.redColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize
+                                            .sisxteen // Change the text color here
+                                    ),
+                                  ),*/
+                                  ],
+                                ),
+                                softWrap: true,
+                              )
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
   }
 
 
@@ -711,6 +747,11 @@ class AddTourLinesPage extends StatelessWidget{
 
           if (!businessTourPlanController.SelectedAlongPersonWith_list.contains(selection)) {
             businessTourPlanController.SelectedAlongPersonWith_list.add(selection);
+            businessTourPlanController.SelectedAlongPersonWith_list1.add((selection.firstName ?? "") +
+                " " +
+                (selection.middleName?? "") +
+                " " +
+                (selection.lastName?? ""),);
             Utils.showToastification('Success', 'Add Successfully');
           }else{
             Utils.showErrorToastification('Error', 'Already Selected');
@@ -722,6 +763,7 @@ class AddTourLinesPage extends StatelessWidget{
             FocusNode focusNode, VoidCallback onFieldSubmitted) {
           return TextField(
             onTap: (){
+              businessTourPlanController.AlongPersonWith_controller.clear();
               if(focusNode.hasFocus){
                 focusNode.unfocus();
               }else{
@@ -738,6 +780,7 @@ class AddTourLinesPage extends StatelessWidget{
               suffixIcon: IconButton(
                 color: AllColors.primaryDark1,
                 onPressed: (){
+                  businessTourPlanController.AlongPersonWith_controller.clear();
                   if(focusNode.hasFocus){
                     focusNode.unfocus();
                   }else{
@@ -818,6 +861,98 @@ class AddTourLinesPage extends StatelessWidget{
         },
       ),
     );
+  }
+
+
+  ConfirmationDialog(context, String TourId){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.delete_forever, color: AllColors.redColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Create Line !',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          'Do You Want To Create Line ?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+
+                      SizedBox(height: 20),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              Get.back();
+
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Cancel',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              businessTourPlanController.BusinessTourPlanLinesCreate(TourId);
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Submit',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),]
+            ),
+          );
+
+        });
   }
 
 

@@ -22,17 +22,24 @@ class BusinessPlanTourViewModel extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   RxBool loading = false.obs;
-  String StartDate = '', EndDate = '';
+  RxBool meetingWith = true.obs;
+  String StartDate = '', EndDate = '', Tour_Id = '', CustomerId = '';
   RxString filterStatusFlag = 'PENDING'.obs;
+
+  String MeetingWithResponse = '', Accompanied_With_Response = '';
+
   RxList<BussinessTourPlanModel> BusinessTourPlanList = <BussinessTourPlanModel>[].obs;
   RxList<BusinessTourPlanDetailsModel> BusinessTourPlanDetails_list = <BusinessTourPlanDetailsModel>[].obs;
   RxList<Lines> BusinessTourHourLines = <Lines>[].obs;
   RxList<AlongWithPersonModel> AlongPersonWith_list = <AlongWithPersonModel>[].obs;
   RxList<AlongWithPersonModel> SelectedAlongPersonWith_list = <AlongWithPersonModel>[].obs;
+  RxList<String> SelectedAlongPersonWith_list1 = <String>[].obs;
   RxList<TouringDistrictModel> TouringDistirct_list = <TouringDistrictModel>[].obs;
   RxList<TouringDistrictModel> TourType_List = <TouringDistrictModel>[].obs;
   RxList<TourPlanAccountModel> TourPlanAccount_List = <TourPlanAccountModel>[].obs;
   RxList<TourPlanAccountModel> TourPlanContact_List = <TourPlanAccountModel>[].obs;
+  RxList<TourPlanAccountModel> SelectedMeetingWith_List = <TourPlanAccountModel>[].obs;
+  RxList<String> SelectedMeetingWith_List1 = <String>[].obs;
 
   var filterCreatedByController = TextEditingController().obs;
   var filterTourIdController = TextEditingController().obs;
@@ -44,8 +51,8 @@ class BusinessPlanTourViewModel extends GetxController{
 
   var AlongPersonWith_controller = TextEditingController();
   var TourPlanDistrict_Controller = TextEditingController();
-  var TourPlanAccount_Controller = TextEditingController();
-  var MeetingWith_controller = TextEditingController();
+  var TourPlanAccount_Controller = TextEditingController().obs;
+  var MeetingWith_controller = TextEditingController().obs;
   var TourPlanRemarks_Controller = TextEditingController();
   var TourPlanObjective_Controller = TextEditingController();
   var tourDate_Controller = TextEditingController();
@@ -63,6 +70,15 @@ class BusinessPlanTourViewModel extends GetxController{
   Future<void> refreshList() async {
     pageNumber = 0;
     getBusinessTourPlanData(pageNumber);
+  }
+
+  String formattedNames(String encodedString) {
+    try {
+      List<dynamic> names = jsonDecode(encodedString);
+      return names.join(", ");
+    } catch (e) {
+      return ""; // or fallback to original string if needed
+    }
   }
 
   getBusinessTourPlanData(int page_no) {
@@ -216,6 +232,7 @@ class BusinessPlanTourViewModel extends GetxController{
                 response[0].condition == "True") {
               BusinessTourPlanDetails_list.value=response;
               BusinessTourHourLines.value = response[0].lines??[];
+              Tour_Id = BusinessTourPlanDetails_list[0].tourId??"";
               StartDate = BusinessTourPlanDetails_list[0].startDate??"";
               EndDate = BusinessTourPlanDetails_list[0].endDate??"";
               Get.toNamed(RoutesName.BusinessTourPlanDetails);
@@ -249,6 +266,95 @@ class BusinessPlanTourViewModel extends GetxController{
     ).whenComplete(() {
       loading.value = false;
     },);
+  }
+
+  BusinessTourPlanLinesCreate(String TourId) {
+    try {
+      Map data = {
+        "tour_id": TourId,
+        "touring_district": TourPlanDistrict_Controller.value.text.isEmpty?"":TourPlanDistrict_Controller.value.text,
+        "tour_date": tourDate_Controller.value.text.isEmpty?"":tourDate_Controller.value.text,
+        "tour_type": TourType_Controller.value.text.isEmpty?'':TourType_Controller.value.text,
+        "accompanied_with": jsonEncode(SelectedAlongPersonWith_list1),
+        "customer": CustomerId,
+        "meeting_with": jsonEncode(SelectedMeetingWith_List1),
+        "objective": TourPlanObjective_Controller.value.text.isEmpty?"":TourPlanObjective_Controller.value.text,
+        "remark": TourPlanRemarks_Controller.value.text.isEmpty?"":TourPlanRemarks_Controller.value.text,
+        "email_id": email
+      };
+      loading.value = true;
+      _api.BusinessTourPlanLineCreate(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BussinessTourPlanModel> response =
+            jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
+            if (response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification("Message !", response[0].message.toString());
+              getBusinessTourPlanDetailsApi(response[0].tourId);
+
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  BusinessTourPlanLinesDelete(String TourId, String LineNo) {
+    try {
+      Map data = {
+        "tour_id": TourId,
+        "line_no": LineNo,
+        "email_id": email
+      };
+      loading.value = true;
+      _api.BusinessTourPlanLineDelete(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BussinessTourPlanModel> response =
+            jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
+            if (response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification("Message !", response[0].message.toString());
+              getBusinessTourPlanDetailsApi(response[0].tourId);
+
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
   }
 
   getEmpMstEmailByApi() {
@@ -469,6 +575,17 @@ class BusinessPlanTourViewModel extends GetxController{
     filterTourIdController.value.clear();
     filterTouringRegionController.value.clear();
 
+  }
+
+  void clearAllCreateLinePlanController(){
+    AlongPersonWith_controller.clear();
+    TourPlanDistrict_Controller.clear();
+    TourPlanAccount_Controller.value.clear();
+    MeetingWith_controller.value.clear();
+    TourPlanRemarks_Controller.clear();
+    TourPlanObjective_Controller.clear();
+    tourDate_Controller.clear();
+    TourType_Controller.clear();
   }
 
 }

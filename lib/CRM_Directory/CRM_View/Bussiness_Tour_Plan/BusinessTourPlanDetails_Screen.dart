@@ -109,6 +109,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                         ),
                         GestureDetector(
                           onTap: () {
+                            businessTourPlanController.clearAllCreateLinePlanController();
                             businessTourPlanController.getEmpMstEmailByApi();
                             businessTourPlanController.getTourPlanDistrictTypeApi('');
                             businessTourPlanController.getTourTypeApi();
@@ -221,6 +222,98 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                               width: 60,
                               alignment: Alignment.center,
                               child: Text('Discard',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),]
+            ),
+          );
+
+        });
+  }
+
+  ConfirmationDeleteLineDialog(context, String TourId, String LineNo){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.delete_forever, color: AllColors.redColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Delete !',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          'Do You Want To Delete This Line ?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+
+                      SizedBox(height: 20),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              Get.back();
+
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Cancel',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              businessTourPlanController.BusinessTourPlanLinesDelete(TourId, LineNo);
+                              Get.back();
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Delete',
                                 /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
                                 style: GoogleFonts.poppins(
                                   color: AllColors.blackColor,
@@ -606,6 +699,9 @@ class BusinessTourPlanDeatil extends StatelessWidget {
     String? TourDate = StaticMethod.convertDateFormat1(
         businessTourPlanController.BusinessTourHourLines[index].tourDate ?? "");
 
+    String MeetingWith = businessTourPlanController.formattedNames(businessTourPlanController.BusinessTourHourLines[index].meetingWith??"");
+    String AccompaniedWith = businessTourPlanController.formattedNames(businessTourPlanController.BusinessTourHourLines[index].accompaniedWith??"");
+
     return Card(
       //margin: EdgeInsets.all(5),
       child: ListTile(
@@ -613,23 +709,37 @@ class BusinessTourPlanDeatil extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "Tour Id : ",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w800,
-              ),
+            Row(
+              children: [
+                Text(
+                  "Tour Id : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Text(
+                  businessTourPlanController.BusinessTourHourLines[index].tourId ??
+                      "",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
             ),
-            Text(
-              businessTourPlanController.BusinessTourHourLines[index].tourId ??
-                  "",
-              style: GoogleFonts.poppins(
-                color: AllColors.textColor,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
+
+            InkWell(
+                onTap: () {
+                  ConfirmationDeleteLineDialog(context, businessTourPlanController.BusinessTourHourLines[index].tourId??"", businessTourPlanController.BusinessTourHourLines[index].lineNo??"" );
+                },
+                child: Icon(
+                  Icons.delete_forever,
+                  color: Colors.red,
+                  size: 30,
+                )),
           ],
         ),
         subtitle: Column(
@@ -732,21 +842,26 @@ class BusinessTourPlanDeatil extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Accompanied With. : ",
+                  "Accompanied With : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.twelve,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  businessTourPlanController
-                      .BusinessTourHourLines[index].accompaniedWith
-                      .toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Tooltip(
+                    message: AccompaniedWith,
+                    child: Text(
+                      AccompaniedWith,
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ],
@@ -778,7 +893,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Meeting With. : ",
+                  "Meeting With : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.twelve,
@@ -786,9 +901,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  businessTourPlanController
-                      .BusinessTourHourLines[index].meetingWith
-                      .toString(),
+                  MeetingWith,
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -808,14 +921,23 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text(
-                  businessTourPlanController
-                      .BusinessTourHourLines[index].objective
-                      .toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Tooltip(
+                    message: businessTourPlanController
+                        .BusinessTourHourLines[index].objective
+                        .toString(),
+                    child: Text(
+                      businessTourPlanController
+                          .BusinessTourHourLines[index].objective
+                          .toString(),
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
                 ),
               ],
@@ -874,53 +996,6 @@ class BusinessTourPlanDeatil extends StatelessWidget {
             ),
           ],
         ),
-        /* trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Visibility(
-              visible: saleCycleController.saleCycleList[0].quoteAccepted
-                          ?.toUpperCase() ==
-                      "LOSS"
-                  ? false
-                  : true,
-              child: Container(
-                child: Visibility(
-                  visible: saleCycleController
-                                  .saleCycleList[0].isReadySendForApproval ==
-                              1 &&
-                          saleCycleController
-                                  .saleCycleList[0].isSalesCycleClosed !=
-                              1
-                      ? true
-                      : false,
-                  child: InkWell(
-                      onTap: () {
-                        showConfirmationDialog(context,
-                            saleCycleController.quoteList[index].quoteId ?? "");
-                      },
-                      child: Icon(
-                        Icons.add_chart,
-                        color: Colors.blueAccent,
-                      )),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 8,
-            ),
-            InkWell(
-                onTap: () {
-                  saleCycleController.quoteId.value =
-                      saleCycleController.quoteList[index].quoteId!;
-                  saleCycleController.getQuoteHeaderInformation(
-                      saleCycleController.quoteList[index].quoteId, "");
-                },
-                child: Icon(
-                  Icons.remove_red_eye,
-                  color: Colors.blueAccent,
-                )),
-          ],
-        ),*/
       ),
     );
   }

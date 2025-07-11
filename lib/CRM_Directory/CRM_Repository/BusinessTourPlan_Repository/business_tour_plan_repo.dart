@@ -16,6 +16,14 @@ class BusinessTourPlanRepo{
     return _apiService.postApi(data, AppUrl.BusinessTourPlanHeaderDelete,sessionManagement);
   }
 
+  Future<String> BusinessTourPlanLineCreate(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.BusinessTourPlanLineCreate,sessionManagement);
+  }
+
+  Future<String> BusinessTourPlanLineDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.BusinessTourPlanLineDelete,sessionManagement);
+  }
+
   Future<String> BusinessTourPlanDetailsGet(Map<String, String> data, SessionManagement sessionManagement) async {
     return _apiService.getApi(AppUrl.BusinessTourPlanDetailsGet, sessionManagement,data);
   }
