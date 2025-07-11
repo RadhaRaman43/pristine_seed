@@ -198,11 +198,11 @@ class QuoteInformationScreen extends StatelessWidget {
                       children: [
                         Obx((){
                           return Visibility(
-                            visible:  (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
+                            visible:  ((saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() ||
                                 saleCycleController.isAdminWritePermission=="1")&&
                             saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected"&&saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved"&&
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="rejected") || (saleCycleController
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved"   && saleCycleController.isAdminWritePermission=="1")&&
                                 saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="open" ,
                             child: Tooltip(
                               message: "Reopen",
@@ -1265,7 +1265,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           return Visibility(
                             visible: saleCycleController.showBranchHead.value ||
-                                saleCycleController.showClusterHead.value,
+                                saleCycleController.showClusterHead.value|| saleCycleController.isAdminWritePermission=="1",
                             child: Row(
                               children: [
                                 Text(
@@ -1323,9 +1323,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                        Obx((){
                          return Visibility(
-                             visible: saleCycleController
-                                 .quoteHeaderdata[0].isReadyForApprove ==
-                                 1,
+                             visible: saleCycleController.showBranchHead.value||saleCycleController.isAdminWritePermission=="1",
                              child: Row(
                                children: [
                                  Text(

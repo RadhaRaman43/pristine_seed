@@ -55,18 +55,18 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         print('fromPageNameSales.....${saleCycleController.FromPage}');
-        if (saleCycleController.FromPage == 'Sales') {
+        /*if (saleCycleController.FromPage == 'Sales') {
          // print('Yaha Se1...');
           saleCycleController.clearAllFieldOfFilter();
-          /*  saleCycleController.accountNameController.value.clear();
+          *//*  saleCycleController.accountNameController.value.clear();
           //saleCycleController.contactNameController.value.clear();
-          saleCycleController.ApprovalStatusController.value.clear();*/
+          saleCycleController.ApprovalStatusController.value.clear();*//*
           saleCycleController.pageNumber = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "Open";
           saleCycleController.getsalesCycleData(
               saleCycleController.pageNumber, "", "", 'Sales');
           Get.toNamed(RoutesName.salesCycleScreen);
-        } else if (saleCycleController.FromPage == 'Task') {
+        } else*/ if (saleCycleController.FromPage == 'Task') {
           TaskMaster_page_controller.getTaskMaster(
               0,
               TaskMaster_page_controller.is_Active.toString(),
@@ -102,9 +102,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           Get.toNamed(RoutesName.allQuoteLineItemScreen);
         }
         else {
+          saleCycleController.clearAllFieldOfFilter();
+          saleCycleController.pageNumber = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "Open";
+          saleCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Open";
+          saleCycleController.getsalesCycleData(
+              saleCycleController.pageNumber, "", "", 'Sales');
+          Get.toNamed(RoutesName.salesCycleScreen);
+
+        /*  saleCycleController.filterQuoteAcceptedFlag.value = "Open";
           //saleCycleController.getsalesCycleData(0, "", "",'');
-          Get.offAllNamed(RoutesName.salesCycleScreen);
+          Get.offAllNamed(RoutesName.salesCycleScreen);*/
         }
         return false;
       },
@@ -143,7 +151,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     visible: saleCycleController
                             .saleCycleList[0].quoteAccepted
                             ?.toLowerCase() ==
-                        'loss' && saleCycleController.isAdminWritePermission=="1"?true:false,
+                        'loss' && saleCycleController.isAdminWritePermission=="1",
                     child: GestureDetector(
                       onTap: () {
                         saleCycleController.reOpenRemarksController.value.text =
@@ -153,7 +161,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       },
                       child: Container(
                         padding: const EdgeInsets.all(7.0),
-                        margin: EdgeInsets.only(right: 10),
                         child: Icon(
                           Icons.lock_open,
                           color: AllColors.whiteColor,
@@ -366,10 +373,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       // Always add the second item
                       if (saleCycleController.saleCycleList[0].salesCycleStatus
                               ?.toLowerCase() !=
-                          "suspect" /*&& saleCycleController.saleCycleList[0]
-                          .salesCycleStatus
-                          ?.toLowerCase() !=
-                          "rejected"*/) {
+                          "suspect") {
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -472,7 +476,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
                               && (saleCycleController.saleCycleList[0].quoteAccepted
                                   ?.toUpperCase() ==
-                                  "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                                  "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                   ?.toLowerCase() !=
                                   "rejected") && saleCycleController.FromPage.value == "Sales"?false:true ,
                           child: Column(
@@ -552,7 +556,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
                             && (saleCycleController.saleCycleList[0].quoteAccepted
                                 ?.toUpperCase() ==
-                                "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                                "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                 ?.toLowerCase() !=
                                 "rejected") && saleCycleController.FromPage.value == "Sales",
                                     /*visible: saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||
@@ -721,8 +725,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 width: size.width * 0.02,
                               ),
                               Visibility(
-                                  visible: (saleCycleController.saleCycleList[0]
-                                      .createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
+                                  visible: ((saleCycleController.isAdminWritePermission=="1" || saleCycleController.userType.toLowerCase()=="branch head"  ||saleCycleController.saleCycleList[0]
+                                      .createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()) &&
                                       saleCycleController.filter.value ==
                                               'Sales cycle' &&
                                           saleCycleController.saleCycleList[0]
@@ -789,56 +793,70 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                   Obx(() {
                     return Visibility(
-                      visible: saleCycleController
-                          .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()&&
+                      visible:( saleCycleController
+                          .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()|| saleCycleController.userType.toLowerCase()=="branch head"
+                      || saleCycleController.isAdminWritePermission=='1')&&
                               saleCycleController
                                       .saleCycleList[0].salesCycleStatus!
                                       .toUpperCase() ==
-                                  "PROSPECT" /*saleCycleController.saleCycleList[0]
-                              .approvedBy?.toLowerCase() !=
-                              saleCycleController.email.toLowerCase()*/
+                                  "PROSPECT"
                               &&
                               saleCycleController.filter.value ==
                                   'Solution Accepted'
-                          ? true
-                          : false,
-                      child: Column(
-                        children: [
-                          Container(
-                            child: bindSolutionAccepted(context),
-                          ),
-                          Visibility(
-                                visible: (saleCycleController.saleCycleList[0]
-                                                .salesCycleStatus!
-                                                .toUpperCase() ==
-                                            "PROSPECT") &&
-                                        (saleCycleController
-                                                .ischangeNeedIdentity.isFalse ||
-                                            saleCycleController
-                                                .ischangesolutionAccepted
-                                                .isFalse)
-                                    ? true
-                                    : false,
-                                child: bindSolutionRejectedRemarks(context)),
+                          ,
+                      child: IgnorePointer(
+                        ignoring:
+                        (saleCycleController.saleCycleList[0]
+                            .createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()|| saleCycleController.isAdminWritePermission=="1"
+                            || saleCycleController.userType.toLowerCase()=="branch head") &&
+                            (saleCycleController
+                                .saleCycleList[0].actualSalesCycleApprovalStatus
+                                ?.toLowerCase() !=
+                                "rejected" && saleCycleController
+                                .saleCycleList[0].quoteAccepted
+                                ?.toLowerCase() ==
+                                "open") &&
+                            (saleCycleController.FromPage.value == "Sales")
+                            ? false
+                            : true,
+                        child: Column(
+                          children: [
+                            Container(
+                              child: bindSolutionAccepted(context),
+                            ),
+                            Visibility(
+                                  visible: (saleCycleController.saleCycleList[0]
+                                                  .salesCycleStatus!
+                                                  .toUpperCase() ==
+                                              "PROSPECT") &&
+                                          (saleCycleController
+                                                  .ischangeNeedIdentity.isFalse ||
+                                              saleCycleController
+                                                  .ischangesolutionAccepted
+                                                  .isFalse)
+                                      ? true
+                                      : false,
+                                  child: bindSolutionRejectedRemarks(context)),
 
-                          /*   Obx(() {
-                                return Visibility(
-                                    visible: saleCycleController
-                                        .saleCycleList[0].salesCycleStatus!
-                                        .toUpperCase() == "PROSPECT" &&
-                                        saleCycleController.ischangeNeedIdentity
-                                            .value &&
-                                        saleCycleController
-                                            .ischangesolutionAccepted.value &&
-                                        (saleCycleController
-                                            .ischangeNeedIdentity.value &&
-                                            saleCycleController
-                                                .ischangesolutionAccepted.value)
-                                        ? true
-                                        : false,
-                                    child: BindProposedSolution(context));
-                              }),*/
-                        ],
+                            /*   Obx(() {
+                                  return Visibility(
+                                      visible: saleCycleController
+                                          .saleCycleList[0].salesCycleStatus!
+                                          .toUpperCase() == "PROSPECT" &&
+                                          saleCycleController.ischangeNeedIdentity
+                                              .value &&
+                                          saleCycleController
+                                              .ischangesolutionAccepted.value &&
+                                          (saleCycleController
+                                              .ischangeNeedIdentity.value &&
+                                              saleCycleController
+                                                  .ischangesolutionAccepted.value)
+                                          ? true
+                                          : false,
+                                      child: BindProposedSolution(context));
+                                }),*/
+                          ],
+                        ),
                       ),
                     );
                   }),
@@ -994,7 +1012,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
                               && (saleCycleController.saleCycleList[0].quoteAccepted
                                   ?.toUpperCase() ==
-                                  "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                                  "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                   ?.toLowerCase() !=
                                   "rejected") && saleCycleController.FromPage.value == "Sales"?false:true,
                           child: Column(
@@ -1026,7 +1044,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
                                               && (saleCycleController.saleCycleList[0].quoteAccepted
                                               ?.toUpperCase() ==
-                                              "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                                              "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                               ?.toLowerCase() !=
                                               "rejected") && saleCycleController.FromPage.value == "Sales",
                                           /*  visible: saleCycleController
@@ -1302,12 +1320,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ),
               Obx(() {
                 return Visibility(
-                    visible: ( saleCycleController
-                        .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() &&
+                    visible: (saleCycleController
+                        .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase() || saleCycleController.isAdminWritePermission=="1"
+                    || saleCycleController.userType.toLowerCase()=="branch head") &&
                                 (saleCycleController
                                         .saleCycleList[0].salesCycleStatus!
                                         .toLowerCase() ==
-                                    "prospect")) &&
+                                    "prospect")&&
                             saleCycleController.saleCycleList[0].quoteAccepted
                                     ?.toUpperCase() !=
                                 "LOSS" &&
@@ -1345,29 +1364,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 onPressed: () {
                                   if( saleCycleController.filter.value ==
                                       'Customer Need Identity'){
-                                    showDialog(context: context, builder: (ctx)=>AlertDialog(
-                                      title: Text("Update"),
-                                      content: Text("Do you want to save details?",
-                                          style: GoogleFonts.poppins(
-                                            fontSize: AllFontSize.fourtine,
-                                            fontWeight: FontWeight.w500,
-                                            color: AllColors.primaryDark1,
-                                          )),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            saleCycleController.proposedSolutionController.value.text="";
-                                            saleCycleController.solutionRejectedRemarkController.value.text="";
-                                            saleCycleController
-                                                .getSalesCycleMstUpdateProposedSolution(
-                                                saleCycleController.saleCycleList[0],
-                                                "Update");
-                                            Navigator.of(ctx).pop();
-                                          },
-                                          child: const Text("Confirm"),
-                                        ),
-                                      ],
-                                    ));
+                                    saleCycleController.proposedSolutionController.value.text="";
+                                    saleCycleController.solutionRejectedRemarkController.value.text="";
+                                    saleCycleController
+                                        .getSalesCycleMstUpdateProposedSolution(
+                                        saleCycleController.saleCycleList[0],
+                                        "Update");
                                   }else{
                                   saleCycleController.purchaseProcessController
                                       .value.text = "";
@@ -2348,13 +2350,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           bottom: 10,
         ),
         child: DropdownMenu<String>(
-          width: saleCycleController.saleCycleList[0].quoteAccepted
+          width: /*saleCycleController.saleCycleList[0].quoteAccepted
                           ?.toUpperCase() !=
                       "OPEN" ||
               saleCycleController.FromPage.value == "FromDashboard"||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems"
               || saleCycleController.saleCycleList[0].isReadySendForApproval==0
           ? size.width - 20
-              : size.width / 2 - 16,
+              :*/ size.width / 2-16,
           controller:
               saleCycleController.ConfirmExpectedRevenueController.value,
           label: Text(
@@ -2513,81 +2515,96 @@ class ViewSaleHeaderScreen extends StatelessWidget {
   }
 
   Widget bindCustomerNeedIdentity(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(left: 15, bottom: 10),
-      child: DropdownMenu<String>(
-        width: MediaQuery.of(context).size.width - 30,
-        controller: saleCycleController.customerNeedIdetityController.value,
-        label: Text(
-          "Customer Need Identity",
-          style: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
-        ),
+    return IgnorePointer(
+      ignoring:  (saleCycleController.saleCycleList[0]
+          .createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()|| saleCycleController.isAdminWritePermission=="1"
+      || saleCycleController.userType.toLowerCase()=="branch head") &&
+          (saleCycleController
+              .saleCycleList[0].actualSalesCycleApprovalStatus
+              ?.toLowerCase() !=
+              "rejected" && saleCycleController
+              .saleCycleList[0].quoteAccepted
+              ?.toLowerCase() ==
+              "open") &&
+          (saleCycleController.FromPage.value == "Sales")
+        ? false
+        : true,
+      child: Container(
+        padding: const EdgeInsets.only(left: 15, bottom: 10),
+        child: DropdownMenu<String>(
+          width: MediaQuery.of(context).size.width - 30,
+          controller: saleCycleController.customerNeedIdetityController.value,
+          label: Text(
+            "Customer Need Identity",
+            style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w700),
+          ),
 
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            borderSide: BorderSide(
-              color: AllColors.primaryDark1,
+          inputDecorationTheme: const InputDecorationTheme(
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: AllColors.primaryDark1,
+              ),
             ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                  color: AllColors.primaryDark1), // Change the color to green
+            ),
+            filled: false,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
           ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          filled: false,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        ),
 
-        //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-        enabled:
-            ( saleCycleController.saleCycleList[0]
-                .createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
-                        saleCycleController
-                                .saleCycleList[0].actualSalesCycleApprovalStatus
-                                ?.toLowerCase() ==
-                            "rejected" ||
-                        saleCycleController.saleCycleList[0].quoteAccepted
-                                ?.toUpperCase() !=
-                            "OPEN") ||
-                    (saleCycleController.FromPage.value == "FromDashboard")
-                /* || saleCycleController.FromPage != 'Sales'*/ ? false
-                : true,
-        onSelected: (String? selection) {
-          print(selection);
+          //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
+         /* enabled:
+              ( saleCycleController.saleCycleList[0]
+                  .createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
+                          saleCycleController
+                                  .saleCycleList[0].actualSalesCycleApprovalStatus
+                                  ?.toLowerCase() ==
+                              "rejected" ||
+                          saleCycleController.saleCycleList[0].quoteAccepted
+                                  ?.toUpperCase() !=
+                              "OPEN") ||
+                      (saleCycleController.FromPage.value == "FromDashboard")
+                  *//* || saleCycleController.FromPage != 'Sales'*//* ? false
+                  : true,*/
+          onSelected: (String? selection) {
+            print(selection);
 
-          saleCycleController.customerNeedIdetityController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!)
-                  .toString();
-          print(
-              'IsActive.....${saleCycleController.customerNeedIdetityController.value.text}');
-          if (saleCycleController.customerNeedIdetityController.value.text ==
-              "Yes") {
+            saleCycleController.customerNeedIdetityController.value.text =
+                _displayCustomerNeedIdentityStatusForOption(selection!)
+                    .toString();
             print(
                 'IsActive.....${saleCycleController.customerNeedIdetityController.value.text}');
-            saleCycleController.ischangeNeedIdentity.value = true;
-          } else {
-            saleCycleController.ischangeNeedIdentity.value = false;
-          }
-        },
+            if (saleCycleController.customerNeedIdetityController.value.text ==
+                "Yes") {
+              print(
+                  'IsActive.....${saleCycleController.customerNeedIdetityController.value.text}');
+              saleCycleController.ischangeNeedIdentity.value = true;
+            } else {
+              saleCycleController.ischangeNeedIdentity.value = false;
+            }
+          },
 
-        dropdownMenuEntries: saleCycleController.customerNeedIdentityList
-            .map<DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(
-              value: e,
-              label: e!,
-              style: ButtonStyle(
-                foregroundColor:
-                    MaterialStateProperty.all<Color>(AllColors.primaryDark1),
-              ));
-        }).toList(),
+          dropdownMenuEntries: saleCycleController.customerNeedIdentityList
+              .map<DropdownMenuEntry<String>>((String e) {
+            return DropdownMenuEntry<String>(
+                value: e,
+                label: e!,
+                style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+                ));
+          }).toList(),
+        ),
       ),
     );
   }
@@ -2626,7 +2643,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         ),
         //enabled: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?false:true,
-        enabled:
+       /* enabled:
             ( saleCycleController.saleCycleList[0]
                 .createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()||
                         saleCycleController
@@ -2637,8 +2654,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 ?.toUpperCase() ==
                             "LOSS") ||
                     (saleCycleController.FromPage.value == "FromDashboard")
-                /*|| saleCycleController.FromPage != 'Sales'*/ ? false
-                : true,
+                *//*|| saleCycleController.FromPage != 'Sales'*//* ? false
+                : true,*/
         onSelected: (String? selection) {
           print(selection);
           saleCycleController.solutionAcceptedController.value.text =
@@ -4198,9 +4215,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         "rejected" && saleCycleController
                     .saleCycleList[0].quoteAccepted
                     ?.toLowerCase() ==
-                    "open" && saleCycleController
+                    "open" && (saleCycleController
                     .saleCycleList[0].createdBy?.toLowerCase() ==
-                    saleCycleController.email.toLowerCase(),
+                    saleCycleController.email.toLowerCase()|| saleCycleController.userType.toLowerCase()=="branch head" ||
+                    saleCycleController.isAdminWritePermission=="1"),
                 child: GestureDetector(
                   onTap: () {
                     showSalesProductConfirmationDialog(
@@ -7201,7 +7219,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
     && (saleCycleController.saleCycleList[0].quoteAccepted
         ?.toUpperCase() ==
-    "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+    "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
         ?.toLowerCase() !=
     "rejected") && saleCycleController.FromPage.value == "Sales"?false:true,
 /*      saleCycleController.saleCycleList[0].quoteAccepted
@@ -7340,7 +7358,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
       && (saleCycleController.saleCycleList[0].quoteAccepted
               ?.toUpperCase() ==
-              "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+              "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                   ?.toLowerCase() !=
                   "rejected") && saleCycleController.FromPage.value == "Sales"?false:true,
      /* ignoring:
@@ -7541,7 +7559,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
                                 && (saleCycleController.saleCycleList[0].quoteAccepted
                                     ?.toUpperCase() ==
-                                    "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                                    "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                     ?.toLowerCase() !=
                                     "rejected") && saleCycleController.FromPage.value == "Sales")
                           /*  if (!(saleCycleController.FromPage.value ==
@@ -7572,7 +7590,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
                       && (saleCycleController.saleCycleList[0].quoteAccepted
                           ?.toUpperCase() ==
-                      "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                      "OPEN"   && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                           ?.toLowerCase() !=
                       "rejected") && saleCycleController.FromPage.value == "Sales",
                               /*saleCycleController.saleCycleList[0]
@@ -7807,7 +7825,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 30, left: 15, right: 15),
       child: TextField(
-        readOnly:
+     onTapOutside: (value){
+      FocusScope.of(context).unfocus();
+     },
+     /*   readOnly:
             ( saleCycleController
                 .saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()||
                         saleCycleController
@@ -7819,7 +7840,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             "LOSS") ||
                     (saleCycleController.FromPage.value == "FromDashboard")
                 ? true
-                : false,
+                : false,*/
         //readOnly: saleCycleController.saleCycleList[0].isReadySendForApproval!=1?true:false,
         cursorColor: AllColors.primaryDark1,
         controller: saleCycleController.solutionRejectedRemarkController.value,
@@ -8336,7 +8357,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase())
                       && (saleCycleController.saleCycleList[0].quoteAccepted
                           ?.toUpperCase() ==
-                          "OPEN" || saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
+                          "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                           ?.toLowerCase() !=
                           "rejected") && saleCycleController.FromPage.value == "Sales",
                              /* saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||

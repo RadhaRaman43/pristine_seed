@@ -4349,31 +4349,29 @@ class SalesCycleVm extends GetxController {
   }
 
   void findquotationUserType(List<getApprovalPersonMadol> approvalPersonList) {
-    showApprovalBtn.value=false;
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
-        if (email.toLowerCase() ==
-            approvalPersonList[i].approvedBy?.toLowerCase() &&  approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval") {
-           showApprovalBtn.value=true;
-          if (approvalPersonList[i].userType?.toLowerCase() == 'branch head') {
-            showBranchHead.value = true;
-          } else {
+        if (email.toLowerCase() == approvalPersonList[i].approvedBy?.toLowerCase()){
+          if(approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval"){
+            showApprovalBtn.value=true;
+            approvalPersonList[i].userType?.toLowerCase() == 'branch head'?showBranchHead.value = true: showBranchHead.value = false;
+            approvalPersonList[i].userType?.toLowerCase() == 'cluster head'?showClusterHead.value = true:showClusterHead.value = false;
+            approvalPersonList[i].userType?.toLowerCase() ==
+                'general manager'? showGeneralManager.value = true:showGeneralManager.value = false;
+          }else if(approvalPersonList[i].quoteStatus?.toLowerCase()=="approved"){
             showBranchHead.value = false;
-          }
-          if (approvalPersonList[i].userType?.toLowerCase() == 'cluster head') {
-            showClusterHead.value = true;
-          } else {
             showClusterHead.value = false;
-          }
-          if (approvalPersonList[i].userType?.toLowerCase() ==
-              'general manager') {
-            showGeneralManager.value = true;
-          } else {
             showGeneralManager.value = false;
           }
-          //saleCycleController.showUpdateBtnApproveQuoteItem.value=true;
+        }else{
+          showApprovalBtn.value=false;
+          showBranchHead.value = false;
+          showClusterHead.value = false;
+          showGeneralManager.value = false;
         }
+
       }
+
       print("Branch Head ..${showBranchHead.value}");
     } catch (e) {
       print("Catch Block exception Exception ..${e}");
