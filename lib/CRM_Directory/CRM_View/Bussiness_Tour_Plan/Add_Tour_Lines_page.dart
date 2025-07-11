@@ -872,7 +872,7 @@ class AddTourLinesPage extends StatelessWidget{
             title:  Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(Icons.delete_forever, color: AllColors.redColor,),
+                Icon(Icons.info_outline, color: AllColors.textColor,),
                 SizedBox(width: 5,),
                 Text(
                     'Create Line !',

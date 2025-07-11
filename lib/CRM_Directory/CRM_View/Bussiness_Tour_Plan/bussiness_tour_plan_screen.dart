@@ -259,7 +259,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-          businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId);
+          businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId, "");
         },
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,

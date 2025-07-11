@@ -292,6 +292,7 @@ class AppUrl {
      //todo business tour plan
      static const String businessPlanListGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanListGet";
      static const String BusinessTourPlanHeaderCreate="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanHeaderCreate";
+     static const String BusinessTourPlanHeaderComplete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanHeadercComplete";
      static const String BusinessTourPlanDetailsGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanDetailsGet";
      static const String BusinessTourPlanHeaderDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanHeaderDelete";
      static const String BusinessTourTypeGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourTypeGet";
@@ -300,5 +301,7 @@ class AppUrl {
      static const String BusinessTourPlanContactsGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanContactsGet";
      static const String BusinessTourPlanLineCreate="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanLineCreate";
      static const String BusinessTourPlanLineDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanLineDelete";
+     static const String BusinessTourPlanReport="$BASE_URL/api/CRM/BusinessTourPlan/BussinessTourPlanReport";
+     static const String BusinessTourplanApprovalGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApprovalGet";
 
 }

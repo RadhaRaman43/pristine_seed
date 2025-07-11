@@ -10,6 +10,7 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_inform
 
 
 import '../CRM_Directory/CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
+import '../CRM_Directory/CRM_VIewModels/Bussiness_Tour_Plan_Vm/Business_Tour_Approval_Vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
@@ -489,6 +490,16 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.toNamed(RoutesName.BusinessTourPlanScreen);
                                               Navigator.of(context);
                                               break;
+
+                                            case 'Business Tour Approval List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<BusinessTourApprovalVm>();
+                                              BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
+                                              Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
+                                              Navigator.of(context);
+                                              break;
+
 
                                           }
                                         },

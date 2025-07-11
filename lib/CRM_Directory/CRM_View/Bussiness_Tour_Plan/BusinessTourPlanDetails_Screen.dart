@@ -13,18 +13,22 @@ import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 class BusinessTourPlanDeatil extends StatelessWidget {
   BusinessTourPlanDeatil({super.key});
 
-  BusinessPlanTourViewModel businessTourPlanController =
-      Get.put(BusinessPlanTourViewModel());
+  BusinessPlanTourViewModel businessTourPlanController = Get.put(BusinessPlanTourViewModel());
   Size size = Get.size;
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
         onWillPop: () async {
-          businessTourPlanController.clearAllFieldOfFilter();
-          businessTourPlanController.pageNumber = 0;
-          businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
-          Get.toNamed(RoutesName.BusinessTourPlanScreen);
+          if(businessTourPlanController.isSendForApproval.value == ""){
+            businessTourPlanController.clearAllFieldOfFilter();
+            businessTourPlanController.pageNumber = 0;
+            businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
+            Get.toNamed(RoutesName.BusinessTourPlanScreen);
+          }else {
+            Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
+          }
+
           return false;
         },
         child: Scaffold(
@@ -71,6 +75,58 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                         }, //Text
                       ),
                     );
+                  }),
+                  Obx((){
+                    return Visibility(
+                      visible:
+                      businessTourPlanController.BusinessTourHourLines.isNotEmpty &&  businessTourPlanController.BusinessTourPlanDetails_list[0].status == "PENDING"? true : false,
+                      child: ActionChip(
+                        elevation: 2,
+                        padding: EdgeInsets.all(5),
+                        backgroundColor: AllColors.primaryDark1,
+                        shadowColor: Colors.black,
+                        shape: StadiumBorder(
+                            side: BorderSide(color: AllColors.whiteColor)),
+                        //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                        //CircleAvatar
+                        label: Tooltip(
+                          message: "Send For Approval",
+                          child: Text('Send For Approval',
+                              style: GoogleFonts.poppins(
+                                color: AllColors.whiteColor,
+                                fontSize: AllFontSize.twelve,
+                                fontWeight: FontWeight.w500,
+                              )),
+                        ),
+                        onPressed: () async {
+                          ConfirmationDialogSendForApproval(context, businessTourPlanController.BusinessTourPlanDetails_list[0].tourId??"");
+                        }, //Text
+                      ),
+                    );
+                  }),
+                  Obx((){
+                    return Visibility(
+                        visible:
+                        businessTourPlanController.isSendForApproval.value == "SendForApproval"? true : false,
+                        child: IconButton(
+                          icon: Icon(Icons.edit ,),
+                          onPressed: (){
+
+                          },
+                        )
+                    );
+                  }),
+                  Obx((){
+                    return Visibility(
+                      visible:
+                      businessTourPlanController.BusinessTourHourLines.isNotEmpty &&  businessTourPlanController.BusinessTourPlanDetails_list[0].status != "PENDING"? true : false,
+                      child: IconButton(
+                        icon: Icon(Icons.download_for_offline_sharp ,size: 30,),
+                        onPressed: (){
+                          businessTourPlanController.businessPlanReportDownload(businessTourPlanController.BusinessTourPlanDetails_list[0].tourId??"");
+                        },
+                      )
+                    );
                   })
 
                 ],
@@ -107,27 +163,30 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            businessTourPlanController.clearAllCreateLinePlanController();
-                            businessTourPlanController.getEmpMstEmailByApi();
-                            businessTourPlanController.getTourPlanDistrictTypeApi('');
-                            businessTourPlanController.getTourTypeApi();
-                            businessTourPlanController.getTourPlanAccountTypeApi("");
-                            Get.toNamed(RoutesName.AddTourLinesPage);
-                          },
-                          child: Container(
-                            child: Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: Icon(
-                                Icons.add,
-                                color: AllColors.primaryDark1,
+                        Visibility(
+                          visible: businessTourPlanController.BusinessTourPlanDetails_list[0].status?.toUpperCase() ==  'PENDING',
+                          child: GestureDetector(
+                            onTap: () {
+                              businessTourPlanController.clearAllCreateLinePlanController();
+                              businessTourPlanController.getEmpMstEmailByApi();
+                              businessTourPlanController.getTourPlanDistrictTypeApi('');
+                              businessTourPlanController.getTourTypeApi();
+                              businessTourPlanController.getTourPlanAccountTypeApi("");
+                              Get.toNamed(RoutesName.AddTourLinesPage);
+                            },
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.all(7.0),
+                                child: Icon(
+                                  Icons.add,
+                                  color: AllColors.primaryDark1,
+                                ),
                               ),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(30),
+                                  border:
+                                      Border.all(color: AllColors.primaryDark1)),
                             ),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30),
-                                border:
-                                    Border.all(color: AllColors.primaryDark1)),
                           ),
                         ),
                       ],
@@ -222,6 +281,97 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                               width: 60,
                               alignment: Alignment.center,
                               child: Text('Discard',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),]
+            ),
+          );
+
+        });
+  }
+
+  ConfirmationDialogSendForApproval(context, String TourId){
+    showDialog(
+        context: context,
+        builder: (context){
+          return AlertDialog(
+            title:  Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(Icons.info, color: AllColors.textColor,),
+                SizedBox(width: 5,),
+                Text(
+                    'Send !',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          'Do You Want To Send This For Approval?',
+                          style: GoogleFonts.poppins(
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                            color: AllColors.primaryDark1,
+                          )),
+
+                      SizedBox(height: 20),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.lightredColor,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              Get.back();
+
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Cancel',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: ()  {
+                              businessTourPlanController.BusinessTourPlanHeaderComplete(TourId);
+                            },
+                            child: Container(
+                              width: 60,
+                              alignment: Alignment.center,
+                              child: Text('Confirm',
                                 /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
                                 style: GoogleFonts.poppins(
                                   color: AllColors.blackColor,
@@ -349,7 +499,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
       switch (status) {
         case 'PENDING' || 'Pending':
           return Colors.yellow[900]!;
-        case 'Rejected' || 'rejected':
+        case 'Rejected' || 'REJECTED':
           return AllColors.redColor;
         case 'APPROVED' || 'Approved':
           return Colors.green;
@@ -731,15 +881,18 @@ class BusinessTourPlanDeatil extends StatelessWidget {
               ],
             ),
 
-            InkWell(
-                onTap: () {
-                  ConfirmationDeleteLineDialog(context, businessTourPlanController.BusinessTourHourLines[index].tourId??"", businessTourPlanController.BusinessTourHourLines[index].lineNo??"" );
-                },
-                child: Icon(
-                  Icons.delete_forever,
-                  color: Colors.red,
-                  size: 30,
-                )),
+            Visibility(
+              visible: businessTourPlanController.BusinessTourPlanDetails_list[0].status == "PENDING",
+              child: InkWell(
+                  onTap: () {
+                    ConfirmationDeleteLineDialog(context, businessTourPlanController.BusinessTourHourLines[index].tourId??"", businessTourPlanController.BusinessTourHourLines[index].lineNo??"" );
+                  },
+                  child: Icon(
+                    Icons.delete_forever,
+                    color: Colors.red,
+                    size: 30,
+                  )),
+            ),
           ],
         ),
         subtitle: Column(

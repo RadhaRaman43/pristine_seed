@@ -1,10 +1,19 @@
 
 import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import '../../../main.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessPlanReport_Model.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessTourPlanDetailsModel.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BussinessTourPlanModel.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/TourPlanAccount_Model.dart';
@@ -24,6 +33,7 @@ class BusinessPlanTourViewModel extends GetxController{
   RxBool loading = false.obs;
   RxBool meetingWith = true.obs;
   String StartDate = '', EndDate = '', Tour_Id = '', CustomerId = '';
+  RxString isSendForApproval = ''.obs;
   RxString filterStatusFlag = 'PENDING'.obs;
 
   String MeetingWithResponse = '', Accompanied_With_Response = '';
@@ -40,6 +50,7 @@ class BusinessPlanTourViewModel extends GetxController{
   RxList<TourPlanAccountModel> TourPlanContact_List = <TourPlanAccountModel>[].obs;
   RxList<TourPlanAccountModel> SelectedMeetingWith_List = <TourPlanAccountModel>[].obs;
   RxList<String> SelectedMeetingWith_List1 = <String>[].obs;
+  RxList<BusinessPlanReportModel> ReportList = <BusinessPlanReportModel>[].obs;
 
   var filterCreatedByController = TextEditingController().obs;
   var filterTourIdController = TextEditingController().obs;
@@ -148,7 +159,49 @@ class BusinessPlanTourViewModel extends GetxController{
             if (response.length > 0 && response[0].condition == "True") {
               loading.value = false;
               Utils.showToastification("Message !", response[0].message.toString());
-              getBusinessTourPlanDetailsApi(response[0].tourId);
+              getBusinessTourPlanDetailsApi(response[0].tourId, "");
+
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  BusinessTourPlanHeaderComplete(String TourId) {
+    try {
+      Map data = {
+        "tour_id": TourId,
+        "email_id": email
+      };
+      loading.value = true;
+      _api.BusinessTourPlanHeaderComplete(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BussinessTourPlanModel> response =
+            jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
+            if (response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification("Message !", response[0].message.toString());
+              pageNumber = 0;
+              getBusinessTourPlanData(pageNumber);
+              Get.toNamed(RoutesName.BusinessTourPlanScreen);
 
             } else {
               loading.value = false;
@@ -213,7 +266,7 @@ class BusinessPlanTourViewModel extends GetxController{
     }
   }
 
-  getBusinessTourPlanDetailsApi(String? TourId) {
+  getBusinessTourPlanDetailsApi(String? TourId, String Flag) {
     Map<String , String> data = {
       "tour_id": TourId??""
     };
@@ -235,6 +288,7 @@ class BusinessPlanTourViewModel extends GetxController{
               Tour_Id = BusinessTourPlanDetails_list[0].tourId??"";
               StartDate = BusinessTourPlanDetails_list[0].startDate??"";
               EndDate = BusinessTourPlanDetails_list[0].endDate??"";
+              isSendForApproval.value = Flag;
               Get.toNamed(RoutesName.BusinessTourPlanDetails);
 
 
@@ -293,7 +347,7 @@ class BusinessPlanTourViewModel extends GetxController{
             if (response.length > 0 && response[0].condition == "True") {
               loading.value = false;
               Utils.showToastification("Message !", response[0].message.toString());
-              getBusinessTourPlanDetailsApi(response[0].tourId);
+              getBusinessTourPlanDetailsApi(response[0].tourId, "");
 
             } else {
               loading.value = false;
@@ -334,7 +388,7 @@ class BusinessPlanTourViewModel extends GetxController{
             if (response.length > 0 && response[0].condition == "True") {
               loading.value = false;
               Utils.showToastification("Message !", response[0].message.toString());
-              getBusinessTourPlanDetailsApi(response[0].tourId);
+              getBusinessTourPlanDetailsApi(response[0].tourId, "");
 
             } else {
               loading.value = false;
@@ -567,6 +621,157 @@ class BusinessPlanTourViewModel extends GetxController{
     }
   }
 
+
+  Future<void> businessPlanReportDownload(String TourId) async {
+    try {
+      Map<String, String> data = {
+        "tour_id": TourId,
+      };
+      print(data);
+      loading.value = true;
+      _api.BusinessTourPlanReport(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BusinessPlanReportModel> response = jsonResponse
+                .map((e) => BusinessPlanReportModel.fromJson(e))
+                .toList();
+            if (response.isNotEmpty &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              ReportList.value = response;
+              fileDownload(ReportList[0].bussinessTourPlanReportUrl!);
+            } else {
+              Utils.showErrorToastification(
+                  "False Message !", response[0].message.toString());
+              loading.value = false;
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      return result == PermissionStatus.granted;
+    }
+  }
+
+  Future<void> checkPermissions() async {
+    //await _requestPermission(Permission.storage
+    if (await _requestPermission(Permission.storage)) {
+      print("Storage permission grant.");
+    } else {
+      print("Storage permission is required to save the file.");
+    }
+  }
+
+
+  Future<void> fileDownload(String url) async {
+    await checkPermissions();
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        final bytes = response.bodyBytes;
+        print("Bytes: ${bytes.length}");
+        Directory? downloadsDir;
+        if (Platform.isAndroid) {
+          downloadsDir = Directory('/storage/emulated/0/Download');
+        } else if (Platform.isIOS) {
+          downloadsDir = await getApplicationDocumentsDirectory();
+        } else {
+          throw Exception("Unsupported platform");
+        }
+
+        if (downloadsDir == null) {
+          throw Exception("Unable to get the downloads directory");
+        }
+        String baseName = "";
+          baseName = 'Business_Tour_Plan_${BusinessTourPlanDetails_list[0].tourId}';
+        String extension = '.pdf';
+        String filePath = '${downloadsDir.path}/$baseName$extension';
+        int counter = 1;
+
+        while (await File(filePath).exists()) {
+          filePath = '${downloadsDir.path}/$baseName($counter)$extension';
+          counter++;
+        }
+
+        File file = File(filePath);
+        await file.writeAsBytes(bytes);
+        print("${file.path}");
+
+        Directory? dir = await getExternalStorageDirectory();
+
+        if (dir != null) {
+          // Make sure the directory exists
+          await Directory(dir.path).create(recursive: true);
+
+          // Define the file path
+          File file = File('${dir.path}/BusinessTourPlan.pdf');
+          //File file = File('${dir.path}/QuoteReport.pdf');
+
+          // Write the bytes to the file
+          await file.writeAsBytes(bytes);
+
+          // Show notification
+          showNotification(file.path);
+          print("File saved successfully at ${file.path}");
+        } else {
+          print("Failed to get the download directory");
+        }
+      } else {
+        print("Failed to download file: ${response.statusCode}");
+      }
+    } catch (e) {
+      print("Error downloading file: $e");
+    }
+  }
+
+  void showNotification(String path) async {
+    String title = 'Business Tour Plan';
+    int notificationId = Random().nextInt(100000);
+
+    const AndroidNotificationDetails androidDetails =
+    AndroidNotificationDetails(
+      'basic_channel',
+      'Basic notifications',
+      channelDescription: 'Notification channel for basic tests',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+      ticker: 'ticker',
+    );
+
+    const NotificationDetails platformDetails = NotificationDetails(
+      android: androidDetails,
+    );
+
+    await flutterLocalNotificationsPlugin.show(
+      notificationId,
+      title,
+      'Report downloaded successfully',
+      platformDetails,
+      payload: 'filePath=$path',
+    );
+  }
 
 
   void clearAllFieldOfFilter() {
