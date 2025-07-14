@@ -1079,13 +1079,13 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          saleCycleController.quoteLinedata[position].qty =
+                        /*  saleCycleController.quoteLinedata[position].qty =
                               double.tryParse(saleCycleController
                                   .qtyUpdateLineController.value.text) ??
                                   saleCycleController.quoteLinedata[position].qty;
                           saleCycleController.qtyUpdateBool.value=false;
                           saleCycleController.qtyUpdateBool.value=true;
-                          Get.back();
+                          Get.back();*/
                         },
                         child: Container(
                           width: 60,

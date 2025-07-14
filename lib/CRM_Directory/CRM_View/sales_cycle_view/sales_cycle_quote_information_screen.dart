@@ -748,6 +748,11 @@ class QuoteInformationScreen extends StatelessWidget {
                                   2: FixedColumnWidth(120),
                                   3: FixedColumnWidth(130),
                                   4: FixedColumnWidth(130),
+                                  5: FixedColumnWidth(120),
+                                  6: FixedColumnWidth(130),
+                                  7: FixedColumnWidth(120),
+                                  8: FixedColumnWidth(130),
+                                  9: FixedColumnWidth(130),
                                 },
                                 border: TableBorder.symmetric(
                                   inside: BorderSide(
@@ -759,8 +764,13 @@ class QuoteInformationScreen extends StatelessWidget {
                                   TableRow(
                                     children: [
                                       tableHeaderCell("Qty"),
+                                      tableHeaderCell("BM %"),
+                                      tableHeaderCell("Appr Amt Per Unit"),
+                                      tableHeaderCell("Sales Credit"),
                                       tableHeaderCell("Approved Price"),
-                                      tableHeaderCell("Amount"),
+                                      tableHeaderCell("GM %"),
+                                      tableHeaderCell("GM Abso Amt"),
+                                      tableHeaderCell("GM Total Abso Amt"),
                                       tableHeaderCell("Gst Amount"),
                                       tableHeaderCell("Total Amount"),
                                     ],
@@ -771,10 +781,21 @@ class QuoteInformationScreen extends StatelessWidget {
                                       tableValueCell(saleCycleController
                                           .quoteHeaderdata[0].quoteTotalQty),
                                       tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0]
-                                          .quoteTotalApprovedDiscountAmount),
+                                          .quoteHeaderdata[0].quoteTotalBmPerAverage
+                                          ),
                                       tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteTotalAmount),
+                                          .quoteHeaderdata[0].quoteApprovedAmtPerUnit),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteSalesCreditAverage),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteTotalGmPerAverage),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0]
+                                          .quoteTotalGmDiscountAmount),
+                                      tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteNewTotalGmDiscountAmount),
                                       tableValueCell(saleCycleController
                                           .quoteHeaderdata[0].quoteGstAmount),
                                       tableValueCell(saleCycleController
@@ -1323,7 +1344,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                        Obx((){
                          return Visibility(
-                             visible: saleCycleController.showBranchHead.value||saleCycleController.isAdminWritePermission=="1",
+                             visible: saleCycleController.showBranchHead.value ||
+                                 saleCycleController.showClusterHead.value|| saleCycleController.isAdminWritePermission=="1",
                              child: Row(
                                children: [
                                  Text(
@@ -1397,9 +1419,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         }),
                         Obx(() {
                           return Visibility(
-                            visible: saleCycleController
-                                    .quoteHeaderdata[0].isReadyForApprove ==
-                                1,
+                            visible: saleCycleController.showBranchHead.value ||
+                                saleCycleController.showClusterHead.value|| saleCycleController.isAdminWritePermission=="1",
                             child: Row(
                               children: [
                                 Text(
@@ -1727,7 +1748,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "App. Amt. per Unit : ",
+                              "Appr. Amt per Unit : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1737,11 +1758,11 @@ class QuoteInformationScreen extends StatelessWidget {
                             Flexible(
                               child: Tooltip(
                                 message:  saleCycleController
-                                    .quoteLinedata[index].totalPrice
+                                    .quoteLinedata[index].approvedAmountPerUnit
                                     .toString(),
                                 child: Text(
                                   saleCycleController
-                                      .quoteLinedata[index].totalPrice
+                                      .quoteLinedata[index].approvedAmountPerUnit
                                       .toString(),
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
@@ -1803,6 +1824,39 @@ class QuoteInformationScreen extends StatelessWidget {
                                           saleCycleController
                                               .quoteLinedata[index]
                                               .gmDiscountAmount
+                                              .toString(),
+                                          style: GoogleFonts.poppins(
+                                            color: AllColors.textColor,
+                                            fontSize: AllFontSize.twelve,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Gm Total Abs Amt:",
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Flexible(
+                                      fit: FlexFit.loose,
+                                      child: Tooltip(
+                                        message: saleCycleController
+                                            .quoteLinedata[index]
+                                            .gmTotalDiscountAmount
+                                            .toString(),
+                                        child: Text(
+                                          saleCycleController
+                                              .quoteLinedata[index]
+                                              .gmTotalDiscountAmount
                                               .toString(),
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,

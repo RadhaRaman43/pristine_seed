@@ -382,7 +382,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   Icons.info_outline,
                                   color: AllColors.blackColor,
                                 ),
-                                Text(' Competitor Details'),
+                                Text(' Competitor Mapping'),
                               ],
                             ),
                             onTap: () {
@@ -4499,6 +4499,39 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
                     fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Methodex Price : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Flexible(
+                  //width: size.width * 0.4,
+                  child: Tooltip(
+                    message: saleCycleController
+                        .get_SalesCycleProductById_List[index]
+                        .methodexPrice.toString(),
+                    child: Text(
+                      saleCycleController
+                          .get_SalesCycleProductById_List[index]
+                          .methodexPrice.toString(),
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.end,
+                    ),
                   ),
                 ),
               ],
@@ -9708,36 +9741,34 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   //todo comment code of mark loss btn of case of prospect
-                  /*  Visibility(
-                        visible: saleCycleController.saleCycleList[0].salesCycleStatus != 'Propose',
-                        child: Container(
-                          padding: EdgeInsets.only(right: 5),
-                          child: GestureDetector(
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  side: const BorderSide(
-                                      color: AllColors.primaryDark),
-                                  backgroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        8), // Optional: border radius
-                                  ),
-                                ),
-                                onPressed: () {
-                                  showConfirmationDialogForMarkLoss(context,saleCycleController.saleCycleList[0]);
-                                },
-                                child: Text("Mark Loss",
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
-                                  ),),
-                              )
+                  Obx((){
+                    return Visibility(
+                        visible:
+                        (saleCycleController.saleCycleList[0].salesCycleStatus
+                            ?.toLowerCase() !=
+                            "suspect") && saleCycleController
+                            .saleCycleList[0].quoteAccepted
+                            ?.toLowerCase() ==
+                            "open" &&  saleCycleController
+                            .saleCycleList[0].actualSalesCycleApprovalStatus
+                            ?.toLowerCase() !=
+                            "rejected"  && flagView=="",
+                        child:Tooltip(
+                          message: "Clear Competitor Mapping",
+                          child: CircleAvatar(
+                            child: IconButton(
+                              icon: Icon(Icons.delete, color: AllColors.redColor,),
+                              onPressed: () {
+                                clearCompetitorMapping(context,saleCycleController
+                                    .saleCycleList[0].salesCycleId!);
+                              },
+                            ),
                           ),
-                        ),
-                      ),*/
+                        )
+                    );
+                  }),
 
+                  SizedBox(width: 5,),
                   Padding(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: CircleAvatar(
@@ -10034,6 +10065,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     height: 10,
                   ),
                   EditLossReason(context),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  EditMethodExPrice(context),
+
                   SizedBox(
                     height: 10,
                   ),
@@ -11450,5 +11486,98 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             ]),
           );
         });
+  }
+
+  void clearCompetitorMapping(BuildContext context, String salesCucleId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Clear',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to clear competitor mapping details ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: DefaultButton(
+                         text: "Cancel",
+                          press: (){
+                           Get.back();
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 5,),
+                      Expanded(
+                        child: DefaultButton(
+                          text: "Confirm",
+                          press: (){
+                            saleCycleController.getSalesProductLineCompetitorClear(salesCucleId);
+                            Get.back();
+                            Get.back();
+                          },
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
+          );
+        });
+  }
+
+
+  Widget EditMethodExPrice(BuildContext context) {
+    return TextField(
+      keyboardType: TextInputType.number,
+      cursorColor: AllColors.primaryDark1,
+      controller:
+      saleCycleController.updateMethodexPriceController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
+          hintText: 'Methodex Price',
+          labelText: 'Methodex Price',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+    );
   }
 }

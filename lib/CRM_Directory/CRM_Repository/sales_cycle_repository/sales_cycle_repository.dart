@@ -209,5 +209,8 @@ class SalesCycleRepository{
   Future<String> QuoteHeaderGetNewApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.QuoteHeaderGetNew,sessionManagement);
   }
+  Future<String> SalesProductLineCompetitorClearApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesProductLineCompetitorClear,sessionManagement);
+  }
 
 }
