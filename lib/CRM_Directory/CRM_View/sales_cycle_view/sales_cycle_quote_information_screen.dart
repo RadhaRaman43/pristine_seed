@@ -64,7 +64,6 @@ class QuoteInformationScreen extends StatelessWidget {
           pendingDraftQuoteController.getPendingDraftQuoteList(0, "All");*/
           Get.offNamed(RoutesName.allQuoteLineItemScreen);
         }
-
         else if (saleCycleController.quoteApprovalPage.value ==
             "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;
@@ -2601,6 +2600,43 @@ class QuoteInformationScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
+                        "Kind Attention",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Flexible(
+                        //width: size.width * 0.5,
+                        child: Tooltip(
+                          message: saleCycleController
+                              .quoteHeaderdata[0].kindAttention ??
+                              "",
+                          child: Text(
+                            saleCycleController
+                                .quoteHeaderdata[0].kindAttention ??
+                                "",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: 3,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         "Quote Commit",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
@@ -3127,42 +3163,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     height: 3,
                   ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Kind Attention",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Flexible(
-                        //width: size.width * 0.5,
-                        child: Tooltip(
-                          message: saleCycleController
-                              .quoteHeaderdata[0].kindAttention ??
-                              "",
-                          child: Text(
-                            saleCycleController
-                                .quoteHeaderdata[0].kindAttention ??
-                                "",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
+
                 ],
               ),
             ),
@@ -3460,7 +3461,7 @@ class QuoteInformationScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          saleCycleController.quoteHeaderUpdateApiHit();
+                          saleCycleController.quoteHeaderUpdateApiHit(saleCycleController.quoteHeaderdata[0].quoteId!);
                           Get.back();
                         },
                         child: Container(

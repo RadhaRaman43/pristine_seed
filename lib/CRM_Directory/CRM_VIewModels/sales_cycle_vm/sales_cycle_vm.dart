@@ -1730,7 +1730,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               loading.value = false;
-              getQuoteHeaderInformation(quoteId.value, "");
+              getQuoteHeaderInformation(quoteId.value, quoteApprovalPage.value);
             } else {
               Utils.showErrorToastification(
                   "False Message !", response[0].message.toString());
@@ -1751,10 +1751,10 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  void quoteHeaderUpdateApiHit() {
+  void quoteHeaderUpdateApiHit(String quoteId) {
     try {
       Map data = {
-        "quote_id": quoteId.value,
+        "quote_id": quoteId,
         "quote_validity": updateQuoteValidityController.value.text,
         "quote_commit": quoteCommitController.value.text == 'Yes' ? 1 : 0,
         "exp_closure_date": updateExpectedClosureDateController.value.text,
@@ -1775,7 +1775,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               loading.value = false;
-              getQuoteHeaderInformation(quoteId.value, "");
+              getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
             } else {
               Utils.showErrorToastification(
                   "False Message !", response[0].message.toString());
@@ -1901,7 +1901,7 @@ class SalesCycleVm extends GetxController {
                       "reportSpr");
                 }
               });*/
-              getQuoteHeaderInformation(quoteId.value, "");
+              getQuoteHeaderInformation(quoteId.value, quoteApprovalPage.value);
               Utils.showToastification(
                   "Message", response[0].message.toString());
             } else {
@@ -1948,7 +1948,7 @@ class SalesCycleVm extends GetxController {
                   "Message !", response[0].message.toString());
               loading.value = false;
               pageNumber = 0;
-              getQuoteHeaderInformation(quoteId, "");
+              getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
              // Get.offAllNamed(RoutesName.quoteApprovalListScreen);
               // getQuoteHeaderInformation(quoteId, "quoteApprovalScreen");
             } else {
@@ -4544,7 +4544,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
-              getQuoteHeaderInformation(quoteid, "");
+              getQuoteHeaderInformation(quoteid, quoteApprovalPage.value);
               loading.value = false;
             } else {
               loading.value = false;
