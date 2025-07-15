@@ -20,6 +20,7 @@ import '../../CRM_Models/Bussiness_Tour_Plan_Model/TourPlanAccount_Model.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/TouringDistrictModel.dart';
 import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_Repository/BusinessTourPlan_Repository/business_tour_plan_repo.dart';
+import 'Business_Tour_Approval_Vm.dart';
 
 class BusinessPlanTourViewModel extends GetxController{
 
@@ -69,10 +70,17 @@ class BusinessPlanTourViewModel extends GetxController{
   var tourDate_Controller = TextEditingController();
   var TourType_Controller = TextEditingController();
 
+  var ApproveReject_Controller = TextEditingController();
+  var RejectReason_Controller = TextEditingController();
+  RxBool RejectBool=false.obs;
+  String ApproveReject = '';
+  RxList<String> approveRejectList = <String>[].obs;
+
   @override
   Future<void> onInit() async {
     email = await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
     getBusinessTourPlanData(pageNumber);
     super.onInit();
@@ -771,6 +779,51 @@ class BusinessPlanTourViewModel extends GetxController{
       platformDetails,
       payload: 'filePath=$path',
     );
+  }
+
+  BusinessTourPlanApproveReject(String TourId, String Status) {
+    try {
+      Map data = {
+        "tour_id": TourId,
+        "status": Status,
+        "reject_remark": RejectReason_Controller.value.text.isNotEmpty?RejectReason_Controller.value.text:'',
+        "email_id": email
+      };
+      loading.value = true;
+      _api.BusinessTourPlanApproveReject(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BussinessTourPlanModel> response =
+            jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
+            if (response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              Utils.showToastification("Message !", response[0].message.toString());
+              BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
+              BusinessTourApprovalController.pageNumber = 0;
+              BusinessTourApprovalController.getBusinessTourApprovalListData(pageNumber);
+              Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
+
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "Error !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
   }
 
 

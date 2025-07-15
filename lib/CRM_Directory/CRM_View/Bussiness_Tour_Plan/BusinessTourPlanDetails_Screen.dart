@@ -7,6 +7,7 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
+import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 
@@ -15,6 +16,9 @@ class BusinessTourPlanDeatil extends StatelessWidget {
 
   BusinessPlanTourViewModel businessTourPlanController = Get.put(BusinessPlanTourViewModel());
   Size size = Get.size;
+
+  static String _displayApproveRejectForOption(String option) =>
+      option;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +75,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                               )),
                         ),
                         onPressed: () async {
-                          ConfirmationDialog(context, businessTourPlanController.BusinessTourPlanDetails_list[0].tourId??"");
+                          ConfirmationDialog(context, businessTourPlanController.BusinessTourPlanDetails_list[0].tourId??"", 'Discard', 'Do You Want To Discard This  Header ?');
                         }, //Text
                       ),
                     );
@@ -111,6 +115,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                         child: IconButton(
                           icon: Icon(Icons.edit ,),
                           onPressed: (){
+                            showApprovRejectDialog(context, businessTourPlanController.BusinessTourPlanDetails_list[0].tourId??"");
 
                           },
                         )
@@ -209,7 +214,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
         ));
   }
 
-  ConfirmationDialog(context, String TourId){
+  ConfirmationDialog(context, String TourId, String title, String description){
     showDialog(
         context: context,
         builder: (context){
@@ -220,7 +225,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                 Icon(Icons.delete_forever, color: AllColors.redColor,),
                 SizedBox(width: 5,),
                 Text(
-                    'Discard !',
+                    title+" !",
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.sisxteen,
                       fontWeight: FontWeight.w700,
@@ -233,7 +238,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                   Column(
                     children: [
                       Text(
-                          'Do You Want To Discard This  Header ?',
+                          description,
                           style: GoogleFonts.poppins(
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
@@ -275,12 +280,19 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                               ),
                             ),
                             onPressed: ()  {
-                              businessTourPlanController.BusinessTourPlanHeaderDelete(TourId);
+                              if(title == 'Discard'){
+                                businessTourPlanController.BusinessTourPlanHeaderDelete(TourId);
+                              }else if(title == 'Approve'){
+                                businessTourPlanController.BusinessTourPlanApproveReject(TourId, 'APPROVED');
+                              }else if(title == 'Reject'){
+                                businessTourPlanController.BusinessTourPlanApproveReject(TourId, 'REJECTED');
+                              }
+
                             },
                             child: Container(
-                              width: 60,
+                              //width: 60,
                               alignment: Alignment.center,
-                              child: Text('Discard',
+                              child: Text(title,
                                 /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
                                 style: GoogleFonts.poppins(
                                   color: AllColors.blackColor,
@@ -298,6 +310,281 @@ class BusinessTourPlanDeatil extends StatelessWidget {
           );
 
         });
+  }
+
+  showApprovRejectDialog(context, String TaskId) {
+    businessTourPlanController.ApproveReject_Controller.clear();
+    businessTourPlanController.RejectReason_Controller.clear();
+   // businessTourPlanController.ApproveBool.value = false;
+    businessTourPlanController.RejectBool.value = false;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+              title: Text(
+                'Update Tour Header',
+                style: GoogleFonts.poppins(
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700,
+                  color: AllColors.primaryDark1,
+                ),
+              ),
+              content: Wrap(
+                children: [
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  SizedBox(height: 15,),
+                  bindApprovRejectDropDown(context),
+                  SizedBox(height: 55,),
+                  Obx(() {
+                    return Visibility(
+                      visible: businessTourPlanController.RejectBool
+                          .value,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10)
+                        ),
+                        //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                        child: TextFormField(
+                          controller: businessTourPlanController
+                              .RejectReason_Controller,
+                          decoration: InputDecoration(
+                              hintText: "Reject Reason",
+                              labelText: "Reject Reason",
+                              //suffixIcon: Icon(Icons.email),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+
+                              /*focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),*/
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 55,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Obx(() {
+                        return Visibility(
+                          visible: !businessTourPlanController.RejectBool.value,
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                AllColors.greenblue,
+                              ),
+                            ),
+                            onPressed: () {
+                              if (businessTourPlanController
+                                  .ApproveReject_Controller.text.isEmpty ||
+                                  businessTourPlanController
+                                      .ApproveReject_Controller == null) {
+                                Utils.sanckBarError(
+                                    'Error : ', 'Please select Type.');
+                                return;
+                              }
+                              Navigator.pop(context);
+                              ConfirmationDialog(context, TaskId, 'Approve', 'Do you want to Approve this header?' );
+                            },
+                            child: Container(
+                              width: 80,
+                              alignment: Alignment.center,
+                              child: Text('Approve',
+                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                style: GoogleFonts.poppins(
+                                  color: AllColors.blackColor,
+                                  fontSize: AllFontSize.fourtine,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
+                      ),
+                      Obx(() {
+                        return Visibility(
+                            visible: businessTourPlanController.RejectBool
+                                .value,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<
+                                    Color>(
+                                  AllColors.lightredColor,
+                                ),
+                              ),
+                              onPressed: () {
+                                if (businessTourPlanController
+                                    .ApproveReject_Controller.text ==
+                                    "Reject") {
+                                  if (businessTourPlanController
+                                      .RejectReason_Controller.text.isEmpty ||
+                                      businessTourPlanController
+                                          .RejectReason_Controller == null) {
+                                    Utils.sanckBarError('Error : ',
+                                        'Please Enter Reject Reason.');
+                                  } else {
+                                    Navigator.pop(context);
+                                    ConfirmationDialog(context, TaskId, "Reject",'Do you want to Reject this header?');
+                                    //TaskMaster_page_controller.UpdateTaskStatus(context);
+                                  }
+                                }
+                              },
+                              child: Container(
+                                width: 80,
+                                alignment: Alignment.center,
+                                child: Text('Reject',
+                                  /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                            ));
+                      })
+                      ,
+                    ],)
+                ],
+              )
+          );
+        });
+  }
+
+  Widget bindApprovRejectDropDown(context) {
+    return Autocomplete<String>(
+      displayStringForOption: _displayApproveRejectForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return businessTourPlanController.approveRejectList;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return businessTourPlanController.approveRejectList
+            .where((String option) {
+          return option
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (String selection) {
+        print(selection);
+        // Update the TextField with the selected
+        businessTourPlanController.ApproveReject_Controller.text =
+            _displayApproveRejectForOption(selection).toString();
+        if (businessTourPlanController.ApproveReject_Controller.text ==
+            'Approve') {
+          businessTourPlanController.ApproveReject = "Approved";
+          businessTourPlanController.RejectBool.value = false;
+        } else {
+          businessTourPlanController.ApproveReject = "Rejected";
+          businessTourPlanController.RejectBool.value = true;
+
+        }
+        //print('IsActive.....${accountMaster_page_controller.IsActive_controller.text}');
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return Container(
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10)
+          ),
+          child: TextField(
+            onTap: () {
+              focusNode.requestFocus();
+              controller.clear();
+            },
+            cursorColor: AllColors.primaryDark1,
+            controller: controller
+              ..text = businessTourPlanController.ApproveReject_Controller
+                  .text,
+            focusNode: focusNode,
+            //onSubmitted: onFieldSubmitted,
+            decoration: InputDecoration(
+              suffixIcon: InkWell(
+                  onTap: () {
+                    focusNode.requestFocus();
+                    controller.clear();
+                  },
+                  child: Icon(Icons.arrow_drop_down)),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+              hintText: 'Task Status',
+              labelText: 'Task Status',
+              /*hintStyle: GoogleFonts.poppins(
+                  color: AllColors.lightblackColor,
+                  fontWeight: FontWeight.w300,
+                  fontSize: AllFontSize.ten
+              ),
+              labelStyle: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontWeight: FontWeight.w700,
+                  fontSize: AllFontSize.sisxteen),
+              focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: AllColors.primaryDark1), // Change the color to green
+              ),*/
+
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10))
+              ),
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<String> onSelected,
+          Iterable<String> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            elevation: 4.0,
+            child: Container(
+              width: size.width * .5,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final String option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   ConfirmationDialogSendForApproval(context, String TourId){

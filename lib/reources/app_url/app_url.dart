@@ -303,5 +303,6 @@ class AppUrl {
      static const String BusinessTourPlanLineDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanLineDelete";
      static const String BusinessTourPlanReport="$BASE_URL/api/CRM/BusinessTourPlan/BussinessTourPlanReport";
      static const String BusinessTourplanApprovalGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApprovalGet";
+     static const String BusinessTourPlanApproveReject="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApproveReject";
 
 }
