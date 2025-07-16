@@ -210,7 +210,7 @@ class AccountmasterScreen extends StatelessWidget{
               buildInfoRow("Company Sub Type", controller.companyProfileSubType),
               buildInfoRow("Email Id", controller.emailId),
               buildInfoRow("Phone No.", controller.phoneNo),
-              buildInfoRow("Created By", controller.createdBy),
+              buildInfoRow("Created By", controller.accountOwnerFullName),
              // buildInfoRow("Frontliner Value", controller.frontlinerValue),
               buildInfoRow("Region Name", controller.branchHeadValue),
              // buildInfoRow("Zone Head Value", controller.zoneHeadValue),

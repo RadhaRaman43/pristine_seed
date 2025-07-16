@@ -14,6 +14,7 @@ class getApprovalPersonMadol {
   String? approverGeoValue;
   String? userType;
   String? managerRemarks;
+  int? isAdmin;
 
   getApprovalPersonMadol(
       {this.condition,
@@ -30,7 +31,8 @@ class getApprovalPersonMadol {
         this.approverGeoName,
         this.approverGeoValue,
         this.userType,
-        this.managerRemarks});
+        this.managerRemarks,
+        this.isAdmin});
 
   getApprovalPersonMadol.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -48,6 +50,7 @@ class getApprovalPersonMadol {
     approverGeoValue = json['approver_geo_value'];
     userType = json['user_type'];
     managerRemarks = json['manager_remarks'];
+    isAdmin = json['is_admin'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,6 +70,7 @@ class getApprovalPersonMadol {
     data['approver_geo_value'] = this.approverGeoValue;
     data['user_type'] = this.userType;
     data['manager_remarks'] = this.managerRemarks;
+    data['is_admin'] = this.isAdmin;
     return data;
   }
 }

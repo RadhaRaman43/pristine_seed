@@ -121,7 +121,7 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                           text: "Add New Address",
                         ),
                       ),
-                      SizedBox(width: 10,),
+                      SizedBox(width: 5,),
                       Expanded(
                         child: DefaultButton(
                           press: (){
@@ -129,8 +129,6 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                             saleCycleController.pageNumber = 0;
                             saleCycleController.getAddressMasterList(saleCycleController.pageNumber,saleCycleController.accountCode.value);
                             saleCycleController.showConsigneeAddressList(context, saleCycleController.address_master_list,saleCycleController.accountCode.value);
-
-
                           },
                           text: "Change Address",
                         ),

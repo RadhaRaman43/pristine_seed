@@ -692,11 +692,11 @@ class AllContactMasterScreen extends StatelessWidget{
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
-                        .designationname?? "",
+                        .designationName?? "",
                     child: Text(
                       contact_vm_controller
                           .contact_master_list[position]
-                          .designationname?? "",
+                          .designationName?? "",
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.end,
                       style: GoogleFonts.poppins(

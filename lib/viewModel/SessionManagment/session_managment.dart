@@ -25,6 +25,16 @@ class SessionManagement {
     return prefs.getString('Email');
   }
 
+
+  Future<void> setUserType(String email) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userTypeName', email);
+  }
+  Future<String?> getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userTypeName');
+  }
+
   Future<String?> getAuthToken() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();

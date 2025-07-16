@@ -13,6 +13,7 @@ import 'package:get/state_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sales_advise_modal/sales_advise_header_line_modal.dart';
+import 'package:navigation_drawer_flutter/component/default_button.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -67,6 +68,7 @@ class SalesCycleVm extends GetxController {
   RxString Total_Expected_Amount = "0".obs;
   RxBool loading = false.obs;
   String email = "";
+  String userType = "";
   String isAdminWritePermission = "";
   String consigneeId = "";
   RxString FromPage = "Sales".obs;
@@ -132,6 +134,9 @@ class SalesCycleVm extends GetxController {
       <SalesAdviseHeaderLineModal>[].obs;
   RxList<advise.QuoteItems> salesAdviseLinesDataList =
       <advise.QuoteItems>[].obs;
+
+  var filterQuoteAcceptedController = TextEditingController().obs;
+  var quoteAcceptedForFilterOnSaleCycle = "Open".obs;
 
   var closureDateController = TextEditingController().obs;
   var budgetAmountController = TextEditingController().obs;
@@ -249,6 +254,7 @@ class SalesCycleVm extends GetxController {
   var updateCompetitorNameProductController = TextEditingController().obs;
   var updateCompetitorPriceProductController = TextEditingController().obs;
   var updateLossReasonProductController = TextEditingController().obs;
+  var updateMethodexPriceController = TextEditingController().obs;
 
   //todo update quote item list data on approval page
   var bmDiscountPerController = TextEditingController().obs;
@@ -289,6 +295,8 @@ class SalesCycleVm extends GetxController {
   RxList<String> salesAdviseStatusList = ["Draft", "Completed"].obs;
   RxList<String> SaleCycleStatusList =
       ["All", "Suspect", "Prospect", "Propose"].obs;
+  RxList<String> qouteAcceptedList =
+      ["All", "Open", "Loss", "Won"].obs;
   RxList<String> ApprovalStatusList =
       ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
 
@@ -301,6 +309,7 @@ class SalesCycleVm extends GetxController {
   @override
   Future<void> onInit() async {
     email = await sessionManagement.getEmail() ?? '';
+    userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     clearAllFieldOfFilter();
     getsalesCycleData(pageNumber, "", "", '');
@@ -900,6 +909,7 @@ class SalesCycleVm extends GetxController {
   }
 
   getApprovalPersonList(String QuoteId) {
+    approvalPersonList.value=[];
     Map data = {
       "filter_quote_id": QuoteId,
       "filter_sales_cycle_id": "",
@@ -937,10 +947,15 @@ class SalesCycleVm extends GetxController {
             approvalPersonList.addAll(response);
             total_rows=int.parse(approvalPersonList[0].totalRows!);*/
             } else {
+              showApprovalBtn.value=false;
+              showBranchHead.value = false;
+              showClusterHead.value = false;
+              showGeneralManager.value = false;
               //Utils.showErrorToastification("Else!", "No Record Found");
               approvalPersonList.value = [];
             }
           } else {
+
             loading.value = false;
             // service_indent_header_list.value = [];
             Utils.showExceptionToastification("Api Error!", jsonResponse);
@@ -995,7 +1010,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               if (pageNumber == 0) {
                 get_SalesCycleProductById_List.clear();
               }
@@ -1232,10 +1247,11 @@ class SalesCycleVm extends GetxController {
               }
               Get.toNamed(RoutesName.quoteInformationScreen);
               quoteApprovalPage.value = flag;
-              if (flag == "quoteApprovalScreen") {
+              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
+              /*if (flag == "quoteApprovalScreen") {
                 print("Approver person");
                 getApprovalPersonList(quoteHeaderdata[0].quoteId!);
-              }
+              }*/
               /* if (flag == "") {
               quoteApprovalPage.value = flag;
                Get.toNamed(RoutesName.quoteInformationScreen);
@@ -1714,7 +1730,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               loading.value = false;
-              getQuoteHeaderInformation(quoteId.value, "");
+              getQuoteHeaderInformation(quoteId.value, quoteApprovalPage.value);
             } else {
               Utils.showErrorToastification(
                   "False Message !", response[0].message.toString());
@@ -1735,10 +1751,10 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  void quoteHeaderUpdateApiHit() {
+  void quoteHeaderUpdateApiHit(String quoteId) {
     try {
       Map data = {
-        "quote_id": quoteId.value,
+        "quote_id": quoteId,
         "quote_validity": updateQuoteValidityController.value.text,
         "quote_commit": quoteCommitController.value.text == 'Yes' ? 1 : 0,
         "exp_closure_date": updateExpectedClosureDateController.value.text,
@@ -1759,7 +1775,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               loading.value = false;
-              getQuoteHeaderInformation(quoteId.value, "");
+              getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
             } else {
               Utils.showErrorToastification(
                   "False Message !", response[0].message.toString());
@@ -1885,7 +1901,7 @@ class SalesCycleVm extends GetxController {
                       "reportSpr");
                 }
               });*/
-              getQuoteHeaderInformation(quoteId.value, "");
+              getQuoteHeaderInformation(quoteId.value, quoteApprovalPage.value);
               Utils.showToastification(
                   "Message", response[0].message.toString());
             } else {
@@ -1932,7 +1948,7 @@ class SalesCycleVm extends GetxController {
                   "Message !", response[0].message.toString());
               loading.value = false;
               pageNumber = 0;
-              getQuoteHeaderInformation(quoteId, "");
+              getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
              // Get.offAllNamed(RoutesName.quoteApprovalListScreen);
               // getQuoteHeaderInformation(quoteId, "quoteApprovalScreen");
             } else {
@@ -2028,7 +2044,7 @@ class SalesCycleVm extends GetxController {
             JsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
         if (response != null &&
             response.isNotEmpty &&
-            response[0].condition == "True") {
+            response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
           Utils.showToastification("Success!", response[0].message.toString());
           pageNumberForQuote = 0;
@@ -2038,10 +2054,11 @@ class SalesCycleVm extends GetxController {
           //getQuoteHeaderData(0,  saleCycleList[0].salesCycleId!, '');
           quoteValidityController.value.clear();
           expectedClosuredateController.value.clear();
-          productCategoryController.value.clear();
+          productCategoryController .value.clear();
+          kindAttentionController.value.clear();
         } else {
           loading.value = false;
-          Utils.showErrorToastification("Error!", "Unsuccessful");
+          Utils.showErrorToastification("Error!",  response[0].message.toString());
         }
       } else {
         loading.value = false;
@@ -2914,113 +2931,86 @@ class SalesCycleVm extends GetxController {
                           visible: address_master_list.value.length > 0
                               ? true
                               : false,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.primaryDark1,
-                              ),
+                          child: Expanded(
+                            child: DefaultButton(
+                              text: "Discard",
+                              press: (){
+                                selectedItem.value = -1;
+                                shippingController.value.text = "";
+                                shippingAddress2Controller.value.text = "";
+                                Shipping_PostCode_Controller.value.text = "";
+                                Shipping_City_Controller.value.text = "";
+                                Shipping_District_Controller.value.text = "";
+                                Shipping_State_Controller.value.text = "";
+                                Shipping_phone_Controller.value.text = "";
+                                Shipping_email_Controller.value.text = "";
+                                //todo commented by nirupma
+                                /*   shippingController.value.text=saleCycleList[0].shippingAddress??"";
+                                shippingAddress2Controller.value.text=saleCycleList[0].shippingAddress2??"";
+                                Shipping_PostCode_Controller.value.text=saleCycleList[0].shippingPostCode??"";
+                                Shipping_City_Controller.value.text=saleCycleList[0].shippingCity??"" ;
+                                Shipping_District_Controller.value.text=saleCycleList[0].shippingDistrict??"" ;
+                                Shipping_State_Controller.value.text=saleCycleList[0].shippingStateCode??"";
+                                Shipping_phone_Controller.value.text=saleCycleList[0].shippingPhoneNo??"";
+                                Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";*/
+                                consigneeId = '';
+                                // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
+                                Get.back();
+                              },
                             ),
-                            onPressed: () {
-                              selectedItem.value = -1;
-                              shippingController.value.text = "";
-                              shippingAddress2Controller.value.text = "";
-                              Shipping_PostCode_Controller.value.text = "";
-                              Shipping_City_Controller.value.text = "";
-                              Shipping_District_Controller.value.text = "";
-                              Shipping_State_Controller.value.text = "";
-                              Shipping_phone_Controller.value.text = "";
-                              Shipping_email_Controller.value.text = "";
-                              //todo commented by nirupma
-                              /*   shippingController.value.text=saleCycleList[0].shippingAddress??"";
-                              shippingAddress2Controller.value.text=saleCycleList[0].shippingAddress2??"";
-                              Shipping_PostCode_Controller.value.text=saleCycleList[0].shippingPostCode??"";
-                              Shipping_City_Controller.value.text=saleCycleList[0].shippingCity??"" ;
-                              Shipping_District_Controller.value.text=saleCycleList[0].shippingDistrict??"" ;
-                              Shipping_State_Controller.value.text=saleCycleList[0].shippingStateCode??"";
-                              Shipping_phone_Controller.value.text=saleCycleList[0].shippingPhoneNo??"";
-                              Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";*/
-                              consigneeId = '';
-                              // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
-                              Get.back();
-                            },
-                            child: Container(
-                              width: 80,
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Discard' /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files'*/,
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.customDarkerWhite,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
+                          )
                         );
                       }),
+                      SizedBox(width: 5,),
                       Obx(() {
                         return Visibility(
                           visible: address_master_list.value.length > 0
                               ? true
                               : false,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                AllColors.primaryDark1,
-                              ),
+                          child: Expanded(
+                            child: DefaultButton(
+                              text: "Save",
+                              press: (){
+                                shippingController.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .address ??
+                                        "";
+                                shippingAddress2Controller.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .address2 ??
+                                        "";
+                                Shipping_PostCode_Controller.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .postCode ??
+                                        "";
+                                Shipping_City_Controller.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .city ??
+                                        "";
+                                Shipping_District_Controller.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .district ??
+                                        "";
+                                Shipping_State_Controller.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .stateName ??
+                                        "";
+                                Shipping_phone_Controller.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .phoneNo ??
+                                        "";
+                                Shipping_email_Controller.value.text =
+                                    address_master_list[selectedItem.value]
+                                        .emailId ??
+                                        "";
+                                consigneeId =
+                                    address_master_list[selectedItem.value]
+                                        .consigneeId ??
+                                        "";
+                                Get.back();
+                              },
                             ),
-                            onPressed: () {
-                              shippingController.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .address ??
-                                      "";
-                              shippingAddress2Controller.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .address2 ??
-                                      "";
-                              Shipping_PostCode_Controller.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .postCode ??
-                                      "";
-                              Shipping_City_Controller.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .city ??
-                                      "";
-                              Shipping_District_Controller.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .district ??
-                                      "";
-                              Shipping_State_Controller.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .stateName ??
-                                      "";
-                              Shipping_phone_Controller.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .phoneNo ??
-                                      "";
-                              Shipping_email_Controller.value.text =
-                                  address_master_list[selectedItem.value]
-                                          .emailId ??
-                                      "";
-                              consigneeId =
-                                  address_master_list[selectedItem.value]
-                                          .consigneeId ??
-                                      "";
-                              Get.back();
-                            },
-                            child: Container(
-                              width: 80,
-                              alignment: Alignment.center,
-                              child: Text(
-                                'Save',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.customDarkerWhite,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ),
+                          )
                         );
                       })
                     ],
@@ -3032,6 +3022,8 @@ class SalesCycleVm extends GetxController {
         });
   }
 
+
+ 
   Widget BindAddressListView(context) {
     if (address_master_list.value.isNotEmpty &&
         address_master_list.value.length > 0) {
@@ -4070,6 +4062,7 @@ class SalesCycleVm extends GetxController {
         "competitor_name": updateCompetitorNameProductController.value.text,
         "competitor_price": updateCompetitorPriceProductController.value.text,
         "loss_reason": updateLossReasonProductController.value.text,
+        "methodex_price": updateMethodexPriceController.value.text,
       });
     }
 
@@ -4193,11 +4186,6 @@ class SalesCycleVm extends GetxController {
                   "Success !", response[0].message.toString());
               loading.value = false;
               getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
-              print("message ${response[0].message.toString()}");
-              loading.value = false;
-
-              /*Utils.showToastification(
-                  "Success !", response[0].message.toString());*/
             } else {
               loading.value = false;
               Utils.showErrorToastification(
@@ -4341,30 +4329,33 @@ class SalesCycleVm extends GetxController {
 
   void findquotationUserType(List<getApprovalPersonMadol> approvalPersonList) {
     showApprovalBtn.value=false;
+    showBranchHead.value = false;
+    showClusterHead.value = false;
+    showGeneralManager.value = false;
     try {
       for (int i = 0; i < approvalPersonList.length; i++) {
-        if (email.toLowerCase() ==
-            approvalPersonList[i].approvedBy?.toLowerCase() &&  approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval") {
-           showApprovalBtn.value=true;
-          if (approvalPersonList[i].userType?.toLowerCase() == 'branch head') {
-            showBranchHead.value = true;
-          } else {
+        if (email.toLowerCase() == approvalPersonList[i].approvedBy?.toLowerCase()){
+          if(approvalPersonList[i].quoteStatus?.toLowerCase()=="pending for approval"){
+            showApprovalBtn.value=true;
+            approvalPersonList[i].userType?.toLowerCase() == 'branch head'?showBranchHead.value = true: showBranchHead.value = false;
+            approvalPersonList[i].userType?.toLowerCase() == 'cluster head'?showClusterHead.value = true:showClusterHead.value = false;
+            approvalPersonList[i].userType?.toLowerCase() ==
+                'general manager'? showGeneralManager.value = true:showGeneralManager.value = false;
+          }else if(approvalPersonList[i].quoteStatus?.toLowerCase()=="approved"){
             showBranchHead.value = false;
-          }
-          if (approvalPersonList[i].userType?.toLowerCase() == 'cluster head') {
-            showClusterHead.value = true;
-          } else {
             showClusterHead.value = false;
-          }
-          if (approvalPersonList[i].userType?.toLowerCase() ==
-              'general manager') {
-            showGeneralManager.value = true;
-          } else {
             showGeneralManager.value = false;
           }
-          //saleCycleController.showUpdateBtnApproveQuoteItem.value=true;
+          else{
+            showApprovalBtn.value=false;
+            showBranchHead.value = false;
+            showClusterHead.value = false;
+            showGeneralManager.value = false;
+          }
         }
+
       }
+
       print("Branch Head ..${showBranchHead.value}");
     } catch (e) {
       print("Catch Block exception Exception ..${e}");
@@ -4553,7 +4544,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
-              getQuoteHeaderInformation(quoteid, "");
+              getQuoteHeaderInformation(quoteid, quoteApprovalPage.value);
               loading.value = false;
             } else {
               loading.value = false;
@@ -5053,6 +5044,49 @@ class SalesCycleVm extends GetxController {
   }
 
 
-
+  getSalesProductLineCompetitorClear(String salesId) {
+    loading.value = true;
+    Map data = {
+      "sales_cycle_id": salesId,
+      "created_by": email
+    };
+    try {
+      _api.SalesProductLineCompetitorClearApiHit(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.showToastification(
+                  "Success !", response[0].message.toString());
+              pageNumber = 0;
+              clearSaleProductListController();
+             getSaleCycleProductByIdList(
+                pageNumber,
+                  salesId);
+              loading.value = false;
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "False Message !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      Utils.showErrorToastification("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    }
+  }
 
 }

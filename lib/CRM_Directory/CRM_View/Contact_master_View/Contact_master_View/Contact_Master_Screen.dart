@@ -688,11 +688,11 @@ class ContactMasterScreen extends StatelessWidget{
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
-                        .designationname?? "",
+                        .reportingPerson?? "",
                     child: Text(
                       contact_vm_controller
                           .contact_master_list[position]
-                          .designationname?? "",
+                          .reportingPerson?? "",
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                           color: AllColors.textColor,
@@ -704,6 +704,36 @@ class ContactMasterScreen extends StatelessWidget{
               ],
             ),
             SizedBox(height: 3),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Created By : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: Tooltip(
+                    message: contact_vm_controller
+                        .contact_master_list[position]
+                        .createdFullName?? "",
+                    child: Text(
+                      contact_vm_controller
+                          .contact_master_list[position]
+                          .createdFullName?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
 
           ],
         ),

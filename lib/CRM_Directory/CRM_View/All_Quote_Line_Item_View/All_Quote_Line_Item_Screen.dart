@@ -135,16 +135,16 @@ class AllQuoteLineItemScreen extends StatelessWidget{
     String? quoteValidityDate=StaticMethod.convertDateFormat1(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteValidity ?? "");
     String? expectedClosuredateDate=StaticMethod.convertDateFormat1(pendingDraftQuoteController.PendingDraftQuoteList[position].expClosureDate ?? "");
     String? createdOn=StaticMethod.dateTimeToDate(pendingDraftQuoteController.PendingDraftQuoteList[position].createdOn ?? "");
-    String saleCycleStatus = pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus??"";
+    String saleCycleStatus = pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'Rejected':
+        case 'rejected':
           return Colors.red[600]!;
-        case 'Approved':
+        case 'approved':
           return Colors.green[700]!;
-        case 'Draft':
+        case 'draft':
           return Colors.red[900]!;
-        case 'PENDING FOR APPROVAL':
+        case 'pending for approval':
           return Colors.yellow[700]!;
         default:
           return Colors.black;
@@ -156,6 +156,8 @@ class AllQuoteLineItemScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
+            saleCycleController.quoteId.value =
+            pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId!;
             saleCycleController.getApprovalPersonList(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId??"");
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
             saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "ALLQuoteLineItems");
