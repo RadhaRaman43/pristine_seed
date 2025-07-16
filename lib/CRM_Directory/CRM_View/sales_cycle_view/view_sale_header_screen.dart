@@ -123,6 +123,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               color: AllColors.whiteColor,
             ),
             title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -145,7 +146,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                Spacer(),
+               // Spacer(),
                 Obx(() {
                   return Visibility(
                     visible: saleCycleController
@@ -3549,6 +3550,37 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           color: AllColors.textColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 3,
+                  ),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Reopen Remarks",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+
+                      Flexible(
+                        child: Tooltip(
+                          message: saleCycleController.saleCycleList[0].reopenRemarks??"",
+                          child: Text(
+                            saleCycleController.saleCycleList[0].reopenRemarks??"",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
                       ),
                     ],
