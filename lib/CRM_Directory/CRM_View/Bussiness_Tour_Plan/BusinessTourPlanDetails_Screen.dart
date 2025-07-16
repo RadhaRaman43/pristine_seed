@@ -29,8 +29,10 @@ class BusinessTourPlanDeatil extends StatelessWidget {
             businessTourPlanController.pageNumber = 0;
             businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
             Get.toNamed(RoutesName.BusinessTourPlanScreen);
+          }else if(businessTourPlanController.isSendForApproval.value == "ApproveRejectPage"){
+            Get.toNamed(RoutesName.BusinessTourApproveRejectListScreen);
           }else {
-            Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
+          Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
           }
 
           return false;

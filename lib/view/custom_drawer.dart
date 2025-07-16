@@ -500,6 +500,15 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
+                                            case 'Approved / Rejected Business Tour Plan':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<BusinessTourApprovalVm>();
+                                              BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
+                                              Get.toNamed(RoutesName.BusinessTourApproveRejectListScreen);
+                                              Navigator.of(context);
+                                              break;
+
 
                                           }
                                         },
