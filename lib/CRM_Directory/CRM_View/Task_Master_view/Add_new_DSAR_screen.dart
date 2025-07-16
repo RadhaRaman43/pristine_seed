@@ -546,13 +546,13 @@ class AddNewDsarScreen extends StatelessWidget{
         TaskMaster_page_controller.Method_of_call_controller.clear();
         TaskMaster_page_controller.PurposeOfVisit.value = false;
         //TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
-        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Revisit"){
-          TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR REVISIT');
+        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Sales Cycle"){
+          TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR SALES CYCLE');
         }else{
           TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR OTHER');
         }
 
-        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Reschedule" && TaskMaster_page_controller.Task_Master_list[0].typeOfCall == "New Call"){
+        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Reschedule"  && TaskMaster_page_controller.Task_Master_list[0].typeOfCall == "New Call"){
           TaskMaster_page_controller.Type_of_call_controller.text= "New Call";
           TaskMaster_page_controller.typeOfCall.value = false;
           TaskMaster_page_controller.typeOfCall.value = true;
@@ -562,13 +562,13 @@ class AddNewDsarScreen extends StatelessWidget{
           TaskMaster_page_controller.typeOfCall.value = true;
         }
 
-        if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 1){
+        if(selection.isTypeOfCall == 1 && selection.isCreateSalesCycle == 0){
           TaskMaster_page_controller.typeOfCall.value = true;
           TaskMaster_page_controller.DSARStatus.value = true;
           TaskMaster_page_controller.ItemCateDropDown.value = false;
-        }else if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 0 ){
+        }else if(selection.isTypeOfCall == 1 && selection.isCreateSalesCycle == 1 ){
           TaskMaster_page_controller.DSARStatus.value = true;
-          TaskMaster_page_controller.typeOfCall.value = false;
+          TaskMaster_page_controller.typeOfCall.value = true;
           TaskMaster_page_controller.ItemCateDropDown.value = true;
           TaskMaster_page_controller.Item_Category_Selected_list.value = [];
           for(int i = 0; i < TaskMaster_page_controller.Item_Category_master_list.length; i++ ){
