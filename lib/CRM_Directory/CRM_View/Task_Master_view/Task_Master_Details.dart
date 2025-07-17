@@ -110,9 +110,6 @@ class TaskMasterDetails extends StatelessWidget{
               Row(
                 children: [
                   Obx((){
-                    print("dfdgcvxvdf1..${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar}");
-                    print("sdafsfffd2..${TaskMaster_page_controller.TaskDSAR_Master_list.length}");
-                    print("isadminskjdghius3..${TaskMaster_page_controller.isAdminWritePermission.toString()}");
                     return  Visibility(
                       visible: TaskMaster_page_controller.TaskDSAR_Master_list.isEmpty?true:false,
                       //visible: account_vm_controller.view=='Sales'?false:true,
@@ -1492,6 +1489,7 @@ class TaskMasterDetails extends StatelessWidget{
                     salesCycleController.clearSaleProductListController();
                     salesCycleController.filterQuoteAcceptedFlag.value="";
                     salesCycleController.pageNumber=0;
+                    salesCycleController.clearAllFieldOfFilter();
                     salesCycleController.getsalesCycleData( salesCycleController.pageNumber, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!, "ViewHeader", 'Task');
                     salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber, TaskMaster_page_controller
                         .Task_Master_list[0].salesCycleId??"" );

@@ -883,6 +883,7 @@ class TaskMasterScreen extends StatelessWidget {
                       salesCycleController.pageNumber = 0;
                       salesCycleController.clearSaleProductListController();
                       salesCycleController.filterQuoteAcceptedFlag.value="";
+                      salesCycleController.clearAllFieldOfFilter();
                       salesCycleController.getsalesCycleData(
                           salesCycleController.pageNumber,
                           TaskMaster_page_controller

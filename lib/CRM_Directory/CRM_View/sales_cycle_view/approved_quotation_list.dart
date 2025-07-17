@@ -29,6 +29,7 @@ class ApprovedQuotationList extends StatelessWidget{
             saleCycleController.pageNumber=0;
             saleCycleController.pageNumberForQuote=0;
             saleCycleController.filterQuoteAcceptedFlag.value="";
+            saleCycleController.clearAllFieldOfFilter();
             saleCycleController.getsalesCycleData(saleCycleController.pageNumber, saleCycleController.salesCycleId.value, "", saleCycleController.FromPage.value);
             saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,saleCycleController.salesCycleId.value, '');
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);

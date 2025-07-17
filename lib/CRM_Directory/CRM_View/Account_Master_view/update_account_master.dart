@@ -106,6 +106,7 @@ class UpdateAccountMaster extends StatelessWidget{
          }else if(accountMaster_page_controller.view=='FromSaleCycleMainScreen'){
            saleCycleController.pageNumber=0;
            saleCycleController.filterQuoteAcceptedFlag.value="";
+           saleCycleController.clearAllFieldOfFilter();
            saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
            Get.toNamed(RoutesName.salesCycleScreen);
          }
