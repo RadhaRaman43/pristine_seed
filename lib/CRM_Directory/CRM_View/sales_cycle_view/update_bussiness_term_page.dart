@@ -465,7 +465,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
           controller: saleCycleController.quoteRemarkController.value,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten,),
               hintText: 'Remarks',
               labelText: 'Remarks',
               hintStyle: GoogleFonts.poppins(
@@ -484,7 +484,6 @@ class UpdateBussinessTermPage extends StatelessWidget{
               )
           ),
         );
-
       }),
     );
   }
