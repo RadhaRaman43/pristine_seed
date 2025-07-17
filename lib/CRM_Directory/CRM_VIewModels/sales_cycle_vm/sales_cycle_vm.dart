@@ -265,6 +265,7 @@ class SalesCycleVm extends GetxController {
   RxString extClosureStartToEnd = "".obs;
   RxString quoteValidityStartToEnd = "".obs;
   var isCommitController = TextEditingController().obs;
+  var isCommitForProposeController = TextEditingController().obs;
   var branch_head_value_controller = TextEditingController().obs;
   //var zone_head_value_controller=TextEditingController().obs;
   var cluster_head_value_controller = TextEditingController().obs;
@@ -511,8 +512,8 @@ class SalesCycleVm extends GetxController {
                     ? QuoteSubmittedController.value.text = "No"
                     : QuoteSubmittedController.value.text = "Yes";
                 saleCycleList[0].commit == 0
-                    ? isCommitController.value.text = "No"
-                    : isCommitController.value.text = "Yes";
+                    ? isCommitForProposeController.value.text = "No"
+                    : isCommitForProposeController.value.text = "Yes";
                 //saleCycleList[0].confirmDecisionDate==0?ConfirmDecisionDateController.value.text="No":ConfirmDecisionDateController.value.text="Yes";
                 saleCycleList[0].confirmExpectedRevenue == 0
                     ? ConfirmExpectedRevenueController.value.text = "No"
@@ -4117,7 +4118,7 @@ class SalesCycleVm extends GetxController {
     loading.value = true;
     Map data = {
       "sales_cycle_id": salesId,
-      "is_commit": isCommitController.value.text == 'Yes' ? 1 : 0,
+      "is_commit": isCommitForProposeController.value.text == 'Yes' ? 1 : 0,
       "quote_submitted": QuoteSubmittedController.value.text == 'Yes' ? 1 : 0,
       "confirm_decision_date": 0,
       "confirm_expected_revenue":

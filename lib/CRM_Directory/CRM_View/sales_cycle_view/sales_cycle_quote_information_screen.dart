@@ -42,26 +42,26 @@ class QuoteInformationScreen extends StatelessWidget {
           quoteApprovalController.getQuoteHeaderData(0);
           Get.toNamed(RoutesName.quoteApprovalListScreen);
         }else if (saleCycleController.quoteApprovalPage.value == "pendingDraftQuote") {
-          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(0, "PENDING & PENDING FOR APPROVAL");*/
+          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "PENDING & PENDING FOR APPROVAL");
           Get.offNamed(RoutesName.pendingDraftQuoteScreen);
         }
         else if (saleCycleController.quoteApprovalPage.value == "approvedRejectedQuote") {
-          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(0, "APPROVED & REJECTED");*/
+          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "APPROVED & REJECTED");
           Get.offNamed(RoutesName.approvedRejectedQuoteScreen);
         }else if (saleCycleController.quoteApprovalPage.value == "AllQuoteList") {
-          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(0, "All");*/
+          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "All");
           Get.offNamed(RoutesName.allQuoteScreenScreen);
         }
         else if (saleCycleController.quoteApprovalPage.value == "ALLQuoteLineItems") {
-          /*pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
           pendingDraftQuoteController.pageNumberForQuote =0;
-          pendingDraftQuoteController.getPendingDraftQuoteList(0, "All");*/
+          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "All");
           Get.offNamed(RoutesName.allQuoteLineItemScreen);
         }
         else if (saleCycleController.quoteApprovalPage.value ==

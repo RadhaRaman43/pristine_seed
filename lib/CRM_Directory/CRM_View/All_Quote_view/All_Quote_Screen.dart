@@ -251,6 +251,7 @@ class AllQuoteScreen extends StatelessWidget{
                       saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
                       saleCycleController.pageNumber = 0;
                       saleCycleController.filterQuoteAcceptedFlag.value="";
+                      saleCycleController.clearAllFieldOfFilter();
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .salesCycleId!, "ViewHeader", "FromAllQuotePage");
                     },
