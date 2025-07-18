@@ -479,7 +479,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ?.toUpperCase() ==
                                   "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                   ?.toLowerCase() !=
-                                  "rejected") && (saleCycleController.FromPage.value == "Sales" ||
+                                  "rejected") && (saleCycleController.FromPage.value == "Sales" || 
                               saleCycleController.FromPage.value == "FromTaskScreen"||saleCycleController.FromPage.value == "Task")?false:true ,
                           child: Column(
                             children: [
@@ -561,8 +561,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                 ?.toLowerCase() !=
                                 "rejected") && (saleCycleController.FromPage.value == "Sales"
-                                        ||saleCycleController.FromPage.value == "FromTaskScreen" ||
-                                        saleCycleController.FromPage.value == "Task"),
+                                        ||saleCycleController.FromPage.value == "FromTaskScreen" ||saleCycleController.FromPage.value == "Task"),
                                     /*visible: saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||
                                     saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() != "OPEN" ||
                                         saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase()||
@@ -820,8 +819,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 .saleCycleList[0].quoteAccepted
                                 ?.toLowerCase() ==
                                 "open") &&
-                            (saleCycleController.FromPage.value == "Sales"||
-                                saleCycleController.FromPage.value == "FromTaskScreen"||saleCycleController.FromPage.value == "Task")
+                            (saleCycleController.FromPage.value == "Sales"||saleCycleController.FromPage.value == "FromTaskScreen")
                             ? false
                             : true,
                         child: Column(
@@ -1042,8 +1040,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             ?.toUpperCase() ==
                                             "OPEN" && saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus
                                             ?.toLowerCase() !=
-                                            "rejected") && (saleCycleController.FromPage.value == "Sales" ||
-                                              saleCycleController.FromPage.value == "FromTaskScreen"||saleCycleController.FromPage.value == "Task"),
+                                            "rejected") && (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromTaskScreen"),
                                         /*  visible: saleCycleController
                                               .saleCycleList[0]
                                               .isReadySendForApproval ==
@@ -2843,7 +2840,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Account Name",
+                        "Customer Name",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -5147,7 +5144,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Account Code : ",
+                  "Customer Code : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.twelve,
@@ -5168,7 +5165,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Account Name : ",
+                  "Customer Name : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.twelve,
@@ -5187,6 +5184,39 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         fontSize: AllFontSize.twelve,
                         fontWeight: FontWeight.w500,
                       ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Kind Attention : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+
+                Flexible(
+                  child: Tooltip(
+                    message: saleCycleController
+                        .quoteList[index]
+                        .kindAttention??"",
+                    child: Text(
+                      saleCycleController
+                          .quoteList[index]
+                          .kindAttention??"",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.end,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ),
@@ -10772,8 +10802,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
                                         horizontal: AllFontSize.ten),
-                                    labelText: 'Account Name',
-                                    hintText: 'Account Name',
+                                    labelText: 'Customer Name',
+                                    hintText: 'Customer Name',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -10805,8 +10835,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
                                         horizontal: AllFontSize.ten),
-                                    labelText: 'Account Code',
-                                    hintText: 'Account Code',
+                                    labelText: 'Customer Code',
+                                    hintText: 'Customer Code',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
