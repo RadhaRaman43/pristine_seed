@@ -160,8 +160,8 @@ class UpdateAccountMaster extends StatelessWidget{
          title:Row(
            children: [
              Text(
-         accountMaster_page_controller.view=='VIEW'?"Account Details":
-               'Account',
+         accountMaster_page_controller.view=='VIEW'?"Customer Details":
+               'Customer',
                style: GoogleFonts.poppins(
                  color: AllColors.whiteColor,
                  fontSize: 20.0,
@@ -288,18 +288,18 @@ class UpdateAccountMaster extends StatelessWidget{
          child: Container(
            margin: EdgeInsets.only(left: 30),
            child: DefaultButton(
-             text: "Update Account",
+             text: "Update Customer",
              press: () {
                if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
-                 Utils.sanckBarError('Account Name!', "Please Enter Account Name");
+                 Utils.sanckBarError('Customer Name!', "Please Enter Customer Name");
                  return  ;
                }
                if(accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty || accountMaster_page_controller.EmployeeMember_Controller == null){
-                 Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
+                 Utils.sanckBarError('Customer Owner!', "Please Enter Customer Owner");
                  return  ;
                }
                if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
-                 Utils.sanckBarError('Account Type!', "Please Enter Account Type");
+                 Utils.sanckBarError('Customer Type!', "Please Enter Customer Type");
                  return  ;
                }
                if(accountMaster_page_controller.PhoneNo_Controller.text.isNotEmpty){
@@ -315,7 +315,7 @@ class UpdateAccountMaster extends StatelessWidget{
                }
 
                if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
-                     Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
+                     Utils.sanckBarError('Customer Category Type!', "Please Enter Customer Category Type");
                      return  ;
                    }
                if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
@@ -406,8 +406,8 @@ class UpdateAccountMaster extends StatelessWidget{
                        //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode,
                        controller: accountMaster_page_controller.account_code_controller,
                        decoration: InputDecoration(
-                           hintText: "Account Code",
-                           labelText: "Account Code",
+                           hintText: "Customer Code",
+                           labelText: "Customer Code",
                            //suffixIcon: Icon(Icons.email),
                            contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -436,8 +436,8 @@ class UpdateAccountMaster extends StatelessWidget{
                        //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountName!,
                        controller: accountMaster_page_controller.account_name_controller,
                        decoration: InputDecoration(
-                           hintText: "Account Name*",
-                           labelText: "Account Name*",
+                           hintText: "Customer Name*",
+                           labelText: "Customer Name*",
                            //suffixIcon: Icon(Icons.email),
                            contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -529,8 +529,8 @@ class UpdateAccountMaster extends StatelessWidget{
                                controller: accountMaster_page_controller
                                    .OldCRMAccountNo_Controller,
                                decoration: InputDecoration(
-                                   hintText: "Old Crm Account No.",
-                                   labelText: "Old Crm Account No.",
+                                   hintText: "Old Crm Customer No.",
+                                   labelText: "Old Crm Customer No.",
                                    //suffixIcon: Icon(Icons.email),
                                    contentPadding: EdgeInsets.symmetric(
                                        vertical: AllFontSize.ten,
@@ -2364,8 +2364,8 @@ class UpdateAccountMaster extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Owner',
-            labelText: 'Account Owner',
+            hintText: 'Customer Owner',
+            labelText: 'Customer Owner',
 
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
@@ -2424,7 +2424,7 @@ class UpdateAccountMaster extends StatelessWidget{
         width: size.width-55,
         controller:  accountMaster_page_controller.account_type_controller,
         label: Text(
-          "Account Type",
+          "Customer Type",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: 15,
@@ -2649,8 +2649,8 @@ class UpdateAccountMaster extends StatelessWidget{
                 ),
                 contentPadding: EdgeInsets.symmetric(
                     vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                hintText: 'Account Category Type*',
-                labelText: 'Account Category Type*',
+                hintText: 'Customer Category Type*',
+                labelText: 'Customer Category Type*',
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(10))
                 ),

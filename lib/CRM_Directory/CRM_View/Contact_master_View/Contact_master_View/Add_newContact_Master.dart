@@ -561,8 +561,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Name',
-              labelText: 'Account Name',
+              hintText: 'Customer Name',
+              labelText: 'Customer Name',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),

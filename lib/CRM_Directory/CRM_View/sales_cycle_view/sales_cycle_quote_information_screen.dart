@@ -2353,7 +2353,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Account Name",
+                        "Customer Name",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -2853,7 +2853,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   SizedBox(
                     height: 3,
                   ),
-                  Row(
+                 /* Row(
                     children: [
                       Text(
                         "Reject Reason",
@@ -2888,7 +2888,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 3,
-                  ),
+                  ),*/
                   Row(
                     children: [
                       Text(
@@ -5730,7 +5730,7 @@ class QuoteInformationScreen extends StatelessWidget {
                       return Visibility(
                           visible: saleCycleController.showBranchHead.value ||
                               saleCycleController.showGeneralManager.value,
-                          child: bindSalesCreditPer(context));
+                          child:  bindSalesCreditPer(context));
                     }),
                     SizedBox(
                       height: 10,
