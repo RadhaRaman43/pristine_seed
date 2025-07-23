@@ -264,7 +264,7 @@ class AllQuoteScreen extends StatelessWidget{
                             .salesCycleId ?? "",
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
-                            fontSize: AllFontSize.sisxteen,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.wavy,
@@ -309,7 +309,7 @@ class AllQuoteScreen extends StatelessWidget{
                           //textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
-                            fontSize: AllFontSize.sisxteen,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.wavy,
@@ -332,7 +332,7 @@ class AllQuoteScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width*0.4,
+                    width: size.width*0.3,
                     child: Tooltip(
                       message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .accountName  ?? "",

@@ -1270,14 +1270,23 @@ class QuoteInformationScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              saleCycleController
-                                  .quoteLinedata[index].quoteLinePrice
-                                  .toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
+                            Container(
+                              width: size.width*0.12,
+                              child: Tooltip(
+                                message:  saleCycleController
+                                    .quoteLinedata[index].quoteLinePrice
+                                    .toString(),
+                                child: Text(
+                                  saleCycleController
+                                      .quoteLinedata[index].quoteLinePrice
+                                      .toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],
@@ -2853,7 +2862,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   SizedBox(
                     height: 3,
                   ),
-                 /* Row(
+                  Row(
                     children: [
                       Text(
                         "Reject Reason",
@@ -2888,7 +2897,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   ),
                   SizedBox(
                     height: 3,
-                  ),*/
+                  ),
                   Row(
                     children: [
                       Text(
@@ -5718,17 +5727,17 @@ class QuoteInformationScreen extends StatelessWidget {
                     SizedBox(height: 5),
                     bindApprovedDiscountPer(context),
                     SizedBox(height: 10),
-                    Obx(() {
+                  /*  Obx(() {
                       return Visibility(
                           visible: saleCycleController.showGeneralManager.value,
                           child: bindGmDiscountPer(context));
-                    }),
+                    }),*/
                     SizedBox(
                       height: 10,
                     ),
                     Obx(() {
                       return Visibility(
-                          visible: saleCycleController.showBranchHead.value ||
+                          visible: saleCycleController.isAdminWritePermission=="1" ||
                               saleCycleController.showGeneralManager.value,
                           child:  bindSalesCreditPer(context));
                     }),

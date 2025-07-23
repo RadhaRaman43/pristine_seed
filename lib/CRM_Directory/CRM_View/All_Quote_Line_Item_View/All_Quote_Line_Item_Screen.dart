@@ -271,7 +271,6 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                             decorationStyle: TextDecorationStyle.wavy,
                           ),
                           overflow: TextOverflow.ellipsis,
-
                         ),
 
                       ),
