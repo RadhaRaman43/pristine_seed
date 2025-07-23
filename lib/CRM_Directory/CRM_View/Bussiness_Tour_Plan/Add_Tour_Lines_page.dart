@@ -228,6 +228,12 @@ class AddTourLinesPage extends StatelessWidget{
               );
             }
 
+            if (initialDate.isBefore(stating_date)) {
+              initialDate = stating_date;
+            } else if (initialDate.isAfter(ending_date)) {
+              initialDate = ending_date;
+            }
+
 
             // Remove focus from the field
             FocusScope.of(context).requestFocus(FocusNode());
