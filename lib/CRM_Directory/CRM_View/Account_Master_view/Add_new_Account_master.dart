@@ -117,7 +117,7 @@ class AddNewAccountMaster extends StatelessWidget{
           title:Row(
             children: [
               Text(
-                'Create Customer',
+                'Create Account',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20,
@@ -141,7 +141,7 @@ class AddNewAccountMaster extends StatelessWidget{
                       Icon(Icons.save_as),
                       SizedBox(width: 5,),
                       Tooltip(
-                        message: "Create Customer ",
+                        message: "Create Account ",
                         child: Text('Draft',
                             style: GoogleFonts.poppins(
                               color: AllColors.whiteColor,
@@ -277,7 +277,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
               accountMaster_page_controller.AccountMstUploaderApiHit('Create', "", accountMaster_page_controller.SalesRepresentativeEmail, accountMaster_page_controller.RegionalHeadEmail);
             },
-            text: "Create Customer",
+            text: "Create Account",
           ),
         ),
       ),

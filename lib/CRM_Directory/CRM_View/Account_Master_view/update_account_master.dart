@@ -160,8 +160,8 @@ class UpdateAccountMaster extends StatelessWidget{
          title:Row(
            children: [
              Text(
-         accountMaster_page_controller.view=='VIEW'?"Customer Details":
-               'Customer',
+         accountMaster_page_controller.view=='VIEW'?"Account Details":
+               'Account',
                style: GoogleFonts.poppins(
                  color: AllColors.whiteColor,
                  fontSize: 20.0,
@@ -288,7 +288,7 @@ class UpdateAccountMaster extends StatelessWidget{
          child: Container(
            margin: EdgeInsets.only(left: 30),
            child: DefaultButton(
-             text: "Update Customer",
+             text: "Update Account",
              press: () {
                if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
                  Utils.sanckBarError('Customer Name!', "Please Enter Customer Name");

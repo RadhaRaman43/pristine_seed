@@ -41,7 +41,7 @@ class DraftItemList extends StatelessWidget{
           title:Row(
             children: [
               Text(
-                'Draft Customers',
+                'Draft Account',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20.0,
@@ -165,9 +165,9 @@ class DraftItemList extends StatelessWidget{
             buildInfoRow("Phone No.", controller.phoneNo),
             buildInfoRow("Created By", controller.accountOwnerFullName),
            // buildInfoRow("Frontliner Value", controller.frontlinerValue),
-            buildInfoRow("Region Name", controller.branchHeadValue),
+           // buildInfoRow("Region Name", controller.branchHeadValue),
            // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-            buildInfoRow("Cluster Name", controller.clustureHeadValue),
+            //buildInfoRow("Cluster Name", controller.clustureHeadValue),
             buildInfoRow("Address", controller.permanentAddress?.address ?? ""),
           ],
         ),

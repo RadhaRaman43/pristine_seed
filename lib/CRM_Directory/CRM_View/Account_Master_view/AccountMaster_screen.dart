@@ -50,7 +50,7 @@ class AccountmasterScreen extends StatelessWidget{
           title:Row(
             children: [
               Text(
-                'Customer Master',
+                'Account Master',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20.0,
