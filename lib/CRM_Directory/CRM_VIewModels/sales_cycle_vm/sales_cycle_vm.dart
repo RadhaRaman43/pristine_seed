@@ -22,6 +22,7 @@ import 'package:http/http.dart' as http;
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../main.dart';
+import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
@@ -285,6 +286,8 @@ class SalesCycleVm extends GetxController {
   var managerRemarksController = TextEditingController().obs;
   var reOpenRemarksController = TextEditingController().obs;
 
+  var erpItemNameController=TextEditingController().obs;
+
   RxInt index = 0.obs;
   RxInt saleAdviseindex = 0.obs;
   final qtyFocusNode = FocusNode();
@@ -306,6 +309,8 @@ class SalesCycleVm extends GetxController {
   RxBool isnextbtn = false.obs;
 
   RxString filterQuoteAcceptedFlag = "Open".obs;
+
+  RxList<BulkItemMasterGetModel> item_no_list = <BulkItemMasterGetModel>[].obs;
 
   @override
   Future<void> onInit() async {
@@ -5090,4 +5095,97 @@ class SalesCycleVm extends GetxController {
     }
   }
 
+
+  Future<Iterable<BulkItemMasterGetModel>> getItemNo(String text) async {
+    /*if (text == '') {
+      return const Iterable<BulkItemMasterGetModel>.empty();
+    }*/
+    Map data = {
+      "item_code": "",
+      "name": text,
+      "description": "",
+      "category_code": "",
+      "gst_group_code": "",
+      "hsn_code": "",
+      "location_code": "",
+      "active": -1,
+      "is_bulky": -1,
+      "is_expiry_mandatory": -1,
+      "rowsPerPage": 10,
+      "pageNumber": 0
+    };
+
+    String itemdropdownresp =
+    await _api.itemMasterGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(itemdropdownresp);
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<BulkItemMasterGetModel> response = jsonResponse
+            .map((data) => BulkItemMasterGetModel.fromJson(data))
+            .toList();
+        if (response[0].condition?.toLowerCase() == 'true') {
+          print(jsonResponse);
+          item_no_list.value = response;
+        } else {
+          item_no_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        item_no_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      item_no_list.value= [];
+    }
+    return   item_no_list.value;
+  }
+
+
+  getsalesAdviceLineItemUpdate(advise.QuoteItems salesAdviseLinesDataList) {
+    if(erpItemNameController.value.text=="" || erpItemNameController.value.text.isEmpty){
+      Utils.showErrorToastification("Error", "Please Select ERP Item Name.");
+      return;
+    }
+    loading.value = true;
+    Map data = {
+      "sales_advice_id": salesAdviseLinesDataList.salesAdviceId,
+      "line_no": salesAdviseLinesDataList.lineNo,
+      "erp_item_code": erpItemNameController.value.text,
+      "created_by": email
+    };
+    try {
+      _api.salesAdviceLineItemUpdateApiHit(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              getSalesAdviseHeaderLine(salesAdviseLinesDataList.salesAdviceId!);
+              Utils.showToastification(
+                  "Success !", response[0].message.toString());
+            } else {
+              Utils.showErrorToastification(
+                  "False Message !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      Utils.showErrorToastification("Message !", e.toString());
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
 }

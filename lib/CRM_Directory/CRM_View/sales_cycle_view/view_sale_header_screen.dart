@@ -4581,7 +4581,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Column(
+            Visibility(
+                visible: flagView!="View",
+                child:  Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -4598,13 +4600,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       //width: size.width * 0.4,
                       child: Tooltip(
                         message: saleCycleController
-                                .get_SalesCycleProductById_List[index]
-                                .competitorName ??
+                            .get_SalesCycleProductById_List[index]
+                            .competitorName ??
                             "",
                         child: Text(
                           saleCycleController
-                                  .get_SalesCycleProductById_List[index]
-                                  .competitorName ??
+                              .get_SalesCycleProductById_List[index]
+                              .competitorName ??
                               "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -4631,14 +4633,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     ),
                     Text(
                       saleCycleController
-                                  .get_SalesCycleProductById_List[index]
-                                  .competitorPrice ==
-                              null
+                          .get_SalesCycleProductById_List[index]
+                          .competitorPrice ==
+                          null
                           ? ""
                           : saleCycleController
-                              .get_SalesCycleProductById_List[index]
-                              .competitorPrice
-                              .toString(),
+                          .get_SalesCycleProductById_List[index]
+                          .competitorPrice
+                          .toString(),
                       style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.twelve,
@@ -4662,13 +4664,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       //width: size.width * 0.5,
                       child: Tooltip(
                         message: saleCycleController
-                                .get_SalesCycleProductById_List[index]
-                                .lossReason ??
+                            .get_SalesCycleProductById_List[index]
+                            .lossReason ??
                             "",
                         child: Text(
                           saleCycleController
-                                  .get_SalesCycleProductById_List[index]
-                                  .lossReason ??
+                              .get_SalesCycleProductById_List[index]
+                              .lossReason ??
                               "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -4697,13 +4699,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       //width: size.width * 0.5,
                       child: Tooltip(
                         message: saleCycleController
-                                .get_SalesCycleProductById_List[index]
-                                .lossOn ??
+                            .get_SalesCycleProductById_List[index]
+                            .lossOn ??
                             "",
                         child: Text(
                           saleCycleController
-                                  .get_SalesCycleProductById_List[index]
-                                  .lossOn ??
+                              .get_SalesCycleProductById_List[index]
+                              .lossOn ??
                               "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -4729,16 +4731,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ),
                     Flexible(
-                     // width: size.width * 0.5,
+                      // width: size.width * 0.5,
                       child: Tooltip(
                         message: saleCycleController
-                                .get_SalesCycleProductById_List[index]
-                                .lossBy ??
+                            .get_SalesCycleProductById_List[index]
+                            .lossBy ??
                             "",
                         child: Text(
                           saleCycleController
-                                  .get_SalesCycleProductById_List[index]
-                                  .lossBy ??
+                              .get_SalesCycleProductById_List[index]
+                              .lossBy ??
                               "",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -4753,7 +4755,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ],
                 ),
               ],
-            )
+            ))
+
           ],
         ),
 

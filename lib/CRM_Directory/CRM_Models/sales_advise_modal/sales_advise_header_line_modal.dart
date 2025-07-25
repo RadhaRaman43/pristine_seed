@@ -266,6 +266,9 @@ class QuoteItems {
   String? itemCode;
   String? itemName;
   String? itemDescription;
+  String? productType;
+  String? erpItemCode;
+  String? erpItemName;
   double? qty;
   double? unitPrice;
   double? mrpPrice;
@@ -314,6 +317,9 @@ class QuoteItems {
         this.itemCode,
         this.itemName,
         this.itemDescription,
+        this.productType,
+        this.erpItemCode,
+        this.erpItemName,
         this.qty,
         this.unitPrice,
         this.mrpPrice,
@@ -362,6 +368,9 @@ class QuoteItems {
     itemCode = json['item_code'];
     itemName = json['item_name'];
     itemDescription = json['item_description'];
+    productType = json['product_type'];
+    erpItemCode = json['erp_item_code'];
+    erpItemName = json['erp_item_name'];
     qty = json['qty'];
     unitPrice = json['unit_price'];
     mrpPrice = json['mrp_price'];
@@ -412,6 +421,9 @@ class QuoteItems {
     data['item_code'] = this.itemCode;
     data['item_name'] = this.itemName;
     data['item_description'] = this.itemDescription;
+    data['product_type'] = this.productType;
+    data['erp_item_code'] = this.erpItemCode;
+    data['erp_item_name'] = this.erpItemName;
     data['qty'] = this.qty;
     data['unit_price'] = this.unitPrice;
     data['mrp_price'] = this.mrpPrice;
