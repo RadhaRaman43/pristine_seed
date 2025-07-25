@@ -1222,31 +1222,50 @@ class UpdateAccountMaster extends StatelessWidget{
                            ),
                          ),*/
 
-                           Container(
 
-                               child: bindPostalCodeDropDown(context)
-                           ),
-
-                           SizedBox(height: 15,),
-
-                           Container(
-                             //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                             child: bindStateDropDown(context),
-                           ),
-
+                           Obx((){
+                             return Visibility(
+                               visible:accountMaster_page_controller.ShowState1.value,
+                               child: Container(
+                                   child: bindPostalCodeDropDown(context)
+                               ),
+                             );
+                           }),
 
                            SizedBox(height: 15,),
 
-                           Container(
 
-                               child: bindCityDropDown(context)
-                           ),
+                           Obx((){
+                             return Visibility(
+                               visible:accountMaster_page_controller.ShowState1.value,
+                               child: Container(
+                                   child: bindStateDropDown(context)
+                               ),
+                             );
+                           }),
+
 
                            SizedBox(height: 15,),
 
-                           Container(
-                               child: bindDistrictDropDown(context)
-                           ),
+                           Obx((){
+                             return Visibility(
+                               visible:accountMaster_page_controller.ShowState1.value,
+                               child: Container(
+                                   child: bindCityDropDown(context)
+                               ),
+                             );
+                           }),
+
+                           SizedBox(height: 15,),
+
+                           Obx((){
+                             return Visibility(
+                               visible:accountMaster_page_controller.ShowState1.value,
+                               child: Container(
+                                   child: bindDistrictDropDown(context)
+                               ),
+                             );
+                           }),
 
                            SizedBox(height: 15,),
 
@@ -3656,6 +3675,11 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'state');
         accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'city');
         accountMaster_page_controller.getStateMasterApi(accountMaster_page_controller.PostCode_Controller.text, 'district');
+        accountMaster_page_controller.City_Controller.text = '';
+        accountMaster_page_controller.District_Controller.text = '';
+        accountMaster_page_controller.State_Controller.text = '';
+        accountMaster_page_controller.ShowState1.value = false;
+        accountMaster_page_controller.ShowState1.value = true;
         final parts = [
           accountMaster_page_controller.Address_controller.text,
           accountMaster_page_controller.Address2_Controller.text,
@@ -3792,6 +3816,11 @@ class UpdateAccountMaster extends StatelessWidget{
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'state');
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'city');
         accountMaster_page_controller.getShippingStateMasterApi(accountMaster_page_controller.Shipping_PostCode_Controller.value.text,'district');
+        accountMaster_page_controller.Shipping_City_Controller.value.text = '';
+        accountMaster_page_controller.Shipping_District_Controller.value.text = '';
+        accountMaster_page_controller.Shipping_State_Controller.value.text = '';
+        accountMaster_page_controller.ShowState.value = false;
+        accountMaster_page_controller.ShowState.value = true;
         final parts = [
           accountMaster_page_controller.Shipping_Address_controller.value.text,
           accountMaster_page_controller.Shipping_Address2_Controller.value.text,
