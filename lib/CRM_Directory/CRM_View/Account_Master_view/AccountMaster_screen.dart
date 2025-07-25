@@ -203,9 +203,9 @@ class AccountmasterScreen extends StatelessWidget{
           subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildInfoRow("Account Code", controller.accountCode),
-              buildInfoRow("Account Name", controller.accountName),
-              buildInfoRow("Account Type", controller.accountType),
+              buildInfoRow("Customer Code", controller.accountCode),
+              buildInfoRow("Customer Name", controller.accountName),
+              buildInfoRow("Customer Type", controller.accountType),
               buildInfoRow("Company Type", controller.companyProfileType),
               buildInfoRow("Company Sub Type", controller.companyProfileSubType),
               buildInfoRow("Email Id", controller.emailId),
@@ -1045,7 +1045,7 @@ class AccountmasterScreen extends StatelessWidget{
         width: size.width-18,
         controller:  accountMaster_page_controller.account_type_controller,
         label: Text(
-          "Account Type",
+          "Customer Type",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.sisxteen,
@@ -1242,8 +1242,8 @@ class AccountmasterScreen extends StatelessWidget{
               ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Category Type',
-            labelText: 'Account Category Type',
+            hintText: 'Customer Category Type',
+            labelText: 'Customer Category Type',
               hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
@@ -1846,8 +1846,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Code',
-          hintText: 'Account Code',
+          labelText: 'Customer Code',
+          hintText: 'Customer Code',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1876,8 +1876,8 @@ class AccountmasterScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Name',
-          hintText: 'Account Name',
+          labelText: 'Customer Name',
+          hintText: 'Customer Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

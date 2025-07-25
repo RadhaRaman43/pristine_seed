@@ -175,8 +175,8 @@ class AllContactMasterScreen extends StatelessWidget{
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Account Code',
-                              hintText: 'Account Code',
+                              labelText: 'Customer Code',
+                              hintText: 'Customer Code',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -205,8 +205,8 @@ class AllContactMasterScreen extends StatelessWidget{
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Account Name',
-                              hintText: 'Account Name',
+                              labelText: 'Customer Name',
+                              hintText: 'Customer Name',
                               hintStyle: GoogleFonts.poppins(
                                   color: AllColors.lightblackColor,
                                   fontWeight: FontWeight.w300,
@@ -515,7 +515,7 @@ class AllContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Account Code : ",
+                  "Customer Code : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -549,7 +549,7 @@ class AllContactMasterScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Account Name : ",
+                  "Customer Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,

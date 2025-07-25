@@ -219,8 +219,8 @@ class AddNewConsigneeadd extends StatelessWidget{
                               //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountCode,
                               controller: address_vm_controller.account_code_controller,
                               decoration: InputDecoration(
-                                  hintText: "Account Code",
-                                  labelText: "Account Code",
+                                  hintText: "Customer Code",
+                                  labelText: "Customer Code",
                                   //suffixIcon: Icon(Icons.email),
                                   contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 
@@ -248,8 +248,8 @@ class AddNewConsigneeadd extends StatelessWidget{
                               //initialValue: accountMaster_page_controller.AccountMasterGetCode_list[0].accountName!,
                               controller: address_vm_controller.account_name_controller,
                               decoration: InputDecoration(
-                                  hintText: "Account Name*",
-                                  labelText: "Account Name*",
+                                  hintText: "Customer Name*",
+                                  labelText: "Customer Name*",
                                   //suffixIcon: Icon(Icons.email),
                                   contentPadding: EdgeInsets.symmetric(vertical: AllFontSize.ten,horizontal: AllFontSize.ten ),
 

@@ -213,8 +213,8 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            hintText: 'Account Name',
-            labelText: 'Account Name',
+            hintText: 'Customer Name',
+            labelText: 'Customer Name',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,

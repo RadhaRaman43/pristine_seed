@@ -221,10 +221,11 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),);
                         }),
-                        /*Obx((){
+                        Obx((){
                               return Visibility(
-                                visible: saleCycleController
-                                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
+                                visible: (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                                || saleCycleController.userType.toLowerCase()=="branch head") && saleCycleController
+                                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
                                 child: ActionChip(
                                   label: Text(
                                     "Sales Advise Create",
@@ -245,7 +246,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                               *//* Tooltip(
+                             /*   Tooltip(
                                   message: "Sales Advise Create",
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -261,13 +262,13 @@ class QuoteInformationScreen extends StatelessWidget {
                                     },
                                         icon: Icon(Icons.add)),
                                   ),
-                                ),*//*
+                                ),*/
                               );
                             }),
                         Obx((){
                           return Visibility(
                             visible: saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
+                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
                             child: ActionChip(
                               label: Text(
                                 "View Sales Advise",
@@ -288,7 +289,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
 
-                            *//*Tooltip(
+                           /* Tooltip(
                               message: "View Sales Advise",
                               child: Container(
                                 decoration: BoxDecoration(
@@ -303,8 +304,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                 },
                                     icon: Icon(Icons.article)),
                               ),
-                            )*//*);
-                        }),*/
+                            )*/);
+                        }),
                         Obx(() {
                           return Padding(
                             padding: const EdgeInsets.only(right: 0.0),
@@ -1270,14 +1271,23 @@ class QuoteInformationScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              saleCycleController
-                                  .quoteLinedata[index].quoteLinePrice
-                                  .toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
+                            Container(
+                              width: size.width*0.12,
+                              child: Tooltip(
+                                message:  saleCycleController
+                                    .quoteLinedata[index].quoteLinePrice
+                                    .toString(),
+                                child: Text(
+                                  saleCycleController
+                                      .quoteLinedata[index].quoteLinePrice
+                                      .toString(),
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],
@@ -1344,7 +1354,7 @@ class QuoteInformationScreen extends StatelessWidget {
                        Obx((){
                          return Visibility(
                              visible: saleCycleController.showBranchHead.value ||
-                                 saleCycleController.showClusterHead.value|| saleCycleController.isAdminWritePermission=="1",
+                                 saleCycleController.showClusterHead.value,
                              child: Row(
                                children: [
                                  Text(
@@ -1447,7 +1457,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           return Visibility(
                             visible:
-                                saleCycleController.showGeneralManager.value,
+                                saleCycleController.showGeneralManager.value || saleCycleController.isAdminWritePermission=="1",
                             child: Row(
                               children: [
                                 Text(
@@ -1777,7 +1787,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx(() {
                           return Visibility(
                             visible:
-                                saleCycleController.showGeneralManager.value,
+                                saleCycleController.showGeneralManager.value || saleCycleController.isAdminWritePermission=="1",
                             child: Column(
                               children: [
                                 Row(
@@ -2353,7 +2363,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Account Name",
+                        "Customer Name",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -4995,14 +5005,14 @@ class QuoteInformationScreen extends StatelessWidget {
                             SizedBox(
                               height: 5,
                             ),
-                            EditCompetitorName(context),
+                           /* EditCompetitorName(context),
                             SizedBox(
                               height: 5,
                             ),
                             EditLossReason(context),
                             SizedBox(
                               height: 5,
-                            ),
+                            ),*/
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -5451,7 +5461,7 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Row(
+           /* Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
@@ -5473,7 +5483,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   ),
                 ),
               ],
-            ),
+            ),*/
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -5518,7 +5528,7 @@ class QuoteInformationScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Column(
+            /*Column(
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -5687,7 +5697,7 @@ class QuoteInformationScreen extends StatelessWidget {
                   ],
                 ),
               ],
-            )
+            )*/
           ],
         ),
       ),
@@ -5718,19 +5728,19 @@ class QuoteInformationScreen extends StatelessWidget {
                     SizedBox(height: 5),
                     bindApprovedDiscountPer(context),
                     SizedBox(height: 10),
-                    Obx(() {
+                  /*  Obx(() {
                       return Visibility(
                           visible: saleCycleController.showGeneralManager.value,
                           child: bindGmDiscountPer(context));
-                    }),
+                    }),*/
                     SizedBox(
                       height: 10,
                     ),
                     Obx(() {
                       return Visibility(
-                          visible: saleCycleController.showBranchHead.value ||
+                          visible: saleCycleController.isAdminWritePermission=="1" ||
                               saleCycleController.showGeneralManager.value,
-                          child: bindSalesCreditPer(context));
+                          child:  bindSalesCreditPer(context));
                     }),
                     SizedBox(
                       height: 10,

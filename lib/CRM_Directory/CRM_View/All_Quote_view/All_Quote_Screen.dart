@@ -264,7 +264,7 @@ class AllQuoteScreen extends StatelessWidget{
                             .salesCycleId ?? "",
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
-                            fontSize: AllFontSize.sisxteen,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.wavy,
@@ -282,7 +282,7 @@ class AllQuoteScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Account Code : ",
+                    "Customer Code : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -309,7 +309,7 @@ class AllQuoteScreen extends StatelessWidget{
                           //textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
-                            fontSize: AllFontSize.sisxteen,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.wavy,
@@ -325,14 +325,14 @@ class AllQuoteScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Account Name : ",
+                    "Customer Name : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width*0.4,
+                    width: size.width*0.3,
                     child: Tooltip(
                       message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .accountName  ?? "",
@@ -717,8 +717,8 @@ class AllQuoteScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Code',
-                                    hintText: 'Account Code',
+                                    labelText: 'Customer Code',
+                                    hintText: 'Customer Code',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -745,8 +745,8 @@ class AllQuoteScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Name',
-                                    hintText: 'Account Name',
+                                    labelText: 'Customer Name',
+                                    hintText: 'Customer Name',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,

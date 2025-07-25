@@ -219,7 +219,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
               },
             ),*/
             _buildLabelWithValue(
-              label: "Account Code : ",
+              label: "Customer Code : ",
               value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].accountCode,
               //width: size.width * 0.4,
             ),
@@ -468,8 +468,8 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Name',
-                                    hintText: 'Account Name',
+                                    labelText: 'Customer Name',
+                                    hintText: 'Customer Name',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -500,8 +500,8 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Code',
-                                    hintText: 'Account Code',
+                                    labelText: 'Customer Code',
+                                    hintText: 'Customer Code',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
