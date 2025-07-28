@@ -1012,7 +1012,8 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                             ),
                             GestureDetector(
                               onTap: (){
-                                if(saleCycleController.salesAdviseLinesDataList[index].productType?.toLowerCase()!="standard"){
+                                if(saleCycleController.salesAdviseLinesDataList[index].productType?.toLowerCase()!="standard"
+                                    && saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft"){
                                   updateERPItemName(context,saleCycleController.salesAdviseLinesDataList[index], index);
                                 }
                               },
@@ -1427,50 +1428,48 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                 color: AllColors.primaryDark1,
               ),
             ),
-            content: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Divider(
-                    height: 1,
-                    thickness: 1,
-                  ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Divider(
+                  height: 1,
+                  thickness: 1,
+                ),
 
-                  SizedBox(
-                    height: 15,
-                  ),
-                 bindERPItemName(context, index),
-                  SizedBox(
-                    height: 15,
-                  ),
+                SizedBox(
+                  height: 15,
+                ),
+               bindERPItemName(context, index),
+                SizedBox(
+                  height: 15,
+                ),
 
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: DefaultButton(
-                           press: (){
-                             saleCycleController.getsalesAdviceLineItemUpdate(salesAdviseLinesDataList);
-                             Get.back();
-                           },
-                         text: "Save",
-                        ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: DefaultButton(
+                         press: (){
+                           saleCycleController.getsalesAdviceLineItemUpdate(salesAdviseLinesDataList);
+                           Get.back();
+                         },
+                       text: "Save",
                       ),
-                      SizedBox(width: 10,),
-                      Expanded(
-                        child: DefaultButton(
-                          press: (){
-                            saleCycleController.erpItemNameController.value
-                                .clear();
-                            Navigator.pop(context);
-                          },
-                          text: "Cancel",
-                        ),
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: DefaultButton(
+                        press: (){
+                          saleCycleController.erpItemNameController.value
+                              .clear();
+                          Navigator.pop(context);
+                        },
+                        text: "Cancel",
                       ),
-                    ],
-                  )
-                ],
-              ),
+                    ),
+                  ],
+                )
+              ],
             ),
           );
         });
@@ -1774,50 +1773,29 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    AllColors.primaryDark1,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  saleCycleController.pageNumber = 0;
-                                  saleCycleController.getAddressMasterList(
-                                      saleCycleController.pageNumber,
-                                      saleCycleController.quoteHeaderdata[0].accountCode!);
-                                  saleCycleController.showConsigneeAddressList(
-                                      context, saleCycleController.address_master_list,saleCycleController.quoteHeaderdata[0].accountCode!);
-                                },
-                                child: Container(
-                                  child: Text(
-                                    'Change',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.whiteColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                              Expanded(
+                                child: DefaultButton(
+                                  text: 'Change',
+                                  press: (){
+                                    saleCycleController.pageNumber = 0;
+                                    saleCycleController.getAddressMasterList(
+                                        saleCycleController.pageNumber,
+                                        saleCycleController.quoteHeaderdata[0].accountCode!);
+                                    saleCycleController.showConsigneeAddressList(
+                                        context, saleCycleController.address_master_list,saleCycleController.quoteHeaderdata[0].accountCode!);
+                                  },
                                 ),
                               ),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all<Color>(
-                                    AllColors.primaryDark1,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  saleCycleController.getSalesAdviseHeaderUpdate(saleCycleController.salesAdviseLinesDataList[0].salesAdviceId??"");
-                                  Get.back();
-                                },
-                                child: Container(
-                                  child: Text(
-                                    'Update',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.whiteColor,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Expanded(
+                                child: DefaultButton(
+                                  text: 'Update',
+                                  press: (){
+                                    saleCycleController.getSalesAdviseHeaderUpdate(saleCycleController.salesAdviseLinesDataList[0].salesAdviceId??"");
+                                    Get.back();
+                                  },
                                 ),
                               ),
                             ],

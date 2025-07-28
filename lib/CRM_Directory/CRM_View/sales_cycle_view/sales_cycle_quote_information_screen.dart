@@ -235,6 +235,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
+                                    saleCycleController.routingForSalesAdvise.value="";
                                     saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
                                     saleCycleController.salesAdviseCheckedList.value =
                                         List.generate(saleCycleController.quoteLinedata.length, (_) => false);
