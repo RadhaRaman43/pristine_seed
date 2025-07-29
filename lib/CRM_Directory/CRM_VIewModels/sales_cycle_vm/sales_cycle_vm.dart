@@ -5188,4 +5188,49 @@ class SalesCycleVm extends GetxController {
       loading.value = false;
     }
   }
+
+
+
+
+  getSalesCycleCompetitorCreateFromProspectProducts(String salesCycleId) {
+    loading.value = true;
+    Map data = {
+      "sales_cycle_id": salesCycleId,
+      "created_by": email
+    };
+    try {
+      _api.salesCycleCompetitorCreateFromProspectProductsApiHit(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              pageNumber=0;
+              getsalesCycleData(pageNumber, salesCycleId, "ViewHeader", 'Sales');
+              Utils.showToastification(
+                  "Success !", response[0].message.toString());
+            } else {
+              Utils.showErrorToastification(
+                  "False Message !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      Utils.showErrorToastification("Message !", e.toString());
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
 }

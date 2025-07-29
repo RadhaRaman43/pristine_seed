@@ -877,7 +877,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             : false,
                         child: Column(
                           children: [
-                            bindSalesCycleProductData(context, "Add", ""),
+                            bindSalesCycleProductData(context, "Add", "Proposed Solution"),
                             Visibility(
                                 visible: saleCycleController
                                         .get_SalesCycleProductById_List.length >
@@ -1302,7 +1302,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                             //SizedBox(height: 10,),
                             Obx(() {
-                              return bindQuoteData(context);
+                              return bindQuoteData(context,"Quote");
                             }),
                           ],
                         ),
@@ -4370,7 +4370,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               .saleCycleList[0].actualSalesCycleApprovalStatus
                               ?.toLowerCase() ==
                           "rejected" || saleCycleController
-                        .saleCycleList[0].actualSalesCycleApprovalStatus
+                        .saleCycleList[0].quoteAccepted
                         ?.toLowerCase() !=
                     "open",
                   child: InkWell(
@@ -4399,7 +4399,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() ==
                                     "rejected" || saleCycleController
-                            .saleCycleList[0].actualSalesCycleApprovalStatus
+                            .saleCycleList[0].quoteAccepted
                             ?.toLowerCase() !=
                             "open"
                             ? TextDecoration.none
@@ -4582,7 +4582,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               ],
             ),
             Visibility(
-                visible: flagView!="View",
+                visible: flagView=="",
                 child:  Column(
               children: [
                 Row(
@@ -4756,7 +4756,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
               ],
             ))
-
           ],
         ),
 
@@ -4782,7 +4781,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     );
   }
 
-  Widget bindQuoteData(BuildContext context) {
+  Widget bindQuoteData(BuildContext context, String flagForManage) {
     print("Lengh${saleCycleController.quoteList.value.length}");
     if (saleCycleController.quoteList.value.isNotEmpty &&
         saleCycleController.quoteList.value.length > 0) {
@@ -4823,7 +4822,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 shrinkWrap: true,
                 itemCount: saleCycleController.quoteList.value.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return bindPendingListView(context, index);
+                  return bindPendingListView(context, index,flagForManage);
                 }),
           );
         },
@@ -4844,7 +4843,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     }
   }
 
-  Widget bindPendingListView(BuildContext context, int index) {
+  Widget bindPendingListView(BuildContext context, int index, String flagForManage) {
     String? expClosureDate = StaticMethod.convertDateFormat1(
         saleCycleController.quoteList[index].expClosureDate ?? "");
     String? quoteValidity = StaticMethod.convertDateFormat1(
@@ -4918,7 +4917,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             1 &&
                             saleCycleController
                                 .saleCycleList[0].isSalesCycleClosed !=
-                                1
+                                1 && flagForManage=="Quote"
                             ? true
                             : false,
                         child: InkWell(
@@ -4939,10 +4938,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                   InkWell(
                       onTap: () {
-                        saleCycleController.quoteId.value =
-                        saleCycleController.quoteList[index].quoteId!;
-                        saleCycleController.getQuoteHeaderInformation(
-                            saleCycleController.quoteList[index].quoteId, "");
+                        if(flagForManage=="Quote"){
+                          saleCycleController.quoteId.value =
+                          saleCycleController.quoteList[index].quoteId!;
+                          saleCycleController.getQuoteHeaderInformation(
+                              saleCycleController.quoteList[index].quoteId, "");
+                        }else {
+                         //saleCycleController.
+                        }
 
                       },
                       child: Icon(
@@ -9822,7 +9825,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                   Spacer(),
                   //todo comment code of mark loss btn of case of prospect
-                  Obx((){
+                 /* Obx((){
                     return Visibility(
                         visible:
                         (saleCycleController.saleCycleList[0].salesCycleStatus
@@ -9848,8 +9851,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         )
                     );
                   }),
-
-                  SizedBox(width: 5,),
+*/
+                 /* SizedBox(width: 5,),
                   Padding(
                     padding: const EdgeInsets.only(right: 10.0),
                     child: CircleAvatar(
@@ -9860,7 +9863,79 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         child: Icon(Icons.filter_alt_rounded),
                       ),
                     ),
-                  ),
+                  ),*/
+                  Container(
+                    margin: EdgeInsets.only( top:10,right: 10),
+                    child: PopupMenuButton(
+                      iconColor: AllColors.primaryDark1,
+                      itemBuilder: (BuildContext context)  {
+                        List<PopupMenuEntry> items = [];
+                        items.add(
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete, color: AllColors.primaryDark1,),
+                                Text(' Clear Competitor Mapping'),
+                              ],
+                            ),
+                            onTap: () {
+                              clearCompetitorMapping(context,saleCycleController
+                                  .saleCycleList[0].salesCycleId!);
+                            },
+                          ),
+                        );
+                        items.add(
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.filter_alt_rounded,color: AllColors.primaryDark1,),
+                                Text(' Filter Items'),
+                              ],
+                            ),
+                            onTap: () {
+                              showDialogSalesCycleProductFilter(context);
+                            },
+                          ),
+                        );
+                        if(saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect"){
+                          items.add(
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.inventory,color: AllColors.primaryDark1,),
+                                  Text(' Fetch Sales Products'),
+                                ],
+                              ),
+                              onTap: () {
+                                fetchSalesProductsDiolog(context,saleCycleController
+                                    .saleCycleList[0].salesCycleId!);
+
+                              },
+                            ),
+                          );
+                        }
+                        if(saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="propose"){
+                          items.add(
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  Icon(Icons.inventory,color: AllColors.primaryDark1,),
+                                  Text(' From Quotation'),
+                                ],
+                              ),
+                              onTap: () {
+                                bindListBottomSheetQuotation(context  );
+
+                              },
+                            ),
+                          );
+                        }
+                        return items;
+                      },
+
+                    ),
+                  )
+
                 ],
               ),
             ),
@@ -11659,6 +11734,123 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
           )),
+    );
+  }
+
+
+  void fetchSalesProductsDiolog(BuildContext context, String salesCycleId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.info_outline_rounded,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Fetch',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to fetch sales product ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Expanded(
+                        child: DefaultButton(
+                          text: "Cancel",
+                          press: (){
+                            Get.back();
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 5,),
+                      Expanded(
+                        child: DefaultButton(
+                          text: "Confirm",
+                          press: (){
+                            saleCycleController.getSalesCycleCompetitorCreateFromProspectProducts(salesCycleId);
+                            Get.back();
+                            Get.back();
+                          },
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
+          );
+        });
+  }
+
+
+  void bindListBottomSheetQuotation(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      InkWell(
+                        child: CircleBackButton(
+                          press: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: Text(
+                          "Sales Cycle Products",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.sisxteen,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                      Spacer(),
+                    ],
+                  ),
+                ),
+                Center(
+                    child: Divider(
+                      height: 1,
+                      color: AllColors.primaryDark1,
+                    )),
+                Expanded(
+                    child: SingleChildScrollView(
+                        child: Obx(() {
+                          return bindQuoteData(context,"SaleCycleProduct");
+                        }),
+                    )),
+                 ],
+            ));
+      },
     );
   }
 }

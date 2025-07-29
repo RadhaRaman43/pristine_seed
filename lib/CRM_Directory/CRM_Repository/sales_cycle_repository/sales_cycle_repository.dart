@@ -223,4 +223,15 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.itemMasterGet,sessionManagement);
   }
 
+  Future<String> salesCycleCompetitorProductGetBySalesCycleIdApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleCompetitorProductGetBySalesCycleId,sessionManagement);
+  }
+
+
+
+  Future<String> salesCycleCompetitorCreateFromProspectProductsApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleCompetitorCreateFromProspectProducts,sessionManagement);
+  }
+
+
 }

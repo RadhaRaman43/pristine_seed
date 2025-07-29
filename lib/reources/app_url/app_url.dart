@@ -273,6 +273,8 @@ class AppUrl {
      static const String QuoteMstRejectReopen = "$BASE_URL/api/CRM/Quote/QuoteMstRejectReopen";
      static const String QuoteHeaderGetNew="$BASE_URL/api/CRM/Quote/QuoteHeaderGetNew";
      static const String SalesProductLineCompetitorClear="$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorClear";
+     static const String SalesCycleCompetitorProductGetBySalesCycleId="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorProductGetBySalesCycleId";
+     static const String SalesCycleCompetitorCreateFromProspectProducts="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorCreateFromProspectProducts";
 
    //todo SalesAdvise
      static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";

@@ -41,6 +41,8 @@ class SalesAdviseHeaderLineModal {
   int? isSpr;
   String? sprNo;
   String? quoteAccepted;
+  String? kindAttention;
+  String? termsAndCondition;
   int? isReadySendForApproval;
   double? quoteTotalQty;
   double? quoteTotalAmount;
@@ -103,6 +105,8 @@ class SalesAdviseHeaderLineModal {
         this.isSpr,
         this.sprNo,
         this.quoteAccepted,
+        this.kindAttention,
+        this.termsAndCondition,
         this.isReadySendForApproval,
         this.quoteTotalQty,
         this.quoteTotalAmount,
@@ -164,6 +168,8 @@ class SalesAdviseHeaderLineModal {
     isSpr = json['is_spr'];
     sprNo = json['spr_no'];
     quoteAccepted = json['quote_accepted'];
+    kindAttention = json['kind_attention'];
+    termsAndCondition = json['terms_and_condition'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
     quoteTotalQty = json['quote_total_qty'];
     quoteTotalAmount = json['quote_total_amount'];
@@ -233,6 +239,8 @@ class SalesAdviseHeaderLineModal {
     data['is_spr'] = this.isSpr;
     data['spr_no'] = this.sprNo;
     data['quote_accepted'] = this.quoteAccepted;
+    data['kind_attention'] = this.kindAttention;
+    data['terms_and_condition'] = this.termsAndCondition;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
     data['quote_total_qty'] = this.quoteTotalQty;
     data['quote_total_amount'] = this.quoteTotalAmount;

@@ -154,9 +154,87 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
           )),
     );
   }
-
-
   Widget BindSalesAdviseHeaderData(BuildContext context) {
+    final header = saleCycleController.salesAdviseHeaderLineList[0];
+    final status = header.salesAdviceStatus?.toLowerCase() ?? "";
+    final getStatusColor = (String status) {
+      switch (status) {
+        case "draft":
+          return Colors.red[900]!;
+        case "completed":
+          return Colors.green;
+        default:
+          return Colors.black;
+      }
+    };
+
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.all(15),
+      decoration: BoxDecoration(
+        border: Border.all(color: AllColors.grayColor),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: 'Sales Advise Header',
+          labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w700,
+            fontSize: AllFontSize.twentee,
+          ),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            buildLabelValueRow("Sales Cycle Id", header.salesCycleId),
+            buildLabelValueRow("Sales Quote Id", header.quoteId),
+            buildLabelValueRow("Customer Name", header.accountName),
+            buildLabelValueRow("Product Category", header.productCategory),
+            buildLabelValueRow("Sales Advise Status", header.salesAdviceStatus, valueColor: getStatusColor(status)),
+            buildLabelValueRow("Contact Name", header.contactName),
+            buildLabelValueRow("Expected Closure Date", StaticMethod.dateTimeToDate(header.expClosureDate??"")),
+            buildLabelValueRow("Quote Validity", StaticMethod.dateTimeToDate(header.quoteValidity??"")),
+            buildLabelValueRow("Kind Attention ",header.kindAttention),
+            buildLabelValueRow("Term & Condition ",header.termsAndCondition),
+            buildLabelValueRow("Quote Accepted",header.quoteAccepted),
+            buildLabelValueRow("Quote Commit", header.quoteCommit == "1" ? "Yes" : "No"),
+            buildLabelValueRow("Sales Advise Total Amt.", header.quoteTotalAmount?.toString()),
+            buildLabelValueRow("Sales Advise GST Amt.", header.quoteGstAmount?.toString()),
+            buildLabelValueRow("Sales Advise Gross Amt.", header.quoteGrossAmount?.toString()),
+            Row(
+              children: [
+                Text("Sales Product List", style: GoogleFonts.poppins(color: AllColors.primaryDark1, fontSize: AllFontSize.fourtine, fontWeight: FontWeight.w500)),
+                Spacer(),
+                InkWell(
+                  onTap: () {
+                    saleCycleController.clearSaleProductListController();
+                    saleCycleController.pageNumber = 0;
+                    saleCycleController.getSaleCycleProductByIdList(
+                      saleCycleController.pageNumber,
+                      header.salesCycleId!,
+                    );
+                    bindListBottomSheet(context);
+                  },
+                  child: Text("View", style: GoogleFonts.poppins(color: Colors.blueAccent, fontSize: AllFontSize.fourtine, fontWeight: FontWeight.w500, decoration: TextDecoration.underline)),
+                )
+              ],
+            ),
+            buildLabelValueRow("Created By", header.createdFullName),
+            buildLabelValueRow("Created on", StaticMethod.dateTimeToDate(header.createdOn??"")),
+            if (status == "completed") ...[
+              buildLabelValueRow("Completed by", header.completedBy),
+              buildLabelValueRow("Completed Full Name", header.completedFullName),
+              buildLabelValueRow("Completed On", StaticMethod.dateTimeToDate(header.completedOn??"")),
+            ]
+          ].map((w) => Padding(padding: const EdgeInsets.symmetric(vertical: 3), child: w)).toList(),
+        ),
+      ),
+    );
+  }
+
+
+ /* Widget BindSalesAdviseHeaderData(BuildContext context) {
     String? dateTimeCreatedOn = StaticMethod.dateTimeToDate(
         saleCycleController.salesAdviseHeaderLineList[0].createdOn ?? "");
     String? expectedclosuredate = StaticMethod.convertDateFormat1(
@@ -297,7 +375,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                     height: 3,
                   ),
 
-                  Row(
+             *//*     Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
@@ -329,7 +407,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                   ),
                   SizedBox(
                     height: 3,
-                  ),
+                  ),*//*
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -842,6 +920,39 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
           ),
         ],
       ),
+    );
+  }
+*/
+
+
+  Widget buildLabelValueRow(String label, String? value, {Color? valueColor}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value ?? '',
+            child: Text(
+              value ?? '',
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.end,
+              style: GoogleFonts.poppins(
+                color: valueColor ?? AllColors.textColor,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

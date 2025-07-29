@@ -56,6 +56,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle_view/sale_cycle_pending_for_app
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_create_quote_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_quote_information_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_product_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/update_bussiness_term_page.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/update_quote_line_data_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/view_sale_header_screen.dart';
@@ -632,6 +633,12 @@ class AppRoutes{
     ),
 
 
+    GetPage(name: RoutesName.salesCycleProduct,
+        page: ()=>SalesCycleProductList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
     GetPage(name: RoutesName.salesAdviseCreateScreen,
         page: ()=>SalesAdviseCreateScreen(),
         transitionDuration: Duration(microseconds: 180),
@@ -668,6 +675,8 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+
     GetPage(name: RoutesName.pendingDraftQuoteScreen,
         page: ()=>PendingDraftQuote(),
         transitionDuration: Duration(microseconds: 180),
