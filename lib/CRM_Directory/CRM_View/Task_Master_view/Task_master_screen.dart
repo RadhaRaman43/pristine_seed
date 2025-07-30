@@ -889,10 +889,16 @@ class TaskMasterScreen extends StatelessWidget {
                           TaskMaster_page_controller
                               .Task_Master_list[position]
                               .salesCycleId!, "ViewHeader", 'FromTaskScreen');
-                      salesCycleController.getSaleCycleProductByIdList(
+                     /* salesCycleController.getSaleCycleProductByIdList(
                           salesCycleController.pageNumber,
                           TaskMaster_page_controller
+                              .Task_Master_list[position].salesCycleId ?? "");*/
+
+                      salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                          salesCycleController.pageNumber ,
+                          TaskMaster_page_controller
                               .Task_Master_list[position].salesCycleId ?? "");
+
                       salesCycleController.itemCategorySelectedlist.value = [];
                       salesCycleController.getPurchaseProcessApi();
                       salesCycleController.getPurchaseTimeFrameApi();

@@ -19,7 +19,7 @@ class SalesCycleProductList extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Get.toNamed(RoutesName.homeScreen);
+        Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         return false;
       },
       child: Scaffold(
@@ -38,6 +38,36 @@ class SalesCycleProductList extends StatelessWidget{
                     fontWeight: FontWeight.w700,
                   ),
                 ),
+                Spacer(),
+
+                Obx((){
+                 return Visibility(
+                   visible: saleCycleController.salesCycleProductCheckedList.contains(true),
+                   child: ActionChip(
+                      label: Text(
+                        "Save",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.whiteColor,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      onPressed: () {
+                        saleCycleController.getSalesProductLineCompetitorCreate(
+                            saleCycleController.saleCycleList[0].salesCycleId!,
+                            "All",
+                            saleCycleController.get_SalesCycleProductById_List,
+                            0);
+                        Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+                      },
+                      backgroundColor: AllColors.primaryDark1,
+                      shape: StadiumBorder(
+                        side: BorderSide.none,
+                      ),
+                    ),
+                 );
+                })
+
+
               ],
             )
         ),
@@ -105,7 +135,6 @@ class SalesCycleProductList extends StatelessWidget{
   }
 
   Widget bindPendingListView(BuildContext context, int index) {
-    int srNo = index + 1;
     return InkWell(
       child: Card(
         child: ListTile(
@@ -854,25 +883,16 @@ class SalesCycleProductList extends StatelessWidget{
               SizedBox(
                 height: 6,
               ),
-
             ],
           ),
-          leading: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "${srNo}",
-                style: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontSize: AllFontSize.sisxteen,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
-              VerticalDivider(
-                color: Colors.grey,
-              )
-            ],
-          ),
+          leading: Obx((){
+            return Checkbox(
+              value:saleCycleController.salesCycleProductCheckedList[index],
+              onChanged: (bool? value)  {
+                saleCycleController.toggleCheckboxOfSalesCycleProducts(index);
+              },
+            );
+          })
         ),
       ),
     );

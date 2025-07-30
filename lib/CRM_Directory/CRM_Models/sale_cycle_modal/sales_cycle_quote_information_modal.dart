@@ -328,6 +328,7 @@ class QuoteItems {
   String? regretReason;
   String? categoryCode;
   String? categoryName;
+  bool? isSelected;
 
   QuoteItems(
       {this.quoteId,
@@ -375,7 +376,9 @@ class QuoteItems {
         this.regretOn,
         this.regretReason,
         this.categoryCode,
-        this.categoryName});
+        this.categoryName,
+        this.isSelected,
+      });
 
   QuoteItems.fromJson(Map<String, dynamic> json) {
     quoteId = json['quote_id'];
@@ -424,6 +427,7 @@ class QuoteItems {
     regretReason = json['regret_reason'];
     categoryCode = json['category_code'];
     categoryName = json['category_name'];
+    isSelected = json['is_selected'];
   }
 
   Map<String, dynamic> toJson() {
@@ -474,6 +478,7 @@ class QuoteItems {
     data['regret_reason'] = this.regretReason;
     data['category_code'] = this.categoryCode;
     data['category_name'] = this.categoryName;
+    data['is_selected'] = this.isSelected;
     return data;
   }
 }

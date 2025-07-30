@@ -2915,7 +2915,13 @@ class QuoteInformationScreen extends StatelessWidget {
                         onTap: () {
                           saleCycleController.clearSaleProductListController();
                           saleCycleController.pageNumber = 0;
-                          saleCycleController.getSaleCycleProductByIdList(
+
+
+                          /*saleCycleController.getSaleCycleProductByIdList(
+                              saleCycleController.pageNumber,
+                              saleCycleController
+                                  .quoteHeaderdata[0].salesCycleId!);*/
+                          saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
                               saleCycleController.pageNumber,
                               saleCycleController
                                   .quoteHeaderdata[0].salesCycleId!);
@@ -5028,12 +5034,16 @@ class QuoteInformationScreen extends StatelessWidget {
                                     saleCycleController.pageNumber = 0;
                                     saleCycleController
                                         .clearSaleProductListController();
-                                    saleCycleController
+                                    saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                        saleCycleController.pageNumber,
+                                        saleCycleController
+                                            .quoteHeaderdata[0].salesCycleId!);
+                                    /*saleCycleController
                                         .getSaleCycleProductByIdList(
                                             saleCycleController.pageNumber,
                                             saleCycleController
                                                 .quoteHeaderdata[0]
-                                                .salesCycleId!);
+                                                .salesCycleId!);*/
                                     Get.back();
                                   },
                                   child: Text(
@@ -5054,12 +5064,18 @@ class QuoteInformationScreen extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     saleCycleController.pageNumber = 0;
-                                    saleCycleController
+                                    /*saleCycleController
                                         .getSaleCycleProductByIdList(
                                             saleCycleController.pageNumber,
                                             saleCycleController
                                                 .quoteHeaderdata[0]
-                                                .salesCycleId!);
+                                                .salesCycleId!);*/
+
+
+                                    saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                        saleCycleController.pageNumber,
+                                        saleCycleController
+                                            .quoteHeaderdata[0].salesCycleId!);
                                     Get.back();
                                   },
                                   child: Text(
@@ -5236,10 +5252,15 @@ class QuoteInformationScreen extends StatelessWidget {
           //print(
           //"last index ${saleCycleController.pageNumberForQuote} ${saleCycleController.total_rows} ${saleCycleController.rowsPerPage} ${total_page}");
           if (saleCycleController.pageNumber + 1 < total_page) {
-            saleCycleController.getSaleCycleProductByIdList(
+            /*saleCycleController.getSaleCycleProductByIdList(
               saleCycleController.pageNumber + 1,
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
-            );
+            );*/
+
+            saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                saleCycleController.pageNumber + 1,
+                saleCycleController
+                    .quoteHeaderdata[0].salesCycleId!);
             saleCycleController.pageNumber += 1;
           }
         }

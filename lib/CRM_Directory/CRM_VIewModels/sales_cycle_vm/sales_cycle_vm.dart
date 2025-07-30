@@ -981,7 +981,7 @@ class SalesCycleVm extends GetxController {
     });
   }
 
-  getSaleCycleProductByIdList(int pageNumber, String SalesId) {
+  /*getSaleCycleProductByIdList(int pageNumber, String SalesId) {
     Map data = {
       "sales_cycle_id": SalesId,
       "created_by": email,
@@ -1046,7 +1046,7 @@ class SalesCycleVm extends GetxController {
     ).whenComplete(() {
       this.loading.value = false;
     });
-  }
+  }*/
 
   saleCycleQuoteCreate(String saleCycleId) {
     try {
@@ -1129,7 +1129,7 @@ class SalesCycleVm extends GetxController {
 
         if (response != null &&
             response.isNotEmpty &&
-            response[0].condition == "True") {
+            response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
           Utils.showToastification("Success!", response[0].message.toString());
           getItemCategoryMstApi(SalesId, TaskID);
@@ -1170,7 +1170,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
               pageNumberForQuote = 0;
               getQuoteHeaderData(
@@ -1196,7 +1196,7 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  void getQuoteHeaderInformation(String? quoteId, String flag) {
+  void getQuoteHeaderInformation(String? quoteId, String flag,) {
     try {
       Map<String, String> data = {
         "quote_id": quoteId.toString(),
@@ -1250,6 +1250,12 @@ class SalesCycleVm extends GetxController {
                     quoteLinedata[index.value].sgstAmt.toString();
                 updateGrossAmountLineController.value.text =
                     quoteLinedata[index.value].grossAmount.toString();
+              }
+              if(flag=="fromsalescycleproduct"){
+                Get.toNamed(RoutesName.salesCycleProduct);
+                salesCycleProductCheckedList.value =
+                    List.generate(quoteLinedata.length, (_) => false);
+                return;
               }
               Get.toNamed(RoutesName.quoteInformationScreen);
               quoteApprovalPage.value = flag;
@@ -1414,7 +1420,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response != null &&
                 response.length > 0 &&
-                response[0].condition == "True") {
+                response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
               if (pageNumber == 0) {
                 itemMstGetBySalesIdList.clear();
@@ -2118,7 +2124,10 @@ class SalesCycleVm extends GetxController {
                 itemMstGetBySalesIdApiHit(
                     pageNumberForItem, SalesId, PipeProdCate);
               }
-              getSaleCycleProductByIdList(pageNumber, SalesId);
+             // getSaleCycleProductByIdList(pageNumber, SalesId);
+              getsalesCycleCompetitorProductGetBySalesCycleId(
+                  pageNumber ,SalesId);
+
               loading.value = false;
             } else {
               print("message ${response[0].message.toString()}");
@@ -2162,7 +2171,10 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
-              getSaleCycleProductByIdList(pageNumber, SalesCycleid);
+             // getSaleCycleProductByIdList(pageNumber, SalesCycleid);
+
+              getsalesCycleCompetitorProductGetBySalesCycleId(
+                  pageNumber ,SalesCycleid);
               loading.value = false;
             } else {
               Utils.showErrorToastification(
@@ -4053,6 +4065,7 @@ class SalesCycleVm extends GetxController {
           "competitor_name": item.competitorName ?? "",
           "competitor_price": item.competitorPrice ?? 0.0,
           "loss_reason": item.lossReason ?? "",
+          "methodex_price": item.methodexPrice??"",
         });
       }
     } else if (selectedIndex != null &&
@@ -4065,10 +4078,10 @@ class SalesCycleVm extends GetxController {
         "item_description": item.itemDescription ?? "",
         "qty": item.qty ?? 0,
         "line_status": item.lineStatus ?? "",
-        "competitor_name": updateCompetitorNameProductController.value.text,
-        "competitor_price": updateCompetitorPriceProductController.value.text,
-        "loss_reason": updateLossReasonProductController.value.text,
-        "methodex_price": updateMethodexPriceController.value.text,
+        "competitor_name": updateCompetitorNameProductController.value.text.isNotEmpty?updateCompetitorNameProductController.value.text:"",
+        "competitor_price": updateCompetitorPriceProductController.value.text.isNotEmpty? updateCompetitorPriceProductController.value.text:0,
+        "loss_reason": updateLossReasonProductController.value.text.isNotEmpty?updateLossReasonProductController.value.text:"",
+        "methodex_price": updateMethodexPriceController.value.text.isNotEmpty?updateMethodexPriceController.value.text:0,
       });
     }
 
@@ -4094,7 +4107,9 @@ class SalesCycleVm extends GetxController {
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               clearSaleProductListController();
-              getSaleCycleProductByIdList(pageNumber, sales_cycle_id);
+            //  getSaleCycleProductByIdList(pageNumber, );
+              getsalesCycleCompetitorProductGetBySalesCycleId(
+                  pageNumber ,sales_cycle_id);
               loading.value = false;
             } else {
               loading.value = false;
@@ -5070,9 +5085,11 @@ class SalesCycleVm extends GetxController {
                   "Success !", response[0].message.toString());
               pageNumber = 0;
               clearSaleProductListController();
-             getSaleCycleProductByIdList(
+             /*getSaleCycleProductByIdList(
                 pageNumber,
-                  salesId);
+                  salesId);*/
+              getsalesCycleCompetitorProductGetBySalesCycleId(
+                  pageNumber ,salesId);
               loading.value = false;
             } else {
               loading.value = false;
@@ -5233,4 +5250,106 @@ class SalesCycleVm extends GetxController {
       loading.value = false;
     }
   }
+
+
+  var salesCycleProductCheckedList = <bool>[].obs;
+
+  void toggleCheckboxOfSalesCycleProducts(int index) {
+    salesCycleProductCheckedList[index] = !salesCycleProductCheckedList[index];
+  }
+
+
+
+  getsalesCycleCompetitorProductGetBySalesCycleId(int pageNumber, String SalesId) {
+    Map data = {
+      "quote_id":"" ,
+      "sales_cycle_id": SalesId,
+      "created_by": email,
+      "item_code": itemCodeController.value.text.isNotEmpty
+          ? itemCodeController.value.text
+          : "",
+      "item_description": updateItemDescriptionController.value.text.isNotEmpty
+          ? updateItemDescriptionController.value.text
+          : "",
+      "category_name": categoryNameController.value.text.isNotEmpty
+          ? categoryNameController.value.text
+          : "",
+      "competitor_name": updateCompetitorNameProductController.value.text.isNotEmpty
+          ? updateCompetitorNameProductController.value.text
+          : "",
+      "loss_reason": updateLossReasonProductController.value.text.isNotEmpty
+          ? updateLossReasonProductController.value.text
+          : "",
+      "rowsPerPage": rowsPerPage,
+      "pageNumber": pageNumber
+    };
+
+
+   /* {
+      "sales_cycle_id": SalesId,
+      "created_by": email,
+      "item_code": itemCodeController.value.text.isNotEmpty
+          ? itemCodeController.value.text
+          : "",
+      "item_description": updateItemDescriptionController.value.text.isNotEmpty
+          ? updateItemDescriptionController.value.text
+          : "",
+      "category_name": categoryNameController.value.text.isNotEmpty
+          ? categoryNameController.value.text
+          : "",
+      "competitor_name":
+          updateCompetitorNameProductController.value.text.isNotEmpty
+              ? updateCompetitorNameProductController.value.text
+              : "",
+      "loss_reason": updateLossReasonProductController.value.text.isNotEmpty
+          ? updateLossReasonProductController.value.text
+          : "",
+      "rowsPerPage": rowsPerPage,
+      "pageNumber": pageNumber
+    };*/
+    loading.value = true;
+    _api.salesCycleCompetitorProductGetBySalesCycleIdApiHit(data, sessionManagement).then(
+      (onValue) {
+        try {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleByIdModel> response = jsonResponse
+                .map((e) => SalesCycleByIdModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition?.toLowerCase() == "true") {
+              if (pageNumber == 0) {
+                get_SalesCycleProductById_List.clear();
+              }
+              get_SalesCycleProductById_List.addAll(response);
+              print('listSize.....${saleCycleList.length}');
+              total_rows_sale_cyle_item =
+                  int.parse(get_SalesCycleProductById_List[0].totalRows!);
+            } else {
+              // Utils.showErrorToastification("Else!", "No Record Found");
+              get_SalesCycleProductById_List.value = [];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            // Utils.showExceptionToastification("Api Error!", jsonResponse);
+          }
+        } catch (e) {
+          print(e);
+        } finally {
+          loading.value = false;
+        }
+      },
+    ).onError(
+      (error, stackTrace) {
+        print('sjdbbsidbi${error}');
+      },
+    ).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+
 }

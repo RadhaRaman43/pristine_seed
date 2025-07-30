@@ -390,10 +390,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.pageNumber = 0;
                               saleCycleController
                                   .clearSaleProductListController();
-                              saleCycleController.getSaleCycleProductByIdList(
+                              /*saleCycleController.getSaleCycleProductByIdList(
+                                  saleCycleController.pageNumber,
+                                  saleCycleController
+                                      .saleCycleList[0].salesCycleId!);*/
+
+                              saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
                                   saleCycleController.pageNumber,
                                   saleCycleController
                                       .saleCycleList[0].salesCycleId!);
+
+
                               bindListBottomSheet(context,"");
                             },
                           ),
@@ -3663,7 +3670,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             saleCycleController
                                 .clearSaleProductListController();
                             saleCycleController.pageNumber = 0;
-                            saleCycleController.getSaleCycleProductByIdList(
+                            /*saleCycleController.getSaleCycleProductByIdList(
+                                saleCycleController.pageNumber,
+                                saleCycleController
+                                    .saleCycleList[0].salesCycleId!);*/
+
+
+                            saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
                                 saleCycleController.pageNumber,
                                 saleCycleController
                                     .saleCycleList[0].salesCycleId!);
@@ -4133,10 +4146,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           //print(
           //"last index ${saleCycleController.pageNumberForQuote} ${saleCycleController.total_rows} ${saleCycleController.rowsPerPage} ${total_page}");
           if (saleCycleController.pageNumber + 1 < total_page) {
-            saleCycleController.getSaleCycleProductByIdList(
+
+            saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                saleCycleController.pageNumber + 1,
+                saleCycleController.salesCycleId.value);
+
+            /*saleCycleController.getSaleCycleProductByIdList(
               saleCycleController.pageNumber + 1,
               saleCycleController.salesCycleId.value,
-            );
+            );*/
             saleCycleController.pageNumber += 1;
           }
         }
@@ -4938,15 +4956,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                   InkWell(
                       onTap: () {
+                        String flag="";
                         if(flagForManage=="Quote"){
+                          flag="fromQuote";
+                        }else{
+                          flag="fromsalescycleproduct";
+                        }
                           saleCycleController.quoteId.value =
                           saleCycleController.quoteList[index].quoteId!;
                           saleCycleController.getQuoteHeaderInformation(
-                              saleCycleController.quoteList[index].quoteId, "");
-                        }else {
-                         //saleCycleController.
-                        }
-
+                              saleCycleController.quoteList[index].quoteId, flag);
                       },
                       child: Icon(
                         Icons.remove_red_eye,
@@ -9925,7 +9944,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               ),
                               onTap: () {
                                 bindListBottomSheetQuotation(context  );
-
                               },
                             ),
                           );
@@ -10131,11 +10149,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     saleCycleController.pageNumber = 0;
                                     saleCycleController
                                         .clearSaleProductListController();
-                                    saleCycleController
+                                   /* saleCycleController
                                         .getSaleCycleProductByIdList(
                                             saleCycleController.pageNumber,
                                             saleCycleController.saleCycleList[0]
-                                                .salesCycleId!);
+                                                .salesCycleId!);*/
+
+                                    saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                        saleCycleController.pageNumber,
+                                        saleCycleController
+                                            .saleCycleList[0].salesCycleId!);
                                     Get.back();
                                   },
                                   child: Text(
@@ -10156,11 +10179,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                   onPressed: () {
                                     saleCycleController.pageNumber = 0;
-                                    saleCycleController
+                                    saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                        saleCycleController.pageNumber,
+                                        saleCycleController
+                                            .saleCycleList[0].salesCycleId!);
+                                    /*saleCycleController
                                         .getSaleCycleProductByIdList(
                                             saleCycleController.pageNumber,
                                             saleCycleController.saleCycleList[0]
-                                                .salesCycleId!);
+                                                .salesCycleId!);*/
                                     Get.back();
                                   },
                                   child: Text(
@@ -10436,11 +10463,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     )),
                                 onPressed: () {
                                   saleCycleController.pageNumber = 0;
-                                  saleCycleController
+                                  /*saleCycleController
                                       .getSaleCycleProductByIdList(
                                           saleCycleController.pageNumber,
                                           saleCycleController
-                                              .saleCycleList[0].salesCycleId!);
+                                              .saleCycleList[0].salesCycleId!);*/
+
+                                  saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                      saleCycleController.pageNumber,
+                                      saleCycleController
+                                          .saleCycleList[0].salesCycleId!);
                                   Get.back();
                                 },
                                 child: Text(
@@ -10467,11 +10499,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   saleCycleController.pageNumber = 0;
                                   saleCycleController
                                       .clearSaleProductListController();
-                                  saleCycleController
+                                /*  saleCycleController
                                       .getSaleCycleProductByIdList(
                                           saleCycleController.pageNumber,
                                           saleCycleController
                                               .saleCycleList[0].salesCycleId!);
+*/
+                                  saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                      saleCycleController.pageNumber,
+                                      saleCycleController
+                                          .saleCycleList[0].salesCycleId!);
                                   Get.back();
                                 },
                                 child: Text(
@@ -11825,7 +11862,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(left: 5.0),
                         child: Text(
-                          "Sales Cycle Products",
+                          "All Quote List",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.sisxteen,
@@ -11833,7 +11870,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      Spacer(),
+
                     ],
                   ),
                 ),

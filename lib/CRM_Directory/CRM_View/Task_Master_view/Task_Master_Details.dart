@@ -1491,8 +1491,14 @@ class TaskMasterDetails extends StatelessWidget{
                     salesCycleController.pageNumber=0;
                     salesCycleController.clearAllFieldOfFilter();
                     salesCycleController.getsalesCycleData( salesCycleController.pageNumber, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!, "ViewHeader", 'Task');
-                    salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber, TaskMaster_page_controller
-                        .Task_Master_list[0].salesCycleId??"" );
+                    /*salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber, TaskMaster_page_controller
+                        .Task_Master_list[0].salesCycleId??"" );*/
+
+                    salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                        salesCycleController.pageNumber ,
+                        TaskMaster_page_controller
+                            .Task_Master_list[0].salesCycleId??"");
+
                     salesCycleController.itemCategorySelectedlist.value = [];
                     salesCycleController.getPurchaseProcessApi();
                     salesCycleController.getPurchaseTimeFrameApi();
