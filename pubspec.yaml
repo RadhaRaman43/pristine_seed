@@ -80,6 +80,7 @@ dependencies:
   #awesome_notifications: ^0.7.4+1
   email_validator: ^3.0.0
   gstvalidator: ^0.0.1
+  fl_chart: ^0.66.1
 
 dev_dependencies:
   flutter_test:

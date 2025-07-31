@@ -35,6 +35,7 @@ import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/BusinessTourApprovalLis
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/BusinessTourPlanDetails_Screen.dart';
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_approve_rejected.dart';
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_plan_screen.dart';
+import '../../CRM_Directory/CRM_View/Call_Dashboard_view/call_Dashboard_View_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
@@ -718,6 +719,13 @@ class AppRoutes{
 
     GetPage(name: RoutesName.BusinessTourApproveRejectListScreen,
         page: ()=>BussinessTourApproveRejected(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.callDashboardViewScreen,
+        page: ()=>CallDashboardViewScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

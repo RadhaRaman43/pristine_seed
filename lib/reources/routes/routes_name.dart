@@ -147,6 +147,9 @@ class RoutesName{
   static const empMarkLeaveScreen="/emp_mark_leave_screen";
   static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";
 
+  //todo Dashboard Screens
+  static const callDashboardViewScreen="/call_Dashboard_View_Screen";
+
 
   //todo image not found...
 

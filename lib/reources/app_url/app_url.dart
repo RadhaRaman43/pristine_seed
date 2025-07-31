@@ -306,4 +306,8 @@ class AppUrl {
      static const String BusinessTourplanApprovalGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApprovalGet";
      static const String BusinessTourPlanApproveReject="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApproveReject";
 
+
+     //todo dashboard url
+     static const String CallDashboard="$BASE_URL/api/CRM/Dashboard/CallDashboard";
+     static const String CallDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/CallDashboardUserWiseData";
 }
