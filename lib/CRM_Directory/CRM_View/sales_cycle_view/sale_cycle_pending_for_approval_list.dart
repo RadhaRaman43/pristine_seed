@@ -178,8 +178,8 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCycleController.getItemCategoryMstApi(salesCycleId ,taskId );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleId);
           salesCycleController.pageNumber=0;
-          //salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleId);
-          salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(salesCycleController.pageNumber,salesCycleId);
+          salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleId);
+         // salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(salesCycleController.pageNumber,salesCycleId);
           salesCycleController.clearAllFieldOfQuoteFilter();
 
         },

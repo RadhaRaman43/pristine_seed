@@ -84,6 +84,7 @@ class SalesCycleVm extends GetxController {
   int total_rows_items = 0;
   int total_rows_sales = 0;
   int total_rows_sale_cyle_item = 0;
+  int total_rows_Sales_cycle_product = 0;
   RxBool isDeleteBtn = true.obs;
   RxBool qtyUpdateBool = true.obs;
   RxBool isApprovalVisible = false.obs;
@@ -127,6 +128,10 @@ class SalesCycleVm extends GetxController {
   RxList<CustomList> get_PurchaseProcess_list = <CustomList>[].obs;
   RxList<CustomList> get_PurchaseTimeFrame_list = <CustomList>[].obs;
   RxList<SalesCycleByIdModel> get_SalesCycleProductById_List =
+      <SalesCycleByIdModel>[].obs;
+
+
+  RxList<SalesCycleByIdModel> competitorMappingSalesCycleProductList =
       <SalesCycleByIdModel>[].obs;
 
   RxList<SalesAdviseHeaderModal> salesAdviseHeaderList =
@@ -981,7 +986,7 @@ class SalesCycleVm extends GetxController {
     });
   }
 
-  /*getSaleCycleProductByIdList(int pageNumber, String SalesId) {
+  getSaleCycleProductByIdList(int pageNumber, String SalesId) {
     Map data = {
       "sales_cycle_id": SalesId,
       "created_by": email,
@@ -1046,7 +1051,7 @@ class SalesCycleVm extends GetxController {
     ).whenComplete(() {
       this.loading.value = false;
     });
-  }*/
+  }
 
   saleCycleQuoteCreate(String saleCycleId) {
     try {
@@ -1251,6 +1256,8 @@ class SalesCycleVm extends GetxController {
                 updateGrossAmountLineController.value.text =
                     quoteLinedata[index.value].grossAmount.toString();
               }
+              quoteApprovalPage.value = flag;
+              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
               if(flag=="fromsalescycleproduct"){
                 Get.toNamed(RoutesName.salesCycleProduct);
                 salesCycleProductCheckedList.value =
@@ -1258,8 +1265,7 @@ class SalesCycleVm extends GetxController {
                 return;
               }
               Get.toNamed(RoutesName.quoteInformationScreen);
-              quoteApprovalPage.value = flag;
-              getApprovalPersonList(quoteHeaderdata[0].quoteId!);
+
               /*if (flag == "quoteApprovalScreen") {
                 print("Approver person");
                 getApprovalPersonList(quoteHeaderdata[0].quoteId!);
@@ -2099,7 +2105,7 @@ class SalesCycleVm extends GetxController {
           "qty": qtyUpdateLineController.value.text.isNotEmpty
               ? qtyUpdateLineController.value.text
               : 0,
-          "line_status": "Pending"
+          "line_status": "pending"
         }
       ]
     };
@@ -2124,9 +2130,8 @@ class SalesCycleVm extends GetxController {
                 itemMstGetBySalesIdApiHit(
                     pageNumberForItem, SalesId, PipeProdCate);
               }
-             // getSaleCycleProductByIdList(pageNumber, SalesId);
-              getsalesCycleCompetitorProductGetBySalesCycleId(
-                  pageNumber ,SalesId);
+              getSaleCycleProductByIdList(pageNumber, SalesId);
+              //getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesId);
 
               loading.value = false;
             } else {
@@ -2171,10 +2176,9 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
-             // getSaleCycleProductByIdList(pageNumber, SalesCycleid);
+              getSaleCycleProductByIdList(pageNumber, SalesCycleid);
 
-              getsalesCycleCompetitorProductGetBySalesCycleId(
-                  pageNumber ,SalesCycleid);
+              //getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesCycleid);
               loading.value = false;
             } else {
               Utils.showErrorToastification(
@@ -4107,9 +4111,8 @@ class SalesCycleVm extends GetxController {
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               clearSaleProductListController();
-            //  getSaleCycleProductByIdList(pageNumber, );
-              getsalesCycleCompetitorProductGetBySalesCycleId(
-                  pageNumber ,sales_cycle_id);
+             // getSaleCycleProductByIdList(pageNumber,sales_cycle_id );
+              getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,sales_cycle_id);
               loading.value = false;
             } else {
               loading.value = false;
@@ -5088,8 +5091,7 @@ class SalesCycleVm extends GetxController {
              /*getSaleCycleProductByIdList(
                 pageNumber,
                   salesId);*/
-              getsalesCycleCompetitorProductGetBySalesCycleId(
-                  pageNumber ,salesId);
+             getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,salesId);
               loading.value = false;
             } else {
               loading.value = false;
@@ -5226,7 +5228,9 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
               pageNumber=0;
-              getsalesCycleData(pageNumber, salesCycleId, "ViewHeader", 'Sales');
+              getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber, salesCycleId);
+              //getsalesCycleData(pageNumber, salesCycleId, "ViewHeader", 'Sales');
+
               Utils.showToastification(
                   "Success !", response[0].message.toString());
             } else {
@@ -5321,20 +5325,16 @@ class SalesCycleVm extends GetxController {
                 response.length > 0 &&
                 response[0].condition?.toLowerCase() == "true") {
               if (pageNumber == 0) {
-                get_SalesCycleProductById_List.clear();
+                competitorMappingSalesCycleProductList.clear();
               }
-              get_SalesCycleProductById_List.addAll(response);
-              print('listSize.....${saleCycleList.length}');
-              total_rows_sale_cyle_item =
-                  int.parse(get_SalesCycleProductById_List[0].totalRows!);
+              competitorMappingSalesCycleProductList.addAll(response);
+              total_rows_Sales_cycle_product =
+                  int.parse(competitorMappingSalesCycleProductList[0].totalRows!);
             } else {
-              // Utils.showErrorToastification("Else!", "No Record Found");
-              get_SalesCycleProductById_List.value = [];
+              competitorMappingSalesCycleProductList.value = [];
             }
           } else {
             loading.value = false;
-            // service_indent_header_list.value = [];
-            // Utils.showExceptionToastification("Api Error!", jsonResponse);
           }
         } catch (e) {
           print(e);
@@ -5344,7 +5344,6 @@ class SalesCycleVm extends GetxController {
       },
     ).onError(
       (error, stackTrace) {
-        print('sjdbbsidbi${error}');
       },
     ).whenComplete(() {
       this.loading.value = false;

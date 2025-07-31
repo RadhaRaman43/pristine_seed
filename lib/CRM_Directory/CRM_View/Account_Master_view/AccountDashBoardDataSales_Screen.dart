@@ -225,11 +225,11 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                         .salesCycleId!, "ViewHeader", 'FromDashboard');
                     salesCycleController.pageNumber=0;
 
-                    salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                    /*salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
                         salesCycleController.pageNumber ,
-                        accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
+                        accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);*/
 
-                    //salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
+                    salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
                   },
 
                 ),
