@@ -10235,16 +10235,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  saleCycleController.competitorMappingSalesCycleProductList
+                                  saleCycleController.get_SalesCycleProductById_List
                                       .length >
                                       0
                                       ? (saleCycleController
-                                      .competitorMappingSalesCycleProductList[0]
+                                      .get_SalesCycleProductById_List[0]
                                       .productTotalQty ==
                                       null
                                       ? "0"
                                       : saleCycleController
-                                      .competitorMappingSalesCycleProductList[0]
+                                      .get_SalesCycleProductById_List[0]
                                       .productTotalQty
                                       .toString())
                                       : "",
@@ -10267,16 +10267,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  saleCycleController.competitorMappingSalesCycleProductList
+                                  saleCycleController.get_SalesCycleProductById_List
                                       .length >
                                       0
                                       ? (saleCycleController
-                                      .competitorMappingSalesCycleProductList[0]
+                                      .get_SalesCycleProductById_List[0]
                                       .productTotalAmount ==
                                       null
                                       ? "0"
                                       : saleCycleController
-                                      .competitorMappingSalesCycleProductList[0]
+                                      .get_SalesCycleProductById_List[0]
                                       .productTotalAmount
                                       .toString())
                                       : "",
@@ -12540,7 +12540,10 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       "rejected" ,
               child: GestureDetector(
                 onTap: () {
-
+                  saleCycleController.getsalesProductLineCompetitorDelete( saleCycleController
+                      .saleCycleList[0].salesCycleId!,saleCycleController
+                      .competitorMappingSalesCycleProductList[index]
+                      .lineNo);
                 },
                 child: Icon(
                   Icons.delete,

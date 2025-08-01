@@ -1256,14 +1256,16 @@ class SalesCycleVm extends GetxController {
                 updateGrossAmountLineController.value.text =
                     quoteLinedata[index.value].grossAmount.toString();
               }
-              quoteApprovalPage.value = flag;
+
               getApprovalPersonList(quoteHeaderdata[0].quoteId!);
               if(flag=="fromsalescycleproduct"){
                 Get.toNamed(RoutesName.salesCycleProduct);
                 salesCycleProductCheckedList.value =
                     List.generate(quoteLinedata.length, (_) => false);
+                competitorMappSalesCycleProducts.value=quoteLinedata;
                 return;
               }
+              quoteApprovalPage.value = flag;
               Get.toNamed(RoutesName.quoteInformationScreen);
 
               /*if (flag == "quoteApprovalScreen") {
@@ -3790,9 +3792,9 @@ class SalesCycleVm extends GetxController {
   //todo checkbox indexex select variable...
   var checkBoxValues = <int, bool>{}.obs;
 //todo chip button visible function...
-  get isAnyCheckboxSelected {
+ /* get isAnyCheckboxSelected {
     return checkBoxValues.values.any((value) => value == true);
-  }
+  }*/
 
   /* void toggleMultiCheckbox(int index) {
     final bool isChecked = checkBoxValues[index] ?? false;
@@ -5262,6 +5264,27 @@ class SalesCycleVm extends GetxController {
     salesCycleProductCheckedList[index] = !salesCycleProductCheckedList[index];
   }
 
+/*  RxList<salesCycle.QuoteItems> salesAdviceItemList =
+      <salesCycle.QuoteItems>[].obs;*/
+
+  RxList<salesCycle.QuoteItems>  competitorMappSalesCycleProducts=
+      <salesCycle.QuoteItems>[].obs;
+
+  List<salesCycle.QuoteItems> getSelectedQSalesCycleProductAsJson() {
+    List<salesCycle.QuoteItems> selected = [];
+
+    int minLength = competitorMappSalesCycleProducts.length < salesCycleProductCheckedList.length
+        ? competitorMappSalesCycleProducts.length
+        : salesCycleProductCheckedList.length;
+
+    for (int i = 0; i < minLength; i++) {
+      if (salesCycleProductCheckedList[i]) {
+        selected.add(competitorMappSalesCycleProducts[i]);
+      }
+    }
+    return selected;
+  }
+
 
 
   getsalesCycleCompetitorProductGetBySalesCycleId(int pageNumber, String SalesId) {
@@ -5288,29 +5311,6 @@ class SalesCycleVm extends GetxController {
       "pageNumber": pageNumber
     };
 
-
-   /* {
-      "sales_cycle_id": SalesId,
-      "created_by": email,
-      "item_code": itemCodeController.value.text.isNotEmpty
-          ? itemCodeController.value.text
-          : "",
-      "item_description": updateItemDescriptionController.value.text.isNotEmpty
-          ? updateItemDescriptionController.value.text
-          : "",
-      "category_name": categoryNameController.value.text.isNotEmpty
-          ? categoryNameController.value.text
-          : "",
-      "competitor_name":
-          updateCompetitorNameProductController.value.text.isNotEmpty
-              ? updateCompetitorNameProductController.value.text
-              : "",
-      "loss_reason": updateLossReasonProductController.value.text.isNotEmpty
-          ? updateLossReasonProductController.value.text
-          : "",
-      "rowsPerPage": rowsPerPage,
-      "pageNumber": pageNumber
-    };*/
     loading.value = true;
     _api.salesCycleCompetitorProductGetBySalesCycleIdApiHit(data, sessionManagement).then(
       (onValue) {
@@ -5330,6 +5330,7 @@ class SalesCycleVm extends GetxController {
               competitorMappingSalesCycleProductList.addAll(response);
               total_rows_Sales_cycle_product =
                   int.parse(competitorMappingSalesCycleProductList[0].totalRows!);
+
             } else {
               competitorMappingSalesCycleProductList.value = [];
             }
@@ -5351,4 +5352,117 @@ class SalesCycleVm extends GetxController {
   }
 
 
+  getsalesProductLineCompetitorDelete(String SalesId, dynamic line_no) {
+    Map data = {
+      "sales_cycle_id": SalesId,
+      "quote_id": "",
+      "line_no": line_no,
+      "created_by": email
+    };
+
+    loading.value = true;
+    _api.salesProductLineCompetitorDeleteApiHit(data, sessionManagement).then(
+          (onValue) {
+        try {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+             Utils.showToastification("Success", response[0].message.toString());
+             getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesId);
+            } else {
+              Utils.showErrorToastification("False Message", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        } catch (e) {
+          print(e);
+        } finally {
+          loading.value = false;
+        }
+      },
+    ).onError(
+          (error, stackTrace) {
+      },
+    ).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+
+  getSalesProductLineCompetitorFromCompeMappCreate(
+      String sales_cycle_id,
+      String quote_accepted,
+      List<salesCycle.QuoteItems> selectedList,
+      ) {
+    loading.value = true;
+    List<Map<String, dynamic>> lineData = [];
+      for (int i = 0; i < selectedList.length; i++) {
+        final item = selectedList[i];
+        lineData.add({
+          "line_no": -1,
+          "item_code": item.itemCode ?? "",
+          "item_description": item.itemDescription ?? "",
+          "qty": item.qty ?? 0,
+          "line_status": item.lineStatus ?? "",
+          "competitor_name":  "",
+          "competitor_price":  0,
+          "loss_reason":  "",
+          "methodex_price": 0,
+        });
+      }
+    Map<String, dynamic> data = {
+      "sales_cycle_id": sales_cycle_id,
+      "quote_accepted":quote_accepted ,
+      "created_by": email,
+      "flag": "All",
+      "lines": lineData,
+    };
+    try {
+      print(data);
+      _api.SalesProductLineCompetitorCreateApiHit(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.showToastification(
+                  "Message !", response[0].message.toString());
+              pageNumber = 0;
+              clearSaleProductListController();
+              // getSaleCycleProductByIdList(pageNumber,sales_cycle_id );
+               getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,sales_cycle_id);
+              pageNumberForQuote=0;
+              getQuoteHeaderData(pageNumberForQuote, sales_cycle_id,"");
+               Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+              loading.value = false;
+            } else {
+              loading.value = false;
+              Utils.showErrorToastification(
+                  "False Message !", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    } catch (e) {
+      Utils.sanckBarException("Message !", e.toString());
+      loading.value = false;
+      print(e);
+    } finally {
+      loading.value = false;
+    }
+  }
 }

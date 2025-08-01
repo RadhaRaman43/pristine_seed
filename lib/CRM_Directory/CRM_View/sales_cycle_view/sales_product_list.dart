@@ -9,6 +9,7 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
 import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class SalesCycleProductList extends StatelessWidget{
@@ -52,12 +53,17 @@ class SalesCycleProductList extends StatelessWidget{
                         ),
                       ),
                       onPressed: () {
-                        saleCycleController.getSalesProductLineCompetitorCreate(
-                            saleCycleController.saleCycleList[0].salesCycleId!,
-                            "All",
-                            saleCycleController.get_SalesCycleProductById_List,
-                            0);
-                        Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
+
+
+                        List<QuoteItems> selectedJsonList = saleCycleController.getSelectedQSalesCycleProductAsJson();
+                        if(selectedJsonList.length>0){
+                          saleCycleController.getSalesProductLineCompetitorFromCompeMappCreate(
+                              saleCycleController.saleCycleList[0].salesCycleId!,
+                              saleCycleController.saleCycleList[0].quoteAccepted!,
+                              selectedJsonList);
+                          //saleCycleController.getSalesAdviceCreate(selectedJsonList,saleCycleController.quoteHeaderdata[0].quoteId??"");
+                        }
+
                       },
                       backgroundColor: AllColors.primaryDark1,
                       shape: StadiumBorder(
