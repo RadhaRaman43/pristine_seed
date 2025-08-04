@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:ffi';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/dashboard_models/call_DashBoard_Model.dart';
 import '../../CRM_Models/dashboard_models/call_dashboard_user_wise_Data_model.dart';
 import '../../CRM_Repository/dashboard_repository/dashboard_repo.dart';
@@ -19,14 +22,26 @@ class CallDashboardVm extends GetxController{
   var selectedOption = 'Employee'.obs;
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
+  RxString character = 'Month'.obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
-  int total_rows = 0;
+  RxInt total_rows = 0.obs;
 
   RxList<CallDashboardModel> callDashboardList = <CallDashboardModel>[].obs;
   RxList<Records> callDashboardRecordList = <Records>[].obs;
   RxList<CallDashboardUserWiseDataModel> callDashboardUserWiseDataList = <CallDashboardUserWiseDataModel>[].obs;
+
+  RxList<String> TaskStatusListTypeList = <String>[].obs;
+  RxList<String> selectedTaskStatusList = <String>[].obs;
+  RxList<CallStatusMasterModel> DSARStatus_Master_list = <CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+
+  var filterCustomDateController=TextEditingController().obs;
+  var task_Status_controller=TextEditingController().obs;
+  var AccountOwner_controller=TextEditingController().obs;
 
 
   @override
@@ -34,10 +49,13 @@ class CallDashboardVm extends GetxController{
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
+    TaskStatusListTypeList.value = ['All','Pending','Pending For Approval', 'Approved', 'Rejected'];
     DateRange("month");
-
+    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     callDashboardData();
     //getDashboardUserWiseData(pageNumber);
+    CallDSARsMasterApiHit();
+    getEmployeeMemberApi();
   }
 
   void DateRange(String type) {
@@ -60,6 +78,23 @@ class CallDashboardVm extends GetxController{
       case 'month':
         startDate = DateTime(now.year, now.month, 1);
         endDate = DateTime(now.year, now.month + 1, 0);
+        break;
+
+      case 'quarterly':
+        int currentMonth = now.month;
+        if (currentMonth >= 1 && currentMonth <= 3) {
+          startDate = DateTime(now.year, 1, 1);
+          endDate = DateTime(now.year, 3, 31);
+        } else if (currentMonth >= 4 && currentMonth <= 6) {
+          startDate = DateTime(now.year, 4, 1);
+          endDate = DateTime(now.year, 6, 30);
+        } else if (currentMonth >= 7 && currentMonth <= 9) {
+          startDate = DateTime(now.year, 7, 1);
+          endDate = DateTime(now.year, 9, 30);
+        } else {
+          startDate = DateTime(now.year, 10, 1);
+          endDate = DateTime(now.year, 12, 31);
+        }
         break;
 
       case 'financial':
@@ -94,11 +129,12 @@ class CallDashboardVm extends GetxController{
         "email_id": email,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
+        "filter_type_of_call": "All",
         "filter_owner_name": '',
         "filter_region_name": '',
         "filter_cluster_name": '',
         "filter_product_category": '',
-        "filter_activity_status": '',
+        "filter_activity_status": 'All',
         "filter_customer_name": '',
         "filter_task_approval_status": 'All',
       };
@@ -119,7 +155,7 @@ class CallDashboardVm extends GetxController{
           callDashboardList.value = response;
           callDashboardRecordList.value = response[0].records ?? [];
           print('baisgdiuasgi du${response}');
-          getDashboardUserWiseData(pageNumber);
+
         } else {
           Utils.showErrorToastification(
               "False Message !", response[0].message.toString());
@@ -130,6 +166,7 @@ class CallDashboardVm extends GetxController{
       print("API error: $e");
     } finally {
       loading.value = false;
+      getDashboardUserWiseData(pageNumber);
     }
   }
 
@@ -142,12 +179,12 @@ class CallDashboardVm extends GetxController{
         "emp_email_id": "",
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
-        "filter_type_of_call": "",
+        "filter_type_of_call": "All",
         "filter_owner_name": "",
         "filter_region_name": "",
         "filter_cluster_name": "",
         "filter_product_category": "",
-        "filter_activity_status": "",
+        "filter_activity_status": "All",
         "filter_customer_name": "",
         "filter_task_approval_status": "All",
         "rowsPerPage": rowsPerPage,
@@ -180,7 +217,7 @@ class CallDashboardVm extends GetxController{
             }
             callDashboardUserWiseDataList.addAll(response);
             print("${callDashboardUserWiseDataList.length}");
-            total_rows=int.parse(callDashboardUserWiseDataList[0].totalRows!);
+            total_rows.value=int.parse(callDashboardUserWiseDataList[0].totalRows!);
           }else {
             callDashboardUserWiseDataList.value=[];
             loading.value = false;
@@ -200,6 +237,89 @@ class CallDashboardVm extends GetxController{
     }
     finally{
       loading.value = false;
+    }
+  }
+
+  CallDSARsMasterApiHit(){
+    try{
+      Map<String, String> data={
+        "filter_type_of_call": "dsar",
+      };
+      loading.value=true;
+      _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            DSARStatus_Master_list.addAll(response);
+
+          }else {
+            loading.value = false;
+            DSARStatus_Master_list.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getEmployeeMemberApi() {
+    Map data = {
+      "email_id": email,
+      "flag": "GeoLevelLower"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
     }
   }
 

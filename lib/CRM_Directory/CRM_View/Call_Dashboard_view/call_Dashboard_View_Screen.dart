@@ -1,17 +1,21 @@
 import 'dart:math';
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_VIewModels/Dashboard_VM/call_dashboard_vm.dart';
 
 class CallDashboardViewScreen extends StatelessWidget{
@@ -44,7 +48,7 @@ class CallDashboardViewScreen extends StatelessWidget{
                   ),
                   Spacer(),
                   IconButton(onPressed: () {
-                    //showFilterBottomSheet(context);
+                    showFilterBottomSheet(context);
                   }, icon: Icon(Icons.filter_alt_sharp))
                 ],
               )
@@ -106,7 +110,7 @@ class CallDashboardViewScreen extends StatelessWidget{
                                 ),
                                 SizedBox(width: 10,),
                                 Text(
-                                  '(' +dashboard_view_Controller.total_rows.toString()+')',
+                                  '(' +dashboard_view_Controller.total_rows.value.toString()+')',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.redColor,
                                     fontSize: AllFontSize.fourtine,
@@ -181,131 +185,94 @@ class CallDashboardViewScreen extends StatelessWidget{
         child: SizedBox(
           height: 450, // fixed height avoids layout issues
           width: chartWidth,  // increase for scrollable horizontal chart
-          child: BarChart(
-           /* BarChartData(
-              alignment: BarChartAlignment.start,
-              maxY: _calculateMaxY(),
-              barGroups: _createBarGroups(),
-              barTouchData: BarTouchData(enabled: true),
-              titlesData: FlTitlesData(
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    interval: 5, // ensures 0, 5, 10, ..., 50
-                    getTitlesWidget: (value, meta) {
-                      return Text(
-                        value.toInt().toString(),
-                        style: TextStyle(fontSize: 12, color: Colors.black),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.start,
+                maxY: maxY,
+                barGroups: _createBarGroups(),
+                barTouchData: BarTouchData(
+                  enabled: true,
+                  touchTooltipData: BarTouchTooltipData(
+                    tooltipBgColor: Colors.lightBlue[50],
+                    tooltipPadding: EdgeInsets.all(8),
+                    tooltipRoundedRadius: 8,
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      final record = dashboard_view_Controller.callDashboardRecordList[group.x.toInt()];
+                      // Choose label
+                      String name = dashboard_view_Controller.selectedOption.value == 'Employee'
+                          ? record.employee ?? ""
+                          : record.geoValue ?? "";
+
+                      // Pick value based on rodIndex
+                      String valueLabel;
+                      switch (rodIndex) {
+                        case 0:
+                          valueLabel = 'Follow-up: ${rod.toY.toInt()}';
+                          break;
+                        case 1:
+                          valueLabel = 'New Call: ${rod.toY.toInt()}';
+                          break;
+                        case 2:
+                          valueLabel = 'Payment: ${rod.toY.toInt()}';
+                          break;
+                        default:
+                          valueLabel = 'Value: ${rod.toY.toInt()}';
+                      }
+
+                      return BarTooltipItem(
+                        '$name\n$valueLabel',
+                        const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       );
                     },
                   ),
                 ),
-                topTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: false
-                  )
-                ),
-                rightTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: false
-                  )
-                ),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    getTitlesWidget: _getBottomTitles,
+
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: interval,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toInt().toString(),
+                          style: TextStyle(fontSize: 10, color: Colors.black),
+                        );
+                      },
+                    ),
+                  ),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 50,
+                      getTitlesWidget: _getBottomTitles,
+                    ),
                   ),
                 ),
-              ),
-              borderData: FlBorderData(show: false,),
-              gridData: FlGridData(show: false),
-             // alignment: BarChartAlignment.spaceAround,
-            ),*/
-            BarChartData(
-              alignment: BarChartAlignment.start,
-              maxY: maxY,
-              barGroups: _createBarGroups(),
-              /*barTouchData: BarTouchData(enabled: true),*/
-              barTouchData: BarTouchData(
-                enabled: true,
-                touchTooltipData: BarTouchTooltipData(
-                  tooltipBgColor: Colors.lightBlue[50],
-                  tooltipPadding: EdgeInsets.all(8),
-                  tooltipRoundedRadius: 8,
-                  getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                    final record = dashboard_view_Controller.callDashboardRecordList[group.x.toInt()];
-                    // Choose label
-                    String name = dashboard_view_Controller.selectedOption.value == 'Employee'
-                        ? record.employee ?? ""
-                        : record.geoValue ?? "";
-
-                    // Pick value based on rodIndex
-                    String valueLabel;
-                    switch (rodIndex) {
-                      case 0:
-                        valueLabel = 'Follow-up: ${rod.toY.toInt()}';
-                        break;
-                      case 1:
-                        valueLabel = 'New Call: ${rod.toY.toInt()}';
-                        break;
-                      case 2:
-                        valueLabel = 'Payment: ${rod.toY.toInt()}';
-                        break;
-                      default:
-                        valueLabel = 'Value: ${rod.toY.toInt()}';
-                    }
-
-                    return BarTooltipItem(
-                      '$name\n$valueLabel',
-                      const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                      ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border(
+                    left: BorderSide(color: Colors.grey, width: 1),
+                    bottom: BorderSide(color: Colors.grey, width: 1),
+                  ),
+                ),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey.withOpacity(0.2),
+                      strokeWidth: 1,
                     );
                   },
                 ),
-              ),
-
-              titlesData: FlTitlesData(
-                leftTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    interval: interval,
-                    getTitlesWidget: (value, meta) {
-                      return Text(
-                        value.toInt().toString(),
-                        style: TextStyle(fontSize: 10, color: Colors.black),
-                      );
-                    },
-                  ),
-                ),
-                topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false,)),
-                rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                bottomTitles: AxisTitles(
-                  sideTitles: SideTitles(
-                    showTitles: true,
-                    reservedSize: 50,
-                    getTitlesWidget: _getBottomTitles,
-                  ),
-                ),
-              ),
-              borderData: FlBorderData(
-                show: true,
-                border: Border(
-                  left: BorderSide(color: Colors.grey, width: 1),
-                  bottom: BorderSide(color: Colors.grey, width: 1),
-                ),
-              ),
-              gridData: FlGridData(
-                show: true,
-                drawVerticalLine: false,
-                getDrawingHorizontalLine: (value) {
-                  return FlLine(
-                    color: Colors.grey.withOpacity(0.2),
-                    strokeWidth: 1,
-                  );
-                },
               ),
             ),
           ),
@@ -315,7 +282,7 @@ class CallDashboardViewScreen extends StatelessWidget{
   }
 
   /// Provide max Y value based on data (adds some padding)
-  double _calculateMaxY() {
+  /*double _calculateMaxY() {
     double max = 0;
     for (var r in dashboard_view_Controller.callDashboardRecordList) {
       max = [
@@ -326,6 +293,23 @@ class CallDashboardViewScreen extends StatelessWidget{
       ].reduce((a, b) => a > b ? a : b);
     }
     return (max + 10).ceilToDouble();
+  }*/
+
+  double _calculateMaxY() {
+    double max = 0;
+    for (var r in dashboard_view_Controller.callDashboardRecordList) {
+      max = [
+        max,
+        (r.newCall ?? 0).toDouble(),
+        (r.followUpCall ?? 0).toDouble(),
+        (r.paymentCall ?? 0).toDouble()
+      ].reduce((a, b) => a > b ? a : b);
+    }
+
+    if (max == 0) return 100; // force 0-100 scale if no data
+
+    // Round up to next multiple of 10
+    return ((max / 10).ceil() * 10).toDouble();
   }
 
   double _calculateInterval(double maxY) {
@@ -335,7 +319,7 @@ class CallDashboardViewScreen extends StatelessWidget{
     if (maxY <= 500) return 50;
     if (maxY <= 1000) return 100;
     if (maxY <= 10000) return 1000;
-    return (maxY / 5).roundToDouble(); // fallback
+    return (maxY / 10).roundToDouble(); // fallback
   }
 
   /// Dynamically create groups of bars
@@ -450,15 +434,15 @@ class CallDashboardViewScreen extends StatelessWidget{
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
 
-          int total_page = (dashboard_view_Controller.total_rows /
+          int total_page = (dashboard_view_Controller.total_rows.value /
               dashboard_view_Controller.rowsPerPage)
               .toInt();
-          if ((dashboard_view_Controller.total_rows %
+          if ((dashboard_view_Controller.total_rows.value %
               dashboard_view_Controller.rowsPerPage) >
               0) total_page += 1;
 
           print(
-              "last index ${dashboard_view_Controller.pageNumber} ${dashboard_view_Controller.total_rows} ${dashboard_view_Controller.rowsPerPage} ${total_page}");
+              "last index ${dashboard_view_Controller.pageNumber} ${dashboard_view_Controller.total_rows.value} ${dashboard_view_Controller.rowsPerPage} ${total_page}");
           if (dashboard_view_Controller.pageNumber + 1 < total_page) {
             dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber+1);
             dashboard_view_Controller.pageNumber += 1;
@@ -906,5 +890,548 @@ class CallDashboardViewScreen extends StatelessWidget{
       ),
     );
   }
+
+
+  void showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.85,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                        SizedBox(width: 5,),
+                        Text(
+                          "Dashboard Filter ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.cancel,
+                              color: AllColors.primaryDark1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.primaryDark1,
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              RadioGroupDateRangeFilter(context),
+                              SizedBox(
+                                height: 10,
+                              ),
+
+
+
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              side: BorderSide(
+                                  color: AllColors.primaryDark,
+                                  width: 1),
+                            )),
+                            onPressed: () {
+
+                             // quoteApprovalController.pageNumberForQuote = 0;
+                             // quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                              Get.back();
+                            },
+                            child: Text(
+                              'Submit',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15),
+                              side: BorderSide(
+                                  color: AllColors.redColor, width: 1),
+                            )),
+                            onPressed: () {
+
+                            //  quoteApprovalController.clearAllFieldOfQuoteFilter();
+                             // quoteApprovalController.pageNumberForQuote = 0;
+                              //saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
+                            //  quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                              Get.back();
+
+                            },
+                            child: Text(
+                              'Reset',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+
+        );
+      },
+    );
+  }
+
+  RadioGroupDateRangeFilter(BuildContext context){
+    return Container(
+      width: double.infinity,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          Container(
+            //margin: EdgeInsets.only(left: 15.0, right: 15.0),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AllColors.grayColor, // Set the border color here
+                width: 1.0, // Adjust the border width if necessary
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: InputDecorator(
+              decoration: InputDecoration(
+                labelText: 'Date Ranges',
+                labelStyle: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontWeight: FontWeight.w700,
+                    fontSize: AllFontSize.twentee),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Obx((){
+                    return RadioListTile<String>(
+                      title: const Text('Day' , style: TextStyle(
+                          fontSize: AllFontSize.sisxteen
+                      ),),
+                      value: 'Day',
+                      dense: true,
+                      groupValue: dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value??"";
+                        dashboard_view_Controller.DateRange('day');
+                        dashboard_view_Controller.filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+
+                  Obx((){
+                    return RadioListTile<String>(
+                      title: const Text('Weakly' , style: TextStyle(
+                          fontSize: AllFontSize.sisxteen
+                      ),),
+                      value: 'Weakly',
+                      dense: true,
+                      groupValue: dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value??"";
+                        dashboard_view_Controller.DateRange('week');
+                        dashboard_view_Controller.filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+
+                  Obx((){
+                    return RadioListTile<String>(
+                      title: const Text('Month' ,style: TextStyle(
+                          fontSize: AllFontSize.sisxteen
+                      ),),
+                      value: 'Month',
+                      dense: true,
+                      groupValue: dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value??"";
+                        dashboard_view_Controller.DateRange('month');
+                        dashboard_view_Controller.filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+
+                  Obx((){
+                    return  RadioListTile<String>(
+                      title: const Text('Quarterly', style: TextStyle(
+                          fontSize: AllFontSize.sisxteen
+                      ),),
+                      value: 'Quarterly',
+                      dense: true,
+                      groupValue: dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value??"";
+                        dashboard_view_Controller.DateRange('quarterly');
+                        dashboard_view_Controller.filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+
+                  Obx((){
+                    return RadioListTile<String>(
+                      title: const Text('Financial Year', style: TextStyle(
+                          fontSize: AllFontSize.sisxteen
+                      ),),
+                      value: 'Financial Year',
+                      dense: true,
+                      groupValue: dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value??"";
+                        dashboard_view_Controller.DateRange('financial');
+                        dashboard_view_Controller.filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+
+                  Obx((){
+                    return RadioListTile<String>(
+                      title: const Text('Custom', style: TextStyle(
+                          fontSize: AllFontSize.sisxteen
+                      ),),
+                      value: 'Custom',
+                      dense: true,
+                      groupValue: dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value??"";
+                      },
+
+                    );
+                  }),
+
+                  Obx((){
+                    return filterWithCustomDate(context);
+                  })
+
+
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          bindTaskStatus(context),
+          SizedBox(height: 10),
+          bindLastActivityStatus(context),
+          SizedBox(height: 10),
+          bindAccountOwnerFilter(context)
+
+        ],
+
+      ),
+
+    );
+  }
+
+  filterWithCustomDate(BuildContext context) {
+    return IgnorePointer(
+      ignoring: dashboard_view_Controller.character.value != "Custom",
+      child: TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: dashboard_view_Controller.filterCustomDateController.value,
+        readOnly: true,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          suffixIcon: Icon(Icons.calendar_month),
+          hintText: 'Select Start Date -End Date',
+          labelText: 'Date Range',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+        onTap: () async {
+          FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+          DateTimeRange? picked = await showDateRangePicker(
+            context: context,
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2200),
+            /* initialDateRange: DateTimeRange(
+              start: DateTime.now(),
+              end: DateTime.now().add(Duration(days: 7)),
+            ),*/
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                    textTheme: ButtonTextTheme.primary,
+                  ),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          if (picked != null) {
+            final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+            final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+            dashboard_view_Controller.formattedStartDate.value = startDate;
+            dashboard_view_Controller.formattedEndDate.value = endDate;
+            dashboard_view_Controller.filterCustomDateController.value.text =
+            '$startDate - $endDate';
+          } else {
+            dashboard_view_Controller.filterCustomDateController.value.text = '';
+            dashboard_view_Controller.formattedStartDate.value = '';
+            dashboard_view_Controller.formattedEndDate.value = '';
+          }
+        },
+      ),
+    );
+  }
+
+  bindTaskStatus(BuildContext context) {
+    return DropdownSearch<String>.multiSelection(
+      items: dashboard_view_Controller.TaskStatusListTypeList,
+      itemAsString: (String u) => u,
+      selectedItems: dashboard_view_Controller.selectedTaskStatusList,
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        baseStyle: TextStyle(color: Colors.black),
+        dropdownSearchDecoration: InputDecoration(
+          filled: false,
+          labelText: "Select Created By",
+          hintText: "Select Created By",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+      dropdownBuilder: (context, selectedItems) {
+        // Custom builder to just show comma-separated names
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Text(
+            selectedItems.map((e) => e).join(', '),
+            style: TextStyle(color: Colors.black), // Only black text
+          ),
+        );
+      },
+      onChanged: (List<String> selectedList) {
+        dashboard_view_Controller.selectedTaskStatusList.value =
+            selectedList;
+        dashboard_view_Controller.task_Status_controller.value.text =
+            selectedList.map((e) => e).join(', ');
+      },
+
+      popupProps: PopupPropsMultiSelection.dialog(
+        showSearchBox: true,
+        searchFieldProps: TextFieldProps(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+            // Top margin here
+            hintText: "Search...",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+
+        itemBuilder: (context, item, isSelected) =>
+            ListTile(
+              title: Text(item),
+            ),
+      ),
+    );
+  }
+
+  bindLastActivityStatus(BuildContext context) {
+    return DropdownSearch<CallStatusMasterModel>.multiSelection(
+      items: dashboard_view_Controller.DSARStatus_Master_list,
+      itemAsString: (CallStatusMasterModel u) => u.taskStatus??"",
+      selectedItems: dashboard_view_Controller.selectedDSARStatusList,
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        baseStyle: TextStyle(color: Colors.black),
+        dropdownSearchDecoration: InputDecoration(
+          filled: false,
+          labelText: "Last Activity Status",
+          hintText: "Last Activity Status",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+      dropdownBuilder: (context, selectedItems) {
+        // Custom builder to just show comma-separated names
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Text(
+            selectedItems.map((e) => e).join(', '),
+            style: TextStyle(color: Colors.black), // Only black text
+          ),
+        );
+      },
+      onChanged: (List<CallStatusMasterModel> selectedList) {
+        dashboard_view_Controller.selectedDSARStatusList.value =
+            selectedList;
+        dashboard_view_Controller.task_Status_controller.value.text =
+            selectedList.map((e) => e).join(', ');
+      },
+
+      popupProps: PopupPropsMultiSelection.dialog(
+        showSearchBox: true,
+        searchFieldProps: TextFieldProps(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+            // Top margin here
+            hintText: "Search...",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+
+        itemBuilder: (context, item, isSelected) =>
+            ListTile(
+              title: Text(item.taskStatus??""),
+            ),
+      ),
+    );
+  }
+
+  bindAccountOwnerFilter(BuildContext context) {
+    return DropdownSearch<EmployeeMemberModel>.multiSelection(
+      items: dashboard_view_Controller.employee_Member_list,
+      itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+      selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
+      dropdownDecoratorProps: DropDownDecoratorProps(
+        baseStyle: TextStyle(color: Colors.black),
+        dropdownSearchDecoration: InputDecoration(
+          filled: false,
+          labelText: "Account Owner",
+          hintText: "Account Owner",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+      ),
+      dropdownBuilder: (context, selectedItems) {
+        // Custom builder to just show comma-separated names
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Text(
+            selectedItems.map((e) => e).join(', '),
+            style: TextStyle(color: Colors.black), // Only black text
+          ),
+        );
+      },
+      onChanged: (List<EmployeeMemberModel> selectedList) {
+        dashboard_view_Controller.SelectedEmployee_Member_list.value =
+            selectedList;
+        dashboard_view_Controller.AccountOwner_controller.value.text =
+            selectedList.map((e) => e).join(', ');
+      },
+
+      popupProps: PopupPropsMultiSelection.dialog(
+        showSearchBox: true,
+        searchFieldProps: TextFieldProps(
+          decoration: InputDecoration(
+            contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+            // Top margin here
+            hintText: "Search...",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+
+        itemBuilder: (context, item, isSelected) =>
+            ListTile(
+              title: Text(item.fullName??""),
+            ),
+      ),
+    );
+  }
+
 
 }

@@ -13,4 +13,13 @@ class DashboardRepo{
     return _apiService.postApi(data, AppUrl.CallDashboardUserWiseData,sessionManagement);
   }
 
+  Future<String> CallStatusMasterGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.CallStatusMstGet,sessionManagement);
+  }
+
+  Future<String> EmployeeMamberGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.employeeMemberGet,sessionManagement);
+  }
+
+
 }
