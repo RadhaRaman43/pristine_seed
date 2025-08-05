@@ -4,6 +4,8 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Contact_master_
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/Task_Approval_List_Screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_add_screen.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_request_add_screen.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_request_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_line_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_screen.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
@@ -45,6 +47,7 @@ import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_master_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/update_task_mst_infra_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
+import '../../CRM_Directory/CRM_View/employee_information_system/leave_request_approval_screen.dart';
 import '../../CRM_Directory/CRM_View/quote_approval_list/quote_approval_list_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_advise_view/sales_advise_create_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Screen.dart';
@@ -669,6 +672,23 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.empMarkLeaveRequestScreen,
+        page: ()=>EmpMarkLeaveRequestScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.empMarkLeaveRequestAddScreen,
+        page: ()=>EmpMarkLeaveRequestAddScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.empMarkLeaveRequestApprovalScreen,
+        page: ()=>LeaveRequestApprovalScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
     GetPage(name: RoutesName.salesCyclePendingForApprovalListScreen,
         page: ()=>SaleCyclePendingForApprovalList(),

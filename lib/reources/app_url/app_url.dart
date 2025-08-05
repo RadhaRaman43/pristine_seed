@@ -290,9 +290,13 @@ class AppUrl {
      //todo employee information
      static const String employeeLeaveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveDataGet";
      static const String leaveTypesGet="$BASE_URL/api/CRM/EmployeeAttendance/LeaveTypesGet";
-     static const String shiftDetailsByEmailGet="$BASE_URL/api/CRM/EmployeeAttendance/ShiftDetailsByEmailGet";
+     static const String shiftDetailsByEmailGet="$BASE_URL/api/CRM/EmployeeAttendance/ShiftDet ailsByEmailGet";
      static const String getEmployeeHolidays="$BASE_URL/api/CRM/EmployeeAttendance/GetEmployeeHolidays";
      static const String employeeLeaveMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveMark";
+     static const String employeeLeaveRequestDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestDataGet";
+     static const String employeeLeaveRequestMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestMark";
+     static const String employeeLeaveRequestRejectApproveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestRejectApproveDataGet";
+     static const String employeeLeaveRequestApproveReject="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestApproveReject";
 
      //todo business tour plan
      static const String businessPlanListGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanListGet";

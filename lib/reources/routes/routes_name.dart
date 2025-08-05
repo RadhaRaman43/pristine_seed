@@ -147,6 +147,9 @@ class RoutesName{
 
   static const empMarkLeaveScreen="/emp_mark_leave_screen";
   static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";
+  static const empMarkLeaveRequestScreen="/emp_mark_leave_request_screen";
+  static const empMarkLeaveRequestAddScreen="/emp_mark_leave_request_add_screen";
+  static const empMarkLeaveRequestApprovalScreen="/leave_request_approval_screen";
 
 
   //todo image not found...

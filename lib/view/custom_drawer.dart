@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/emp_infor_system/emp_mark_leave_request_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_pending_for_approval_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
 
@@ -15,6 +16,7 @@ import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/all_contact_master_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/emp_infor_system/leave_request_approval_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
@@ -425,14 +427,32 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
-                                            case 'Mark Leave':
+                                            /*case 'Mark Leave':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               Get.delete<MarkAttendanceViewmodel>();
                                               MarkAttendanceViewmodel employeeMarkLeaveController=Get.put(MarkAttendanceViewmodel());
                                               Get.toNamed(RoutesName.empMarkLeaveScreen,);
                                               Navigator.of(context);
+                                              break;*/
+                                            case 'Mark Leave Request':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<EmpMarkLeaveRequestVm>();
+                                              EmpMarkLeaveRequestVm employeeMarkLeaveController=Get.put(EmpMarkLeaveRequestVm());
+                                              Get.toNamed(RoutesName.empMarkLeaveRequestScreen,);
+                                              Navigator.of(context);
                                               break;
+
+                                            case 'Leave Request Approval':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<LeaveRequestApprovalVm>();
+                                              LeaveRequestApprovalVm employeeMarkLeaveController=Get.put(LeaveRequestApprovalVm());
+                                              Get.toNamed(RoutesName.empMarkLeaveRequestApprovalScreen,);
+                                              Navigator.of(context);
+                                              break;
+
 
                                             case 'Sales Cycle Approval List':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
