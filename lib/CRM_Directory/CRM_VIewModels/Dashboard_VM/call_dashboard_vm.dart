@@ -8,7 +8,10 @@ import 'package:intl/intl.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/dashboard_models/call_DashBoard_Model.dart';
 import '../../CRM_Models/dashboard_models/call_dashboard_user_wise_Data_model.dart';
 import '../../CRM_Repository/dashboard_repository/dashboard_repo.dart';
@@ -18,11 +21,14 @@ class CallDashboardVm extends GetxController{
   final _api = DashboardRepo();
   SessionManagement sessionManagement = SessionManagement();
   RxBool loading = false.obs;
+  RxBool isShimmerLoading = false.obs;
   String email = "";
+  String userType = "";
   var selectedOption = 'Employee'.obs;
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
   RxString character = 'Month'.obs;
+  RxString rodName = ''.obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -36,12 +42,34 @@ class CallDashboardVm extends GetxController{
   RxList<String> selectedTaskStatusList = <String>[].obs;
   RxList<CallStatusMasterModel> DSARStatus_Master_list = <CallStatusMasterModel>[].obs;
   RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> TypeCall_Master_list = <CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> selectedTypeCallList = <CallStatusMasterModel>[].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
   var filterCustomDateController=TextEditingController().obs;
   var task_Status_controller=TextEditingController().obs;
+  var lastActivity_Status_controller=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
+  var typeOfCall_controller=TextEditingController().obs;
+  var ProductCategory_controller=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
+
+
+  var TypeOfCallForApi;
+  var TaskStatusForApi;
+  var lastActivityStatusForApi;
+  var ProductCategoryForApi;
+  var AccountOwnerForApi;
+  var ClusterNameForApi;
+  var RegionNameForApi;
 
 
   @override
@@ -49,13 +77,17 @@ class CallDashboardVm extends GetxController{
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
+    userType = await sessionManagement.getUserType() ?? '';
     TaskStatusListTypeList.value = ['All','Pending','Pending For Approval', 'Approved', 'Rejected'];
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     callDashboardData();
     //getDashboardUserWiseData(pageNumber);
     CallDSARsMasterApiHit();
+    CallMasterApiHit();
     getEmployeeMemberApi();
+    getItemCategoryMstWithoutTaskIdApi();
+    getClustersGetByEmail();
   }
 
   void DateRange(String type) {
@@ -123,24 +155,75 @@ class CallDashboardVm extends GetxController{
   }
 
   Future<void> callDashboardData() async {
+    TypeOfCallForApi="";
+    if(typeOfCall_controller.value.text.isNotEmpty){
+      TypeOfCallForApi = typeOfCall_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    lastActivityStatusForApi = '';
+    if(lastActivity_Status_controller.value.text.isNotEmpty){
+      lastActivityStatusForApi = lastActivity_Status_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    AccountOwnerForApi = '';
+    if(AccountOwner_controller.value.text.isNotEmpty){
+      AccountOwnerForApi = AccountOwner_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    ProductCategoryForApi = '';
+    if(ProductCategory_controller.value.text.isNotEmpty){
+      ProductCategoryForApi = ProductCategory_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    TaskStatusForApi="";
+    if(task_Status_controller.value.text.isNotEmpty){
+      TaskStatusForApi = task_Status_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+
     try {
       Map<String, String> data = {
         "flag": selectedOption.value,
         "email_id": email,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
-        "filter_type_of_call": "All",
-        "filter_owner_name": '',
-        "filter_region_name": '',
-        "filter_cluster_name": '',
-        "filter_product_category": '',
-        "filter_activity_status": 'All',
+        "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
+        "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
         "filter_customer_name": '',
-        "filter_task_approval_status": 'All',
+        "filter_task_approval_status": TaskStatusForApi.isEmpty?"All":TaskStatusForApi,
       };
 
       print(data);
       loading.value = true;
+      isShimmerLoading.value = true;
 
       final onValue = await _api.callDashboardGetApiHit(data, sessionManagement);
       final jsonResponse = json.decode(onValue);
@@ -159,6 +242,7 @@ class CallDashboardVm extends GetxController{
         } else {
           Utils.showErrorToastification(
               "False Message !", response[0].message.toString());
+          callDashboardRecordList.value = [];
         }
       }
 
@@ -166,6 +250,7 @@ class CallDashboardVm extends GetxController{
       print("API error: $e");
     } finally {
       loading.value = false;
+      isShimmerLoading.value = false;
       getDashboardUserWiseData(pageNumber);
     }
   }
@@ -173,38 +258,26 @@ class CallDashboardVm extends GetxController{
 
   getDashboardUserWiseData(int pageNumber){
     try{
+      loading.value=true;
       Map data={
         "flag": selectedOption.value,
         "email_id": email,
         "emp_email_id": "",
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
-        "filter_type_of_call": "All",
-        "filter_owner_name": "",
-        "filter_region_name": "",
-        "filter_cluster_name": "",
-        "filter_product_category": "",
-        "filter_activity_status": "All",
-        "filter_customer_name": "",
-        "filter_task_approval_status": "All",
+        "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
+        "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
+        "filter_customer_name": '',
+        "filter_task_approval_status": TaskStatusForApi.isEmpty?"All":TaskStatusForApi,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
-      /* {
-        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty?filterQuoteIdController.value.text:"",
-        "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isNotEmpty?filterQuoteSaleCycleController.value.text:"" ,
-        "filter_account_name": filterQuoteAccountNameController.value.text.isNotEmpty?filterQuoteAccountNameController.value.text:"",
-        "filter_contact_name": filterQuoteContactNameController.value.text.isNotEmpty?filterQuoteContactNameController.value.text:"",
-        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty?filterQuoteValidityController.value.text:"",
-        "filter_contact_person_name": "",
-        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
-        "filter_quote_status": "Under Approval",
-        "filter_created_by": email,
-        "filter_approved_by": "",
-        "row_per_page": rowsPerPage,
-        "page_number": pageNumberForQuote
-      };*/
-      loading.value=true;
+
+
       _api.callDashboardUserWiseDataApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
@@ -220,6 +293,7 @@ class CallDashboardVm extends GetxController{
             total_rows.value=int.parse(callDashboardUserWiseDataList[0].totalRows!);
           }else {
             callDashboardUserWiseDataList.value=[];
+            total_rows.value = 0;
             loading.value = false;
           }
         } else {
@@ -257,6 +331,41 @@ class CallDashboardVm extends GetxController{
           }else {
             loading.value = false;
             DSARStatus_Master_list.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  CallMasterApiHit(){
+    try{
+      Map<String, String> data={
+        "filter_type_of_call": "Call",
+      };
+      loading.value=true;
+      _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            TypeCall_Master_list.addAll(response);
+
+          }else {
+            loading.value = false;
+            TypeCall_Master_list.value=[];
 
           }
         } else {
@@ -322,6 +431,154 @@ class CallDashboardVm extends GetxController{
       print(e);
     }
   }
+
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+
+  clearAllFilterController(){
+    character.value = 'Month';
+    rodName.value = '';
+    TypeOfCallForApi = '';
+    TaskStatusForApi = '';
+    lastActivityStatusForApi = '';
+    ProductCategoryForApi = '';
+    AccountOwnerForApi = '';
+    ClusterNameForApi = '';
+    RegionNameForApi = '';
+    filterCustomDateController.value.clear();
+    task_Status_controller.value.clear();
+    lastActivity_Status_controller.value.clear();
+    AccountOwner_controller.value.clear();
+    typeOfCall_controller.value.clear();
+    ProductCategory_controller.value.clear();
+    clusterName_controller.value.clear();
+    RegionName_controller.value.clear();
+    selectedDSARStatusList.value = [];
+    selectedTypeCallList.value = [];
+    SelectedEmployee_Member_list.value = [];
+    SelectedProductCategory_list.value = [];
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    selectedTaskStatusList.value = [];
+    DateRange("month");
+    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
+
+  }
+
 
 
 }

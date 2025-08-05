@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -15,7 +16,10 @@ import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Dashboard_VM/call_dashboard_vm.dart';
 
 class CallDashboardViewScreen extends StatelessWidget{
@@ -69,24 +73,61 @@ class CallDashboardViewScreen extends StatelessWidget{
               Expanded(
                   child: ListView(
                     children: [
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: ConstrainedBox(
-                          constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _buildActionChip("Cluster"),
-                                SizedBox(width: 8),
-                                _buildActionChip("Region"),
-                                SizedBox(width: 8),
-                                _buildActionChip("Employee"),
-                              ],
+                      Visibility(
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Visibility(
+                                    visible: dashboard_view_Controller.userType != 'Branch Head',
+                                      child: _buildActionChip("Cluster")),
+                                  SizedBox(width: 8),
+                                  _buildActionChip("Region"),
+                                  SizedBox(width: 8),
+                                  _buildActionChip("Employee"),
+                                ],
+                              ),
                             ),
                           ),
                         ),
+                        visible: dashboard_view_Controller.userType != 'Frontliners',
+                      ),
+
+                      Container(
+                          padding: EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
+                          child:
+                          Obx((){
+                            return  Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Task Due ${dashboard_view_Controller.character.value}',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  '${dashboard_view_Controller.character.value} : Type Of Calls (R)',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.blackColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            );
+                          })
+
+
                       ),
 
                       Obx(() {
@@ -101,7 +142,7 @@ class CallDashboardViewScreen extends StatelessWidget{
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'All ${dashboard_view_Controller.selectedOption.value}',
+                                  'All ${dashboard_view_Controller.rodName == ''?dashboard_view_Controller.selectedOption.value : dashboard_view_Controller.rodName}',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.fourtine,
@@ -173,7 +214,7 @@ class CallDashboardViewScreen extends StatelessWidget{
     });
   }
 
-  Widget BindDashboardBarChartData(BuildContext context) {
+  /*Widget BindDashboardBarChartData(BuildContext context) {
     double chartWidth = max(MediaQuery.of(context).size.width, _calculateChartWidth());
     final maxY = _calculateMaxY();
     final interval = _calculateInterval(maxY);
@@ -279,6 +320,192 @@ class CallDashboardViewScreen extends StatelessWidget{
         ),
       ),
     );
+  }*/
+
+  Widget BindDashboardBarChartData(BuildContext context) {
+    /*if (dashboard_view_Controller.isShimmerLoading.value) {
+      return BarChartShimmer(context);
+    } else*/ if (dashboard_view_Controller.callDashboardRecordList.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset("assests/images/data-analytics.png", width: 150, height: 150,),
+            Text('No Record Found',
+              style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w700),
+            ),
+            SizedBox(height: 20,)
+          ],
+        )
+      );
+    } else {
+      double chartWidth = max(MediaQuery.of(context).size.width, _calculateChartWidth());
+      final maxY = _calculateMaxY();
+      final interval = _calculateInterval(maxY);
+
+      return Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            height: 450,
+            width: chartWidth,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 5.0),
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.start,
+                  maxY: maxY,
+                  barGroups: _createBarGroups(),
+                  barTouchData: BarTouchData(
+                    enabled: true,
+                    touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
+                      if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
+                      final rodIndex = response.spot!.touchedRodDataIndex;
+                      // Now call appropriate API
+                      switch (rodIndex) {
+                        case 0:
+                          dashboard_view_Controller.TypeOfCallForApi = 'Follow-Up Call';
+                          dashboard_view_Controller.rodName.value = 'Follow-Up Call';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          break;
+                        case 1:
+                          dashboard_view_Controller.TypeOfCallForApi = 'New Call';
+                          dashboard_view_Controller.rodName.value = 'New Call';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          break;
+                        case 2:
+                          dashboard_view_Controller.TypeOfCallForApi = 'Payment Call';
+                          dashboard_view_Controller.rodName.value = 'Payment Call';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          break;
+                      }
+                    },
+                    touchTooltipData: BarTouchTooltipData(
+                      tooltipBgColor: Colors.lightBlue[50],
+                      tooltipPadding: EdgeInsets.all(8),
+                      tooltipRoundedRadius: 8,
+                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                        final record = dashboard_view_Controller.callDashboardRecordList[group.x.toInt()];
+                        String name = dashboard_view_Controller.selectedOption.value == 'Employee'
+                            ? record.employee ?? ""
+                            : record.geoValue ?? "";
+
+                        String valueLabel;
+                        switch (rodIndex) {
+                          case 0:
+                            valueLabel = 'Follow-up: ${rod.toY.toInt()}';
+
+                            break;
+                          case 1:
+                            valueLabel = 'New Call: ${rod.toY.toInt()}';
+
+                            break;
+                          case 2:
+                            valueLabel = 'Payment: ${rod.toY.toInt()}';
+
+                            break;
+                          default:
+                            valueLabel = 'Value: ${rod.toY.toInt()}';
+                            //dashboard_view_Controller.pageNumber = 0;
+                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                        }
+
+                        return BarTooltipItem(
+                          '$name\n$valueLabel',
+                          const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        interval: interval,
+                        getTitlesWidget: (value, meta) {
+                          return Text(
+                            value.toInt().toString(),
+                            style: TextStyle(fontSize: 10, color: Colors.black),
+                          );
+                        },
+                      ),
+                    ),
+                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 50,
+                        getTitlesWidget: _getBottomTitles,
+                      ),
+                    ),
+                  ),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: Border(
+                      left: BorderSide(color: Colors.grey, width: 1),
+                      bottom: BorderSide(color: Colors.grey, width: 1),
+                    ),
+                  ),
+                  gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: false,
+                    getDrawingHorizontalLine: (value) {
+                      return FlLine(
+                        color: Colors.grey.withOpacity(0.2),
+                        strokeWidth: 1,
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+  }
+
+
+  Widget BarChartShimmer(BuildContext context) {
+    // Example "bar heights" to match your image visually
+    final List<double> barHeights = [100, 120, 200, 190, 150, 170, 160];
+
+    return SizedBox(
+      height: 450,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 160.0, left: 20, right: 20),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: List.generate(barHeights.length, (index) {
+            return Shimmer.fromColors(
+              baseColor: Colors.grey.shade300,
+              highlightColor: Colors.grey.shade100,
+              child: Container(
+                width: 20,
+                height: barHeights[index],
+                decoration: BoxDecoration(
+                  color: Colors.grey,
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+            );
+          }),
+        ),
+      ),
+    );
   }
 
   /// Provide max Y value based on data (adds some padding)
@@ -292,7 +519,7 @@ class CallDashboardViewScreen extends StatelessWidget{
         (r.paymentCall ?? 0).toDouble()
       ].reduce((a, b) => a > b ? a : b);
     }
-    return (max + 10).ceilToDouble();
+    return (max + 12).ceilToDouble();
   }*/
 
   double _calculateMaxY() {
@@ -309,7 +536,7 @@ class CallDashboardViewScreen extends StatelessWidget{
     if (max == 0) return 100; // force 0-100 scale if no data
 
     // Round up to next multiple of 10
-    return ((max / 10).ceil() * 10).toDouble();
+    return ((max / 10).ceil() * 11).toDouble();
   }
 
   double _calculateInterval(double maxY) {
@@ -326,26 +553,33 @@ class CallDashboardViewScreen extends StatelessWidget{
   List<BarChartGroupData> _createBarGroups() {
     return List.generate(dashboard_view_Controller.callDashboardRecordList.length, (index) {
       final record = dashboard_view_Controller.callDashboardRecordList[index];
-
+      double Width = 20;
+      if(dashboard_view_Controller.userType == 'Frontliners'){
+        Width = 100;
+      }else if(dashboard_view_Controller.userType == 'Branch Head' && dashboard_view_Controller.selectedOption == 'Region') {
+        Width = 100;
+      }else{
+        Width = 20;
+      }
       return BarChartGroupData(
         x: index,
         barRods: [
           BarChartRodData(
             toY: (record.followUpCall ?? 0).toDouble(),
             color: Colors.blue,
-            width: 20,
+            width: Width,
             borderRadius: BorderRadius.zero,
           ),
           BarChartRodData(
             toY: (record.newCall ?? 0).toDouble(),
             color: Colors.green,
-            width: 20,
+            width: Width,
             borderRadius: BorderRadius.zero,
           ),
           BarChartRodData(
             toY: (record.paymentCall ?? 0).toDouble(),
             color: Colors.orange,
-            width: 20,
+            width: Width,
             borderRadius: BorderRadius.zero,
           ),
 
@@ -356,28 +590,6 @@ class CallDashboardViewScreen extends StatelessWidget{
   }
 
   /// X-axis label widget
-  /*Widget _getBottomTitles(double value, TitleMeta meta) {
-    final index = value.toInt();
-    String name ;
-    if(dashboard_view_Controller.selectedOption.value == 'Employee'){
-      name = dashboard_view_Controller.callDashboardRecordList[index].employee??"";
-    }else{
-      name = dashboard_view_Controller.callDashboardRecordList[index].geoValue??"";
-    }
-
-    if (index >= 0 && index < dashboard_view_Controller.callDashboardRecordList.length) {
-      return SideTitleWidget(
-        axisSide: meta.axisSide,
-        child: Text(name,
-          style: TextStyle(fontSize: 10, color: AllColors.blackColor),
-        ),
-      );
-    } else {
-      return SizedBox.shrink();
-    }
-  }*/
-
-
   Widget _getBottomTitles(double value, TitleMeta meta) {
     final index = value.toInt();
     if (index >= 0 && index < dashboard_view_Controller.callDashboardRecordList.length) {
@@ -463,7 +675,8 @@ class CallDashboardViewScreen extends StatelessWidget{
             return BindCustomerRequestListView(context, index);
           });
     } else {
-      return Center(child: Column(
+      return Center(
+          child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Image.asset("assests/images/no_data_remove.png", width: 150, height: 150,),
@@ -987,8 +1200,8 @@ class CallDashboardViewScreen extends StatelessWidget{
                             )),
                             onPressed: () {
 
-                             // quoteApprovalController.pageNumberForQuote = 0;
-                             // quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                              dashboard_view_Controller.pageNumber = 0;
+                              dashboard_view_Controller.callDashboardData();
                               Get.back();
                             },
                             child: Text(
@@ -1011,10 +1224,9 @@ class CallDashboardViewScreen extends StatelessWidget{
                             )),
                             onPressed: () {
 
-                            //  quoteApprovalController.clearAllFieldOfQuoteFilter();
-                             // quoteApprovalController.pageNumberForQuote = 0;
-                              //saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
-                            //  quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                              dashboard_view_Controller.clearAllFilterController();
+                              dashboard_view_Controller.pageNumber = 0;
+                              dashboard_view_Controller.callDashboardData();
                               Get.back();
 
                             },
@@ -1197,9 +1409,19 @@ class CallDashboardViewScreen extends StatelessWidget{
           SizedBox(height: 10),
           bindTaskStatus(context),
           SizedBox(height: 10),
+          bindTypeCallFilter(context),
+          SizedBox(height: 10),
           bindLastActivityStatus(context),
           SizedBox(height: 10),
-          bindAccountOwnerFilter(context)
+          bindProductCategoryFilter(context),
+          SizedBox(height: 10),
+          bindAccountOwnerFilter(context),
+          SizedBox(height: 10),
+          bindClusterNameFilter(context),
+          SizedBox(height: 10),
+          bindRegionNameFilter(context),
+
+
 
         ],
 
@@ -1278,159 +1500,462 @@ class CallDashboardViewScreen extends StatelessWidget{
   }
 
   bindTaskStatus(BuildContext context) {
-    return DropdownSearch<String>.multiSelection(
-      items: dashboard_view_Controller.TaskStatusListTypeList,
-      itemAsString: (String u) => u,
-      selectedItems: dashboard_view_Controller.selectedTaskStatusList,
-      dropdownDecoratorProps: DropDownDecoratorProps(
-        baseStyle: TextStyle(color: Colors.black),
-        dropdownSearchDecoration: InputDecoration(
-          filled: false,
-          labelText: "Select Created By",
-          hintText: "Select Created By",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      ),
-      dropdownBuilder: (context, selectedItems) {
-        // Custom builder to just show comma-separated names
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Text(
-            selectedItems.map((e) => e).join(', '),
-            style: TextStyle(color: Colors.black), // Only black text
-          ),
-        );
-      },
-      onChanged: (List<String> selectedList) {
-        dashboard_view_Controller.selectedTaskStatusList.value =
-            selectedList;
-        dashboard_view_Controller.task_Status_controller.value.text =
-            selectedList.map((e) => e).join(', ');
-      },
-
-      popupProps: PopupPropsMultiSelection.dialog(
-        showSearchBox: true,
-        searchFieldProps: TextFieldProps(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-            // Top margin here
-            hintText: "Search...",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+    return Obx((){
+      return DropdownSearch<String>.multiSelection(
+        items: dashboard_view_Controller.TaskStatusListTypeList,
+        itemAsString: (String u) => u,
+        selectedItems: dashboard_view_Controller.selectedTaskStatusList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.selectedTaskStatusList.isNotEmpty?"Task Status":null,
+            hintText: "Task Status",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
-
-        itemBuilder: (context, item, isSelected) =>
-            ListTile(
-              title: Text(item),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Task Status",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
             ),
-      ),
-    );
+          );
+        },
+        onChanged: (List<String> selectedList) {
+          dashboard_view_Controller.selectedTaskStatusList.value =
+              selectedList;
+          dashboard_view_Controller.task_Status_controller.value.text =
+              selectedList.map((e) => e).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item),
+              ),
+        ),
+      );
+    });
+
   }
 
   bindLastActivityStatus(BuildContext context) {
-    return DropdownSearch<CallStatusMasterModel>.multiSelection(
-      items: dashboard_view_Controller.DSARStatus_Master_list,
-      itemAsString: (CallStatusMasterModel u) => u.taskStatus??"",
-      selectedItems: dashboard_view_Controller.selectedDSARStatusList,
-      dropdownDecoratorProps: DropDownDecoratorProps(
-        baseStyle: TextStyle(color: Colors.black),
-        dropdownSearchDecoration: InputDecoration(
-          filled: false,
-          labelText: "Last Activity Status",
-          hintText: "Last Activity Status",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      ),
-      dropdownBuilder: (context, selectedItems) {
-        // Custom builder to just show comma-separated names
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Text(
-            selectedItems.map((e) => e).join(', '),
-            style: TextStyle(color: Colors.black), // Only black text
-          ),
-        );
-      },
-      onChanged: (List<CallStatusMasterModel> selectedList) {
-        dashboard_view_Controller.selectedDSARStatusList.value =
-            selectedList;
-        dashboard_view_Controller.task_Status_controller.value.text =
-            selectedList.map((e) => e).join(', ');
-      },
-
-      popupProps: PopupPropsMultiSelection.dialog(
-        showSearchBox: true,
-        searchFieldProps: TextFieldProps(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-            // Top margin here
-            hintText: "Search...",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+    return Obx((){
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: dashboard_view_Controller.DSARStatus_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus??"",
+        selectedItems: dashboard_view_Controller.selectedDSARStatusList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.selectedDSARStatusList.isNotEmpty?"Last Activity Status":null,
+            hintText: "Last Activity Status",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
-
-        itemBuilder: (context, item, isSelected) =>
-            ListTile(
-              title: Text(item.taskStatus??""),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Last Activity Status",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
             ),
-      ),
-    );
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          dashboard_view_Controller.selectedDSARStatusList.value =
+              selectedList;
+          dashboard_view_Controller.lastActivity_Status_controller.value.text =
+              selectedList.map((e) => e).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.taskStatus??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindTypeCallFilter(BuildContext context) {
+    return Obx((){
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: dashboard_view_Controller.TypeCall_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus??"",
+        selectedItems: dashboard_view_Controller.selectedTypeCallList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.selectedTypeCallList.isNotEmpty?"Type Of Call":null,
+            hintText: "Type Of Call",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Type Of Call",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          dashboard_view_Controller.selectedTypeCallList.value =
+              selectedList;
+          dashboard_view_Controller.typeOfCall_controller.value.text =
+              selectedList.map((e) => e.taskStatus).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.taskStatus??""),
+              ),
+        ),
+      );
+    });
+
   }
 
   bindAccountOwnerFilter(BuildContext context) {
-    return DropdownSearch<EmployeeMemberModel>.multiSelection(
-      items: dashboard_view_Controller.employee_Member_list,
-      itemAsString: (EmployeeMemberModel u) => u.fullName??"",
-      selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
-      dropdownDecoratorProps: DropDownDecoratorProps(
-        baseStyle: TextStyle(color: Colors.black),
-        dropdownSearchDecoration: InputDecoration(
-          filled: false,
-          labelText: "Account Owner",
-          hintText: "Account Owner",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        ),
-      ),
-      dropdownBuilder: (context, selectedItems) {
-        // Custom builder to just show comma-separated names
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Text(
-            selectedItems.map((e) => e).join(', '),
-            style: TextStyle(color: Colors.black), // Only black text
-          ),
-        );
-      },
-      onChanged: (List<EmployeeMemberModel> selectedList) {
-        dashboard_view_Controller.SelectedEmployee_Member_list.value =
-            selectedList;
-        dashboard_view_Controller.AccountOwner_controller.value.text =
-            selectedList.map((e) => e).join(', ');
-      },
-
-      popupProps: PopupPropsMultiSelection.dialog(
-        showSearchBox: true,
-        searchFieldProps: TextFieldProps(
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-            // Top margin here
-            hintText: "Search...",
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: dashboard_view_Controller.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Account Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
-
-        itemBuilder: (context, item, isSelected) =>
-            ListTile(
-              title: Text(item.fullName??""),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Account Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
             ),
-      ),
-    );
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          dashboard_view_Controller.SelectedEmployee_Member_list.value =
+              selectedList;
+          dashboard_view_Controller.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: dashboard_view_Controller.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName??"",
+        selectedItems: dashboard_view_Controller.SelectedProductCategory_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedProductCategory_list.isNotEmpty?"Product Category":null,
+            hintText: "Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          dashboard_view_Controller.SelectedProductCategory_list.value =
+              selectedList;
+          dashboard_view_Controller.ProductCategory_controller.value.text =
+              selectedList.map((e) => e.categoryName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.categoryName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindClusterNameFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<ClusterModal>.multiSelection(
+        items: dashboard_view_Controller.clusterGetByEmailList,
+        itemAsString: (ClusterModal u) => u.geoValue??"",
+        selectedItems: dashboard_view_Controller.SelectedCluster_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedCluster_list.isNotEmpty?"Cluster Name":null,
+            hintText: "Cluster Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Cluster Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.geoValue).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ClusterModal> selectedList) {
+          dashboard_view_Controller.SelectedCluster_list.value =
+              selectedList;
+          dashboard_view_Controller.clusterName_controller.value.text =
+              selectedList.map((e) => e.geoValue).join(', ');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.geoValue??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindRegionNameFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<RegionWithClusterFilterModal>.multiSelection(
+        items: dashboard_view_Controller.regionwithclusterGetByEmailList,
+        itemAsString: (RegionWithClusterFilterModal u) => u.geoValue??"",
+        selectedItems: dashboard_view_Controller.SelectedRegion_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedRegion_list.isNotEmpty?"Region Name":null,
+            hintText: "Region Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Region Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.geoValue).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<RegionWithClusterFilterModal> selectedList) {
+          dashboard_view_Controller.SelectedRegion_list.value = selectedList;
+          dashboard_view_Controller.clusterName_controller.value.text =
+              selectedList.map((e) => e.geoValue).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.geoValue??""),
+              ),
+        ),
+      );
+    });
+
   }
 
 

@@ -203,6 +203,9 @@ class AppUrl {
      static const String DepartmentGetInsert = "$BASE_URL/api/Master/DepartmentGetInsert";
      static const String ContactMstUploader = "$BASE_URL/api/CRM/Contact/ContactMstUploader";
      static const String DesignationGet = "$BASE_URL/api/Master/DesignationGet";
+     static const String ClustersGetByEmail = "$BASE_URL/api/CRM/Master/ClustersGetByEmail";
+     static const String RegionsWithClusterFilterGetByEmail = "$BASE_URL/api/CRM/Master/RegionsWithClusterFilterGetByEmail";
+
 
      //todo Address or Consignee master repo.....
      static const String ConsigneeMstUploader = "$BASE_URL/api/CRM/Account/ConsigneeMstUploader";
