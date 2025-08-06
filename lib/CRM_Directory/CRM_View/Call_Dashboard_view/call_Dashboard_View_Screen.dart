@@ -15,6 +15,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
@@ -141,12 +142,26 @@ class CallDashboardViewScreen extends StatelessWidget{
                             return  Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                  'All ${dashboard_view_Controller.rodName == ''?dashboard_view_Controller.selectedOption.value : dashboard_view_Controller.rodName}',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
+                                Visibility(
+                                  visible : dashboard_view_Controller.rodName == '',
+                                  child: Text(
+                                    'All ${dashboard_view_Controller.selectedOption.value}',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                Visibility(
+                                  visible : dashboard_view_Controller.rodName != '',
+                                  child: Text(
+                                    '${dashboard_view_Controller.geoValueName} ${dashboard_view_Controller.rodName}',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
                                 ),
                                 SizedBox(width: 10,),
@@ -207,6 +222,7 @@ class CallDashboardViewScreen extends StatelessWidget{
         ),
         onPressed: () {
           dashboard_view_Controller.selectedOption.value = label;
+          dashboard_view_Controller.clearAllFilterController();
           dashboard_view_Controller.pageNumber = 0;
           dashboard_view_Controller.callDashboardData();
         },
@@ -355,7 +371,8 @@ class CallDashboardViewScreen extends StatelessWidget{
             width: chartWidth,
             child: Padding(
               padding: const EdgeInsets.only(top: 5.0),
-              child: BarChart(
+              child:
+              BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.start,
                   maxY: maxY,
@@ -365,7 +382,21 @@ class CallDashboardViewScreen extends StatelessWidget{
                     touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
                       if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
                       final rodIndex = response.spot!.touchedRodDataIndex;
-                      // Now call appropriate API
+                      final groupIndex = response.spot!.touchedBarGroupIndex;
+                      String? record = dashboard_view_Controller.callDashboardRecordList[groupIndex].geoValue == null?dashboard_view_Controller.callDashboardRecordList[groupIndex].employee : dashboard_view_Controller.callDashboardRecordList[groupIndex].geoValue;
+
+                      dashboard_view_Controller.geoValueName.value = record??"";
+                      if(dashboard_view_Controller.selectedOption == 'Region'){
+                        dashboard_view_Controller.RegionNameForApi = record??"";
+                      }else if(dashboard_view_Controller.selectedOption == 'Cluster'){
+                        dashboard_view_Controller.ClusterNameForApi = record??"";
+                      }else if(dashboard_view_Controller.selectedOption == 'Employee'){
+                        dashboard_view_Controller.EmployeeEmailIdForApi = dashboard_view_Controller.callDashboardRecordList[groupIndex].emailId??"";
+                      }
+
+                      print('geoNameValue...${record}');
+
+
                       switch (rodIndex) {
                         case 0:
                           dashboard_view_Controller.TypeOfCallForApi = 'Follow-Up Call';
@@ -376,19 +407,21 @@ class CallDashboardViewScreen extends StatelessWidget{
                         case 1:
                           dashboard_view_Controller.TypeOfCallForApi = 'New Call';
                           dashboard_view_Controller.rodName.value = 'New Call';
+                         // dashboard_view_Controller.geoValueName.value = record??"";
                           dashboard_view_Controller.pageNumber = 0;
                           dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
                           break;
                         case 2:
                           dashboard_view_Controller.TypeOfCallForApi = 'Payment Call';
                           dashboard_view_Controller.rodName.value = 'Payment Call';
+                         // dashboard_view_Controller.geoValueName.value = record??"";
                           dashboard_view_Controller.pageNumber = 0;
                           dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
                           break;
                       }
                     },
                     touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: Colors.lightBlue[50],
+                     // tooltipBgColor: Colors.lightBlue[50],
                       tooltipPadding: EdgeInsets.all(8),
                       tooltipRoundedRadius: 8,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
@@ -396,6 +429,8 @@ class CallDashboardViewScreen extends StatelessWidget{
                         String name = dashboard_view_Controller.selectedOption.value == 'Employee'
                             ? record.employee ?? ""
                             : record.geoValue ?? "";
+
+
 
                         String valueLabel;
                         switch (rodIndex) {
@@ -413,8 +448,7 @@ class CallDashboardViewScreen extends StatelessWidget{
                             break;
                           default:
                             valueLabel = 'Value: ${rod.toY.toInt()}';
-                            //dashboard_view_Controller.pageNumber = 0;
-                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+
                         }
 
                         return BarTooltipItem(
@@ -1409,6 +1443,8 @@ class CallDashboardViewScreen extends StatelessWidget{
           SizedBox(height: 10),
           bindTaskStatus(context),
           SizedBox(height: 10),
+          bindCustomerNameFilter(context),
+          SizedBox(height: 10),
           bindTypeCallFilter(context),
           SizedBox(height: 10),
           bindLastActivityStatus(context),
@@ -1594,7 +1630,7 @@ class CallDashboardViewScreen extends StatelessWidget{
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e).join(', '),
+              selectedItems.map((e) => e.taskStatus).join(', '),
               style: TextStyle(color: Colors.black), // Only black text
             ),
           );
@@ -1603,7 +1639,7 @@ class CallDashboardViewScreen extends StatelessWidget{
           dashboard_view_Controller.selectedDSARStatusList.value =
               selectedList;
           dashboard_view_Controller.lastActivity_Status_controller.value.text =
-              selectedList.map((e) => e).join(', ');
+              selectedList.map((e) => e.taskStatus).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(
@@ -1687,6 +1723,72 @@ class CallDashboardViewScreen extends StatelessWidget{
           itemBuilder: (context, item, isSelected) =>
               ListTile(
                 title: Text(item.taskStatus??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindCustomerNameFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<AccountMasterModel>.multiSelection(
+        items: dashboard_view_Controller.Account_Master_list,
+        itemAsString: (AccountMasterModel u) => u.accountName??"",
+        selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedAccount_Master_list.isNotEmpty?"Customer Name":null,
+            hintText: "Customer Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Customer Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.accountName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<AccountMasterModel> selectedList) {
+          dashboard_view_Controller.SelectedAccount_Master_list.value =
+              selectedList;
+          dashboard_view_Controller.CustomerName_controller.value.text =
+              selectedList.map((e) => e.accountName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.accountName??""),
               ),
         ),
       );

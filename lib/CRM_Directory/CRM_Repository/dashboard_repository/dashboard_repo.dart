@@ -33,5 +33,9 @@ class DashboardRepo{
     return _apiService.getApi(AppUrl.RegionsWithClusterFilterGetByEmail, sessionManagement, data);
   }
 
+  Future<String> AccountMasterGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.AccountMstGet,sessionManagement);
+  }
+
 
 }

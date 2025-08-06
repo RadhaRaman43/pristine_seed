@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
@@ -29,6 +30,7 @@ class CallDashboardVm extends GetxController{
   RxString formattedEndDate = "".obs;
   RxString character = 'Month'.obs;
   RxString rodName = ''.obs;
+  RxString geoValueName = ''.obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -42,6 +44,8 @@ class CallDashboardVm extends GetxController{
   RxList<String> selectedTaskStatusList = <String>[].obs;
   RxList<CallStatusMasterModel> DSARStatus_Master_list = <CallStatusMasterModel>[].obs;
   RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
+  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
   RxList<CallStatusMasterModel> TypeCall_Master_list = <CallStatusMasterModel>[].obs;
   RxList<CallStatusMasterModel> selectedTypeCallList = <CallStatusMasterModel>[].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
@@ -61,15 +65,18 @@ class CallDashboardVm extends GetxController{
   var ProductCategory_controller=TextEditingController().obs;
   var clusterName_controller=TextEditingController().obs;
   var RegionName_controller=TextEditingController().obs;
+  var CustomerName_controller=TextEditingController().obs;
 
 
   var TypeOfCallForApi;
+  var CustomerNameApi;
   var TaskStatusForApi;
   var lastActivityStatusForApi;
   var ProductCategoryForApi;
   var AccountOwnerForApi;
   var ClusterNameForApi;
   var RegionNameForApi;
+  var EmployeeEmailIdForApi = '';
 
 
   @override
@@ -88,6 +95,7 @@ class CallDashboardVm extends GetxController{
     getEmployeeMemberApi();
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
+    getAccountMaster(pageNumber);
   }
 
   void DateRange(String type) {
@@ -162,6 +170,13 @@ class CallDashboardVm extends GetxController{
           .map((e) => e.trim())
           .join('||');
     }
+    CustomerNameApi="";
+    if(CustomerName_controller.value.text.isNotEmpty){
+      CustomerNameApi = CustomerName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
     lastActivityStatusForApi = '';
     if(lastActivity_Status_controller.value.text.isNotEmpty){
       lastActivityStatusForApi = lastActivity_Status_controller.value.text
@@ -217,7 +232,7 @@ class CallDashboardVm extends GetxController{
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
-        "filter_customer_name": '',
+        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"All":TaskStatusForApi,
       };
 
@@ -262,7 +277,7 @@ class CallDashboardVm extends GetxController{
       Map data={
         "flag": selectedOption.value,
         "email_id": email,
-        "emp_email_id": "",
+        "emp_email_id": EmployeeEmailIdForApi.isEmpty?"":EmployeeEmailIdForApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
         "filter_type_of_call": TypeOfCallForApi.isEmpty?"All":TypeOfCallForApi,
@@ -271,7 +286,7 @@ class CallDashboardVm extends GetxController{
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_activity_status": lastActivityStatusForApi.isEmpty?"All":lastActivityStatusForApi,
-        "filter_customer_name": '',
+        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "filter_task_approval_status": TaskStatusForApi.isEmpty?"All":TaskStatusForApi,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
@@ -548,10 +563,66 @@ class CallDashboardVm extends GetxController{
     }
   }
 
+  void getAccountMaster(int page_no){
+    try{
+      Map<String, String> data={
+        "filter_account_code":'',
+        "filter_account_name": '',
+        "filter_account_type": '',
+        "filter_email_id": '',
+        "filter_phone_no":  '',
+        "filter_company_profile_type": '',
+        "filter_state_name": '',
+        "filter_postal_code": '',
+        "filter_district": '',
+        "filter_created_by": '',
+        "filter_account_owner": email,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": '',
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": '',
+        "filter_is_active": '-1',
+        "row_per_page": '50',
+        "page_number": '0'
+      };
+      loading.value=true;
+      _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              Account_Master_list.clear();
+            }
+            Account_Master_list.addAll(response);
+
+          }else {
+            loading.value = false;
+            Account_Master_list.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
 
   clearAllFilterController(){
     character.value = 'Month';
     rodName.value = '';
+    geoValueName.value = '';
     TypeOfCallForApi = '';
     TaskStatusForApi = '';
     lastActivityStatusForApi = '';
@@ -559,6 +630,7 @@ class CallDashboardVm extends GetxController{
     AccountOwnerForApi = '';
     ClusterNameForApi = '';
     RegionNameForApi = '';
+    EmployeeEmailIdForApi = '';
     filterCustomDateController.value.clear();
     task_Status_controller.value.clear();
     lastActivity_Status_controller.value.clear();
@@ -566,8 +638,10 @@ class CallDashboardVm extends GetxController{
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
     clusterName_controller.value.clear();
+    CustomerName_controller.value.clear();
     RegionName_controller.value.clear();
     selectedDSARStatusList.value = [];
+    SelectedAccount_Master_list.value = [];
     selectedTypeCallList.value = [];
     SelectedEmployee_Member_list.value = [];
     SelectedProductCategory_list.value = [];
