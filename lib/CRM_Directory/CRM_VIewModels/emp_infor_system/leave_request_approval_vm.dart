@@ -31,6 +31,8 @@ class LeaveRequestApprovalVm extends GetxController{
   String ShortLeaveTiming = "";
   String LeaveAction = "Add";
 
+  RxList<String> approveRejectList=["Approve", "Reject"].obs;
+
   var selectedChipIndex = (0).obs;
   RxBool isHalfDay = false.obs;
   RxBool isShortLeave = false.obs;
@@ -64,6 +66,13 @@ class LeaveRequestApprovalVm extends GetxController{
   final leaveId_filter_controller=TextEditingController();
 
 
+  final reject_remarks_controller=TextEditingController();
+  final approveReject_controller=TextEditingController().obs;
+  final manager_remarks_controller=TextEditingController();
+  RxString approveRejectFlag="Approve".obs;
+
+  RxList<LeaveTypeModel> leaveType_data_list=<LeaveTypeModel>[].obs;
+  Rx<LeaveTypeModel> leave_selection=LeaveTypeModel().obs;
 
   RxList<MarkLeaveRequestModal> employee_leave_data_Approval_list=<MarkLeaveRequestModal>[].obs;
 
@@ -74,6 +83,7 @@ class LeaveRequestApprovalVm extends GetxController{
     super.onInit();
     email = await sessionManagement.getEmail()??"";
     getEmployeeLeaveRequestRejectApproveDataGet(filterStatus.value, pageNumber);
+    getLeaveTypeData();
   }
 
 
@@ -131,9 +141,77 @@ class LeaveRequestApprovalVm extends GetxController{
 
 
 
+  getLeaveTypeData(){
+    Map data={
+      "leave_code": "",
+      "description": "",
+    };
+    print(data);
 
+    _api.leaveTypeApiHit(data, sessionManagement).then((value) {
+      print(value);
+      final Jsonresponse=json.decode(value);
+      try{
+        if(Jsonresponse is List){
+          List<LeaveTypeModel > response=Jsonresponse.map((e) =>
+              LeaveTypeModel .fromJson(e)).toList();
+          if(response!=null && response.length>0 && response[0].condtion?.toLowerCase()=="true"){
+            leaveType_data_list.value = response;
+          }else{
+            leaveType_data_list.value=[];
+          }
+        }
+      }catch(e){
+        print(e);
+      }finally{
 
+        loading.value=false;
+      }
+    },).onError((error, stackTrace) {
+      loading.value=false;
+    },).whenComplete(() {
+      loading.value=false;
+    },);
+  }
 
+  getEmployeeLeaveRequestApproveReject(String leaveId){
+    Map data={
+      "leave_id": leaveId,
+      "status": "pending for approval",
+      "approved_by": "",
+      "reject_remarks": reject_remarks_controller.value.text.isNotEmpty?reject_remarks_controller.value.text:"",
+      "leave_code": "",
+      "approved_from_date": "",
+      "approved_to_date": "",
+      "manager_remarks": ""
+    } ;
+
+    print(data);
+    loading.value=true;
+    _api.employeeLeaveRequestApproveRejectApiHit(data, sessionManagement).then((value) {
+      print(value);
+      final Jsonresponse=json.decode(value);
+      try{
+        if(Jsonresponse is List){
+          List<MarkLeaveRequestModal> response=Jsonresponse.map((e) =>
+              MarkLeaveRequestModal.fromJson(e)).toList();
+          if( response[0].condition?.toLowerCase()=="true"){
+          Utils.showToastification("Success", response[0].message.toString());
+          }else{
+            Utils.showErrorToastification("Error Message!", response[0].message.toString());
+          }
+        }
+      }catch(e){
+        print(e);
+      }finally{
+        loading.value=false;
+      }
+    },).onError((error, stackTrace) {
+      loading.value=false;
+    },).whenComplete(() {
+      loading.value=false;
+    },);
+  }
 
 
 

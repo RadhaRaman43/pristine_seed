@@ -1014,7 +1014,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
         if (date != null) {
           employeeMarkLeaveController.EndDate_filter_controller.text =
               outputFormat.format(date);
-          // Calculate the difference after selecting the end date
         }
       },
     );

@@ -555,7 +555,7 @@ class EmpMarkLeaveRequestAddScreen extends StatelessWidget {
           employee_Mark_Leave_Controller.leave_selection.value = selection;
           //employee_Mark_Leave_Controller.task_no = selection.leaveCode!;
 
-          if (selection.description == 'Comprehensive Leave') {
+       /*   if (selection.description == 'Comprehensive Leave') {
             employee_Mark_Leave_Controller.isComprehensiveLeave.value = true;
             employee_Mark_Leave_Controller.isPaternityLeave.value = false;
             employee_Mark_Leave_Controller.isTwinBabies_cobtroller.text = "";
@@ -568,7 +568,7 @@ class EmpMarkLeaveRequestAddScreen extends StatelessWidget {
             employee_Mark_Leave_Controller.isComprehensiveLeave.value = false;
             employee_Mark_Leave_Controller.isPaternityLeave.value = false;
             employee_Mark_Leave_Controller.isTwinBabies_cobtroller.text = "";
-          }
+          }*/
           FocusScope.of(context).unfocus();
         },
         dropdownMenuEntries: employee_Mark_Leave_Controller.leaveType_data_list
