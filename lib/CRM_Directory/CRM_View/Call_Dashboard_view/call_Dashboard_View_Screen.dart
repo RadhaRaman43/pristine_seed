@@ -480,7 +480,7 @@ class CallDashboardViewScreen extends StatelessWidget{
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        reservedSize: 50,
+                        reservedSize: 60,
                         getTitlesWidget: _getBottomTitles,
                       ),
                     ),
@@ -631,20 +631,30 @@ class CallDashboardViewScreen extends StatelessWidget{
           ? dashboard_view_Controller.callDashboardRecordList[index].employee ?? ""
           : dashboard_view_Controller.callDashboardRecordList[index].geoValue ?? "";
 
+      int TotalCall = (dashboard_view_Controller.callDashboardRecordList[index].newCall!) + (dashboard_view_Controller.callDashboardRecordList[index].followUpCall!) + (dashboard_view_Controller.callDashboardRecordList[index].paymentCall!);
+
       String formattedName = name.replaceAll(' ', '\n');
+      print('totalCallc ${TotalCall}');
 
       return SideTitleWidget(
         axisSide: meta.axisSide,
         space: 10,
         child: RotatedBox(
           quarterTurns: 4,
-          child: Text(
-            formattedName,
-            style: TextStyle(fontSize: 10, color: AllColors.blackColor),
-            softWrap: true,
-            maxLines: 2, // or more if needed
-            overflow: TextOverflow.ellipsis, // optional: show "..." if too long
-            textAlign: TextAlign.center,
+          child: Column(
+            children: [
+              Text('All Calls : ${TotalCall.toString()}', style: TextStyle(
+                fontSize: 10, color: AllColors.redColor
+              ),),
+              Text(
+                formattedName,
+                style: TextStyle(fontSize: 10, color: AllColors.blackColor),
+                softWrap: true,
+                maxLines: 2, // or more if needed
+                overflow: TextOverflow.ellipsis, // optional: show "..." if too long
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
         /*child: Transform.rotate(

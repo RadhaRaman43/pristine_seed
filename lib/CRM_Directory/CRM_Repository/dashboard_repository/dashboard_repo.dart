@@ -38,4 +38,13 @@ class DashboardRepo{
   }
 
 
+  Future<String> funnelDashboardGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.FunnelDashboardDataGet,sessionManagement);
+  }
+
+  Future<String> funnelDashboardUserWiseDataApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.FunnelDashboardDataGetByUser,sessionManagement);
+  }
+
+
 }
