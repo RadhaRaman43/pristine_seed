@@ -315,4 +315,6 @@ class AppUrl {
      static const String CallDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/CallDashboardUserWiseData";
      static const String FunnelDashboardDataGet="$BASE_URL/api/CRM/Dashboard/FunneldashboardDataGet";
      static const String FunnelDashboardDataGetByUser="$BASE_URL/api/CRM/Dashboard/FunneldashboardDataGetByUser";
+     static const String CommitDashboardDataGet="$BASE_URL/api/CRM/Dashboard/CommitDashboard";
+     static const String CommitDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/CommitDashboardUserWiseData";
 }

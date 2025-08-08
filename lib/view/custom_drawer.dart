@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Dashboard_VM/commit_dashboard_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_pending_for_approval_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
@@ -526,6 +527,15 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.delete<FunnelDashboardVm>();
                                               FunnelDashboardVm callDashboardController=Get.put(FunnelDashboardVm());
                                               Get.toNamed(RoutesName.funnelDashboardViewScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Commit Dashboard':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<CommitDashboardVm>();
+                                              CommitDashboardVm callDashboardController=Get.put(CommitDashboardVm());
+                                              Get.toNamed(RoutesName.commitDashboardViewScreen);
                                               Navigator.of(context);
                                               break;
 

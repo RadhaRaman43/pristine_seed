@@ -150,6 +150,7 @@ class RoutesName{
   //todo Dashboard Screens
   static const callDashboardViewScreen="/call_Dashboard_View_Screen";
   static const funnelDashboardViewScreen="/funnel_Dashboard_view.dart";
+  static const commitDashboardViewScreen="/commit_dashboard_viewScreen.dart";
 
 
   //todo image not found...

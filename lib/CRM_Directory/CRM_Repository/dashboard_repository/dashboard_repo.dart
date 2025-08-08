@@ -46,5 +46,13 @@ class DashboardRepo{
     return _apiService.postApi(data, AppUrl.FunnelDashboardDataGetByUser,sessionManagement);
   }
 
+  Future<String> commitDashboardGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.CommitDashboardDataGet,sessionManagement);
+  }
+
+  Future<String> commitDashboardUserWiseDataApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.CommitDashboardUserWiseData,sessionManagement);
+  }
+
 
 }
