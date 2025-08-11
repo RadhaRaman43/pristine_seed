@@ -79,6 +79,7 @@ class CommitDashboardVm extends GetxController{
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
     SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
+    selectedSalesStageStatusList.value = ["All"];
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     commitDashboardData();
@@ -214,7 +215,7 @@ class CommitDashboardVm extends GetxController{
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
-        "filter_quote_accepted": QuoteAcceptedForApi.isEmpty?"":QuoteAcceptedForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
         "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
@@ -267,7 +268,7 @@ class CommitDashboardVm extends GetxController{
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
-        "filter_quote_accepted": QuoteAcceptedForApi.isEmpty?"":QuoteAcceptedForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
         "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
@@ -556,7 +557,8 @@ class CommitDashboardVm extends GetxController{
     SelectedProductCategory_list.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
-    selectedSalesStageStatusList.value = [];
+    //selectedSalesStageStatusList.value = [];
+    selectedSalesStageStatusList.value = ["All"];
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 

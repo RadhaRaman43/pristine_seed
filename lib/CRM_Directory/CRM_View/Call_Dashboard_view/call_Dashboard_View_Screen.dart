@@ -100,7 +100,7 @@ class CallDashboardViewScreen extends StatelessWidget{
                       ),
 
                       Container(
-                          padding: EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
+                          padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 10.0),
                           child:
                           Obx((){
                             return  Column(
@@ -363,145 +363,141 @@ class CallDashboardViewScreen extends StatelessWidget{
       final interval = _calculateInterval(maxY);
 
       return Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: SizedBox(
             height: 450,
             width: chartWidth,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 5.0),
-              child:
-              BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.start,
-                  maxY: maxY,
-                  barGroups: _createBarGroups(),
-                  barTouchData: BarTouchData(
-                    enabled: true,
-                    touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
-                      if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
-                      final rodIndex = response.spot!.touchedRodDataIndex;
-                      final groupIndex = response.spot!.touchedBarGroupIndex;
-                      String? record = dashboard_view_Controller.callDashboardRecordList[groupIndex].geoValue == null?dashboard_view_Controller.callDashboardRecordList[groupIndex].employee : dashboard_view_Controller.callDashboardRecordList[groupIndex].geoValue;
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.start,
+                maxY: maxY,
+                barGroups: _createBarGroups(),
+                barTouchData: BarTouchData(
+                  enabled: true,
+                  touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
+                    if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
+                    final rodIndex = response.spot!.touchedRodDataIndex;
+                    final groupIndex = response.spot!.touchedBarGroupIndex;
+                    String? record = dashboard_view_Controller.callDashboardRecordList[groupIndex].geoValue == null?dashboard_view_Controller.callDashboardRecordList[groupIndex].employee : dashboard_view_Controller.callDashboardRecordList[groupIndex].geoValue;
 
-                      dashboard_view_Controller.geoValueName.value = record??"";
-                      if(dashboard_view_Controller.selectedOption == 'Region'){
-                        dashboard_view_Controller.RegionNameForApi = record??"";
-                      }else if(dashboard_view_Controller.selectedOption == 'Cluster'){
-                        dashboard_view_Controller.ClusterNameForApi = record??"";
-                      }else if(dashboard_view_Controller.selectedOption == 'Employee'){
-                        dashboard_view_Controller.EmployeeEmailIdForApi = dashboard_view_Controller.callDashboardRecordList[groupIndex].emailId??"";
-                      }
+                    dashboard_view_Controller.geoValueName.value = record??"";
+                    if(dashboard_view_Controller.selectedOption == 'Region'){
+                      dashboard_view_Controller.RegionNameForApi = record??"";
+                    }else if(dashboard_view_Controller.selectedOption == 'Cluster'){
+                      dashboard_view_Controller.ClusterNameForApi = record??"";
+                    }else if(dashboard_view_Controller.selectedOption == 'Employee'){
+                      dashboard_view_Controller.EmployeeEmailIdForApi = dashboard_view_Controller.callDashboardRecordList[groupIndex].emailId??"";
+                    }
 
-                      print('geoNameValue...${record}');
+                    print('geoNameValue...${record}');
 
 
+                    switch (rodIndex) {
+                      case 0:
+                        dashboard_view_Controller.TypeOfCallForApi = 'Follow-Up Call';
+                        dashboard_view_Controller.rodName.value = 'Follow-Up Call';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                        break;
+                      case 1:
+                        dashboard_view_Controller.TypeOfCallForApi = 'New Call';
+                        dashboard_view_Controller.rodName.value = 'New Call';
+                       // dashboard_view_Controller.geoValueName.value = record??"";
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                        break;
+                      case 2:
+                        dashboard_view_Controller.TypeOfCallForApi = 'Payment Call';
+                        dashboard_view_Controller.rodName.value = 'Payment Call';
+                       // dashboard_view_Controller.geoValueName.value = record??"";
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                        break;
+                    }
+                  },
+                  touchTooltipData: BarTouchTooltipData(
+                   // tooltipBgColor: Colors.lightBlue[50],
+                    tooltipPadding: EdgeInsets.all(8),
+                    tooltipRoundedRadius: 8,
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      final record = dashboard_view_Controller.callDashboardRecordList[group.x.toInt()];
+                      String name = dashboard_view_Controller.selectedOption.value == 'Employee'
+                          ? record.employee ?? ""
+                          : record.geoValue ?? "";
+
+
+
+                      String valueLabel;
                       switch (rodIndex) {
                         case 0:
-                          dashboard_view_Controller.TypeOfCallForApi = 'Follow-Up Call';
-                          dashboard_view_Controller.rodName.value = 'Follow-Up Call';
-                          dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          valueLabel = 'Follow-up: ${rod.toY.toInt()}';
+
                           break;
                         case 1:
-                          dashboard_view_Controller.TypeOfCallForApi = 'New Call';
-                          dashboard_view_Controller.rodName.value = 'New Call';
-                         // dashboard_view_Controller.geoValueName.value = record??"";
-                          dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          valueLabel = 'New Call: ${rod.toY.toInt()}';
+
                           break;
                         case 2:
-                          dashboard_view_Controller.TypeOfCallForApi = 'Payment Call';
-                          dashboard_view_Controller.rodName.value = 'Payment Call';
-                         // dashboard_view_Controller.geoValueName.value = record??"";
-                          dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          valueLabel = 'Payment: ${rod.toY.toInt()}';
+
                           break;
+                        default:
+                          valueLabel = 'Value: ${rod.toY.toInt()}';
+
                       }
+
+                      return BarTooltipItem(
+                        '$name\n$valueLabel',
+                        const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                      );
                     },
-                    touchTooltipData: BarTouchTooltipData(
-                     // tooltipBgColor: Colors.lightBlue[50],
-                      tooltipPadding: EdgeInsets.all(8),
-                      tooltipRoundedRadius: 8,
-                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                        final record = dashboard_view_Controller.callDashboardRecordList[group.x.toInt()];
-                        String name = dashboard_view_Controller.selectedOption.value == 'Employee'
-                            ? record.employee ?? ""
-                            : record.geoValue ?? "";
-
-
-
-                        String valueLabel;
-                        switch (rodIndex) {
-                          case 0:
-                            valueLabel = 'Follow-up: ${rod.toY.toInt()}';
-
-                            break;
-                          case 1:
-                            valueLabel = 'New Call: ${rod.toY.toInt()}';
-
-                            break;
-                          case 2:
-                            valueLabel = 'Payment: ${rod.toY.toInt()}';
-
-                            break;
-                          default:
-                            valueLabel = 'Value: ${rod.toY.toInt()}';
-
-                        }
-
-                        return BarTooltipItem(
-                          '$name\n$valueLabel',
-                          const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          ),
+                  ),
+                ),
+                titlesData: FlTitlesData(
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      interval: interval,
+                      getTitlesWidget: (value, meta) {
+                        return Text(
+                          value.toInt().toString(),
+                          style: TextStyle(fontSize: 10, color: Colors.black),
                         );
                       },
                     ),
                   ),
-                  titlesData: FlTitlesData(
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        interval: interval,
-                        getTitlesWidget: (value, meta) {
-                          return Text(
-                            value.toInt().toString(),
-                            style: TextStyle(fontSize: 10, color: Colors.black),
-                          );
-                        },
-                      ),
-                    ),
-                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 60,
-                        getTitlesWidget: _getBottomTitles,
-                      ),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50, getTitlesWidget: _getTopTitles,)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 60,
+                      getTitlesWidget: _getBottomTitles,
                     ),
                   ),
-                  borderData: FlBorderData(
-                    show: true,
-                    border: Border(
-                      left: BorderSide(color: Colors.grey, width: 1),
-                      bottom: BorderSide(color: Colors.grey, width: 1),
-                    ),
+                ),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border(
+                    left: BorderSide(color: Colors.grey, width: 1),
+                    bottom: BorderSide(color: Colors.grey, width: 1),
                   ),
-                  gridData: FlGridData(
-                    show: true,
-                    drawVerticalLine: false,
-                    getDrawingHorizontalLine: (value) {
-                      return FlLine(
-                        color: Colors.grey.withOpacity(0.2),
-                        strokeWidth: 1,
-                      );
-                    },
-                  ),
+                ),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey.withOpacity(0.2),
+                      strokeWidth: 1,
+                    );
+                  },
                 ),
               ),
             ),
@@ -631,10 +627,13 @@ class CallDashboardViewScreen extends StatelessWidget{
           ? dashboard_view_Controller.callDashboardRecordList[index].employee ?? ""
           : dashboard_view_Controller.callDashboardRecordList[index].geoValue ?? "";
 
-      int TotalCall = (dashboard_view_Controller.callDashboardRecordList[index].newCall!) + (dashboard_view_Controller.callDashboardRecordList[index].followUpCall!) + (dashboard_view_Controller.callDashboardRecordList[index].paymentCall!);
+      //int TotalCall = (dashboard_view_Controller.callDashboardRecordList[index].newCall!) + (dashboard_view_Controller.callDashboardRecordList[index].followUpCall!) + (dashboard_view_Controller.callDashboardRecordList[index].paymentCall!);
+      String followUpCall = dashboard_view_Controller.callDashboardRecordList[index].followUpCall.toString();
+      String newCall = dashboard_view_Controller.callDashboardRecordList[index].newCall.toString();
+      String paymentCall = dashboard_view_Controller.callDashboardRecordList[index].paymentCall.toString();
 
       String formattedName = name.replaceAll(' ', '\n');
-      print('totalCallc ${TotalCall}');
+    //  print('totalCallc ${TotalCall}');
 
       return SideTitleWidget(
         axisSide: meta.axisSide,
@@ -642,9 +641,10 @@ class CallDashboardViewScreen extends StatelessWidget{
         child: RotatedBox(
           quarterTurns: 4,
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text('All Calls : ${TotalCall.toString()}', style: TextStyle(
-                fontSize: 10, color: AllColors.redColor
+              Text('${followUpCall}    ${newCall}    ${paymentCall}', style: TextStyle(
+                fontSize: 10, color: AllColors.blackColor
               ),),
               Text(
                 formattedName,
@@ -656,6 +656,37 @@ class CallDashboardViewScreen extends StatelessWidget{
               ),
             ],
           ),
+        ),
+        /*child: Transform.rotate(
+          angle: -0.5, // approx -28.6 degrees (negative to tilt upward)
+          child: Text(
+            name,
+            style: TextStyle(fontSize: 12, color: AllColors.blackColor),
+            softWrap: false,
+            overflow: TextOverflow.ellipsis,
+            textAlign: TextAlign.center,
+          ),
+        ),*/
+      );
+    } else {
+      return SizedBox.shrink();
+    }
+  }
+
+  Widget _getTopTitles(double value, TitleMeta meta) {
+    final index = value.toInt();
+    if (index >= 0 && index < dashboard_view_Controller.callDashboardRecordList.length) {
+
+      int TotalCall = (dashboard_view_Controller.callDashboardRecordList[index].newCall!) + (dashboard_view_Controller.callDashboardRecordList[index].followUpCall!) + (dashboard_view_Controller.callDashboardRecordList[index].paymentCall!);
+
+      return SideTitleWidget(
+        axisSide: meta.axisSide,
+        space: 10,
+        child: RotatedBox(
+          quarterTurns: 4,
+          child: Text('All Calls : ${TotalCall.toString()}', style: TextStyle(
+              fontSize: 10, color: AllColors.blackColor
+          ),),
         ),
         /*child: Transform.rotate(
           angle: -0.5, // approx -28.6 degrees (negative to tilt upward)

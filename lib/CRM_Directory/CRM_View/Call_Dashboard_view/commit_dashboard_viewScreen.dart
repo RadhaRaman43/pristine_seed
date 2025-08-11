@@ -46,7 +46,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
             title:Row(
               children: [
                 Text(
-                  'Call Dashboard',
+                  'Commit Dashboard',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
                     fontSize: 17.0,
@@ -290,16 +290,19 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         dashboard_view_Controller.EmployeeEmailIdForApi = dashboard_view_Controller.commitDashboardRecordList[groupIndex].emailId??"";
                       }
 
+                      dashboard_view_Controller.rodName.value = dashboard_view_Controller.geoValueName.value;
+                      dashboard_view_Controller.pageNumber = 0;
+                      dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
 
-                      switch (rodIndex) {
+
+
+                      /*switch (rodIndex) {
                         case 0:
                          // dashboard_view_Controller.TypeOfCallForApi = 'Follow-Up Call';
-                          dashboard_view_Controller.rodName.value = dashboard_view_Controller.geoValueName.value;
-                          dashboard_view_Controller.pageNumber = 0;
-                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+
                           break;
 
-                      }
+                      }*/
                     },
                     touchTooltipData: BarTouchTooltipData(
                       // tooltipBgColor: Colors.lightBlue[50],
@@ -312,15 +315,16 @@ class CommitDashboardViewscreen extends StatelessWidget{
                             : record.geoValue ?? "";
 
                         String valueLabel;
-                        switch (rodIndex) {
+                        valueLabel = 'Estimated Amount: ${rod.toY.toInt()}';
+                        /*switch (rodIndex) {
                           case 0:
-                            valueLabel = 'Estimated Amount: ${rod.toY.toInt()}';
+
                             break;
 
                           default:
                             valueLabel = 'Value: ${rod.toY.toInt()}';
 
-                        }
+                        }*/
 
                         return BarTooltipItem(
                           '$name\n$valueLabel',
@@ -340,9 +344,13 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         interval: interval,
                         reservedSize: 50,
                         getTitlesWidget: (value, meta) {
+                          // Skip top label
+                          if (value == meta.max) {
+                            return const SizedBox.shrink();
+                          }
                           return Text(
                             value.toInt().toString(),
-                            style: TextStyle(fontSize: 10, color: Colors.black),
+                            style: const TextStyle(fontSize: 12, color: Colors.black),
                           );
                         },
                       ),
@@ -410,7 +418,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
   double _calculateInterval(double maxY) {
     // Desired number of intervals (around 6–10 is ideal)
-    const desiredSteps = 6;
+    const desiredSteps = 5;
 
     // Step 1: Calculate raw step size
     double rawInterval = maxY / desiredSteps;
@@ -503,10 +511,20 @@ class CommitDashboardViewscreen extends StatelessWidget{
     }
   }
 
-  double _calculateChartWidth() {
+  /*double _calculateChartWidth() {
     final count = dashboard_view_Controller.commitDashboardRecordList.length;
     final spacingPerBar = 80.0;
     return count * spacingPerBar + 10;
+  }*/
+
+  double _calculateChartWidth() {
+    final count = dashboard_view_Controller.commitDashboardRecordList.length;
+
+    double barWidth = 20; // your actual bar width in pixels
+    double barSpacing = 40; // gap between bars in pixels
+
+    // total width = (bar width + spacing) × count
+    return (barWidth + barSpacing) * count;
   }
 
 
@@ -955,10 +973,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                       child: Text(" ${dashboard_view_Controller
                           .commitDashboardUserWiseDataList[position]
                           .estClosureDate ??
-                          ""} ${pipeLine} ${dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .estClosureDate } "
-                        ,
+                          ""}",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -1417,6 +1432,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
             fontSize: AllFontSize.fourtine,
             fontWeight: FontWeight.w600),
       ),
+      initialSelection: 'All',
       inputDecorationTheme: const InputDecorationTheme(
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
