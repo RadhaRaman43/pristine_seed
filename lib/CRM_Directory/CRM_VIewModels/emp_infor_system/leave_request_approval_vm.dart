@@ -64,11 +64,14 @@ class LeaveRequestApprovalVm extends GetxController{
   final EndDate_filter_controller=TextEditingController();
   final leaveCode_filter_controller=TextEditingController();
   final leaveId_filter_controller=TextEditingController();
+  final createdBy_filter_controller=TextEditingController();
+  final leave_reason_filter_controller=TextEditingController();
 
 
   final reject_remarks_controller=TextEditingController();
   final approveReject_controller=TextEditingController().obs;
   final manager_remarks_controller=TextEditingController();
+
   RxString approveRejectFlag="Approve".obs;
 
   RxList<LeaveTypeModel> leaveType_data_list=<LeaveTypeModel>[].obs;
@@ -91,14 +94,14 @@ class LeaveRequestApprovalVm extends GetxController{
 
   getEmployeeLeaveRequestRejectApproveDataGet(String status, int pageNumber){
     Map data= {
-      "leave_id": "",
+      "leave_id": leaveId_filter_controller.value.text.isNotEmpty?leaveId_filter_controller.value.text:"",
       "email": email,
       "status": status,
-      "filter_start_date": "",
-      "filter_end_date": "",
-      "filter_leave_code": "",
-      "filter_created_by": "",
-      "leave_reason": "",
+      "filter_start_date": StartDate_filter_controller.value.text.isNotEmpty?StartDate_filter_controller.value.text:"",
+      "filter_end_date": EndDate_filter_controller.value.text.isNotEmpty?EndDate_filter_controller.value.text:"",
+      "filter_leave_code": leaveCode_filter_controller.value.text.isNotEmpty?leaveCode_filter_controller.value.text:"",
+      "filter_created_by": createdBy_filter_controller.value.text.isNotEmpty?createdBy_filter_controller.value.text:"",
+      "leave_reason": leave_reason_filter_controller.value.text.isNotEmpty?leave_reason_filter_controller.value.text:"",
       "pageNumber": pageNumber,
       "rowsPerPage": rowsPerPage
     };
@@ -174,16 +177,16 @@ class LeaveRequestApprovalVm extends GetxController{
     },);
   }
 
-  getEmployeeLeaveRequestApproveReject(String leaveId){
+  getEmployeeLeaveRequestApproveReject(String leaveId,String status, String leaveCode){
     Map data={
       "leave_id": leaveId,
-      "status": "pending for approval",
-      "approved_by": "",
+      "status": status=="Approve"?"APPROVED":"REJECTED",
+      "approved_by": email,
       "reject_remarks": reject_remarks_controller.value.text.isNotEmpty?reject_remarks_controller.value.text:"",
-      "leave_code": "",
-      "approved_from_date": "",
-      "approved_to_date": "",
-      "manager_remarks": ""
+      "leave_code": leaveCode,
+      "approved_from_date": StartDate_controller.value.text.isNotEmpty?StartDate_controller.value.text:"",
+      "approved_to_date": EndDate_controller.value.text.isNotEmpty? EndDate_controller.value.text:"",
+      "manager_remarks": manager_remarks_controller.value.text.isNotEmpty?manager_remarks_controller.value.text:""
     } ;
 
     print(data);
@@ -196,6 +199,8 @@ class LeaveRequestApprovalVm extends GetxController{
           List<MarkLeaveRequestModal> response=Jsonresponse.map((e) =>
               MarkLeaveRequestModal.fromJson(e)).toList();
           if( response[0].condition?.toLowerCase()=="true"){
+            pageNumber=0;
+            getEmployeeLeaveRequestRejectApproveDataGet("pending for approval", pageNumber);
           Utils.showToastification("Success", response[0].message.toString());
           }else{
             Utils.showErrorToastification("Error Message!", response[0].message.toString());

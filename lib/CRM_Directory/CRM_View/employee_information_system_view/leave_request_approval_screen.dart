@@ -58,7 +58,7 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
                 Spacer(),
 
                 IconButton(onPressed: () {
-
+                  showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
               ],
             )
@@ -265,6 +265,10 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
         .employee_leave_data_Approval_list[index].toDate??"");
     var approved_date=StaticMethod.convertDateFormat1(employeeLeaveRequestController
         .employee_leave_data_Approval_list[index].approvedOn??"");
+    var approved_start_date=StaticMethod.convertDateFormat1(employeeLeaveRequestController
+        .employee_leave_data_Approval_list[index].fromDate??"");
+    var approved_end_date=StaticMethod.convertDateFormat1(employeeLeaveRequestController
+        .employee_leave_data_Approval_list[index].toDate??"");
 
     String status= employeeLeaveRequestController
         .employee_leave_data_Approval_list[index].status?.toLowerCase()??"";
@@ -311,12 +315,26 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
 
             Spacer(),
 
-            GestureDetector(
-              onTap: (){
-                diologForApproveReject(context, employeeLeaveRequestController
-                    .employee_leave_data_Approval_list[index]);
-              },
-                child: Icon(Icons.update_sharp, color: AllColors.primaryDark1,)
+            Visibility(
+              visible: employeeLeaveRequestController
+                  .employee_leave_data_Approval_list[index].status?.toLowerCase()=='pending for approval',
+              child: GestureDetector(
+                onTap: (){
+                  employeeLeaveRequestController.leaveCode_controller.text=employeeLeaveRequestController
+                      .employee_leave_data_Approval_list[index].leaveDescription??"";
+                  employeeLeaveRequestController.approveReject_controller.value.text="Approve";
+                  employeeLeaveRequestController.approveRejectFlag.value="Approve";
+                  employeeLeaveRequestController.reject_remarks_controller.text="";
+                  employeeLeaveRequestController.manager_remarks_controller.text="";
+                  employeeLeaveRequestController.StartDate_controller.text=employeeLeaveRequestController
+                      .employee_leave_data_Approval_list[index].fromDate??"";
+                  employeeLeaveRequestController.EndDate_controller.text=employeeLeaveRequestController
+                      .employee_leave_data_Approval_list[index].toDate??"";
+                  diologForApproveReject(context, employeeLeaveRequestController
+                      .employee_leave_data_Approval_list[index]);
+                },
+                  child: Icon(Icons.update_sharp, color: AllColors.primaryDark1,)
+              ),
             )
 
 
@@ -324,10 +342,16 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
         ),
         subtitle:  Column(
           children: [
+
             _buildLabelWithValue(
-              label: "Emp Name : ",
+              label: "Cluster : ",
               value: employeeLeaveRequestController
-                  .employee_leave_data_Approval_list[index].createdFullName,
+                  .employee_leave_data_Approval_list[index].clusture,
+            ),
+            _buildLabelWithValue(
+              label: "Region : ",
+              value: employeeLeaveRequestController
+                  .employee_leave_data_Approval_list[index].region,
             ),
 
             _buildLabelWithValue(
@@ -337,10 +361,7 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
               // width: size.width * 0.36,
               color: getStatusColor(status),
             ),
-            _buildLabelWithValue(
-              label: "Created On : ",
-              value: createdOn,
-            ),
+
             _buildLabelWithValue(
               label: "Leave Description : ",
               value: employeeLeaveRequestController
@@ -368,28 +389,70 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
 
             Visibility(
               visible: employeeLeaveRequestController.filterStatus == 'Approved',
-              child: _buildLabelWithValue(
-                label: "Approved On : ",
-                value: approved_date,
+              child: Column(
+                children: [
+                  _buildLabelWithValue(
+                    label: "Approved Start Date: ",
+                    value: approved_start_date,
+                  ),
+                  _buildLabelWithValue(
+                    label: "Approved End Date: ",
+                    value: approved_end_date,
+                  ),
+                  _buildLabelWithValue(
+                    label: "Approved No. of days : ",
+                    value:employeeLeaveRequestController
+                        .employee_leave_data_Approval_list[index].noOfApprovedDays.toString()
+                  ),
+                  _buildLabelWithValue(
+                      label: "Approved Leave Description : ",
+                      value:employeeLeaveRequestController
+                          .employee_leave_data_Approval_list[index].approvedLeaveDescription
+                  ),
+                  _buildLabelWithValue(
+                      label: "Manager Remarks : ",
+                      value:employeeLeaveRequestController
+                          .employee_leave_data_Approval_list[index].managerRemarks
+                  ),
+                  _buildLabelWithValue(
+                    label: "Approved On : ",
+                    value: approved_date,
+                  ),
+                ],
               ),
             ),
 
+            _buildLabelWithValue(
+              label: "Reporting Manager : ",
+              value: employeeLeaveRequestController
+                  .employee_leave_data_Approval_list[index].approvedFullName,
+            ),
 
+            _buildLabelWithValue(
+              label: "Created By : ",
+              value: employeeLeaveRequestController
+                  .employee_leave_data_Approval_list[index].createdFullName,
+            ),
+            _buildLabelWithValue(
+              label: "Created On : ",
+              value: createdOn,
+            ),
 
             Visibility(
               visible: employeeLeaveRequestController.filterStatus == 'Rejected',
               child: Column(
                 children: [
                   _buildLabelWithValue(
-                    label: "Rejected On : ",
-                    value: approved_date,
-                  ),
-
-                  _buildLabelWithValue(
                     label: "Reject Remarks : ",
                     value: employeeLeaveRequestController
                         .employee_leave_data_Approval_list[index].rejectRemarks,
                   ),
+                  _buildLabelWithValue(
+                    label: "Rejected On : ",
+                    value: approved_date,
+                  ),
+
+
                 ],
               ),
             ),
@@ -479,16 +542,192 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
     );
   }
 
+
   void diologForApproveReject(context,MarkLeaveRequestModal employee_leave_data_approval_list) {
-/*    var toDate=StaticMethod.convertDateFormat1(employee_leave_data_approval_list.toDate??"");
-    var startDate=StaticMethod.convertDateFormat1(employee_leave_data_approval_list.fromDate??"");*/
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.6,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                children: [
+
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                        SizedBox(width: 5,),
+                        Text(
+                          "Leave Approve/Reject",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Get.back();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.cancel,
+                              color: AllColors.primaryDark1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.primaryDark1,
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: AllColors.grayColor1, // Set the border color here
+                                    width: 1.0, // Adjust the border width if necessary
+                                  ),
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: Column(
+                                  children: [
+                                    _buildLabelWithValue(
+                                      label: "Created By : ",
+                                      value: employee_leave_data_approval_list.createdFullName,
+                                    ),
+                                    _buildLabelWithValue(
+                                      label: "Leave Type : ",
+                                      value:employee_leave_data_approval_list.leaveDescription,
+                                    ),
+                                    _buildLabelWithValue(
+                                        label: "Start Date : ",
+                                        value: employee_leave_data_approval_list.fromDate
+                                    ),
+                                    _buildLabelWithValue(
+                                      label: "End Date : ",
+                                      value: employee_leave_data_approval_list.toDate,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Center(
+                                  child: Divider(
+                                    height: 1,
+                                    color: AllColors.primaryDark1,
+                                  )),
+
+                              SizedBox(height: 10,),
+
+
+                              Obx((){
+
+                                return bindAction(context);
+                              }),
+                              SizedBox(height: 10,),
+                              Obx((){
+                                return  Visibility(
+                                  visible: employeeLeaveRequestController.approveRejectFlag.value=="Approve",
+                                  child: Column(
+                                    children: [
+                                      bindLeaveTypeDropDown(context),
+                                      SizedBox(height: 10,),
+                                      bindFromDatePicker(context,employee_leave_data_approval_list),
+                                      SizedBox(height: 10,),
+                                      bindEndDatePicker(context,employee_leave_data_approval_list),
+                                      SizedBox(height: 10,),
+                                      bindManagerRemarks(context),
+                                      SizedBox(height: 10,),
+                                    ],
+                                  ),
+                                );
+                              }),
+                             Obx((){
+                               return Visibility(
+                                   visible: employeeLeaveRequestController.approveRejectFlag.value=="Reject",
+                                   child: bindRejectedRemarks(context));
+                             })
+                              ,
+                              SizedBox(height: 20,),
+                              Obx((){
+                                return  Container(
+                                  width: size.width,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:MaterialStateProperty.all(employeeLeaveRequestController.approveRejectFlag.value=="Approve"
+                                            ?AllColors.primaryDark1:AllColors.redColor)
+                                    ),
+                                    child: Text(employeeLeaveRequestController.approveRejectFlag.value,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.whiteColor,
+                                        fontSize: AllFontSize.fourtine,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+
+                                    onPressed: () {
+                                      if(employeeLeaveRequestController.approveRejectFlag.value=='Approve'){
+                                        employeeLeaveRequestController.reject_remarks_controller.text="";
+                                      }else{
+                                        employeeLeaveRequestController.manager_remarks_controller.text="";
+                                      }
+                                      employeeLeaveRequestController.getEmployeeLeaveRequestApproveReject(
+                                          employee_leave_data_approval_list.leaveId??"",employeeLeaveRequestController.approveRejectFlag.value,
+                                          employee_leave_data_approval_list.leaveCode??""
+                                      );
+                                      Get.back();
+                                    },
+                                  ),
+                                );
+                              })
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
+
+                ],
+              ),
+            );
+          },
+
+        );
+      },
+    );
+  }
+ /* void diologForApproveReject(context,MarkLeaveRequestModal employee_leave_data_approval_list) {
+*//*    var toDate=StaticMethod.convertDateFormat1(employee_leave_data_approval_list.toDate??"");
+    var startDate=StaticMethod.convertDateFormat1(employee_leave_data_approval_list.fromDate??"");*//*
     employeeLeaveRequestController.EndDate_controller.text=employee_leave_data_approval_list.toDate??"";
     employeeLeaveRequestController.StartDate_controller.text=employee_leave_data_approval_list.fromDate??"";
-    showModalBottomSheet(context: context, builder: (context){
+    showModalBottomSheet(context: context,
+        isScrollControlled: true,
+        builder: (context){
       return SingleChildScrollView(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
         child: Column(
           mainAxisSize: MainAxisSize.min, // Ensure minimal height
           children: [
@@ -575,7 +814,7 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
 
 
                       Obx((){
-                        employeeLeaveRequestController.approveReject_controller.value.text="Approve";
+
                         return bindAction(context);
                       }),
                       SizedBox(height: 10,),
@@ -585,15 +824,16 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
                       bindFromDatePicker(context),
                       SizedBox(height: 10,),
                       bindEndDatePicker(context),
-
+                      SizedBox(height: 10,),
+                      bindManagerRemarks(context),
                       SizedBox(height: 20,),
                       Obx((){
                         return  Container(
                           width: size.width,
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              backgroundColor:MaterialStateProperty.all(employeeLeaveRequestController.approveRejectFlag.value=="Approve"
-                                  ?AllColors.primaryDark1:AllColors.redColor)
+                                backgroundColor:MaterialStateProperty.all(employeeLeaveRequestController.approveRejectFlag.value=="Approve"
+                                    ?AllColors.primaryDark1:AllColors.redColor)
                             ),
                             child: Text(employeeLeaveRequestController.approveRejectFlag.value,
                               style: GoogleFonts.poppins(
@@ -604,27 +844,80 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
                             ),
 
                             onPressed: () {
-
+                              employeeLeaveRequestController.getEmployeeLeaveRequestApproveReject(
+                                  employee_leave_data_approval_list.leaveId??""
+                              );
                             },
                           ),
                         );
                       })
-
-
-
                     ],
                   ),
                 ),
               ),
-            )
+            ),
+
           ],
         ),
       );
     });
+  }*/
+
+
+
+  Widget bindManagerRemarks(context) {
+    return TextFormField(
+      controller: employeeLeaveRequestController.manager_remarks_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Manager Remarks',
+          labelText: 'Manager Remarks',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      cursorColor: AllColors.primaryDark1,
+    );
   }
 
+  Widget bindRejectedRemarks(context) {
+    return TextFormField(
+      controller: employeeLeaveRequestController.reject_remarks_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Enter Reject Reason',
+          labelText: 'Enter Reject Reason',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )),
+      cursorColor: AllColors.primaryDark1,
+    );
+  }
 
-  Widget bindEndDatePicker(context) {
+  Widget bindEndDatePicker(context, MarkLeaveRequestModal employee_leave_data_approval_list, ) {
     return Container(
      // padding: const EdgeInsets.only(right: 10),
       child: TextFormField(
@@ -658,27 +951,11 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
           DateTime stating_date = startDateText.isNotEmpty
               ? DateFormat('yyyy-MM-dd').parse(startDateText)
               : DateTime.now();*/
-          DateTime initialDate = DateTime.now();
-          if (employeeLeaveRequestController
-              .StartDate_controller.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
-              employeeLeaveRequestController.StartDate_controller.text,
+          DateTime initialDate= DateFormat('yyyy-MM-dd').parse(
+              employee_leave_data_approval_list.fromDate??"");
+          var ending_date = DateFormat('yyyy-MM-dd').parse(
+              employee_leave_data_approval_list.toDate??"",
             );
-          }
-          var ending_date=DateTime.now();
-          if(employeeLeaveRequestController
-              .EndDate_controller.text.isNotEmpty){
-            ending_date = DateFormat('yyyy-MM-dd').parse(
-              employeeLeaveRequestController.EndDate_controller.text,
-            );
-          }
-        /*  // Get the previously selected end date or use today
-          String endDateText =
-              employeeLeaveRequestController.EndDate_controller.text;
-          DateTime initialDate = endDateText.isNotEmpty
-              ? DateFormat('yyyy-MM-dd').parse(endDateText)
-              : stating_date;
-          DateTime ending_date = DateTime(2200);*/
           FocusScope.of(context).requestFocus(FocusNode());
           DateTime? date = await showDatePicker(
             context: context,
@@ -711,7 +988,7 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
     );
   }
 
-  Widget bindFromDatePicker(context) {
+  Widget bindFromDatePicker(context, MarkLeaveRequestModal employee_leave_data_approval_list, ) {
     return Container(
       //padding: const EdgeInsets.only(right: 10),
       child: TextFormField(
@@ -740,25 +1017,14 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
         cursorColor: AllColors.primaryDark1,
         onTap: () async {
           // Check if a date is already selected and parse it
-          DateTime initialDate = DateTime.now();
-          if (employeeLeaveRequestController
-              .StartDate_controller.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
-              employeeLeaveRequestController.StartDate_controller.text,
+          DateTime initialDate = DateFormat('yyyy-MM-dd').parse(
+              employee_leave_data_approval_list.fromDate??"",
             );
-          }
-          var ending_date=DateTime.now();
-          if(employeeLeaveRequestController
-              .EndDate_controller.text.isNotEmpty){
-            ending_date = DateFormat('yyyy-MM-dd').parse(
-              employeeLeaveRequestController.EndDate_controller.text,
+
+          var ending_date= DateFormat('yyyy-MM-dd').parse(
+                employee_leave_data_approval_list.toDate??"",
             );
-          }
 
-
-          // Define the range of selectable dates
-         // DateTime stating_date = DateTime(1900);
-         // DateTime ending_date = DateTime(2200);
           FocusScope.of(context).requestFocus(FocusNode());
           DateTime? date = await showDatePicker(
             context: context,
@@ -924,6 +1190,356 @@ class LeaveRequestApprovalScreen extends StatelessWidget{
               ));
         }).toList(),
       ),
+    );
+  }
+
+
+
+  void showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SingleChildScrollView(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Ensure minimal height
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
+                    SizedBox(width: 5,),
+                    Text(
+                      "Filter ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twentee,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    Spacer(),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 18.0),
+                        child: Icon(
+                          Icons.cancel,
+                          color: AllColors.primaryDark1,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Center(
+                  child: Divider(
+                    height: 1,
+                    color: AllColors.primaryDark1,
+                  )),
+              SingleChildScrollView(
+                child: Container(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        bindLeaveId(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        bindLeaveReason(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+
+                        bindFilterStartDate(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        bindFilterEndDate(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        bindCreatedBy(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: DefaultButton(
+                                text: 'Reset',
+                                press: (){
+                                  employeeLeaveRequestController.leaveCode_filter_controller.text="";
+                                  employeeLeaveRequestController.StartDate_filter_controller.text="";
+                                  employeeLeaveRequestController.EndDate_filter_controller.text="";
+                                  employeeLeaveRequestController.leaveId_filter_controller.text="";
+                                  employeeLeaveRequestController.createdBy_filter_controller.text="";
+                                  employeeLeaveRequestController.leave_reason_filter_controller.text="";
+                                  employeeLeaveRequestController.pageNumber=0;
+                                  employeeLeaveRequestController.getEmployeeLeaveRequestRejectApproveDataGet(
+                                      employeeLeaveRequestController.filterStatus.value, employeeLeaveRequestController.pageNumber);
+                                  Get.back();
+                                },
+                              ),
+                            ),
+                            SizedBox(width: 10,),
+                            Expanded(
+                              child: DefaultButton(
+                                text:  'Submit',
+                                press: (){
+                                  employeeLeaveRequestController.pageNumber=0;
+                                  employeeLeaveRequestController.getEmployeeLeaveRequestRejectApproveDataGet(
+                                      employeeLeaveRequestController.filterStatus.value, employeeLeaveRequestController.pageNumber);
+                                  Get.back();
+                                },
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  bindFilterStartDate(BuildContext context) {
+    return  TextFormField(
+      controller: employeeLeaveRequestController.StartDate_filter_controller,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          suffixIcon: Icon(Icons.calendar_month),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Start Date',
+          hintText: 'Start Date',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      onTap: () async {
+        DateTime? initialDate;
+        if (employeeLeaveRequestController.StartDate_filter_controller.text.isNotEmpty) {
+          initialDate = DateFormat('yyyy-MM-dd').parse(
+            employeeLeaveRequestController.StartDate_filter_controller.text,
+          );
+        } else {
+          initialDate = DateTime.now();
+        }
+        // Define the first and last date of the current year
+        DateTime stating_date = DateTime(DateTime.now().year, 1, 1); // January 1st
+        DateTime ending_date = DateTime(DateTime.now().year, 12, 31); // December 31st
+        FocusScope.of(context).requestFocus(new FocusNode());
+        DateTime? date = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: stating_date,
+          lastDate: ending_date,
+
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark, // Change the primary color
+                //accentColor: AllColors.primaryDark1, // Change the accent color
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark),
+                buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!,
+            );
+          },
+        );
+        var outputFormat = DateFormat('yyyy-MM-dd');
+        employeeLeaveRequestController.StartDate_filter_controller.text =
+            outputFormat.format(date!);
+
+      },
+    );
+  }
+
+  bindFilterEndDate(BuildContext context) {
+    return  TextFormField(
+      controller: employeeLeaveRequestController.EndDate_filter_controller,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          suffixIcon: Icon(Icons.calendar_month),
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'End Date',
+          hintText: 'End Date',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      onTap: () async {
+        // Get the start date and parse it
+        String startDateText =
+            employeeLeaveRequestController.StartDate_filter_controller.text;
+        DateTime stating_date = startDateText.isNotEmpty
+            ? DateFormat('yyyy-MM-dd').parse(startDateText)
+            : DateTime.now();
+
+        // Get the previously selected end date or use today
+        String endDateText =
+            employeeLeaveRequestController.EndDate_filter_controller.text;
+        DateTime initialDate = endDateText.isNotEmpty
+            ? DateFormat('yyyy-MM-dd').parse(endDateText)
+            : stating_date;
+
+        // Ensure the end date cannot be earlier than the start date
+        DateTime ending_date = DateTime(2200);
+
+        // Remove focus from the field
+        FocusScope.of(context).requestFocus(FocusNode());
+
+        // Show the date picker
+        DateTime? date = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: stating_date,
+          lastDate: ending_date,
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        // Update the controller with the selected date
+        var outputFormat = DateFormat('yyyy-MM-dd');
+        if (date != null) {
+          employeeLeaveRequestController.EndDate_filter_controller.text =
+              outputFormat.format(date);
+        }
+      },
+    );
+  }
+  bindLeaveId(BuildContext context) {
+    return   TextField(
+      controller: employeeLeaveRequestController.leaveId_filter_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Leave Id',
+          hintText: 'Leave Id',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+    );
+  }
+
+
+
+
+  bindLeaveReason(BuildContext context) {
+    return  TextField(
+      controller: employeeLeaveRequestController.leave_reason_filter_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Leave Reason',
+          hintText: 'Leave Reason',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+
+    );
+  }
+
+  bindCreatedBy(BuildContext context) {
+    return  TextField(
+      controller: employeeLeaveRequestController.createdBy_filter_controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Created By',
+          hintText: 'Created By',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+
     );
   }
 }

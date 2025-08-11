@@ -285,11 +285,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              _buildLabelWithValue(
-                label: "Emp Name : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].createdFullName,
-              ),
 
               _buildLabelWithValue(
                 label: "Status : ",
@@ -298,10 +293,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                 // width: size.width * 0.36,
                 color: getStatusColor(status),
               ),
-              _buildLabelWithValue(
-                label: "Created On : ",
-                value: createdOn,
-              ),
+
               _buildLabelWithValue(
                 label: "Leave Description : ",
                 value: employeeMarkLeaveController
@@ -328,17 +320,55 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
               ),
 
               Visibility(
-                visible: employeeMarkLeaveController.filterStatus == 'Approved',
-                child: _buildLabelWithValue(
-                  label: "Approved On : ",
-                  value: approved_date,
+                visible: employeeMarkLeaveController.filterStatus.value == 'Approved',
+                child: Column(
+                  children: [
+                    _buildLabelWithValue(
+                      label: "Approved Start Date: ",
+                      value: employeeMarkLeaveController
+                          .employee_leave_data_list[index].approvedFromDate,
+                    ),
+                    _buildLabelWithValue(
+                      label: "Approved End Date: ",
+                      value: employeeMarkLeaveController
+                          .employee_leave_data_list[index].approvedToDate
+                    ),
+                    _buildLabelWithValue(
+                        label: "Approved No. of days : ",
+                        value:employeeMarkLeaveController
+                            .employee_leave_data_list[index].noOfApprovedDays.toString()
+                    ),
+                    _buildLabelWithValue(
+                        label: "Approved Leave Description : ",
+                        value:employeeMarkLeaveController
+                            .employee_leave_data_list[index].approvedLeaveDescription
+                    ),
+                    _buildLabelWithValue(
+                        label: "Manager Remarks : ",
+                        value:employeeMarkLeaveController
+                            .employee_leave_data_list[index].managerRemarks
+                    ),
+                    _buildLabelWithValue(
+                      label: "Approved On : ",
+                      value: approved_date,
+                    ),
+                  ],
                 ),
               ),
 
+              _buildLabelWithValue(
+                label: "Created By: ",
+                value: employeeMarkLeaveController
+                    .employee_leave_data_list[index].createdFullName,
+              ),
+              _buildLabelWithValue(
+                label: "Created On : ",
+                value: createdOn,
+              ),
 
 
               Visibility(
-                visible: employeeMarkLeaveController.filterStatus == 'Rejected',
+                visible: employeeMarkLeaveController.filterStatus.value == 'Rejected',
                 child: Column(
                   children: [
                     _buildLabelWithValue(
