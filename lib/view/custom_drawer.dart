@@ -12,6 +12,7 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_inform
 
 import '../CRM_Directory/CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Bussiness_Tour_Plan_Vm/Business_Tour_Approval_Vm.dart';
+import '../CRM_Directory/CRM_VIewModels/Dashboard_VM/Sales_Dashboard_Vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Dashboard_VM/call_dashboard_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Dashboard_VM/funnel_dashboard_Vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
@@ -536,6 +537,15 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.delete<CommitDashboardVm>();
                                               CommitDashboardVm callDashboardController=Get.put(CommitDashboardVm());
                                               Get.toNamed(RoutesName.commitDashboardViewScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Sales Dashboard ':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesDashboardVm>();
+                                              SalesDashboardVm callDashboardController=Get.put(SalesDashboardVm());
+                                              Get.toNamed(RoutesName.salesDashboardViewScreen);
                                               Navigator.of(context);
                                               break;
 

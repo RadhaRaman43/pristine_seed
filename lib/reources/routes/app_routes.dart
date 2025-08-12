@@ -38,6 +38,7 @@ import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_plan_scr
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/call_Dashboard_View_Screen.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/commit_dashboard_viewScreen.dart';
 import '../../CRM_Directory/CRM_View/Call_Dashboard_view/funnel_Dashboard_view.dart';
+import '../../CRM_Directory/CRM_View/Call_Dashboard_view/sales_Dashboard_ViewScreen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
@@ -743,6 +744,13 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.salesDashboardViewScreen,
+        page: ()=>SalesDashboardViewscreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
 
 
