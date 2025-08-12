@@ -77,6 +77,7 @@ class QuoteInformationScreen extends StatelessWidget {
           Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
         } else {
           saleCycleController.clearAllFieldOfQuoteFilter();
+          saleCycleController.clearAllFieldOfFilter();
           saleCycleController.pageNumber = 0;
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "";
@@ -225,7 +226,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               return Visibility(
                                 visible: (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
                                 || saleCycleController.userType.toLowerCase()=="branch head") && saleCycleController
-                                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
+                                    .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
                                 child: ActionChip(
                                   label: Text(
                                     "Sales Advise Create",
@@ -269,7 +270,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx((){
                           return Visibility(
                             visible: saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
+                                .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
                             child: ActionChip(
                               label: Text(
                                 "View Sales Advise",

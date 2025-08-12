@@ -11,6 +11,8 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
@@ -33,6 +35,9 @@ class AddNewDsarScreen extends StatelessWidget{
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
+
+  static String _displayContactNameForOption(ContactMstGetListModal option) =>
+      option.contactName!;
 
 
   @override
@@ -223,6 +228,23 @@ class AddNewDsarScreen extends StatelessWidget{
                   ),
                 );
               }),
+
+              Obx((){
+                return Visibility(
+                    visible: TaskMaster_page_controller.typeOfCall.value,
+                    child: Column(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: bindContactNameDropDown(context)
+                        ),
+                        SizedBox(height: 15,),
+                      ],
+                    )
+                );
+              }),
+
+
 
               Obx((){
                 return Visibility(
@@ -1242,5 +1264,63 @@ class AddNewDsarScreen extends StatelessWidget{
 
   }
 
+
+  Widget bindContactNameDropDown(context){
+    return Container(
+      padding: const EdgeInsets.only(right: 15),
+      child: DropdownMenu<ContactMstGetListModal>(
+        width: MediaQuery.of(context).size.width - 25,
+        controller: TaskMaster_page_controller.Contact_Name_controller,
+        label: Text(
+          "Select Contact Name",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w400),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1),
+            borderRadius: BorderRadius.all(Radius.circular(10)),// Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+        onSelected: (ContactMstGetListModal? selection) {
+          TaskMaster_page_controller.Contact_Name_controller.text =
+              _displayContactNameForOption(selection!).toString();
+          TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode!;
+          FocusScope.of(context).unfocus();
+        },
+        enableFilter: true,
+        requestFocusOnTap: true,
+        dropdownMenuEntries: TaskMaster_page_controller.contact_master_list
+            .map<DropdownMenuEntry<ContactMstGetListModal>>((ContactMstGetListModal e) {
+          return DropdownMenuEntry<ContactMstGetListModal>(
+              value: e,
+              label: e.contactName!,
+              style: ButtonStyle(
+                foregroundColor:
+                MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+              ));
+        }).toList(),
+      ),
+    );
+
+  }
 
 }

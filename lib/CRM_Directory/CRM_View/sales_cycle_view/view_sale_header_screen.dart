@@ -1353,7 +1353,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 .value
                                                 .text = saleCycleController
                                                     .saleCycleList[0]
-                                                    .salesCycleApprovalStatus ??
+                                                    .actualSalesCycleApprovalStatus ??
                                                 "";
                                             saleCycleController
                                                 .expectedClosuredateController
@@ -5304,6 +5304,27 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
                 Text(
                   saleCycleController.quoteList[index].quoteStatus ?? "",
+                  style: GoogleFonts.poppins(
+                    color: getStatusColor(saleCycleStatus),
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Quote Accepted : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  saleCycleController.quoteList[index].quoteAccepted ?? "",
                   style: GoogleFonts.poppins(
                     color: getStatusColor(saleCycleStatus),
                     fontSize: AllFontSize.twelve,

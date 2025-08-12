@@ -2055,8 +2055,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Created By',
-          hintText: 'Created By',
+          labelText: 'Task Owner',
+          hintText: 'Task Owner',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

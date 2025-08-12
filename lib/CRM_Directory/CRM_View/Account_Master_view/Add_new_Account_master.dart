@@ -1590,7 +1590,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                             SizedBox(height: 15,),
 
-                            Obx((){
+                            /*Obx((){
                               return Container(
                                 decoration: BoxDecoration(
                                     color: Colors.white,
@@ -1619,11 +1619,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 ),
                               );
-                            })
-
-
-
-
+                            })*/
                           ],
                         ),
                       ),
