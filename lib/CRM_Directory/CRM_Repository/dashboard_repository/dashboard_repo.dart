@@ -58,5 +58,13 @@ class DashboardRepo{
     return _apiService.postApi(data, AppUrl.SalesDashboardReportGet,sessionManagement);
   }
 
+  Future<String> PendingDSARDashboardApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.PendingDSARDashboard,sessionManagement);
+  }
+
+  Future<String> pendingDSARDashboardUserWiseDataApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.PendingDsarDashboardUserWiseData,sessionManagement);
+  }
+
 
 }

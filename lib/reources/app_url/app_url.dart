@@ -317,5 +317,7 @@ class AppUrl {
      static const String FunnelDashboardDataGetByUser="$BASE_URL/api/CRM/Dashboard/FunneldashboardDataGetByUser";
      static const String CommitDashboardDataGet="$BASE_URL/api/CRM/Dashboard/CommitDashboard";
      static const String CommitDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/CommitDashboardUserWiseData";
+     static const String PendingDSARDashboard="$BASE_URL/api/CRM/Dashboard/PendingDsarDashboard";
+     static const String PendingDsarDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/PendingDsarDashboardUserWiseData";
      static const String SalesDashboardReportGet="$BASE_URL/api/CRM/SalesCycle/SalesDashboardReportGet";
 }

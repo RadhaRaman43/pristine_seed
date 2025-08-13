@@ -289,9 +289,7 @@ class FunnelDashboardView extends StatelessWidget{
     String? Due_Date=StaticMethod.convertDateFormat1( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].taskDueDate ?? "");
     String? LastActivityUpdatedOn=StaticMethod.convertDateFormat1( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].lastActivityUpdatedOn ?? "");
     String? createdOn=StaticMethod.dateTimeToDate( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].createdOn ?? "");
-    String taskStatus =  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].taskStatus!;
-    String pipeLine = dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
-        .taskDueTime!.isNotEmpty ? "|" : "";
+    String taskStatus =  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].taskStatus??"";
     Color getStatusColor(String status) {
       switch (status.toUpperCase()) {
         case 'PENDING':
@@ -330,11 +328,11 @@ class FunnelDashboardView extends StatelessWidget{
                     fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
-                          .taskStatus!,
+                          .taskStatus??"",
                       child: Text(
                         dashboard_view_Controller
                             .funnelDashboardUserWiseDataList[position]
-                            .taskStatus!,
+                            .taskStatus??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: getStatusColor(taskStatus),
@@ -360,11 +358,11 @@ class FunnelDashboardView extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
-                          .taskId!,
+                          .taskId??"",
                       child: Text(
                         dashboard_view_Controller
                             .funnelDashboardUserWiseDataList[position]
-                            .taskId!,
+                            .taskId??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -448,11 +446,11 @@ class FunnelDashboardView extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
-                          .contactName!,
+                          .contactName??"",
                       child: Text(
                         dashboard_view_Controller
                             .funnelDashboardUserWiseDataList[position]
-                            .contactName!,
+                            .contactName??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -478,11 +476,11 @@ class FunnelDashboardView extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
-                          .contactName!,
+                          .contactName??"",
                       child: Text(
                         dashboard_view_Controller
                             .funnelDashboardUserWiseDataList[position]
-                            .contactName!,
+                            .contactName??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -508,11 +506,11 @@ class FunnelDashboardView extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
-                          .typeOfCall!,
+                          .typeOfCall??"",
                       child: Text(
                         dashboard_view_Controller
                             .funnelDashboardUserWiseDataList[position]
-                            .typeOfCall!,
+                            .typeOfCall??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -607,14 +605,10 @@ class FunnelDashboardView extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
-                          .taskDueDate,
-                      child: Text(" ${dashboard_view_Controller
+                          .taskDueDate??"",
+                      child: Text('${dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
-                          .taskDueDate ??
-                          ""} ${pipeLine} ${dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .taskDueTime } "
-                        ,
+                          .taskDueDate ?? ""}',
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,

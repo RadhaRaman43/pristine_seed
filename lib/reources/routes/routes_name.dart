@@ -152,6 +152,7 @@ class RoutesName{
   static const funnelDashboardViewScreen="/funnel_Dashboard_view.dart";
   static const commitDashboardViewScreen="/commit_dashboard_viewScreen.dart";
   static const salesDashboardViewScreen="/sales_Dashboard_ViewScreen";
+  static const pendingDSARDashboardViewScreen="/pending_DSAR_Dashboard_ViewScreen.dart";
 
 
   //todo image not found...
