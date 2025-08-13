@@ -224,6 +224,11 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                     salesCycleController.getsalesCycleData(salesCycleController.pageNumber,  accountMaster_page_controller.AccountDashboardDataSalesList[position]
                         .salesCycleId!, "ViewHeader", 'FromDashboard');
                     salesCycleController.pageNumber=0;
+
+                    /*salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                        salesCycleController.pageNumber ,
+                        accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);*/
+
                     salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
                   },
 
@@ -254,7 +259,7 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Account Name : ",
+                  "Customer Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,

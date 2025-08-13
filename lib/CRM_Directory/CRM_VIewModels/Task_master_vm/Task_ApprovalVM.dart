@@ -95,6 +95,7 @@ class TaskApprovalvm extends GetxController{
 
 
   RxList<TaskMasterGetModel> Task_Master_list=<TaskMasterGetModel>[].obs;
+  RxList<TaskMasterGetModel> Task_Master_list_line_Wise=<TaskMasterGetModel>[].obs;
   RxList<String> SaleCycleActiveTypeList = <String>[].obs;
   RxList<TaskDSARModel> TaskDSAR_Master_list = <TaskDSARModel>[].obs;
 
@@ -107,17 +108,15 @@ class TaskApprovalvm extends GetxController{
     SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
     approveRejectList.value = ['Approve', 'Reject'];
 
-    getTaskMaster(pageNumber, is_Active.toString(), '','');
+    getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
   }
 
   Future<void>refreshList() async{
-    getTaskMaster(pageNumber, is_Active.toString(), '','');
-
-
+    getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
   }
 
   RxInt infraLeadValue=0.obs;
-  getTaskMaster(int page_no, String IsActive, String? taskId, String flag){
+  getTaskMaster(int page_no, String IsActive, String? taskId){
     if(isInfraLeadFilterController.text=="All"){
       infraLeadValue.value=-1;
     }
@@ -142,13 +141,12 @@ class TaskApprovalvm extends GetxController{
         "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.text,
         "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
         "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
-        "filter_task_status": flag=='View'?'GET FROM TASK ID':'PENDING FOR APPROVAL',
+        "filter_task_status": 'GET FROM TASK ID',
         "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
         "filter_type_of_call":  Type_of_call_controller.text.isEmpty?"":Type_of_call_controller.text,
         "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
         "filter_last_activity_status": "",
         "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
-        //"filter_is_infra_lead": infraLeadValue.value,
         "filter_is_infra_lead": 0,
         "filter_is_sales_cycle_active": is_Active.toString(),
         "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
@@ -158,7 +156,7 @@ class TaskApprovalvm extends GetxController{
         "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
         "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
         "filter_is_closed_completed": 0,
-        "filter_day_flag": flag=='View'?'':'All',
+        "filter_day_flag":"",
         "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
         "filter_frontliner_value": "",
@@ -175,34 +173,18 @@ class TaskApprovalvm extends GetxController{
         print(onValue);
         if(jsonResponse is List){
           List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
-          if(response!= null && response.length>0 && response[0].condition=="True"){
+          if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
             loading.value = false;
-            if(page_no==0){
-              Task_Master_list.clear();
-            }
-            Task_Master_list.addAll(response);
-            total_rows=int.parse(Task_Master_list[0].totalRows!);
-            if(flag == 'View'){
-             /* Active = Task_Master_list[0].isSalesCycleActive!;
-              if(Active == 1){
-                IsSaleCycleActive = 'Yes';
-              }else if(Active == 0){
-                IsSaleCycleActive = 'No';
-              }*/
-
+            Task_Master_list_line_Wise..value=response;
               getTaskMstDSARList(taskId);
               Get.toNamed(RoutesName.taslMasterApprovalDetailsScreen);
-
-            }
-
           }else {
             loading.value = false;
-            Task_Master_list.value=[];
+            Task_Master_list_line_Wise.value=[];
 
           }
         } else {
           loading.value = false;
-
         }
       },
       ).onError(
@@ -247,6 +229,97 @@ class TaskApprovalvm extends GetxController{
     filterTaskCreationOnController.value.clear();
     createdOnStartToEnd.value = "";
     is_Active = -1;
+  }
+
+
+
+  getTaskMasterApprovalList(int page_no, String IsActive){
+    if(isInfraLeadFilterController.text=="All"){
+      infraLeadValue.value=-1;
+    }
+    else if( isInfraLeadFilterController.text=="Yes"){
+      infraLeadValue.value=1;
+    }
+    else if( isInfraLeadFilterController.text=="No"){
+      infraLeadValue.value=0;
+    }
+    else{
+      infraLeadValue.value=-1;
+    }
+    if(IsActive == 'All'){
+      is_Active = -1;
+    }else if( IsActive == 'Yes'){
+      is_Active = 1;
+    }else if(IsActive == 'No'){
+      is_Active = 0;
+    }
+    try{
+      Map data={
+        "filter_task_id":"",
+        "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
+        "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
+        "filter_task_status": 'PENDING FOR APPROVAL',
+        "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
+        "filter_type_of_call":  Type_of_call_controller.text.isEmpty?"":Type_of_call_controller.text,
+        "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
+        "filter_last_activity_status": "",
+        "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
+        "filter_is_infra_lead": 0,
+        "filter_is_sales_cycle_active": is_Active.toString(),
+        "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
+        "filter_created_by": isAdminWritePermission == "0"?email:"",
+        "filter_approved_by": "",
+        "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
+        "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
+        "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
+        "filter_is_closed_completed": 0,
+        "filter_day_flag":'All',
+        "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
+        "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+        "row_per_page": rowsPerPage.toString(),
+        "page_number": page_no.toString()
+      };
+      print("Data Json....${data}");
+      loading.value=true;
+      _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        print(onValue);
+        if(jsonResponse is List){
+          List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              Task_Master_list.clear();
+            }
+            Task_Master_list.addAll(response);
+            total_rows=int.parse(Task_Master_list[0].totalRows!);
+          }else {
+            loading.value = false;
+            Task_Master_list.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
   }
 
 
@@ -311,7 +384,7 @@ class TaskApprovalvm extends GetxController{
             loading.value = false;
             Utils.showToastification('Success!', response[0].message.toString());
             pageNumber=0;
-            getTaskMaster(pageNumber, is_Active.toString(), '', '',);
+            getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
             Get.toNamed(RoutesName.taskApproval_List);
           }else {
             loading.value = false;

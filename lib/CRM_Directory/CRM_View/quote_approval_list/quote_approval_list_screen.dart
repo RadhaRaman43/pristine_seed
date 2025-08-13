@@ -240,7 +240,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Sale Cycle Id : ",
+                    "Sales Cycle Id : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -250,6 +250,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                     onTap: (){
                       saleCycleController.pageNumber = 0;
                       saleCycleController.filterQuoteAcceptedFlag.value="";
+                      saleCycleController.clearAllFieldOfFilter();
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position]
                           .salesCycleId!, "ViewHeader", "QuoteApprovalPage");
                     },
@@ -280,7 +281,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Account Name : ",
+                    "Customer Name : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -646,8 +647,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                               ),
                               filterWithQuoteId(context),
                               SizedBox(height: 10),
-                              filterWithQuoteStatus(context),
-                              SizedBox(height: 10),
+                             /* filterWithQuoteStatus(context),
+                              SizedBox(height: 10),*/
                               filterWithSaleCycle(context),
                               SizedBox(height: 10),
                               filterWithQuoteValidity(context),
@@ -659,8 +660,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Name',
-                                    hintText: 'Account Name',
+                                    labelText: 'Customer Name',
+                                    hintText: 'Customer Name',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -689,8 +690,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Code',
-                                    hintText: 'Account Code',
+                                    labelText: 'Customer Code',
+                                    hintText: 'Customer Code',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -737,18 +738,18 @@ class QuoteApprovalListScreen extends StatelessWidget{
                                 height: 10,
                               ),
 
-                              filterWithQuoteFrontLinerValue(),
+                            /*  filterWithQuoteFrontLinerValue(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               filterWithQuoteBranchHead(),
                               SizedBox(
                                 height: 10,
                               ),
-                              filterWithQuoteZoneHead(),
+                             /* filterWithQuoteZoneHead(),
                               SizedBox(
                                 height: 10,
-                              ),
+                              ),*/
                               filterWithQuoteClusterHead(),
                               SizedBox(
                                 height: 10,
@@ -1047,8 +1048,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Head Value',
-          hintText: 'Cluster Head Value',
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1107,8 +1108,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Branch Head Value',
-          hintText: 'Branch Head Value',
+          labelText: 'Region Name',
+          hintText: 'Region Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1133,65 +1134,69 @@ class QuoteApprovalListScreen extends StatelessWidget{
 
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
-        cursorColor: AllColors.primaryDark1,
-        controller: quoteApprovalController.createdOnCnontroller.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Created On',
-            labelText: 'Created On',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
+      cursorColor: AllColors.primaryDark1,
+      controller: quoteApprovalController.createdOnCnontroller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        onTap: () async {
-          DateTime start_date = new DateTime(1900);
-          DateTime ending_date = new DateTime(2200);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  colorScheme: ColorScheme.light(
-                      primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(
-                      textTheme: ButtonTextTheme.primary),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
                 ),
-                child: child!,
-              );
-            },
+              ),
+              child: child!,
+            );
+          },
+        );
 
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            quoteApprovalController.createdOnCnontroller.value.text =
-                outputFormat.format(date);
-          else
-            quoteApprovalController.createdOnCnontroller.value.text =
-            "";
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          quoteApprovalController.createdOnStartToEnd.value = "$startDate@$endDate";
+          quoteApprovalController.createdOnCnontroller.value.text =
+          '$startDate - $endDate';
+        } else {
+          quoteApprovalController.createdOnCnontroller.value.text = '';
+          quoteApprovalController.createdOnStartToEnd.value = "";
         }
-
-
+      },
     );
   }
+
+
 /*  void showDialogForFilter(BuildContext context) {
     showModalBottomSheet(context: context,
         isScrollControlled: true,
@@ -1351,7 +1356,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
     );
   }
 
-  filterWithAccountName(BuildContext context) {
+/*  filterWithAccountName(BuildContext context) {
     return  TextField(
       cursorColor:AllColors.primaryDark1 ,
       controller: quoteApprovalController.filterQuoteAccountNameController.value,
@@ -1402,123 +1407,135 @@ class QuoteApprovalListScreen extends StatelessWidget{
           )
       ),
     );
-  }
+  }*/
+
 
   filterWithQuoteValidity(BuildContext context) {
     return TextField(
-        cursorColor:AllColors.primaryDark1 ,
-        controller: quoteApprovalController.filterQuoteValidityController.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Quote Validity',
-            labelText: 'Quote Validity',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
+      cursorColor: AllColors.primaryDark1,
+      controller: quoteApprovalController.filterQuoteValidityController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Quote Validity',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        onTap: () async {
-          DateTime ending_date = new DateTime(2200);
-          DateTime start_date = new DateTime(1900);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1, // Header background color
-                  //accentColor: AllColors.primaryDark1, // Color of the buttons
-                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
                 ),
-                child: child!,
-              );
-            },
+              ),
+              child: child!,
+            );
+          },
+        );
 
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            quoteApprovalController.filterQuoteValidityController.value.text= outputFormat.format(date);
-          else
-            quoteApprovalController.filterQuoteValidityController.value.text = "";
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          quoteApprovalController.quoteValidityStartToEnd.value = "$startDate@$endDate";
+          quoteApprovalController.filterQuoteValidityController.value.text =
+          '$startDate - $endDate';
+        } else {
+          quoteApprovalController.filterQuoteValidityController.value.text = '';
+          quoteApprovalController.quoteValidityStartToEnd.value = "";
         }
-
+      },
     );
   }
 
+
   filterWithQuoteClosureDate(BuildContext context) {
     return TextField(
-        cursorColor:AllColors.primaryDark1 ,
-        controller: quoteApprovalController.filterExpectedClosuredateController.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Expected Closure Date',
-            labelText: 'Expected Closure Date',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
+      cursorColor: AllColors.primaryDark1,
+      controller: quoteApprovalController.filterExpectedClosuredateController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Expected Closure Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        onTap: () async {
-          DateTime start_date = new DateTime(1900);
-          DateTime ending_date = new DateTime(2200);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1, // Header background color
-                  //accentColor: AllColors.primaryDark1, // Color of the buttons
-                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
                 ),
-                child: child!,
-              );
-            },
+              ),
+              child: child!,
+            );
+          },
+        );
 
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            quoteApprovalController.filterExpectedClosuredateController.value.text= outputFormat.format(date);
-          else
-            quoteApprovalController.filterExpectedClosuredateController.value.text = "";
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          quoteApprovalController.extClosureStartToEnd.value = "$startDate@$endDate";
+          quoteApprovalController.filterExpectedClosuredateController.value.text =
+          '$startDate - $endDate';
+        } else {
+          quoteApprovalController.filterExpectedClosuredateController.value.text = '';
+          quoteApprovalController.extClosureStartToEnd.value = "";
         }
-
-
-
+      },
     );
   }
 

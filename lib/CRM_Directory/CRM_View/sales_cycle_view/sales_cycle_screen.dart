@@ -97,7 +97,7 @@ class SalesCycleScreen extends StatelessWidget{
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
                               backgroundColor:
-                              salesCycleController.filterQuoteAcceptedFlag.value == 'Open'
+                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
                                   ? AllColors.primaryDark1
                                   : AllColors.grayColor,
                               shadowColor: Colors.black,
@@ -107,7 +107,7 @@ class SalesCycleScreen extends StatelessWidget{
                               label: Text(
                                 'Open',
                                 style: GoogleFonts.poppins(
-                                  color: salesCycleController.filterQuoteAcceptedFlag.value == 'Open'
+                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
@@ -116,6 +116,7 @@ class SalesCycleScreen extends StatelessWidget{
                               ),
                               onPressed: () {
                                 salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
+                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
                                 salesCycleController.pageNumber=0;
                                 salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
                               },
@@ -126,8 +127,8 @@ class SalesCycleScreen extends StatelessWidget{
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor:
-                              salesCycleController.filterQuoteAcceptedFlag.value == 'Won'
+                              backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
+
                                   ? AllColors.primaryDark1
                                   : AllColors.grayColor,
                               shadowColor: Colors.black,
@@ -137,7 +138,7 @@ class SalesCycleScreen extends StatelessWidget{
                               label: Text(
                                 'Won',
                                 style: GoogleFonts.poppins(
-                                  color: salesCycleController.filterQuoteAcceptedFlag.value == 'Won'
+                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
@@ -146,6 +147,7 @@ class SalesCycleScreen extends StatelessWidget{
                               ),
                               onPressed: () {
                                 salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
+                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Won";
                                 salesCycleController.pageNumber=0;
                                 salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
                               },
@@ -156,8 +158,7 @@ class SalesCycleScreen extends StatelessWidget{
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor:
-                              salesCycleController.filterQuoteAcceptedFlag.value == 'Loss'
+                              backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
                                   ? AllColors.primaryDark1
                                   : AllColors.grayColor,
                               shadowColor: Colors.black,
@@ -167,7 +168,7 @@ class SalesCycleScreen extends StatelessWidget{
                               label: Text(
                                 'Loss',
                                 style: GoogleFonts.poppins(
-                                  color: salesCycleController.filterQuoteAcceptedFlag.value == 'Loss'
+                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
@@ -176,6 +177,7 @@ class SalesCycleScreen extends StatelessWidget{
                               ),
                               onPressed: () {
                                 salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
+                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Loss";
                                 salesCycleController.pageNumber=0;
                                 salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
                               },
@@ -186,8 +188,7 @@ class SalesCycleScreen extends StatelessWidget{
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                              backgroundColor:
-                              salesCycleController.filterQuoteAcceptedFlag.value == ''
+                              backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
                                   ? AllColors.primaryDark1
                                   : AllColors.grayColor,
                               shadowColor: Colors.black,
@@ -197,7 +198,7 @@ class SalesCycleScreen extends StatelessWidget{
                               label: Text(
                                 'All',
                                 style: GoogleFonts.poppins(
-                                  color: salesCycleController.filterQuoteAcceptedFlag.value == ''
+                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
                                       ? AllColors.whiteColor
                                       : AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
@@ -205,6 +206,7 @@ class SalesCycleScreen extends StatelessWidget{
                                 ),
                               ),
                               onPressed: () {
+                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";
                                 salesCycleController.filterQuoteAcceptedFlag.value = '';
                                 salesCycleController.pageNumber=0;
                                 salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
@@ -286,6 +288,7 @@ class SalesCycleScreen extends StatelessWidget{
     var createdOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].createdOn??"");
     var approvedOn=StaticMethod.dateTimeToDate(salesCycleController.saleCycleList[position].approvedOn??"");
     String saleCycleStatus = salesCycleController.saleCycleList[position].salesCycleApprovalStatus??"";
+    String saleQuoteAccepted= salesCycleController.saleCycleList[position].quoteAccepted?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status) {
         case 'PENDING' || 'Pending':
@@ -300,12 +303,24 @@ class SalesCycleScreen extends StatelessWidget{
           return Colors.black;
       }
     }
+
+    Color getQouteAcceptedColor(String status) {
+      switch (status) {
+        case 'open'||'won' :
+          return Colors.blueAccent;
+        case 'loss' :
+          return AllColors.redColor;
+        default:
+          return Colors.black;
+      }
+    }
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
           onTap: () {
             salesCycleController.extClosureStartToEnd.value="";
-            salesCycleController.filter.value = "Sales cycle";salesCycleController.clearSaleProductListController();
+            salesCycleController.filter.value = "Customer Need Identity";
+            salesCycleController.clearSaleProductListController();
           salesCycleController.salesCycleId.value=salesCycleController.saleCycleList[position].salesCycleId!;
           salesCycleController.pageNumber=0;
           salesCycleController.getsalesCycleData(salesCycleController.pageNumber, salesCycleController.saleCycleList[position].salesCycleId!, "ViewHeader", 'Sales');
@@ -316,6 +331,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
           salesCycleController.pageNumber=0;
           salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
+          //salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
           salesCycleController.clearAllFieldOfQuoteFilter();
 
           },
@@ -338,13 +354,18 @@ class SalesCycleScreen extends StatelessWidget{
                 //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
+                label: "Quote Accepted: ",
+                value: salesCycleController.saleCycleList[position].quoteAccepted,
+                color: getQouteAcceptedColor(saleQuoteAccepted),
+              ),
+              _buildLabelWithValue(
                 label: "Approval Status : ",
                 value: salesCycleController.saleCycleList[position].salesCycleApprovalStatus,
                // width: size.width * 0.36,
                 color: getStatusColor(saleCycleStatus),
               ),
               _buildClickableLabel(
-                label: "Account Name : ",
+                label: "Customer Name : ",
                 value: salesCycleController.saleCycleList[position].accountName,
                 width: size.width * 0.4,
                 onTap: () {
@@ -356,7 +377,7 @@ class SalesCycleScreen extends StatelessWidget{
                 },
               ),
               _buildLabelWithValue(
-                label: "Account Code : ",
+                label: "Customer Code : ",
                 value: salesCycleController.saleCycleList[position].accountCode,
                 //width: size.width * 0.4,
               ),
@@ -928,19 +949,28 @@ class SalesCycleScreen extends StatelessWidget{
                               SizedBox(
                                 height: 5,
                               ),
+                              Obx((){
+                                return Visibility(
+                                  visible: salesCycleController.filterQuoteAcceptedFlag.value=='',
+                                    child:Column(
+                                  children: [
+                                    bindQuoteAccepted(context),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                  ],
+                                ) );
+                              }),
+
                               bindTaskId(),
                               SizedBox(
                                 height: 5,
                               ),
-
                               bindSaleCycleStatusDropDown(context),
-
                               SizedBox(
                                 height: 10,
                               ),
-
                               bindApprovalStatusDropDown(context),
-
                               SizedBox(
                                 height: 10,
                               ),
@@ -950,8 +980,8 @@ class SalesCycleScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Name',
-                                    hintText: 'Account Name',
+                                    labelText: 'Customer Name',
+                                    hintText: 'Customer Name',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -982,8 +1012,8 @@ class SalesCycleScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Code',
-                                    hintText: 'Account Code',
+                                    labelText: 'Customer Code',
+                                    hintText: 'Customer Code',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -1375,7 +1405,7 @@ class SalesCycleScreen extends StatelessWidget{
 
   Widget bindSaleCycleStatusDropDown(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only( bottom: 10, right: 15),
+      padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<String>(
         width: MediaQuery
             .of(context)
@@ -1538,7 +1568,7 @@ class SalesCycleScreen extends StatelessWidget{
 
   Widget bindApprovalStatusDropDown(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only( bottom: 10, right: 15),
+      padding: const EdgeInsets.only( right: 15),
       child: DropdownMenu<String>(
         width: MediaQuery
             .of(context)
@@ -2474,6 +2504,74 @@ class SalesCycleScreen extends StatelessWidget{
       },
     );
   }
+
+  bindQuoteAccepted(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(right: 15),
+      child: DropdownMenu<String>(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width-15,
+        controller: salesCycleController.filterQuoteAcceptedController.value,
+        label: Text(
+          "Select Quote Accepted",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          print(selection);
+          if(selection=="Open"){
+            salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
+          }
+          else if(selection=="Won"){
+            salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
+          }
+          else if(selection=="Loss"){
+            salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
+          }else{
+            salesCycleController.filterQuoteAcceptedFlag.value = '';
+          }
+          salesCycleController.filterQuoteAcceptedController.value.text =
+              _displaySaleCycleStatusForOption(selection!)
+                  .toString();
+        },
+        dropdownMenuEntries:
+        salesCycleController.qouteAcceptedList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+
 
 
 }

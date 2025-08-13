@@ -11,6 +11,8 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
@@ -33,6 +35,9 @@ class AddNewDsarScreen extends StatelessWidget{
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
+
+  static String _displayContactNameForOption(ContactMstGetListModal option) =>
+      option.contactName!;
 
 
   @override
@@ -223,6 +228,23 @@ class AddNewDsarScreen extends StatelessWidget{
                   ),
                 );
               }),
+
+              Obx((){
+                return Visibility(
+                    visible: TaskMaster_page_controller.typeOfCall.value,
+                    child: Column(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                            child: bindContactNameDropDown(context)
+                        ),
+                        SizedBox(height: 15,),
+                      ],
+                    )
+                );
+              }),
+
+
 
               Obx((){
                 return Visibility(
@@ -546,13 +568,13 @@ class AddNewDsarScreen extends StatelessWidget{
         TaskMaster_page_controller.Method_of_call_controller.clear();
         TaskMaster_page_controller.PurposeOfVisit.value = false;
         //TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR');
-        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Revisit"){
-          TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR REVISIT');
+        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Sales Cycle"){
+          TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR SALES CYCLE');
         }else{
           TaskMaster_page_controller.CallStatusMasterApiHit('CALL DSAR OTHER');
         }
 
-        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Reschedule" && TaskMaster_page_controller.Task_Master_list[0].typeOfCall == "New Call"){
+        if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Reschedule"  && TaskMaster_page_controller.Task_Master_list[0].typeOfCall == "New Call"){
           TaskMaster_page_controller.Type_of_call_controller.text= "New Call";
           TaskMaster_page_controller.typeOfCall.value = false;
           TaskMaster_page_controller.typeOfCall.value = true;
@@ -562,13 +584,13 @@ class AddNewDsarScreen extends StatelessWidget{
           TaskMaster_page_controller.typeOfCall.value = true;
         }
 
-        if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 1){
+        if(selection.isTypeOfCall == 1 && selection.isCreateSalesCycle == 0){
           TaskMaster_page_controller.typeOfCall.value = true;
           TaskMaster_page_controller.DSARStatus.value = true;
           TaskMaster_page_controller.ItemCateDropDown.value = false;
-        }else if(selection.isNextInteraction == 1 && selection.isTypeOfCall == 0 ){
+        }else if(selection.isTypeOfCall == 1 && selection.isCreateSalesCycle == 1 ){
           TaskMaster_page_controller.DSARStatus.value = true;
-          TaskMaster_page_controller.typeOfCall.value = false;
+          TaskMaster_page_controller.typeOfCall.value = true;
           TaskMaster_page_controller.ItemCateDropDown.value = true;
           TaskMaster_page_controller.Item_Category_Selected_list.value = [];
           for(int i = 0; i < TaskMaster_page_controller.Item_Category_master_list.length; i++ ){
@@ -1242,5 +1264,63 @@ class AddNewDsarScreen extends StatelessWidget{
 
   }
 
+
+  Widget bindContactNameDropDown(context){
+    return Container(
+      padding: const EdgeInsets.only(right: 15),
+      child: DropdownMenu<ContactMstGetListModal>(
+        width: MediaQuery.of(context).size.width - 25,
+        controller: TaskMaster_page_controller.Contact_Name_controller,
+        label: Text(
+          "Select Contact Name",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w400),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1),
+            borderRadius: BorderRadius.all(Radius.circular(10)),// Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+        onSelected: (ContactMstGetListModal? selection) {
+          TaskMaster_page_controller.Contact_Name_controller.text =
+              _displayContactNameForOption(selection!).toString();
+          TaskMaster_page_controller.contact_code_for_dsar.value=selection.contactCode!;
+          FocusScope.of(context).unfocus();
+        },
+        enableFilter: true,
+        requestFocusOnTap: true,
+        dropdownMenuEntries: TaskMaster_page_controller.contact_master_list
+            .map<DropdownMenuEntry<ContactMstGetListModal>>((ContactMstGetListModal e) {
+          return DropdownMenuEntry<ContactMstGetListModal>(
+              value: e,
+              label: e.contactName!,
+              style: ButtonStyle(
+                foregroundColor:
+                MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+              ));
+        }).toList(),
+      ),
+    );
+
+  }
 
 }

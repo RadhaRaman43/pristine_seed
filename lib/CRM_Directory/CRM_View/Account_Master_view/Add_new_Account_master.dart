@@ -172,7 +172,7 @@ class AddNewAccountMaster extends StatelessWidget{
                         print('Failed to retrieve items: $e');
                       }
                     } else{
-                      Utils.showErrorToastification('Error!', "Please Enter Account Name!");
+                      Utils.showErrorToastification('Error!', "Please Enter Customer Name!");
                     }
 
                   }, //Text
@@ -191,11 +191,11 @@ class AddNewAccountMaster extends StatelessWidget{
           child: DefaultButton(
             press: (){
               if(accountMaster_page_controller.account_name_controller.text.isEmpty || accountMaster_page_controller.account_name_controller == null){
-                Utils.sanckBarError('Account Name!', "Please Enter Account Name");
+                Utils.sanckBarError('Customer Name!', "Please Enter Customer Name");
                 return  ;
               }
               if(defaultFullName == "" && accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty){
-                Utils.sanckBarError('Account Owner!', "Please Enter Account Owner");
+                Utils.sanckBarError('Customer Owner!', "Please Enter Customer Owner");
                 return  ;
               }
               /*if(accountMaster_page_controller.account_type_controller.text.isEmpty || accountMaster_page_controller.account_type_controller == null){
@@ -215,7 +215,7 @@ class AddNewAccountMaster extends StatelessWidget{
               }
 
               if(accountMaster_page_controller.account_cat_type_controller.text.isEmpty || accountMaster_page_controller.account_cat_type_controller == null){
-                Utils.sanckBarError('Account Category Type!', "Please Enter Account Category Type");
+                Utils.sanckBarError('Customer Category Type!', "Please Enter Customer Category Type");
                 return  ;
               }
               if(accountMaster_page_controller.comp_prof_type_controller.text.isEmpty || accountMaster_page_controller.comp_prof_type_controller == null){
@@ -349,8 +349,8 @@ class AddNewAccountMaster extends StatelessWidget{
                         controller: accountMaster_page_controller
                             .account_name_controller,
                         decoration: InputDecoration(
-                            hintText: "Account Name*",
-                            labelText: "Account Name*",
+                            hintText: "Customer Name*",
+                            labelText: "Customer Name*",
                             //suffixIcon: Icon(Icons.email),
                             contentPadding: EdgeInsets.symmetric(
                                 vertical: AllFontSize.ten,
@@ -429,6 +429,37 @@ class AddNewAccountMaster extends StatelessWidget{
                         ),
                         child: Column(
                           children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)
+                              ),
+                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: TextFormField(
+                                readOnly: true,
+                                controller: accountMaster_page_controller
+                                    .OldCRMAccountNo_Controller,
+                                decoration: InputDecoration(
+                                    hintText: "Old Crm Customer No.",
+                                    labelText: "Old Crm Customer No.",
+                                    //suffixIcon: Icon(Icons.email),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten,
+                                        horizontal: AllFontSize.ten),
+
+                                    focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.blue)
+                                    ),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                    )
+                                ),
+
+                              ),
+                            ),
+
+                            SizedBox(height: 15,),
+
                             bindAccountTypeDropDown(context),
 
                             SizedBox(height: 15,),
@@ -1559,7 +1590,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                             SizedBox(height: 15,),
 
-                            Obx((){
+                            /*Obx((){
                               return Container(
                                 decoration: BoxDecoration(
                                     color: Colors.white,
@@ -1588,11 +1619,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                                 ),
                               );
-                            })
-
-
-
-
+                            })*/
                           ],
                         ),
                       ),
@@ -1701,8 +1728,8 @@ class AddNewAccountMaster extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Owner',
-            labelText: 'Account Owner',
+            hintText: 'Customer Owner',
+            labelText: 'Customer Owner',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),
@@ -1866,7 +1893,7 @@ class AddNewAccountMaster extends StatelessWidget{
         width: size.width-55,
         controller:  accountMaster_page_controller.account_type_controller,
         label: Text(
-          "Account Type",
+          "Customer Type",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: 15,
@@ -1959,8 +1986,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Category Type*',
-              labelText: 'Account Category Type*',
+              hintText: 'Customer Category Type*',
+              labelText: 'Customer Category Type*',
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -4023,7 +4050,7 @@ class AddNewAccountMaster extends StatelessWidget{
         salesRepresentative: accountMaster_page_controller.Sale_Representative_Controller.value.text,
         regionalServiceHead: accountMaster_page_controller.Regional_service_head_Controller.value.text,
       ));
-      Utils.showToastification('Account', 'Data save in Draft');
+      Utils.showToastification('Customer', 'Data save in Draft');
       print('Data inserted successfully.');
     } catch (e) {
       print('Failed to insert data: $e');
@@ -4067,7 +4094,7 @@ class AddNewAccountMaster extends StatelessWidget{
         salesRepresentative: accountMaster_page_controller.Sale_Representative_Controller.value.text,
         regionalServiceHead: accountMaster_page_controller.Regional_service_head_Controller.value.text,
       ));
-      Utils.showToastification('Account', 'Data updated in Draft');
+      Utils.showToastification('Customer', 'Data updated in Draft');
       print('Data updated successfully.');
     } catch (e) {
       print('Failed to insert data: $e');

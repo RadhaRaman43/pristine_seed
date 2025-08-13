@@ -41,6 +41,8 @@ class SalesAdviseHeaderLineModal {
   int? isSpr;
   String? sprNo;
   String? quoteAccepted;
+  String? kindAttention;
+  String? termsAndCondition;
   int? isReadySendForApproval;
   double? quoteTotalQty;
   double? quoteTotalAmount;
@@ -103,6 +105,8 @@ class SalesAdviseHeaderLineModal {
         this.isSpr,
         this.sprNo,
         this.quoteAccepted,
+        this.kindAttention,
+        this.termsAndCondition,
         this.isReadySendForApproval,
         this.quoteTotalQty,
         this.quoteTotalAmount,
@@ -164,6 +168,8 @@ class SalesAdviseHeaderLineModal {
     isSpr = json['is_spr'];
     sprNo = json['spr_no'];
     quoteAccepted = json['quote_accepted'];
+    kindAttention = json['kind_attention'];
+    termsAndCondition = json['terms_and_condition'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
     quoteTotalQty = json['quote_total_qty'];
     quoteTotalAmount = json['quote_total_amount'];
@@ -233,6 +239,8 @@ class SalesAdviseHeaderLineModal {
     data['is_spr'] = this.isSpr;
     data['spr_no'] = this.sprNo;
     data['quote_accepted'] = this.quoteAccepted;
+    data['kind_attention'] = this.kindAttention;
+    data['terms_and_condition'] = this.termsAndCondition;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
     data['quote_total_qty'] = this.quoteTotalQty;
     data['quote_total_amount'] = this.quoteTotalAmount;
@@ -266,6 +274,9 @@ class QuoteItems {
   String? itemCode;
   String? itemName;
   String? itemDescription;
+  String? productType;
+  String? erpItemCode;
+  String? erpItemName;
   double? qty;
   double? unitPrice;
   double? mrpPrice;
@@ -314,6 +325,9 @@ class QuoteItems {
         this.itemCode,
         this.itemName,
         this.itemDescription,
+        this.productType,
+        this.erpItemCode,
+        this.erpItemName,
         this.qty,
         this.unitPrice,
         this.mrpPrice,
@@ -362,6 +376,9 @@ class QuoteItems {
     itemCode = json['item_code'];
     itemName = json['item_name'];
     itemDescription = json['item_description'];
+    productType = json['product_type'];
+    erpItemCode = json['erp_item_code'];
+    erpItemName = json['erp_item_name'];
     qty = json['qty'];
     unitPrice = json['unit_price'];
     mrpPrice = json['mrp_price'];
@@ -412,6 +429,9 @@ class QuoteItems {
     data['item_code'] = this.itemCode;
     data['item_name'] = this.itemName;
     data['item_description'] = this.itemDescription;
+    data['product_type'] = this.productType;
+    data['erp_item_code'] = this.erpItemCode;
+    data['erp_item_name'] = this.erpItemName;
     data['qty'] = this.qty;
     data['unit_price'] = this.unitPrice;
     data['mrp_price'] = this.mrpPrice;

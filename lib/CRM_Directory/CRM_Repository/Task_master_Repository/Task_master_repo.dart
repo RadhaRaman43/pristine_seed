@@ -9,6 +9,12 @@ class TaskMasterRepo{
     return _apiService.postApi(data, AppUrl.TaskMstGet,sessionManagement);
   }
 
+  Future<String> TaskMstGetApprovalListApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.TaskMstGetApprovalList,sessionManagement);
+  }
+
+
+
   Future<String> TaskMasterCreateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.TaskMstCreate,sessionManagement);
   }

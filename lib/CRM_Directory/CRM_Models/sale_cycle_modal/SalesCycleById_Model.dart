@@ -12,10 +12,12 @@ class SalesCycleByIdModel {
   double? mrpPrice;
   double? totalPrice;
   String? createdBy;
+  String? createdFullName;
   String? createdOn;
   String? lineStatus;
   String? updatedBy;
   String? updatedOn;
+  double? methodexPrice;
   String? competitorName;
   double? competitorPrice;
   String? lossReason;
@@ -40,10 +42,12 @@ class SalesCycleByIdModel {
         this.mrpPrice,
         this.totalPrice,
         this.createdBy,
+        this.createdFullName,
         this.createdOn,
         this.lineStatus,
         this.updatedBy,
         this.updatedOn,
+        this.methodexPrice,
         this.competitorName,
         this.competitorPrice,
         this.lossReason,
@@ -68,10 +72,12 @@ class SalesCycleByIdModel {
     mrpPrice = json['mrp_price'];
     totalPrice = json['total_price'];
     createdBy = json['created_by'];
+    createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
     lineStatus = json['line_status'];
     updatedBy = json['updated_by'];
     updatedOn = json['updated_on'];
+    methodexPrice = json['methodex_price'];
     competitorName = json['competitor_name'];
     competitorPrice = json['competitor_price'];
     lossReason = json['loss_reason'];
@@ -98,10 +104,12 @@ class SalesCycleByIdModel {
     data['mrp_price'] = this.mrpPrice;
     data['total_price'] = this.totalPrice;
     data['created_by'] = this.createdBy;
+    data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
     data['line_status'] = this.lineStatus;
     data['updated_by'] = this.updatedBy;
     data['updated_on'] = this.updatedOn;
+    data['methodex_price'] = this.methodexPrice;
     data['competitor_name'] = this.competitorName;
     data['competitor_price'] = this.competitorPrice;
     data['loss_reason'] = this.lossReason;

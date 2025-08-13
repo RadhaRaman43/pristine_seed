@@ -465,7 +465,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
           controller: saleCycleController.quoteRemarkController.value,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+                  vertical: AllFontSize.two, horizontal: AllFontSize.ten,),
               hintText: 'Remarks',
               labelText: 'Remarks',
               hintStyle: GoogleFonts.poppins(
@@ -484,7 +484,6 @@ class UpdateBussinessTermPage extends StatelessWidget{
               )
           ),
         );
-
       }),
     );
   }
@@ -495,6 +494,7 @@ class UpdateBussinessTermPage extends StatelessWidget{
     if (percentageValue == null) {
       saleCycleController.advncPaymentAmountController.value.clear();
     } else if (percentageValue > 100) {
+      print("hhhh${percentageValue}");
       Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
     } else if(percentageValue <= 100){
          final advanceAmt = (saleCycleController.quoteHeaderdata[0].quoteTotalAmount! * percentageValue) / 100;
@@ -661,10 +661,12 @@ class UpdateBussinessTermPage extends StatelessWidget{
       }
       if(percantage<=100){
         saleCycleController.advncPaymentPerController.value.text = percantage.toStringAsFixed(2);
-
-      }else{
+      }else if(text>100){
         Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
       }
+      /*else{
+        Utils.showErrorToastification('Error', 'Payment Percentage cannot be greater than 100');
+      }*/
 
     }
   }

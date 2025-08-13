@@ -449,7 +449,7 @@ class ContactMasterVM extends GetxController{
     alternate_no_controller.text=contact_master_list[index].alternateNo?? "";
     reporting_person_controller.text=contact_master_list[index].reportingPerson?? "";
     contact_title_controller.text=contact_master_list[index].contactTitle?? "";
-    designation_name_controller.text=contact_master_list[index].designationname ?? "";
+    designation_name_controller.text=contact_master_list[index].designationName ?? "";
     contact_code_controller.text=contact_master_list[index].contactCode ?? "";
     FullAddress_Controller.value.text=contact_master_list[index].fullAddress ?? "";
     IsHeDecisionMakerController.value.text=contact_master_list[index].contactRole??"";
@@ -463,7 +463,7 @@ class ContactMasterVM extends GetxController{
       alternate_no_controller.text=account_vm_controller.view_contract_list[index].alternateNo?? "";
       reporting_person_controller.text=account_vm_controller.view_contract_list[index].reportingPerson?? "";
       contact_title_controller.text=account_vm_controller.view_contract_list[index].contactTitle?? "";
-      designation_name_controller.text=account_vm_controller.view_contract_list[index].designationname ?? "";
+      designation_name_controller.text=account_vm_controller.view_contract_list[index].designationName ?? "";
       contact_code_controller.text=account_vm_controller.view_contract_list[index].contactCode ?? "";
       IsHeDecisionMakerController.value.text=account_vm_controller.view_contract_list[index].contactRole??"";
     }

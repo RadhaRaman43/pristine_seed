@@ -17,6 +17,7 @@ class LoginResponse {
   String? profile;
   String? userType;
   String? customerCode;
+  String? userTypeName;
   int? isCrm;
   List<Menu>? menu;
 
@@ -39,6 +40,7 @@ class LoginResponse {
         this.profile,
         this.userType,
         this.customerCode,
+        this.userTypeName,
         this.isCrm,
         this.menu
         });
@@ -62,6 +64,7 @@ class LoginResponse {
     profile = json['profile'];
     userType = json['user_type'];
     customerCode = json['customer_code'];
+    userTypeName = json['user_type_name'];
     isCrm = json['is_crm'];
     if (json['menu'] != null) {
       menu = <Menu>[];
@@ -91,6 +94,7 @@ class LoginResponse {
     data['profile'] = this.profile;
     data['user_type'] = this.userType;
     data['customer_code'] = this.customerCode;
+    data['user_type_name'] = this.userTypeName;
     data['is_crm'] = this.isCrm;
     if (this.menu != null) {
       data['menu'] = this.menu!.map((v) => v.toJson()).toList();

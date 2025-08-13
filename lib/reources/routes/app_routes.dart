@@ -3,7 +3,6 @@ import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/all_contact_master_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/Task_Approval_List_Screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
-import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_add_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_line_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/sales_advise_view/sales_advise_header_screen.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
@@ -28,24 +27,39 @@ import '../../CRM_Directory/CRM_View/Account_Master_view/Draft_item_list.dart';
 import '../../CRM_Directory/CRM_View/Account_Master_view/update_account_master.dart';
 import '../../CRM_Directory/CRM_View/Address_Master_view/Add_New_ConsigneeAdd.dart';
 import '../../CRM_Directory/CRM_View/Address_Master_view/View_address_screen.dart';
+import '../../CRM_Directory/CRM_View/All_Quote_Line_Item_View/All_Quote_Line_Item_Screen.dart';
+import '../../CRM_Directory/CRM_View/All_Quote_view/All_Quote_Screen.dart';
+import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/Add_Tour_Lines_page.dart';
+import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/BusinessTourApprovalListScreen.dart';
+import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/BusinessTourPlanDetails_Screen.dart';
+import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_approve_rejected.dart';
+import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_plan_screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Contact_Master_Screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/View_contacts_screen.dart';
+import '../../CRM_Directory/CRM_View/Pending_Draft_Quote_view/pending_Draft_Quote.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_DSAR_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_Task_Screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_master_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/update_task_mst_infra_screen.dart';
-import '../../CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
+import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_add_screen.dart';
+import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_request_add_screen.dart';
+import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_request_screen.dart';
+import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_screen.dart';
+import '../../CRM_Directory/CRM_View/employee_information_system_view/leave_request_approval_screen.dart';
 import '../../CRM_Directory/CRM_View/quote_approval_list/quote_approval_list_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_advise_view/sales_advise_create_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approval_person_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_approve_reject_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_item_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sale_cycle_pending_for_approval_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_create_quote_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_quote_information_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_product_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/update_bussiness_term_page.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/update_quote_line_data_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/view_sale_header_screen.dart';
@@ -622,6 +636,12 @@ class AppRoutes{
     ),
 
 
+    GetPage(name: RoutesName.salesCycleProduct,
+        page: ()=>SalesCycleProductList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
     GetPage(name: RoutesName.salesAdviseCreateScreen,
         page: ()=>SalesAdviseCreateScreen(),
         transitionDuration: Duration(microseconds: 180),
@@ -652,6 +672,85 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.empMarkLeaveRequestScreen,
+        page: ()=>EmpMarkLeaveRequestScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.empMarkLeaveRequestAddScreen,
+        page: ()=>EmpMarkLeaveRequestAddScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+    GetPage(name: RoutesName.empMarkLeaveRequestApprovalScreen,
+        page: ()=>LeaveRequestApprovalScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.salesCyclePendingForApprovalListScreen,
+        page: ()=>SaleCyclePendingForApprovalList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+    GetPage(name: RoutesName.pendingDraftQuoteScreen,
+        page: ()=>PendingDraftQuote(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.approvedRejectedQuoteScreen,
+        page: ()=>QuoteApproveRejectScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.allQuoteScreenScreen,
+        page: ()=>AllQuoteScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.allQuoteLineItemScreen,
+        page: ()=>AllQuoteLineItemScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.BusinessTourPlanScreen,
+        page: ()=>BussinessTourPlanScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.BusinessTourPlanDetails,
+        page: ()=>BusinessTourPlanDeatil(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.AddTourLinesPage,
+        page: ()=>AddTourLinesPage(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.BusinessTourApprovalListScreen,
+        page: ()=>BusinessTourApprovalListScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.BusinessTourApproveRejectListScreen,
+        page: ()=>BussinessTourApproveRejected(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
 
 //todo image not found....

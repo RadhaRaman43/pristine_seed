@@ -225,6 +225,7 @@ class AppUrl {
      static const String GeoGetPincodeHierarchy = "$BASE_URL/api/GeographicalSetup/GeoGetPincodeHierarchy";
      static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
      static const String TaskMstRejectReopen = "$BASE_URL/api/CRM/Task/TaskMstRejectReopen";
+     static const String TaskMstGetApprovalList = "$BASE_URL  /api/CRM/Task/TaskMstGetApprovalList";
 
 
      //todo sales cycle
@@ -270,6 +271,11 @@ class AppUrl {
      static const String SalesCycleMstRejectReopen = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstRejectReopen";
      static const String QuotationDiscountReport = "$BASE_URL/api/CRM/Quote/QuotationDiscountReport";
      static const String QuoteMstRejectReopen = "$BASE_URL/api/CRM/Quote/QuoteMstRejectReopen";
+     static const String QuoteHeaderGetNew="$BASE_URL/api/CRM/Quote/QuoteHeaderGetNew";
+     static const String SalesProductLineCompetitorClear="$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorClear";
+     static const String SalesCycleCompetitorProductGetBySalesCycleId="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorProductGetBySalesCycleId";
+     static const String SalesCycleCompetitorCreateFromProspectProducts="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorCreateFromProspectProducts";
+     static const String salesProductLineCompetitorDelete="$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorDelete";
 
    //todo SalesAdvise
      static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";
@@ -279,13 +285,33 @@ class AppUrl {
      static const String salesAdviceHeaderUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderUpdate";
      static const String salesAdviceLineDelete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineDelete";
      static const String salesAdviceComplete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceComplete";
+     static const String salesAdviceLineItemUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineItemUpdate";
 
      //todo employee information
      static const String employeeLeaveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveDataGet";
      static const String leaveTypesGet="$BASE_URL/api/CRM/EmployeeAttendance/LeaveTypesGet";
-     static const String shiftDetailsByEmailGet="$BASE_URL/api/CRM/EmployeeAttendance/ShiftDetailsByEmailGet";
+     static const String shiftDetailsByEmailGet="$BASE_URL/api/CRM/EmployeeAttendance/ShiftDet ailsByEmailGet";
      static const String getEmployeeHolidays="$BASE_URL/api/CRM/EmployeeAttendance/GetEmployeeHolidays";
      static const String employeeLeaveMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveMark";
+     static const String employeeLeaveRequestDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestDataGet";
+     static const String employeeLeaveRequestMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestMark";
+     static const String employeeLeaveRequestRejectApproveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestRejectApproveDataGet";
+     static const String employeeLeaveRequestApproveReject="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestApproveReject";
 
+     //todo business tour plan
+     static const String businessPlanListGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanListGet";
+     static const String BusinessTourPlanHeaderCreate="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanHeaderCreate";
+     static const String BusinessTourPlanHeaderComplete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanHeadercComplete";
+     static const String BusinessTourPlanDetailsGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanDetailsGet";
+     static const String BusinessTourPlanHeaderDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanHeaderDelete";
+     static const String BusinessTourTypeGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourTypeGet";
+     static const String BusinessTourPlanAccountGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanAccountGet";
+     static const String BusinessTourPlanDistrictGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanDistrictGet";
+     static const String BusinessTourPlanContactsGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanContactsGet";
+     static const String BusinessTourPlanLineCreate="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanLineCreate";
+     static const String BusinessTourPlanLineDelete="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanLineDelete";
+     static const String BusinessTourPlanReport="$BASE_URL/api/CRM/BusinessTourPlan/BussinessTourPlanReport";
+     static const String BusinessTourplanApprovalGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApprovalGet";
+     static const String BusinessTourPlanApproveReject="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApproveReject";
 
 }

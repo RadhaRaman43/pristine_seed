@@ -206,6 +206,35 @@ class SalesCycleRepository{
   Future<String> salesAdviceLineUpdateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.salesAdviceLineUpdate,sessionManagement);
   }
+  Future<String> QuoteHeaderGetNewApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteHeaderGetNew,sessionManagement);
+  }
+  Future<String> SalesProductLineCompetitorClearApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesProductLineCompetitorClear,sessionManagement);
+  }
+
+  Future<String> salesAdviceLineItemUpdateApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceLineItemUpdate,sessionManagement);
+  }
+
+
+
+  Future<String> itemMasterGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.itemMasterGet,sessionManagement);
+  }
+
+  Future<String> salesCycleCompetitorProductGetBySalesCycleIdApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleCompetitorProductGetBySalesCycleId,sessionManagement);
+  }
+
+  Future<String> salesCycleCompetitorCreateFromProspectProductsApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleCompetitorCreateFromProspectProducts,sessionManagement);
+  }
+
+  Future<String> salesProductLineCompetitorDeleteApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesProductLineCompetitorDelete,sessionManagement);
+  }
+
 
 
 }

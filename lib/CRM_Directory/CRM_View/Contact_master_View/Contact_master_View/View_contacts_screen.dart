@@ -272,7 +272,7 @@ class ViewContactsScreen extends StatelessWidget{
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Account Name : ",
+                  "Customer Name : ",
                   style: GoogleFonts.poppins(
                       color: AllColors.primaryDark1,
                       fontSize: AllFontSize.fourtine,
@@ -411,11 +411,11 @@ class ViewContactsScreen extends StatelessWidget{
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]
-                        .designationname?? "",
+                        .designationName?? "",
                     child: Text(
                       accountMaster_page_controller
                           .view_contract_list[position]
-                          .designationname?? "",
+                          .designationName?? "",
                       overflow: TextOverflow.ellipsis,
                       style: GoogleFonts.poppins(
                           color: AllColors.textColor,

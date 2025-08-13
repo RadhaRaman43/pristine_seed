@@ -34,6 +34,7 @@ class SalesCycleModal {
   String? quoteRejectedReason;
   int? isSolutionAccepted;
   String? solutionRejectedRemarks;
+  String? reopenRemarks;
   String? wonQuoteId;
   int? isSalesCycleClosed;
   int? isInfraLead;
@@ -129,6 +130,7 @@ class SalesCycleModal {
         this.quoteRejectedReason,
         this.isSolutionAccepted,
         this.solutionRejectedRemarks,
+        this.reopenRemarks,
         this.wonQuoteId,
         this.isSalesCycleClosed,
         this.isInfraLead,
@@ -224,6 +226,7 @@ class SalesCycleModal {
     quoteRejectedReason = json['quote_rejected_reason'];
     isSolutionAccepted = json['is_solution_accepted'];
     solutionRejectedRemarks = json['solution_rejected_remarks'];
+    reopenRemarks = json['reopen_remarks'];
     wonQuoteId = json['won_quote_id'];
     isSalesCycleClosed = json['is_sales_cycle_closed'];
     isInfraLead = json['is_infra_lead'];
@@ -322,6 +325,7 @@ class SalesCycleModal {
     data['quote_rejected_reason'] = this.quoteRejectedReason;
     data['is_solution_accepted'] = this.isSolutionAccepted;
     data['solution_rejected_remarks'] = this.solutionRejectedRemarks;
+    data['reopen_remarks'] = this.reopenRemarks;
     data['won_quote_id'] = this.wonQuoteId;
     data['is_sales_cycle_closed'] = this.isSalesCycleClosed;
     data['is_infra_lead'] = this.isInfraLead;

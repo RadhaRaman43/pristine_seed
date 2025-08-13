@@ -35,19 +35,25 @@ class SalesCycleQuoteInformationModal {
   double? advancePaymentAmt;
   String? otherRemarks;
   int? isSpr;
-  String? quoteAccepted;
   String? sprNo;
+  String? quoteAccepted;
   int? noOfSalesAdvice;
   int? isSalesAdviceCreated;
+  String? kindAttention;
+  String? termsAndCondition;
   int? isReadyForApprove;
   int? isReadySendForApproval;
   double? quoteTotalQty;
   double? quoteTotalAmount;
   double? quoteTotalApprovedDiscountAmount;
   double? quoteTotalGmDiscountAmount;
+  double? quoteNewTotalGmDiscountAmount;
+  double? quoteTotalGmPerAverage;
+  double? quoteTotalBmPerAverage;
   double? quoteGrossAmount;
   double? quoteGstAmount;
-  List<QuoteItems>? quoteItems;
+  double? quoteApprovedAmtPerUnit;
+  double? quoteSalesCreditAverage;
   String? shippingAddress;
   String? shippingAddress2;
   String? shippingPostCode;
@@ -57,7 +63,7 @@ class SalesCycleQuoteInformationModal {
   String? shippingDistrict;
   String? shippingPhoneNo;
   String? shippingEmailId;
-
+  List<QuoteItems>? quoteItems;
 
   SalesCycleQuoteInformationModal(
       {this.condition,
@@ -96,19 +102,25 @@ class SalesCycleQuoteInformationModal {
         this.advancePaymentAmt,
         this.otherRemarks,
         this.isSpr,
+        this.sprNo,
         this.quoteAccepted,
         this.noOfSalesAdvice,
         this.isSalesAdviceCreated,
-        this.sprNo,
+        this.kindAttention,
+        this.termsAndCondition,
         this.isReadyForApprove,
         this.isReadySendForApproval,
         this.quoteTotalQty,
         this.quoteTotalAmount,
         this.quoteTotalApprovedDiscountAmount,
         this.quoteTotalGmDiscountAmount,
+        this.quoteNewTotalGmDiscountAmount,
+        this.quoteTotalGmPerAverage,
+        this.quoteTotalBmPerAverage,
         this.quoteGrossAmount,
         this.quoteGstAmount,
-        this.quoteItems,
+        this.quoteApprovedAmtPerUnit,
+        this.quoteSalesCreditAverage,
         this.shippingAddress,
         this.shippingAddress2,
         this.shippingPostCode,
@@ -117,7 +129,8 @@ class SalesCycleQuoteInformationModal {
         this.shippingCity,
         this.shippingDistrict,
         this.shippingPhoneNo,
-        this.shippingEmailId});
+        this.shippingEmailId,
+        this.quoteItems});
 
   SalesCycleQuoteInformationModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -156,24 +169,26 @@ class SalesCycleQuoteInformationModal {
     advancePaymentAmt = json['advance_payment_amt'];
     otherRemarks = json['other_remarks'];
     isSpr = json['is_spr'];
+    sprNo = json['spr_no'];
     quoteAccepted = json['quote_accepted'];
     noOfSalesAdvice = json['no_of_sales_advice'];
     isSalesAdviceCreated = json['is_sales_advice_created'];
-    sprNo = json['spr_no'];
+    kindAttention = json['kind_attention'];
+    termsAndCondition = json['terms_and_condition'];
     isReadyForApprove = json['is_ready_for_approve'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
     quoteTotalQty = json['quote_total_qty'];
     quoteTotalAmount = json['quote_total_amount'];
-    quoteGrossAmount = json['quote_gross_amount'];
-    quoteTotalApprovedDiscountAmount = json['quote_total_approved_discount_amount'];
+    quoteTotalApprovedDiscountAmount =
+    json['quote_total_approved_discount_amount'];
     quoteTotalGmDiscountAmount = json['quote_total_gm_discount_amount'];
+    quoteNewTotalGmDiscountAmount = json['quote_new_total_gm_discount_amount'];
+    quoteTotalGmPerAverage = json['quote_total_gm_per_average'];
+    quoteTotalBmPerAverage = json['quote_total_bm_per_average'];
+    quoteGrossAmount = json['quote_gross_amount'];
     quoteGstAmount = json['quote_gst_amount'];
-    if (json['quote_items'] != null) {
-      quoteItems = <QuoteItems>[];
-      json['quote_items'].forEach((v) {
-        quoteItems!.add(new QuoteItems.fromJson(v));
-      });
-    }
+    quoteApprovedAmtPerUnit = json['quote_approved_amt_per_unit'];
+    quoteSalesCreditAverage = json['quote_sales_credit_average'];
     shippingAddress = json['shipping_address'];
     shippingAddress2 = json['shipping_address2'];
     shippingPostCode = json['shipping_post_code'];
@@ -183,6 +198,12 @@ class SalesCycleQuoteInformationModal {
     shippingDistrict = json['shipping_district'];
     shippingPhoneNo = json['shipping_phone_no'];
     shippingEmailId = json['shipping_email_id'];
+    if (json['quote_items'] != null) {
+      quoteItems = <QuoteItems>[];
+      json['quote_items'].forEach((v) {
+        quoteItems!.add(new QuoteItems.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -227,17 +248,23 @@ class SalesCycleQuoteInformationModal {
     data['quote_accepted'] = this.quoteAccepted;
     data['no_of_sales_advice'] = this.noOfSalesAdvice;
     data['is_sales_advice_created'] = this.isSalesAdviceCreated;
+    data['kind_attention'] = this.kindAttention;
+    data['terms_and_condition'] = this.termsAndCondition;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
     data['quote_total_qty'] = this.quoteTotalQty;
     data['quote_total_amount'] = this.quoteTotalAmount;
-    data['quote_gross_amount'] = this.quoteGrossAmount;
-    data['quote_total_approved_discount_amount'] = this.quoteTotalApprovedDiscountAmount;
+    data['quote_total_approved_discount_amount'] =
+        this.quoteTotalApprovedDiscountAmount;
     data['quote_total_gm_discount_amount'] = this.quoteTotalGmDiscountAmount;
+    data['quote_new_total_gm_discount_amount'] =
+        this.quoteNewTotalGmDiscountAmount;
+    data['quote_total_gm_per_average'] = this.quoteTotalGmPerAverage;
+    data['quote_total_bm_per_average'] = this.quoteTotalBmPerAverage;
+    data['quote_gross_amount'] = this.quoteGrossAmount;
     data['quote_gst_amount'] = this.quoteGstAmount;
-    if (this.quoteItems != null) {
-      data['quote_items'] = this.quoteItems!.map((v) => v.toJson()).toList();
-    }
+    data['quote_approved_amt_per_unit'] = this.quoteApprovedAmtPerUnit;
+    data['quote_sales_credit_average'] = this.quoteSalesCreditAverage;
     data['shipping_address'] = this.shippingAddress;
     data['shipping_address2'] = this.shippingAddress2;
     data['shipping_post_code'] = this.shippingPostCode;
@@ -247,6 +274,9 @@ class SalesCycleQuoteInformationModal {
     data['shipping_district'] = this.shippingDistrict;
     data['shipping_phone_no'] = this.shippingPhoneNo;
     data['shipping_email_id'] = this.shippingEmailId;
+    if (this.quoteItems != null) {
+      data['quote_items'] = this.quoteItems!.map((v) => v.toJson()).toList();
+    }
     return data;
   }
 }
@@ -268,8 +298,10 @@ class QuoteItems {
   double? bmDiscountPer;
   double? gmDiscountPer;
   double? gmDiscountAmount;
+  double? gmTotalDiscountAmount;
   double? approvedDiscountPer;
   double? approvedAmount;
+  double? approvedAmountPerUnit;
   double? discountAmt;
   double? standardCost;
   double? branchTransferPrice;
@@ -296,6 +328,7 @@ class QuoteItems {
   String? regretReason;
   String? categoryCode;
   String? categoryName;
+  bool? isSelected;
 
   QuoteItems(
       {this.quoteId,
@@ -314,8 +347,10 @@ class QuoteItems {
         this.bmDiscountPer,
         this.gmDiscountPer,
         this.gmDiscountAmount,
+        this.gmTotalDiscountAmount,
         this.approvedDiscountPer,
         this.approvedAmount,
+        this.approvedAmountPerUnit,
         this.discountAmt,
         this.standardCost,
         this.branchTransferPrice,
@@ -341,7 +376,9 @@ class QuoteItems {
         this.regretOn,
         this.regretReason,
         this.categoryCode,
-        this.categoryName});
+        this.categoryName,
+        this.isSelected,
+      });
 
   QuoteItems.fromJson(Map<String, dynamic> json) {
     quoteId = json['quote_id'];
@@ -360,8 +397,10 @@ class QuoteItems {
     bmDiscountPer = json['bm_discount_per'];
     gmDiscountPer = json['gm_discount_per'];
     gmDiscountAmount = json['gm_discount_amount'];
+    gmTotalDiscountAmount = json['gm_total_discount_amount'];
     approvedDiscountPer = json['approved_discount_per'];
     approvedAmount = json['approved_amount'];
+    approvedAmountPerUnit = json['approved_amount_per_unit'];
     discountAmt = json['discount_amt'];
     standardCost = json['standard_cost'];
     branchTransferPrice = json['branch_transfer_price'];
@@ -388,6 +427,7 @@ class QuoteItems {
     regretReason = json['regret_reason'];
     categoryCode = json['category_code'];
     categoryName = json['category_name'];
+    isSelected = json['is_selected'];
   }
 
   Map<String, dynamic> toJson() {
@@ -408,8 +448,10 @@ class QuoteItems {
     data['bm_discount_per'] = this.bmDiscountPer;
     data['gm_discount_per'] = this.gmDiscountPer;
     data['gm_discount_amount'] = this.gmDiscountAmount;
+    data['gm_total_discount_amount'] = this.gmTotalDiscountAmount;
     data['approved_discount_per'] = this.approvedDiscountPer;
     data['approved_amount'] = this.approvedAmount;
+    data['approved_amount_per_unit'] = this.approvedAmountPerUnit;
     data['discount_amt'] = this.discountAmt;
     data['standard_cost'] = this.standardCost;
     data['branch_transfer_price'] = this.branchTransferPrice;
@@ -436,6 +478,7 @@ class QuoteItems {
     data['regret_reason'] = this.regretReason;
     data['category_code'] = this.categoryCode;
     data['category_name'] = this.categoryName;
+    data['is_selected'] = this.isSelected;
     return data;
   }
 }

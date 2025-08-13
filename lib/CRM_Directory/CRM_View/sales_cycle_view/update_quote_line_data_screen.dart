@@ -626,7 +626,6 @@ class UpdateQuoteLineDataScreen extends StatelessWidget{
         },
         cursorColor:AllColors.primaryDark1 ,
         controller: saleCycleController.updateItemDescription2Controller.value,
-        keyboardType: TextInputType.number,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten),

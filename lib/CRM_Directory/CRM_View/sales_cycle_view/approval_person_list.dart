@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/approval_person_model.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -93,14 +94,18 @@ class ApprovalPersonList extends StatelessWidget{
         }
       });*/
 
+      final nonAdminList = saleCycleController.approvalPersonList
+          .where((item) => item.isAdmin == 0) // or item.isAdmin != 1 depending on your model
+          .toList();
+
       return ListView.separated(
           padding: EdgeInsets.zero,
           separatorBuilder: (context, index) => Divider(height: .05, color: Colors.transparent,),
           shrinkWrap: true,
-          itemCount: saleCycleController.approvalPersonList.value.length,
+          itemCount: nonAdminList.length,
           controller: scrollController,
           itemBuilder: (BuildContext context, int index) {
-            return BindCustomerRequestListView(context, index);
+            return BindCustomerRequestListView(context, index, nonAdminList);
           });
     } else {
       return Center(
@@ -110,9 +115,9 @@ class ApprovalPersonList extends StatelessWidget{
     }
   }
 
-  Widget BindCustomerRequestListView(context, int position){
-    String? dateApprovedOn=StaticMethod.dateTimeToDate(saleCycleController.approvalPersonList[position].approvedOn??"");
-    final item = saleCycleController.approvalPersonList[position];
+  Widget BindCustomerRequestListView(context, int position, List<getApprovalPersonMadol> nonAdminList){
+    String? dateApprovedOn=StaticMethod.dateTimeToDate(nonAdminList[position].approvedOn??"");
+    final item = nonAdminList[position];
     return Card(
         margin: EdgeInsets.all(10),
         elevation: 3,
@@ -132,7 +137,8 @@ class ApprovalPersonList extends StatelessWidget{
                   fontWeight: FontWeight.w500),
           ),*/
 
-          subtitle: Column(
+          subtitle:
+          Column(
             children: [
               /*Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -378,16 +384,16 @@ class ApprovalPersonList extends StatelessWidget{
               ),*/
 
               detailRow("Approver Order", item.approverOrder.toString(), ),
-              detailRow("Is SPR", item.isSpr.toString() == '1' ? "Yes" : "No", ),
+              /*detailRow("Is SPR", item.isSpr.toString() == '1' ? "Yes" : "No", ),
               detailRow("SPR No", item.sprNo ?? "",),
               detailRow("SPR Category", item.sprCategoryName ?? "", ),
-              detailRow("User Type", item.userType ?? "", ),
+              detailRow("User Type", item.userType ?? "", ),*/
              /* detailRow("Approver Geo Name", item.approverGeoName ?? "", ),
               detailRow("Approver Geo Value", item.approverGeoValue ?? "", ),*/
               detailRow("Quote Status", item.quoteStatus ?? "", ),
               detailRow("Approved By", item.approvedFullName ?? "", ),
               detailRow("Approved On", dateApprovedOn ?? "", ),
-              detailRow("Manager Remarks", item.managerRemarks ?? "",),
+              //detailRow("Manager Remarks", item.managerRemarks ?? "",),
               detailRow("Reject Reason", item.rejectReason ?? "",),
             ],
           ),

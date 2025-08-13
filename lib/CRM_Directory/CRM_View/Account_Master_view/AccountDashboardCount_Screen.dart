@@ -47,7 +47,7 @@ class AccountdashboardcountScreen extends StatelessWidget{
           title:Row(
             children: [
               Text(
-                'Account Dashboard',
+                'Customer Dashboard',
                 style: GoogleFonts.poppins(
                   color: AllColors.whiteColor,
                   fontSize: 20.0,

@@ -44,6 +44,8 @@ class SalesCycleQuoteHeaderModal {
   String? branchHeadValue;
   String? zoneHeadValue;
   String? clustureHeadValue;
+  String? kindAttention;
+  String? quoteAccepted;
 
   SalesCycleQuoteHeaderModal(
       {this.condition,
@@ -90,7 +92,9 @@ class SalesCycleQuoteHeaderModal {
         this.frontlinerValue,
         this.branchHeadValue,
         this.zoneHeadValue,
-        this.clustureHeadValue});
+        this.clustureHeadValue,
+        this.kindAttention,
+        this.quoteAccepted,});
 
   SalesCycleQuoteHeaderModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -138,6 +142,8 @@ class SalesCycleQuoteHeaderModal {
     branchHeadValue = json['branch_head_value'];
     zoneHeadValue = json['zone_head_value'];
     clustureHeadValue = json['clusture_head_value'];
+    kindAttention = json['kind_attention'];
+    quoteAccepted = json['quote_accepted'];
   }
 
   Map<String, dynamic> toJson() {
@@ -187,6 +193,8 @@ class SalesCycleQuoteHeaderModal {
     data['branch_head_value'] = this.branchHeadValue;
     data['zone_head_value'] = this.zoneHeadValue;
     data['clusture_head_value'] = this.clustureHeadValue;
+    data['kind_attention'] = this.kindAttention;
+    data['quote_accepted'] = this.quoteAccepted;
     return data;
   }
 }

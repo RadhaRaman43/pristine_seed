@@ -126,6 +126,19 @@ class RoutesName{
   static const quoteApprovalListScreen="/quote_approval_list_screen";
   static const approvedQuotationListScreen="/approved_quotation_list.dart";
   static const ItemListBySalesCycle_Screen="/ItemListBySalesCycle_Screen.dart";
+  static const salesCyclePendingForApprovalListScreen="/sale_cycle_pending_for_approval_list";
+  static const pendingDraftQuoteScreen="/pending_Draft_Quote";
+  static const approvedRejectedQuoteScreen="/quote_approve_reject_screen";
+  static const allQuoteScreenScreen="/All_Quote_Screen";
+  static const allQuoteLineItemScreen="/All_Quote_Line_Item_Screen";
+  static const salesCycleProduct="/sales_product_list";
+
+  //todo business tour plan
+  static const BusinessTourPlanScreen="/bussiness_tour_plan_screen";
+  static const BusinessTourPlanDetails="/BusinessTourPlanDetails_Screen";
+  static const AddTourLinesPage="/Add_Tour_Lines_page.dart";
+  static const BusinessTourApprovalListScreen="/BusinessTourApprovalListScreen";
+  static const BusinessTourApproveRejectListScreen="/bussiness_tour_approve_rejected";
 
   //todo sales advise
   static const salesAdviseCreateScreen="/sales_advise_create_screen";
@@ -134,10 +147,18 @@ class RoutesName{
 
   static const empMarkLeaveScreen="/emp_mark_leave_screen";
   static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";
+  static const empMarkLeaveRequestScreen="/emp_mark_leave_request_screen";
+  static const empMarkLeaveRequestAddScreen="/emp_mark_leave_request_add_screen";
+  static const empMarkLeaveRequestApprovalScreen="/leave_request_approval_screen";
+
+
   //todo image not found...
 
 
   static const image_not_found_screen="/error_404.dart";
+
+
+
 
 
 

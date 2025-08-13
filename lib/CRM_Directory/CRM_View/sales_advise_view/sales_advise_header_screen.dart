@@ -51,15 +51,22 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                   ),
                 ),
                 Spacer(),
-                IconButton(
-                    onPressed: () {
-                      saleCycleController.routingForSalesAdvise.value="SalesAdvise";
-                      saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
-                      saleCycleController.salesAdviseCheckedList.value =
-                          List.generate(saleCycleController.quoteLinedata.length, (_) => false);
-                      Get.toNamed(RoutesName.salesAdviseCreateScreen);
-                    },
-                    icon: Icon(Icons.add_circle, size: 30,)),
+                Obx((){
+                  return Visibility(
+                    visible:  saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                        || saleCycleController.userType.toLowerCase()=="branch head",
+                      child: IconButton(
+                          onPressed: () {
+                            saleCycleController.routingForSalesAdvise.value="SalesAdvise";
+                            saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
+                            saleCycleController.salesAdviseCheckedList.value =
+                                List.generate(saleCycleController.quoteLinedata.length, (_) => false);
+                            Get.toNamed(RoutesName.salesAdviseCreateScreen);
+                          },
+                          icon: Icon(Icons.add_circle, size: 30,)),
+                  );
+                }),
+
                 GestureDetector(
                     onTap: () {
                       showDialogForFilter(context);
@@ -335,7 +342,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Account Code : ",
+                    "Customer Code : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -365,7 +372,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Account Name : ",
+                    "Customer Name : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -1083,8 +1090,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
                                         horizontal: AllFontSize.ten),
-                                    labelText: 'Account Name',
-                                    hintText: 'Account Name',
+                                    labelText: 'Customer Name',
+                                    hintText: 'Customer Name',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -1116,8 +1123,8 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten,
                                         horizontal: AllFontSize.ten),
-                                    labelText: 'Account Code',
-                                    hintText: 'Account Code',
+                                    labelText: 'Customer Code',
+                                    hintText: 'Customer Code',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
