@@ -64,4 +64,8 @@ class BusinessTourPlanRepo{
     return _apiService.postApi(data, AppUrl.BusinessTourPlanApproveReject,sessionManagement);
   }
 
+  Future<String> BusinessTourPlanAllLineGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.BusinessTourPlanAllLineGet,sessionManagement);
+  }
+
 }

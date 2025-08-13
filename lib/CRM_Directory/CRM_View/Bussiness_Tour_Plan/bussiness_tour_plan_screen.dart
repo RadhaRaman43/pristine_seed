@@ -729,7 +729,37 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                   // Handle the text field value changes if needed
                                 },
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
 
+                              TextField(
+                                controller: businessTourPlanController.filterClusterNameController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Cluster Name',
+                                    hintText: 'Cluster Name',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -761,7 +791,37 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                   // Handle the text field value changes if needed
                                 },
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
 
+                              TextField(
+                                controller: businessTourPlanController.filterTouringNameController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Region Name',
+                                    hintText: 'Region Name',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -793,7 +853,6 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                   // Handle the text field value changes if needed
                                 },
                               ),
-
                               SizedBox(
                                 height: 10,
                               ),

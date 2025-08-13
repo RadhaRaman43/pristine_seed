@@ -32,6 +32,7 @@ import '../../CRM_Directory/CRM_View/All_Quote_view/All_Quote_Screen.dart';
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/Add_Tour_Lines_page.dart';
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/BusinessTourApprovalListScreen.dart';
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/BusinessTourPlanDetails_Screen.dart';
+import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/Bussiness_tour_plan_line_detail_screen.dart';
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_approve_rejected.dart';
 import '../../CRM_Directory/CRM_View/Bussiness_Tour_Plan/bussiness_tour_plan_screen.dart';
 import '../../CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/Add_newContact_Master.dart';
@@ -723,6 +724,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.BusinessTourPlanScreen,
         page: ()=>BussinessTourPlanScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.BusinessTourPlanLineDetailScreen,
+        page: ()=>BussinessTourPlanLineDetailScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
