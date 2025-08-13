@@ -20,6 +20,7 @@ import '../CRM_Directory/CRM_VIewModels/emp_infor_system/leave_request_approval_
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_font_size.dart';
@@ -483,6 +484,25 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.toNamed(RoutesName.approvedRejectedQuoteScreen,);
                                               Navigator.of(context);
                                               break;
+
+                                            case 'All SPR Mapping Line Items':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<PendingDraftQuoteVm>();
+                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLSPRMAPPING"));
+                                              Get.toNamed(RoutesName.allSPRMappingScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Sales Cycle Competitor List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesCycleCompetitorProductInforVm>();
+                                              SalesCycleCompetitorProductInforVm PendingDraftQuoteController=Get.put(SalesCycleCompetitorProductInforVm());
+                                              Get.toNamed(RoutesName.salesCycleCompetitorProductInforScreen,);
+                                              Navigator.of(context);
+                                              break;
+
 
                                             case 'All Quote':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);

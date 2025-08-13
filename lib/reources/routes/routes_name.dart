@@ -130,6 +130,8 @@ class RoutesName{
   static const pendingDraftQuoteScreen="/pending_Draft_Quote";
   static const approvedRejectedQuoteScreen="/quote_approve_reject_screen";
   static const allQuoteScreenScreen="/All_Quote_Screen";
+  static const allSPRMappingScreen="/all_spr_mapping_screen";
+  static const salesCycleCompetitorProductInforScreen="/sales_cycle_competitor_product_infor_screen";
   static const allQuoteLineItemScreen="/All_Quote_Line_Item_Screen";
   static const salesCycleProduct="/sales_product_list";
 

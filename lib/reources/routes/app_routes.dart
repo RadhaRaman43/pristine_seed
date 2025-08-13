@@ -43,6 +43,7 @@ import '../../CRM_Directory/CRM_View/Task_Master_view/Add_new_Task_Screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_Master_Details.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/Task_master_screen.dart';
 import '../../CRM_Directory/CRM_View/Task_Master_view/update_task_mst_infra_screen.dart';
+import '../../CRM_Directory/CRM_View/all_spr_mapping_view/all_spr_mapping_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_add_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_request_add_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_request_screen.dart';
@@ -56,6 +57,7 @@ import '../../CRM_Directory/CRM_View/sales_cycle_view/approved_quotation_list.da
 import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_approve_reject_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/quote_item_list.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sale_cycle_pending_for_approval_list.dart';
+import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_competitor_product_infor_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_create_quote_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_quote_information_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/sales_cycle_screen.dart';
@@ -714,6 +716,21 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.allSPRMappingScreen,
+        page: ()=>AllSprMappingScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.salesCycleCompetitorProductInforScreen,
+        page: ()=>SalesCycleCompetitorProductInforScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+
+
 
     GetPage(name: RoutesName.allQuoteLineItemScreen,
         page: ()=>AllQuoteLineItemScreen(),

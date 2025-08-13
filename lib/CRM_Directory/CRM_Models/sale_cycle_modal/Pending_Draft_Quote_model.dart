@@ -1,4 +1,3 @@
-
 class Pending_Draft_Quote_Model {
   String? condition;
   String? totalRows;
@@ -13,7 +12,7 @@ class Pending_Draft_Quote_Model {
   String? quoteStatus;
   String? quoteValidity;
   String? expClosureDate;
-  int? quoteCommit;
+  dynamic? quoteCommit;
   String? approvedBy;
   String? approvedFullName;
   String? approvedOn;
@@ -22,27 +21,73 @@ class Pending_Draft_Quote_Model {
   String? createdFullName;
   String? createdOn;
   String? updatedBy;
+  String? updatedFullName;
   String? updatedOn;
   String? regretBy;
   String? regretOn;
   String? regretReason;
-  int? isActive;
-  double? installationCharges;
-  double? otherCharges;
+  dynamic? isActive;
+  dynamic? installationCharges;
+  dynamic? otherCharges;
   String? warrantyPeriod;
   String? deliveryInWeeks;
   double? advancePaymentPer;
   double? advancePaymentAmt;
   String? otherRemarks;
-  int? isSpr;
-  int? noOfSalesAdvice;
-  int? isSalesAdviceCreated;
+  dynamic? isSpr;
+  dynamic? noOfSalesAdvice;
+  dynamic? isSalesAdviceCreated;
+  String? rhApprovalEmail;
+  String? rhApproval;
+  String? rhApprovalOn;
+  String? cbhApprovalEmail;
+  String? cbhApproval;
+  String? cbhApprovalOn;
+  String? gmApprovalEmail;
+  String? gmApproval;
+  String? gmApprovalOn;
+  String? frontlinerValue;
+  String? branchHeadValue;
+  String? zoneHeadValue;
+  String? clustureHeadValue;
+  String? postCode;
+  String? district;
   String? sprNo;
   int? isReadyForApprove;
   int? isReadySendForApproval;
   double? quoteTotalAmount;
   double? quoteGrossAmount;
   double? quoteGstAmount;
+  String? itemCode;
+  String? itemName;
+  String? itemDescription;
+  dynamic? qty;
+  double? unitPrice;
+  double? mrpPrice;
+  double? quoteLinePrice;
+  double? totalPrice;
+  dynamic? discountPer;
+  double? discountAmt;
+  double? bmDiscountPer;
+  double? gmDiscountPer;
+  double? gmDiscountAmount;
+  dynamic? approvedDiscountPer;
+  double? approvedAmount;
+  double? standardCost;
+  double? branchTransferPrice;
+  double? minimalAcceptablePrice;
+  double? listSellingPrice;
+  dynamic? isSprRequired;
+  dynamic? sgstPer;
+  dynamic? cgstPer;
+  dynamic? igstPer;
+  double? sgstAmt;
+  double? cgstAmt;
+  dynamic? igstAmt;
+  double? gstAmount;
+  double? grossAmount;
+  dynamic? salesCredit;
+  String? lineStatus;
 
   Pending_Draft_Quote_Model(
       {this.condition,
@@ -67,6 +112,7 @@ class Pending_Draft_Quote_Model {
         this.createdFullName,
         this.createdOn,
         this.updatedBy,
+        this.updatedFullName,
         this.updatedOn,
         this.regretBy,
         this.regretOn,
@@ -82,12 +128,57 @@ class Pending_Draft_Quote_Model {
         this.isSpr,
         this.noOfSalesAdvice,
         this.isSalesAdviceCreated,
+        this.rhApprovalEmail,
+        this.rhApproval,
+        this.rhApprovalOn,
+        this.cbhApprovalEmail,
+        this.cbhApproval,
+        this.cbhApprovalOn,
+        this.gmApprovalEmail,
+        this.gmApproval,
+        this.gmApprovalOn,
+        this.frontlinerValue,
+        this.branchHeadValue,
+        this.zoneHeadValue,
+        this.clustureHeadValue,
+        this.postCode,
+        this.district,
         this.sprNo,
         this.isReadyForApprove,
         this.isReadySendForApproval,
         this.quoteTotalAmount,
         this.quoteGrossAmount,
-        this.quoteGstAmount});
+        this.quoteGstAmount,
+        this.itemCode,
+        this.itemName,
+        this.itemDescription,
+        this.qty,
+        this.unitPrice,
+        this.mrpPrice,
+        this.quoteLinePrice,
+        this.totalPrice,
+        this.discountPer,
+        this.discountAmt,
+        this.bmDiscountPer,
+        this.gmDiscountPer,
+        this.gmDiscountAmount,
+        this.approvedDiscountPer,
+        this.approvedAmount,
+        this.standardCost,
+        this.branchTransferPrice,
+        this.minimalAcceptablePrice,
+        this.listSellingPrice,
+        this.isSprRequired,
+        this.sgstPer,
+        this.cgstPer,
+        this.igstPer,
+        this.sgstAmt,
+        this.cgstAmt,
+        this.igstAmt,
+        this.gstAmount,
+        this.grossAmount,
+        this.salesCredit,
+        this.lineStatus});
 
   Pending_Draft_Quote_Model.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -112,6 +203,7 @@ class Pending_Draft_Quote_Model {
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
     updatedBy = json['updated_by'];
+    updatedFullName = json['updated_full_name'];
     updatedOn = json['updated_on'];
     regretBy = json['regret_by'];
     regretOn = json['regret_on'];
@@ -127,12 +219,57 @@ class Pending_Draft_Quote_Model {
     isSpr = json['is_spr'];
     noOfSalesAdvice = json['no_of_sales_advice'];
     isSalesAdviceCreated = json['is_sales_advice_created'];
+    rhApprovalEmail = json['rh_approval_email'];
+    rhApproval = json['rh_approval'];
+    rhApprovalOn = json['rh_approval_on'];
+    cbhApprovalEmail = json['cbh_approval_email'];
+    cbhApproval = json['cbh_approval'];
+    cbhApprovalOn = json['cbh_approval_on'];
+    gmApprovalEmail = json['gm_approval_email'];
+    gmApproval = json['gm_approval'];
+    gmApprovalOn = json['gm_approval_on'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
+    postCode = json['post_code'];
+    district = json['district'];
     sprNo = json['spr_no'];
     isReadyForApprove = json['is_ready_for_approve'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
     quoteTotalAmount = json['quote_total_amount'];
     quoteGrossAmount = json['quote_gross_amount'];
     quoteGstAmount = json['quote_gst_amount'];
+    itemCode = json['item_code'];
+    itemName = json['item_name'];
+    itemDescription = json['item_description'];
+    qty = json['qty'];
+    unitPrice = json['unit_price'];
+    mrpPrice = json['mrp_price'];
+    quoteLinePrice = json['quote_line_price'];
+    totalPrice = json['total_price'];
+    discountPer = json['discount_per'];
+    discountAmt = json['discount_amt'];
+    bmDiscountPer = json['bm_discount_per'];
+    gmDiscountPer = json['gm_discount_per'];
+    gmDiscountAmount = json['gm_discount_amount'];
+    approvedDiscountPer = json['approved_discount_per'];
+    approvedAmount = json['approved_amount'];
+    standardCost = json['standard_cost'];
+    branchTransferPrice = json['branch_transfer_price'];
+    minimalAcceptablePrice = json['minimal_acceptable_price'];
+    listSellingPrice = json['list_selling_price'];
+    isSprRequired = json['is_spr_required'];
+    sgstPer = json['sgst_per'];
+    cgstPer = json['cgst_per'];
+    igstPer = json['igst_per'];
+    sgstAmt = json['sgst_amt'];
+    cgstAmt = json['cgst_amt'];
+    igstAmt = json['igst_amt'];
+    gstAmount = json['gst_amount'];
+    grossAmount = json['gross_amount'];
+    salesCredit = json['sales_credit'];
+    lineStatus = json['line_status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -159,6 +296,7 @@ class Pending_Draft_Quote_Model {
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
     data['updated_by'] = this.updatedBy;
+    data['updated_full_name'] = this.updatedFullName;
     data['updated_on'] = this.updatedOn;
     data['regret_by'] = this.regretBy;
     data['regret_on'] = this.regretOn;
@@ -174,12 +312,57 @@ class Pending_Draft_Quote_Model {
     data['is_spr'] = this.isSpr;
     data['no_of_sales_advice'] = this.noOfSalesAdvice;
     data['is_sales_advice_created'] = this.isSalesAdviceCreated;
+    data['rh_approval_email'] = this.rhApprovalEmail;
+    data['rh_approval'] = this.rhApproval;
+    data['rh_approval_on'] = this.rhApprovalOn;
+    data['cbh_approval_email'] = this.cbhApprovalEmail;
+    data['cbh_approval'] = this.cbhApproval;
+    data['cbh_approval_on'] = this.cbhApprovalOn;
+    data['gm_approval_email'] = this.gmApprovalEmail;
+    data['gm_approval'] = this.gmApproval;
+    data['gm_approval_on'] = this.gmApprovalOn;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
+    data['post_code'] = this.postCode;
+    data['district'] = this.district;
     data['spr_no'] = this.sprNo;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
     data['quote_total_amount'] = this.quoteTotalAmount;
     data['quote_gross_amount'] = this.quoteGrossAmount;
     data['quote_gst_amount'] = this.quoteGstAmount;
+    data['item_code'] = this.itemCode;
+    data['item_name'] = this.itemName;
+    data['item_description'] = this.itemDescription;
+    data['qty'] = this.qty;
+    data['unit_price'] = this.unitPrice;
+    data['mrp_price'] = this.mrpPrice;
+    data['quote_line_price'] = this.quoteLinePrice;
+    data['total_price'] = this.totalPrice;
+    data['discount_per'] = this.discountPer;
+    data['discount_amt'] = this.discountAmt;
+    data['bm_discount_per'] = this.bmDiscountPer;
+    data['gm_discount_per'] = this.gmDiscountPer;
+    data['gm_discount_amount'] = this.gmDiscountAmount;
+    data['approved_discount_per'] = this.approvedDiscountPer;
+    data['approved_amount'] = this.approvedAmount;
+    data['standard_cost'] = this.standardCost;
+    data['branch_transfer_price'] = this.branchTransferPrice;
+    data['minimal_acceptable_price'] = this.minimalAcceptablePrice;
+    data['list_selling_price'] = this.listSellingPrice;
+    data['is_spr_required'] = this.isSprRequired;
+    data['sgst_per'] = this.sgstPer;
+    data['cgst_per'] = this.cgstPer;
+    data['igst_per'] = this.igstPer;
+    data['sgst_amt'] = this.sgstAmt;
+    data['cgst_amt'] = this.cgstAmt;
+    data['igst_amt'] = this.igstAmt;
+    data['gst_amount'] = this.gstAmount;
+    data['gross_amount'] = this.grossAmount;
+    data['sales_credit'] = this.salesCredit;
+    data['line_status'] = this.lineStatus;
     return data;
   }
 }

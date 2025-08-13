@@ -38,6 +38,7 @@ import '../../CRM_Models/sale_cycle_modal/item_quote_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/productCategoryWiseAmtModel.dart';
 import '../../CRM_Models/sale_cycle_modal/quoteWonModel.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_approve_reject_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_competitor_product_infor_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
@@ -116,6 +117,9 @@ class SalesCycleVm extends GetxController {
       <SalesCycleUpdateStatusModal>[].obs;
   RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list =
       <SalesCycleQuoteHeaderModal>[].obs;
+
+
+
  /* RxList<SalesAdviseHeaderModal> selection_sales_advise_won_list =
       <SalesAdviseHeaderModal>[].obs;*/
   RxList<ItemCategoryMstModel> productCategoryList =
@@ -5465,4 +5469,7 @@ class SalesCycleVm extends GetxController {
       loading.value = false;
     }
   }
+
+
+
 }

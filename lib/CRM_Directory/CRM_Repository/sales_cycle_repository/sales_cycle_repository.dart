@@ -235,6 +235,12 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.salesProductLineCompetitorDelete,sessionManagement);
   }
 
+  Future<String> salesCycleCompetitorProductInformationGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesCycleCompetitorProductInformationGet,sessionManagement);
+  }
+
+
+
 
 
 }

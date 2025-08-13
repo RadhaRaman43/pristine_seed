@@ -64,6 +64,12 @@ class QuoteInformationScreen extends StatelessWidget {
           pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "All");
           Get.offNamed(RoutesName.allQuoteLineItemScreen);
         }
+        else if(saleCycleController.quoteApprovalPage.value=="FromAllSPRMapping"){
+          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+          Get.offNamed(RoutesName.allSPRMappingScreen);
+        }
         else if (saleCycleController.quoteApprovalPage.value ==
             "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;
