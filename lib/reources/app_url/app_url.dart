@@ -287,6 +287,7 @@ class AppUrl {
      static const String salesAdviceLineDelete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineDelete";
      static const String salesAdviceComplete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceComplete";
      static const String salesAdviceLineItemUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineItemUpdate";
+     static const String salesAdviceHeaderGetNew="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGetNew";
 
      //todo employee information
      static const String employeeLeaveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveDataGet";

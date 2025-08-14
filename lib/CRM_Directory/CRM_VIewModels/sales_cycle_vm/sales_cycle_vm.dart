@@ -80,6 +80,8 @@ class SalesCycleVm extends GetxController {
   int pageNumberForItem = 0;
   int pageNumberForQuote = 0;
   int pageNumberSalesAdvise = 0;
+  RxString routingSalesAdvise="".obs;
+
   int rowsPerPage = 10;
   int total_rows = 0;
   int total_rows_items = 0;

@@ -175,6 +175,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: (){
+            saleCycleController.routingSalesAdvise.value="fromSalesAdviseHeader";
             saleCycleController.getSalesAdviseHeaderLine(saleCycleController.salesAdviseHeaderList[position].salesAdviceId?? "");
           },
           title: Row(

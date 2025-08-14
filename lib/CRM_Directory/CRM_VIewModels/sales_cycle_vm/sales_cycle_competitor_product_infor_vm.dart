@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../utils/app_utils.dart';
@@ -23,6 +24,42 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
 
   final _api = SalesCycleRepository();
   SessionManagement sessionManagement = SessionManagement();
+
+  var cluster_head_value_controller = TextEditingController().obs;
+  var createdByController = TextEditingController().obs;
+  var district_controller = TextEditingController().obs;
+  var postalCodeController = TextEditingController().obs;
+  var companyProfileTypeController = TextEditingController().obs;
+  var filterTask_Id_controller = TextEditingController().obs;
+  var accountCodeController = TextEditingController().obs;
+  var category_Approval_controller = TextEditingController().obs;
+  var accountNameController = TextEditingController().obs;
+  var filterExpectedClosuredateController = TextEditingController().obs;
+  var filterQuoteStatusController = TextEditingController().obs;
+  var filterQuoteValidityController = TextEditingController().obs;
+  var filterQuoteIdController = TextEditingController().obs;
+  var productCategoryController = TextEditingController().obs;
+  var branch_head_value_controller = TextEditingController().obs;
+  var createdOnCnontroller = TextEditingController().obs;
+  var filterItemCodeController = TextEditingController().obs;
+  var filterQuoteAcceptedController = TextEditingController().obs;
+  var filterSalesCycleApprovalStatusController = TextEditingController().obs;
+  var filterSalesCycleStatusController = TextEditingController().obs;
+  var filterSalesCycleIdController = TextEditingController().obs;
+
+  RxList<String> SaleCycleStatusList =
+      ["All", "Suspect", "Prospect", "Propose"].obs;
+  RxList<String> qouteAcceptedList =
+      ["All", "Open", "Loss", "Won"].obs;
+  RxList<String> ApprovalStatusList =
+      ["All", "PENDING", "PENDING FOR APPROVAL", "APPROVED", "REJECTED"].obs;
+
+
+  RxString createdOnStartToEnd="".obs;
+  RxString extClosureStartToEnd="".obs;
+  RxString quoteValidityStartToEnd="".obs;
+
+
   @override
   void onInit() async{
     email = await sessionManagement.getEmail() ?? '';
@@ -35,27 +72,27 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
 
   getGalesCycleCompetitorProductInformationGet(int pageNumber) {
     Map data = {
-      "filter_quote_id": "",
-      "filter_sales_cycle_id": "",
-      "filter_account_code": "",
-      "filter_account_name": "",
+      "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty?filterQuoteIdController.value.text:"",
+      "filter_sales_cycle_id": filterSalesCycleIdController.value.text.isNotEmpty?filterSalesCycleIdController.value.text:"",
+      "filter_account_code": accountCodeController.value.text.isNotEmpty?accountCodeController.value.text:"",
+      "filter_account_name": accountNameController.value.text.isNotEmpty?accountNameController.value.text:"",
       "filter_flag": "AllCompetitorLines",
-      "filter_product_category": "",
+      "filter_product_category": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
       "filter_created_by": email,
-      "filter_created_on": "",
-      "filter_item_code_name": "",
+      "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
+      "filter_item_code_name": filterItemCodeController.value.text.isNotEmpty?filterItemCodeController.value.text:"",
       "filter_competitor_name": "",
       "filter_loss_reason": "",
-      "filter_sales_cycle_status": "",
-      "filter_sales_cycle_approval_status": "",
-      "filter_sales_cycle_quote_accepted": "",
-      "filter_expected_closure_date": "",
+      "filter_sales_cycle_status": filterSalesCycleStatusController.value.text.isNotEmpty?filterSalesCycleStatusController.value.text:"",
+      "filter_sales_cycle_approval_status": filterSalesCycleApprovalStatusController.value.text.isNotEmpty?filterSalesCycleApprovalStatusController.value.text:"",
+      "filter_sales_cycle_quote_accepted":filterQuoteAcceptedController.value.text.isNotEmpty?filterQuoteAcceptedController.value.text:"",
+      "filter_expected_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
       "filter_postal_code": "",
       "filter_district": "",
       "filter_frontliner_value": "",
-      "filter_branch_head_value": "",
+      "filter_branch_head_value": branch_head_value_controller.value.text.isNotEmpty?branch_head_value_controller.value.text:"",
       "filter_zone_head_value": "",
-      "filter_clusture_head_value": "",
+      "filter_clusture_head_value": cluster_head_value_controller.value.text.isNotEmpty? cluster_head_value_controller.value.text:"",
       "row_per_page": rowsPerPage,
       "page_number": pageNumber
     };
@@ -94,6 +131,22 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     ).whenComplete(() {
       this.loading.value = false;
     });
+  }
+
+  void clearAllField() {
+    filterSalesCycleApprovalStatusController.value.clear();
+    filterQuoteAcceptedController.value.clear();
+    filterSalesCycleStatusController.value.clear();
+    filterItemCodeController.value.clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    filterSalesCycleIdController.value.clear();
+    productCategoryController.value.clear();
+    filterExpectedClosuredateController.value.clear();
+    extClosureStartToEnd.value="";
+    createdOnStartToEnd.value="";
+    cluster_head_value_controller.value.clear();
+    branch_head_value_controller.value.clear();
   }
 
 }

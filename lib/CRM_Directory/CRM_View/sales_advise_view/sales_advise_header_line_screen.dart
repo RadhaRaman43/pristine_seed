@@ -27,10 +27,15 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        saleCycleController.pageNumberSalesAdvise=0;
-        saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise,
-          saleCycleController.quoteHeaderdata[0].salesCycleId??"", saleCycleController.quoteHeaderdata[0].quoteId??"","" );
-        Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+        if(saleCycleController.routingSalesAdvise.value=="fromallSalesAdvise"){
+          Get.offAllNamed(RoutesName.allSalesAdviseList);
+        }else{
+          saleCycleController.pageNumberSalesAdvise=0;
+          saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise,
+              saleCycleController.quoteHeaderdata[0].salesCycleId??"", saleCycleController.quoteHeaderdata[0].quoteId??"","" );
+          Get.toNamed(RoutesName.salesAdviseHeaderScreen);
+        }
+
         return false;
       },
       child: Scaffold(

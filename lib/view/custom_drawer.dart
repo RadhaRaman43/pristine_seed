@@ -20,6 +20,7 @@ import '../CRM_Directory/CRM_VIewModels/emp_infor_system/leave_request_approval_
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
@@ -519,6 +520,16 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.delete<PendingDraftQuoteVm>();
                                               PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLQuoteLineItems"));
                                               Get.toNamed(RoutesName.allQuoteLineItemScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+
+                                            case 'All Sales Advice List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesAdviseAllListVm>();
+                                              SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm());
+                                              Get.toNamed(RoutesName.allSalesAdviseList,);
                                               Navigator.of(context);
                                               break;
 
