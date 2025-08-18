@@ -50,11 +50,11 @@ class AllSalesAdviseList extends StatelessWidget{
                   ),
                 ),
                 Spacer(),
-                /*GestureDetector(
+                GestureDetector(
                     onTap: () {
                       showDialogForFilter(context);
                     },
-                    child: Icon(Icons.filter_alt_rounded, size: 30,)),*/
+                    child: Icon(Icons.filter_alt_rounded, size: 30,)),
 
               ],
             )
@@ -697,276 +697,6 @@ class AllSalesAdviseList extends StatelessWidget{
     );
   }
 
-  /*filterWithSalesAdviseStatus(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only( right: 15),
-      child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
-        controller: saleCycleCompetitorController.salesAdviseStatusController.value,
-        label: Text(
-          "Sales Advise Status",
-          style: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontSize: AllFontSize.sisxteen,
-              fontWeight: FontWeight.w500),
-        ),
-
-        inputDecorationTheme: const InputDecorationTheme(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: AllColors.primaryDark1,),
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: AllColors.primaryDark1), // Change the color to green
-          ),
-          filled: false,
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        ),
-
-
-        onSelected: (String? selection) {
-          print(selection);
-          saleCycleCompetitorController.salesAdviseStatusController.value.text =
-              _displaySalesAdviseStatusForOption(selection!)
-                  .toString();
-        },
-        dropdownMenuEntries:
-        saleCycleCompetitorController.salesAdviseStatusList.map<
-            DropdownMenuEntry<String>>((String e) {
-          return DropdownMenuEntry<String>(
-              value: e, label: e!, style: ButtonStyle(
-            foregroundColor: MaterialStateProperty.all<Color>(
-                AllColors.primaryDark1),));
-        }).toList(),
-      ),
-    );
-  }
-
-  filterWithQuoteProductCategory() {
-    return TextField(
-      controller: saleCycleCompetitorController.productCategoryController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Product Category',
-          hintText: 'Product Category',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-
-
-  filterWithQuoteClusterHead() {
-    return TextField(
-      controller: saleCycleCompetitorController.cluster_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Name',
-          hintText: 'Cluster Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteBranchHead() {
-    return TextField(
-      controller: saleCycleCompetitorController.branch_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region Name',
-          hintText: 'Region Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteCreatedOn(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller:saleCycleCompetitorController.createdOnCnontroller
-          .value,
-      readOnly: true,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Select Start Date -End Date',
-        labelText: 'Created On Start Date -End Date',
-        hintStyle: GoogleFonts.poppins(
-            color: AllColors.lightblackColor,
-            fontWeight: FontWeight.w300,
-            fontSize: AllFontSize.ten),
-        labelStyle: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontWeight: FontWeight.w500,
-            fontSize: AllFontSize.sisxteen),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
-      onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
-        DateTimeRange? picked = await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2200),
-          *//* initialDateRange: DateTimeRange(
-            start: DateTime.now(),
-            end: DateTime.now().add(Duration(days: 7)),
-          ),*//*
-          builder: (BuildContext context, Widget? child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                primaryColor: AllColors.primaryDark1,
-                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                buttonTheme: ButtonThemeData(
-                  textTheme: ButtonTextTheme.primary,
-                ),
-              ),
-              child: child!,
-            );
-          },
-        );
-
-        if (picked != null) {
-          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
-          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          saleCycleCompetitorController.createdOnStartToEnd.value="$startDate@$endDate";
-          saleCycleCompetitorController.createdOnCnontroller.value.text = '$startDate - $endDate';
-        } else {
-          saleCycleCompetitorController.createdOnCnontroller.value.text = '';
-          saleCycleCompetitorController.createdOnStartToEnd.value="";
-        }
-      },
-    );
-    return TextField(
-        cursorColor: AllColors.primaryDark1,
-        controller: saleCycleCompetitorController.createdOnCnontroller.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Created On',
-            labelText: 'Created On',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
-        ),
-        onTap: () async {
-          DateTime start_date = new DateTime(1900);
-          DateTime ending_date = new DateTime(2200);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  colorScheme: ColorScheme.light(
-                      primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(
-                      textTheme: ButtonTextTheme.primary),
-                ),
-                child: child!,
-              );
-            },
-
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            saleCycleCompetitorController.createdOnCnontroller.value.text =
-                outputFormat.format(date);
-          else
-            saleCycleCompetitorController.createdOnCnontroller.value.text =
-            "";
-        }
-
-
-    );
-  }
-
   void showDialogForFilter(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -1046,7 +776,7 @@ class AllSalesAdviseList extends StatelessWidget{
                               filterWithQuoteClosureDate(context),
                               SizedBox(height: 10),
                               TextField(
-                                controller: saleCycleCompetitorController
+                                controller: salesAdviseAllVmController
                                     .accountNameController.value,
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
@@ -1071,15 +801,13 @@ class AllSalesAdviseList extends StatelessWidget{
                                       BorderRadius.all(Radius.circular(10)),
                                     )),
                                 cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
+
                               ),
                               SizedBox(
                                 height: 10,
                               ),
                               TextField(
-                                controller: saleCycleCompetitorController
+                                controller: salesAdviseAllVmController
                                     .accountCodeController.value,
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
@@ -1150,15 +878,8 @@ class AllSalesAdviseList extends StatelessWidget{
                                       color: AllColors.primaryDark, width: 1),
                                 )),
                             onPressed: () {
-                              saleCycleCompetitorController.pageNumberSalesAdvise = 0;
-                              //saleCycleCompetitorController.getQuoteHeaderData(saleCycleCompetitorController.pageNumberForQuote,"","");
-                              saleCycleCompetitorController.getSalesAdviseData(
-                                  saleCycleCompetitorController.pageNumberSalesAdvise,
-                                  saleCycleCompetitorController
-                                      .quoteHeaderdata[0].salesCycleId??"",
-                                  saleCycleCompetitorController
-                                      .quoteHeaderdata[0].quoteId??"",saleCycleCompetitorController.salesAdviseStatusController.value.text
-                              );
+                              salesAdviseAllVmController.pageNumber=0;
+                              salesAdviseAllVmController.getSaleCycleProductByIdList(salesAdviseAllVmController.pageNumber);
                               Get.back();
                             },
                             child: Text(
@@ -1182,16 +903,9 @@ class AllSalesAdviseList extends StatelessWidget{
                                       color: AllColors.redColor, width: 1),
                                 )),
                             onPressed: () {
-                              saleCycleCompetitorController.clearAllFieldOfQuoteFilter();
-                              saleCycleCompetitorController.pageNumberSalesAdvise = 0;
-                              //saleCycleCompetitorController.getQuoteHeaderData(saleCycleCompetitorController.pageNumberForQuote,"","");
-                              saleCycleCompetitorController.getSalesAdviseData(
-                                  saleCycleCompetitorController.pageNumberSalesAdvise,
-                                  saleCycleCompetitorController
-                                      .quoteHeaderdata[0].salesCycleId??"",
-                                  saleCycleCompetitorController
-                                      .quoteHeaderdata[0].quoteId??"",""
-                              );
+                              salesAdviseAllVmController.clearAllField();
+                              salesAdviseAllVmController.pageNumber=0;
+                              salesAdviseAllVmController.getSaleCycleProductByIdList(salesAdviseAllVmController.pageNumber);
                               Get.back();
                             },
                             child: Text(
@@ -1219,7 +933,7 @@ class AllSalesAdviseList extends StatelessWidget{
   Widget filterWithSalesAdviseId(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: saleCycleCompetitorController.salesAdviseIdController.value,
+      controller: salesAdviseAllVmController.salesAdviseIdController.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.two, horizontal: AllFontSize.ten),
@@ -1245,7 +959,7 @@ class AllSalesAdviseList extends StatelessWidget{
   filterWithQuoteValidity(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller:saleCycleCompetitorController.filterQuoteValidityController.value,
+      controller:salesAdviseAllVmController.filterQuoteValidityController.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -1274,10 +988,10 @@ class AllSalesAdviseList extends StatelessWidget{
           context: context,
           firstDate: DateTime(1900),
           lastDate: DateTime(2200),
-          *//* initialDateRange: DateTimeRange(
+          /* initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(Duration(days: 7)),
-          ),*//*
+          ),*/
           builder: (BuildContext context, Widget? child) {
             return Theme(
               data: ThemeData.light().copyWith(
@@ -1295,74 +1009,21 @@ class AllSalesAdviseList extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          saleCycleCompetitorController.quoteValidityStartToEnd.value="$startDate@$endDate";
-          saleCycleCompetitorController.filterQuoteValidityController.value.text = '$startDate - $endDate';
+          salesAdviseAllVmController.quoteValidityStartToEnd.value="$startDate@$endDate";
+          salesAdviseAllVmController.filterQuoteValidityController.value.text = '$startDate - $endDate';
         } else {
-          saleCycleCompetitorController.filterQuoteValidityController.value.text = '';
-          saleCycleCompetitorController.quoteValidityStartToEnd.value="";
+          salesAdviseAllVmController.filterQuoteValidityController.value.text = '';
+          salesAdviseAllVmController.quoteValidityStartToEnd.value="";
         }
       },
     );
-    return TextField(
-        cursorColor: AllColors.primaryDark1,
-        controller: saleCycleCompetitorController.filterQuoteValidityController.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Quote Validity',
-            labelText: 'Quote Validity',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )),
-        onTap: () async {
-          DateTime ending_date = new DateTime(2200);
-          DateTime start_date = new DateTime(1900);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  // Header background color
-                  //accentColor: AllColors.primaryDark1, // Color of the buttons
-                  colorScheme:
-                  ColorScheme.light(primary: AllColors.primaryDark1),
-                  buttonTheme:
-                  ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-                child: child!,
-              );
-            },
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            saleCycleCompetitorController.filterQuoteValidityController.value.text =
-                outputFormat.format(date);
-          else
-            saleCycleCompetitorController.filterQuoteValidityController.value.text = "";
-        });
+
   }
 
   filterWithQuoteClosureDate(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller:saleCycleCompetitorController.filterExpectedClosuredateController
+      controller:salesAdviseAllVmController.filterExpectedClosuredateController
           .value,
       readOnly: true,
       decoration: InputDecoration(
@@ -1392,10 +1053,10 @@ class AllSalesAdviseList extends StatelessWidget{
           context: context,
           firstDate: DateTime(1900),
           lastDate: DateTime(2200),
-          *//* initialDateRange: DateTimeRange(
+          /* initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(Duration(days: 7)),
-          ),*//*
+          ),*/
           builder: (BuildContext context, Widget? child) {
             return Theme(
               data: ThemeData.light().copyWith(
@@ -1413,15 +1074,284 @@ class AllSalesAdviseList extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          saleCycleCompetitorController.extClosureStartToEnd.value="$startDate@$endDate";
-          saleCycleCompetitorController.filterExpectedClosuredateController.value.text = '$startDate - $endDate';
+          salesAdviseAllVmController.extClosureStartToEnd.value="$startDate@$endDate";
+          salesAdviseAllVmController.filterExpectedClosuredateController.value.text = '$startDate - $endDate';
         } else {
-          saleCycleCompetitorController.filterExpectedClosuredateController.value.text = '';
-          saleCycleCompetitorController.extClosureStartToEnd.value="";
+          salesAdviseAllVmController.filterExpectedClosuredateController.value.text = '';
+          salesAdviseAllVmController.extClosureStartToEnd.value="";
         }
       },
     );
 
-  }*/
+  }
 
+  filterWithSalesAdviseStatus(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only( right: 15),
+      child: DropdownMenu<String>(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width-15,
+        controller: salesAdviseAllVmController.salesAdviseStatusController.value,
+        label: Text(
+          "Sales Advise Status",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w500),
+        ),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+
+
+        onSelected: (String? selection) {
+          print(selection);
+          salesAdviseAllVmController.salesAdviseStatusController.value.text =
+              _displaySalesAdviseStatusForOption(selection!)
+                  .toString();
+        },
+        dropdownMenuEntries:
+        salesAdviseAllVmController.salesAdviseStatusList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
+    );
+  }
+
+  filterWithQuoteProductCategory() {
+    return TextField(
+      controller: salesAdviseAllVmController.productCategoryController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Product Category',
+          hintText: 'Product Category',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+
+
+  filterWithQuoteClusterHead() {
+    return TextField(
+      controller: salesAdviseAllVmController.cluster_head_value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Cluster Name',
+          hintText: 'Cluster Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteBranchHead() {
+    return TextField(
+      controller: salesAdviseAllVmController.branch_head_value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Region Name',
+          hintText: 'Region Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller:salesAdviseAllVmController.createdOnCnontroller
+          .value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On Start Date -End Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          salesAdviseAllVmController.createdOnStartToEnd.value="$startDate@$endDate";
+          salesAdviseAllVmController.createdOnCnontroller.value.text = '$startDate - $endDate';
+        } else {
+          salesAdviseAllVmController.createdOnCnontroller.value.text = '';
+          salesAdviseAllVmController.createdOnStartToEnd.value="";
+        }
+      },
+    );
+    return TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: saleCycleController.createdOnCnontroller.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Created On',
+            labelText: 'Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme: ColorScheme.light(
+                      primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                      textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            saleCycleController.createdOnCnontroller.value.text =
+                outputFormat.format(date);
+          else
+            saleCycleController.createdOnCnontroller.value.text =
+            "";
+        }
+
+
+    );
+  }
 }

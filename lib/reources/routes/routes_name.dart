@@ -147,6 +147,7 @@ class RoutesName{
   static const salesAdviseHeaderScreen="/sales_advise_header_screen";
   static const salesAdviseHeaderLineScreen="/sales_advise_header_line_screen";
   static const allSalesAdviseList="/all_sales_advise_list";
+  static const allSalesAdviseLineItemsScreen="/all_sales_advise_line_items_screen";
 
   static const empMarkLeaveScreen="/emp_mark_leave_screen";
   static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";

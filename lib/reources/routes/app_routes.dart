@@ -50,6 +50,7 @@ import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_l
 import '../../CRM_Directory/CRM_View/employee_information_system_view/emp_mark_leave_screen.dart';
 import '../../CRM_Directory/CRM_View/employee_information_system_view/leave_request_approval_screen.dart';
 import '../../CRM_Directory/CRM_View/quote_approval_list/quote_approval_list_screen.dart';
+import '../../CRM_Directory/CRM_View/sales_advise_view/all_sales_advise_line_items_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_advise_view/all_sales_advise_list.dart';
 import '../../CRM_Directory/CRM_View/sales_advise_view/sales_advise_create_screen.dart';
 import '../../CRM_Directory/CRM_View/sales_cycle_view/ItemListBySalesCycle_Screen.dart';
@@ -732,6 +733,12 @@ class AppRoutes{
 
     GetPage(name: RoutesName.allSalesAdviseList,
         page: ()=>AllSalesAdviseList(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
+    GetPage(name: RoutesName.allSalesAdviseLineItemsScreen,
+        page: ()=>AllSalesAdviseLineItemsScreen(),
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),

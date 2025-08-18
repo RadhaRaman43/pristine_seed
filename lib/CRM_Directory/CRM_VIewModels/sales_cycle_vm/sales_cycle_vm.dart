@@ -4635,11 +4635,15 @@ class SalesCycleVm extends GetxController {
                 response.length > 0 &&
                 response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
-              if (pageNumberForQuote == 0) {
+              if (pageNumber == 0) {
                 salesAdviseHeaderList.clear();
               }
               salesAdviseHeaderList.addAll(response);
               total_rows = int.parse(salesAdviseHeaderList[0].totalRows!);
+              if(routingSalesAdvise.value=="fromallSalesAdvise"){
+                Get.toNamed(RoutesName.allSalesAdviseList);
+                return;
+              };
               if(flagStatus=="completed"){
                 Get.toNamed(RoutesName.approvedQuotationListScreen);
               }else{
@@ -5006,10 +5010,10 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  getSalesAdviseHeaderComplete(String salesAdviseId) {
+  getSalesAdviseHeaderComplete(advise.QuoteItems salesAdviseLinesDataList) {
     loading.value = true;
     Map data = {
-      "sales_advice_id": salesAdviseId,
+      "sales_advice_id": salesAdviseLinesDataList.salesAdviceId,
       "created_by": email};
     try {
       _api.salesAdviceCompleteApiHit(data, sessionManagement)
@@ -5025,7 +5029,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message", response[0].message.toString());
               pageNumberSalesAdvise=0;
-              getSalesAdviseData(pageNumberSalesAdvise,salesAdviseHeaderList[0].salesCycleId??"",salesAdviseHeaderList[0].quoteId??"","");
+              getSalesAdviseData(pageNumberSalesAdvise,salesAdviseLinesDataList.salesCycleId??"",salesAdviseLinesDataList.quoteId??"","");
               loading.value = false;
             } else {
               loading.value = false;
@@ -5192,6 +5196,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
               getSalesAdviseHeaderLine(salesAdviseLinesDataList.salesAdviceId!);
+              erpItemNameController.value.text="";
               Utils.showToastification(
                   "Success !", response[0].message.toString());
             } else {

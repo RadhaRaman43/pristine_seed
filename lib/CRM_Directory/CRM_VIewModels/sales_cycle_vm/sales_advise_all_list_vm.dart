@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -9,6 +10,11 @@ import '../../CRM_Models/sales_advise_modal/all_sales_advise_list_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
 class SalesAdviseAllListVm extends GetxController{
+  String filterFlag="";
+  SalesAdviseAllListVm([String? flag]){
+    this.filterFlag = flag??"";
+  }
+
   final _api = SalesCycleRepository();
   SessionManagement sessionManagement = SessionManagement();
   RxBool loading = false.obs;
@@ -18,6 +24,21 @@ class SalesAdviseAllListVm extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   int pageNumber = 0;
+ var filterExpectedClosuredateController=TextEditingController().obs;
+ var salesAdviseIdController=TextEditingController().obs;
+ var filterQuoteValidityController=TextEditingController().obs;
+ var salesAdviseStatusController=TextEditingController().obs;
+ var accountNameController=TextEditingController().obs;
+ var accountCodeController=TextEditingController().obs;
+ var branch_head_value_controller=TextEditingController().obs;
+ var cluster_head_value_controller=TextEditingController().obs;
+ var productCategoryController=TextEditingController().obs;
+ var createdOnCnontroller=TextEditingController().obs;
+
+ RxString quoteValidityStartToEnd="".obs;
+ RxString extClosureStartToEnd="".obs;
+ RxString createdOnStartToEnd="".obs;
+  RxList<String> salesAdviseStatusList = ["Draft", "Completed"].obs;
 
   RxList<AllSalesAdviseModal> salesAdviseList=<AllSalesAdviseModal>[].obs;
 
@@ -33,26 +54,26 @@ class SalesAdviseAllListVm extends GetxController{
 
   getSaleCycleProductByIdList(int pageNumber) {
     Map data = {
-      "filter_sales_advice_id": "",
+      "filter_sales_advice_id": salesAdviseIdController.value.text.isNotEmpty?salesAdviseIdController.value.text:"",
       "filter_quote_id": "",
       "filter_sales_cycle_id": "",
-      "filter_account_code": "",
-      "filter_account_name": "",
+      "filter_account_code": accountNameController.value.text.isNotEmpty?accountNameController.value.text:"",
+      "filter_account_name": accountCodeController.value.text.isNotEmpty?accountCodeController.value.text:"",
       "filter_rh_approval": "",
       "filter_cbh_approval": "",
       "filter_category_approval": "",
       "filter_gm_approval": "",
       "filter_quote_version": -1,
-      "filter_quote_validity": "",
-      "filter_exp_closure_date": "",
-      "filter_sales_advice_status": "",
-      "filter_flag": "AllSalesAdviceHeader",
-      "filter_product_category": "",
+      "filter_quote_validity": quoteValidityStartToEnd.value,
+      "filter_exp_closure_date": extClosureStartToEnd.value,
+      "filter_sales_advice_status": salesAdviseStatusController.value.text.isNotEmpty?salesAdviseStatusController.value.text:"",
+      "filter_flag": filterFlag,
+      "filter_product_category": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
       "filter_created_by": email,
-      "filter_created_on": "",
+      "filter_created_on": createdOnStartToEnd.value,
       "filter_frontliner_value": "",
-      "filter_branch_head_value": "",
-      "filter_zone_head_value": "",
+      "filter_branch_head_value": branch_head_value_controller.value.text.isNotEmpty?branch_head_value_controller.value.text:"",
+      "filter_zone_head_value": cluster_head_value_controller.value.text.isNotEmpty?cluster_head_value_controller.value.text:"",
       "filter_clusture_head_value": "",
       "filter_spr_no": "",
       "filter_item_code": "",
@@ -89,8 +110,6 @@ class SalesAdviseAllListVm extends GetxController{
             } else {
               salesAdviseList.value = [];
             }
-          } else {
-            loading.value = false;
           }
         } catch (e) {
           print(e);
@@ -110,5 +129,22 @@ class SalesAdviseAllListVm extends GetxController{
   Future<void> refreshList() async {
     pageNumber = 0;
     getSaleCycleProductByIdList(pageNumber);
+  }
+
+  void clearAllField() {
+     filterExpectedClosuredateController.value.clear();
+     salesAdviseIdController.value.clear();
+     filterQuoteValidityController.value.clear();
+     salesAdviseStatusController.value.clear();
+     accountNameController.value.clear();
+     accountCodeController.value.clear();
+     branch_head_value_controller.value.clear();
+     cluster_head_value_controller.value.clear();
+     productCategoryController.value.clear();
+     createdOnCnontroller.value.clear();
+     extClosureStartToEnd.value="";
+     quoteValidityStartToEnd.value="";
+     createdOnStartToEnd.value="";
+
   }
 }

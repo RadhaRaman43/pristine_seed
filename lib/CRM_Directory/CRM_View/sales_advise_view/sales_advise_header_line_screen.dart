@@ -32,7 +32,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
         }else{
           saleCycleController.pageNumberSalesAdvise=0;
           saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise,
-              saleCycleController.quoteHeaderdata[0].salesCycleId??"", saleCycleController.quoteHeaderdata[0].quoteId??"","" );
+              saleCycleController.salesAdviseHeaderLineList[0].salesCycleId??"", saleCycleController.salesAdviseHeaderLineList[0].quoteId??"","" );
           Get.toNamed(RoutesName.salesAdviseHeaderScreen);
         }
 
@@ -45,6 +45,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
               color: AllColors.whiteColor,
             ),
             title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Sales Advise(${saleCycleController.salesAdviseHeaderLineList[0].salesAdviceId.toString()})',
@@ -55,7 +56,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-                Spacer(),
+                //Spacer(),
 
                 Obx((){
                   return  Visibility(
@@ -111,12 +112,12 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-
-                          Visibility(
-                            visible: (saleCycleController.salesAdviseHeaderLineList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
-                                || saleCycleController.userType.toLowerCase()=="branch head")
-                                &&saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft",
-                            child: ActionChip(
+                          Obx((){
+                            return Visibility(
+                              visible: (saleCycleController.salesAdviseHeaderLineList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                                  || saleCycleController.userType.toLowerCase()=="branch head")
+                                  &&saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft",
+                              child: ActionChip(
                                 label: Text(
                                   "Complete",
                                   style: GoogleFonts.poppins(
@@ -132,7 +133,9 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                   side: BorderSide.none,
                                 ),
                               ),
-                          )
+                            );
+                          })
+
                         ],
                       ),
                     ),
@@ -231,7 +234,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
               ],
             ),
             buildLabelValueRow("Created By", header.createdFullName),
-            buildLabelValueRow("Created on", StaticMethod.dateTimeToDate(header.createdOn??"")),
+            buildLabelValueRow("Create   d on", StaticMethod.dateTimeToDate(header.createdOn??"")),
             if (status == "completed") ...[
               buildLabelValueRow("Completed by", header.completedBy),
               buildLabelValueRow("Completed Full Name", header.completedFullName),
@@ -1830,7 +1833,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                   ),
                                 ),
                                 onPressed: () {
-                                  saleCycleController.getSalesAdviseHeaderComplete(saleCycleController.salesAdviseLinesDataList[0].salesAdviceId??"");
+                                  saleCycleController.getSalesAdviseHeaderComplete(saleCycleController.salesAdviseLinesDataList[0]);
                                   Navigator.pop(context);
                                 },
                                 child: Container(
@@ -1901,9 +1904,9 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                     saleCycleController.pageNumber = 0;
                                     saleCycleController.getAddressMasterList(
                                         saleCycleController.pageNumber,
-                                        saleCycleController.quoteHeaderdata[0].accountCode!);
+                                        saleCycleController.salesAdviseHeaderLineList[0].accountCode!);
                                     saleCycleController.showConsigneeAddressList(
-                                        context, saleCycleController.address_master_list,saleCycleController.quoteHeaderdata[0].accountCode!);
+                                        context, saleCycleController.address_master_list,saleCycleController.salesAdviseHeaderLineList[0].accountCode!);
                                   },
                                 ),
                               ),
@@ -2408,7 +2411,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                         .getSaleCycleProductByIdList(
                                         saleCycleController.pageNumber,
                                         saleCycleController
-                                            .quoteHeaderdata[0]
+                                            .salesAdviseHeaderLineList[0]
                                             .salesCycleId!);
 
                                    /* saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
@@ -2440,7 +2443,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                         .getSaleCycleProductByIdList(
                                         saleCycleController.pageNumber,
                                         saleCycleController
-                                            .quoteHeaderdata[0]
+                                            .salesAdviseHeaderLineList[0]
                                             .salesCycleId!);
 
                                   /*  saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
@@ -2496,7 +2499,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
           if (saleCycleController.pageNumber + 1 < total_page) {
             saleCycleController.getSaleCycleProductByIdList(
               saleCycleController.pageNumber + 1,
-              saleCycleController.quoteHeaderdata[0].salesCycleId!,
+              saleCycleController.salesAdviseHeaderLineList[0].salesCycleId!,
             );
 
 
