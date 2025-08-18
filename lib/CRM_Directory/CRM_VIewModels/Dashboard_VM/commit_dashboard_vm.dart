@@ -50,13 +50,15 @@ class CommitDashboardVm extends GetxController{
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
-  RxList<String> quoteAcceptedList = ["All","WON", "LOSS"].obs;
+  RxList<String> quoteAcceptedList = ["ALL","WON", "LOSS"].obs;
+  RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
 
   var filterCustomDateController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
   var typeOfCall_controller=TextEditingController().obs;
   var ProductCategory_controller=TextEditingController().obs;
   var QuoteAccepted_controller=TextEditingController().obs;
+  var IsCommit_controller=TextEditingController().obs;
   var StageName_controller=TextEditingController().obs;
   var clusterName_controller=TextEditingController().obs;
   var RegionName_controller=TextEditingController().obs;
@@ -547,7 +549,8 @@ class CommitDashboardVm extends GetxController{
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
-    QuoteAccepted_controller.value.clear();
+    QuoteAccepted_controller.value.text = "All";
+    IsCommit_controller.value.text = 'ALL';
     StageName_controller.value.clear();
     clusterName_controller.value.clear();
     CustomerName_controller.value.clear();

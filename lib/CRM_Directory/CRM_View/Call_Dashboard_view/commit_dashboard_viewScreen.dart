@@ -30,6 +30,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
 
+  static String _displayCommitStatusForOption(String option) =>
+      option;
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -1339,6 +1342,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
           SizedBox(height: 10),
           bindProductCategoryFilter(context),
           SizedBox(height: 10),
+          bindIsCommitDropDown(context),
+          SizedBox(height: 10),
           bindClusterNameFilter(context),
           SizedBox(height: 10),
           bindRegionNameFilter(context),
@@ -1464,7 +1469,59 @@ class CommitDashboardViewscreen extends StatelessWidget{
           .map<DropdownMenuEntry<String>>((String e) {
         return DropdownMenuEntry<String>(
             value: e,
-            label: e!,
+            label: e,
+            style: ButtonStyle(
+              foregroundColor:
+              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
+    );
+  }
+
+  bindIsCommitDropDown(BuildContext context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width*.96,
+      controller: dashboard_view_Controller.IsCommit_controller.value,
+      label: Text(
+        "is Commit",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w600),
+      ),
+      initialSelection: 'ALL',
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+
+      onSelected: (String? selection) {
+        print(selection);
+        dashboard_view_Controller.IsCommit_controller.value.text =
+            _displayCommitStatusForOption(selection!)
+                .toString();
+      },
+
+      dropdownMenuEntries: dashboard_view_Controller.isCommitList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e,
+            label: e,
             style: ButtonStyle(
               foregroundColor:
               MaterialStateProperty.all<Color>(AllColors.primaryDark1),
@@ -1483,8 +1540,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
-            labelText: dashboard_view_Controller.selectedSalesStageStatusList.isNotEmpty?"Task Status":null,
-            hintText: "Task Status",
+            labelText: dashboard_view_Controller.selectedSalesStageStatusList.isNotEmpty?"Sales Cycle Stage":null,
+            hintText: "Sales Cycle Stage",
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -1492,7 +1549,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
           // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
-              "Task Status",
+              "Sales Cycle Stage",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,

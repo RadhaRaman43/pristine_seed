@@ -8,7 +8,13 @@ import 'package:intl/intl.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/dashboard_models/call_dashboard_user_wise_Data_model.dart';
+import '../../CRM_Models/dashboard_models/funnel_dashboard_model/funnelDashboard_User_Data_Model.dart';
 import '../../CRM_Models/dashboard_models/funnel_dashboard_model/funnel_Dashboard_model.dart';
 import '../../CRM_Repository/dashboard_repository/dashboard_repo.dart';
 
@@ -33,27 +39,140 @@ class FunnelDashboardVm extends GetxController{
   RxInt total_rows = 0.obs;
 
   RxList<FunnelDashboardModel> funnelDashboardList = <FunnelDashboardModel>[].obs;
-  RxList<CallDashboardUserWiseDataModel> funnelDashboardUserWiseDataList = <CallDashboardUserWiseDataModel>[].obs;
+  RxList<funnelDashboardDataListModel> funnelDashboardUserWiseDataList = <funnelDashboardDataListModel>[].obs;
+
+  RxList<String> SalesCycleStageStatusList = <String>[].obs;
+  RxList<String> selectedSalesStageStatusList = <String>[].obs;
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> SelectedProductCategory_list = <ItemCategoryMstModel>[].obs;
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
+  RxList<String> quoteAcceptedList = ["ALL","WON", "LOSS"].obs;
+  RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
 
   var filterCustomDateController=TextEditingController().obs;
+  var AccountOwner_controller=TextEditingController().obs;
+  var typeOfCall_controller=TextEditingController().obs;
+  var ProductCategory_controller=TextEditingController().obs;
+  var QuoteAccepted_controller=TextEditingController().obs;
+  var IsCommit_controller=TextEditingController().obs;
+  var StageName_controller=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
+  var CustomerName_controller=TextEditingController().obs;
+
+  var CustomerNameApi;
+  var ProductCategoryForApi;
+  var AccountOwnerForApi;
+  var ClusterNameForApi;
+  var RegionNameForApi;
+  var QuoteAcceptedForApi;
+  var isCommitForApi;
+  var StageNameForApi = '';
+  var EmployeeEmailIdForApi = '';
+
 
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
+    SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
+    selectedSalesStageStatusList.value = ["All"];
+    QuoteAccepted_controller.value.text = "All";
+    IsCommit_controller.value.text = 'ALL';
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     funnelDashboardData();
+    getEmployeeMemberApi();
+    getItemCategoryMstWithoutTaskIdApi();
+    getClustersGetByEmail();
+    getAccountMaster(pageNumber);
   }
 
   Future<void> funnelDashboardData() async {
+    CustomerNameApi="";
+    if(CustomerName_controller.value.text.isNotEmpty){
+      CustomerNameApi = CustomerName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    AccountOwnerForApi = '';
+    if(AccountOwner_controller.value.text.isNotEmpty){
+      AccountOwnerForApi = AccountOwner_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    ClusterNameForApi = '';
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    RegionNameForApi = '';
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    ProductCategoryForApi = '';
+    if(ProductCategory_controller.value.text.isNotEmpty){
+      ProductCategoryForApi = ProductCategory_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    QuoteAcceptedForApi = '';
+    if (QuoteAccepted_controller.value.text.isNotEmpty) {
+      QuoteAcceptedForApi = QuoteAccepted_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+
+    StageNameForApi = '';
+    if (StageName_controller.value.text.isNotEmpty) {
+      StageNameForApi = StageName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+
+    if (IsCommit_controller.value.text.isNotEmpty) {
+      if(IsCommit_controller.value.text == 'ALL'){
+        isCommitForApi = '-1';
+      }else if(IsCommit_controller.value.text == 'YES'){
+        isCommitForApi = '1';
+      }else if(IsCommit_controller.value.text == 'NO'){
+        isCommitForApi = '0';
+      }
+
+    }
 
     try {
       Map<String, String> data = {
+        "flag": "",
         "email_id": email,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
+        "filter_commit": (IsCommit_controller.value.text.isEmpty||IsCommit_controller.value.text=='All')?"-1":isCommitForApi,
+        "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
+        "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
+        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
       };
 
       print(data);
@@ -94,31 +213,19 @@ class FunnelDashboardVm extends GetxController{
     try{
       loading.value=true;
       Map data={
+        "flag": '',
         "email_id": email,
+        "emp_email_id": EmployeeEmailIdForApi.isEmpty?"":EmployeeEmailIdForApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
-        "filter_type_of_call": '',
-        "filter_account_code": '',
-        "filter_account_name": '',
-        "filter_account_owner": '',
-        "filter_approved_by": '',
-        "filter_branch_head_value": '',
-        "filter_clusture_head_value": '',
-        "filter_company_profile_type": '',
-        "filter_created_by": email,
-        "filter_created_on": '',
-        "filter_due_date": '',
-        "filter_frontliner_value": '',
-        "filter_is_infra_lead": '0',
-        "filter_is_sales_cycle_active": '-1',
-        "filter_last_activity_status": '',
-        "filter_method_of_call": '',
-        "filter_postal_code": '',
-        "filter_product_category": '',
-        "filter_sales_cycle_id": '',
-        "filter_task_id": '',
-        "filter_task_status": '',
-        "filter_zone_head_value": '',
+        "filter_commit": (IsCommit_controller.value.text.isEmpty||IsCommit_controller.value.text=='All')?"-1":isCommitForApi,
+        "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
+        "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
+        "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
+        "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
+        "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
+        "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "rowsPerPage": rowsPerPage,
         "pageNumber": pageNumber
       };
@@ -128,7 +235,7 @@ class FunnelDashboardVm extends GetxController{
         final jsonResponse = json.decode(onValue);
         print(onValue);
         if(jsonResponse is List){
-          List<CallDashboardUserWiseDataModel> response = jsonResponse.map((e) => CallDashboardUserWiseDataModel.fromJson(e)).toList();
+          List<funnelDashboardDataListModel> response = jsonResponse.map((e) => funnelDashboardDataListModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
             loading.value = false;
             if(pageNumber==0){
@@ -221,6 +328,257 @@ class FunnelDashboardVm extends GetxController{
 
     print("Start Date: $formattedStartDate");
     print("End Date: $formattedEndDate");
+
+  }
+
+
+  getEmployeeMemberApi() {
+    Map data = {
+      "email_id": email,
+      "flag": "GeoLevelLower"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+  void getAccountMaster(int page_no){
+    try{
+      Map<String, String> data={
+        "filter_account_code":'',
+        "filter_account_name": '',
+        "filter_account_type": '',
+        "filter_email_id": '',
+        "filter_phone_no":  '',
+        "filter_company_profile_type": '',
+        "filter_state_name": '',
+        "filter_postal_code": '',
+        "filter_district": '',
+        "filter_created_by": '',
+        "filter_account_owner": email,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": '',
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": '',
+        "filter_is_active": '-1',
+        "row_per_page": '50',
+        "page_number": '0'
+      };
+      loading.value=true;
+      _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            if(page_no==0){
+              Account_Master_list.clear();
+            }
+            Account_Master_list.addAll(response);
+
+          }else {
+            loading.value = false;
+            Account_Master_list.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  clearAllFilterController(){
+    character.value = 'Month';
+    ProductCategoryForApi = '';
+    AccountOwnerForApi = '';
+    ClusterNameForApi = '';
+    RegionNameForApi = '';
+    EmployeeEmailIdForApi = '';
+    StageNameForApi = '';
+    QuoteAcceptedForApi = '';
+    CustomerNameApi="";
+
+    filterCustomDateController.value.clear();
+    AccountOwner_controller.value.clear();
+    typeOfCall_controller.value.clear();
+    ProductCategory_controller.value.clear();
+    QuoteAccepted_controller.value.text = "All";
+    IsCommit_controller.value.text = 'ALL';
+    StageName_controller.value.clear();
+    clusterName_controller.value.clear();
+    CustomerName_controller.value.clear();
+    RegionName_controller.value.clear();
+    SelectedAccount_Master_list.value = [];
+    SelectedEmployee_Member_list.value = [];
+    SelectedProductCategory_list.value = [];
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    //selectedSalesStageStatusList.value = [];
+    selectedSalesStageStatusList.value = ["All"];
+    DateRange("month");
+    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 
   }
 

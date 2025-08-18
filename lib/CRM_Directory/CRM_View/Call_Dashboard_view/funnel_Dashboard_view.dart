@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,11 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
-import '../../CRM_Models/dashboard_models/funnel_dashboard_model/funnel_Dashboard_model.dart';
+import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Dashboard_VM/funnel_dashboard_Vm.dart';
 
 class FunnelDashboardView extends StatelessWidget{
@@ -19,6 +24,12 @@ class FunnelDashboardView extends StatelessWidget{
 
   final dashboard_view_Controller = Get.put(FunnelDashboardVm());
   Size size=Get.size;
+
+  static String _displayCustomerNeedIdentityStatusForOption(String option) =>
+      option;
+
+  static String _displayCommitStatusForOption(String option) =>
+      option;
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +79,7 @@ class FunnelDashboardView extends StatelessWidget{
                   child: ListView(
                     children: [
                       Container(
-                          padding: EdgeInsets.only(left: 15.0, bottom: 10.0, top: 10.0),
+                          padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 15.0),
                           child:
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -82,72 +93,126 @@ class FunnelDashboardView extends StatelessWidget{
                                   fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              SizedBox(width: 10,),
+                              SizedBox(height: 10,),
                               Obx((){
                                 return Padding(
                                   padding: const EdgeInsets.only(left: 8.0 ,right: 25),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '1. Suspect',
-                                            style: GoogleFonts.poppins(
-                                              color: AllColors.blackColor,
-                                              fontSize: AllFontSize.twelve,
-                                              fontWeight: FontWeight.w500,
+                                      InkWell(
+                                        onTap: (){
+                                          dashboard_view_Controller.StageNameForApi = 'Suspect';
+                                          dashboard_view_Controller.pageNumber = 0;
+                                          dashboard_view_Controller.funnelDashboardData();
+                                        },
+                                        child: Container(
+                                          width: 90,
+                                          decoration: BoxDecoration(
+                                            color: Colors.green[50],
+                                            border: Border.all(
+                                              color: AllColors.skyBlue, // Set the border color here
+                                              width: 1.0, // Adjust the border width if necessary
                                             ),
+                                            borderRadius: BorderRadius.circular(10.0),
                                           ),
-                                          Text(
-                                            '${dashboard_view_Controller.totalSuspectPrice}',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.green,
-                                              fontSize: AllFontSize.twelve,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '1. Suspect',
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.blackColor,
+                                                  fontSize: AllFontSize.twelve,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${dashboard_view_Controller.totalSuspectPrice}',
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.green,
+                                                  fontSize: AllFontSize.twelve,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '2. Prospect',
-                                            style: GoogleFonts.poppins(
-                                              color: AllColors.blackColor,
-                                              fontSize: AllFontSize.twelve,
-                                              fontWeight: FontWeight.w500,
+                                      InkWell(
+                                        onTap: (){
+                                          dashboard_view_Controller.StageNameForApi = 'Prospect';
+                                          dashboard_view_Controller.pageNumber = 0;
+                                          dashboard_view_Controller.funnelDashboardData();
+                                        },
+                                        child: Container(
+                                          width: 90,
+                                          decoration: BoxDecoration(
+                                            color: Colors.amber[50],
+                                            border: Border.all(
+                                              color: AllColors.skyBlue, // Set the border color here
+                                              width: 1.0, // Adjust the border width if necessary
                                             ),
+                                            borderRadius: BorderRadius.circular(10.0),
                                           ),
-                                          Text(
-                                            '${dashboard_view_Controller.totalProspectPrice}',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.orange,
-                                              fontSize: AllFontSize.twelve,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '2. Prospect',
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.blackColor,
+                                                  fontSize: AllFontSize.twelve,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${dashboard_view_Controller.totalProspectPrice}',
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.orange,
+                                                  fontSize: AllFontSize.twelve,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                            '3. Propose',
-                                            style: GoogleFonts.poppins(
-                                              color: AllColors.blackColor,
-                                              fontSize: AllFontSize.twelve,
-                                              fontWeight: FontWeight.w500,
+                                      InkWell(
+                                        onTap: (){
+                                          dashboard_view_Controller.StageNameForApi = 'Propose';
+                                          dashboard_view_Controller.pageNumber = 0;
+                                          dashboard_view_Controller.funnelDashboardData();
+                                        },
+                                        child: Container(
+                                          width: 90,
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue[50],
+                                            border: Border.all(
+                                              color: AllColors.skyBlue, // Set the border color here
+                                              width: 1.0, // Adjust the border width if necessary
                                             ),
+                                            borderRadius: BorderRadius.circular(10.0),
                                           ),
-                                          Text(
-                                            '${dashboard_view_Controller.totalProposePrice}',
-                                            style: GoogleFonts.poppins(
-                                              color: Colors.blue,
-                                              fontSize: AllFontSize.twelve,
-                                              fontWeight: FontWeight.w500,
-                                            ),
+                                          child: Column(
+                                            children: [
+                                              Text(
+                                                '3. Propose',
+                                                style: GoogleFonts.poppins(
+                                                  color: AllColors.blackColor,
+                                                  fontSize: AllFontSize.twelve,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                              Text(
+                                                '${dashboard_view_Controller.totalProposePrice}',
+                                                style: GoogleFonts.poppins(
+                                                  color: Colors.blue,
+                                                  fontSize: AllFontSize.twelve,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -167,16 +232,30 @@ class FunnelDashboardView extends StatelessWidget{
                       Container(
                           padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
                           child:
-                          Text(
-                            'User Wise Data List',
-                            style: GoogleFonts.poppins(
-                              color: AllColors.primaryDark1,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-
-
+                          Obx((){
+                            return  Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'All Details',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Text(
+                                  '(' +dashboard_view_Controller.total_rows.value.toString()+')',
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.redColor,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            );
+                          })
                       ),
 
                       Divider(
@@ -286,10 +365,7 @@ class FunnelDashboardView extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    String? Due_Date=StaticMethod.convertDateFormat1( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].taskDueDate ?? "");
-    String? LastActivityUpdatedOn=StaticMethod.convertDateFormat1( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].lastActivityUpdatedOn ?? "");
-    String? createdOn=StaticMethod.dateTimeToDate( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].createdOn ?? "");
-    String taskStatus =  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].taskStatus??"";
+    String taskStatus =  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleStatus??"";
     Color getStatusColor(String status) {
       switch (status.toUpperCase()) {
         case 'PENDING':
@@ -318,7 +394,7 @@ class FunnelDashboardView extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Task Status : ",
+                    "Sales Cycle Stage : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -328,14 +404,44 @@ class FunnelDashboardView extends StatelessWidget{
                     fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
-                          .taskStatus??"",
+                          .salesCycleStatus??"",
                       child: Text(
                         dashboard_view_Controller
                             .funnelDashboardUserWiseDataList[position]
-                            .taskStatus??"",
+                            .salesCycleStatus??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: getStatusColor(taskStatus),
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Sales Cycle Id: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .3,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
+                          .salesCycleId??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .funnelDashboardUserWiseDataList[position]
+                            .salesCycleId??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
@@ -373,27 +479,66 @@ class FunnelDashboardView extends StatelessWidget{
                   ),
                 ],
               ),
-              /*Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Manager Name : ",
+                    "Quote Accepted	: ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
+                  Container(
+                    width: size.width * .3,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
+                          .quoteAccepted??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .funnelDashboardUserWiseDataList[position]
+                            .quoteAccepted??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
                   Text(
-                    dashboard_view_Controller
-                        .funnelDashboardUserWiseDataList[position]
-                        .approvedFullName!,
+                    "Approval Status: ",
                     style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
+                        color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
+                  Container(
+                    width: size.width * .3,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
+                          .salesCycleApprovalStatus??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .funnelDashboardUserWiseDataList[position]
+                            .salesCycleApprovalStatus??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
                 ],
-              ),*/
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -495,66 +640,6 @@ class FunnelDashboardView extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Type Of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .typeOfCall??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .typeOfCall??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Method of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .methodOfCall??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .methodOfCall??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
                     "Created By : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
@@ -590,68 +675,9 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Due Date : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .taskDueDate??"",
-                      child: Text('${dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .taskDueDate ?? ""}',
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Remarks : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position].taskRemarks ?? "",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position].taskRemarks ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-
-                    ),
-                  ),
-                ],
-              ),
               Visibility(
                 visible: dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
-                    .taskStatus == 'Rejected' ? true : false,
+                    .salesCycleApprovalStatus == 'Rejected' ? true : false,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -671,7 +697,7 @@ class FunnelDashboardView extends StatelessWidget{
                         child: Text(
                           dashboard_view_Controller
                               .funnelDashboardUserWiseDataList[position]
-                              .methodOfCall??"",
+                              .rejectReason??"",
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
                               color: AllColors.textColor,
@@ -813,7 +839,7 @@ class FunnelDashboardView extends StatelessWidget{
                             )),
                             onPressed: () {
 
-                             // dashboard_view_Controller.clearAllFilterController();
+                              dashboard_view_Controller.clearAllFilterController();
                               dashboard_view_Controller.pageNumber = 0;
                               dashboard_view_Controller.funnelDashboardData();
                               Get.back();
@@ -996,7 +1022,7 @@ class FunnelDashboardView extends StatelessWidget{
             ),
           ),
           SizedBox(height: 10),
-         /* bindSalesStageStatus(context),
+          bindSalesStageStatus(context),
           SizedBox(height: 10),
           bindQuoteSubmitted(context),
           SizedBox(height: 10),
@@ -1006,9 +1032,11 @@ class FunnelDashboardView extends StatelessWidget{
           SizedBox(height: 10),
           bindProductCategoryFilter(context),
           SizedBox(height: 10),
+          bindIsCommitDropDown(context),
+          SizedBox(height: 10),
           bindClusterNameFilter(context),
           SizedBox(height: 10),
-          bindRegionNameFilter(context),*/
+          bindRegionNameFilter(context),
 
 
 
@@ -1088,11 +1116,509 @@ class FunnelDashboardView extends StatelessWidget{
     );
   }
 
+  bindSalesStageStatus(BuildContext context) {
+    return Obx((){
+      return DropdownSearch<String>.multiSelection(
+        items: dashboard_view_Controller.SalesCycleStageStatusList,
+        itemAsString: (String u) => u,
+        selectedItems: dashboard_view_Controller.selectedSalesStageStatusList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.selectedSalesStageStatusList.isNotEmpty?"Sales Cycle Stage":null,
+            hintText: "Sales Cycle Stage",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Sales Cycle Stage",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<String> selectedList) {
+          dashboard_view_Controller.selectedSalesStageStatusList.value =
+              selectedList;
+          dashboard_view_Controller.StageName_controller.value.text =
+              selectedList.map((e) => e).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindCustomerNameFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<AccountMasterModel>.multiSelection(
+        items: dashboard_view_Controller.Account_Master_list,
+        itemAsString: (AccountMasterModel u) => u.accountName??"",
+        selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedAccount_Master_list.isNotEmpty?"Customer Name":null,
+            hintText: "Customer Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Customer Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.accountName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<AccountMasterModel> selectedList) {
+          dashboard_view_Controller.SelectedAccount_Master_list.value =
+              selectedList;
+          dashboard_view_Controller.CustomerName_controller.value.text =
+              selectedList.map((e) => e.accountName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.accountName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: dashboard_view_Controller.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Account Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Account Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          dashboard_view_Controller.SelectedEmployee_Member_list.value =
+              selectedList;
+          dashboard_view_Controller.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindProductCategoryFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: dashboard_view_Controller.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName??"",
+        selectedItems: dashboard_view_Controller.SelectedProductCategory_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedProductCategory_list.isNotEmpty?"Product Category":null,
+            hintText: "Product Category",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          dashboard_view_Controller.SelectedProductCategory_list.value =
+              selectedList;
+          dashboard_view_Controller.ProductCategory_controller.value.text =
+              selectedList.map((e) => e.categoryName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.categoryName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindClusterNameFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<ClusterModal>.multiSelection(
+        items: dashboard_view_Controller.clusterGetByEmailList,
+        itemAsString: (ClusterModal u) => u.geoValue??"",
+        selectedItems: dashboard_view_Controller.SelectedCluster_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedCluster_list.isNotEmpty?"Cluster Name":null,
+            hintText: "Cluster Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Cluster Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.geoValue).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ClusterModal> selectedList) {
+          dashboard_view_Controller.SelectedCluster_list.value =
+              selectedList;
+          dashboard_view_Controller.clusterName_controller.value.text =
+              selectedList.map((e) => e.geoValue).join(', ');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.geoValue??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindRegionNameFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<RegionWithClusterFilterModal>.multiSelection(
+        items: dashboard_view_Controller.regionwithclusterGetByEmailList,
+        itemAsString: (RegionWithClusterFilterModal u) => u.geoValue??"",
+        selectedItems: dashboard_view_Controller.SelectedRegion_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedRegion_list.isNotEmpty?"Region Name":null,
+            hintText: "Region Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Region Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.geoValue).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<RegionWithClusterFilterModal> selectedList) {
+          dashboard_view_Controller.SelectedRegion_list.value = selectedList;
+          dashboard_view_Controller.clusterName_controller.value.text =
+              selectedList.map((e) => e.geoValue).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.geoValue??""),
+              ),
+        ),
+      );
+    });
+
+  }
+
+  bindQuoteSubmitted(BuildContext context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width*.96,
+      controller: dashboard_view_Controller.QuoteAccepted_controller.value,
+      label: Text(
+        "Quote Accepted",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w600),
+      ),
+      initialSelection: 'All',
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+
+      onSelected: (String? selection) {
+        print(selection);
+        dashboard_view_Controller.QuoteAccepted_controller.value.text =
+            _displayCustomerNeedIdentityStatusForOption(selection!)
+                .toString();
+      },
+
+      dropdownMenuEntries: dashboard_view_Controller.quoteAcceptedList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e,
+            label: e,
+            style: ButtonStyle(
+              foregroundColor:
+              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
+    );
+  }
+
+  bindIsCommitDropDown(BuildContext context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width*.96,
+      controller: dashboard_view_Controller.IsCommit_controller.value,
+      label: Text(
+        "Is Commit",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w600),
+      ),
+     // initialSelection: 'ALL',
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+
+      onSelected: (String? selection) {
+        print(selection);
+        dashboard_view_Controller.IsCommit_controller.value.text =
+            _displayCommitStatusForOption(selection!)
+                .toString();
+      },
+
+      dropdownMenuEntries: dashboard_view_Controller.isCommitList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e,
+            label: e,
+            style: ButtonStyle(
+              foregroundColor:
+              MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+            ));
+      }).toList(),
+    );
+  }
 
 
 }
 
-class FunnelData {
+/*class FunnelData {
   final String label;
   final double value;
 
@@ -1146,7 +1672,7 @@ class FunnelChartWidget extends StatelessWidget {
       ),
     );
   }
-}
+}*/
 
 
 class PyramidData {
@@ -1188,6 +1714,7 @@ class PyramidChartWidget extends StatelessWidget {
 
         ],
         series: PyramidSeries<PyramidData, String>(
+         // onPointTap: Utils.sanckBarError('sagduiasw', 'sduigsdiugh'),
           dataSource: chartData,
           xValueMapper: (PyramidData data, _) => data.stage,
           yValueMapper: (PyramidData data, _) => data.value,
