@@ -187,11 +187,11 @@ class Addressmastervm extends GetxController{
             address_master_list.value=response;
            // resetAllContactCreativeField('Icon');
             Utils.showToastification('Address add successfully', response[0].message!);
-            if(FromPage=="SalesCycleQuotation"){
+            if(FromPage.value=="SalesCycleQuotation"){
               Get.offNamed(RoutesName.quoteInformationScreen);
-            }else if(FromPage=="AddQuote"){
+            }else if(FromPage.value=="AddQuote"){
               Get.offNamed(RoutesName.salesCycleCreateQuoteScreen);
-            }else if(FromPage.value=="AddSalesAdvise"){
+            }else if(FromPage.value=="salesAdviseHeaderLine"){
               Get.offNamed(RoutesName.salesAdviseHeaderLineScreen);
             }else if(FromPage.value=="CreateSalesAdvise"){
               Get.toNamed(RoutesName.salesAdviseCreateScreen);

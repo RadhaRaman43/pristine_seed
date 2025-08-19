@@ -15,6 +15,7 @@ import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
+import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
 
 class SalesAdviseHeaderLineScreen extends StatelessWidget{
@@ -65,8 +66,15 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                       && saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft",
                     child: GestureDetector(
                         onTap: (){
-                          saleCycleController.bindSalesAdviseAddress(saleCycleController.salesAdviseHeaderLineList[0]);
-                          showDialogForAddressUpdate(context, );
+                          saleCycleController.pageNumber = 0;
+                          saleCycleController.getAddressMasterList(
+                              saleCycleController.pageNumber,
+                              saleCycleController.salesAdviseHeaderLineList[0].accountCode!);
+                          showConsigneeAddressList(
+                              context, saleCycleController.address_master_list,saleCycleController.salesAdviseHeaderLineList[0].accountCode!);
+
+                         /* saleCycleController.bindSalesAdviseAddress(saleCycleController.salesAdviseHeaderLineList[0]);
+                          showDialogForAddressUpdate(context, );*/
                         },
                         child: Tooltip(
                             message: "Update Sales Advise Header",
@@ -1858,7 +1866,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
         });
   }
 
- Future showDialogForAddressUpdate(BuildContext context) {
+/* Future showDialogForAddressUpdate(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1964,7 +1972,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
             ),
           );
         });
-  }
+  }*/
 
   Widget bindShippingAddress(BuildContext context) {
     return Container(
@@ -2609,7 +2617,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500,
                       ),
                       overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.start,
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ),
@@ -3161,6 +3169,463 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
         );
       },
     );
+  }
+
+  void showConsigneeAddressList(
+      BuildContext context, RxList<AddressMasterModel> address_master_list, String AccountCode) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Select Address',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    )),
+                Spacer(),
+                InkWell(
+                    onTap: (){
+                      address_vm_controller.FromPage.value="salesAdviseHeaderLine";
+                      address_vm_controller.clearController();
+                      address_vm_controller.account_code_controller.text=saleCycleController.quoteHeaderdata[0].accountCode??"";
+                      address_vm_controller.account_name_controller.text=saleCycleController.quoteHeaderdata[0].accountName??"";
+                      address_vm_controller.gst_registration_type_controller.value.text = 'UnRegistered';
+                      address_vm_controller.getGeoPostalCodeApi();
+                      Get.toNamed(RoutesName.addNewAddress_screen);
+                    },
+                    child: Icon(Icons.add_circle, color: AllColors.primaryDark1,))
+              ],
+            ),
+            content: Container(
+              height: size.height * .6,
+              width: size.width * 45,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Container(
+                    child: TextFormField(
+                      onChanged: (value){
+                        saleCycleController.pageNumber=0;
+                        saleCycleController.getAddressMasterList(
+                            saleCycleController.pageNumber, AccountCode);
+                      },
+                      controller: saleCycleController.searchAddressController.value,
+                      decoration: InputDecoration(
+                          hintText: "Search Address",
+                          labelText: "Search Address",
+                          contentPadding: EdgeInsets.symmetric(
+                              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: AllColors.textColor),
+                              borderRadius: BorderRadius.only(topLeft: Radius.circular(10), bottomRight:Radius.circular(10),  )
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          prefixIcon: Icon(Icons.search),
+                          suffixIcon: GestureDetector(
+                              onTap: (){
+                                saleCycleController.searchAddressController.value.text="";
+                                saleCycleController.pageNumber=0;
+                                saleCycleController.getAddressMasterList(
+                                    saleCycleController.pageNumber, AccountCode);
+                              },
+                              child: Icon(Icons.close_outlined, color: AllColors.redColor,))
+                      ),
+
+                    ),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          left: 2.0, top: 5.0, right: 2.0, bottom: 5.0),
+                      child: Obx(() {
+                        return BindAddressListView(context);
+                      }),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Obx(() {
+                        return Visibility(
+                            visible: address_master_list.value.length > 0
+                                ? true
+                                : false,
+                            child: Expanded(
+                              child: DefaultButton(
+                                text: "Discard",
+                                press: (){
+                                  saleCycleController.selectedItem.value = -1;
+                                  saleCycleController.shippingController.value.text = "";
+                                  saleCycleController.shippingAddress2Controller.value.text = "";
+                                  saleCycleController.Shipping_PostCode_Controller.value.text = "";
+                                  saleCycleController.Shipping_City_Controller.value.text = "";
+                                  saleCycleController.Shipping_District_Controller.value.text = "";
+                                  saleCycleController.Shipping_State_Controller.value.text = "";
+                                  saleCycleController.Shipping_phone_Controller.value.text = "";
+                                  saleCycleController.Shipping_email_Controller.value.text = "";
+                                  //todo commented by nirupma
+                                  /*   shippingController.value.text=saleCycleList[0].shippingAddress??"";
+                                shippingAddress2Controller.value.text=saleCycleList[0].shippingAddress2??"";
+                                Shipping_PostCode_Controller.value.text=saleCycleList[0].shippingPostCode??"";
+                                Shipping_City_Controller.value.text=saleCycleList[0].shippingCity??"" ;
+                                Shipping_District_Controller.value.text=saleCycleList[0].shippingDistrict??"" ;
+                                Shipping_State_Controller.value.text=saleCycleList[0].shippingStateCode??"";
+                                Shipping_phone_Controller.value.text=saleCycleList[0].shippingPhoneNo??"";
+                                Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";*/
+                                  saleCycleController.consigneeId = '';
+                                  // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
+                                  Get.back();
+                                },
+                              ),
+                            )
+                        );
+                      }),
+                      SizedBox(width: 5,),
+                      Obx(() {
+                        return Visibility(
+                            visible: address_master_list.value.length > 0
+                                ? true
+                                : false,
+                            child: Expanded(
+                              child: DefaultButton(
+                                text: "Save",
+                                press: (){
+                                  saleCycleController.shippingController.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .address ??
+                                          "";
+                                  saleCycleController.shippingAddress2Controller.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .address2 ??
+                                          "";
+                                  saleCycleController.Shipping_PostCode_Controller.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .postCode ??
+                                          "";
+                                  saleCycleController.Shipping_City_Controller.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .city ??
+                                          "";
+                                  saleCycleController.Shipping_District_Controller.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .district ??
+                                          "";
+                                  saleCycleController.Shipping_State_Controller.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .stateName ??
+                                          "";
+                                  saleCycleController.Shipping_phone_Controller.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .phoneNo ??
+                                          "";
+                                  saleCycleController.Shipping_email_Controller.value.text =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .emailId ??
+                                          "";
+                                  saleCycleController.consigneeId =
+                                      address_master_list[saleCycleController.selectedItem.value]
+                                          .consigneeId ??
+                                          "";
+                                  Get.back();
+                                },
+                              ),
+                            )
+                        );
+                      })
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+
+
+  Widget BindAddressListView(context) {
+    if (saleCycleController.address_master_list.value.isNotEmpty &&
+        saleCycleController.address_master_list.value.length > 0) {
+      ScrollController scrollController = ScrollController();
+
+      scrollController.addListener(() {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          // You have reached the end of the list
+          int total_page = (saleCycleController.total_rows / saleCycleController.rowsPerPage).toInt();
+          if ((saleCycleController.total_rows % saleCycleController.rowsPerPage) > 0) total_page += 1;
+
+          //print("last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
+
+          if (saleCycleController.pageNumber + 1 < total_page) {
+            saleCycleController.getAddressMasterList(
+              saleCycleController.pageNumber,
+              saleCycleController.accountCode.value,
+            );
+            saleCycleController.pageNumber += 1;
+          }
+        }
+      });
+
+      return ListView.separated(
+          padding: EdgeInsets.zero,
+          separatorBuilder: (context, index) => Divider(
+            height: .05,
+            color: Colors.transparent,
+          ),
+          shrinkWrap: true,
+          itemCount: saleCycleController.address_master_list.value.length,
+          controller: scrollController,
+          itemBuilder: (BuildContext context, int index) {
+            return BindCustomerRequestListView(context, index);
+          });
+    } else {
+      return Center(
+        //child: Image.asset("assests/images/no_record_found.gif",),
+        child: Image.asset(
+          "assests/images/no_data_remove.png",
+          width: 300,
+          height: 180,
+        ),
+      );
+    }
+  }
+
+  Widget BindCustomerRequestListView(context, int position) {
+    return Obx(() {
+      return Card(
+        margin: EdgeInsets.all(5),
+        color:
+        saleCycleController.selectedItem.value == position ? AllColors.grayColor : Colors.white,
+        child: ListTile(
+          onTap: () {
+            saleCycleController.selectedItem.value = position;
+          },
+          subtitle: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Address Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .25,
+                    child: Tooltip(
+                      message: saleCycleController.address_master_list[position].contactName ?? "",
+                      child: Text(
+                        saleCycleController.address_master_list[position].contactName ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Phone No. : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: saleCycleController.address_master_list[position].phoneNo ?? "",
+                      child: Text(
+                        saleCycleController.address_master_list[position].phoneNo ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Email Id : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: saleCycleController.address_master_list[position].emailId ?? "",
+                      child: Text(
+                        saleCycleController.address_master_list[position].emailId ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Address : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: "${saleCycleController.address_master_list[position].address ?? ""}",
+                      child: Text(
+                        "${saleCycleController.address_master_list[position].address ?? ""} ",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "City : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: saleCycleController.address_master_list[position].city ?? "",
+                      child: Text(
+                        saleCycleController.address_master_list[position].city ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "State : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: saleCycleController.address_master_list[position].stateName ?? "",
+                      child: Text(
+                        saleCycleController.address_master_list[position].stateName ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Pin Code : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.twelve,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .2,
+                    child: Tooltip(
+                      message: saleCycleController.address_master_list[position].postCode ?? "",
+                      child: Text(
+                        saleCycleController.address_master_list[position].postCode ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.twelve,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 3),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
 

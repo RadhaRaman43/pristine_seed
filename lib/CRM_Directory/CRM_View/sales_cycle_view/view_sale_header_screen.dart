@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -5113,6 +5115,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         saleCycleController.quoteList[index].quoteValidity ?? "");
     String saleCycleStatus =
         saleCycleController.quoteList[index].quoteStatus ?? "";
+    String quoteAccepted =
+        saleCycleController.quoteList[index].quoteAccepted?.toLowerCase() ?? "";
     Color getStatusColor(String status) {
       switch (status) {
         case 'DRAFT' || "Draft":
@@ -5127,6 +5131,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           return Colors.green;
         case 'PENDING FOR APPROVAL':
           return Colors.yellow[700]!;
+        default:
+          return Colors.black;
+      }
+    }
+    Color getQuoteAccepted(String status) {
+      switch (status) {
+        case 'loss':
+          return Colors.red;
+        case 'won'|| 'open':
+          return Colors.blue;
         default:
           return Colors.black;
       }
@@ -5326,7 +5340,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 Text(
                   saleCycleController.quoteList[index].quoteAccepted ?? "",
                   style: GoogleFonts.poppins(
-                    color: getStatusColor(saleCycleStatus),
+                    color: getQuoteAccepted(quoteAccepted),
                     fontSize: AllFontSize.twelve,
                     fontWeight: FontWeight.w500,
                   ),
@@ -10398,25 +10412,29 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       iconColor: AllColors.primaryDark1,
                       itemBuilder: (BuildContext context) {
                         List<PopupMenuEntry> items = [];
-                        items.add(
-                          PopupMenuItem(
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.delete,
-                                  color: AllColors.primaryDark1,
-                                ),
-                                Text(' Clear Competitor Mapping'),
-                              ],
+
+                        if(saleCycleController.competitorMappingSalesCycleProductList.value.length>0){
+                          items.add(
+                            PopupMenuItem(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.delete,
+                                    color: AllColors.primaryDark1,
+                                  ),
+                                  Text(' Clear Competitor Mapping'),
+                                ],
+                              ),
+                              onTap: () {
+                                clearCompetitorMapping(
+                                    context,
+                                    saleCycleController
+                                        .saleCycleList[0].salesCycleId!);
+                              },
                             ),
-                            onTap: () {
-                              clearCompetitorMapping(
-                                  context,
-                                  saleCycleController
-                                      .saleCycleList[0].salesCycleId!);
-                            },
-                          ),
-                        );
+                          );
+                        }
+
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -12373,6 +12391,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   InkWell(
                     child: CircleBackButton(
                       press: () {
+                        saleCycleController.clearAllFieldOfQuoteFilter();
                         Navigator.of(context).pop();
                       },
                     ),
@@ -12388,6 +12407,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ),
                   ),
+                  Spacer(),
+                  InkWell(
+                    onTap: (){
+                      filterDialogFromQuotation(context);
+                    },
+                      child: Icon(Icons.filter_alt,color: AllColors.primaryDark1,)),
                 ],
               ),
             ),
@@ -12613,6 +12638,134 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void filterDialogFromQuotation(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Obx(() {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SingleChildScrollView(
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.check_circle,
+                                  color: AllColors.lightredColor,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Filter Quotation ',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: AllFontSize.sisxteen,
+                                      fontWeight: FontWeight.w700,
+                                      color: AllColors.primaryDark1,
+                                    ))
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            filterWithQuoteId(context),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            filterWithQuoteProductCategory(),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            filterWithQuoteStatus(context),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            filterWithQuoteValidity(context),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            filterWithQuoteClosureDate(context),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                      AllColors.redColor,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    saleCycleController.clearAllFieldOfQuoteFilter();
+                                    saleCycleController.pageNumberForQuote = 0;
+                                    //saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
+                                    saleCycleController.getQuoteHeaderData(
+                                      saleCycleController.pageNumberForQuote,
+                                      saleCycleController
+                                          .saleCycleList[0].salesCycleId!,
+                                      "",
+                                    );
+                                    Get.back();
+                                  },
+                                  child: Text(
+                                    'Reset',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                                ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                      AllColors.greenblue,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    saleCycleController.pageNumberForQuote = 0;
+                                    saleCycleController.getQuoteHeaderData(
+                                      saleCycleController.pageNumberForQuote,
+                                      saleCycleController
+                                          .saleCycleList[0].salesCycleId!,
+                                      "",
+                                    );
+
+                                    Get.back();
+                                  },
+                                  child: Text(
+                                    'Submit',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.blackColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              );
+            }),
+          );
+        });
   }
 
 
