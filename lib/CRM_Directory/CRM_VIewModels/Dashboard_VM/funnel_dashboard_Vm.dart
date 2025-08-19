@@ -75,6 +75,7 @@ class FunnelDashboardVm extends GetxController{
   var QuoteAcceptedForApi;
   var isCommitForApi;
   var StageNameForApi = '';
+  var SelectedTabForApi = '';
   var EmployeeEmailIdForApi = '';
 
 
@@ -96,48 +97,57 @@ class FunnelDashboardVm extends GetxController{
     getAccountMaster(pageNumber);
   }
 
+
+  Future<void> onRefereshMethod() async {
+    await Future.delayed(Duration(seconds: 2));
+    clearAllFilterController();
+    pageNumber = 0;
+    funnelDashboardData();
+
+  }
+
   Future<void> funnelDashboardData() async {
     CustomerNameApi="";
     if(CustomerName_controller.value.text.isNotEmpty){
       CustomerNameApi = CustomerName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     AccountOwnerForApi = '';
     if(AccountOwner_controller.value.text.isNotEmpty){
       AccountOwnerForApi = AccountOwner_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     ClusterNameForApi = '';
     if(clusterName_controller.value.text.isNotEmpty){
       ClusterNameForApi = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     RegionNameForApi = '';
     if(RegionName_controller.value.text.isNotEmpty){
       RegionNameForApi = RegionName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     ProductCategoryForApi = '';
     if(ProductCategory_controller.value.text.isNotEmpty){
       ProductCategoryForApi = ProductCategory_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     QuoteAcceptedForApi = '';
     if (QuoteAccepted_controller.value.text.isNotEmpty) {
       QuoteAcceptedForApi = QuoteAccepted_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
 
     StageNameForApi = '';
@@ -145,7 +155,7 @@ class FunnelDashboardVm extends GetxController{
       StageNameForApi = StageName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
 
     if (IsCommit_controller.value.text.isNotEmpty) {
@@ -223,7 +233,7 @@ class FunnelDashboardVm extends GetxController{
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
-        "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
+        "filter_stage_name": StageNameForApi.isEmpty?SelectedTabForApi:StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "rowsPerPage": rowsPerPage,
@@ -559,6 +569,7 @@ class FunnelDashboardVm extends GetxController{
     StageNameForApi = '';
     QuoteAcceptedForApi = '';
     CustomerNameApi="";
+    SelectedTabForApi = '';
 
     filterCustomDateController.value.clear();
     AccountOwner_controller.value.clear();

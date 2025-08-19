@@ -63,217 +63,229 @@ class FunnelDashboardView extends StatelessWidget{
               )
           ),
           drawer: CustomDrawer(),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Obx(() {
-                return Visibility(
-                  visible: dashboard_view_Controller.loading.value,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.green,
-                    color: AllColors.textColor,
-                  ),
-                );
-              }),
-              Expanded(
-                  child: ListView(
-                    children: [
-                      Container(
-                          padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 15.0),
-                          child:
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Active Funnel',
-                                style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(height: 10,),
-                              Obx((){
-                                return Padding(
-                                  padding: const EdgeInsets.only(left: 8.0 ,right: 25),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      InkWell(
-                                        onTap: (){
-                                          dashboard_view_Controller.StageNameForApi = 'Suspect';
-                                          dashboard_view_Controller.pageNumber = 0;
-                                          dashboard_view_Controller.funnelDashboardData();
-                                        },
-                                        child: Container(
-                                          width: 90,
-                                          decoration: BoxDecoration(
-                                            color: Colors.green[50],
-                                            border: Border.all(
-                                              color: AllColors.skyBlue, // Set the border color here
-                                              width: 1.0, // Adjust the border width if necessary
-                                            ),
-                                            borderRadius: BorderRadius.circular(10.0),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                '1. Suspect',
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.blackColor,
-                                                  fontSize: AllFontSize.twelve,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Text(
-                                                '${dashboard_view_Controller.totalSuspectPrice}',
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.green,
-                                                  fontSize: AllFontSize.twelve,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: (){
-                                          dashboard_view_Controller.StageNameForApi = 'Prospect';
-                                          dashboard_view_Controller.pageNumber = 0;
-                                          dashboard_view_Controller.funnelDashboardData();
-                                        },
-                                        child: Container(
-                                          width: 90,
-                                          decoration: BoxDecoration(
-                                            color: Colors.amber[50],
-                                            border: Border.all(
-                                              color: AllColors.skyBlue, // Set the border color here
-                                              width: 1.0, // Adjust the border width if necessary
-                                            ),
-                                            borderRadius: BorderRadius.circular(10.0),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                '2. Prospect',
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.blackColor,
-                                                  fontSize: AllFontSize.twelve,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Text(
-                                                '${dashboard_view_Controller.totalProspectPrice}',
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.orange,
-                                                  fontSize: AllFontSize.twelve,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      InkWell(
-                                        onTap: (){
-                                          dashboard_view_Controller.StageNameForApi = 'Propose';
-                                          dashboard_view_Controller.pageNumber = 0;
-                                          dashboard_view_Controller.funnelDashboardData();
-                                        },
-                                        child: Container(
-                                          width: 90,
-                                          decoration: BoxDecoration(
-                                            color: Colors.blue[50],
-                                            border: Border.all(
-                                              color: AllColors.skyBlue, // Set the border color here
-                                              width: 1.0, // Adjust the border width if necessary
-                                            ),
-                                            borderRadius: BorderRadius.circular(10.0),
-                                          ),
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                '3. Propose',
-                                                style: GoogleFonts.poppins(
-                                                  color: AllColors.blackColor,
-                                                  fontSize: AllFontSize.twelve,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                              Text(
-                                                '${dashboard_view_Controller.totalProposePrice}',
-                                                style: GoogleFonts.poppins(
-                                                  color: Colors.blue,
-                                                  fontSize: AllFontSize.twelve,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-
-                                );
-                              })
-
-                            ],
-                          ),
-
-
-                      ),
-
-                      Obx(() {
-                        return BindDashboardFunnelChartData(context);
-                      }),
-                      Container(
-                          padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
-                          child:
-                          Obx((){
-                            return  Row(
+          body: RefreshIndicator(
+            onRefresh: (){
+              return dashboard_view_Controller.onRefereshMethod();
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Obx(() {
+                  return Visibility(
+                    visible: dashboard_view_Controller.loading.value,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.green,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
+                Expanded(
+                    child: ListView(
+                      children: [
+                        Container(
+                            padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 15.0),
+                            child:
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  'All Details',
+                                  'Active Funnel',
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.fourtine,
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                                SizedBox(width: 10,),
-                                Text(
-                                  '(' +dashboard_view_Controller.total_rows.value.toString()+')',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.redColor,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
+                                SizedBox(height: 10,),
+                                Obx((){
+                                  return Padding(
+                                    padding: const EdgeInsets.only(left: 8.0 ,right: 25),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        InkWell(
+                                          onTap: (){
+                                            dashboard_view_Controller.clearAllFilterController();
+                                            dashboard_view_Controller.SelectedTabForApi = 'Suspect';
+                                            dashboard_view_Controller.pageNumber = 0;
+                                            dashboard_view_Controller.funnelDashboardData();
+                                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                          },
+                                          child: Container(
+                                            width: 90,
+                                            decoration: BoxDecoration(
+                                              color: Colors.green[50],
+                                              border: Border.all(
+                                                color: AllColors.skyBlue, // Set the border color here
+                                                width: 1.0, // Adjust the border width if necessary
+                                              ),
+                                              borderRadius: BorderRadius.circular(10.0),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  '1. Suspect',
+                                                  style: GoogleFonts.poppins(
+                                                    color: AllColors.blackColor,
+                                                    fontSize: AllFontSize.twelve,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${dashboard_view_Controller.totalSuspectPrice}',
+                                                  style: GoogleFonts.poppins(
+                                                    color: Colors.green,
+                                                    fontSize: AllFontSize.twelve,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: (){
+                                            dashboard_view_Controller.clearAllFilterController();
+                                            dashboard_view_Controller.SelectedTabForApi = 'Prospect';
+                                            dashboard_view_Controller.pageNumber = 0;
+                                            dashboard_view_Controller.funnelDashboardData();
+                                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                          },
+                                          child: Container(
+                                            width: 90,
+                                            decoration: BoxDecoration(
+                                              color: Colors.amber[50],
+                                              border: Border.all(
+                                                color: AllColors.skyBlue, // Set the border color here
+                                                width: 1.0, // Adjust the border width if necessary
+                                              ),
+                                              borderRadius: BorderRadius.circular(10.0),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  '2. Prospect',
+                                                  style: GoogleFonts.poppins(
+                                                    color: AllColors.blackColor,
+                                                    fontSize: AllFontSize.twelve,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${dashboard_view_Controller.totalProspectPrice}',
+                                                  style: GoogleFonts.poppins(
+                                                    color: Colors.orange,
+                                                    fontSize: AllFontSize.twelve,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: (){
+                                            dashboard_view_Controller.clearAllFilterController();
+                                            dashboard_view_Controller.SelectedTabForApi = 'Propose';
+                                            dashboard_view_Controller.pageNumber = 0;
+                                            dashboard_view_Controller.funnelDashboardData();
+                                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                          },
+                                          child: Container(
+                                            width: 90,
+                                            decoration: BoxDecoration(
+                                              color: Colors.blue[50],
+                                              border: Border.all(
+                                                color: AllColors.skyBlue, // Set the border color here
+                                                width: 1.0, // Adjust the border width if necessary
+                                              ),
+                                              borderRadius: BorderRadius.circular(10.0),
+                                            ),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  '3. Propose',
+                                                  style: GoogleFonts.poppins(
+                                                    color: AllColors.blackColor,
+                                                    fontSize: AllFontSize.twelve,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  '${dashboard_view_Controller.totalProposePrice}',
+                                                  style: GoogleFonts.poppins(
+                                                    color: Colors.blue,
+                                                    fontSize: AllFontSize.twelve,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+
+                                  );
+                                })
+
                               ],
-                            );
-                          })
-                      ),
+                            ),
 
-                      Divider(
-                        height: 1,
-                        color: AllColors.lightgreyColor,
-                      ),
-                      Container(
-                        height: size.height/2,
-                        child: Obx(() {
-                          return BindDashboardWiseDataList(context);
+
+                        ),
+
+                        Obx(() {
+                          return BindDashboardFunnelChartData(context);
                         }),
-                      )
-                    ],
-                  )),
+                        Container(
+                            padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
+                            child:
+                            Obx((){
+                              return  Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    dashboard_view_Controller.SelectedTabForApi.isEmpty?
+                                    'All Details':dashboard_view_Controller.SelectedTabForApi,
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  SizedBox(width: 10,),
+                                  Text(
+                                    '(' +dashboard_view_Controller.total_rows.value.toString()+')',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.redColor,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              );
+                            })
+                        ),
+
+                        Divider(
+                          height: 1,
+                          color: AllColors.lightgreyColor,
+                        ),
+                        Container(
+                          height: size.height/2,
+                          child: Obx(() {
+                            return BindDashboardWiseDataList(context);
+                          }),
+                        )
+                      ],
+                    )),
 
 
 
-            ],
+              ],
+            ),
           ),
         ),
     );
@@ -1483,7 +1495,7 @@ class FunnelDashboardView extends StatelessWidget{
         },
         onChanged: (List<RegionWithClusterFilterModal> selectedList) {
           dashboard_view_Controller.SelectedRegion_list.value = selectedList;
-          dashboard_view_Controller.clusterName_controller.value.text =
+          dashboard_view_Controller.RegionName_controller.value.text =
               selectedList.map((e) => e.geoValue).join(', ');
         },
 
@@ -1706,7 +1718,7 @@ class PyramidChartWidget extends StatelessWidget {
     return Transform.rotate(
       angle: 3.1416,
       child: SfPyramidChart(
-        tooltipBehavior: TooltipBehavior(enable: true),
+        tooltipBehavior: TooltipBehavior(enable: false),
         palette: <Color>[
           Colors.blue,
           Colors.orange,
