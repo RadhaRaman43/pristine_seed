@@ -403,7 +403,7 @@ class FunnelDashboardView extends StatelessWidget{
           subtitle: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Stage : ",
@@ -423,7 +423,7 @@ class FunnelDashboardView extends StatelessWidget{
                             .salesCycleStatus??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                            color: getStatusColor(taskStatus),
+                            color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),
@@ -432,7 +432,7 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Id: ",
@@ -441,8 +441,8 @@ class FunnelDashboardView extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
@@ -462,7 +462,7 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Task Id: ",
@@ -471,8 +471,8 @@ class FunnelDashboardView extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
@@ -492,7 +492,7 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Accepted	: ",
@@ -501,8 +501,8 @@ class FunnelDashboardView extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
@@ -522,7 +522,7 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Approval Status: ",
@@ -531,8 +531,8 @@ class FunnelDashboardView extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .funnelDashboardUserWiseDataList[position]
@@ -552,7 +552,7 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Name : ",
@@ -561,27 +561,25 @@ class FunnelDashboardView extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  InkWell(
-                    child: Container(
-                      width: size.width * .4,
-                      child: Tooltip(
-                        message: dashboard_view_Controller
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
+                          .accountName ?? "",
+                      child: Text(
+                        dashboard_view_Controller
                             .funnelDashboardUserWiseDataList[position]
-                            .accountName ?? "",
-                        child: Text(
-                          dashboard_view_Controller
-                              .funnelDashboardUserWiseDataList[position]
-                              .accountName ??
-                              "" + " | ${dashboard_view_Controller
-                                  .funnelDashboardUserWiseDataList[position]
-                                  .accountName ?? ""}",
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.start,
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                          ),
+                            .accountName ??
+                            "" + " | ${dashboard_view_Controller
+                                .funnelDashboardUserWiseDataList[position]
+                                .accountName ?? ""}",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -589,7 +587,7 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Code : ",
@@ -619,7 +617,7 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Contact Name : ",
@@ -649,7 +647,98 @@ class FunnelDashboardView extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Product Category : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
+                          .productCategory??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .funnelDashboardUserWiseDataList[position]
+                            .productCategory??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cluster Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
+                          .clustureHeadValue??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .funnelDashboardUserWiseDataList[position]
+                            .clustureHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Region Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
+                          .branchHeadValue??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .funnelDashboardUserWiseDataList[position]
+                            .branchHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created By : ",

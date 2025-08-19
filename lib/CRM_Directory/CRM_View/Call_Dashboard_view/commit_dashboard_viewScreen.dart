@@ -586,7 +586,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    String? createdOn=StaticMethod.dateTimeToDate( dashboard_view_Controller.commitDashboardUserWiseDataList[position].createdOn ?? "");
+    /*String? createdOn=StaticMethod.dateTimeToDate( dashboard_view_Controller.commitDashboardUserWiseDataList[position].createdOn ?? "");
     String Approval_Status =  dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleStatus!;
     String pipeLine = dashboard_view_Controller.commitDashboardUserWiseDataList[position]
         .estClosureDate!.isNotEmpty ? "|" : "";
@@ -603,7 +603,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         default:
           return Colors.black;
       }
-    }
+    }*/
     return Card(
       margin: EdgeInsets.all(5),
       child: Container(
@@ -615,7 +615,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
           subtitle: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Stage : ",
@@ -644,7 +644,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Id: ",
@@ -653,8 +653,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .commitDashboardUserWiseDataList[position]
@@ -674,7 +674,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Task Id: ",
@@ -683,8 +683,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .commitDashboardUserWiseDataList[position]
@@ -704,7 +704,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Accepted: ",
@@ -713,8 +713,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .commitDashboardUserWiseDataList[position]
@@ -734,7 +734,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Approval Status: ",
@@ -743,8 +743,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .commitDashboardUserWiseDataList[position]
@@ -764,7 +764,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Name : ",
@@ -773,25 +773,23 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  InkWell(
-                    child: Container(
-                      width: size.width * .4,
-                      child: Tooltip(
-                        message: dashboard_view_Controller
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .commitDashboardUserWiseDataList[position]
+                          .accountName ?? "",
+                      child: Text(
+                        dashboard_view_Controller
                             .commitDashboardUserWiseDataList[position]
-                            .accountName ?? "",
-                        child: Text(
-                          dashboard_view_Controller
-                              .commitDashboardUserWiseDataList[position]
-                              .accountName ??
-                              "",
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.start,
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                          ),
+                            .accountName ??
+                            "",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -799,7 +797,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Code : ",
@@ -829,7 +827,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Contact Name : ",
@@ -859,7 +857,67 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cluster Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .commitDashboardUserWiseDataList[position]
+                          .clustureHeadValue??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .commitDashboardUserWiseDataList[position]
+                            .clustureHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Region Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .commitDashboardUserWiseDataList[position]
+                          .branchHeadValue??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .commitDashboardUserWiseDataList[position]
+                            .branchHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Is Commit : ",
@@ -868,8 +926,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .4,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .commitDashboardUserWiseDataList[position]
@@ -889,7 +947,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Solution Accepted : ",
@@ -919,7 +977,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created By : ",
@@ -958,7 +1016,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Expected Closure Date : ",
@@ -991,7 +1049,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                 visible: dashboard_view_Controller.commitDashboardUserWiseDataList[position]
                     .salesCycleApprovalStatus == 'Rejected' ? true : false,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "Rejected Reason : ",
