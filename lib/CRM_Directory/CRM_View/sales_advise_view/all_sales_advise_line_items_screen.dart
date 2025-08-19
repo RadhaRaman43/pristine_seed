@@ -140,7 +140,7 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
     String? quoteValidityDate=StaticMethod.convertDateFormat1(salesAdviseAllVmController.salesAdviseList[position].quoteValidity ?? "");
     String? expectedClosuredateDate=StaticMethod.convertDateFormat1(salesAdviseAllVmController.salesAdviseList[position].expClosureDate ?? "");
     String? createdOn=StaticMethod.dateTimeToDate(salesAdviseAllVmController.salesAdviseList[position].createdOn ?? "");
-    String? completedOn=StaticMethod.dateTimeToDate(salesAdviseAllVmController.salesAdviseList[position].completedOn ?? "");
+   // String? completedOn=StaticMethod.dateTimeToDate(salesAdviseAllVmController.salesAdviseList[position]. ?? "");
     String saleAdviseStatus = salesAdviseAllVmController.salesAdviseList[position].salesAdviceStatus?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status) {
@@ -190,7 +190,109 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              Row(
+              _buildLabelWithValue(
+                label: "Sales Cycle Id : ",
+                value: salesAdviseAllVmController.salesAdviseList[position].salesCycleId,
+                //width: size.width * 0.33,
+                color: Colors.blue,
+              ),
+              _buildLabelWithValue(
+                label: "Sales Advise Status : ",
+                value: salesAdviseAllVmController.salesAdviseList[position].salesAdviceStatus,
+                //width: size.width * 0.33,
+                color: getStatusColor(saleAdviseStatus),
+              ),
+
+              _buildLabelWithValue(
+                label: "Quote Id : ",
+                value: salesAdviseAllVmController.salesAdviseList[position].quoteId,
+              ),
+              _buildLabelWithValue(
+                label: "Quote Version: ",
+                value: salesAdviseAllVmController.salesAdviseList[position].quoteVersion.toString(),
+              ),
+              _buildLabelWithValue(
+                label: "Quote Validity: ",
+                value: salesAdviseAllVmController.salesAdviseList[position].quoteValidity.toString(),
+              ),
+              _buildLabelWithValue(
+                label: "Customer Code : ",
+                value: salesAdviseAllVmController.salesAdviseList[position].accountCode,
+              ),
+              _buildLabelWithValue(
+                label: "Customer Name : ",
+                value: salesAdviseAllVmController.salesAdviseList[position].accountName,
+              ),
+              _buildLabelWithValue(
+                label: "Contact Name : ",
+                value: salesAdviseAllVmController.salesAdviseList[position].contactName,
+              ),
+              _buildLabelWithValue(
+                label: "Expected Closure Date : ",
+                value:  expectedClosuredateDate,
+              ),
+              _buildLabelWithValue(
+                label: "Sales Advise Total Amt : ",
+                value:  salesAdviseAllVmController.salesAdviseList[position]
+                    .quoteTotalAmount.toString(),
+              ),
+              _buildLabelWithValue(
+                label: "Sales Advise Gst Amt. : ",
+                value:  salesAdviseAllVmController.salesAdviseList[position]
+                    .quoteGstAmount.toString(),
+              ),
+              _buildLabelWithValue(
+                label: "Sales Advise Gross Amt. : ",
+                value:  salesAdviseAllVmController.salesAdviseList[position]
+                    .quoteGrossAmount.toString(),
+              ),
+              _buildLabelWithValue(
+                label: "Created By : ",
+                value:  salesAdviseAllVmController.salesAdviseList[position]
+                    .createdFullName,
+              ),
+              _buildLabelWithValue(
+                label: "Created On : ",
+                value: createdOn.toString(),
+              ),
+              _buildLabelWithValue(
+                label: "Region Name : ",
+                value: salesAdviseAllVmController.salesAdviseList[position]
+                    .zoneHeadValue,
+              ),
+              _buildLabelWithValue(
+                label: "Cluster Name : ",
+                value: salesAdviseAllVmController.salesAdviseList[position]
+                    .clustureHeadValue,
+              ),
+              _buildLabelWithValue(
+                  label: "Item Code : ",
+                  value: salesAdviseAllVmController.salesAdviseList[position]
+                      .itemCode
+              ),
+              _buildLabelWithValue(
+                  label: "Item Name : ",
+                  value: salesAdviseAllVmController.salesAdviseList[position]
+                      .itemName
+              ),
+              _buildLabelWithValue(
+                  label: "Qty : ",
+                  value: salesAdviseAllVmController.salesAdviseList[position]
+                      .qty.toString()
+              ),
+              _buildLabelWithValue(
+                  label: "LSP : ",
+                  value: salesAdviseAllVmController.salesAdviseList[position]
+                      .listSellingPrice.toString()
+              ),
+              _buildLabelWithValue(
+                  label: "Sales Credit : ",
+                  value: salesAdviseAllVmController.salesAdviseList[position]
+                      .salesCredit.toString()
+              ),
+
+
+            /*  Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -570,6 +672,206 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
                   ),
                 ],
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Region Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    //width: size.width * .37,
+                    child: Tooltip(
+                      message: salesAdviseAllVmController.salesAdviseList[position]
+                          .zoneHeadValue??"",
+                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
+                          .zoneHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cluster Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    // width: size.width * .4,
+                    child: Tooltip(
+                      message: salesAdviseAllVmController.salesAdviseList[position]
+                          .clustureHeadValue??"",
+                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
+                          .clustureHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Item Code : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    //width: size.width * .4,
+                    child: Tooltip(
+                      message: salesAdviseAllVmController.salesAdviseList[position]
+                          .itemCode?? "",
+                      child: Text(
+                        salesAdviseAllVmController.salesAdviseList[position]
+                            .itemCode ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Item Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+
+                    child: Tooltip(
+                      message: salesAdviseAllVmController.salesAdviseList[position]
+                          .itemName?? "",
+                      child: Text(
+                        salesAdviseAllVmController.salesAdviseList[position]
+                            .itemName?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Qty : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    //width: size.width * .37,
+                    child: Tooltip(
+                      message: salesAdviseAllVmController.salesAdviseList[position]
+                          .qty.toString(),
+                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
+                          .qty.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "LSP : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    //width: size.width * .37,
+                    child: Tooltip(
+                      message: salesAdviseAllVmController.salesAdviseList[position]
+                          .listSellingPrice.toString(),
+                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
+                          .listSellingPrice.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Sales Credit : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    //width: size.width * .37,
+                    child: Tooltip(
+                      message: salesAdviseAllVmController.salesAdviseList[position]
+                          .salesCredit.toString(),
+                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
+                          .salesCredit.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+*/
 
 
               Row(
@@ -1196,5 +1498,57 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
       },
     );
 
+  }
+
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    double? width,
+    Color color = AllColors.textColor,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        /* width != null
+            ? Container(
+          width: width,
+          child: Tooltip(
+            message: value ?? "",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        )
+            :*/ Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }

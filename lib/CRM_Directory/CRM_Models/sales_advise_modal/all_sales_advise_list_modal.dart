@@ -39,6 +39,15 @@ class AllSalesAdviseModal {
   double? advancePaymentAmt;
   String? otherRemarks;
   int? isSpr;
+  String? rhApprovalEmail;
+  String? rhApproval;
+  Null? rhApprovalOn;
+  Null? cbhApprovalEmail;
+  String? cbhApproval;
+  Null? cbhApprovalOn;
+  Null? gmApprovalEmail;
+  String? gmApproval;
+  Null? gmApprovalOn;
   String? kindAttention;
   String? termsAndCondition;
   String? sprNo;
@@ -52,6 +61,36 @@ class AllSalesAdviseModal {
   String? clustureHeadValue;
   String? postCode;
   String? district;
+  String? itemCode;
+  String? itemName;
+  String? itemDescription;
+  int? qty;
+  double? unitPrice;
+  double? mrpPrice;
+  double? quoteLinePrice;
+  int? totalPrice;
+  int? discountPer;
+  int? discountAmt;
+  int? bmDiscountPer;
+  int? gmDiscountPer;
+  int? gmDiscountAmount;
+  int? approvedDiscountPer;
+  int? approvedAmount;
+  int? standardCost;
+  double? branchTransferPrice;
+  double? minimalAcceptablePrice;
+  double? listSellingPrice;
+  int? isSprRequired;
+  int? sgstPer;
+  int? cgstPer;
+  int? igstPer;
+  double? sgstAmt;
+  double? cgstAmt;
+  int? igstAmt;
+  double? gstAmount;
+  double? grossAmount;
+  int? salesCredit;
+  String? lineStatus;
 
   AllSalesAdviseModal(
       {this.condition,
@@ -94,6 +133,15 @@ class AllSalesAdviseModal {
         this.advancePaymentAmt,
         this.otherRemarks,
         this.isSpr,
+        this.rhApprovalEmail,
+        this.rhApproval,
+        this.rhApprovalOn,
+        this.cbhApprovalEmail,
+        this.cbhApproval,
+        this.cbhApprovalOn,
+        this.gmApprovalEmail,
+        this.gmApproval,
+        this.gmApprovalOn,
         this.kindAttention,
         this.termsAndCondition,
         this.sprNo,
@@ -106,7 +154,37 @@ class AllSalesAdviseModal {
         this.zoneHeadValue,
         this.clustureHeadValue,
         this.postCode,
-        this.district});
+        this.district,
+        this.itemCode,
+        this.itemName,
+        this.itemDescription,
+        this.qty,
+        this.unitPrice,
+        this.mrpPrice,
+        this.quoteLinePrice,
+        this.totalPrice,
+        this.discountPer,
+        this.discountAmt,
+        this.bmDiscountPer,
+        this.gmDiscountPer,
+        this.gmDiscountAmount,
+        this.approvedDiscountPer,
+        this.approvedAmount,
+        this.standardCost,
+        this.branchTransferPrice,
+        this.minimalAcceptablePrice,
+        this.listSellingPrice,
+        this.isSprRequired,
+        this.sgstPer,
+        this.cgstPer,
+        this.igstPer,
+        this.sgstAmt,
+        this.cgstAmt,
+        this.igstAmt,
+        this.gstAmount,
+        this.grossAmount,
+        this.salesCredit,
+        this.lineStatus});
 
   AllSalesAdviseModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -149,6 +227,15 @@ class AllSalesAdviseModal {
     advancePaymentAmt = json['advance_payment_amt'];
     otherRemarks = json['other_remarks'];
     isSpr = json['is_spr'];
+    rhApprovalEmail = json['rh_approval_email'];
+    rhApproval = json['rh_approval'];
+    rhApprovalOn = json['rh_approval_on'];
+    cbhApprovalEmail = json['cbh_approval_email'];
+    cbhApproval = json['cbh_approval'];
+    cbhApprovalOn = json['cbh_approval_on'];
+    gmApprovalEmail = json['gm_approval_email'];
+    gmApproval = json['gm_approval'];
+    gmApprovalOn = json['gm_approval_on'];
     kindAttention = json['kind_attention'];
     termsAndCondition = json['terms_and_condition'];
     sprNo = json['spr_no'];
@@ -162,6 +249,36 @@ class AllSalesAdviseModal {
     clustureHeadValue = json['clusture_head_value'];
     postCode = json['post_code'];
     district = json['district'];
+    itemCode = json['item_code'];
+    itemName = json['item_name'];
+    itemDescription = json['item_description'];
+    qty = json['qty'];
+    unitPrice = json['unit_price'];
+    mrpPrice = json['mrp_price'];
+    quoteLinePrice = json['quote_line_price'];
+    totalPrice = json['total_price'];
+    discountPer = json['discount_per'];
+    discountAmt = json['discount_amt'];
+    bmDiscountPer = json['bm_discount_per'];
+    gmDiscountPer = json['gm_discount_per'];
+    gmDiscountAmount = json['gm_discount_amount'];
+    approvedDiscountPer = json['approved_discount_per'];
+    approvedAmount = json['approved_amount'];
+    standardCost = json['standard_cost'];
+    branchTransferPrice = json['branch_transfer_price'];
+    minimalAcceptablePrice = json['minimal_acceptable_price'];
+    listSellingPrice = json['list_selling_price'];
+    isSprRequired = json['is_spr_required'];
+    sgstPer = json['sgst_per'];
+    cgstPer = json['cgst_per'];
+    igstPer = json['igst_per'];
+    sgstAmt = json['sgst_amt'];
+    cgstAmt = json['cgst_amt'];
+    igstAmt = json['igst_amt'];
+    gstAmount = json['gst_amount'];
+    grossAmount = json['gross_amount'];
+    salesCredit = json['sales_credit'];
+    lineStatus = json['line_status'];
   }
 
   Map<String, dynamic> toJson() {
@@ -206,6 +323,15 @@ class AllSalesAdviseModal {
     data['advance_payment_amt'] = this.advancePaymentAmt;
     data['other_remarks'] = this.otherRemarks;
     data['is_spr'] = this.isSpr;
+    data['rh_approval_email'] = this.rhApprovalEmail;
+    data['rh_approval'] = this.rhApproval;
+    data['rh_approval_on'] = this.rhApprovalOn;
+    data['cbh_approval_email'] = this.cbhApprovalEmail;
+    data['cbh_approval'] = this.cbhApproval;
+    data['cbh_approval_on'] = this.cbhApprovalOn;
+    data['gm_approval_email'] = this.gmApprovalEmail;
+    data['gm_approval'] = this.gmApproval;
+    data['gm_approval_on'] = this.gmApprovalOn;
     data['kind_attention'] = this.kindAttention;
     data['terms_and_condition'] = this.termsAndCondition;
     data['spr_no'] = this.sprNo;
@@ -219,6 +345,36 @@ class AllSalesAdviseModal {
     data['clusture_head_value'] = this.clustureHeadValue;
     data['post_code'] = this.postCode;
     data['district'] = this.district;
+    data['item_code'] = this.itemCode;
+    data['item_name'] = this.itemName;
+    data['item_description'] = this.itemDescription;
+    data['qty'] = this.qty;
+    data['unit_price'] = this.unitPrice;
+    data['mrp_price'] = this.mrpPrice;
+    data['quote_line_price'] = this.quoteLinePrice;
+    data['total_price'] = this.totalPrice;
+    data['discount_per'] = this.discountPer;
+    data['discount_amt'] = this.discountAmt;
+    data['bm_discount_per'] = this.bmDiscountPer;
+    data['gm_discount_per'] = this.gmDiscountPer;
+    data['gm_discount_amount'] = this.gmDiscountAmount;
+    data['approved_discount_per'] = this.approvedDiscountPer;
+    data['approved_amount'] = this.approvedAmount;
+    data['standard_cost'] = this.standardCost;
+    data['branch_transfer_price'] = this.branchTransferPrice;
+    data['minimal_acceptable_price'] = this.minimalAcceptablePrice;
+    data['list_selling_price'] = this.listSellingPrice;
+    data['is_spr_required'] = this.isSprRequired;
+    data['sgst_per'] = this.sgstPer;
+    data['cgst_per'] = this.cgstPer;
+    data['igst_per'] = this.igstPer;
+    data['sgst_amt'] = this.sgstAmt;
+    data['cgst_amt'] = this.cgstAmt;
+    data['igst_amt'] = this.igstAmt;
+    data['gst_amount'] = this.gstAmount;
+    data['gross_amount'] = this.grossAmount;
+    data['sales_credit'] = this.salesCredit;
+    data['line_status'] = this.lineStatus;
     return data;
   }
 }
