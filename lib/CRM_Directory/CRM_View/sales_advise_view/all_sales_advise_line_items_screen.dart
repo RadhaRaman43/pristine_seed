@@ -232,17 +232,17 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
                 value:  expectedClosuredateDate,
               ),
               _buildLabelWithValue(
-                label: "Sales Advise Total Amt : ",
+                label: "Quote Total Amt : ",
                 value:  salesAdviseAllVmController.salesAdviseList[position]
                     .quoteTotalAmount.toString(),
               ),
               _buildLabelWithValue(
-                label: "Sales Advise Gst Amt. : ",
+                label: "Quote Gst Amt. : ",
                 value:  salesAdviseAllVmController.salesAdviseList[position]
                     .quoteGstAmount.toString(),
               ),
               _buildLabelWithValue(
-                label: "Sales Advise Gross Amt. : ",
+                label: "Quote Gross Amt. : ",
                 value:  salesAdviseAllVmController.salesAdviseList[position]
                     .quoteGrossAmount.toString(),
               ),
@@ -258,7 +258,7 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Region Name : ",
                 value: salesAdviseAllVmController.salesAdviseList[position]
-                    .zoneHeadValue,
+                    .branchHeadValue,
               ),
               _buildLabelWithValue(
                 label: "Cluster Name : ",
@@ -290,589 +290,6 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
                   value: salesAdviseAllVmController.salesAdviseList[position]
                       .salesCredit.toString()
               ),
-
-
-            /*  Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Cycle Id : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .33,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position].salesCycleId?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position].salesCycleId?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Advise Status: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position].salesAdviceStatus?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position].salesAdviceStatus?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color:getStatusColor(saleAdviseStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Id : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .33,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position].quoteId?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position].quoteId?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Version: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    salesAdviseAllVmController.salesAdviseList[position].quoteVersion.toString(),
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.end,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Validity : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .35,
-                    child: Tooltip(
-                      message: quoteValidityDate.toString(),
-                      child: Text(
-                        quoteValidityDate.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Code : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .accountCode  ?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position]
-                            .accountCode ??
-                            "",
-                        overflow: TextOverflow.ellipsis,
-                        //textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .accountName  ?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position]
-                            .accountName ??
-                            "",
-                        overflow: TextOverflow.ellipsis,
-                        //textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .4,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .contactName ?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position]
-                            .contactName ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Expected Closure Date: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    expectedClosuredateDate.toString(),
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.end,
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Advise Total Amt : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .37,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .quoteTotalAmount.toString(),
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .quoteTotalAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Advise Gst Amt. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    // width: size.width * .4,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .quoteGstAmount.toString(),
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .quoteGstAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Advise Gross Amt. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .35,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .quoteGrossAmount.toString(),
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .quoteGrossAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .4,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .createdBy?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position]
-                            .createdBy ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created On : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .4,
-                    child: Tooltip(
-                      message: createdOn.toString(),
-                      child: Text(
-                        createdOn.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Region Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .37,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .zoneHeadValue??"",
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .zoneHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Cluster Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    // width: size.width * .4,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .clustureHeadValue??"",
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .clustureHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Item Code : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .4,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .itemCode?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position]
-                            .itemCode ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Item Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .itemName?? "",
-                      child: Text(
-                        salesAdviseAllVmController.salesAdviseList[position]
-                            .itemName?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Qty : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .37,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .qty.toString(),
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .qty.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "LSP : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .37,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .listSellingPrice.toString(),
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .listSellingPrice.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Credit : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    //width: size.width * .37,
-                    child: Tooltip(
-                      message: salesAdviseAllVmController.salesAdviseList[position]
-                          .salesCredit.toString(),
-                      child: Text(salesAdviseAllVmController.salesAdviseList[position]
-                          .salesCredit.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-*/
-
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -1051,6 +468,22 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
                                 height: 10,
                               ),
                               filterWithQuoteClusterHead(),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithItemCode(context),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithName(context),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithLSP(context),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              filterWithSalesCredit(context),
                               SizedBox(
                                 height: 10,
                               ),
@@ -1549,6 +982,114 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
           ),
         ),
       ],
+    );
+  }
+
+  Widget filterWithItemCode(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: salesAdviseAllVmController.itemCodeController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Item Code',
+          labelText: 'Item Code',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  Widget filterWithName(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: salesAdviseAllVmController.itemNameController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Item Name',
+          labelText: 'Item Name',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  filterWithLSP(BuildContext context) {
+    return TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: salesAdviseAllVmController.lspController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'LSP',
+          labelText: 'LSP',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  filterWithSalesCredit(BuildContext context) {
+    return TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: salesAdviseAllVmController.salesCreditController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Sales Credit',
+          labelText: 'Sales Credit',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
     );
   }
 }

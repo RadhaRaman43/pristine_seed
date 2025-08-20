@@ -157,7 +157,8 @@ class PendingDraftQuote extends StatelessWidget{
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
            saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "pendingDraftQuote");
           },
-          subtitle: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
@@ -184,7 +185,14 @@ class PendingDraftQuote extends StatelessWidget{
                   ),
                 ],
               ),
+              Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+            ],
+          ),
+          subtitle: Column(
+            children: [
+
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Version: ",
@@ -196,6 +204,7 @@ class PendingDraftQuote extends StatelessWidget{
                   Text(
                     pendingDraftQuoteController.PendingDraftQuoteList[position].quoteVersion.toString(),
                     overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
@@ -204,7 +213,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Status : ",
@@ -225,6 +234,7 @@ class PendingDraftQuote extends StatelessWidget{
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
 
                       ),
 
@@ -233,7 +243,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Id : ",
@@ -265,6 +275,7 @@ class PendingDraftQuote extends StatelessWidget{
                             decorationStyle: TextDecorationStyle.wavy,
                           ),
                           overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
 
                         ),
 
@@ -274,7 +285,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Code : ",
@@ -295,6 +306,7 @@ class PendingDraftQuote extends StatelessWidget{
                               .PendingDraftQuoteList[position].accountCode ??
                               "",
                           overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
                             fontSize: AllFontSize.fourtine,
@@ -317,7 +329,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Name : ",
@@ -335,6 +347,7 @@ class PendingDraftQuote extends StatelessWidget{
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .accountName ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -346,7 +359,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Contact Name : ",
@@ -364,6 +377,7 @@ class PendingDraftQuote extends StatelessWidget{
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .contactName ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -374,7 +388,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Validity : ",
@@ -390,6 +404,7 @@ class PendingDraftQuote extends StatelessWidget{
                       child: Text(
                         quoteValidityDate.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -400,7 +415,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Expected Closure Date: ",
@@ -420,7 +435,7 @@ class PendingDraftQuote extends StatelessWidget{
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Total Amt : ",
@@ -437,6 +452,7 @@ class PendingDraftQuote extends StatelessWidget{
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteTotalAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -447,7 +463,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gst Amt. : ",
@@ -464,6 +480,7 @@ class PendingDraftQuote extends StatelessWidget{
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGstAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -474,7 +491,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gross Amt. : ",
@@ -491,6 +508,63 @@ class PendingDraftQuote extends StatelessWidget{
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGrossAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Region Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .branchHeadValue??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .branchHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cluster Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .clustureHeadValue??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .clustureHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -502,7 +576,7 @@ class PendingDraftQuote extends StatelessWidget{
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Spr No. : ",
@@ -517,6 +591,7 @@ class PendingDraftQuote extends StatelessWidget{
                       message: pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -527,7 +602,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created By : ",
@@ -545,6 +620,7 @@ class PendingDraftQuote extends StatelessWidget{
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .createdBy ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -555,7 +631,7 @@ class PendingDraftQuote extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created On : ",
@@ -571,6 +647,7 @@ class PendingDraftQuote extends StatelessWidget{
                       child: Text(
                         createdOn.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -601,7 +678,7 @@ class PendingDraftQuote extends StatelessWidget{
               ),
             ],
           ),
-          trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+          //trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
     );
@@ -987,7 +1064,7 @@ class PendingDraftQuote extends StatelessWidget{
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+              fontWeight: FontWeight.w500),
         ),
 
         inputDecorationTheme: const InputDecorationTheme(

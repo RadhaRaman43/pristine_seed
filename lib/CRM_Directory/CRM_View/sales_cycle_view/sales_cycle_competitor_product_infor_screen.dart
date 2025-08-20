@@ -128,7 +128,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                           width: 5,
                         ),
                         Text(
-                          "Quote Filter ",
+                          "Filter ",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twentee,
@@ -1128,7 +1128,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+              fontWeight: FontWeight.w500),
         ),
 
         inputDecorationTheme: const InputDecorationTheme(
@@ -1214,7 +1214,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+              fontWeight: FontWeight.w500),
         ),
 
         inputDecorationTheme: const InputDecorationTheme(

@@ -162,7 +162,8 @@ class AllQuoteLineItemScreen extends StatelessWidget{
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
             saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "ALLQuoteLineItems");
           },
-          subtitle: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
@@ -189,7 +190,13 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                   ),
                 ],
               ),
+              Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+            ],
+          ),
+          subtitle: Column(
+            children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Version: ",
@@ -205,11 +212,12 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.end,
                   ),
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Status : ",
@@ -230,6 +238,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
 
                       ),
 
@@ -238,7 +247,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sale Cycle Id : ",
@@ -271,6 +280,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                             decorationStyle: TextDecorationStyle.wavy,
                           ),
                           overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
                         ),
 
                       ),
@@ -279,7 +289,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Code : ",
@@ -306,7 +316,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                               .accountCode ??
                               "",
                           overflow: TextOverflow.ellipsis,
-                          //textAlign: TextAlign.end,
+                          textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
                             fontSize: AllFontSize.sisxteen,
@@ -322,7 +332,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Name : ",
@@ -341,7 +351,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                             .accountName ??
                             "",
                         overflow: TextOverflow.ellipsis,
-                        //textAlign: TextAlign.end,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -353,7 +363,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Contact Name : ",
@@ -371,6 +381,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .contactName ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -381,7 +392,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Validity : ",
@@ -397,6 +408,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                       child: Text(
                         quoteValidityDate.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -407,7 +419,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Expected Closure Date: ",
@@ -418,6 +430,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                   ),
                   Text(
                     expectedClosuredateDate.toString(),
+                    textAlign: TextAlign.end,
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
@@ -425,9 +438,8 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                   ),
                 ],
               ),
-
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Total Amt : ",
@@ -444,6 +456,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteTotalAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -454,7 +467,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gst Amt. : ",
@@ -471,6 +484,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGstAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -481,7 +495,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gross Amt. : ",
@@ -498,6 +512,63 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGrossAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Region Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .branchHeadValue??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .branchHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cluster Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .clustureHeadValue??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .clustureHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -509,7 +580,120 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Item Code : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .itemCode??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .itemCode??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Item Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .itemName??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .itemName??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "LSP : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .listSellingPrice.toString(),
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .listSellingPrice.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Sales Credit : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .salesCredit.toString(),
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .salesCredit.toString(),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Spr No. : ",
@@ -524,6 +708,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                       message: pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
                       child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -534,7 +719,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created By : ",
@@ -552,6 +737,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .createdBy ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -562,7 +748,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created On : ",
@@ -578,6 +764,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                       child: Text(
                         createdOn.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -588,7 +775,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Is Spr : ",
@@ -608,7 +795,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               ),
             ],
           ),
-          trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+          //trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
     );
@@ -1013,7 +1200,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
-              fontWeight: FontWeight.w700),
+              fontWeight: FontWeight.w500),
         ),
 
         inputDecorationTheme: const InputDecorationTheme(

@@ -291,7 +291,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     .quoteHeaderdata[0].salesCycleId??"",saleCycleController
                                     .quoteHeaderdata[0].quoteId??"","");
                               },
-                              backgroundColor: AllColors.primaryDark1,
+                              backgroundColor : AllColors.primaryDark1,
                               shape: StadiumBorder(
                                 side: BorderSide.none,
                               ),

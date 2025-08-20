@@ -30,7 +30,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
       onWillPop: () async {
         saleCycleController.clearAllFieldOfQuoteFilter();
         saleCycleController.getQuoteHeaderInformation(
-            saleCycleController.quoteHeaderdata[0].quoteId, "");
+            saleCycleController.quoteHeaderdata[0].quoteId, saleCycleController.quoteApprovalPage.value);
         Get.toNamed(RoutesName.quoteInformationScreen);
         return false;
       },

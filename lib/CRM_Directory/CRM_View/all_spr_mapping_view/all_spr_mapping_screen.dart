@@ -161,15 +161,41 @@ class AllSprMappingScreen extends StatelessWidget{
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
             saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "FromAllSPRMapping");
           },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "Quote Id : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message:  pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .quoteId ?? "",
+                      child: Text(
+                        pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .quoteId ?? "",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+            ],
+          ),
           subtitle: Column(
             children: [
-              _buildLabelWithValue(
-                label: "Quote Id : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId,
-                //width: size.width * 0.33,
-
-              ),
-
               _buildLabelWithValue(
                 label: "Quote Version: ",
                 value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteVersion.toString(),
@@ -218,7 +244,6 @@ class AllSprMappingScreen extends StatelessWidget{
                 label: "Quote Validity : ",
                 value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteValidity,
                 //width: size.width * 0.33,
-
               ),
               _buildLabelWithValue(
                 label: "Expected Closure Date : ",
@@ -242,14 +267,43 @@ class AllSprMappingScreen extends StatelessWidget{
                 label: "Quote Gross Amt. : ",
                 value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGrossAmount.toString(),
                 //width: size.width * 0.33,
-
+              ),
+              _buildLabelWithValue(
+                label: "Region Name : ",
+                value: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                    .branchHeadValue,
+              ),
+              _buildLabelWithValue(
+                label: "Cluster Name : ",
+                value: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                    .clustureHeadValue,
+              ),
+              _buildLabelWithValue(
+                label: "Item Code :  ",
+                value: pendingDraftQuoteController.PendingDraftQuoteList[position].itemCode,
+                //width: size.width * 0.33,
+              ),
+              _buildLabelWithValue(
+                label: "Item Name :  ",
+                value: pendingDraftQuoteController.PendingDraftQuoteList[position].itemName,
+                //width: size.width * 0.33,
+              ),
+              _buildLabelWithValue(
+                label: "LSP :  ",
+                value: pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString(),
+                //width: size.width * 0.33,
+              ),
+              _buildLabelWithValue(
+                label: "Sales Credit :  ",
+                value: pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString(),
+                //width: size.width * 0.33,
               ),
               _buildLabelWithValue(
                 label: "Spr No. : ",
                 value: pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo,
                 //width: size.width * 0.33,
-
               ),
+
               _buildLabelWithValue(
                 label: "Created By :  ",
                 value: pendingDraftQuoteController.PendingDraftQuoteList[position].createdBy,
@@ -260,19 +314,9 @@ class AllSprMappingScreen extends StatelessWidget{
                 value: createdOn,
                 //width: size.width * 0.33,
               ),
-             /* _buildLabelWithValue(
-                label: "Item Code :  ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].itemCode,
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "Item Code :  ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].itemDescription,
-                //width: size.width * 0.33,
-              ),*/
             ],
           ),
-          trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+         // trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
     );
@@ -1079,6 +1123,7 @@ class AllSprMappingScreen extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -1131,6 +1176,7 @@ class AllSprMappingScreen extends StatelessWidget{
     double? width,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,

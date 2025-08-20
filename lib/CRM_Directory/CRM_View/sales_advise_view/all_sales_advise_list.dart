@@ -240,17 +240,17 @@ class AllSalesAdviseList extends StatelessWidget{
                 value:  expectedClosuredateDate,
               ),
               _buildLabelWithValue(
-                label: "Sales Advise Total Amt : ",
+                label: "Quote Total Amt : ",
                 value:  salesAdviseAllVmController.salesAdviseList[position]
                     .quoteTotalAmount.toString(),
               ),
               _buildLabelWithValue(
-                label: "Sales Advise Gst Amt. : ",
+                label: "Quote Gst Amt. : ",
                 value:  salesAdviseAllVmController.salesAdviseList[position]
                     .quoteGstAmount.toString(),
               ),
               _buildLabelWithValue(
-                label: "Sales Advise Gross Amt. : ",
+                label: "Quote Gross Amt. : ",
                 value:  salesAdviseAllVmController.salesAdviseList[position]
                     .quoteGrossAmount.toString(),
               ),
@@ -266,7 +266,7 @@ class AllSalesAdviseList extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Region Name : ",
                 value: salesAdviseAllVmController.salesAdviseList[position]
-                    .zoneHeadValue,
+                    .branchHeadValue,
               ),
               _buildLabelWithValue(
                 label: "Cluster Name : ",

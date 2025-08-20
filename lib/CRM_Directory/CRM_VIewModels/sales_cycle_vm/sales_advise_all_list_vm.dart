@@ -34,6 +34,10 @@ class SalesAdviseAllListVm extends GetxController{
  var cluster_head_value_controller=TextEditingController().obs;
  var productCategoryController=TextEditingController().obs;
  var createdOnCnontroller=TextEditingController().obs;
+ var itemCodeController=TextEditingController().obs;
+ var itemNameController=TextEditingController().obs;
+ var lspController=TextEditingController().obs;
+ var salesCreditController=TextEditingController().obs;
 
  RxString quoteValidityStartToEnd="".obs;
  RxString extClosureStartToEnd="".obs;
@@ -76,13 +80,13 @@ class SalesAdviseAllListVm extends GetxController{
       "filter_zone_head_value": cluster_head_value_controller.value.text.isNotEmpty?cluster_head_value_controller.value.text:"",
       "filter_clusture_head_value": "",
       "filter_spr_no": "",
-      "filter_item_code": "",
-      "filter_item_name": "",
+      "filter_item_code": itemCodeController.value.text.isNotEmpty?itemCodeController.value.text:"",
+      "filter_item_name": itemNameController.value.text.isNotEmpty?itemNameController.value.text:"",
       "filter_quantity": "",
       "filter_gm_per": "",
       "filter_bm_per": "",
-      "filter_sales_credit": "",
-      "filter_lsp": "",
+      "filter_sales_credit": salesCreditController.value.text.isNotEmpty?salesCreditController.value.text:"",
+      "filter_lsp": lspController.value.text.isNotEmpty?lspController.value.text:"",
       "filter_map": "",
       "filter_btp": "",
       "filter_standard_cost": "",
@@ -145,6 +149,10 @@ class SalesAdviseAllListVm extends GetxController{
      extClosureStartToEnd.value="";
      quoteValidityStartToEnd.value="";
      createdOnStartToEnd.value="";
+     itemCodeController.value.clear();
+     itemNameController.value.clear();
+     lspController.value.clear();
+     salesCreditController.value.clear();
 
   }
 }

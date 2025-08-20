@@ -335,15 +335,47 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.clearAllFieldOfQuoteFilter();
 
           },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Sales Cycle Stage : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Container(
+                  width: size.width * .4,
+                  child: Tooltip(
+                    message: salesCycleController.saleCycleList[position].salesCycleStatus??"",
+                    child: Text(salesCycleController.saleCycleList[position].salesCycleStatus??"",
+                      overflow: TextOverflow.ellipsis,
+
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+
+          ],
+        ),
           subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildLabelWithValue(
+             /* _buildLabelWithValue(
                 label: "Sales Cycle Stage : ",
                 value: salesCycleController.saleCycleList[position].salesCycleStatus,
                 //width: size.width * 0.33,
                 color: Colors.blue,
-              ),
+              ),*/
               _buildLabelWithValue(
                 label: "Sales Cycle Id: ",
                 value: salesCycleController.saleCycleList[position].salesCycleId,
@@ -783,7 +815,7 @@ class SalesCycleScreen extends StatelessWidget{
               ),
             ],
           ),*/
-          trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+         // trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
   }
@@ -795,6 +827,7 @@ class SalesCycleScreen extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -845,6 +878,7 @@ class SalesCycleScreen extends StatelessWidget{
     double? width,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -863,6 +897,7 @@ class SalesCycleScreen extends StatelessWidget{
               child: Text(
                 value ?? "",
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
                 style: GoogleFonts.poppins(
                   color: Colors.blueAccent,
                   fontSize: AllFontSize.fourtine,
