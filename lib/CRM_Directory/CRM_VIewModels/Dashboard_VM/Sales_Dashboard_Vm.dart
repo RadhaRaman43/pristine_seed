@@ -25,6 +25,15 @@ class SalesDashboardVm extends GetxController{
   RxString PeriodFrom = "".obs;
   RxString PeriodTo = "".obs;
 
+  RxBool isExpandCrtd = true.obs;
+
+  var PeriodTo_Controller = TextEditingController().obs;
+  var PeriodFrom_Controller = TextEditingController().obs;
+  var SalesPersonER_Code_Controller = TextEditingController().obs;
+  var SalesPersonName_Controller = TextEditingController().obs;
+  var RegionName_Controller = TextEditingController().obs;
+  var ClusterName_Controller = TextEditingController().obs;
+
 
   RxList<SaleDashboardDataModel> salesDashboardList = <SaleDashboardDataModel>[].obs;
   RxList<MonthWiseTotalFunnel> monthWiseTotalFunnelList = <MonthWiseTotalFunnel>[].obs;
@@ -110,6 +119,10 @@ class SalesDashboardVm extends GetxController{
 
   }
 
+  void toggleCrtd() {
+    isExpandCrtd.value = !isExpandCrtd.value;
+  }
+
   Future<void> salesDashboardData() async {
     /*CustomerNameApi="";
     if(CustomerName_controller.value.text.isNotEmpty){
@@ -186,7 +199,13 @@ class SalesDashboardVm extends GetxController{
           monthWiseTotalFunnelList.value = response[0].monthWiseTotalFunnel ?? [];
           monthWiseCommitmentList.value = response[0].monthWiseCommitment ?? [];
           monthWiseAoVsBookingList.value = response[0].monthWiseAoVsBookingAchive ?? [];
-          print('baisgdiuasgi du${response}');
+          ClusterName_Controller.value.text = response[0].clusterHead??"";
+          RegionName_Controller.value.text = response[0].regionHead??"";
+          SalesPersonName_Controller.value.text = response[0].salePersonName??"";
+          SalesPersonER_Code_Controller.value.text = response[0].salePersonEmpCode??"";
+          PeriodFrom_Controller.value.text = response[0].periodFrom??"";
+          PeriodTo_Controller.value.text = response[0].periodTo??"";
+          print('baisgdiuasgi du${response[0].clusterHead??""}');
 
         } else {
           Utils.showErrorToastification(

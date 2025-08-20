@@ -645,7 +645,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           subtitle: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Task Status : ",
@@ -658,11 +658,11 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                     fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position]
-                          .taskStatus!,
+                          .taskStatus??"",
                       child: Text(
                         dashboard_view_Controller
                             .pendingDSARDashboardUserWiseDataList[position]
-                            .taskStatus!,
+                            .taskStatus??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: getStatusColor(taskStatus),
@@ -674,7 +674,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Task Id: ",
@@ -683,16 +683,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .3,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .pendingDSARDashboardUserWiseDataList[position]
-                          .taskId!,
+                          .taskId??"",
                       child: Text(
                         dashboard_view_Controller
                             .pendingDSARDashboardUserWiseDataList[position]
-                            .taskId!,
+                            .taskId??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -703,29 +703,9 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                   ),
                 ],
               ),
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Manager Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    dashboard_view_Controller
-                        .pendingDSARDashboardUserWiseDataList[position]
-                        .approvedFullName!,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),*/
+
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Name : ",
@@ -734,27 +714,22 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  InkWell(
-                    child: Container(
-                      width: size.width * .4,
-                      child: Tooltip(
-                        message: dashboard_view_Controller
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .pendingDSARDashboardUserWiseDataList[position]
+                          .accountName ?? "",
+                      child: Text(
+                        dashboard_view_Controller
                             .pendingDSARDashboardUserWiseDataList[position]
                             .accountName ?? "",
-                        child: Text(
-                          dashboard_view_Controller
-                              .pendingDSARDashboardUserWiseDataList[position]
-                              .accountName ??
-                              "" + " | ${dashboard_view_Controller
-                                  .pendingDSARDashboardUserWiseDataList[position]
-                                  .accountName ?? ""}",
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.start,
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -762,7 +737,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Code : ",
@@ -776,11 +751,11 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .pendingDSARDashboardUserWiseDataList[position]
-                          .contactName!,
+                          .accountName??"",
                       child: Text(
                         dashboard_view_Controller
                             .pendingDSARDashboardUserWiseDataList[position]
-                            .contactName!,
+                            .accountName??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -792,7 +767,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Contact Name : ",
@@ -806,11 +781,11 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .pendingDSARDashboardUserWiseDataList[position]
-                          .contactName!,
+                          .contactName??"",
                       child: Text(
                         dashboard_view_Controller
                             .pendingDSARDashboardUserWiseDataList[position]
-                            .contactName!,
+                            .contactName??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -822,7 +797,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Type Of Call : ",
@@ -831,16 +806,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Container(
-                    width: size.width * .4,
+                  Flexible(
+                    fit: FlexFit.loose,
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .pendingDSARDashboardUserWiseDataList[position]
-                          .typeOfCall!,
+                          .typeOfCall??"",
                       child: Text(
                         dashboard_view_Controller
                             .pendingDSARDashboardUserWiseDataList[position]
-                            .typeOfCall!,
+                            .typeOfCall??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -852,7 +827,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Method of Call : ",
@@ -882,7 +857,67 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cluster Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .pendingDSARDashboardUserWiseDataList[position]
+                          .clustureHeadValue??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .pendingDSARDashboardUserWiseDataList[position]
+                            .clustureHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Region Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Tooltip(
+                      message: dashboard_view_Controller
+                          .pendingDSARDashboardUserWiseDataList[position]
+                          .branchHeadValue??"",
+                      child: Text(
+                        dashboard_view_Controller
+                            .pendingDSARDashboardUserWiseDataList[position]
+                            .branchHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created By : ",
@@ -921,7 +956,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Due Date : ",
@@ -954,8 +989,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Remarks : ",
