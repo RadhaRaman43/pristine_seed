@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -17,6 +18,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return WillPopScope(onWillPop: () async {
+      businessTourPlanController.clearAllFieldOfFilter();
       Get.toNamed(RoutesName.homeScreen);
       return false;
     },
@@ -26,22 +28,26 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
             iconTheme: IconThemeData(
               color: AllColors.whiteColor,
             ),
-            title:Row(
-              children: [
-                Text(
-                  'Business Tour Plan Line Details',
-                  style: GoogleFonts.poppins(
-                    color: AllColors.whiteColor,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w700,
-                  ),
+            title:Tooltip(
+              message: 'Business Tour Plan Line Details',
+              child: Text(
+                'Business Tour Plan Line Details',
+                style: GoogleFonts.poppins(
+                  color: AllColors.whiteColor,
+                  fontSize: 17.0,
+                  fontWeight: FontWeight.w700,
                 ),
-                Spacer(),
-                IconButton(onPressed: () {
-                  showFilterBottomSheet(context);
-                }, icon: Icon(Icons.filter_alt_sharp))
-              ],
-            )
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                showFilterBottomSheet(context);
+              },
+              icon: Icon(Icons.filter_alt_sharp),
+            ),
+          ],
         ),
         drawer: CustomDrawer(),
         body: RefreshIndicator(
@@ -69,7 +75,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
 
   Widget BindCustomerListView(context) {
 
-    if (businessTourPlanController.BusinessTourPlanList.value.isNotEmpty && businessTourPlanController.BusinessTourPlanList.value.length > 0) {
+    if (businessTourPlanController.BusinessTourPlanLineDetailList.value.isNotEmpty && businessTourPlanController.BusinessTourPlanLineDetailList.value.length > 0) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
         if (scrollController.position.pixels ==
@@ -87,7 +93,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
 
 
           if (businessTourPlanController.pageNumber + 1 < total_page) {
-            businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber + 1,);
+            businessTourPlanController.getBusinessTourPlanAllLineGet(businessTourPlanController.pageNumber + 1,);
             businessTourPlanController.pageNumber += 1;
           }
         }
@@ -101,7 +107,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
             color: Colors.transparent,
           ),
           shrinkWrap: true,
-          itemCount: businessTourPlanController.BusinessTourPlanList.value.length,
+          itemCount: businessTourPlanController.BusinessTourPlanLineDetailList.value.length,
           itemBuilder: (BuildContext context, int index) {
             return BindCustomerRequestListView(context, index);
           });
@@ -113,100 +119,130 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    var createdOn=StaticMethod.dateTimeToDate(businessTourPlanController.BusinessTourPlanLineDetailList[position].createdOn??"");
-
+    var createdOn = StaticMethod.dateTimeToDate(businessTourPlanController.BusinessTourPlanLineDetailList[position].createdOn??"");
+    var tourDate  = StaticMethod.dateTimeToDate(businessTourPlanController.BusinessTourPlanLineDetailList[position].tourDate??"");
+    String saleCycleStatus = businessTourPlanController.BusinessTourPlanLineDetailList[position].approvalStatus??"";
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-          businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId, "");
+          //businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanLineDetailList[position].tourId, "");
         },
-        subtitle:Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-           /* _buildLabelWithValue(
-              label: "Tour ID : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].tourId,
-            ),
-            _buildLabelWithValue(
-              label: "Cluster: ",
-              value: businessTourPlanController.BusinessTourPlanList[position].cluster,
-              //width: size.width * 0.36,
-            ),
-            _buildLabelWithValue(
-              label: "Region : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].region,
-              // width: size.width * 0.36,
+        subtitle:
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildLabelWithValue(
+                label: "Region: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].region,
+                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Touring Region: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].touringRegion,
+                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Touring District: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].touringDistrict,
+                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Tour Type: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].tourType,
+                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Customer: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].customer,
+                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Customer Name: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].customerName,
+                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Meeting With : ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].meetingWith,
+                // width: size.width * 0.36,
 
-            ),
-            _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
-              // width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "No Of Days : ",
+                value:  businessTourPlanController.BusinessTourPlanLineDetailList[position].noOfDays.toString(),
+                // width: size.width * 0.36,
 
-            ),
-            _buildLabelWithValue(
-              label: "Touring Region : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
-              // width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Objective : ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].objective,
+                // width: size.width * 0.36,
 
-            ),
-            _buildLabelWithValue(
-              label: "Status : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].status,
-              // width: size.width * 0.36,
-              color: getStatusColor(saleCycleStatus),
-            ),
-            _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
-              // width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Status : ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].approvalStatus,
+                // width: size.width * 0.36,
+                color: getStatusColor(saleCycleStatus),
+              ),
+              _buildLabelWithValue(
+                label: "Remarks : ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].remarks,
+                // width: size.width * 0.36,
 
-            ),
-            _buildLabelWithValue(
-              label: "Reporting Manager : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].reportingManager,
-              // width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Accompanied With : ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].accompaniedWith,
+                // width: size.width * 0.36,
 
-            ),
+              ),
+              _buildLabelWithValue(
+                label: "Created By",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].createdBy,
+                //: size.width * 0.33,
+              ),
 
-            _buildLabelWithValue(
-              label: "Created By: ",
-              value: businessTourPlanController.BusinessTourPlanList[position].createdFullName,
-              //: size.width * 0.33,
-            ),
+              _buildLabelWithValue(
+                label: "Owner Name: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].ownerName,
+                //: size.width * 0.33,
+              ),
+              _buildLabelWithValue(
+                label: "Created On: ",
+                value: createdOn,
+                //: size.width * 0.33,
+              ),
+
+              _buildLabelWithValue(
+                label: "Tour Date: ",
+                value: tourDate,
+                //: size.width * 0.33,
+              ),
+
+            ],
+          ),
 
 
-            _buildLabelWithValue(
-              label: "Created On: ",
-              value: createdOn,
-              //: size.width * 0.33,
-            ),
-
-            _buildLabelWithValue(
-              label: "Reject Reason",
-              value: businessTourPlanController.BusinessTourPlanList[position].rejectReason,
-              //: size.width * 0.33,
-            ),
-
-            _buildLabelWithValue(
-              label: "Approved/Rejected By: ",
-              value: businessTourPlanController.BusinessTourPlanList[position].approvedFullName,
-              //: size.width * 0.33,
-            ),
-
-            _buildLabelWithValue(
-              label: "Approve On: ",
-              value: approvedOn,
-              //: size.width * 0.33,
-            ),*/
-
-          ],
-        ),
-
-        trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+        //trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
+  }
+
+  Color getStatusColor(String status) {
+    switch (status) {
+      case 'PENDING' || 'Pending':
+        return Colors.yellow[900]!;
+      case 'Rejected' || 'REJECTED':
+        return AllColors.redColor;
+      case 'APPROVED' || 'Approved':
+        return Colors.green;
+      case 'PENDING FOR APPROVAL' || 'Pending For Approval':
+        return Colors.yellow[700]!;
+      default:
+        return Colors.black;
+    }
   }
   Widget _buildLabelWithValue({
     required String label,
@@ -215,6 +251,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -304,164 +341,26 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindTextField(context,businessTourPlanController.filterTourIdController.value,'Tour ID'),
 
-                              TextField(
-                                controller: businessTourPlanController.filterTourIdController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Tour ID',
-                                    hintText: 'Tour ID',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindTextField(context,businessTourPlanController.filterClusterNameController.value,'Cluster'),
 
-                              TextField(
-                                controller: businessTourPlanController.filterClusterNameController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Cluster',
-                                    hintText: 'Cluster',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindTextField(context,businessTourPlanController.filterRegionController.value,'Region'),
 
-                              TextField(
-                                controller: businessTourPlanController.filterTouringRegionController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Touring Region',
-                                    hintText: 'Touring Region',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindTextField(context,businessTourPlanController.filterTouringRegionController.value,'Touring Region'),
 
-                              TextField(
-                                controller: businessTourPlanController.filterTouringNameController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Region',
-                                    hintText: 'Region',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindTextField(context,businessTourPlanController.filterCreatedByController.value,'Created By'),
 
-                              TextField(
-                                controller: businessTourPlanController.filterCreatedByController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Created By',
-                                    hintText: 'Created By',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
+
+                              SizedBox(height: 10,),
+                              BindTourDate(context),
+                              SizedBox(height: 10,),
+                              createdOnDate(context)
 
                             ],
                           ),
@@ -533,6 +432,200 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
 
         );
       },
+    );
+  }
+
+  Widget bindTextField(BuildContext context, TextEditingController controller, String lavel_text){
+    return  TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: lavel_text,
+          hintText: lavel_text,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  Widget BindTourDate(context) {
+    return Container(
+      decoration: BoxDecoration(
+          //color: Colors.white,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: TextFormField(
+        controller: businessTourPlanController.filterTourDateController.value,
+        readOnly: true,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Tour Date',
+            labelText: 'Tour Date',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )),
+        cursorColor: AllColors.primaryDark1,
+        onTap: () async {
+
+          DateTime stating_date = DateTime(1900);
+          DateTime ending_date = DateTime(2200);
+
+          if (businessTourPlanController.StartDate.isNotEmpty) {
+            stating_date = DateFormat('yyyy-MM-dd').parse(businessTourPlanController.StartDate);
+          }
+          if (businessTourPlanController.EndDate.isNotEmpty) {
+            ending_date = DateFormat('yyyy-MM-dd').parse(businessTourPlanController.EndDate);
+          }
+          // Check if a date is already selected and parse it
+          DateTime initialDate = DateTime.now();
+          if (businessTourPlanController.filterTourDateController.value.text.isNotEmpty) {
+            initialDate = DateFormat('yyyy-MM-dd').parse(
+              businessTourPlanController.filterTourDateController.value.text,
+            );
+          }
+
+
+          // Remove focus from the field
+          FocusScope.of(context).requestFocus(FocusNode());
+
+          // Show the date picker
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: initialDate.isBefore(stating_date) ? stating_date : initialDate,
+            firstDate: stating_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          // Update the controller with the selected date
+          if (date != null) {
+            var outputFormat = DateFormat('yyyy-MM-dd');
+            businessTourPlanController.filterTourDateController.value.text =
+                outputFormat.format(date);
+          }
+        },
+      ),
+    );
+  }
+
+  Widget createdOnDate(context) {
+    return Container(
+      decoration: BoxDecoration(
+          //color: Colors.white,
+          borderRadius: BorderRadius.circular(10)
+      ),
+      child: TextFormField(
+        controller: businessTourPlanController.filterCreatedOnController.value,
+        readOnly: true,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Created On',
+            labelText: 'Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )),
+        cursorColor: AllColors.primaryDark1,
+        onTap: () async {
+
+          DateTime stating_date = DateTime(1900);
+          DateTime ending_date = DateTime(2200);
+
+          if (businessTourPlanController.StartDate.isNotEmpty) {
+            stating_date = DateFormat('yyyy-MM-dd').parse(businessTourPlanController.StartDate);
+          }
+          if (businessTourPlanController.EndDate.isNotEmpty) {
+            ending_date = DateFormat('yyyy-MM-dd').parse(businessTourPlanController.EndDate);
+          }
+          // Check if a date is already selected and parse it
+          DateTime initialDate = DateTime.now();
+          if (businessTourPlanController.filterCreatedOnController.value.text.isNotEmpty) {
+            initialDate = DateFormat('yyyy-MM-dd').parse(
+              businessTourPlanController.filterCreatedOnController.value.text,
+            );
+          }
+
+
+          // Remove focus from the field
+          FocusScope.of(context).requestFocus(FocusNode());
+
+          // Show the date picker
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: initialDate.isBefore(stating_date) ? stating_date : initialDate,
+            firstDate: stating_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          // Update the controller with the selected date
+          if (date != null) {
+            var outputFormat = DateFormat('yyyy-MM-dd');
+            businessTourPlanController.filterCreatedOnController.value.text =
+                outputFormat.format(date);
+          }
+        },
+      ),
     );
   }
 
