@@ -175,16 +175,16 @@ class BusinessPlanTourViewModel extends GetxController{
   getBusinessTourPlanAllLineGet(int page_no) {
     try {
       Map data = {
-        "tour_id": "",
+        "tour_id": filterTourIdController.value.text.isEmpty?"":filterTourIdController.value.text,
         "account_code": "",
-        "created_by": email,
-        "created_on": "",
-        "tour_date_on": "",
-        "branch_head_value": "",
-        "clusture_head_value": "",
+        "created_by": filterCreatedByController.value.text.isEmpty?"":filterCreatedByController.value.text,
+        "created_on": filterCreatedOnController.value.text.isEmpty?"":filterCreatedOnController.value.text,
+        "tour_date_on": filterTourDateController.value.text.isEmpty?"":filterTourDateController.value.text,
+        "branch_head_value": filterRegionController.value.text.isEmpty?"":filterRegionController.value.text,
+        "clusture_head_value": filterClusterNameController.value.text.isEmpty?"":filterClusterNameController.value.text,
         "district": "",
         "status": "",
-        "touring_region": "",
+        "touring_region": filterTouringRegionController.value.text.isEmpty?"":filterCreatedByController.value.text,
         "filter_flag": "AllBusinessTourLine",
         "rowsPerPage": rowsPerPage,
         "pageNumber": page_no
@@ -912,6 +912,10 @@ class BusinessPlanTourViewModel extends GetxController{
     filterTouringRegionController.value.clear();
     filterTouringNameController.value.clear();
     filterClusterNameController.value.clear();
+
+    filterRegionController.value.clear();
+    filterTourDateController.value.clear();
+    filterCreatedOnController.value.clear();
 
   }
 
