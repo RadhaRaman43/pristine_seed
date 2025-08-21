@@ -25,7 +25,8 @@ class SalesDashboardVm extends GetxController{
   RxString PeriodFrom = "".obs;
   RxString PeriodTo = "".obs;
 
-  RxBool isExpandCrtd = true.obs;
+  RxBool isExpandCrtd = false.obs;
+  RxBool isExpandFunnel = false.obs;
 
   var PeriodTo_Controller = TextEditingController().obs;
   var PeriodFrom_Controller = TextEditingController().obs;
@@ -48,7 +49,7 @@ class SalesDashboardVm extends GetxController{
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
-    DateRange("month");
+    DateRange("financial");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     salesDashboardData();
 
@@ -123,6 +124,10 @@ class SalesDashboardVm extends GetxController{
     isExpandCrtd.value = !isExpandCrtd.value;
   }
 
+  void toggleFunnelCrtd() {
+    isExpandFunnel.value = !isExpandFunnel.value;
+  }
+
   Future<void> salesDashboardData() async {
     /*CustomerNameApi="";
     if(CustomerName_controller.value.text.isNotEmpty){
@@ -178,6 +183,8 @@ class SalesDashboardVm extends GetxController{
     try {
       Map<String, String> data = {
         "email_id": email,
+        "cluster_name": 'ALl',
+        "region_name": 'ALl',
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
       };
@@ -197,6 +204,7 @@ class SalesDashboardVm extends GetxController{
             response[0].condition?.toLowerCase() == "true") {
           salesDashboardList.value = response;
           monthWiseTotalFunnelList.value = response[0].monthWiseTotalFunnel ?? [];
+          print('length.....${monthWiseTotalFunnelList.length}');
           monthWiseCommitmentList.value = response[0].monthWiseCommitment ?? [];
           monthWiseAoVsBookingList.value = response[0].monthWiseAoVsBookingAchive ?? [];
           ClusterName_Controller.value.text = response[0].clusterHead??"";

@@ -295,8 +295,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       icon: Icon(
                                         dashboard_view_Controller
                                             .isExpandCrtd.value
-                                            ? Icons.arrow_drop_down
-                                            : Icons.arrow_drop_up,
+                                            ? Icons.arrow_drop_up
+                                            : Icons.arrow_drop_down,
                                         size: 25,
                                         color: AllColors.whiteColor,
                                       ),
@@ -323,9 +323,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              /*border: Border.all(
-                          color: AllColors.blackColor, // Set the border color here
-                        ),*/
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: AllColors.textColor
                             ),
@@ -334,7 +331,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(left: 10),
-                                  child: Icon(Icons.task, color: AllColors.whiteColor,),
+                                  child: Icon(Icons.auto_graph, color: AllColors.whiteColor,),
                                 ),
                                 Text(
                                   "Funnel",
@@ -348,7 +345,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       () {
                                     return IconButton(
                                       onPressed: () {
-                                        dashboard_view_Controller.toggleCrtd();
+                                        dashboard_view_Controller.toggleFunnelCrtd();
                                         if (dashboard_view_Controller
                                             .isExpandCrtd.value ==
                                             true) {
@@ -361,9 +358,9 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       },
                                       icon: Icon(
                                         dashboard_view_Controller
-                                            .isExpandCrtd.value
-                                            ? Icons.arrow_drop_down
-                                            : Icons.arrow_drop_up,
+                                            .isExpandFunnel.value
+                                            ? Icons.arrow_drop_up
+                                            : Icons.arrow_drop_down,
                                         size: 25,
                                         color: AllColors.whiteColor,
                                       ),
@@ -375,7 +372,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             ),
                           ),
                           Obx(() {
-                            return CRMTaskDetailCard(context);
+                            return FunnelDetailCard(context);
                           }),
                         ],
                       ),
@@ -392,219 +389,314 @@ class SalesDashboardViewscreen extends StatelessWidget{
   }
 
   Widget CRMTaskDetailCard(BuildContext context) {
-    return   Visibility(
-      visible: dashboard_view_Controller.isExpandCrtd.value == true ? true : false,
-      child: Container(
-        margin: EdgeInsets.only(left: 10.0, right: 10.0),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Text(
-                  "Existing Accounts : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  dashboard_view_Controller
-                      .salesDashboardList[0]
-                      .existingAccount.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Row(
-              children: [
-                Text(
-                  "New Account Created :",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  dashboard_view_Controller
-                          .salesDashboardList[0]
-                          .newAccount.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Row(
-              children: [
-                Text(
-                  "Total Accounts :",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  dashboard_view_Controller
-                      .salesDashboardList[0]
-                      .totalAccount.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Row(
-              children: [
-                Text("Acc. Covered in C/M :",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
+    if(dashboard_view_Controller.salesDashboardList.isNotEmpty){
+      return   Visibility(
+        visible: dashboard_view_Controller.isExpandCrtd.value,
+        child: Container(
+          margin: EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            children: [
+              ListItemBind("Existing Accounts :",dashboard_view_Controller.salesDashboardList[0].existingAccount ),
+              SizedBox(height: 3,),
+              ListItemBind("New Account Created :",dashboard_view_Controller.salesDashboardList[0].newAccount ),
+              SizedBox(height: 3,),
+              ListItemBind("Total Accounts :",dashboard_view_Controller.salesDashboardList[0].totalAccount ),
+              SizedBox(height: 3,),
+              ListItemBind("Acc. Covered in C/M :",dashboard_view_Controller.salesDashboardList[0].accountCoveredCurrentMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Acc. Covered in P/M :",dashboard_view_Controller.salesDashboardList[0].accountCoveredPreviousMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Fresh Acc. Covered in C/M :",dashboard_view_Controller.salesDashboardList[0].freshAccountCoveredCurrentMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Total Acc. Covered :",dashboard_view_Controller.salesDashboardList[0].totalAccountCovered ),
+              SizedBox(height: 3,),
+              ListItemBind("New Call :", dashboard_view_Controller.salesDashboardList[0].newCall),
+              SizedBox(height: 3,),
+              ListItemBind("Follow Up Call :", dashboard_view_Controller.salesDashboardList[0].followUpCall),
+              SizedBox(height: 3,),
+              ListItemBind("Payment Call :", dashboard_view_Controller.salesDashboardList[0].paymentCall),
+              SizedBox(height: 3,),
+              ListItemBind("Total Calls :", dashboard_view_Controller.salesDashboardList[0].totalCall),
+              SizedBox(height: 3,),
+              ListItemBind("Total Order :", dashboard_view_Controller.salesDashboardList[0].totalOrders),
+              SizedBox(height: 3,),
+              ListItemBind("Call Rate :", dashboard_view_Controller.salesDashboardList[0].callRate),
+              SizedBox(height: 3,),
+              ListItemBind("Call Rate Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].callRateTargetAchieve),
+              SizedBox(height: 3,),
+              ListItemBind("New Call :", dashboard_view_Controller.salesDashboardList[0].newCall),
+              SizedBox(height: 3,),
+              ListItemBind("New Call Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].newCallTargetAchieve),
+              SizedBox(height: 3,),
+              ListItemBind("Strike Rate: :", dashboard_view_Controller.salesDashboardList[0].strikeRate),
+              SizedBox(height: 3,),
+              ListItemBind("Strike Rate Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].strikeRateTargetAchieve),
+              SizedBox(height: 3,),
+              ListItemBind("DSAR % :", dashboard_view_Controller.salesDashboardList[0].dsarPer),
+              SizedBox(height: 3,),
+              ListItemBind("DSAR  Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].dsarTargetAchieve),
+              SizedBox(height: 3,),
+              ListItemBind("Average Order Size :", dashboard_view_Controller.salesDashboardList[0].avgOrderSize),
+              SizedBox(height: 3,),
+              ListItemBind("Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].targetAchievement),
+              SizedBox(height: 3,),
+              ListItemBind("Business Tour Plan (No of Days) :", dashboard_view_Controller.salesDashboardList[0].businessTourDays),
+              SizedBox(height: 3,),
 
-                      dashboard_view_Controller
-                          .salesDashboardList[0]
-                          .accountCoveredCurrentMonth.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Row(
-              children: [
-                Text("Acc. Covered in P/M :",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
 
-                  dashboard_view_Controller
-                      .salesDashboardList[0]
-                      .accountCoveredPreviousMonth.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),Row(
-              children: [
-                Text("Fresh Acc. Covered in C/M :",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  dashboard_view_Controller
-                      .salesDashboardList[0]
-                      .freshAccountCoveredCurrentMonth.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),Row(
-              children: [
-                Text("Total Acc. Covered :",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-
-                  dashboard_view_Controller
-                      .salesDashboardList[0]
-                      .totalAccountCovered.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),Row(
-              children: [
-                Text("Working Days :",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Spacer(),
-                Text(
-                  dashboard_view_Controller
-                      .salesDashboardList[0]
-                      .workingDays.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 3,
-            ),
-
-          ],
+            ],
+          ),
         ),
+      );
+    }else{
+      return  Obx(() {
+        return Visibility(
+          visible: dashboard_view_Controller.loading.value,
+          child: SizedBox()
+        );
+      });
+    }
+
+  }
+
+  Widget FunnelDetailCard(BuildContext context) {
+    if(dashboard_view_Controller.salesDashboardList.isNotEmpty){
+      return   Visibility(
+        visible: dashboard_view_Controller.isExpandFunnel.value,
+        child: Container(
+          margin: EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            children: [
+              Text("C/M Funnel",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].currentMonthPropose ),
+              SizedBox(height: 3,),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].currentMonthProspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].currentMonthPropose ),
+              SizedBox(height: 3,),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].currentMonthTotalFunnel ),
+              SizedBox(height: 3,),
+              Divider(height: 1, thickness: 2, color: Colors.grey,),
+              SizedBox(height: 3,),
+              Text("C/F/M Funnel",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearSuspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearProspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearPropose ),
+              SizedBox(height: 3,),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearTotalFunnel ),
+              SizedBox(height: 3,),
+              Divider(height: 1, thickness: 2, color: Colors.grey,),
+              SizedBox(height: 3,),
+              Text("Quarter 1",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].firstQuaterSuspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].firstQuaterProspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].firstQuaterPropose ),
+              SizedBox(height: 3,),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].firstQuaterTotalFunnel ),
+              SizedBox(height: 3,),
+              Divider(height: 1, thickness: 2, color: Colors.grey,),
+              SizedBox(height: 3,),
+
+              Text("Quarter 2 ",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].secondQuaterSuspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].secondQuaterProspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].secondQuaterPropose),
+              SizedBox(height: 3,),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].secondQuaterTotalFunnel ),
+              SizedBox(height: 3,),
+              Divider(height: 1, thickness: 2, color: Colors.grey,),
+              SizedBox(height: 3,),
+
+              Text("Quarter 3 ",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterSuspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterProspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterPropose ),
+              SizedBox(height: 3,),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterTotalFunnel ),
+              SizedBox(height: 3,),
+              Divider(height: 1, thickness: 2, color: Colors.grey,),
+              SizedBox(height: 3,),
+
+              Text("Quarter 4 ",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterSuspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterProspect ),
+              SizedBox(height: 3,),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterPropose ),
+              SizedBox(height: 3,),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterTotalFunnel ),
+              SizedBox(height: 3,),
+              Divider(height: 1, thickness: 2, color: Colors.grey,),
+              SizedBox(height: 3,),
+
+              Text("Month wise total funnel",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: 5,),
+              Container(
+                height: 70,
+                  child: MonthWiseDataFunnel(context)),
+              SizedBox(height: 3,),
+              ListItemBind("New Prospects Generated in C/M :",dashboard_view_Controller.salesDashboardList[0].newProspectsGeneratedCurrentMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Carry Forward Prospects From P/M :",dashboard_view_Controller.salesDashboardList[0].carryForwardProspectsPreviousMonths ),
+              SizedBox(height: 3,),
+              ListItemBind("Previous Month Order Won :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderWon ),
+              SizedBox(height: 3,),
+              ListItemBind("Previous Month Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderLost ),
+              SizedBox(height: 3,),
+              ListItemBind("C/M Order Won :",dashboard_view_Controller.salesDashboardList[0].currentMonthOrderWon ),
+              SizedBox(height: 3,),
+              ListItemBind("P/M Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderLost ),
+              SizedBox(height: 3,),
+              ListItemBind("Order Lost FY :",dashboard_view_Controller.salesDashboardList[0].orderLostFy ),
+              SizedBox(height: 3,),
+              ListItemBind("Order Won FY :",dashboard_view_Controller.salesDashboardList[0].orderWonFy ),
+              SizedBox(height: 3,),
+
+
+
+
+
+
+
+            ],
+          ),
+        ),
+      );
+    }else{
+      return  Obx(() {
+        return Visibility(
+            visible: dashboard_view_Controller.loading.value,
+            child: SizedBox()
+        );
+      });
+    }
+
+  }
+
+  Widget MonthWiseDataFunnel(BuildContext context){
+    ScrollController scrollController = ScrollController();
+    if(dashboard_view_Controller.monthWiseTotalFunnelList.isNotEmpty){
+      return ListView.builder(
+          controller: scrollController,
+          padding: EdgeInsets.only(bottom: 10),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: dashboard_view_Controller.monthWiseTotalFunnelList.value.length,
+          itemBuilder: (BuildContext context, int index) {
+            return BindDataListView(context, index);
+          });
+    }
+    else {
+      return SizedBox();
+    }
+
+  }
+
+  Widget BindDataListView(BuildContext context, int pos){
+    return  Container(
+      width: 80,
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        border: Border.all(
+          color: Colors.grey, // Set the border color here
+          width: 1.0, // Adjust the border width if necessary
+        ),
+        borderRadius: BorderRadius.circular(10.0),
       ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthName??"",
+            style: GoogleFonts.poppins(
+              color: AllColors.blackColor,
+              fontSize: AllFontSize.twelve,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            '${dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthYearValue??""}',
+            style: GoogleFonts.poppins(
+              color: Colors.green,
+              fontSize: AllFontSize.twelve,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget ListItemBind(String Tag, dynamic Value){
+    return Row(
+      children: [
+        Text(Tag,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Spacer(),
+        Text(
+          "${Value}",
+          style: GoogleFonts.poppins(
+            color: AllColors.textColor,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 
