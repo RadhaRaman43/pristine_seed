@@ -1121,8 +1121,8 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Container(
-                                  width: size.width * .2,
+                                Flexible(
+                                 // width: size.width * .2,
                                   child: Tooltip(
                                     message: saleCycleController
                                         .salesAdviseLinesDataList[index].itemCode ??
@@ -1144,6 +1144,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                             ),
                             GestureDetector(
                               onTap: (){
+                                saleCycleController.erpItemNameController.value.text=saleCycleController.salesAdviseLinesDataList[index].erpItemName??"";
                                 if(saleCycleController.salesAdviseLinesDataList[index].productType?.toLowerCase()!="standard"
                                     && saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=="draft"){
                                   updateERPItemName(context,saleCycleController.salesAdviseLinesDataList[index], index);
@@ -1157,12 +1158,13 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                       color: AllColors.primaryDark1,
                                       fontSize: AllFontSize.twelve,
                                       fontWeight: FontWeight.w500,
-                                        decoration: saleCycleController.salesAdviseLinesDataList[index].productType?.toLowerCase()!="standard"?TextDecoration.underline
+                                        decoration: saleCycleController.salesAdviseLinesDataList[index].productType?.toLowerCase()!="standard" &&
+                                            saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=='draft'?TextDecoration.underline
                                             :TextDecoration.none
                                     ),
                                   ),
-                                  Container(
-                                    width: size.width * .2,
+                                  Flexible(
+                                   // width: size.width * .2,
                                     child: Tooltip(
                                       message: saleCycleController
                                           .salesAdviseLinesDataList[index].erpItemName ??
@@ -1175,7 +1177,9 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                           color: AllColors.textColor,
                                           fontSize: AllFontSize.twelve,
                                           fontWeight: FontWeight.w500,
-                                          decoration: saleCycleController.salesAdviseLinesDataList[index].productType?.toLowerCase()!="standard"?TextDecoration.underline
+                                          decoration: saleCycleController.salesAdviseLinesDataList[index].productType?.toLowerCase()!="standard"
+                                              &&
+                                              saleCycleController.salesAdviseHeaderLineList[0].salesAdviceStatus?.toLowerCase()=='draft'?TextDecoration.underline
                                               :TextDecoration.none
                                         ),
                                         overflow: TextOverflow.ellipsis,
@@ -3204,7 +3208,13 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                       address_vm_controller.getGeoPostalCodeApi();
                       Get.toNamed(RoutesName.addNewAddress_screen);
                     },
-                    child: Icon(Icons.add_circle, color: AllColors.primaryDark1,))
+                    child: Icon(Icons.add_circle, color: AllColors.primaryDark1,)),
+                SizedBox(width: 10,),
+                InkWell(
+                  onTap: (){
+                    Get.back();
+                  },
+                    child: Icon(Icons.close_outlined, color: AllColors.redColor,))
               ],
             ),
             content: Container(
@@ -3313,7 +3323,12 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                               child: DefaultButton(
                                 text: "Save",
                                 press: (){
-                                  saleCycleController.shippingController.value.text =
+
+                                  saleCycleController.getSalesAdviseHeaderUpdate(saleCycleController.salesAdviseLinesDataList[0].salesAdviceId??"");
+                                  Get.back();
+
+
+                                /*  saleCycleController.shippingController.value.text =
                                       address_master_list[saleCycleController.selectedItem.value]
                                           .address ??
                                           "";
@@ -3349,7 +3364,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                                       address_master_list[saleCycleController.selectedItem.value]
                                           .consigneeId ??
                                           "";
-                                  Get.back();
+                                  Get.back();*/
                                 },
                               ),
                             )
@@ -3497,7 +3512,7 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width * .35,
+                    width: size.width * .3,
                     child: Tooltip(
                       message: saleCycleController.address_master_list[position].emailId ?? "",
                       child: Text(

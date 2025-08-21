@@ -348,7 +348,7 @@ class SalesCycleScreen extends StatelessWidget{
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
-                  width: size.width * .4,
+                  width: size.width * .35,
                   child: Tooltip(
                     message: salesCycleController.saleCycleList[position].salesCycleStatus??"",
                     child: Text(salesCycleController.saleCycleList[position].salesCycleStatus??"",

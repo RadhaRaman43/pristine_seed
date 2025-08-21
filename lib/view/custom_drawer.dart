@@ -159,13 +159,17 @@ class _Drawer extends State<CustomDrawer> {
                                 ),
                                 Container(
                                   width: size.width*.7,
-                                  child: Text(
-                                    email,
-                                    style: GoogleFonts.poppins(
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w600,
-                                        color: AllColors.whiteColor),
-                                    textAlign: TextAlign.center,
+                                  child: Tooltip(
+                                    message: email,
+                                    child: Text(
+                                      email,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w600,
+                                          color: AllColors.whiteColor),
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
                               ],

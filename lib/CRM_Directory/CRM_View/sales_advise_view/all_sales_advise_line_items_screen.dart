@@ -624,10 +624,10 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
           context: context,
           firstDate: DateTime(1900),
           lastDate: DateTime(2200),
-           initialDateRange: DateTimeRange(
+           /*initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(Duration(days: 7)),
-          ),
+          )*/
           builder: (BuildContext context, Widget? child) {
             return Theme(
               data: ThemeData.light().copyWith(
@@ -689,10 +689,10 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
           context: context,
           firstDate: DateTime(1900),
           lastDate: DateTime(2200),
-           initialDateRange: DateTimeRange(
+           /*initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(Duration(days: 7)),
-          ),
+          ),*/
           builder: (BuildContext context, Widget? child) {
             return Theme(
               data: ThemeData.light().copyWith(
@@ -901,10 +901,10 @@ class AllSalesAdviseLineItemsScreen extends StatelessWidget{
           context: context,
           firstDate: DateTime(1900),
           lastDate: DateTime(2200),
-           initialDateRange: DateTimeRange(
+          /* initialDateRange: DateTimeRange(
             start: DateTime.now(),
             end: DateTime.now().add(Duration(days: 7)),
-          ),
+          ),*/
           builder: (BuildContext context, Widget? child) {
             return Theme(
               data: ThemeData.light().copyWith(

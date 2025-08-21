@@ -66,6 +66,8 @@ class BusinessPlanTourViewModel extends GetxController{
   var filterTourDateController = TextEditingController().obs;
   var filterCreatedOnController = TextEditingController().obs;
 
+  RxString createdOnStartToEnd="".obs;
+
 
 
 
@@ -124,7 +126,7 @@ class BusinessPlanTourViewModel extends GetxController{
     }
   }
 
-  getBusinessTourPlanData(int page_no) {
+  getBusinessTourPlanData(int page_no)  {
     try {
       Map data = {
         "created_by": filterCreatedByController.value.text.isEmpty?"":filterCreatedByController.value.text,
@@ -178,13 +180,13 @@ class BusinessPlanTourViewModel extends GetxController{
         "tour_id": filterTourIdController.value.text.isEmpty?"":filterTourIdController.value.text,
         "account_code": "",
         "created_by": filterCreatedByController.value.text.isEmpty?"":filterCreatedByController.value.text,
-        "created_on": filterCreatedOnController.value.text.isEmpty?"":filterCreatedOnController.value.text,
+        "created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "tour_date_on": filterTourDateController.value.text.isEmpty?"":filterTourDateController.value.text,
         "branch_head_value": filterRegionController.value.text.isEmpty?"":filterRegionController.value.text,
         "clusture_head_value": filterClusterNameController.value.text.isEmpty?"":filterClusterNameController.value.text,
         "district": "",
         "status": "",
-        "touring_region": filterTouringRegionController.value.text.isEmpty?"":filterCreatedByController.value.text,
+        "touring_region": filterTouringRegionController.value.text.isEmpty?"":filterTouringRegionController.value.text,
         "filter_flag": "AllBusinessTourLine",
         "rowsPerPage": rowsPerPage,
         "pageNumber": page_no
@@ -916,6 +918,7 @@ class BusinessPlanTourViewModel extends GetxController{
     filterRegionController.value.clear();
     filterTourDateController.value.clear();
     filterCreatedOnController.value.clear();
+    createdOnStartToEnd.value="";
 
   }
 

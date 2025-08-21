@@ -79,15 +79,15 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                children: [
                  GestureDetector(
                    onTap: () {
-                     saleCycleController.pageNumber = 0;
+                   /*  saleCycleController.pageNumber = 0;
                      saleCycleController.getAddressMasterList(
                          saleCycleController.pageNumber,
                          saleCycleController.quoteHeaderdata[0].accountCode!);
                      showConsigneeAddressList(
                          context, saleCycleController.address_master_list,saleCycleController.quoteHeaderdata[0].accountCode!);
-
-                    /* saleCycleController.bindAddress();
-                     showDialogForAddressUpdate(context,);*/
+*/
+                    saleCycleController.bindAddress();
+                    showDialogForAddressUpdate(context,);
                    },
                    child: Container(
                      child: Padding(
@@ -1141,7 +1141,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
         });
   }
 
-/*  Future showDialogForAddressUpdate(BuildContext context) {
+  Future showDialogForAddressUpdate(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -1241,7 +1241,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
             ),
           );
         });
-  }*/
+  }
 
 
   Widget bindShippingAddress(BuildContext context) {
@@ -1466,7 +1466,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
     );
   }
 
-  void showConsigneeAddressList(
+/*  void showConsigneeAddressList(
       BuildContext context, RxList<AddressMasterModel> address_master_list, String AccountCode) {
     showDialog(
         context: context,
@@ -1582,14 +1582,14 @@ class SalesAdviseCreateScreen extends StatelessWidget {
                                   saleCycleController.Shipping_phone_Controller.value.text = "";
                                   saleCycleController.Shipping_email_Controller.value.text = "";
                                   //todo commented by nirupma
-                                  /*   shippingController.value.text=saleCycleList[0].shippingAddress??"";
+                                  *//*   shippingController.value.text=saleCycleList[0].shippingAddress??"";
                                 shippingAddress2Controller.value.text=saleCycleList[0].shippingAddress2??"";
                                 Shipping_PostCode_Controller.value.text=saleCycleList[0].shippingPostCode??"";
                                 Shipping_City_Controller.value.text=saleCycleList[0].shippingCity??"" ;
                                 Shipping_District_Controller.value.text=saleCycleList[0].shippingDistrict??"" ;
                                 Shipping_State_Controller.value.text=saleCycleList[0].shippingStateCode??"";
                                 Shipping_phone_Controller.value.text=saleCycleList[0].shippingPhoneNo??"";
-                                Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";*/
+                                Shipping_email_Controller.value.text=saleCycleList[0].shippingEmailId??"";*//*
                                   saleCycleController.consigneeId = '';
                                   // shippingController.value.text=('${saleCycleList[0].shippingAddress??""} ${saleCycleList[0].shippingStateCode??"" } ${saleCycleList[0].shippingPostCode??"" }');
                                   Get.back();
@@ -1657,7 +1657,7 @@ class SalesAdviseCreateScreen extends StatelessWidget {
             ),
           );
         });
-  }
+  }*/
 
 
 

@@ -318,7 +318,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
             ),
             _buildLabelWithValue(
               label: "Touring Region : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
+              value: businessTourPlanController.BusinessTourPlanList[position].touringRegion,
               // width: size.width * 0.36,
 
             ),
