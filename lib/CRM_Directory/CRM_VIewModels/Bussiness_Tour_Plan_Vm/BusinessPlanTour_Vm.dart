@@ -15,6 +15,7 @@ import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessPlanReport_Model.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessTourPlanDetailsModel.dart';
+import '../../CRM_Models/Bussiness_Tour_Plan_Model/BussinessTourPlanLineDetailsModal.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BussinessTourPlanModel.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/TourPlanAccount_Model.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/TouringDistrictModel.dart';
@@ -40,6 +41,7 @@ class BusinessPlanTourViewModel extends GetxController{
   String MeetingWithResponse = '', Accompanied_With_Response = '';
 
   RxList<BussinessTourPlanModel> BusinessTourPlanList = <BussinessTourPlanModel>[].obs;
+  RxList<BussinessTourPlanLineDetailsModal> BusinessTourPlanLineDetailList = <BussinessTourPlanLineDetailsModal>[].obs;
   RxList<BusinessTourPlanDetailsModel> BusinessTourPlanDetails_list = <BusinessTourPlanDetailsModel>[].obs;
   RxList<Lines> BusinessTourHourLines = <Lines>[].obs;
   RxList<AlongWithPersonModel> AlongPersonWith_list = <AlongWithPersonModel>[].obs;
@@ -53,9 +55,26 @@ class BusinessPlanTourViewModel extends GetxController{
   RxList<String> SelectedMeetingWith_List1 = <String>[].obs;
   RxList<BusinessPlanReportModel> ReportList = <BusinessPlanReportModel>[].obs;
 
+  var filterTourIdController = TextEditingController().obs;
+  var filterClusterNameController = TextEditingController().obs;
+  var filterTouringRegionController = TextEditingController().obs;
+  var filterTouringNameController = TextEditingController().obs;
+  var filterCreatedByController = TextEditingController().obs;
+
+
+  var filterRegionController = TextEditingController().obs;
+  var filterTourDateController = TextEditingController().obs;
+  var filterCreatedOnController = TextEditingController().obs;
+
+
+
+
+ /* //todo Bussiness Tour Plan Line Details Controller
   var filterCreatedByController = TextEditingController().obs;
   var filterTourIdController = TextEditingController().obs;
   var filterTouringRegionController = TextEditingController().obs;
+  var filterTouringNameController = TextEditingController().obs;
+  var filterClusterNameController = TextEditingController().obs;*/
 
   var touringRegionController = TextEditingController().obs;
   var startDateController = TextEditingController().obs;
@@ -83,12 +102,17 @@ class BusinessPlanTourViewModel extends GetxController{
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
     getBusinessTourPlanData(pageNumber);
+    getBusinessTourPlanAllLineGet(pageNumber);
     super.onInit();
   }
 
   Future<void> refreshList() async {
     pageNumber = 0;
     getBusinessTourPlanData(pageNumber);
+  }
+  Future<void> refreshLineDetailList() async {
+    pageNumber = 0;
+    getBusinessTourPlanAllLineGet(pageNumber);
   }
 
   String formattedNames(String encodedString) {
@@ -131,6 +155,60 @@ class BusinessPlanTourViewModel extends GetxController{
             } else {
               loading.value = false;
               BusinessTourPlanList.value = [];
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
+  getBusinessTourPlanAllLineGet(int page_no) {
+    try {
+      Map data = {
+        "tour_id": "",
+        "account_code": "",
+        "created_by": email,
+        "created_on": "",
+        "tour_date_on": "",
+        "branch_head_value": "",
+        "clusture_head_value": "",
+        "district": "",
+        "status": "",
+        "touring_region": "",
+        "filter_flag": "AllBusinessTourLine",
+        "rowsPerPage": rowsPerPage,
+        "pageNumber": page_no
+      };
+      loading.value = true;
+      _api.BusinessTourPlanAllLineGet(data, sessionManagement).then(
+            (onValue) {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<BussinessTourPlanLineDetailsModal> response =
+            jsonResponse.map((e) => BussinessTourPlanLineDetailsModal.fromJson(e)).toList();
+            if (response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              if (page_no == 0) {
+                BusinessTourPlanLineDetailList.clear();
+              }
+              BusinessTourPlanLineDetailList.addAll(response);
+              print('listSize.....${BusinessTourPlanLineDetailList.length}');
+              total_rows = int.parse(BusinessTourPlanLineDetailList[0].totalRows!);
+
+            } else {
+              loading.value = false;
+              BusinessTourPlanLineDetailList.value = [];
             }
           } else {
             loading.value = false;
@@ -832,6 +910,8 @@ class BusinessPlanTourViewModel extends GetxController{
     filterCreatedByController.value.clear();
     filterTourIdController.value.clear();
     filterTouringRegionController.value.clear();
+    filterTouringNameController.value.clear();
+    filterClusterNameController.value.clear();
 
   }
 

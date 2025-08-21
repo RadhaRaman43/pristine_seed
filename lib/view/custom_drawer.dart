@@ -551,6 +551,15 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
+                                            case 'Business Tour Plan Line Details':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<BusinessPlanTourViewModel>();
+                                              BusinessPlanTourViewModel BusinessTourPlanLineDetailsController=Get.put(BusinessPlanTourViewModel());
+                                              Get.toNamed(RoutesName.BusinessTourPlanLineDetailScreen);
+                                              Navigator.of(context);
+                                              break;
+
                                             case 'Business Tour Approval List':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);

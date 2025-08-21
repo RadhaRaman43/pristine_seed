@@ -137,6 +137,7 @@ class RoutesName{
 
   //todo business tour plan
   static const BusinessTourPlanScreen="/bussiness_tour_plan_screen";
+  static const BusinessTourPlanLineDetailScreen="/bussiness_tour_plan_line_detailscreen";
   static const BusinessTourPlanDetails="/BusinessTourPlanDetails_Screen";
   static const AddTourLinesPage="/Add_Tour_Lines_page.dart";
   static const BusinessTourApprovalListScreen="/BusinessTourApprovalListScreen";
