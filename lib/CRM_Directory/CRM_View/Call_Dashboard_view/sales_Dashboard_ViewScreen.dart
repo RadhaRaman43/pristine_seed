@@ -347,7 +347,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       onPressed: () {
                                         dashboard_view_Controller.toggleFunnelCrtd();
                                         if (dashboard_view_Controller
-                                            .isExpandCrtd.value ==
+                                            .isExpandFunnel.value ==
                                             true) {
                                           print(
                                               "If......${dashboard_view_Controller.isExpandCrtd.value}");
@@ -373,6 +373,136 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           ),
                           Obx(() {
                             return FunnelDetailCard(context);
+                          }),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 10,),
+
+                    Card(
+                      color: AllColors.whiteColor,
+                      elevation: 10,
+                      margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: AllColors.textColor
+                            ),
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Icon(Icons.business, color: AllColors.whiteColor,),
+                                ),
+                                Text(
+                                  "Business Central Booking",
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.whiteColor,
+                                    fontSize: AllFontSize.twentee,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Obx(
+                                      () {
+                                    return IconButton(
+                                      onPressed: () {
+                                        dashboard_view_Controller.toggleBussinessCrtd();
+                                        if (dashboard_view_Controller
+                                            .isExpandBussiness.value ==
+                                            true) {
+                                          print(
+                                              "If......${dashboard_view_Controller.isExpandBussiness.value}");
+                                        } else {
+                                          print(
+                                              "else......${dashboard_view_Controller.isExpandBussiness.value}");
+                                        }
+                                      },
+                                      icon: Icon(
+                                        dashboard_view_Controller
+                                            .isExpandBussiness.value
+                                            ? Icons.arrow_drop_up
+                                            : Icons.arrow_drop_down,
+                                        size: 25,
+                                        color: AllColors.whiteColor,
+                                      ),
+                                    );
+                                  },
+                                )
+
+                              ],
+                            ),
+                          ),
+                          Obx(() {
+                            return BusinessCentreBookingCard(context);
+                          }),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 10,),
+
+                    Card(
+                      color: AllColors.whiteColor,
+                      elevation: 10,
+                      margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                      child: Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: AllColors.textColor
+                            ),
+                            child:Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: Icon(Icons.list_alt_outlined, color: AllColors.whiteColor,),
+                                ),
+                                Text(
+                                  "Collection",
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.whiteColor,
+                                    fontSize: AllFontSize.twentee,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                Obx(
+                                      () {
+                                    return IconButton(
+                                      onPressed: () {
+                                        dashboard_view_Controller.toggleCollectionCrtd();
+                                        if (dashboard_view_Controller
+                                            .isExpandCollection.value ==
+                                            true) {
+                                          print(
+                                              "If......${dashboard_view_Controller.isExpandBussiness.value}");
+                                        } else {
+                                          print(
+                                              "else......${dashboard_view_Controller.isExpandBussiness.value}");
+                                        }
+                                      },
+                                      icon: Icon(
+                                        dashboard_view_Controller
+                                            .isExpandCollection.value
+                                            ? Icons.arrow_drop_up
+                                            : Icons.arrow_drop_down,
+                                        size: 25,
+                                        color: AllColors.whiteColor,
+                                      ),
+                                    );
+                                  },
+                                )
+
+                              ],
+                            ),
+                          ),
+                          Obx(() {
+                            return CollectionCard(context);
                           }),
                         ],
                       ),
@@ -699,6 +829,242 @@ class SalesDashboardViewscreen extends StatelessWidget{
       ],
     );
   }
+
+  Widget BusinessCentreBookingCard(BuildContext context) {
+    if(dashboard_view_Controller.salesDashboardList.isNotEmpty){
+      return   Visibility(
+        visible: dashboard_view_Controller.isExpandBussiness.value,
+        child: Container(
+          margin: EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            children: [
+              SizedBox(height: 5,),
+              ListItemBind("Commitment Prev. Month :",dashboard_view_Controller.salesDashboardList[0].commitmentPreMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Actual Booking Prev. Month :",dashboard_view_Controller.salesDashboardList[0].actualBookingPrevMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Booking Ach. Prev. Month (%) :",dashboard_view_Controller.salesDashboardList[0].bookingAchiveCurrentMonthPer ),
+              SizedBox(height: 3,),
+              ListItemBind("Booking Commitment C/M :",dashboard_view_Controller.salesDashboardList[0].bookingCommitmentCurrentMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Actual Booking C/M :",dashboard_view_Controller.salesDashboardList[0].actualBookingCurrentMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Booking Ach. C/M (%):",dashboard_view_Controller.salesDashboardList[0].bookingAchiveCurrentMonthPer ),
+              SizedBox(height: 3,),
+              ListItemBind("Booking AO C/M :",dashboard_view_Controller.salesDashboardList[0].bookingAoCurrentMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("AO Vs Booking Ach. C/M (%):",dashboard_view_Controller.salesDashboardList[0].aoVsBookingAchiveCurrentMonthPer ),
+              SizedBox(height: 3,),
+              ListItemBind("Booking AO Current FY:",dashboard_view_Controller.salesDashboardList[0].bookingAoCurrentFy ),
+              SizedBox(height: 3,),
+              ListItemBind("Actual Booking Current FY:",dashboard_view_Controller.salesDashboardList[0].actualBookingCurrentFy ),
+              SizedBox(height: 3,),
+              ListItemBind("AO Vs Booking Ach. FY (%):",dashboard_view_Controller.salesDashboardList[0].aoVsBookingAchiveFyPer ),
+              SizedBox(height: 3,),
+              ListItemBind("Order Over 15/20 Lakhs C/M:",dashboard_view_Controller.salesDashboardList[0].ordersAbove15LakhCurrentMonth ),
+              SizedBox(height: 3,),
+              ListItemBind("Order Over 15/20 Lakhs FY:",dashboard_view_Controller.salesDashboardList[0].ordersAbove15LakhFy ),
+              SizedBox(height: 3,),
+
+              Text("Month wise commitment",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: 5,),
+              Container(
+                  height: 70,
+                  child: MonthWiseCommitment(context)),
+              Divider(
+                height: 1, thickness: 2, color: Colors.grey,
+              ),
+              SizedBox(height: 5,),
+              Text("Month wise  AO Vs Booking Ach",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              SizedBox(height: 5,),
+              Container(
+                  height: 70,
+                  child: MonthWiseAOVsBookingAch(context)),
+              SizedBox(height: 3,),
+
+
+            ],
+          ),
+        ),
+      );
+    }else{
+      return  Obx(() {
+        return Visibility(
+            visible: dashboard_view_Controller.loading.value,
+            child: SizedBox()
+        );
+      });
+    }
+
+  }
+
+  Widget MonthWiseCommitment(BuildContext context){
+    ScrollController scrollController = ScrollController();
+    if(dashboard_view_Controller.monthWiseCommitmentList.isNotEmpty){
+      return ListView.builder(
+          controller: scrollController,
+          padding: EdgeInsets.only(bottom: 10),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: dashboard_view_Controller.monthWiseCommitmentList.value.length,
+          itemBuilder: (BuildContext context, int index) {
+            return BindDataCommitmentListView(context, index);
+          });
+    }
+    else {
+      return SizedBox();
+    }
+
+  }
+
+  Widget BindDataCommitmentListView(BuildContext context, int pos){
+    return  Container(
+      width: 80,
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        border: Border.all(
+          color: Colors.grey, // Set the border color here
+          width: 1.0, // Adjust the border width if necessary
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            dashboard_view_Controller.monthWiseCommitmentList[pos].monthName??"",
+            style: GoogleFonts.poppins(
+              color: AllColors.blackColor,
+              fontSize: AllFontSize.twelve,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            '${dashboard_view_Controller.monthWiseCommitmentList[pos].monthYearValue??""}',
+            style: GoogleFonts.poppins(
+              color: Colors.green,
+              fontSize: AllFontSize.twelve,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget MonthWiseAOVsBookingAch(BuildContext context){
+    ScrollController scrollController = ScrollController();
+    if(dashboard_view_Controller.monthWiseAoVsBookingList.isNotEmpty){
+      return ListView.builder(
+          controller: scrollController,
+          padding: EdgeInsets.only(bottom: 10),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: dashboard_view_Controller.monthWiseAoVsBookingList.value.length,
+          itemBuilder: (BuildContext context, int index) {
+            return BindDataAOvsBookingListView(context, index);
+          });
+    }
+    else {
+      return SizedBox();
+    }
+
+  }
+
+  Widget BindDataAOvsBookingListView(BuildContext context, int pos){
+    return  Container(
+      width: 80,
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        border: Border.all(
+          color: Colors.grey, // Set the border color here
+          width: 1.0, // Adjust the border width if necessary
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthName??"",
+            style: GoogleFonts.poppins(
+              color: AllColors.blackColor,
+              fontSize: AllFontSize.twelve,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          Text(
+            '${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearActualBookingValue??""}',
+            style: GoogleFonts.poppins(
+              color: Colors.green,
+              fontSize: AllFontSize.twelve,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget CollectionCard(BuildContext context) {
+    if(dashboard_view_Controller.salesDashboardList.isNotEmpty){
+      return   Visibility(
+        visible: dashboard_view_Controller.isExpandCollection.value,
+        child: Container(
+          margin: EdgeInsets.only(left: 10.0, right: 10.0),
+          child: Column(
+            children: [
+              SizedBox(height: 3,),
+              ListItemBind("Prev. Month Collection Commitment:",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionCommitment ),
+              SizedBox(height: 3,),
+              ListItemBind("Prev. Month Collection (Actual) :",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionActual ),
+              SizedBox(height: 3,),
+              ListItemBind("Collection Plan Vs Ach. :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer ),
+              SizedBox(height: 3,),
+              ListItemBind("Collection Commitment (This Month) :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionCommitment ),
+              SizedBox(height: 3,),
+              ListItemBind("Actual Collection This Month  :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionActual ),
+              SizedBox(height: 3,),
+              ListItemBind("Collection Plan Vs Ach. (% C/M) :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer ),
+              SizedBox(height: 3,),
+              ListItemBind("Month wise Collection Plan Vs Ach. (%):",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer ),
+              SizedBox(height: 3,),
+              ListItemBind("Collection Plan Vs Ach. FY (%):", dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer),
+              SizedBox(height: 3,),
+              ListItemBind("Bank Guarantee :", dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer),
+              SizedBox(height: 3,),
+              ListItemBind("EMSD :", dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer),
+              SizedBox(height: 3,),
+              ListItemBind("Outstanding FY :", dashboard_view_Controller.salesDashboardList[0].totalCall),
+              SizedBox(height: 3,),
+
+            ],
+          ),
+        ),
+      );
+    }else{
+      return  Obx(() {
+        return Visibility(
+            visible: dashboard_view_Controller.loading.value,
+            child: SizedBox()
+        );
+      });
+    }
+
+  }
+
 
 
 }

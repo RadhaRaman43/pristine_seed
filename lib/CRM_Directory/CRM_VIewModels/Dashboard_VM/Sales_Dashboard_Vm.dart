@@ -27,6 +27,8 @@ class SalesDashboardVm extends GetxController{
 
   RxBool isExpandCrtd = false.obs;
   RxBool isExpandFunnel = false.obs;
+  RxBool isExpandBussiness = false.obs;
+  RxBool isExpandCollection = false.obs;
 
   var PeriodTo_Controller = TextEditingController().obs;
   var PeriodFrom_Controller = TextEditingController().obs;
@@ -126,6 +128,14 @@ class SalesDashboardVm extends GetxController{
 
   void toggleFunnelCrtd() {
     isExpandFunnel.value = !isExpandFunnel.value;
+  }
+
+  void toggleBussinessCrtd() {
+    isExpandBussiness.value = !isExpandBussiness.value;
+  }
+
+  void toggleCollectionCrtd() {
+    isExpandCollection.value = !isExpandCollection.value;
   }
 
   Future<void> salesDashboardData() async {

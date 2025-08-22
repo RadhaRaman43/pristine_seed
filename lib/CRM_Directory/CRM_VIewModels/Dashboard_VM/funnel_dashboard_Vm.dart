@@ -6,6 +6,7 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/checkInModel/employee_master_model.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
@@ -25,6 +26,7 @@ class FunnelDashboardVm extends GetxController{
   RxBool loading = false.obs;
   RxBool isShimmerLoading = false.obs;
   String email = "";
+  String isAdminWritePermission = "";
 
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
@@ -84,6 +86,7 @@ class FunnelDashboardVm extends GetxController{
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
     selectedSalesStageStatusList.value = ["All"];
     QuoteAccepted_controller.value.text = "All";
@@ -91,7 +94,12 @@ class FunnelDashboardVm extends GetxController{
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     funnelDashboardData();
-    getEmployeeMemberApi();
+    if(this.isAdminWritePermission==1){
+      EmployeeMasterGet('');
+    }
+    else{
+      getEmployeeMemberApi();
+    }
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
     getAccountMaster(pageNumber);
@@ -389,6 +397,47 @@ class FunnelDashboardVm extends GetxController{
       print(e);
     }
   }
+
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }
+    Map data = {
+      'filter_name': '',
+      'filter_email': query,
+      'filter_location_id': '',
+      'email_id': email,
+      'rowsPerPage': 50,
+      'pageNumber': 0,
+    };
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    return employee_Member_list.value;
+  }
+
 
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
