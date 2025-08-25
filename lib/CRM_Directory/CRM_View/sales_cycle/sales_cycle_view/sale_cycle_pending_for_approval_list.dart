@@ -8,12 +8,14 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_pending_for_approval_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_pending_for_approval_vm.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
 
 
 class SaleCyclePendingForApprovalList extends StatelessWidget{

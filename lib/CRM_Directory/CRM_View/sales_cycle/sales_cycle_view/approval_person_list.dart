@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/approval_person_model.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../reources/routes/routes_name.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
 
 class ApprovalPersonList extends StatelessWidget{
   ApprovalPersonList({super.key});

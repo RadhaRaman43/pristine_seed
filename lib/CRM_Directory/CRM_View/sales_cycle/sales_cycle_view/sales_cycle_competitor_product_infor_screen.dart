@@ -5,12 +5,13 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../reources/routes/routes_name.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
+
 
 class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
   static String _displaySaleCycleStatusForOption(String option) =>

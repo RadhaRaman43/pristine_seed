@@ -49,7 +49,7 @@ class ContactMasterScreen extends StatelessWidget{
               ),
               Spacer(),
               Visibility(
-                visible: contact_vm_controller.isAdminWritePermission=='0'?true:false,
+                visible: contact_vm_controller.isAdminWritePermission=='1'?true:false,
                 child: IconButton(onPressed: () {
                   contact_vm_controller.resetAllContactCreativeField('Icon');
                   contact_vm_controller.insideOut = true;

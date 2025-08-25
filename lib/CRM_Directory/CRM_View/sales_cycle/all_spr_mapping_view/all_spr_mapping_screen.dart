@@ -5,15 +5,17 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
-import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../reources/routes/routes_name.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
+
 
 class AllSprMappingScreen extends StatelessWidget{
   AllSprMappingScreen({super.key});

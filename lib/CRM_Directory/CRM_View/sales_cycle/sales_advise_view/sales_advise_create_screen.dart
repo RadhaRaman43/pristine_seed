@@ -7,14 +7,14 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/address_m
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
-import '../../../component/default_button.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
-import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+import '../../../../component/default_button.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
 
 class SalesAdviseCreateScreen extends StatelessWidget {
   final saleCycleController = Get.put(SalesCycleVm());

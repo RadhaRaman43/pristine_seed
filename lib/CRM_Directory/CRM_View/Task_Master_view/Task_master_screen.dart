@@ -740,14 +740,24 @@ class TaskMasterScreen extends StatelessWidget {
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Text(
-                    TaskMaster_page_controller
-                        .Task_Master_list[position]
-                        .approvedFullName!,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
+                  Container(
+                    width: size.width*0.4,
+                    child: Tooltip(
+                      message: TaskMaster_page_controller
+                          .Task_Master_list[position]
+                          .approvedFullName??"",
+                      child: Text(
+                        TaskMaster_page_controller
+                            .Task_Master_list[position]
+                            .approvedFullName??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.start,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -918,7 +928,7 @@ class TaskMasterScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Method of Call : ",
+                    "Mode of Call : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -3740,8 +3750,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Method Of Call',
-          hintText: 'Method Of Call',
+          labelText: 'Mode Of Call',
+          hintText: 'Mode Of Call',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

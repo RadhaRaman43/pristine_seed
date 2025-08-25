@@ -6,17 +6,15 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../../../component/default_button.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
-import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
-import '../../CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../reources/routes/routes_name.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
 
 class AllSalesAdviseList extends StatelessWidget{
   AllSalesAdviseList({super.key});

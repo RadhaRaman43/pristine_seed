@@ -845,8 +845,8 @@ class AddNewDsarScreen extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Method Of Call',
-            labelText: 'Method of Call',
+            hintText: 'Mode Of Call',
+            labelText: 'Mode of Call',
             /*hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
             ),*/

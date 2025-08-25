@@ -1,38 +1,43 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
-import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
-import '../../CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
-class QuoteApprovalListScreen extends StatelessWidget{
-  QuoteApprovalListScreen({super.key});
-  QuoteApprovalListVm quoteApprovalController=Get.put(QuoteApprovalListVm());
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../reources/routes/routes_name.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
+
+
+class QuoteApproveRejectScreen extends StatelessWidget{
+  QuoteApproveRejectScreen({super.key});
+  PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   final account_vm_controller = Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
   Size size=Get.size;
 
+  static String _displayQuoteStatusForOption(String option) =>
+      option;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () async {
+      onWillPop:() async{
         Get.toNamed(RoutesName.homeScreen);
         return false;
       },
       child: Scaffold(
-        appBar:  AppBar(
+        appBar: AppBar(
             backgroundColor: AllColors.primaryDark1,
             iconTheme: IconThemeData(
               color: AllColors.whiteColor,
@@ -40,10 +45,10 @@ class QuoteApprovalListScreen extends StatelessWidget{
             title:Row(
               children: [
                 Text(
-                  'Quote Approval List',
+                  "Approve/Reject Quote",
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
-                    fontSize: 20.0,
+                    fontSize: 17.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -56,7 +61,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
         ),
         drawer: CustomDrawer(),
         body: RefreshIndicator(
-          onRefresh:quoteApprovalController.refreshList,
+          onRefresh:pendingDraftQuoteController.refreshList,
           child: Container(
             width: double.infinity,
             height: double.infinity,
@@ -64,7 +69,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
               children: [
                 Obx((){
                   return Visibility(
-                    visible:quoteApprovalController.loading.value ,
+                    visible:pendingDraftQuoteController.loading.value ,
                     child: LinearProgressIndicator(
                       backgroundColor: AllColors.primaryDark1,
                       color: AllColors.textColor,
@@ -75,7 +80,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   fit: FlexFit.loose,
                   child: Container(
                     child: Obx(() {
-                      return BindCustomerListView(context);
+                      return BindPendingListView(context);
                     }),
                   ),
                 )
@@ -83,31 +88,27 @@ class QuoteApprovalListScreen extends StatelessWidget{
             ),
           ),
         ),
-      ),
-    );
+      ),);
   }
 
-  Widget BindCustomerListView(context) {
-    if (quoteApprovalController.quoteApprovalList.value.isNotEmpty && quoteApprovalController.quoteApprovalList.value.length > 0) {
-      print("ghd");
+  Widget BindPendingListView(context) {
+    if (pendingDraftQuoteController.PendingDraftQuoteList.value.isNotEmpty && pendingDraftQuoteController.PendingDraftQuoteList.value.length > 0) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
-        print("ghdjhgf");
         if (scrollController.position.pixels ==
             scrollController.position.maxScrollExtent) {
 
-          int total_page = (quoteApprovalController.total_rows /
-              quoteApprovalController.rowsPerPage)
+          int total_page = (pendingDraftQuoteController.total_rows /
+              pendingDraftQuoteController.rowsPerPage)
               .toInt();
-          if ((quoteApprovalController.total_rows %
-              quoteApprovalController.rowsPerPage) >
+          if ((pendingDraftQuoteController.total_rows %
+              pendingDraftQuoteController.rowsPerPage) >
               0) total_page += 1;
 
-          print(
-              "last index ${quoteApprovalController.pageNumberForQuote} ${quoteApprovalController.total_rows} ${quoteApprovalController.rowsPerPage} ${total_page}");
-          if (quoteApprovalController.pageNumberForQuote + 1 < total_page) {
-            quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote+1);
-            quoteApprovalController.pageNumberForQuote += 1;
+          // print("last index ${pendingDraftQuoteController.pageNumberForQuote} ${pendingDraftQuoteController.total_rows} ${pendingDraftQuoteController.rowsPerPage} ${total_page}");
+          if (pendingDraftQuoteController.pageNumberForQuote + 1 < total_page) {
+            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1, "APPROVED & REJECTED");
+            pendingDraftQuoteController.pageNumberForQuote += 1;
           }
         }
       });
@@ -120,7 +121,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
             color: Colors.transparent,
           ),
           shrinkWrap: true,
-          itemCount: quoteApprovalController.quoteApprovalList.value.length,
+          itemCount: pendingDraftQuoteController.PendingDraftQuoteList.value.length,
           itemBuilder: (BuildContext context, int index) {
             return BindCustomerRequestListView(context, index);
           });
@@ -131,23 +132,18 @@ class QuoteApprovalListScreen extends StatelessWidget{
     }
   }
 
+
   Widget BindCustomerRequestListView(context, int position) {
-    String? quoteValidityDate=StaticMethod.convertDateFormat1(quoteApprovalController.quoteApprovalList[position].quoteValidity ?? "");
-    String? expectedClosuredateDate=StaticMethod.convertDateFormat1(quoteApprovalController.quoteApprovalList[position].expClosureDate ?? "");
-    String? createdOn=StaticMethod.dateTimeToDate(quoteApprovalController.quoteApprovalList[position].createdOn ?? "");
-    String saleCycleStatus = quoteApprovalController.quoteApprovalList[position].quoteStatus??"";
+    String? quoteValidityDate=StaticMethod.convertDateFormat1(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteValidity ?? "");
+    String? expectedClosuredateDate=StaticMethod.convertDateFormat1(pendingDraftQuoteController.PendingDraftQuoteList[position].expClosureDate ?? "");
+    String? createdOn=StaticMethod.dateTimeToDate(pendingDraftQuoteController.PendingDraftQuoteList[position].createdOn ?? "");
+    String saleCycleStatus = pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus??"";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'PENDING':
-          return Colors.brown[900]!;
         case 'Rejected':
-          return Colors.red;
-        case 'rejected':
-          return Colors.red;
-        case 'APPROVED':
-          return Colors.green;
-        case 'PENDING FOR APPROVAL':
-          return Colors.yellow[700]!;
+          return Colors.red[900]!;
+        case 'Approved':
+          return Colors.green[700]!;
         default:
           return Colors.black;
       }
@@ -158,10 +154,12 @@ class QuoteApprovalListScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
-           // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
-            saleCycleController.getQuoteHeaderInformation(quoteApprovalController.quoteApprovalList[position].quoteId, "quoteApprovalScreen");
+            saleCycleController.getApprovalPersonList(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId??"");
+            // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
+            saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "approvedRejectedQuote");
           },
-          subtitle: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
@@ -175,9 +173,9 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .33,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position].quoteId?? "",
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId?? "",
                       child: Text(
-                        quoteApprovalController.quoteApprovalList[position].quoteId?? "",
+                        pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId?? "",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color:Colors.blue,
@@ -188,7 +186,13 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   ),
                 ],
               ),
+              Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+            ],
+          ),
+          subtitle: Column(
+            children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Version: ",
@@ -198,8 +202,9 @@ class QuoteApprovalListScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                    quoteApprovalController.quoteApprovalList[position].quoteVersion.toString(),
+                    pendingDraftQuoteController.PendingDraftQuoteList[position].quoteVersion.toString(),
                     overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.end,
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
@@ -208,7 +213,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Status : ",
@@ -220,15 +225,16 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .36,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteStatus ?? "",
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteStatus ?? "",
                         style: GoogleFonts.poppins(
                             color: getStatusColor(saleCycleStatus),
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
 
                       ),
 
@@ -237,7 +243,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Id : ",
@@ -248,18 +254,19 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   ),
                   InkWell(
                     onTap: (){
+                      saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
                       saleCycleController.pageNumber = 0;
                       saleCycleController.filterQuoteAcceptedFlag.value="";
                       saleCycleController.clearAllFieldOfFilter();
-                      saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position]
-                          .salesCycleId!, "ViewHeader", "QuoteApprovalPage");
+                      saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .salesCycleId!, "ViewHeader", "ApprovedRejectedQuotePage");
                     },
                     child: Container(
                       width: size.width * .36,
                       child: Tooltip(
-                        message: quoteApprovalController.quoteApprovalList[position]
+                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .salesCycleId ?? "",
-                        child: Text(quoteApprovalController.quoteApprovalList[position]
+                        child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .salesCycleId ?? "",
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
@@ -269,6 +276,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                             decorationStyle: TextDecorationStyle.wavy,
                           ),
                           overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
 
                         ),
 
@@ -278,48 +286,81 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Customer Name : ",
+                    "Account Code : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   InkWell(
+                    onTap: () {
+                      account_vm_controller.view = 'ApprovedRejectedQuotePage';
+                      contact_vm_controller.view = 'ApprovedRejectedQuotePage';
+                      account_vm_controller.getAccMasterBuyCodeApi(
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode!);
+                    },
                     child: Container(
                       width: size.width*0.4,
                       child: Tooltip(
-                        message: quoteApprovalController.quoteApprovalList[position]
-                            .accountName  ?? "",
+                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .accountCode  ?? "",
                         child: Text(
-                          quoteApprovalController.quoteApprovalList[position]
-                              .accountName ??
+                          pendingDraftQuoteController.PendingDraftQuoteList[position]
+                              .accountCode ??
                               "",
                           overflow: TextOverflow.ellipsis,
-                          //textAlign: TextAlign.end,
+                          textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
-                            fontSize: AllFontSize.fourtine,
+                            fontSize: AllFontSize.sisxteen,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,),
+                            decorationStyle: TextDecorationStyle.wavy,
+                          ),
                         ),
                       ),
                     ),
-                    onTap: (){
-                      account_vm_controller.view='FromQuoteApproval';
-                      contact_vm_controller.view='FromQuoteVIEW';
-                      account_vm_controller.getAccMasterBuyCodeApi(quoteApprovalController.quoteApprovalList[position]
-                          .accountCode!);
-                    },
                   ),
 
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Account Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width*0.4,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .accountName  ?? "",
+                      child: Text(
+                        pendingDraftQuoteController.PendingDraftQuoteList[position]
+                            .accountName ??
+                            "",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Contact Name : ",
@@ -331,12 +372,13 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .4,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .contactName ?? "",
                       child: Text(
-                        quoteApprovalController.quoteApprovalList[position]
+                        pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .contactName ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -347,7 +389,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Validity : ",
@@ -363,6 +405,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                       child: Text(
                         quoteValidityDate.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -373,7 +416,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Expected Closure Date: ",
@@ -383,17 +426,18 @@ class QuoteApprovalListScreen extends StatelessWidget{
                         fontWeight: FontWeight.w500),
                   ),
                   Text(
-                  expectedClosuredateDate.toString(),
+                    expectedClosuredateDate.toString(),
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.end,
                   ),
                 ],
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Total Amt : ",
@@ -405,11 +449,12 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .37,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteTotalAmount.toString(),
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteTotalAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -420,7 +465,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gst Amt. : ",
@@ -432,11 +477,12 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .4,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGstAmount.toString(),
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGstAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -447,7 +493,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Quote Gross Amt. : ",
@@ -459,11 +505,12 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .35,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGrossAmount.toString(),
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .quoteGrossAmount.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -475,7 +522,65 @@ class QuoteApprovalListScreen extends StatelessWidget{
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Region Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .4,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .branchHeadValue??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .branchHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Cluster Name : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Container(
+                    width: size.width * .35,
+                    child: Tooltip(
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .clustureHeadValue??"",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                          .clustureHeadValue??"",
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Spr No. : ",
@@ -487,9 +592,10 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .4,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position].sprNo ?? "",
-                      child: Text(quoteApprovalController.quoteApprovalList[position].sprNo ?? "",
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
+                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -500,7 +606,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created By : ",
@@ -512,12 +618,13 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   Container(
                     width: size.width * .4,
                     child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
+                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
                           .createdBy?? "",
                       child: Text(
-                        quoteApprovalController.quoteApprovalList[position]
+                        pendingDraftQuoteController.PendingDraftQuoteList[position]
                             .createdBy ?? "",
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -528,7 +635,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Created On : ",
@@ -542,8 +649,9 @@ class QuoteApprovalListScreen extends StatelessWidget{
                     child: Tooltip(
                       message: createdOn.toString(),
                       child: Text(
-                       createdOn.toString(),
+                        createdOn.toString(),
                         overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,
@@ -563,7 +671,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Text(quoteApprovalController.quoteApprovalList[position]
+                  Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
                       .isSpr==1?"Yes":"No",
                     style: GoogleFonts.poppins(
                         color: AllColors.textColor,
@@ -574,11 +682,13 @@ class QuoteApprovalListScreen extends StatelessWidget{
               ),
             ],
           ),
-          trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+          //trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
     );
   }
+
+
   void showDialogForFilter(BuildContext context) {
     // accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
@@ -647,117 +757,142 @@ class QuoteApprovalListScreen extends StatelessWidget{
                               ),
                               filterWithQuoteId(context),
                               SizedBox(height: 10),
-                             /* filterWithQuoteStatus(context),
-                              SizedBox(height: 10),*/
+                              TextField(
+                                controller: pendingDraftQuoteController.filterQuoteVersionController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Quote Version',
+                                    hintText: 'Quote Version',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
+                              SizedBox(height: 10),
                               filterWithSaleCycle(context),
+                              SizedBox(height: 10),
+                              TextField(
+                                controller: pendingDraftQuoteController.accountCodeController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Account Code',
+                                    hintText: 'Account Code',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
+                              SizedBox(height: 10),
+                              TextField(
+                                controller: pendingDraftQuoteController.accountNameController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Account Name',
+                                    hintText: 'Account Name',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
+                              SizedBox(height: 10,),
+                              filterWithQuoteProductCategory(),
+                              SizedBox(height: 10,),
+                              filterWithQuoteStatus(context),
                               SizedBox(height: 10),
                               filterWithQuoteValidity(context),
                               SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
                               SizedBox(height: 10),
-                              TextField(
-                                controller: quoteApprovalController.accountNameController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Name',
-                                    hintText: 'Customer Name',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              TextField(
-                                controller: quoteApprovalController.accountCodeController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Code',
-                                    hintText: 'Customer Code',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-
-                              SizedBox(
-                                height: 10,
-                              ),
                               filterWithQuoteRhApproval(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               filterWithQuotecnhApproval(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               filterWithQuoteCategoryApproval(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               filterWithQuoteGmApproval(),
-                              SizedBox(
-                                height: 10,
-                              ),
-
-                              filterWithQuoteProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
-
-                            /*  filterWithQuoteFrontLinerValue(),
-                              SizedBox(
-                                height: 10,
-                              ),*/
+                              SizedBox(height: 10,),
                               filterWithQuoteBranchHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                             /* filterWithQuoteZoneHead(),
-                              SizedBox(
-                                height: 10,
-                              ),*/
+                              SizedBox(height: 10,),
                               filterWithQuoteClusterHead(),
-                              SizedBox(
-                                height: 10,
+                              SizedBox(height: 10,),
+                              TextField(
+                                controller: pendingDraftQuoteController.createdByCnontroller.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Created By',
+                                    hintText: 'Created By',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
                               ),
+                              SizedBox(height: 10,),
                               filterWithQuoteCreatedOn(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                             ],
                           ),
@@ -782,9 +917,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                             )),
                             onPressed: () {
 
-                              quoteApprovalController.pageNumberForQuote = 0;
-                              quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,
-                                );
+                              pendingDraftQuoteController.pageNumberForQuote = 0;
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "APPROVED & REJECTED");
                               Get.back();
                             },
                             child: Text(
@@ -807,10 +941,9 @@ class QuoteApprovalListScreen extends StatelessWidget{
                             )),
                             onPressed: () {
 
-                              quoteApprovalController.clearAllFieldOfQuoteFilter();
-                              quoteApprovalController.pageNumberForQuote = 0;
-                              //saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
-                              quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                              pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+                              pendingDraftQuoteController.pageNumberForQuote = 0;
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "APPROVED & REJECTED");
                               Get.back();
 
                             },
@@ -835,135 +968,44 @@ class QuoteApprovalListScreen extends StatelessWidget{
       },
     );
   }
-  filterWithQuoteRhApproval() {
-    return TextField(
-      controller: quoteApprovalController.rh_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Rh Approval',
-          hintText: 'Rh Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
 
-  filterWithQuotecnhApproval() {
-    return TextField(
-      controller: quoteApprovalController.cbh_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'CBH Approval',
-          hintText: 'CbH Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
 
-  filterWithQuoteCategoryApproval() {
+  Widget filterWithQuoteId(BuildContext context) {
     return  TextField(
-      controller: quoteApprovalController.category_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Category Approval',
-          hintText: 'Category Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteGmApproval() {
-    return TextField(
-      controller: quoteApprovalController.gm_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Gm Approval',
-          hintText: 'Gm Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteStatus(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: quoteApprovalController.filterQuoteStatusController.value,
+      cursorColor:AllColors.primaryDark1 ,
+      controller: pendingDraftQuoteController.filterQuoteIdController.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Quote Status',
-          labelText: 'Quote Status',
+          hintText: 'Quote Id',
+          labelText: 'Quote Id',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
+  filterWithSaleCycle(BuildContext context) {
+    return  TextField(
+      cursorColor:AllColors.primaryDark1 ,
+      controller: pendingDraftQuoteController.filterQuoteSaleCycleController.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          hintText: 'Sale Cycle Id',
+          labelText: 'Sale Cycle Id',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -984,7 +1026,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
 
   filterWithQuoteProductCategory() {
     return TextField(
-      controller: quoteApprovalController.productCategoryController.value,
+      controller: pendingDraftQuoteController.productCategoryController.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
@@ -1012,408 +1054,68 @@ class QuoteApprovalListScreen extends StatelessWidget{
     );
   }
 
-  filterWithQuoteFrontLinerValue() {
-    return TextField(
-      controller: quoteApprovalController.frontliner_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'FrontLiner Value',
-          hintText: 'FrontLiner Value',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
+  Widget filterWithQuoteStatus(BuildContext context){
+    return Container(
+      padding: const EdgeInsets.only( bottom: 10, right: 15),
+      child: DropdownMenu<String>(
+        width: MediaQuery
+            .of(context)
+            .size
+            .width-15,
+        controller: pendingDraftQuoteController.quoteStatusController.value,
+        label: Text(
+          "Quote Status",
+          style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteClusterHead() {
-    return TextField(
-      controller: quoteApprovalController.cluster_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Name',
-          hintText: 'Cluster Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteZoneHead() {
-    return TextField(
-      controller: quoteApprovalController.zone_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Zone Head Value',
-          hintText: 'Zone Head Value',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteBranchHead() {
-    return TextField(
-      controller: quoteApprovalController.branch_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region Name',
-          hintText: 'Region Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteCreatedOn(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: quoteApprovalController.createdOnCnontroller.value,
-      readOnly: true,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Select Start Date -End Date',
-        labelText: 'Created On',
-        hintStyle: GoogleFonts.poppins(
-            color: AllColors.lightblackColor,
-            fontWeight: FontWeight.w300,
-            fontSize: AllFontSize.ten),
-        labelStyle: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontWeight: FontWeight.w500,
-            fontSize: AllFontSize.sisxteen),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w500),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         ),
-      ),
-      onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
-        DateTimeRange? picked = await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2200),
-          /* initialDateRange: DateTimeRange(
-            start: DateTime.now(),
-            end: DateTime.now().add(Duration(days: 7)),
-          ),*/
-          builder: (BuildContext context, Widget? child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                primaryColor: AllColors.primaryDark1,
-                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                buttonTheme: ButtonThemeData(
-                  textTheme: ButtonTextTheme.primary,
-                ),
-              ),
-              child: child!,
-            );
-          },
-        );
 
-        if (picked != null) {
-          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
-          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          quoteApprovalController.createdOnStartToEnd.value = "$startDate@$endDate";
-          quoteApprovalController.createdOnCnontroller.value.text =
-          '$startDate - $endDate';
-        } else {
-          quoteApprovalController.createdOnCnontroller.value.text = '';
-          quoteApprovalController.createdOnStartToEnd.value = "";
-        }
-      },
+
+        onSelected: (String? selection) {
+          print(selection);
+          pendingDraftQuoteController.quoteStatusController.value.text =
+              _displayQuoteStatusForOption(selection!)
+                  .toString();
+
+        },
+        dropdownMenuEntries:
+        pendingDraftQuoteController.approvedRejectedStatusList.map<
+            DropdownMenuEntry<String>>((String e) {
+          return DropdownMenuEntry<String>(
+              value: e, label: e!, style: ButtonStyle(
+            foregroundColor: MaterialStateProperty.all<Color>(
+                AllColors.primaryDark1),));
+        }).toList(),
+      ),
     );
+
   }
-
-
-/*  void showDialogForFilter(BuildContext context) {
-    showModalBottomSheet(context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context){
-          return SingleChildScrollView(
-            padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(Icons.shield_moon_rounded, color: AllColors.lightredColor,),
-                      SizedBox(width: 5,),
-                      Text(
-                          'Filter',
-                          style: GoogleFonts.poppins(
-                            fontSize: AllFontSize.twenteetwo,
-                            fontWeight: FontWeight.w700,
-                            color: AllColors.primaryDark1,
-                          )),
-                      Spacer(),
-                      GestureDetector(
-                          onTap: (){
-                            Navigator.pop(context);
-                          },
-                          child: Icon(Icons.cancel, color: AllColors.lightredColor,)
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(height: 1,color: Colors.grey,),
-                SingleChildScrollView(
-                  child: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            filterWithQuoteId( context),
-                            SizedBox(height: 10),
-                            filterWithSaleCycle(context),
-                            SizedBox(height: 10),
-                            filterWithAccountName( context),
-                            SizedBox(height: 10),
-                            filterWithContactName( context),
-                            SizedBox(height: 10),
-                            filterWithQuoteValidity( context),
-                            SizedBox(height: 10),
-                            filterWithQuoteClosureDate( context),
-                            SizedBox(height: 10),
-                           *//* filterWithQuotetotalAmount( context),
-                            SizedBox(height: 10),
-                            filterWithQuoteGstAmt( context),
-                            SizedBox(height: 10),
-                            filterWithQuoteCrossAmt( context),
-                            SizedBox(height: 10),*//*
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(
-                                        AllColors.greenblue,
-                                      ),
-                                    ),
-                                    onPressed: ()  {
-                                      try{
-                                        quoteApprovalController.filterQuoteIdController.value.clear();
-                                        quoteApprovalController.filterExpectedClosuredateController.value.clear();
-                                        quoteApprovalController.filterQuoteValidityController.value.clear();
-                                        quoteApprovalController.filterQuoteContactNameController.value.clear();
-                                        quoteApprovalController.filterQuoteAccountNameController.value.clear();
-                                        quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote);
-                                        Navigator.pop(context);
-                                      }catch(e){
-                                        print("Exception..${e.toString()}");
-                                      }
-
-                                    },
-                                    child: Container(
-                                      child: Text('Clear',
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.blackColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(width: 10,),
-                                Expanded(
-                                  child: ElevatedButton(
-                                    style: ButtonStyle(
-                                      backgroundColor: MaterialStateProperty.all<Color>(
-                                        AllColors.redColor,
-                                      ),
-                                    ),
-                                    onPressed: ()  {
-                                      quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote);
-                                      Navigator.pop(context);
-                                    },
-                                    child: Container(
-                                      child: Text('Submit',
-                                        style: GoogleFonts.poppins(
-                                          color: AllColors.blackColor,
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w700,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )
-
-                          ],
-                        ),
-                      )
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
-  }*/
-
-  Widget filterWithQuoteId(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: quoteApprovalController.filterQuoteIdController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Quote Id',
-          labelText: 'Quote Id',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-/*  filterWithAccountName(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: quoteApprovalController.filterQuoteAccountNameController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Account Name',
-          labelText: 'Account Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-  filterWithContactName(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: quoteApprovalController.filterQuoteContactNameController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Contact Name',
-          labelText: 'Contact Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }*/
 
 
   filterWithQuoteValidity(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: quoteApprovalController.filterQuoteValidityController.value,
+      controller: pendingDraftQuoteController.filterQuoteValidityController.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -1463,12 +1165,12 @@ class QuoteApprovalListScreen extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          quoteApprovalController.quoteValidityStartToEnd.value = "$startDate@$endDate";
-          quoteApprovalController.filterQuoteValidityController.value.text =
+          pendingDraftQuoteController.quoteValidityStartToEnd.value = "$startDate@$endDate";
+          pendingDraftQuoteController.filterQuoteValidityController.value.text =
           '$startDate - $endDate';
         } else {
-          quoteApprovalController.filterQuoteValidityController.value.text = '';
-          quoteApprovalController.quoteValidityStartToEnd.value = "";
+          pendingDraftQuoteController.filterQuoteValidityController.value.text = '';
+          pendingDraftQuoteController.quoteValidityStartToEnd.value = "";
         }
       },
     );
@@ -1478,7 +1180,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
   filterWithQuoteClosureDate(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller: quoteApprovalController.filterExpectedClosuredateController.value,
+      controller: pendingDraftQuoteController.filterExpectedClosuredateController.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
@@ -1528,27 +1230,26 @@ class QuoteApprovalListScreen extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          quoteApprovalController.extClosureStartToEnd.value = "$startDate@$endDate";
-          quoteApprovalController.filterExpectedClosuredateController.value.text =
+          pendingDraftQuoteController.extClosureStartToEnd.value = "$startDate@$endDate";
+          pendingDraftQuoteController.filterExpectedClosuredateController.value.text =
           '$startDate - $endDate';
         } else {
-          quoteApprovalController.filterExpectedClosuredateController.value.text = '';
-          quoteApprovalController.extClosureStartToEnd.value = "";
+          pendingDraftQuoteController.filterExpectedClosuredateController.value.text = '';
+          pendingDraftQuoteController.extClosureStartToEnd.value = "";
         }
       },
     );
   }
 
 
-  /*filterWithQuotetotalAmount(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: quoteApprovalController.filterQouteTatolAmtController.value,
+  filterWithQuoteRhApproval() {
+    return TextField(
+      controller: pendingDraftQuoteController.rh_Approval_controller.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Quote Total Amount',
-          labelText: 'Quote Total Amount',
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Rh Approval',
+          hintText: 'Rh Approval',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1564,18 +1265,21 @@ class QuoteApprovalListScreen extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
           )
       ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
   }
 
-  filterWithQuoteGstAmt(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: quoteApprovalController.filterQuoteGstAmtController.value,
+  filterWithQuotecnhApproval() {
+    return TextField(
+      controller: pendingDraftQuoteController.cbh_Approval_controller.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Quote Gst Amt.',
-          labelText: 'Quote Gst Amt.',
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'CBH Approval',
+          hintText: 'CbH Approval',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1591,18 +1295,21 @@ class QuoteApprovalListScreen extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
           )
       ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
-  }*/
+  }
 
-  filterWithSaleCycle(BuildContext context) {
+  filterWithQuoteCategoryApproval() {
     return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: quoteApprovalController.filterQuoteSaleCycleController.value,
+      controller: pendingDraftQuoteController.category_Approval_controller.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Sale Cycle Id',
-          labelText: 'Sale Cycle Id',
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Category Approval',
+          hintText: 'Category Approval',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1618,9 +1325,165 @@ class QuoteApprovalListScreen extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
           )
       ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteGmApproval() {
+    return TextField(
+      controller: pendingDraftQuoteController.gm_Approval_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Gm Approval',
+          hintText: 'Gm Approval',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteBranchHead() {
+    return TextField(
+      controller: pendingDraftQuoteController.region_name_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Region Name Value',
+          hintText: 'Region Name Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+  filterWithQuoteClusterHead() {
+    return TextField(
+      controller: pendingDraftQuoteController.cluster_head_value_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Cluster Name Value',
+          hintText: 'Cluster Name Value',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
   }
 
 
+  filterWithQuoteCreatedOn(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: pendingDraftQuoteController.createdOnCnontroller.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Created On',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
 
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          pendingDraftQuoteController.createdOnStartToEnd.value = "$startDate@$endDate";
+          pendingDraftQuoteController.createdOnCnontroller.value.text =
+          '$startDate - $endDate';
+        } else {
+          pendingDraftQuoteController.createdOnCnontroller.value.text = '';
+          pendingDraftQuoteController.createdOnStartToEnd.value = "";
+        }
+      },
+    );
+  }
 }

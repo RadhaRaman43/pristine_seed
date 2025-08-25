@@ -7,17 +7,19 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/component/default_button.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
-import '../../../component/back_button.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
-import '../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
-import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
-import '../../CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
+import '../../../../component/back_button.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../reources/routes/routes_name.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
+import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
+import '../../../CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
 
 class QuoteInformationScreen extends StatelessWidget {
   QuoteInformationScreen({super.key});

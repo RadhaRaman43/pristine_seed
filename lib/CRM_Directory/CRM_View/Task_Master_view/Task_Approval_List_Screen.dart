@@ -419,7 +419,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Method of Call : ",
+                    "Mode of Call : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -1020,8 +1020,8 @@ class TaskApprovalListScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Method Of Call',
-          hintText: 'Method Of Call',
+          labelText: 'Mode Of Call',
+          hintText: 'Mode Of Call',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

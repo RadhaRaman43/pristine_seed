@@ -2,91 +2,91 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
-import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
-class QuoteApproveRejectScreen extends StatelessWidget{
-  QuoteApproveRejectScreen({super.key});
+
+class PendingDraftQuote extends StatelessWidget{
+  PendingDraftQuote({super.key});
   PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   final account_vm_controller = Get.put(Accountmastervm());
   final contact_vm_controller = Get.put(ContactMasterVM());
   Size size=Get.size;
-
   static String _displayQuoteStatusForOption(String option) =>
       option;
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop:() async{
-        Get.toNamed(RoutesName.homeScreen);
-        return false;
-      },
-      child: Scaffold(
-        appBar: AppBar(
-            backgroundColor: AllColors.primaryDark1,
-            iconTheme: IconThemeData(
-              color: AllColors.whiteColor,
-            ),
-            title:Row(
-              children: [
-                Text(
-                  "Approve/Reject Quote",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.whiteColor,
-                    fontSize: 17.0,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                Spacer(),
-                IconButton(onPressed: () {
-                  showDialogForFilter(context);
-                }, icon: Icon(Icons.filter_alt_sharp))
-              ],
-            )
-        ),
-        drawer: CustomDrawer(),
-        body: RefreshIndicator(
-          onRefresh:pendingDraftQuoteController.refreshList,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              children: [
-                Obx((){
-                  return Visibility(
-                    visible:pendingDraftQuoteController.loading.value ,
-                    child: LinearProgressIndicator(
-                      backgroundColor: AllColors.primaryDark1,
-                      color: AllColors.textColor,
-                    ),
-                  );
-                }),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Container(
-                    child: Obx(() {
-                      return BindPendingListView(context);
-                    }),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),);
+     return WillPopScope(
+       onWillPop: () async {
+         Get.toNamed(RoutesName.homeScreen);
+         return false;
+         },
+         child: Scaffold(
+           appBar:  AppBar(
+               backgroundColor: AllColors.primaryDark1,
+               iconTheme: IconThemeData(
+                 color: AllColors.whiteColor,
+               ),
+               title:Row(
+                 children: [
+                   Text(
+                     'Pending Draft Quote',
+                     style: GoogleFonts.poppins(
+                       color: AllColors.whiteColor,
+                       fontSize: 20.0,
+                       fontWeight: FontWeight.w700,
+                     ),
+                   ),
+                   Spacer(),
+                   IconButton(onPressed: () {
+                     showDialogForFilter(context);
+                   }, icon: Icon(Icons.filter_alt_sharp))
+                 ],
+               )
+           ),
+           drawer: CustomDrawer(),
+           body: RefreshIndicator(
+             onRefresh: pendingDraftQuoteController.refreshList,
+             child: Container(
+               width: double.infinity,
+               height: double.infinity,
+               child: Column(
+                 children: [
+                   Obx((){
+                     return Visibility(
+                       visible:pendingDraftQuoteController.loading.value ,
+                       child: LinearProgressIndicator(
+                         backgroundColor: AllColors.primaryDark1,
+                         color: AllColors.textColor,
+                       ),
+                     );
+                   }),
+                   Flexible(
+                     fit: FlexFit.loose,
+                     child: Container(
+                       child: Obx(() {
+                         return BindPendingListView(context);
+                       }),
+                     ),
+                   )
+                 ],
+               ),
+             ),
+           ),
+         ),
+     );
   }
 
   Widget BindPendingListView(context) {
@@ -103,9 +103,9 @@ class QuoteApproveRejectScreen extends StatelessWidget{
               pendingDraftQuoteController.rowsPerPage) >
               0) total_page += 1;
 
-          // print("last index ${pendingDraftQuoteController.pageNumberForQuote} ${pendingDraftQuoteController.total_rows} ${pendingDraftQuoteController.rowsPerPage} ${total_page}");
+         // print("last index ${pendingDraftQuoteController.pageNumberForQuote} ${pendingDraftQuoteController.total_rows} ${pendingDraftQuoteController.rowsPerPage} ${total_page}");
           if (pendingDraftQuoteController.pageNumberForQuote + 1 < total_page) {
-            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1, "APPROVED & REJECTED");
+            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote+1, "PENDING & PENDING FOR APPROVAL");
             pendingDraftQuoteController.pageNumberForQuote += 1;
           }
         }
@@ -138,10 +138,10 @@ class QuoteApproveRejectScreen extends StatelessWidget{
     String saleCycleStatus = pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus??"";
     Color getStatusColor(String status) {
       switch (status) {
-        case 'Rejected':
+        case 'Draft':
           return Colors.red[900]!;
-        case 'Approved':
-          return Colors.green[700]!;
+        case 'PENDING FOR APPROVAL':
+          return Colors.yellow[700]!;
         default:
           return Colors.black;
       }
@@ -152,9 +152,11 @@ class QuoteApproveRejectScreen extends StatelessWidget{
         width: size.width,
         child: ListTile(
           onTap: () {
+            saleCycleController.quoteId.value =
+            pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId!;
             saleCycleController.getApprovalPersonList(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId??"");
             // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
-            saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "approvedRejectedQuote");
+           saleCycleController.getQuoteHeaderInformation(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId, "pendingDraftQuote");
           },
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,6 +191,7 @@ class QuoteApproveRejectScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -255,9 +258,8 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                       saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
                       saleCycleController.pageNumber = 0;
                       saleCycleController.filterQuoteAcceptedFlag.value="";
-                      saleCycleController.clearAllFieldOfFilter();
                       saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .salesCycleId!, "ViewHeader", "ApprovedRejectedQuotePage");
+                          .salesCycleId!, "ViewHeader", "QuotePendingPage");
                     },
                     child: Container(
                       width: size.width * .36,
@@ -287,34 +289,28 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Account Code : ",
+                    "Customer Code : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   InkWell(
-                    onTap: () {
-                      account_vm_controller.view = 'ApprovedRejectedQuotePage';
-                      contact_vm_controller.view = 'ApprovedRejectedQuotePage';
-                      account_vm_controller.getAccMasterBuyCodeApi(
-                          pendingDraftQuoteController
-                              .PendingDraftQuoteList[position].accountCode!);
-                    },
                     child: Container(
-                      width: size.width*0.4,
+                      width: size.width * .4,
                       child: Tooltip(
-                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountCode  ?? "",
+                        message:pendingDraftQuoteController
+                            .PendingDraftQuoteList[position].accountCode ??
+                            "",
                         child: Text(
-                          pendingDraftQuoteController.PendingDraftQuoteList[position]
-                              .accountCode ??
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode ??
                               "",
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.end,
                           style: GoogleFonts.poppins(
                             color: Colors.blueAccent,
-                            fontSize: AllFontSize.sisxteen,
+                            fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500,
                             decoration: TextDecoration.underline,
                             decorationStyle: TextDecorationStyle.wavy,
@@ -322,6 +318,13 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                         ),
                       ),
                     ),
+                    onTap: () {
+                      account_vm_controller.view = 'FromQuoteDraftScreen';
+                      contact_vm_controller.view = 'FromQuoteDraftScreen';
+                      account_vm_controller.getAccMasterBuyCodeApi(
+                          pendingDraftQuoteController
+                              .PendingDraftQuoteList[position].accountCode!);
+                    },
                   ),
 
                 ],
@@ -330,21 +333,20 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Account Name : ",
+                    "Customer Name : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
                   Container(
-                    width: size.width*0.4,
+                    width: size.width * .4,
                     child: Tooltip(
                       message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .accountName  ?? "",
+                          .accountName ?? "",
                       child: Text(
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountName ??
-                            "",
+                            .accountName ?? "",
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.end,
                         style: GoogleFonts.poppins(
@@ -429,7 +431,6 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                         color: AllColors.textColor,
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.end,
                   ),
                 ],
               ),
@@ -518,7 +519,6 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                   ),
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -575,7 +575,6 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                   ),
                 ],
               ),
-
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -790,8 +789,8 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Code',
-                                    hintText: 'Account Code',
+                                    labelText: 'Customer Code',
+                                    hintText: 'Customer Code',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -818,8 +817,8 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                                 decoration: InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
                                         vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Account Name',
-                                    hintText: 'Account Name',
+                                    labelText: 'Customer Name',
+                                    hintText: 'Customer Name',
                                     hintStyle: GoogleFonts.poppins(
                                         color: AllColors.lightblackColor,
                                         fontWeight: FontWeight.w300,
@@ -916,7 +915,7 @@ class QuoteApproveRejectScreen extends StatelessWidget{
                             onPressed: () {
 
                               pendingDraftQuoteController.pageNumberForQuote = 0;
-                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "APPROVED & REJECTED");
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "PENDING & PENDING FOR APPROVAL");
                               Get.back();
                             },
                             child: Text(
@@ -941,7 +940,7 @@ class QuoteApproveRejectScreen extends StatelessWidget{
 
                               pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
                               pendingDraftQuoteController.pageNumberForQuote = 0;
-                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "APPROVED & REJECTED");
+                              pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "PENDING & PENDING FOR APPROVAL");
                               Get.back();
 
                             },
@@ -1097,7 +1096,7 @@ class QuoteApproveRejectScreen extends StatelessWidget{
 
         },
         dropdownMenuEntries:
-        pendingDraftQuoteController.approvedRejectedStatusList.map<
+        pendingDraftQuoteController.QuoteStatusList.map<
             DropdownMenuEntry<String>>((String e) {
           return DropdownMenuEntry<String>(
               value: e, label: e!, style: ButtonStyle(
@@ -1108,7 +1107,6 @@ class QuoteApproveRejectScreen extends StatelessWidget{
     );
 
   }
-
 
   filterWithQuoteValidity(BuildContext context) {
     return TextField(
@@ -1420,7 +1418,6 @@ class QuoteApproveRejectScreen extends StatelessWidget{
     );
   }
 
-
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -1484,4 +1481,5 @@ class QuoteApproveRejectScreen extends StatelessWidget{
       },
     );
   }
+
 }
