@@ -132,6 +132,78 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
 
                     ),
+                    SizedBox(
+                      height: 10,
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(left: 15.0, right: 25),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Text(
+                                '1. Follow-Up-Call',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.blue,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              /*Text(
+                                    '${dashboard_view_Controller.totalSuspectPrice}',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.green,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),*/
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '2. New Call',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.green,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              /*Text(
+                                    '${dashboard_view_Controller.totalProspectPrice}',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.orange,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),*/
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text(
+                                '3. Payment Call',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.orange,
+                                  fontSize: AllFontSize.twelve,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              /*Text(
+                                    '${dashboard_view_Controller.totalProposePrice}',
+                                    style: GoogleFonts.poppins(
+                                      color: Colors.blue,
+                                      fontSize: AllFontSize.twelve,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),*/
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
 
                     Obx(() {
                       return BindDashboardBarChartData(context);
@@ -676,7 +748,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
               InkWell(
                   onTap: (){
-                   // TaskMaster_page_controller.FromPage.value='from_pendingDSARDashboard';
+                    TaskMaster_page_controller.FromPage.value='from_pendingDSARDashboard';
                     TaskMaster_page_controller.getTaskMaster(0,
                         TaskMaster_page_controller.is_Active
                             .toString(),

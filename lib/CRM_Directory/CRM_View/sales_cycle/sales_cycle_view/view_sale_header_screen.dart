@@ -106,7 +106,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             "FromALLQuoteLineItems") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.allQuoteLineItemScreen);
-        } else {
+        }else if (saleCycleController.FromPage.value ==
+            "FromFunnelDashboard") {
+          saleCycleController.clearAllFieldOfFilter();
+          Get.toNamed(RoutesName.funnelDashboardViewScreen);
+        }
+        else if (saleCycleController.FromPage.value ==
+            "FromCommitDashboard") {
+          saleCycleController.clearAllFieldOfFilter();
+          Get.toNamed(RoutesName.commitDashboardViewScreen);
+
+      } else {
           saleCycleController.clearAllFieldOfFilter();
           saleCycleController.pageNumber = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "Open";

@@ -60,6 +60,7 @@ class Taskmastervm extends GetxController{
     RxString filter="Running".obs;
     RxString createdOnStartToEnd="".obs;
     RxInt is_done = 0.obs;
+    RxString FromPage="".obs;
 
     int Active = 0;
     String IsSaleCycleActive= '';

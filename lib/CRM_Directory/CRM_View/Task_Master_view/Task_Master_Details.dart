@@ -54,10 +54,17 @@ class TaskMasterDetails extends StatelessWidget{
             Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             //account_vm_controller.view='';
            // Get.back();
-          }else if (account_vm_controller.view=="TaskDashboard"){
-            account_vm_controller.view='';
+          }else if (account_vm_controller.view=="TaskDashboard") {
+            account_vm_controller.view = '';
             Get.toNamed(RoutesName.AccountDashboardData_Screen);
-          }
+          }else if (TaskMaster_page_controller.FromPage=="from_pendingDSARDashboard"){
+            TaskMaster_page_controller.FromPage.value='';
+            Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
+         }
+          else if (TaskMaster_page_controller.FromPage=="from_CallDashboard"){
+          TaskMaster_page_controller.FromPage.value='';
+          Get.toNamed(RoutesName.callDashboardViewScreen);
+         }
           else {
             TaskMaster_page_controller.resetAllFieldOfFilter();
             TaskMaster_page_controller.pageNumber = 0;
@@ -108,6 +115,7 @@ class TaskMasterDetails extends StatelessWidget{
                 ),
               ),
              // Spacer(),
+              TaskMaster_page_controller.Task_Master_list.isEmpty?SizedBox():
               Row(
                 children: [
                   Obx((){
@@ -346,7 +354,13 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                   ),
                   Obx(() {
-                    return viewCreatorManagerDetail(context);
+                    if(TaskMaster_page_controller.Task_Master_list.length>0 &&
+                        TaskMaster_page_controller.Task_Master_list.isNotEmpty){
+                      return viewCreatorManagerDetail(context);
+                    }else{
+                      return SizedBox();
+                    }
+                   // return viewCreatorManagerDetail(context);
                   }),
                 ],
               ),
@@ -414,7 +428,13 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                   ),
                   Obx(() {
-                    return viewGeoInfoDetail(context);
+                    if(TaskMaster_page_controller.Task_Master_list.length>0 &&
+                        TaskMaster_page_controller.Task_Master_list.isNotEmpty){
+                      return viewGeoInfoDetail(context);
+                    }else{
+                      return SizedBox();
+                    }
+                   // return viewGeoInfoDetail(context);
                   }),
                 ],
               ),
