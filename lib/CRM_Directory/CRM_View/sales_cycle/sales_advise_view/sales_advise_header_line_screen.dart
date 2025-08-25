@@ -9,14 +9,16 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/sales_cyc
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/custom_drawer.dart';
 
-import '../../../component/back_button.dart';
-import '../../../component/default_button.dart';
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
-import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
-import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
-import '../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
+import '../../../../component/back_button.dart';
+import '../../../../component/default_button.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../constants/static_methods.dart';
+import '../../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
+import '../../../CRM_Models/Address_Master_Model/address_master_model.dart';
+import '../../../CRM_VIewModels/address_master_vm/AddressMasterVM.dart';
+
+
 
 class SalesAdviseHeaderLineScreen extends StatelessWidget{
   var saleCycleController=Get.put(SalesCycleVm());

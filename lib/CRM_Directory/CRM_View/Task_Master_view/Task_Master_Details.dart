@@ -97,6 +97,7 @@ class TaskMasterDetails extends StatelessWidget{
             color: AllColors.whiteColor,
           ),
           title:Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 'Task Information',
@@ -106,11 +107,11 @@ class TaskMasterDetails extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              Spacer(),
+             // Spacer(),
               Row(
                 children: [
                   Obx((){
-                    print("DSAR..R${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar}");
+                    print("DSAR..R${TaskMaster_page_controller.Task_Master_list[0].isCreateTaskDsar??""}");
                     return  Visibility(
                       visible: TaskMaster_page_controller.TaskDSAR_Master_list.isEmpty?true:false,
                       //visible: account_vm_controller.view=='Sales'?false:true,
@@ -270,7 +271,13 @@ class TaskMasterDetails extends StatelessWidget{
                   ),
                  // Divider(color: Colors.black,),
                   Obx(() {
-                    return viewTasketails(context);
+                    if(TaskMaster_page_controller.Task_Master_list.length>0 &&
+                        TaskMaster_page_controller.Task_Master_list.isNotEmpty){
+                      return viewTasketails(context);
+                    }else{
+                      return SizedBox();
+                    }
+
                   }),
                 ],
               ),
@@ -540,7 +547,12 @@ class TaskMasterDetails extends StatelessWidget{
                     ),
                   ),
                   Obx(() {
-                    return viewDsarDetails(context);
+                    if(TaskMaster_page_controller.Task_Master_list.length>0){
+                      return viewDsarDetails(context);
+                    }else{
+                      return SizedBox();
+                    }
+
                   }),
                 ],
               ),
@@ -1157,7 +1169,7 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Method of Call",
+                  "Mode of Call",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -2732,7 +2744,7 @@ class TaskMasterDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Method Of Call",
+                  "Mode Of Call",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,

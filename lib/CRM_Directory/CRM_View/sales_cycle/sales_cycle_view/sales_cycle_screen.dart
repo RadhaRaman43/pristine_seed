@@ -8,13 +8,15 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
-import '../../../constants/app_colors.dart';
-import '../../../constants/app_font_size.dart';
-import '../../../reources/routes/routes_name.dart';
-import '../../../view/custom_drawer.dart';
-import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
-import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
-import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+import '../../../../constants/app_colors.dart';
+import '../../../../constants/app_font_size.dart';
+import '../../../../reources/routes/routes_name.dart';
+import '../../../../view/custom_drawer.dart';
+import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
+import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
+import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
+
+
 
 class SalesCycleScreen extends StatelessWidget{
   SalesCycleScreen({super.key});
