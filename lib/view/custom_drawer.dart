@@ -6,8 +6,9 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Dashboard_VM/commit_dashboard_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/emp_infor_system/emp_mark_leave_request_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_pending_for_approval_vm.dart';
-import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/employee_information_system/emp_mark_leave_screen.dart';
+
 
 
 import '../CRM_Directory/CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
@@ -20,9 +21,12 @@ import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/all_contact_master_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/emp_infor_system/leave_request_approval_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_font_size.dart';
@@ -160,13 +164,17 @@ class _Drawer extends State<CustomDrawer> {
                                 ),
                                 Container(
                                   width: size.width*.7,
-                                  child: Text(
-                                    email,
-                                    style: GoogleFonts.poppins(
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w600,
-                                        color: AllColors.whiteColor),
-                                    textAlign: TextAlign.center,
+                                  child: Tooltip(
+                                    message: email,
+                                    child: Text(
+                                      email,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w600,
+                                          color: AllColors.whiteColor),
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -430,14 +438,32 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
-                                            case 'Mark Leave':
+                                            /*case 'Mark Leave':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               Get.delete<MarkAttendanceViewmodel>();
                                               MarkAttendanceViewmodel employeeMarkLeaveController=Get.put(MarkAttendanceViewmodel());
                                               Get.toNamed(RoutesName.empMarkLeaveScreen,);
                                               Navigator.of(context);
+                                              break;*/
+                                            case 'Mark Leave Request':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<EmpMarkLeaveRequestVm>();
+                                              EmpMarkLeaveRequestVm employeeMarkLeaveController=Get.put(EmpMarkLeaveRequestVm());
+                                              Get.toNamed(RoutesName.empMarkLeaveRequestScreen,);
+                                              Navigator.of(context);
                                               break;
+
+                                            case 'Leave Request Approval':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<LeaveRequestApprovalVm>();
+                                              LeaveRequestApprovalVm employeeMarkLeaveController=Get.put(LeaveRequestApprovalVm());
+                                              Get.toNamed(RoutesName.empMarkLeaveRequestApprovalScreen,);
+                                              Navigator.of(context);
+                                              break;
+
 
                                             case 'Sales Cycle Approval List':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
@@ -469,6 +495,25 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
+                                            case 'All SPR Mapping Line Items':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<PendingDraftQuoteVm>();
+                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLSPRMAPPING"));
+                                              Get.toNamed(RoutesName.allSPRMappingScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Sales Cycle Competitor List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesCycleCompetitorProductInforVm>();
+                                              SalesCycleCompetitorProductInforVm PendingDraftQuoteController=Get.put(SalesCycleCompetitorProductInforVm());
+                                              Get.toNamed(RoutesName.salesCycleCompetitorProductInforScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+
                                             case 'All Quote':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
@@ -487,12 +532,40 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
+
+                                            case 'All Sales Advice List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesAdviseAllListVm>();
+                                              SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceHeader"));
+                                              Get.toNamed(RoutesName.allSalesAdviseList,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'All Sales Advice Line Items':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesAdviseAllListVm>();
+                                              SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceLineItem"));
+                                              Get.toNamed(RoutesName.allSalesAdviseLineItemsScreen,);
+                                              Navigator.of(context);
+                                              break;
+
                                             case 'Business Tour Plan':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
                                               Get.delete<BusinessPlanTourViewModel>();
                                               BusinessPlanTourViewModel BusinessTourPlanController=Get.put(BusinessPlanTourViewModel());
                                               Get.toNamed(RoutesName.BusinessTourPlanScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Business Tour Plan Line Details':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<BusinessPlanTourViewModel>();
+                                              BusinessPlanTourViewModel BusinessTourPlanLineDetailsController=Get.put(BusinessPlanTourViewModel());
+                                              Get.toNamed(RoutesName.BusinessTourPlanLineDetailScreen);
                                               Navigator.of(context);
                                               break;
 

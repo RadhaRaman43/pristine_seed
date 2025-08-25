@@ -261,13 +261,44 @@ class BussinessTourPlanScreen extends StatelessWidget{
         onTap: () {
           businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId, "");
         },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Tour ID : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700),
+                ),
+                Container(
+                  child: Tooltip(
+                    message: businessTourPlanController.BusinessTourPlanList[position].tourId?? "",
+                    child: Text(
+                      businessTourPlanController.BusinessTourPlanList[position].tourId?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color:Colors.blue,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+            Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+          ],
+        ),
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabelWithValue(
+            /*_buildLabelWithValue(
               label: "Tour ID : ",
               value: businessTourPlanController.BusinessTourPlanList[position].tourId,
-            ),
+            ),*/
             _buildLabelWithValue(
               label: "Cluster: ",
               value: businessTourPlanController.BusinessTourPlanList[position].cluster,
@@ -287,7 +318,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
             ),
             _buildLabelWithValue(
               label: "Touring Region : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
+              value: businessTourPlanController.BusinessTourPlanList[position].touringRegion,
               // width: size.width * 0.36,
 
             ),
@@ -344,7 +375,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
           ],
         ),
 
-        trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+        //trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
   }
@@ -356,6 +387,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -729,7 +761,37 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                   // Handle the text field value changes if needed
                                 },
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
 
+                              TextField(
+                                controller: businessTourPlanController.filterClusterNameController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Cluster Name',
+                                    hintText: 'Cluster Name',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -761,7 +823,37 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                   // Handle the text field value changes if needed
                                 },
                               ),
+                              SizedBox(
+                                height: 10,
+                              ),
 
+                              TextField(
+                                controller: businessTourPlanController.filterTouringNameController.value,
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+                                    labelText: 'Region Name',
+                                    hintText: 'Region Name',
+                                    hintStyle: GoogleFonts.poppins(
+                                        color: AllColors.lightblackColor,
+                                        fontWeight: FontWeight.w300,
+                                        fontSize: AllFontSize.ten),
+                                    labelStyle: GoogleFonts.poppins(
+                                        color: AllColors.primaryDark1,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: AllFontSize.sisxteen),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                                    )
+                                ),
+                                cursorColor: AllColors.primaryDark1,
+                                onChanged: (value) {
+                                  // Handle the text field value changes if needed
+                                },
+                              ),
                               SizedBox(
                                 height: 10,
                               ),
@@ -793,7 +885,6 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                   // Handle the text field value changes if needed
                                 },
                               ),
-
                               SizedBox(
                                 height: 10,
                               ),

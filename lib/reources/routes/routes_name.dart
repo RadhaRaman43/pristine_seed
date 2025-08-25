@@ -130,10 +130,14 @@ class RoutesName{
   static const pendingDraftQuoteScreen="/pending_Draft_Quote";
   static const approvedRejectedQuoteScreen="/quote_approve_reject_screen";
   static const allQuoteScreenScreen="/All_Quote_Screen";
+  static const allSPRMappingScreen="/all_spr_mapping_screen";
+  static const salesCycleCompetitorProductInforScreen="/sales_cycle_competitor_product_infor_screen";
   static const allQuoteLineItemScreen="/All_Quote_Line_Item_Screen";
+  static const salesCycleProduct="/sales_product_list";
 
   //todo business tour plan
   static const BusinessTourPlanScreen="/bussiness_tour_plan_screen";
+  static const BusinessTourPlanLineDetailScreen="/bussiness_tour_plan_line_detailscreen";
   static const BusinessTourPlanDetails="/BusinessTourPlanDetails_Screen";
   static const AddTourLinesPage="/Add_Tour_Lines_page.dart";
   static const BusinessTourApprovalListScreen="/BusinessTourApprovalListScreen";
@@ -143,9 +147,14 @@ class RoutesName{
   static const salesAdviseCreateScreen="/sales_advise_create_screen";
   static const salesAdviseHeaderScreen="/sales_advise_header_screen";
   static const salesAdviseHeaderLineScreen="/sales_advise_header_line_screen";
+  static const allSalesAdviseList="/all_sales_advise_list";
+  static const allSalesAdviseLineItemsScreen="/all_sales_advise_line_items_screen";
 
   static const empMarkLeaveScreen="/emp_mark_leave_screen";
   static const empMarkLeaveAddScreen="/emp_mark_leave_add_screen";
+  static const empMarkLeaveRequestScreen="/emp_mark_leave_request_screen";
+  static const empMarkLeaveRequestAddScreen="/emp_mark_leave_request_add_screen";
+  static const empMarkLeaveRequestApprovalScreen="/leave_request_approval_screen";
 
   //todo Dashboard Screens
   static const callDashboardViewScreen="/call_Dashboard_View_Screen";

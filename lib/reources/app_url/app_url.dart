@@ -276,6 +276,10 @@ class AppUrl {
      static const String QuoteMstRejectReopen = "$BASE_URL/api/CRM/Quote/QuoteMstRejectReopen";
      static const String QuoteHeaderGetNew="$BASE_URL/api/CRM/Quote/QuoteHeaderGetNew";
      static const String SalesProductLineCompetitorClear="$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorClear";
+     static const String SalesCycleCompetitorProductGetBySalesCycleId="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorProductGetBySalesCycleId";
+     static const String SalesCycleCompetitorCreateFromProspectProducts="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorCreateFromProspectProducts";
+     static const String salesProductLineCompetitorDelete="$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorDelete";
+     static const String salesCycleCompetitorProductInformationGet="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorProductInformationGet";
 
    //todo SalesAdvise
      static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";
@@ -285,13 +289,19 @@ class AppUrl {
      static const String salesAdviceHeaderUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderUpdate";
      static const String salesAdviceLineDelete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineDelete";
      static const String salesAdviceComplete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceComplete";
+     static const String salesAdviceLineItemUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineItemUpdate";
+     static const String salesAdviceHeaderGetNew="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGetNew";
 
      //todo employee information
      static const String employeeLeaveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveDataGet";
      static const String leaveTypesGet="$BASE_URL/api/CRM/EmployeeAttendance/LeaveTypesGet";
-     static const String shiftDetailsByEmailGet="$BASE_URL/api/CRM/EmployeeAttendance/ShiftDetailsByEmailGet";
+     static const String shiftDetailsByEmailGet="$BASE_URL/api/CRM/EmployeeAttendance/ShiftDet ailsByEmailGet";
      static const String getEmployeeHolidays="$BASE_URL/api/CRM/EmployeeAttendance/GetEmployeeHolidays";
      static const String employeeLeaveMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveMark";
+     static const String employeeLeaveRequestDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestDataGet";
+     static const String employeeLeaveRequestMark="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestMark";
+     static const String employeeLeaveRequestRejectApproveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestRejectApproveDataGet";
+     static const String employeeLeaveRequestApproveReject="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveRequestApproveReject";
 
      //todo business tour plan
      static const String businessPlanListGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanListGet";
@@ -308,6 +318,7 @@ class AppUrl {
      static const String BusinessTourPlanReport="$BASE_URL/api/CRM/BusinessTourPlan/BussinessTourPlanReport";
      static const String BusinessTourplanApprovalGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApprovalGet";
      static const String BusinessTourPlanApproveReject="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApproveReject";
+     static const String BusinessTourPlanAllLineGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanAllLineGet";
 
 
      //todo dashboard url

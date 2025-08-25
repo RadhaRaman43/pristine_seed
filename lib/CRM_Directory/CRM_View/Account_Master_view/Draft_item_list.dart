@@ -164,7 +164,7 @@ class DraftItemList extends StatelessWidget{
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildInfoRow("Customer Code", controller.accountCode),
+            buildInfoRow("Customer /Draft Code", controller.accountCode),
             buildInfoRow("Customer Name", controller.accountName),
             buildInfoRow("Customer Type", controller.accountType),
             buildInfoRow("Company Type", controller.companyProfileType),

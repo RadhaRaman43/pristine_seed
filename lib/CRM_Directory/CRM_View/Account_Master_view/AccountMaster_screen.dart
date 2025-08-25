@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
@@ -167,6 +168,7 @@ class AccountmasterScreen extends StatelessWidget{
   Widget BindCustomerRequestListView(context, int position) {
     print('isadminpermosdsdkf....${accountMaster_page_controller.isAdminWritePermission}');
     int? IsActive = accountMaster_page_controller.Account_Master_list[position].isActive;
+    String? createdOn = StaticMethod.dateTimeToDate(accountMaster_page_controller.Account_Master_list[position].createdOn??"");
     var controller=accountMaster_page_controller.Account_Master_list[position];
     String isActive = "";
     if(IsActive == 1){
@@ -211,7 +213,7 @@ class AccountmasterScreen extends StatelessWidget{
               buildInfoRow("Email Id", controller.emailId),
               buildInfoRow("Phone No.", controller.phoneNo),
               buildInfoRow("Created By", controller.accountOwnerFullName),
-             // buildInfoRow("Frontliner Value", controller.frontlinerValue),
+             buildInfoRow("Created On", createdOn),
               buildInfoRow("Region Name", controller.branchHeadValue),
              // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
               buildInfoRow("Cluster Name", controller.clustureHeadValue),

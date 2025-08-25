@@ -1,5 +1,6 @@
 class BulkItemMasterGetModel {
   String? condition;
+  String? message;
   String? totalRows;
   String? itemCode;
   String? name;
@@ -40,6 +41,7 @@ class BulkItemMasterGetModel {
 
   BulkItemMasterGetModel(
       {this.condition,
+        this.message,
         this.totalRows,
         this.itemCode,
         this.name,
@@ -80,6 +82,7 @@ class BulkItemMasterGetModel {
 
   BulkItemMasterGetModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
+    message = json['message'];
     totalRows = json['total_rows'];
     itemCode = json['item_code'];
     name = json['name'];
@@ -122,6 +125,7 @@ class BulkItemMasterGetModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
+    data['message'] = this.message;
     data['total_rows'] = this.totalRows;
     data['item_code'] = this.itemCode;
     data['name'] = this.name;

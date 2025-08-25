@@ -1785,18 +1785,18 @@ class UpdateAccountMaster extends StatelessWidget{
 
                          SizedBox(height: 15,),*/
 
-                           Container(
+                          /* Container(
                              decoration: BoxDecoration(
                                  color: Colors.white,
                                  borderRadius: BorderRadius.circular(10)
                              ),
                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                              child: TextFormField(
-                               /* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
+                               *//* readOnly: accountMaster_page_controller.view=='FromTaskMainScreen'
                                  || accountMaster_page_controller.view=='VIEW' ||
                                  accountMaster_page_controller.view=='Task'||
                                  accountMaster_page_controller.view=='FromSaleCycleMainScreen'
-                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*/
+                                 || accountMaster_page_controller.view=="FromQuoteApproval"?true:false,*//*
                                readOnly:  true,
                                controller: accountMaster_page_controller.Regional_service_head_Controller.value,
                                decoration: InputDecoration(
@@ -1814,7 +1814,7 @@ class UpdateAccountMaster extends StatelessWidget{
                                ),
 
                              ),
-                           ),
+                           ),*/
 
 
 

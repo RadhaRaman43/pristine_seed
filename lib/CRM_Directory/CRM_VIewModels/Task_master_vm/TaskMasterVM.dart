@@ -29,6 +29,7 @@ class Taskmastervm extends GetxController{
     RxString account_code="".obs;
     RxString account_name="".obs;
     RxString contact_code="".obs;
+    RxString contact_code_for_dsar="".obs;
     RxBool loading=false.obs;
     RxBool RejectBool=false.obs;
     RxBool ApproveBool=false.obs;
@@ -250,13 +251,14 @@ class Taskmastervm extends GetxController{
                 "filter_is_infra_lead": -1,
                 "filter_is_sales_cycle_active": is_Active.toString(),
                 "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
-                "filter_created_by": isAdminWritePermission == "1"?"":email,
+                "filter_created_by": isAdminWritePermission=='1'?"":email,
                 "filter_approved_by": "",
                 "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
                 "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
+                "filter_task_owner":email,
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
                 "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
                 "filter_frontliner_value": "",
@@ -281,6 +283,7 @@ class Taskmastervm extends GetxController{
                         Task_Master_list.addAll(response);
                         total_rows=int.parse(Task_Master_list[0].totalRows!);
                       print("gggg...${Task_Master_list[0].isCreateTaskDsar}");
+
                         print('flag data...$flag');
                         if(flag == 'View'){
                             Active = Task_Master_list[0].isSalesCycleActive!;
@@ -417,6 +420,8 @@ class Taskmastervm extends GetxController{
                 "created_by": email,
                 "purpose_of_visit": PusposeOfVisit_controller.text.isEmpty?'':PusposeOfVisit_controller.text,
                 "method_of_call": Method_of_call_controller.text.isEmpty?'':Method_of_call_controller.text,
+                "contact_code": contact_code_for_dsar.value,
+                "contact_name": Contact_Name_controller.text.isNotEmpty?Contact_Name_controller.text:""
             };
 
             loading.value=true;
@@ -563,12 +568,12 @@ class Taskmastervm extends GetxController{
     }
 
 
-    getContactMasterList() {
+    getContactMasterList(String accountCode, String accountName) {
         try{
             Map<String, String> data={
                 "filter_contact_name": '',
-                "filter_account_code": account_code.value,
-                "filter_account_name": account_name.value,
+                "filter_account_code": accountCode,
+                "filter_account_name": accountName,
                 "filter_department_name": '',
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": '0'

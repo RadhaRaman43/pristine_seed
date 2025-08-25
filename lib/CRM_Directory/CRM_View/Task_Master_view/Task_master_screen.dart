@@ -893,6 +893,12 @@ class TaskMasterScreen extends StatelessWidget {
                           salesCycleController.pageNumber,
                           TaskMaster_page_controller
                               .Task_Master_list[position].salesCycleId ?? "");
+
+                 /*     salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                          salesCycleController.pageNumber ,
+                          TaskMaster_page_controller
+                              .Task_Master_list[position].salesCycleId ?? "");*/
+
                       salesCycleController.itemCategorySelectedlist.value = [];
                       salesCycleController.getPurchaseProcessApi();
                       salesCycleController.getPurchaseTimeFrameApi();
@@ -2049,8 +2055,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Created By',
-          hintText: 'Created By',
+          labelText: 'Task Owner',
+          hintText: 'Task Owner',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

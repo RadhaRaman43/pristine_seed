@@ -64,6 +64,12 @@ class QuoteInformationScreen extends StatelessWidget {
           pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "All");
           Get.offNamed(RoutesName.allQuoteLineItemScreen);
         }
+        else if(saleCycleController.quoteApprovalPage.value=="FromAllSPRMapping"){
+          pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+          pendingDraftQuoteController.pageNumberForQuote =0;
+          pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+          Get.offNamed(RoutesName.allSPRMappingScreen);
+        }
         else if (saleCycleController.quoteApprovalPage.value ==
             "approvedQuotationScreen") {
           saleCycleController.pageNumberForQuote = 0;
@@ -77,6 +83,7 @@ class QuoteInformationScreen extends StatelessWidget {
           Get.toNamed(RoutesName.AccountDashboardDataQuotation_Screen);
         } else {
           saleCycleController.clearAllFieldOfQuoteFilter();
+          saleCycleController.clearAllFieldOfFilter();
           saleCycleController.pageNumber = 0;
           saleCycleController.pageNumberForQuote = 0;
           saleCycleController.filterQuoteAcceptedFlag.value = "";
@@ -225,7 +232,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               return Visibility(
                                 visible: (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
                                 || saleCycleController.userType.toLowerCase()=="branch head") && saleCycleController
-                                    .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
+                                    .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==0,
                                 child: ActionChip(
                                   label: Text(
                                     "Sales Advise Create",
@@ -235,6 +242,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {
+                                    saleCycleController.routingForSalesAdvise.value="";
                                     saleCycleController.salesAdviceItemList.value=saleCycleController.quoteLinedata;
                                     saleCycleController.salesAdviseCheckedList.value =
                                         List.generate(saleCycleController.quoteLinedata.length, (_) => false);
@@ -268,7 +276,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Obx((){
                           return Visibility(
                             visible: saleCycleController
-                                .quoteHeaderdata[0].quoteStatus?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
+                                .quoteHeaderdata[0].quoteAccepted?.toLowerCase()=="won" && saleCycleController.quoteHeaderdata[0].isSalesAdviceCreated==1,
                             child: ActionChip(
                               label: Text(
                                 "View Sales Advise",
@@ -283,7 +291,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     .quoteHeaderdata[0].salesCycleId??"",saleCycleController
                                     .quoteHeaderdata[0].quoteId??"","");
                               },
-                              backgroundColor: AllColors.primaryDark1,
+                              backgroundColor : AllColors.primaryDark1,
                               shape: StadiumBorder(
                                 side: BorderSide.none,
                               ),
@@ -2914,10 +2922,16 @@ class QuoteInformationScreen extends StatelessWidget {
                         onTap: () {
                           saleCycleController.clearSaleProductListController();
                           saleCycleController.pageNumber = 0;
+
+
                           saleCycleController.getSaleCycleProductByIdList(
                               saleCycleController.pageNumber,
                               saleCycleController
                                   .quoteHeaderdata[0].salesCycleId!);
+                        /*  saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                              saleCycleController.pageNumber,
+                              saleCycleController
+                                  .quoteHeaderdata[0].salesCycleId!);*/
                           bindListBottomSheet(context);
                         },
                         child: Text(
@@ -5027,6 +5041,10 @@ class QuoteInformationScreen extends StatelessWidget {
                                     saleCycleController.pageNumber = 0;
                                     saleCycleController
                                         .clearSaleProductListController();
+                                   /* saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                        saleCycleController.pageNumber,
+                                        saleCycleController
+                                            .quoteHeaderdata[0].salesCycleId!);*/
                                     saleCycleController
                                         .getSaleCycleProductByIdList(
                                             saleCycleController.pageNumber,
@@ -5059,6 +5077,12 @@ class QuoteInformationScreen extends StatelessWidget {
                                             saleCycleController
                                                 .quoteHeaderdata[0]
                                                 .salesCycleId!);
+
+
+                                 /*   saleCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(
+                                        saleCycleController.pageNumber,
+                                        saleCycleController
+                                            .quoteHeaderdata[0].salesCycleId!);*/
                                     Get.back();
                                   },
                                   child: Text(
@@ -5239,6 +5263,8 @@ class QuoteInformationScreen extends StatelessWidget {
               saleCycleController.pageNumber + 1,
               saleCycleController.quoteHeaderdata[0].salesCycleId!,
             );
+
+
             saleCycleController.pageNumber += 1;
           }
         }

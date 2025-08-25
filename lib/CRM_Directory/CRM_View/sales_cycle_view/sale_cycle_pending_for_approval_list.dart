@@ -179,6 +179,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleId);
           salesCycleController.pageNumber=0;
           salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleId);
+         // salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(salesCycleController.pageNumber,salesCycleId);
           salesCycleController.clearAllFieldOfQuoteFilter();
 
         },

@@ -408,10 +408,16 @@ class AddNewTaskScreen extends StatelessWidget{
                       Utils.sanckBarError('Account Name!', "Please Enter Account Name");
                       return  ;
                     }
-                    if(taskMaster_page_controller.Contact_Name_controller.text.isEmpty || taskMaster_page_controller.Contact_Name_controller == null){
-                      Utils.sanckBarError('Contact NAme!', "Please Enter Contact Name");
+                    if(taskMaster_page_controller.Type_of_call_controller.text!="New Call" &&
+                       ( taskMaster_page_controller.Contact_Name_controller.text.isEmpty ||
+                           taskMaster_page_controller.Contact_Name_controller == null) ){
+                      Utils.sanckBarError('Contact Name!', "Please Enter Contact Name");
                       return  ;
                     }
+                    /*if(taskMaster_page_controller.Contact_Name_controller.text.isEmpty || taskMaster_page_controller.Contact_Name_controller == null){
+                      Utils.sanckBarError('Contact NAme!', "Please Enter Contact Name");
+                      return  ;
+                    }*/
                     if(taskMaster_page_controller.Type_of_call_controller.text.isEmpty || taskMaster_page_controller.Type_of_call_controller == null){
                       Utils.sanckBarError('Type of Call!', "Please Enter Type Of Call");
                       return  ;
@@ -481,7 +487,7 @@ class AddNewTaskScreen extends StatelessWidget{
             _displayAccountNameForOption(selection).toString();
         taskMaster_page_controller.account_code.value=selection.accountCode!;
         taskMaster_page_controller.account_name.value=selection.accountName!;
-            taskMaster_page_controller.getContactMasterList();
+            taskMaster_page_controller.getContactMasterList(taskMaster_page_controller.account_code.value,taskMaster_page_controller.account_name.value);
             taskMaster_page_controller.pageNumber = 0;
         print('I select account name');
             taskMaster_page_controller.getSaleIDByAccountCode(taskMaster_page_controller.pageNumber);
