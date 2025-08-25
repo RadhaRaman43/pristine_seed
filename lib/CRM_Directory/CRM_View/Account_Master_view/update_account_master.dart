@@ -142,6 +142,9 @@ class UpdateAccountMaster extends StatelessWidget{
          }else if(accountMaster_page_controller.view=="FromALLQuoteLineItems"){
            Get.toNamed(RoutesName.allQuoteLineItemScreen);
          }
+         else if(accountMaster_page_controller.view=="FromAllSPRMapping"){
+           Get.toNamed(RoutesName.allSPRMappingScreen);
+         }
 
          else{
           /* accountMaster_page_controller.clearController();

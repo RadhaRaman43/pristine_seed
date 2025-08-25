@@ -31,14 +31,13 @@ class SalesAdviseHeaderLineScreen extends StatelessWidget{
     return WillPopScope(
       onWillPop: () async {
         if(saleCycleController.routingSalesAdvise.value=="fromallSalesAdvise"){
-          Get.offAllNamed(RoutesName.allSalesAdviseList);
+          Get.toNamed(RoutesName.allSalesAdviseList);
         }else{
           saleCycleController.pageNumberSalesAdvise=0;
           saleCycleController.getSalesAdviseData(saleCycleController.pageNumberSalesAdvise,
               saleCycleController.salesAdviseHeaderLineList[0].salesCycleId??"", saleCycleController.salesAdviseHeaderLineList[0].quoteId??"","" );
           Get.toNamed(RoutesName.salesAdviseHeaderScreen);
         }
-
         return false;
       },
       child: Scaffold(
