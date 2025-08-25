@@ -18,11 +18,13 @@ import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Dashboard_VM/funnel_dashboard_Vm.dart';
+import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class FunnelDashboardView extends StatelessWidget{
   FunnelDashboardView({super.key});
 
   final dashboard_view_Controller = Get.put(FunnelDashboardVm());
+  SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
@@ -377,11 +379,11 @@ class FunnelDashboardView extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    String taskStatus =  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleStatus??"";
+    String Status =  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
       switch (status.toUpperCase()) {
         case 'PENDING':
-          return Colors.brown[900]!;
+          return Colors.yellow[900]!;
         case 'REJECTED':
           return Colors.red;
         case 'APPROVED':
@@ -400,10 +402,10 @@ class FunnelDashboardView extends StatelessWidget{
           onTap: () {
 
           },
-          subtitle: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Stage : ",
@@ -412,25 +414,37 @@ class FunnelDashboardView extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
+                  Tooltip(
+                    message: dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
+                        .salesCycleStatus??"",
+                    child: Text(
+                      dashboard_view_Controller
+                          .funnelDashboardUserWiseDataList[position]
                           .salesCycleStatus??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .salesCycleStatus??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],
               ),
+              InkWell(
+                  onTap: (){
+                    saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleId!);
+                    saleCycleController.pageNumber = 0;
+                    saleCycleController.filterQuoteAcceptedFlag.value="";
+                    saleCycleController.clearAllFieldOfFilter();
+                    saleCycleController.getsalesCycleData(saleCycleController.pageNumber, dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
+                        .salesCycleId!, "ViewHeader", "FromFunnelDashboard");
+                  },
+                  child: Icon(Icons.remove_red_eye, size: 30,color: AllColors.textColor,))
+            ],
+          ),
+          subtitle: Column(
+            children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -534,16 +548,12 @@ class FunnelDashboardView extends StatelessWidget{
                   Flexible(
                     fit: FlexFit.loose,
                     child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .salesCycleApprovalStatus??"",
+                      message: Status,
                       child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .salesCycleApprovalStatus??"",
+                        Status,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
+                            color: getStatusColor(Status),
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),

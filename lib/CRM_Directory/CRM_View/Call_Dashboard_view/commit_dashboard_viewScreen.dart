@@ -20,11 +20,13 @@ import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Dashboard_VM/commit_dashboard_vm.dart';
+import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 class CommitDashboardViewscreen extends StatelessWidget{
   CommitDashboardViewscreen({super.key});
 
   final dashboard_view_Controller = Get.put(CommitDashboardVm());
+  SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
@@ -586,14 +588,11 @@ class CommitDashboardViewscreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    /*String? createdOn=StaticMethod.dateTimeToDate( dashboard_view_Controller.commitDashboardUserWiseDataList[position].createdOn ?? "");
-    String Approval_Status =  dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleStatus!;
-    String pipeLine = dashboard_view_Controller.commitDashboardUserWiseDataList[position]
-        .estClosureDate!.isNotEmpty ? "|" : "";
+    String Status =  dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
       switch (status.toUpperCase()) {
         case 'PENDING':
-          return Colors.brown[900]!;
+          return Colors.yellow[900]!;
         case 'REJECTED':
           return Colors.red;
         case 'APPROVED':
@@ -603,7 +602,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
         default:
           return Colors.black;
       }
-    }*/
+    }
     return Card(
       margin: EdgeInsets.all(5),
       child: Container(
@@ -612,10 +611,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
           onTap: () {
 
           },
-          subtitle: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sales Cycle Stage : ",
@@ -624,25 +623,39 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller.commitDashboardUserWiseDataList[position]
+                  Tooltip(
+                    message: dashboard_view_Controller.commitDashboardUserWiseDataList[position]
+                        .salesCycleStatus??"",
+                    child: Text(
+                      dashboard_view_Controller
+                          .commitDashboardUserWiseDataList[position]
                           .salesCycleStatus??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .salesCycleStatus??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.end,
                     ),
                   ),
                 ],
               ),
+              InkWell(
+                  onTap: (){
+                    saleCycleController.ProductCategoryWiseAmtGet(0, dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleId!);
+                    saleCycleController.pageNumber = 0;
+                    saleCycleController.filterQuoteAcceptedFlag.value="";
+                    saleCycleController.clearAllFieldOfFilter();
+                    saleCycleController.getsalesCycleData(saleCycleController.pageNumber, dashboard_view_Controller.commitDashboardUserWiseDataList[position]
+                        .salesCycleId!, "ViewHeader", "FromCommitDashboard");
+                  },
+                  child: Icon(Icons.remove_red_eye, size: 30,color: AllColors.textColor,))
+
+            ],
+          ),
+          subtitle: Column(
+            children: [
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -746,16 +759,12 @@ class CommitDashboardViewscreen extends StatelessWidget{
                   Flexible(
                     fit: FlexFit.loose,
                     child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .salesCycleApprovalStatus??"",
+                      message: Status,
                       child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .salesCycleApprovalStatus??"",
+                        Status,
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
+                            color: getStatusColor(Status),
                             fontSize: AllFontSize.fourtine,
                             fontWeight: FontWeight.w500),
                       ),

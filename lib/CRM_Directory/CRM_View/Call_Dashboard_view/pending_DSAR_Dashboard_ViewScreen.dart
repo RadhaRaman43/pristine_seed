@@ -21,11 +21,13 @@ import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.da
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Dashboard_VM/Pending_DSAR_Dashboard_VM.dart';
+import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 
 class PendingDsarDashboardViewscreen extends StatelessWidget{
   PendingDsarDashboardViewscreen({super.key});
 
   final dashboard_view_Controller = Get.put(PendingDsarDashboardVm());
+  final TaskMaster_page_controller=Get.put(Taskmastervm());
   Size size=Get.size;
 
   @override
@@ -642,6 +644,51 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           onTap: () {
 
           },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "Task Id: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Tooltip(
+                    message: dashboard_view_Controller
+                        .pendingDSARDashboardUserWiseDataList[position]
+                        .taskId??"",
+                    child: Text(
+                      dashboard_view_Controller
+                          .pendingDSARDashboardUserWiseDataList[position]
+                          .taskId??"",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+
+              InkWell(
+                  onTap: (){
+                   // TaskMaster_page_controller.FromPage.value='from_pendingDSARDashboard';
+                    TaskMaster_page_controller.getTaskMaster(0,
+                        TaskMaster_page_controller.is_Active
+                            .toString(),
+                        dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position]
+                            .taskId,
+                        '', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                    Get.toNamed(RoutesName.taskMasterDetails_screen);
+                  },
+                  child: Icon(Icons.remove_red_eye, size: 30,color: AllColors.textColor,))
+
+            ],
+          ),
           subtitle: Column(
             children: [
               Row(
@@ -673,36 +720,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Task Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .taskId??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .taskId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

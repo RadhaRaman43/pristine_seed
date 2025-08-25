@@ -22,11 +22,13 @@ import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.da
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Dashboard_VM/call_dashboard_vm.dart';
+import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 
 class CallDashboardViewScreen extends StatelessWidget{
   CallDashboardViewScreen({super.key});
 
   final dashboard_view_Controller = Get.put(CallDashboardVm());
+  final TaskMaster_page_controller=Get.put(Taskmastervm());
   Size size=Get.size;
 
   @override
@@ -767,9 +769,6 @@ class CallDashboardViewScreen extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    String? Due_Date=StaticMethod.convertDateFormat1( dashboard_view_Controller.callDashboardUserWiseDataList[position].taskDueDate ?? "");
-    String? LastActivityUpdatedOn=StaticMethod.convertDateFormat1( dashboard_view_Controller.callDashboardUserWiseDataList[position].lastActivityUpdatedOn ?? "");
-    String? createdOn=StaticMethod.dateTimeToDate( dashboard_view_Controller.callDashboardUserWiseDataList[position].createdOn ?? "");
     String taskStatus =  dashboard_view_Controller.callDashboardUserWiseDataList[position].taskStatus!;
     String pipeLine = dashboard_view_Controller.callDashboardUserWiseDataList[position]
         .taskDueTime!.isNotEmpty ? "|" : "";
@@ -795,6 +794,50 @@ class CallDashboardViewScreen extends StatelessWidget{
           onTap: () {
 
           },
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "Task Id: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Tooltip(
+                    message: dashboard_view_Controller
+                        .callDashboardUserWiseDataList[position]
+                        .taskId??"",
+                    child: Text(
+                      dashboard_view_Controller
+                          .callDashboardUserWiseDataList[position]
+                          .taskId??"",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color: AllColors.textColor,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                  ),
+                ],
+              ),
+              InkWell(
+                  onTap: (){
+                    //accountMaster_page_controller.view='TaskDashboard';
+                    /*TaskMaster_page_controller.getTaskMaster(0,
+                        TaskMaster_page_controller.is_Active
+                            .toString(),
+                        accountMaster_page_controller.AccountDashboardDataList[position]
+                            .taskId,
+                        '', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
+                    Get.toNamed(RoutesName.taskMasterDetails_screen);*/
+                  },
+                  child: Icon(Icons.remove_red_eye, size: 30,color: AllColors.textColor,))
+
+            ],
+          ),
           subtitle: Column(
             children: [
               Row(
@@ -826,36 +869,7 @@ class CallDashboardViewScreen extends StatelessWidget{
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Task Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .callDashboardUserWiseDataList[position]
-                          .taskId??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .callDashboardUserWiseDataList[position]
-                            .taskId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+
 
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
