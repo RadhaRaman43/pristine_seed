@@ -155,8 +155,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 Obx(() {
                   return Visibility(
                     visible: saleCycleController.saleCycleList[0].quoteAccepted
-                                ?.toLowerCase() ==
-                            'loss' &&
+                                ?.toLowerCase() !=
+                            'open' &&
                         saleCycleController.isAdminWritePermission == "1",
                     child: GestureDetector(
                       onTap: () {
@@ -466,6 +466,24 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.showDialogForsalescycleUpdate(
                                   context,
                                   saleCycleController.saleCycleList[0]);
+                            },
+                          ),
+                        );
+                      }
+
+                      if(saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()==saleCycleController.email.toLowerCase() && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&
+                          saleCycleController.get_SalesCycleProductById_List.length>0 &&
+                          saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="approved"){
+                        items.add(
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.mark_chat_read_outlined, color: Colors.black),
+                                Text(' Mark FC'),
+                              ],
+                            ),
+                            onTap: () {
+                              showMarkFCDialog(context, saleCycleController.saleCycleList[0].salesCycleId??"",);
                             },
                           ),
                         );
@@ -12770,5 +12788,95 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         });
   }
 
+
+  showMarkFCDialog(context, String SalesId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Mark FC!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to Mark FC this sales cycle ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.lightredColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.getSalesCycleMstMarkRateContract(SalesId);
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Confirm',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
+          );
+        });
+  }
 
 }

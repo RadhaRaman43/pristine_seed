@@ -5477,6 +5477,44 @@ class SalesCycleVm extends GetxController {
     }
   }
 
+  getSalesCycleMstMarkRateContract(String SalesId) {
+    Map data = {
+      "sales_cycle_id": SalesId,
+      "created_by": email
+    };
+
+    loading.value = true;
+    _api.salesCycleMstMarkRateContractApiHit(data, sessionManagement).then(
+          (onValue) {
+        try {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.showToastification("Success", response[0].message.toString());
+              //getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesId);
+            } else {
+              Utils.showErrorToastification("False Message", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        } catch (e) {
+          print(e);
+        } finally {
+          loading.value = false;
+        }
+      },
+    ).onError(
+          (error, stackTrace) {
+      },
+    ).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
 
 
 }

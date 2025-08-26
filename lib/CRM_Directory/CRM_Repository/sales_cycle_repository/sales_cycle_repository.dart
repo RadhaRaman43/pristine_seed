@@ -244,6 +244,12 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.salesAdviceHeaderGetNew,sessionManagement);
   }
 
+  Future<String> salesCycleMstMarkRateContractApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesCycleMstMarkRateContract,sessionManagement);
+  }
+
+
+
 
 
 }
