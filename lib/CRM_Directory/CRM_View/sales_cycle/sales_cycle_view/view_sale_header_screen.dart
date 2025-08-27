@@ -479,7 +479,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             child: Row(
                               children: [
                                 Icon(Icons.mark_chat_read_outlined, color: Colors.black),
-                                Text(' Mark FC'),
+                                Text(' Mark RC'),
                               ],
                             ),
                             onTap: () {
@@ -963,7 +963,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 (saleCycleController.FromPage.value ==
                                         "Sales" ||
                                     saleCycleController.FromPage.value ==
-                                        "FromTaskScreen")
+                                        "FromTaskScreen") &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
                             ? false
                             : true,
                         child: Column(
@@ -1538,9 +1538,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 .ischangesolutionAccepted
                                                 .value) ||
                                         saleCycleController.filter.value ==
-                                            'Customer Need Identity'))
-                                ? true
-                                : false,
+                                            'Customer Need Identity')) && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: ElevatedButton(
@@ -2792,7 +2790,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               ?.toLowerCase() ==
                           "open") &&
                   (saleCycleController.FromPage.value == "Sales" ||
-                      saleCycleController.FromPage.value == "FromTaskScreen")
+                      saleCycleController.FromPage.value == "FromTaskScreen") && saleCycleController.saleCycleList[0].isMarkRateContract==0
               ? false
               : true,
       child: Container(
@@ -3233,7 +3231,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.saleCycleList[0]
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() !=
-                                    'rejected',
+                                    'rejected' && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                             /* visible: saleCycleController.FromPage.value ==
                                         "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage"|| saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems" ||
                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
@@ -3734,7 +3732,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? 'No'
                             : 'Yes',
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .isDecisionMaker ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -3819,7 +3819,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? 'No'
                             : 'Yes',
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .commit ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -3976,7 +3978,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? "No"
                             : "Yes",
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .isCustomerNeedIdentify ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -4004,7 +4008,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? "No"
                             : "Yes",
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .isSolutionAccepted ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -4137,7 +4143,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ? 'Yes'
                                   : 'No',
                               style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
+                                color: saleCycleController.saleCycleList[0]
+                                    .quoteSubmitted ==
+                                    1?AllColors.greenblue:AllColors.redColor,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -4194,7 +4202,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ? 'Yes'
                                   : 'No',
                               style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
+                                color: saleCycleController.saleCycleList[0]
+                                    .confirmExpectedRevenue ==
+                                    1?AllColors.greenblue:AllColors.redColor,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -4547,7 +4557,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             saleCycleController.email.toLowerCase() ||
                         saleCycleController.userType.toLowerCase() ==
                             "branch head" ||
-                        saleCycleController.isAdminWritePermission == "1"),
+                        saleCycleController.isAdminWritePermission == "1") && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                 child: GestureDetector(
                   onTap: () {
                     showSalesProductConfirmationDialog(
@@ -4648,14 +4658,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                 ),
                 IgnorePointer(
-                  ignoring: flag == "Update" ||
+                  ignoring: (flag == "Update" ||
                       saleCycleController
                               .saleCycleList[0].actualSalesCycleApprovalStatus
                               ?.toLowerCase() ==
                           "rejected" ||
                       saleCycleController.saleCycleList[0].quoteAccepted
                               ?.toLowerCase() !=
-                          "open",
+                          "open") || saleCycleController.saleCycleList[0].isMarkRateContract==1,
                   child: InkWell(
                     onTap: () {
                       saleCycleController.qtyUpdateLineController.value.text =
@@ -4677,7 +4687,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         color: AllColors.textColor,
                         fontSize: AllFontSize.twelve,
                         fontWeight: FontWeight.w500,
-                        decoration: flag == "Update" ||
+                        decoration: (flag == "Update" ||
                                 saleCycleController.saleCycleList[0]
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() ==
@@ -4685,7 +4695,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController
                                         .saleCycleList[0].quoteAccepted
                                         ?.toLowerCase() !=
-                                    "open"
+                                    "open" )|| saleCycleController.saleCycleList[0].isMarkRateContract==1
                             ? TextDecoration.none
                             : TextDecoration.underline,
                       ),
@@ -7677,7 +7687,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           .saleCycleList[0].actualSalesCycleApprovalStatus
                           ?.toLowerCase() !=
                       "rejected") &&
-              saleCycleController.FromPage.value == "Sales"
+              saleCycleController.FromPage.value == "Sales" &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
           ? false
           : true,
 /*      saleCycleController.saleCycleList[0].quoteAccepted
@@ -7822,7 +7832,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           .saleCycleList[0].actualSalesCycleApprovalStatus
                           ?.toLowerCase() !=
                       "rejected") &&
-              saleCycleController.FromPage.value == "Sales"
+              saleCycleController.FromPage.value == "Sales" &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
           ? false
           : true,
       /* ignoring:
@@ -8036,7 +8046,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() !=
                                     "rejected") &&
-                            saleCycleController.FromPage.value == "Sales")
+                            saleCycleController.FromPage.value == "Sales" &&  saleCycleController.saleCycleList[0].isMarkRateContract==0)
                         /*  if (!(saleCycleController.FromPage.value ==
                                     "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems") &&
                                 saleCycleController
@@ -8075,7 +8085,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .actualSalesCycleApprovalStatus
                                       ?.toLowerCase() !=
                                   "rejected") &&
-                          saleCycleController.FromPage.value == "Sales",
+                          saleCycleController.FromPage.value == "Sales"  &&  saleCycleController.saleCycleList[0].isMarkRateContract==0,
                       /*saleCycleController.saleCycleList[0]
                                               .salesCycleApprovalStatus
                                               ?.toLowerCase() ==
@@ -8854,7 +8864,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               .actualSalesCycleApprovalStatus
                                               ?.toLowerCase() !=
                                           "rejected") &&
-                                  saleCycleController.FromPage.value == "Sales",
+                                  saleCycleController.FromPage.value == "Sales" && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                               /* saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||
                               saleCycleController
                                               .saleCycleList[0].quoteAccepted!

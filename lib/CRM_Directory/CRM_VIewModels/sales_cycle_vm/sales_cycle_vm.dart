@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'dart:io';
 import 'dart:math';
 //import 'package:awesome_notifications/awesome_notifications.dart';
@@ -5495,7 +5496,8 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
               Utils.showToastification("Success", response[0].message.toString());
-              //getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesId);
+              pageNumber=0;
+              getsalesCycleData(pageNumber,SalesId,"ViewHeader", FromPage.value);
             } else {
               Utils.showErrorToastification("False Message", response[0].message.toString());
             }

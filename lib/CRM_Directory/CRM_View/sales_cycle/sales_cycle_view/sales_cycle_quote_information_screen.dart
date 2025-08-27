@@ -2684,7 +2684,9 @@ class QuoteInformationScreen extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
+                                  color: saleCycleController.quoteHeaderdata[0].quoteCommit
+                                      .toString() ==
+                                      '1'?AllColors.greenblue:AllColors.redColor,
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500),
                             ),
