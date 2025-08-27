@@ -1,14 +1,18 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_VIewModels/Dashboard_VM/Sales_Dashboard_Vm.dart';
 
 class SalesDashboardViewscreen extends StatelessWidget{
@@ -42,7 +46,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               ),
               Spacer(),
               IconButton(onPressed: () {
-               // showFilterBottomSheet(context);
+                showFilterBottomSheet(context);
               }, icon: Icon(Icons.filter_alt_sharp))
             ],
           )
@@ -1063,6 +1067,532 @@ class SalesDashboardViewscreen extends StatelessWidget{
       });
     }
 
+  }
+
+  void showFilterBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.85,
+          minChildSize: 0.5,
+          maxChildSize: 0.95,
+          builder: (_, scrollController) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
+              child: Column(
+                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.shield_moon_rounded,
+                          color: AllColors.primaryDark1,
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text(
+                          "Dashboard Filter ",
+                          style: GoogleFonts.poppins(
+                            color: AllColors.primaryDark1,
+                            fontSize: AllFontSize.twentee,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        Spacer(),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: Icon(
+                              Icons.cancel,
+                              color: AllColors.primaryDark1,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Center(
+                      child: Divider(
+                        height: 1,
+                        color: AllColors.primaryDark1,
+                      )),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(
+                                height: 5,
+                              ),
+                              RadioGroupDateRangeFilter(context),
+                              SizedBox(
+                                height: 10,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor,
+                                backgroundColor: AllColors.whiteColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                      color: AllColors.primaryDark, width: 1),
+                                )),
+                            onPressed: () {
+                              dashboard_view_Controller.salesDashboardData();
+                              Get.back();
+                            },
+                            child: Text(
+                              'Submit',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.primaryDark1,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          width: size.width * 0.4,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                                foregroundColor: AllColors.lightgreyColor,
+                                backgroundColor: AllColors.whiteColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                      color: AllColors.redColor, width: 1),
+                                )),
+                            onPressed: () {
+                              dashboard_view_Controller
+                                  .clearAllFilterController();
+                              dashboard_view_Controller.salesDashboardData();
+                              Get.back();
+                            },
+                            child: Text(
+                              'Reset',
+                              style: GoogleFonts.poppins(
+                                  color: AllColors.redColor,
+                                  fontSize: AllFontSize.sisxteen,
+                                  fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  RadioGroupDateRangeFilter(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Column(
+        children: [
+          SizedBox(height: 10),
+          /*Container(
+            //margin: EdgeInsets.only(left: 15.0, right: 15.0),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: AllColors.grayColor, // Set the border color here
+                width: 1.0, // Adjust the border width if necessary
+              ),
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            child: InputDecorator(
+              decoration: InputDecoration(
+                labelText: 'Date Ranges',
+                labelStyle: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontWeight: FontWeight.w700,
+                    fontSize: AllFontSize.twentee),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(),
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Day',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Day',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                        dashboard_view_Controller.DateRange('day');
+                        dashboard_view_Controller
+                            .filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Weakly',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Weakly',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                        dashboard_view_Controller.DateRange('week');
+                        dashboard_view_Controller
+                            .filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Month',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Month',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                        dashboard_view_Controller.DateRange('month');
+                        dashboard_view_Controller
+                            .filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Quarterly',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Quarterly',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                        dashboard_view_Controller.DateRange('quarterly');
+                        dashboard_view_Controller
+                            .filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Financial Year',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Financial Year',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                        dashboard_view_Controller.DateRange('financial');
+                        dashboard_view_Controller
+                            .filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.callDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Custom',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Custom',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return filterWithCustomDate(context);
+                  })
+                ],
+              ),
+            ),
+          ),*/
+          filterWithCustomDate(context),
+          /*SizedBox(height: 10),
+          bindTaskStatus(context),
+          SizedBox(height: 10),
+          bindCustomerNameFilter(context),
+          SizedBox(height: 10),
+          bindTypeCallFilter(context),
+          SizedBox(height: 10),
+          bindLastActivityStatus(context),
+          SizedBox(height: 10),
+          bindProductCategoryFilter(context),
+          SizedBox(height: 10),
+          bindAccountOwnerFilter(context),*/
+          SizedBox(height: 10),
+          bindClusterNameFilter(context),
+          SizedBox(height: 10),
+          bindRegionNameFilter(context),
+        ],
+      ),
+    );
+  }
+
+  filterWithCustomDate(BuildContext context) {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: dashboard_view_Controller.filterCustomDateController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Select Start Date -End Date',
+        labelText: 'Date Range',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme:
+                ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
+                ),
+              ),
+              child: child!,
+            );
+          },
+        );
+
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          dashboard_view_Controller.formattedStartDate.value = startDate;
+          dashboard_view_Controller.formattedEndDate.value = endDate;
+          dashboard_view_Controller.filterCustomDateController.value.text =
+          '$startDate - $endDate';
+        } else {
+          dashboard_view_Controller.filterCustomDateController.value.text =
+          '';
+          dashboard_view_Controller.formattedStartDate.value = '';
+          dashboard_view_Controller.formattedEndDate.value = '';
+        }
+      },
+    );
+  }
+
+  bindClusterNameFilter(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<ClusterModal>.multiSelection(
+        items: dashboard_view_Controller.clusterGetByEmailList,
+        itemAsString: (ClusterModal u) => u.geoValue ?? "",
+        selectedItems: dashboard_view_Controller.SelectedCluster_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedCluster_list.isNotEmpty
+                ? "Cluster Name"
+                : null,
+            hintText: "Cluster Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Cluster Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.geoValue).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ClusterModal> selectedList) {
+          dashboard_view_Controller.SelectedCluster_list.value = selectedList;
+          dashboard_view_Controller.clusterNameFilter_controller.value.text =
+              selectedList.map((e) => e.geoValue).join(', ');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.geoValue ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+
+  bindRegionNameFilter(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<RegionWithClusterFilterModal>.multiSelection(
+        items: dashboard_view_Controller.regionwithclusterGetByEmailList,
+        itemAsString: (RegionWithClusterFilterModal u) => u.geoValue ?? "",
+        selectedItems: dashboard_view_Controller.SelectedRegion_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedRegion_list.isNotEmpty
+                ? "Region Name"
+                : null,
+            hintText: "Region Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Region Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.geoValue).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<RegionWithClusterFilterModal> selectedList) {
+          dashboard_view_Controller.SelectedRegion_list.value = selectedList;
+          dashboard_view_Controller.RegionNameFilter_controller.value.text =
+              selectedList.map((e) => e.geoValue).join(', ');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.geoValue ?? ""),
+          ),
+        ),
+      );
+    });
   }
 
 

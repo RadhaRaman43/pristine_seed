@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/dashboard_models/SalesDashboard_Model/SalesDashboard_Model.dart';
 import '../../CRM_Repository/dashboard_repository/dashboard_repo.dart';
 
@@ -30,18 +32,29 @@ class SalesDashboardVm extends GetxController{
   RxBool isExpandBussiness = false.obs;
   RxBool isExpandCollection = false.obs;
 
+  var ClusterNameForApi;
+  var RegionNameForApi;
+
   var PeriodTo_Controller = TextEditingController().obs;
   var PeriodFrom_Controller = TextEditingController().obs;
   var SalesPersonER_Code_Controller = TextEditingController().obs;
   var SalesPersonName_Controller = TextEditingController().obs;
   var RegionName_Controller = TextEditingController().obs;
   var ClusterName_Controller = TextEditingController().obs;
+  var clusterNameFilter_controller=TextEditingController().obs;
+  var RegionNameFilter_controller=TextEditingController().obs;
 
 
   RxList<SaleDashboardDataModel> salesDashboardList = <SaleDashboardDataModel>[].obs;
   RxList<MonthWiseTotalFunnel> monthWiseTotalFunnelList = <MonthWiseTotalFunnel>[].obs;
   RxList<MonthWiseCommitment> monthWiseCommitmentList = <MonthWiseCommitment>[].obs;
   RxList<MonthWiseAoVsBookingAchive> monthWiseAoVsBookingList = <MonthWiseAoVsBookingAchive>[].obs;
+
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
 
   var filterCustomDateController=TextEditingController().obs;
 
@@ -54,6 +67,7 @@ class SalesDashboardVm extends GetxController{
     DateRange("financial");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     salesDashboardData();
+    getClustersGetByEmail();
 
 
   }
@@ -139,62 +153,26 @@ class SalesDashboardVm extends GetxController{
   }
 
   Future<void> salesDashboardData() async {
-    /*CustomerNameApi="";
-    if(CustomerName_controller.value.text.isNotEmpty){
-      CustomerNameApi = CustomerName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('||');
-    }
-    AccountOwnerForApi = '';
-    if(AccountOwner_controller.value.text.isNotEmpty){
-      AccountOwnerForApi = AccountOwner_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('||');
-    }
     ClusterNameForApi = '';
-    if(clusterName_controller.value.text.isNotEmpty){
-      ClusterNameForApi = clusterName_controller.value.text
+    if(clusterNameFilter_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterNameFilter_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     RegionNameForApi = '';
-    if(RegionName_controller.value.text.isNotEmpty){
-      RegionNameForApi = RegionName_controller.value.text
+    if(RegionNameFilter_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionNameFilter_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
-    ProductCategoryForApi = '';
-    if(ProductCategory_controller.value.text.isNotEmpty){
-      ProductCategoryForApi = ProductCategory_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('||');
-    }
-    QuoteAcceptedForApi = '';
-    if (QuoteAccepted_controller.value.text.isNotEmpty) {
-      QuoteAcceptedForApi = QuoteAccepted_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('||');
-    }
-
-    StageNameForApi = '';
-    if (StageName_controller.value.text.isNotEmpty) {
-      StageNameForApi = StageName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('||');
-    }*/
 
     try {
       Map<String, String> data = {
         "email_id": email,
-        "cluster_name": 'ALl',
-        "region_name": 'ALl',
+        "cluster_name": ClusterNameForApi.isEmpty?"All":ClusterNameForApi,
+        "region_name": RegionNameForApi.isEmpty?"All":RegionNameForApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
       };
@@ -241,6 +219,102 @@ class SalesDashboardVm extends GetxController{
 
     }
   }
+
+
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterNameFilter_controller.value.text.isNotEmpty){
+      selectedCluster = clusterNameFilter_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+  clearAllFilterController(){
+    ClusterNameForApi = '';
+    RegionNameForApi = '';
+    clusterNameFilter_controller.value.clear();
+    RegionNameFilter_controller.value.clear();
+    filterCustomDateController.value.clear();
+    SelectedCluster_list.value = [];
+    SelectedRegion_list.value = [];
+    DateRange("financial");
+    filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
+
+  }
+
 
 
 }

@@ -2043,7 +2043,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
         },
         onChanged: (List<RegionWithClusterFilterModal> selectedList) {
           dashboard_view_Controller.SelectedRegion_list.value = selectedList;
-          dashboard_view_Controller.clusterName_controller.value.text =
+          dashboard_view_Controller.RegionName_controller.value.text =
               selectedList.map((e) => e.geoValue).join(', ');
         },
 
