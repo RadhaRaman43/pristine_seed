@@ -397,7 +397,7 @@ class AccountdashboardcountScreen extends StatelessWidget{
     var count = position + 1;
     var timeLine_date_month =
     StaticMethod.dateTimeToDate(
-        accountMaster_page_controller.AccountTaskHistoryList[position].createdOn!);
+        accountMaster_page_controller.AccountTaskHistoryList[position].createdOn??"");
     var timeLine_date = StaticMethod.onlyMonthName(
         accountMaster_page_controller.AccountTaskHistoryList[position].createdOn??"");
     return Container(
@@ -417,7 +417,7 @@ class AccountdashboardcountScreen extends StatelessWidget{
                       child: Tooltip(
                         message: timeLine_date_month,
                         child: Text(
-                          timeLine_date!,
+                          timeLine_date??"",
                           style: GoogleFonts.poppins(
                             color: AllColors.textColor,
                             fontSize: AllFontSize.fourtine,

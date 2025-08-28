@@ -48,17 +48,14 @@ class ContactMasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              Visibility(
-                visible: contact_vm_controller.isAdminWritePermission=='1'?true:false,
-                child: IconButton(onPressed: () {
-                  contact_vm_controller.resetAllContactCreativeField('Icon');
-                  contact_vm_controller.insideOut = true;
-                  //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                  contact_vm_controller.getAccountMaster("");
-                  contact_vm_controller.getDecisionRoleMaster();
-                  Get.toNamed(RoutesName.addNewContactMaster_screen);
-                }, icon: Icon(Icons.add)),
-              ),
+              IconButton(onPressed: () {
+                contact_vm_controller.resetAllContactCreativeField('Icon');
+                contact_vm_controller.insideOut = true;
+                //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                contact_vm_controller.getAccountMaster("");
+                contact_vm_controller.getDecisionRoleMaster();
+                Get.toNamed(RoutesName.addNewContactMaster_screen);
+              }, icon: Icon(Icons.add)),
 
               Container(
                 child: IconButton(onPressed: () {
@@ -747,7 +744,7 @@ class ContactMasterScreen extends StatelessWidget{
             contact_vm_controller.insideOut = true;
             contact_vm_controller.upDateContact('OutSide', position);
           },
-          child: contact_vm_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
+          child: /*contact_vm_controller.isAdminWritePermission == "0" ?*/Icon(Icons.update) /*Icon(Icons.remove_red_eye)*/,
         ),
       ),
     );

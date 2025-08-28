@@ -5276,6 +5276,11 @@ class SalesCycleVm extends GetxController {
     salesCycleProductCheckedList[index] = !salesCycleProductCheckedList[index];
   }
 
+  void selectAllSalesCycleProducts(bool select) {
+    for (int i = 0; i < salesCycleProductCheckedList.length; i++) {
+      salesCycleProductCheckedList[i] = select;
+    }
+  }
 /*  RxList<salesCycle.QuoteItems> salesAdviceItemList =
       <salesCycle.QuoteItems>[].obs;*/
 

@@ -471,14 +471,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         );
                       }
 
-                      if(saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()==saleCycleController.email.toLowerCase() && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&
+                      if(saleCycleController.userType.toLowerCase()=="branch head" && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&
                           saleCycleController.get_SalesCycleProductById_List.length>0 &&
-                          saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="approved"){
+                          saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="approved" && saleCycleController.solutionAcceptedController.value.text=="Yes"){
                         items.add(
                           PopupMenuItem(
                             child: Row(
                               children: [
-                                Icon(Icons.mark_chat_read_outlined, color: Colors.black),
+                                Icon(Icons.mark_chat_read, color: Colors.black),
                                 Text(' Mark RC'),
                               ],
                             ),
@@ -2074,10 +2074,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     );
   }
 
-  void openConfirmationAmtDeleteDialog(BuildContext context, int? Id) {
+  void openConfirmationAmtDeleteDialog(BuildContext context, int? Id, String flagForDialog) {
     showDialog(
         context: context,
         builder: (context) {
+          String text="";
+          if(flagForDialog=="FromCompetitorMapping"){
+            text="line";
+          }else{
+            text="product category";
+          }
           return AlertDialog(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -2104,7 +2110,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Do you want to delete this product category?',
+                Text('Do you want to delete this $text?',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500,
@@ -2150,8 +2156,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            saleCycleController
-                                .ProductCategoryWiseAmtDeleteApiHit(Id!);
+                            if(flagForDialog=="FromCompetitorMapping"){
+                              saleCycleController.getsalesProductLineCompetitorDelete( saleCycleController
+                                  .saleCycleList[0].salesCycleId!,saleCycleController
+                                  .competitorMappingSalesCycleProductList[Id!]
+                                  .lineNo);
+                            }else{
+                              saleCycleController
+                                  .ProductCategoryWiseAmtDeleteApiHit(Id!);
+                            }
                             Get.back();
                           },
                           child: Container(
@@ -8113,7 +8126,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               user.productCategory!;
                           // saleCycleController.expectedAmountController.value.text = user.estimatedAmount.toString();
                           // saleCycleController.budgetAmountController.value.text = user.budgetAmount.toString();
-                          openConfirmationAmtDeleteDialog(context, user.id);
+                          openConfirmationAmtDeleteDialog(context, user.id,"FromProductCategoryTable");
                           print('id....Selected...${user.id}');
                         },
                       ),
@@ -12616,10 +12629,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       "rejected" ,
               child: GestureDetector(
                 onTap: () {
-                  saleCycleController.getsalesProductLineCompetitorDelete( saleCycleController
+                  /*saleCycleController.getsalesProductLineCompetitorDelete( saleCycleController
                       .saleCycleList[0].salesCycleId!,saleCycleController
                       .competitorMappingSalesCycleProductList[index]
-                      .lineNo);
+                      .lineNo);*/
+                  openConfirmationAmtDeleteDialog(context, index,"FromCompetitorMapping");
+
                 },
                 child: Icon(
                   Icons.delete,

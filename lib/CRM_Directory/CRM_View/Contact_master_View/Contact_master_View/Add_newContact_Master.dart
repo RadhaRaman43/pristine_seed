@@ -67,7 +67,8 @@ class AddNewcontactMasterContact extends StatelessWidget{
           contact_vm_controller.depart_name_controller.clear();
           contact_vm_controller.phone_no_controller.clear();
           contact_vm_controller.emailId_controller.clear();
-          contact_vm_controller.getContactMasterList(0,"","","");
+          contact_vm_controller.pageNumber=0;
+          contact_vm_controller.getContactMasterList(contact_vm_controller.pageNumber,"","","");
           Get.toNamed(RoutesName.contactMaster_screen);
         }
 
@@ -127,23 +128,20 @@ class AddNewcontactMasterContact extends StatelessWidget{
 
       ),
       drawer: CustomDrawer(),
-      floatingActionButton:  Visibility(
-        visible:  accountMaster_page_controller.isAdminWritePermission=="1"?true:false,
-        child: Container(
-          margin: EdgeInsets.only(left: 30),
-          child: DefaultButton(
-            press: (){
-              if(contact_vm_controller.updateContact){
-                contact_vm_controller.createNewContactMstApi("Update");
-              }
-              else{
-                contact_vm_controller.contact_code="";
-                contact_vm_controller.createNewContactMstApi("Create");
-              }
+      floatingActionButton:  Container(
+        margin: EdgeInsets.only(left: 30),
+        child: DefaultButton(
+          press: (){
+            if(contact_vm_controller.updateContact){
+              contact_vm_controller.createNewContactMstApi("Update");
+            }
+            else{
+              contact_vm_controller.contact_code="";
+              contact_vm_controller.createNewContactMstApi("Create");
+            }
 
-            },
-            text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
-          ),
+          },
+          text: contact_vm_controller.updateContact?'Update Contact':'Create Contact',
         ),
       ),
       body: Container(
