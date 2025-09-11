@@ -165,8 +165,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 Obx(() {
                   return Visibility(
                     visible: saleCycleController.saleCycleList[0].quoteAccepted
-                                ?.toLowerCase() ==
-                            'loss' &&
+                                ?.toLowerCase() !=
+                            'open' &&
                         saleCycleController.isAdminWritePermission == "1",
                     child: GestureDetector(
                       onTap: () {
@@ -476,6 +476,24 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               saleCycleController.showDialogForsalescycleUpdate(
                                   context,
                                   saleCycleController.saleCycleList[0]);
+                            },
+                          ),
+                        );
+                      }
+
+                      if(saleCycleController.userType.toLowerCase()=="branch head" && saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase()=="prospect" &&
+                          saleCycleController.get_SalesCycleProductById_List.length>0 &&
+                          saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase()=="approved" && saleCycleController.solutionAcceptedController.value.text=="Yes"){
+                        items.add(
+                          PopupMenuItem(
+                            child: Row(
+                              children: [
+                                Icon(Icons.mark_chat_read, color: Colors.black),
+                                Text(' Mark RC'),
+                              ],
+                            ),
+                            onTap: () {
+                              showMarkFCDialog(context, saleCycleController.saleCycleList[0].salesCycleId??"",);
                             },
                           ),
                         );
@@ -955,7 +973,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 (saleCycleController.FromPage.value ==
                                         "Sales" ||
                                     saleCycleController.FromPage.value ==
-                                        "FromTaskScreen")
+                                        "FromTaskScreen") &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
                             ? false
                             : true,
                         child: Column(
@@ -1530,9 +1548,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                                 .ischangesolutionAccepted
                                                 .value) ||
                                         saleCycleController.filter.value ==
-                                            'Customer Need Identity'))
-                                ? true
-                                : false,
+                                            'Customer Need Identity')) && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                             child: Padding(
                               padding: const EdgeInsets.all(10.0),
                               child: ElevatedButton(
@@ -2068,10 +2084,16 @@ class ViewSaleHeaderScreen extends StatelessWidget {
     );
   }
 
-  void openConfirmationAmtDeleteDialog(BuildContext context, int? Id) {
+  void openConfirmationAmtDeleteDialog(BuildContext context, int? Id, String flagForDialog) {
     showDialog(
         context: context,
         builder: (context) {
+          String text="";
+          if(flagForDialog=="FromCompetitorMapping"){
+            text="line";
+          }else{
+            text="product category";
+          }
           return AlertDialog(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -2098,7 +2120,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Do you want to delete this product category?',
+                Text('Do you want to delete this $text?',
                     style: GoogleFonts.poppins(
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500,
@@ -2144,8 +2166,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            saleCycleController
-                                .ProductCategoryWiseAmtDeleteApiHit(Id!);
+                            if(flagForDialog=="FromCompetitorMapping"){
+                              saleCycleController.getsalesProductLineCompetitorDelete( saleCycleController
+                                  .saleCycleList[0].salesCycleId!,saleCycleController
+                                  .competitorMappingSalesCycleProductList[Id!]
+                                  .lineNo);
+                            }else{
+                              saleCycleController
+                                  .ProductCategoryWiseAmtDeleteApiHit(Id!);
+                            }
                             Get.back();
                           },
                           child: Container(
@@ -2784,7 +2813,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               ?.toLowerCase() ==
                           "open") &&
                   (saleCycleController.FromPage.value == "Sales" ||
-                      saleCycleController.FromPage.value == "FromTaskScreen")
+                      saleCycleController.FromPage.value == "FromTaskScreen") && saleCycleController.saleCycleList[0].isMarkRateContract==0
               ? false
               : true,
       child: Container(
@@ -3225,7 +3254,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController.saleCycleList[0]
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() !=
-                                    'rejected',
+                                    'rejected' && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                             /* visible: saleCycleController.FromPage.value ==
                                         "FromDashboard" || saleCycleController.FromPage.value == "QuotePendingPage"|| saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems" ||
                                 saleCycleController.saleCycleList[0].createdBy?.toLowerCase()!=saleCycleController.email.toLowerCase() ||
@@ -3726,7 +3755,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? 'No'
                             : 'Yes',
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .isDecisionMaker ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -3811,7 +3842,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? 'No'
                             : 'Yes',
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .commit ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -3968,7 +4001,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? "No"
                             : "Yes",
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .isCustomerNeedIdentify ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -3996,7 +4031,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             ? "No"
                             : "Yes",
                         style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
+                          color: saleCycleController.saleCycleList[0]
+                              .isSolutionAccepted ==
+                              1?AllColors.greenblue:AllColors.redColor,
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500,
                         ),
@@ -4129,7 +4166,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ? 'Yes'
                                   : 'No',
                               style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
+                                color: saleCycleController.saleCycleList[0]
+                                    .quoteSubmitted ==
+                                    1?AllColors.greenblue:AllColors.redColor,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -4186,7 +4225,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                   ? 'Yes'
                                   : 'No',
                               style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
+                                color: saleCycleController.saleCycleList[0]
+                                    .confirmExpectedRevenue ==
+                                    1?AllColors.greenblue:AllColors.redColor,
                                 fontSize: AllFontSize.fourtine,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -4539,7 +4580,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                             saleCycleController.email.toLowerCase() ||
                         saleCycleController.userType.toLowerCase() ==
                             "branch head" ||
-                        saleCycleController.isAdminWritePermission == "1"),
+                        saleCycleController.isAdminWritePermission == "1") && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                 child: GestureDetector(
                   onTap: () {
                     showSalesProductConfirmationDialog(
@@ -4640,14 +4681,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                 ),
                 IgnorePointer(
-                  ignoring: flag == "Update" ||
+                  ignoring: (flag == "Update" ||
                       saleCycleController
                               .saleCycleList[0].actualSalesCycleApprovalStatus
                               ?.toLowerCase() ==
                           "rejected" ||
                       saleCycleController.saleCycleList[0].quoteAccepted
                               ?.toLowerCase() !=
-                          "open",
+                          "open") || saleCycleController.saleCycleList[0].isMarkRateContract==1,
                   child: InkWell(
                     onTap: () {
                       saleCycleController.qtyUpdateLineController.value.text =
@@ -4669,7 +4710,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         color: AllColors.textColor,
                         fontSize: AllFontSize.twelve,
                         fontWeight: FontWeight.w500,
-                        decoration: flag == "Update" ||
+                        decoration: (flag == "Update" ||
                                 saleCycleController.saleCycleList[0]
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() ==
@@ -4677,7 +4718,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 saleCycleController
                                         .saleCycleList[0].quoteAccepted
                                         ?.toLowerCase() !=
-                                    "open"
+                                    "open" )|| saleCycleController.saleCycleList[0].isMarkRateContract==1
                             ? TextDecoration.none
                             : TextDecoration.underline,
                       ),
@@ -7669,7 +7710,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           .saleCycleList[0].actualSalesCycleApprovalStatus
                           ?.toLowerCase() !=
                       "rejected") &&
-              saleCycleController.FromPage.value == "Sales"
+              saleCycleController.FromPage.value == "Sales" &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
           ? false
           : true,
 /*      saleCycleController.saleCycleList[0].quoteAccepted
@@ -7814,7 +7855,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           .saleCycleList[0].actualSalesCycleApprovalStatus
                           ?.toLowerCase() !=
                       "rejected") &&
-              saleCycleController.FromPage.value == "Sales"
+              saleCycleController.FromPage.value == "Sales" &&  saleCycleController.saleCycleList[0].isMarkRateContract==0
           ? false
           : true,
       /* ignoring:
@@ -8028,7 +8069,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         .actualSalesCycleApprovalStatus
                                         ?.toLowerCase() !=
                                     "rejected") &&
-                            saleCycleController.FromPage.value == "Sales")
+                            saleCycleController.FromPage.value == "Sales" &&  saleCycleController.saleCycleList[0].isMarkRateContract==0)
                         /*  if (!(saleCycleController.FromPage.value ==
                                     "FromDashboard" ||saleCycleController.FromPage.value == "QuotePendingPage" || saleCycleController.FromPage.value == "ApprovedRejectedQuotePage" || saleCycleController.FromPage.value == "FromAllQuotePage" || saleCycleController.FromPage.value == "FromALLQuoteLineItems") &&
                                 saleCycleController
@@ -8067,7 +8108,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       .actualSalesCycleApprovalStatus
                                       ?.toLowerCase() !=
                                   "rejected") &&
-                          saleCycleController.FromPage.value == "Sales",
+                          saleCycleController.FromPage.value == "Sales"  &&  saleCycleController.saleCycleList[0].isMarkRateContract==0,
                       /*saleCycleController.saleCycleList[0]
                                               .salesCycleApprovalStatus
                                               ?.toLowerCase() ==
@@ -8095,7 +8136,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                               user.productCategory!;
                           // saleCycleController.expectedAmountController.value.text = user.estimatedAmount.toString();
                           // saleCycleController.budgetAmountController.value.text = user.budgetAmount.toString();
-                          openConfirmationAmtDeleteDialog(context, user.id);
+                          openConfirmationAmtDeleteDialog(context, user.id,"FromProductCategoryTable");
                           print('id....Selected...${user.id}');
                         },
                       ),
@@ -8846,7 +8887,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               .actualSalesCycleApprovalStatus
                                               ?.toLowerCase() !=
                                           "rejected") &&
-                                  saleCycleController.FromPage.value == "Sales",
+                                  saleCycleController.FromPage.value == "Sales" && saleCycleController.saleCycleList[0].isMarkRateContract==0,
                               /* saleCycleController.userType.toLowerCase()!="branch head"|| saleCycleController.isAdminWritePermission!="1"||
                               saleCycleController
                                               .saleCycleList[0].quoteAccepted!
@@ -12598,10 +12639,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       "rejected" ,
               child: GestureDetector(
                 onTap: () {
-                  saleCycleController.getsalesProductLineCompetitorDelete( saleCycleController
+                  /*saleCycleController.getsalesProductLineCompetitorDelete( saleCycleController
                       .saleCycleList[0].salesCycleId!,saleCycleController
                       .competitorMappingSalesCycleProductList[index]
-                      .lineNo);
+                      .lineNo);*/
+                  openConfirmationAmtDeleteDialog(context, index,"FromCompetitorMapping");
+
                 },
                 child: Icon(
                   Icons.delete,
@@ -12780,5 +12823,95 @@ class ViewSaleHeaderScreen extends StatelessWidget {
         });
   }
 
+
+  showMarkFCDialog(context, String SalesId) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.check_circle,
+                  color: AllColors.lightredColor,
+                ),
+                SizedBox(
+                  width: 5,
+                ),
+                Text('Mark FC!',
+                    style: GoogleFonts.poppins(
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700,
+                      color: AllColors.primaryDark1,
+                    ))
+              ],
+            ),
+            content: Wrap(children: [
+              Column(
+                children: [
+                  Text('Do you want to Mark FC this sales cycle ?',
+                      style: GoogleFonts.poppins(
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                        color: AllColors.primaryDark1,
+                      )),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.lightredColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Cancel',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                            AllColors.greenblue,
+                          ),
+                        ),
+                        onPressed: () {
+                          saleCycleController.getSalesCycleMstMarkRateContract(SalesId);
+                          Get.back();
+                        },
+                        child: Container(
+                          width: 60,
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Confirm',
+                            style: GoogleFonts.poppins(
+                              color: AllColors.blackColor,
+                              fontSize: AllFontSize.twelve,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ]),
+          );
+        });
+  }
 
 }

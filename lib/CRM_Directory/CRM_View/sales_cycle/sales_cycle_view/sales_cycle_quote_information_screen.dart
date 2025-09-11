@@ -230,7 +230,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),);
                         }),
-                        Obx((){
+                      /*  Obx((){
                               return Visibility(
                                 visible: (saleCycleController.quoteHeaderdata[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
                                 || saleCycleController.userType.toLowerCase()=="branch head") && saleCycleController
@@ -256,7 +256,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                             /*   Tooltip(
+                             *//*   Tooltip(
                                   message: "Sales Advise Create",
                                   child: Container(
                                     decoration: BoxDecoration(
@@ -272,7 +272,7 @@ class QuoteInformationScreen extends StatelessWidget {
                                     },
                                         icon: Icon(Icons.add)),
                                   ),
-                                ),*/
+                                ),*//*
                               );
                             }),
                         Obx((){
@@ -299,7 +299,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
 
-                           /* Tooltip(
+                           *//* Tooltip(
                               message: "View Sales Advise",
                               child: Container(
                                 decoration: BoxDecoration(
@@ -314,8 +314,8 @@ class QuoteInformationScreen extends StatelessWidget {
                                 },
                                     icon: Icon(Icons.article)),
                               ),
-                            )*/);
-                        }),
+                            )*//*);
+                        }),*/
                         Obx(() {
                           return Padding(
                             padding: const EdgeInsets.only(right: 0.0),
@@ -2684,7 +2684,9 @@ class QuoteInformationScreen extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
                               style: GoogleFonts.poppins(
-                                  color: AllColors.textColor,
+                                  color: saleCycleController.quoteHeaderdata[0].quoteCommit
+                                      .toString() ==
+                                      '1'?AllColors.greenblue:AllColors.redColor,
                                   fontSize: AllFontSize.fourtine,
                                   fontWeight: FontWeight.w500),
                             ),

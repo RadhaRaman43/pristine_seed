@@ -55,7 +55,6 @@ class SalesCycleProductList extends StatelessWidget{
                       ),
                       onPressed: () {
 
-
                         List<QuoteItems> selectedJsonList = saleCycleController.getSelectedQSalesCycleProductAsJson();
                         if(selectedJsonList.length>0){
                           saleCycleController.getSalesProductLineCompetitorFromCompeMappCreate(
@@ -64,7 +63,6 @@ class SalesCycleProductList extends StatelessWidget{
                               selectedJsonList);
                           //saleCycleController.getSalesAdviceCreate(selectedJsonList,saleCycleController.quoteHeaderdata[0].quoteId??"");
                         }
-
                       },
                       backgroundColor: AllColors.primaryDark1,
                       shape: StadiumBorder(
@@ -93,6 +91,33 @@ class SalesCycleProductList extends StatelessWidget{
                   ),
                 );
               }),
+
+              Obx((){
+                bool allSelected = saleCycleController.salesCycleProductCheckedList
+                  .every((element) => element == true);
+                return Container(
+                  alignment: Alignment.centerRight,
+                  padding: EdgeInsets.only(right: 10),
+                  child: ActionChip(
+                    label: Text(
+                      allSelected ? "Unselect All" : "Select All",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.whiteColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    onPressed: () {
+                      saleCycleController.selectAllSalesCycleProducts(!allSelected);
+                    },
+                    backgroundColor: AllColors.primaryDark1,
+                    shape: StadiumBorder(
+                      side: BorderSide.none,
+                    ),
+                  ),
+                );
+              }),
+
+
               Flexible(
                 fit: FlexFit.loose,
                 child: Container(

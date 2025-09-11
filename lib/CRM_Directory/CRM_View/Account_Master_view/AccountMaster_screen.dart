@@ -177,12 +177,12 @@ class AccountmasterScreen extends StatelessWidget{
       isActive = "No";
     }
     final parts = [
-      controller.permanentAddress!.address!,
-      controller.permanentAddress!.address2!,
-      controller.permanentAddress!.city!,
-      controller.permanentAddress!.district!,
-      controller.permanentAddress!.stateName!,
-      controller.permanentAddress!.postCode!,
+      controller.permanentAddress!.address??"",
+      controller.permanentAddress!.address2??"",
+      controller.permanentAddress!.city??"",
+      controller.permanentAddress!.district??"",
+      controller.permanentAddress!.stateName??"",
+      controller.permanentAddress!.postCode??"",
 
     ];
 
@@ -922,14 +922,7 @@ class AccountmasterScreen extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              bindCreatedBy(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              /*bindFrontLinerValue(),
-                              SizedBox(
-                                height: 10,
-                              ),*/
+
                               bindBranchHead(),
                               SizedBox(
                                 height: 10,
@@ -2049,7 +2042,7 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-  bindCreatedBy() {
+ /* bindCreatedBy() {
     return  TextField(
       controller: accountMaster_page_controller.created_by_controller.value,
       decoration: InputDecoration(
@@ -2077,7 +2070,7 @@ class AccountmasterScreen extends StatelessWidget{
         // Handle the text field value changes if needed
       },
     );
-  }
+  }*/
 
   bindFrontLinerValue() {
     return  TextField(

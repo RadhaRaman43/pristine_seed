@@ -280,6 +280,7 @@ class AppUrl {
      static const String SalesCycleCompetitorCreateFromProspectProducts="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorCreateFromProspectProducts";
      static const String salesProductLineCompetitorDelete="$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorDelete";
      static const String salesCycleCompetitorProductInformationGet="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorProductInformationGet";
+     static const String salesCycleMstMarkRateContract="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstMarkRateContract";
 
    //todo SalesAdvise
      static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";

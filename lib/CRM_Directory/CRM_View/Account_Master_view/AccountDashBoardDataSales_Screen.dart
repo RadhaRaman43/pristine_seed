@@ -229,7 +229,7 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                         salesCycleController.pageNumber ,
                         accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);*/
 
-                    salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId!);
+                    salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,accountMaster_page_controller.AccountDashboardDataSalesList[position].salesCycleId??"");
                   },
 
                 ),
@@ -247,7 +247,7 @@ class AccountdashboarddatasalesScreen extends StatelessWidget{
                 ),
                 Text(
                   accountMaster_page_controller.AccountDashboardDataSalesList[position]
-                      .salesCycleApprovalStatus!,
+                      .salesCycleApprovalStatus??"",
                   style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
