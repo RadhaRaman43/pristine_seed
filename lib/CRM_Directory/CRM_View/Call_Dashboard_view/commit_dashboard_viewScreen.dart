@@ -347,7 +347,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                       sideTitles: SideTitles(
                         showTitles: true,
                         interval: interval,
-                        reservedSize: 50,
+                        reservedSize: 60,
                         getTitlesWidget: (value, meta) {
                           // Skip top label
                           if (value == meta.max) {

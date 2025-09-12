@@ -939,11 +939,11 @@ class TaskMasterScreen extends StatelessWidget {
                     child: Tooltip(
                       message: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .methodOfCall!,
+                          .methodOfCall??"",
                       child: Text(
                         TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .methodOfCall!,
+                            .methodOfCall??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -1129,11 +1129,11 @@ class TaskMasterScreen extends StatelessWidget {
                       child: Tooltip(
                         message: TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .rejectReason!,
+                            .rejectReason??"",
                         child: Text(
                           TaskMaster_page_controller
                               .Task_Master_list[position]
-                              .methodOfCall!,
+                              .rejectReason??"",
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
                               color: AllColors.textColor,

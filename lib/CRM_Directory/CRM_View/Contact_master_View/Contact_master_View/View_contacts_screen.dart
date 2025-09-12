@@ -278,8 +278,8 @@ class ViewContactsScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .55,
+                Flexible(
+                  fit: FlexFit.loose,
                   child: Tooltip(
                     message: accountMaster_page_controller
                         .view_contract_list[position]

@@ -565,6 +565,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                 titlesData: FlTitlesData(
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
+                      reservedSize: 40,
                       showTitles: true,
                       interval: interval,
                       getTitlesWidget: (value, meta) {
