@@ -64,6 +64,33 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   ),
                 );
               }),
+              Visibility(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                        minWidth: MediaQuery.of(context).size.width),
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 8), // optional spacing
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Visibility(
+                              visible: dashboard_view_Controller.userType !=
+                                  'Branch Head',
+                              child: _buildActionChip("Cluster")),
+                          SizedBox(width: 8),
+                          _buildActionChip("Region"),
+                          SizedBox(width: 8),
+                          _buildActionChip("Employee"),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                visible: dashboard_view_Controller.userType != 'Frontliners',
+              ),
               Container(
                 margin: EdgeInsets.only(top: 15.0,left: 10,right: 10),
                 decoration: BoxDecoration(
@@ -76,7 +103,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
+                    /*Container(
                       decoration: BoxDecoration(
                         border: Border.all(
                           color: AllColors.grayColor, // Set the border color here
@@ -193,7 +220,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
           
                       ),
                     ),
-                    SizedBox(height: 10,),
+                    SizedBox(height: 10,),*/
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -522,6 +549,36 @@ class SalesDashboardViewscreen extends StatelessWidget{
     );
   }
 
+  Widget _buildActionChip(String label) {
+    return Obx(() {
+      final isSelected =
+          dashboard_view_Controller.selectedOption.value == label;
+      return ActionChip(
+        elevation: 2,
+        padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+        backgroundColor:
+        isSelected ? AllColors.primaryDark1 : AllColors.grayColor,
+        shadowColor: Colors.black,
+        shape: StadiumBorder(
+          side: BorderSide(color: AllColors.grayColor),
+        ),
+        label: Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: isSelected ? AllColors.whiteColor : AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        onPressed: () {
+          dashboard_view_Controller.selectedOption.value = label;
+          dashboard_view_Controller.clearAllFilterController();
+          dashboard_view_Controller.salesDashboardData();
+        },
+      );
+    });
+  }
+
   Widget CRMTaskDetailCard(BuildContext context) {
     if(dashboard_view_Controller.salesDashboardList.isNotEmpty){
       return   Visibility(
@@ -601,6 +658,136 @@ class SalesDashboardViewscreen extends StatelessWidget{
           margin: EdgeInsets.only(left: 10.0, right: 10.0),
           child: Column(
             children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                            backgroundColor:dashboard_view_Controller.FilterFunnel.value=="All"
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'All',
+                              style: GoogleFonts.poppins(
+                                color: dashboard_view_Controller.FilterFunnel.value=="All"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              dashboard_view_Controller.FilterFunnel.value="All";
+                              dashboard_view_Controller.salesDashboardData();
+                            },
+                          );
+                        }),
+                        SizedBox(width: 8),
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                            backgroundColor:
+                            dashboard_view_Controller.FilterFunnel.value=="Open"
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'Open',
+                              style: GoogleFonts.poppins(
+                                color: dashboard_view_Controller.FilterFunnel.value=="Open"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              dashboard_view_Controller.FilterFunnel.value="Open";
+                              dashboard_view_Controller.salesDashboardData();
+                            },
+                          );
+                        }),
+                        SizedBox(width: 8),
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                            backgroundColor:dashboard_view_Controller.FilterFunnel.value=="Won"
+
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'Won',
+                              style: GoogleFonts.poppins(
+                                color: dashboard_view_Controller.FilterFunnel.value=="Won"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              dashboard_view_Controller.FilterFunnel.value = "Won";
+                              dashboard_view_Controller.salesDashboardData();
+                              },
+                          );
+                        }),
+                        SizedBox(width: 8), // optional spacing between chips
+                        Obx(() {
+                          return ActionChip(
+                            elevation: 2,
+                            padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                            backgroundColor:dashboard_view_Controller.FilterFunnel.value=="Loss"
+                                ? AllColors.primaryDark1
+                                : AllColors.grayColor,
+                            shadowColor: Colors.black,
+                            shape: StadiumBorder(
+                              side: BorderSide(color: AllColors.grayColor),
+                            ),
+                            label: Text(
+                              'Loss',
+                              style: GoogleFonts.poppins(
+                                color: dashboard_view_Controller.FilterFunnel.value=="Loss"
+                                    ? AllColors.whiteColor
+                                    : AllColors.primaryDark1,
+                                fontSize: AllFontSize.fourtine,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            onPressed: () {
+                              dashboard_view_Controller.FilterFunnel.value="Loss";
+                              dashboard_view_Controller.salesDashboardData();
+                              },
+                          );
+                        }),
+                        SizedBox(width: 8),
+
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 5,),
               Text("C/M Funnel",
                 style: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
@@ -778,6 +965,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
   Widget BindDataListView(BuildContext context, int pos){
     return  Container(
+      margin: EdgeInsets.only(left: 10),
       width: 80,
       decoration: BoxDecoration(
         color: Colors.green[50],
@@ -935,6 +1123,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
   Widget BindDataCommitmentListView(BuildContext context, int pos){
     return  Container(
+      margin: EdgeInsets.only(left: 10),
       width: 80,
       decoration: BoxDecoration(
         color: Colors.green[50],
@@ -989,7 +1178,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
   Widget BindDataAOvsBookingListView(BuildContext context, int pos){
     return  Container(
-      width: 80,
+      margin: EdgeInsets.only(left: 10),
+      width: 90,
       decoration: BoxDecoration(
         color: Colors.green[50],
         border: Border.all(
@@ -1010,7 +1200,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
             ),
           ),
           Text(
-            '${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearActualBookingValue??""}',
+            '${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearBookingAoValue??""}/ \n ${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearActualBookingValue??""}' ,
             style: GoogleFonts.poppins(
               color: Colors.green,
               fontSize: AllFontSize.twelve,

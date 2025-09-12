@@ -18,6 +18,8 @@ class SalesDashboardVm extends GetxController{
   RxBool loading = false.obs;
   String email = "";
   String userType = "";
+  var selectedOption = 'Employee'.obs;
+  var FilterFunnel = 'All'.obs;
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
   RxString ClusterName = "".obs;
@@ -175,6 +177,9 @@ class SalesDashboardVm extends GetxController{
         "region_name": RegionNameForApi.isEmpty?"All":RegionNameForApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
+        "funnel_filter": FilterFunnel.value,
+        "emp_email_id": "",
+        "flag": selectedOption.value
       };
 
       print(data);
