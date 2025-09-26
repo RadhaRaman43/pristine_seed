@@ -86,6 +86,7 @@ class Accountmastervm extends GetxController{
   Rx<CustomList> custome_selection=new CustomList().obs;
 
   RxBool ShowState=true.obs;
+  RxBool ShowState1=true.obs;
 
   //String view ="";
   String view ="Account";

@@ -55,7 +55,7 @@ class AddNewConsigneeadd extends StatelessWidget{
             Get.toNamed(RoutesName.quoteInformationScreen);
           }else if(address_vm_controller.FromPage.value=="AddQuote") {
             Get.offNamed(RoutesName.salesCycleCreateQuoteScreen);
-          }else if(address_vm_controller.FromPage.value=="AddSalesAdvise"){
+          }else if(address_vm_controller.FromPage.value=="salesAdviseHeaderLine"){
             Get.offNamed(RoutesName.salesAdviseHeaderLineScreen);
           }else if(address_vm_controller.FromPage.value=="CreateSalesAdvise"){
             Get.offNamed(RoutesName.salesAdviseCreateScreen);

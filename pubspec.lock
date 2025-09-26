@@ -217,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.0"
+  dropdown_search:
+    dependency: "direct main"
+    description:
+      name: dropdown_search
+      sha256: "55106e8290acaa97ed15bea1fdad82c3cf0c248dd410e651f5a8ac6870f783ab"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.0.6"
   email_validator:
     dependency: "direct main"
     description:
@@ -229,10 +237,10 @@ packages:
     dependency: transitive
     description:
       name: equatable
-      sha256: c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2
+      sha256: "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.5"
+    version: "2.0.7"
   excel:
     dependency: "direct main"
     description:
@@ -305,6 +313,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.3+1"
+  fl_chart:
+    dependency: "direct main"
+    description:
+      name: fl_chart
+      sha256: "74959b99b92b9eebeed1a4049426fd67c4abc3c5a0f4d12e2877097d6a11ae08"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.69.2"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -1040,6 +1056,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.4.1"
+  shimmer:
+    dependency: "direct main"
+    description:
+      name: shimmer
+      sha256: "5f88c883a22e9f9f299e5ba0e4f7e6054857224976a5d9f839d4ebdc94a14ac9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
   signalr_netcore:
     dependency: "direct main"
     description:
@@ -1133,6 +1157,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.0"
+  syncfusion_flutter_charts:
+    dependency: "direct main"
+    description:
+      name: syncfusion_flutter_charts
+      sha256: bdb7cc5814ceb187793cea587f4a5946afcffd96726b219cee79df8460f44b7b
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.2.4"
+  syncfusion_flutter_core:
+    dependency: transitive
+    description:
+      name: syncfusion_flutter_core
+      sha256: "8db8f55c77f56968681447d3837c10f27a9e861e238a898fda116c7531def979"
+      url: "https://pub.dev"
+    source: hosted
+    version: "21.2.10"
   synchronized:
     dependency: transitive
     description:

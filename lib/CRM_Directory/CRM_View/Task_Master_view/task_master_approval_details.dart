@@ -484,7 +484,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Method of Call",
+                  "Mode of Call",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,
@@ -1864,7 +1864,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
             Row(
               children: [
                 Text(
-                  "Method Of Call",
+                  "Mode Of Call",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
                     fontSize: AllFontSize.fourtine,

@@ -1,0 +1,380 @@
+class AllSalesAdviseModal {
+  String? condition;
+  String? totalRows;
+  String? salesAdviceId;
+  String? quoteId;
+  double? quoteVersion;
+  String? salesCycleId;
+  String? accountCode;
+  String? accountName;
+  String? contactCode;
+  String? contactName;
+  String? productCategory;
+  String? salesAdviceStatus;
+  String? quoteValidity;
+  String? expClosureDate;
+  int? quoteCommit;
+  String? approvedBy;
+  String? approvedFullName;
+  String? approvedOn;
+  String? rejectReason;
+  String? createdBy;
+  String? createdFullName;
+  String? createdOn;
+  String? updatedBy;
+  String? updatedFullName;
+  String? updatedOn;
+  String? completedBy;
+  String? completedFullName;
+  String? completedOn;
+  String? regretBy;
+  String? regretOn;
+  String? regretReason;
+  int? isActive;
+  double? installationCharges;
+  double? otherCharges;
+  String? warrantyPeriod;
+  String? deliveryInWeeks;
+  double? advancePaymentPer;
+  double? advancePaymentAmt;
+  String? otherRemarks;
+  int? isSpr;
+  String? rhApprovalEmail;
+  String? rhApproval;
+  String? rhApprovalOn;
+  String? cbhApprovalEmail;
+  String? cbhApproval;
+  String? cbhApprovalOn;
+  String? gmApprovalEmail;
+  String? gmApproval;
+  String? gmApprovalOn;
+  String? kindAttention;
+  String? termsAndCondition;
+  String? sprNo;
+  int? isReadySendForApproval;
+  double? quoteTotalAmount;
+  double? quoteGrossAmount;
+  double? quoteGstAmount;
+  String? frontlinerValue;
+  String? branchHeadValue;
+  String? zoneHeadValue;
+  String? clustureHeadValue;
+  String? postCode;
+  String? district;
+  String? itemCode;
+  String? itemName;
+  String? itemDescription;
+  dynamic? qty;
+  dynamic? unitPrice;
+  dynamic? mrpPrice;
+  dynamic? quoteLinePrice;
+  dynamic? totalPrice;
+  dynamic? discountPer;
+  dynamic? discountAmt;
+  dynamic? bmDiscountPer;
+  dynamic? gmDiscountPer;
+  dynamic? gmDiscountAmount;
+  dynamic? approvedDiscountPer;
+  dynamic? approvedAmount;
+  dynamic? standardCost;
+  double? branchTransferPrice;
+  double? minimalAcceptablePrice;
+  double? listSellingPrice;
+  dynamic? isSprRequired;
+  dynamic? sgstPer;
+  dynamic? cgstPer;
+  dynamic? igstPer;
+  double? sgstAmt;
+  double? cgstAmt;
+  dynamic? igstAmt;
+  double? gstAmount;
+  double? grossAmount;
+  dynamic? salesCredit;
+  String? lineStatus;
+
+  AllSalesAdviseModal(
+      {this.condition,
+        this.totalRows,
+        this.salesAdviceId,
+        this.quoteId,
+        this.quoteVersion,
+        this.salesCycleId,
+        this.accountCode,
+        this.accountName,
+        this.contactCode,
+        this.contactName,
+        this.productCategory,
+        this.salesAdviceStatus,
+        this.quoteValidity,
+        this.expClosureDate,
+        this.quoteCommit,
+        this.approvedBy,
+        this.approvedFullName,
+        this.approvedOn,
+        this.rejectReason,
+        this.createdBy,
+        this.createdFullName,
+        this.createdOn,
+        this.updatedBy,
+        this.updatedFullName,
+        this.updatedOn,
+        this.completedBy,
+        this.completedFullName,
+        this.completedOn,
+        this.regretBy,
+        this.regretOn,
+        this.regretReason,
+        this.isActive,
+        this.installationCharges,
+        this.otherCharges,
+        this.warrantyPeriod,
+        this.deliveryInWeeks,
+        this.advancePaymentPer,
+        this.advancePaymentAmt,
+        this.otherRemarks,
+        this.isSpr,
+        this.rhApprovalEmail,
+        this.rhApproval,
+        this.rhApprovalOn,
+        this.cbhApprovalEmail,
+        this.cbhApproval,
+        this.cbhApprovalOn,
+        this.gmApprovalEmail,
+        this.gmApproval,
+        this.gmApprovalOn,
+        this.kindAttention,
+        this.termsAndCondition,
+        this.sprNo,
+        this.isReadySendForApproval,
+        this.quoteTotalAmount,
+        this.quoteGrossAmount,
+        this.quoteGstAmount,
+        this.frontlinerValue,
+        this.branchHeadValue,
+        this.zoneHeadValue,
+        this.clustureHeadValue,
+        this.postCode,
+        this.district,
+        this.itemCode,
+        this.itemName,
+        this.itemDescription,
+        this.qty,
+        this.unitPrice,
+        this.mrpPrice,
+        this.quoteLinePrice,
+        this.totalPrice,
+        this.discountPer,
+        this.discountAmt,
+        this.bmDiscountPer,
+        this.gmDiscountPer,
+        this.gmDiscountAmount,
+        this.approvedDiscountPer,
+        this.approvedAmount,
+        this.standardCost,
+        this.branchTransferPrice,
+        this.minimalAcceptablePrice,
+        this.listSellingPrice,
+        this.isSprRequired,
+        this.sgstPer,
+        this.cgstPer,
+        this.igstPer,
+        this.sgstAmt,
+        this.cgstAmt,
+        this.igstAmt,
+        this.gstAmount,
+        this.grossAmount,
+        this.salesCredit,
+        this.lineStatus});
+
+  AllSalesAdviseModal.fromJson(Map<String, dynamic> json) {
+    condition = json['condition'];
+    totalRows = json['total_rows'];
+    salesAdviceId = json['sales_advice_id'];
+    quoteId = json['quote_id'];
+    quoteVersion = json['quote_version'];
+    salesCycleId = json['sales_cycle_id'];
+    accountCode = json['account_code'];
+    accountName = json['account_name'];
+    contactCode = json['contact_code'];
+    contactName = json['contact_name'];
+    productCategory = json['product_category'];
+    salesAdviceStatus = json['sales_advice_status'];
+    quoteValidity = json['quote_validity'];
+    expClosureDate = json['exp_closure_date'];
+    quoteCommit = json['quote_commit'];
+    approvedBy = json['approved_by'];
+    approvedFullName = json['approved_full_name'];
+    approvedOn = json['approved_on'];
+    rejectReason = json['reject_reason'];
+    createdBy = json['created_by'];
+    createdFullName = json['created_full_name'];
+    createdOn = json['created_on'];
+    updatedBy = json['updated_by'];
+    updatedFullName = json['updated_full_name'];
+    updatedOn = json['updated_on'];
+    completedBy = json['completed_by'];
+    completedFullName = json['completed_full_name'];
+    completedOn = json['completed_on'];
+    regretBy = json['regret_by'];
+    regretOn = json['regret_on'];
+    regretReason = json['regret_reason'];
+    isActive = json['is_active'];
+    installationCharges = json['installation_charges'];
+    otherCharges = json['other_charges'];
+    warrantyPeriod = json['warranty_period'];
+    deliveryInWeeks = json['delivery_in_weeks'];
+    advancePaymentPer = json['advance_payment_per'];
+    advancePaymentAmt = json['advance_payment_amt'];
+    otherRemarks = json['other_remarks'];
+    isSpr = json['is_spr'];
+    rhApprovalEmail = json['rh_approval_email'];
+    rhApproval = json['rh_approval'];
+    rhApprovalOn = json['rh_approval_on'];
+    cbhApprovalEmail = json['cbh_approval_email'];
+    cbhApproval = json['cbh_approval'];
+    cbhApprovalOn = json['cbh_approval_on'];
+    gmApprovalEmail = json['gm_approval_email'];
+    gmApproval = json['gm_approval'];
+    gmApprovalOn = json['gm_approval_on'];
+    kindAttention = json['kind_attention'];
+    termsAndCondition = json['terms_and_condition'];
+    sprNo = json['spr_no'];
+    isReadySendForApproval = json['is_ready_send_for_approval'];
+    quoteTotalAmount = json['quote_total_amount'];
+    quoteGrossAmount = json['quote_gross_amount'];
+    quoteGstAmount = json['quote_gst_amount'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
+    postCode = json['post_code'];
+    district = json['district'];
+    itemCode = json['item_code'];
+    itemName = json['item_name'];
+    itemDescription = json['item_description'];
+    qty = json['qty'];
+    unitPrice = json['unit_price'];
+    mrpPrice = json['mrp_price'];
+    quoteLinePrice = json['quote_line_price'];
+    totalPrice = json['total_price'];
+    discountPer = json['discount_per'];
+    discountAmt = json['discount_amt'];
+    bmDiscountPer = json['bm_discount_per'];
+    gmDiscountPer = json['gm_discount_per'];
+    gmDiscountAmount = json['gm_discount_amount'];
+    approvedDiscountPer = json['approved_discount_per'];
+    approvedAmount = json['approved_amount'];
+    standardCost = json['standard_cost'];
+    branchTransferPrice = json['branch_transfer_price'];
+    minimalAcceptablePrice = json['minimal_acceptable_price'];
+    listSellingPrice = json['list_selling_price'];
+    isSprRequired = json['is_spr_required'];
+    sgstPer = json['sgst_per'];
+    cgstPer = json['cgst_per'];
+    igstPer = json['igst_per'];
+    sgstAmt = json['sgst_amt'];
+    cgstAmt = json['cgst_amt'];
+    igstAmt = json['igst_amt'];
+    gstAmount = json['gst_amount'];
+    grossAmount = json['gross_amount'];
+    salesCredit = json['sales_credit'];
+    lineStatus = json['line_status'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['condition'] = this.condition;
+    data['total_rows'] = this.totalRows;
+    data['sales_advice_id'] = this.salesAdviceId;
+    data['quote_id'] = this.quoteId;
+    data['quote_version'] = this.quoteVersion;
+    data['sales_cycle_id'] = this.salesCycleId;
+    data['account_code'] = this.accountCode;
+    data['account_name'] = this.accountName;
+    data['contact_code'] = this.contactCode;
+    data['contact_name'] = this.contactName;
+    data['product_category'] = this.productCategory;
+    data['sales_advice_status'] = this.salesAdviceStatus;
+    data['quote_validity'] = this.quoteValidity;
+    data['exp_closure_date'] = this.expClosureDate;
+    data['quote_commit'] = this.quoteCommit;
+    data['approved_by'] = this.approvedBy;
+    data['approved_full_name'] = this.approvedFullName;
+    data['approved_on'] = this.approvedOn;
+    data['reject_reason'] = this.rejectReason;
+    data['created_by'] = this.createdBy;
+    data['created_full_name'] = this.createdFullName;
+    data['created_on'] = this.createdOn;
+    data['updated_by'] = this.updatedBy;
+    data['updated_full_name'] = this.updatedFullName;
+    data['updated_on'] = this.updatedOn;
+    data['completed_by'] = this.completedBy;
+    data['completed_full_name'] = this.completedFullName;
+    data['completed_on'] = this.completedOn;
+    data['regret_by'] = this.regretBy;
+    data['regret_on'] = this.regretOn;
+    data['regret_reason'] = this.regretReason;
+    data['is_active'] = this.isActive;
+    data['installation_charges'] = this.installationCharges;
+    data['other_charges'] = this.otherCharges;
+    data['warranty_period'] = this.warrantyPeriod;
+    data['delivery_in_weeks'] = this.deliveryInWeeks;
+    data['advance_payment_per'] = this.advancePaymentPer;
+    data['advance_payment_amt'] = this.advancePaymentAmt;
+    data['other_remarks'] = this.otherRemarks;
+    data['is_spr'] = this.isSpr;
+    data['rh_approval_email'] = this.rhApprovalEmail;
+    data['rh_approval'] = this.rhApproval;
+    data['rh_approval_on'] = this.rhApprovalOn;
+    data['cbh_approval_email'] = this.cbhApprovalEmail;
+    data['cbh_approval'] = this.cbhApproval;
+    data['cbh_approval_on'] = this.cbhApprovalOn;
+    data['gm_approval_email'] = this.gmApprovalEmail;
+    data['gm_approval'] = this.gmApproval;
+    data['gm_approval_on'] = this.gmApprovalOn;
+    data['kind_attention'] = this.kindAttention;
+    data['terms_and_condition'] = this.termsAndCondition;
+    data['spr_no'] = this.sprNo;
+    data['is_ready_send_for_approval'] = this.isReadySendForApproval;
+    data['quote_total_amount'] = this.quoteTotalAmount;
+    data['quote_gross_amount'] = this.quoteGrossAmount;
+    data['quote_gst_amount'] = this.quoteGstAmount;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
+    data['post_code'] = this.postCode;
+    data['district'] = this.district;
+    data['item_code'] = this.itemCode;
+    data['item_name'] = this.itemName;
+    data['item_description'] = this.itemDescription;
+    data['qty'] = this.qty;
+    data['unit_price'] = this.unitPrice;
+    data['mrp_price'] = this.mrpPrice;
+    data['quote_line_price'] = this.quoteLinePrice;
+    data['total_price'] = this.totalPrice;
+    data['discount_per'] = this.discountPer;
+    data['discount_amt'] = this.discountAmt;
+    data['bm_discount_per'] = this.bmDiscountPer;
+    data['gm_discount_per'] = this.gmDiscountPer;
+    data['gm_discount_amount'] = this.gmDiscountAmount;
+    data['approved_discount_per'] = this.approvedDiscountPer;
+    data['approved_amount'] = this.approvedAmount;
+    data['standard_cost'] = this.standardCost;
+    data['branch_transfer_price'] = this.branchTransferPrice;
+    data['minimal_acceptable_price'] = this.minimalAcceptablePrice;
+    data['list_selling_price'] = this.listSellingPrice;
+    data['is_spr_required'] = this.isSprRequired;
+    data['sgst_per'] = this.sgstPer;
+    data['cgst_per'] = this.cgstPer;
+    data['igst_per'] = this.igstPer;
+    data['sgst_amt'] = this.sgstAmt;
+    data['cgst_amt'] = this.cgstAmt;
+    data['igst_amt'] = this.igstAmt;
+    data['gst_amount'] = this.gstAmount;
+    data['gross_amount'] = this.grossAmount;
+    data['sales_credit'] = this.salesCredit;
+    data['line_status'] = this.lineStatus;
+    return data;
+  }
+}

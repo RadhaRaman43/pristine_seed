@@ -235,6 +235,21 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.salesProductLineCompetitorDelete,sessionManagement);
   }
 
+  Future<String> salesCycleCompetitorProductInformationGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesCycleCompetitorProductInformationGet,sessionManagement);
+  }
+
+
+  Future<String> salesAdviceHeaderGetNewApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesAdviceHeaderGetNew,sessionManagement);
+  }
+
+  Future<String> salesCycleMstMarkRateContractApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.salesCycleMstMarkRateContract,sessionManagement);
+  }
+
+
+
 
 
 }

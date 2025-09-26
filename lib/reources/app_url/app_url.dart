@@ -203,6 +203,9 @@ class AppUrl {
      static const String DepartmentGetInsert = "$BASE_URL/api/Master/DepartmentGetInsert";
      static const String ContactMstUploader = "$BASE_URL/api/CRM/Contact/ContactMstUploader";
      static const String DesignationGet = "$BASE_URL/api/Master/DesignationGet";
+     static const String ClustersGetByEmail = "$BASE_URL/api/CRM/Master/ClustersGetByEmail";
+     static const String RegionsWithClusterFilterGetByEmail = "$BASE_URL/api/CRM/Master/RegionsWithClusterFilterGetByEmail";
+
 
      //todo Address or Consignee master repo.....
      static const String ConsigneeMstUploader = "$BASE_URL/api/CRM/Account/ConsigneeMstUploader";
@@ -276,6 +279,8 @@ class AppUrl {
      static const String SalesCycleCompetitorProductGetBySalesCycleId="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorProductGetBySalesCycleId";
      static const String SalesCycleCompetitorCreateFromProspectProducts="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorCreateFromProspectProducts";
      static const String salesProductLineCompetitorDelete="$BASE_URL/api/CRM/SalesCycle/SalesProductLineCompetitorDelete";
+     static const String salesCycleCompetitorProductInformationGet="$BASE_URL/api/CRM/SalesCycle/SalesCycleCompetitorProductInformationGet";
+     static const String salesCycleMstMarkRateContract="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstMarkRateContract";
 
    //todo SalesAdvise
      static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";
@@ -286,6 +291,7 @@ class AppUrl {
      static const String salesAdviceLineDelete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineDelete";
      static const String salesAdviceComplete="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceComplete";
      static const String salesAdviceLineItemUpdate="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceLineItemUpdate";
+     static const String salesAdviceHeaderGetNew="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGetNew";
 
      //todo employee information
      static const String employeeLeaveDataGet="$BASE_URL/api/CRM/EmployeeAttendance/EmployeeLeaveDataGet";
@@ -315,4 +321,15 @@ class AppUrl {
      static const String BusinessTourPlanApproveReject="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourplanApproveReject";
      static const String BusinessTourPlanAllLineGet="$BASE_URL/api/CRM/BusinessTourPlan/BusinessTourPlanAllLineGet";
 
+
+     //todo dashboard url
+     static const String CallDashboard="$BASE_URL/api/CRM/Dashboard/CallDashboard";
+     static const String CallDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/CallDashboardUserWiseData";
+     static const String FunnelDashboardDataGet="$BASE_URL/api/CRM/Dashboard/FunneldashboardDataGet";
+     static const String FunnelDashboardDataGetByUser="$BASE_URL/api/CRM/Dashboard/FunneldashboardDataGetByUser";
+     static const String CommitDashboardDataGet="$BASE_URL/api/CRM/Dashboard/CommitDashboard";
+     static const String CommitDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/CommitDashboardUserWiseData";
+     static const String PendingDSARDashboard="$BASE_URL/api/CRM/Dashboard/PendingDsarDashboard";
+     static const String PendingDsarDashboardUserWiseData="$BASE_URL/api/CRM/Dashboard/PendingDsarDashboardUserWiseData";
+     static const String SalesDashboardReportGet="$BASE_URL/api/CRM/SalesCycle/SalesDashboardReportGet";
 }

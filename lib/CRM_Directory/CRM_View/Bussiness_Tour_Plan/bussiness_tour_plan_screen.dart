@@ -261,13 +261,44 @@ class BussinessTourPlanScreen extends StatelessWidget{
         onTap: () {
           businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanList[position].tourId, "");
         },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Text(
+                  "Tour ID : ",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700),
+                ),
+                Container(
+                  child: Tooltip(
+                    message: businessTourPlanController.BusinessTourPlanList[position].tourId?? "",
+                    child: Text(
+                      businessTourPlanController.BusinessTourPlanList[position].tourId?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                          color:Colors.blue,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    textAlign: TextAlign.end,
+                  ),
+                ),
+              ],
+            ),
+            Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+          ],
+        ),
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabelWithValue(
+            /*_buildLabelWithValue(
               label: "Tour ID : ",
               value: businessTourPlanController.BusinessTourPlanList[position].tourId,
-            ),
+            ),*/
             _buildLabelWithValue(
               label: "Cluster: ",
               value: businessTourPlanController.BusinessTourPlanList[position].cluster,
@@ -287,7 +318,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
             ),
             _buildLabelWithValue(
               label: "Touring Region : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
+              value: businessTourPlanController.BusinessTourPlanList[position].touringRegion,
               // width: size.width * 0.36,
 
             ),
@@ -344,7 +375,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
           ],
         ),
 
-        trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+        //trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
   }
@@ -356,6 +387,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,

@@ -60,6 +60,7 @@ class Taskmastervm extends GetxController{
     RxString filter="Running".obs;
     RxString createdOnStartToEnd="".obs;
     RxInt is_done = 0.obs;
+    RxString FromPage="".obs;
 
     int Active = 0;
     String IsSaleCycleActive= '';
@@ -251,14 +252,14 @@ class Taskmastervm extends GetxController{
                 "filter_is_infra_lead": -1,
                 "filter_is_sales_cycle_active": is_Active.toString(),
                 "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
-                "filter_created_by": isAdminWritePermission=='1'?"":email,
+                "filter_created_by":"",
                 "filter_approved_by": "",
                 "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
                 "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
-                "filter_task_owner":email,
+                "filter_task_owner":isAdminWritePermission=='1'?"":email,
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
                 "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
                 "filter_frontliner_value": "",

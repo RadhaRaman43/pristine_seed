@@ -960,6 +960,7 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                     height: 3,
                   ),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         "Reporting Manager",
@@ -969,16 +970,27 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                      Spacer(),
-                      Text(
-                        businessTourPlanController
-                                .BusinessTourPlanDetails_list[0]
-                                .reportingManager ??
-                            "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
+
+                      Container(
+                        width: size.width*0.34,
+                        child: Tooltip(
+                          message:businessTourPlanController
+                              .BusinessTourPlanDetails_list[0]
+                              .reportingManager ??
+                              "" ,
+                          child: Text(
+                            businessTourPlanController
+                                    .BusinessTourPlanDetails_list[0]
+                                    .reportingManager ??
+                                "",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.textColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.end,
+                          ),
                         ),
                       ),
                     ],

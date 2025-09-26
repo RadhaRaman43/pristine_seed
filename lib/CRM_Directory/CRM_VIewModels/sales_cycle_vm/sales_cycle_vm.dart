@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'dart:io';
 import 'dart:math';
 //import 'package:awesome_notifications/awesome_notifications.dart';
@@ -38,6 +39,7 @@ import '../../CRM_Models/sale_cycle_modal/item_quote_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/productCategoryWiseAmtModel.dart';
 import '../../CRM_Models/sale_cycle_modal/quoteWonModel.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_approve_reject_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_competitor_product_infor_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_information_modal.dart';
@@ -79,6 +81,8 @@ class SalesCycleVm extends GetxController {
   int pageNumberForItem = 0;
   int pageNumberForQuote = 0;
   int pageNumberSalesAdvise = 0;
+  RxString routingSalesAdvise="".obs;
+
   int rowsPerPage = 10;
   int total_rows = 0;
   int total_rows_items = 0;
@@ -116,6 +120,9 @@ class SalesCycleVm extends GetxController {
       <SalesCycleUpdateStatusModal>[].obs;
   RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list =
       <SalesCycleQuoteHeaderModal>[].obs;
+
+
+
  /* RxList<SalesAdviseHeaderModal> selection_sales_advise_won_list =
       <SalesAdviseHeaderModal>[].obs;*/
   RxList<ItemCategoryMstModel> productCategoryList =
@@ -4629,11 +4636,15 @@ class SalesCycleVm extends GetxController {
                 response.length > 0 &&
                 response[0].condition?.toLowerCase() == "true") {
               loading.value = false;
-              if (pageNumberForQuote == 0) {
+              if (pageNumber == 0) {
                 salesAdviseHeaderList.clear();
               }
               salesAdviseHeaderList.addAll(response);
               total_rows = int.parse(salesAdviseHeaderList[0].totalRows!);
+              if(routingSalesAdvise.value=="fromallSalesAdvise"){
+                Get.toNamed(RoutesName.allSalesAdviseList);
+                return;
+              };
               if(flagStatus=="completed"){
                 Get.toNamed(RoutesName.approvedQuotationListScreen);
               }else{
@@ -5000,10 +5011,10 @@ class SalesCycleVm extends GetxController {
     }
   }
 
-  getSalesAdviseHeaderComplete(String salesAdviseId) {
+  getSalesAdviseHeaderComplete(advise.QuoteItems salesAdviseLinesDataList) {
     loading.value = true;
     Map data = {
-      "sales_advice_id": salesAdviseId,
+      "sales_advice_id": salesAdviseLinesDataList.salesAdviceId,
       "created_by": email};
     try {
       _api.salesAdviceCompleteApiHit(data, sessionManagement)
@@ -5019,7 +5030,7 @@ class SalesCycleVm extends GetxController {
               Utils.showToastification(
                   "Message", response[0].message.toString());
               pageNumberSalesAdvise=0;
-              getSalesAdviseData(pageNumberSalesAdvise,salesAdviseHeaderList[0].salesCycleId??"",salesAdviseHeaderList[0].quoteId??"","");
+              getSalesAdviseData(pageNumberSalesAdvise,salesAdviseLinesDataList.salesCycleId??"",salesAdviseLinesDataList.quoteId??"","");
               loading.value = false;
             } else {
               loading.value = false;
@@ -5186,6 +5197,7 @@ class SalesCycleVm extends GetxController {
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
               getSalesAdviseHeaderLine(salesAdviseLinesDataList.salesAdviceId!);
+              erpItemNameController.value.text="";
               Utils.showToastification(
                   "Success !", response[0].message.toString());
             } else {
@@ -5264,6 +5276,11 @@ class SalesCycleVm extends GetxController {
     salesCycleProductCheckedList[index] = !salesCycleProductCheckedList[index];
   }
 
+  void selectAllSalesCycleProducts(bool select) {
+    for (int i = 0; i < salesCycleProductCheckedList.length; i++) {
+      salesCycleProductCheckedList[i] = select;
+    }
+  }
 /*  RxList<salesCycle.QuoteItems> salesAdviceItemList =
       <salesCycle.QuoteItems>[].obs;*/
 
@@ -5465,4 +5482,46 @@ class SalesCycleVm extends GetxController {
       loading.value = false;
     }
   }
+
+  getSalesCycleMstMarkRateContract(String SalesId) {
+    Map data = {
+      "sales_cycle_id": SalesId,
+      "created_by": email
+    };
+
+    loading.value = true;
+    _api.salesCycleMstMarkRateContractApiHit(data, sessionManagement).then(
+          (onValue) {
+        try {
+          final jsonResponse = json.decode(onValue);
+          print(onValue);
+          if (jsonResponse is List) {
+            List<SalesCycleApproveRejectModal> response = jsonResponse
+                .map((e) => SalesCycleApproveRejectModal.fromJson(e))
+                .toList();
+            if (response[0].condition?.toLowerCase() == "true") {
+              Utils.showToastification("Success", response[0].message.toString());
+              pageNumber=0;
+              getsalesCycleData(pageNumber,SalesId,"ViewHeader", FromPage.value);
+            } else {
+              Utils.showErrorToastification("False Message", response[0].message.toString());
+            }
+          } else {
+            loading.value = false;
+          }
+        } catch (e) {
+          print(e);
+        } finally {
+          loading.value = false;
+        }
+      },
+    ).onError(
+          (error, stackTrace) {
+      },
+    ).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
+
 }

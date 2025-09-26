@@ -178,7 +178,7 @@ class ContactMasterVM extends GetxController{
       "filter_address": "",
       "filter_state_name": "",
       "filter_is_active": "-1",
-      "filter_created_by": email,
+      "filter_created_by": isAdminWritePermission=="1"?"":email,
       "row_per_page": 50,
       "page_number": 0,
       "no_of_employees_min": "",

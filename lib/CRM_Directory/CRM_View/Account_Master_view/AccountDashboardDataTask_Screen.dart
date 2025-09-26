@@ -147,7 +147,7 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
 
 
   Widget BindAccountDataListView(context, int position) {
-    String taskStatus = accountMaster_page_controller.AccountDashboardDataList[position].taskStatus!;
+    String taskStatus = accountMaster_page_controller.AccountDashboardDataList[position].taskStatus??"";
     String pipeLine= accountMaster_page_controller.AccountDashboardDataList[position].taskDueTime!.isNotEmpty?"|":"";
     int? IsActive = accountMaster_page_controller.AccountDashboardDataList[position].isInfraLead;
     String isActive = "";
@@ -260,7 +260,7 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
                 ),
                 Text(
                   accountMaster_page_controller.AccountDashboardDataList[position]
-                      .approvedFullName!,
+                      .approvedFullName??"",
                   style: GoogleFonts.poppins(
                       color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,

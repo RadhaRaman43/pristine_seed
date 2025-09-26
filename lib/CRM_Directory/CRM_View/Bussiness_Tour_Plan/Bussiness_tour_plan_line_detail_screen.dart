@@ -125,13 +125,15 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
-        onTap: () {
-          //businessTourPlanController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourPlanLineDetailList[position].tourId, "");
-        },
         subtitle:
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildLabelWithValue(
+                label: "Tour Id: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].tourID,
+                //width: size.width * 0.36,
+              ),
               _buildLabelWithValue(
                 label: "Region: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].region,
@@ -160,7 +162,6 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Customer Name: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].customerName,
-                //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
                 label: "Meeting With : ",
@@ -198,9 +199,17 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                 // width: size.width * 0.36,
 
               ),
+
               _buildLabelWithValue(
-                label: "Created By",
-                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].createdBy,
+                label: "Region Name : ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].region,
+                // width: size.width * 0.36,
+
+              ),
+
+              _buildLabelWithValue(
+                label: "Cluster Name: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].cluster,
                 //: size.width * 0.33,
               ),
 
@@ -279,15 +288,14 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
     );
   }
   void showFilterBottomSheet(BuildContext context) {
-    // accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
           expand: false,
-          // initialChildSize: 0.85,
-          minChildSize: 0.5,
+          initialChildSize: 0.65,
+          minChildSize: 0.6,
           maxChildSize: 0.95,
           builder: (_, scrollController) {
             return Padding(
@@ -345,17 +353,16 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                               bindTextField(context,businessTourPlanController.filterTourIdController.value,'Tour ID'),
 
                               SizedBox(height: 10,),
-                              bindTextField(context,businessTourPlanController.filterClusterNameController.value,'Cluster'),
+                              bindTextField(context,businessTourPlanController.filterClusterNameController.value,'Cluster Name'),
 
                               SizedBox(height: 10,),
-                              bindTextField(context,businessTourPlanController.filterRegionController.value,'Region'),
+                              bindTextField(context,businessTourPlanController.filterRegionController.value,'Region Name'),
 
                               SizedBox(height: 10,),
                               bindTextField(context,businessTourPlanController.filterTouringRegionController.value,'Touring Region'),
 
                               SizedBox(height: 10,),
                               bindTextField(context,businessTourPlanController.filterCreatedByController.value,'Created By'),
-
 
                               SizedBox(height: 10,),
                               BindTourDate(context),
@@ -468,7 +475,6 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
   Widget BindTourDate(context) {
     return Container(
       decoration: BoxDecoration(
-          //color: Colors.white,
           borderRadius: BorderRadius.circular(10)
       ),
       child: TextFormField(
@@ -548,7 +554,69 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
   }
 
   Widget createdOnDate(context) {
-    return Container(
+      return TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: businessTourPlanController.filterCreatedOnController.value,
+        readOnly: true,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+          suffixIcon: Icon(Icons.calendar_month),
+          hintText: 'Select Start Date -End Date',
+          labelText: 'Created On',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+        ),
+        onTap: () async {
+          FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+          DateTimeRange? picked = await showDateRangePicker(
+            context: context,
+            firstDate: DateTime(1900),
+            lastDate: DateTime(2200),
+            /* initialDateRange: DateTimeRange(
+            start: DateTime.now(),
+            end: DateTime.now().add(Duration(days: 7)),
+          ),*/
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                    textTheme: ButtonTextTheme.primary,
+                  ),
+                ),
+                child: child!,
+              );
+            },
+          );
+
+          if (picked != null) {
+            final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+            final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+            businessTourPlanController.createdOnStartToEnd.value="$startDate@$endDate";
+            businessTourPlanController.filterCreatedOnController.value.text = '$startDate - $endDate';
+          } else {
+            businessTourPlanController.filterCreatedOnController.value.text = '';
+            businessTourPlanController.createdOnStartToEnd.value="";
+          }
+        },
+      );
+
+
+    /*return Container(
       decoration: BoxDecoration(
           //color: Colors.white,
           borderRadius: BorderRadius.circular(10)
@@ -582,13 +650,6 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
           DateTime stating_date = DateTime(1900);
           DateTime ending_date = DateTime(2200);
 
-          if (businessTourPlanController.StartDate.isNotEmpty) {
-            stating_date = DateFormat('yyyy-MM-dd').parse(businessTourPlanController.StartDate);
-          }
-          if (businessTourPlanController.EndDate.isNotEmpty) {
-            ending_date = DateFormat('yyyy-MM-dd').parse(businessTourPlanController.EndDate);
-          }
-          // Check if a date is already selected and parse it
           DateTime initialDate = DateTime.now();
           if (businessTourPlanController.filterCreatedOnController.value.text.isNotEmpty) {
             initialDate = DateFormat('yyyy-MM-dd').parse(
@@ -626,7 +687,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
           }
         },
       ),
-    );
+    );*/
   }
 
 }

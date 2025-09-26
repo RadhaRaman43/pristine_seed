@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Dashboard_VM/commit_dashboard_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/emp_infor_system/emp_mark_leave_request_vm.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_pending_for_approval_vm.dart';
@@ -12,6 +13,10 @@ import 'package:navigation_drawer_flutter/CRM_Directory/CRM_VIewModels/sales_cyc
 
 import '../CRM_Directory/CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Bussiness_Tour_Plan_Vm/Business_Tour_Approval_Vm.dart';
+import '../CRM_Directory/CRM_VIewModels/Dashboard_VM/Pending_DSAR_Dashboard_VM.dart';
+import '../CRM_Directory/CRM_VIewModels/Dashboard_VM/Sales_Dashboard_Vm.dart';
+import '../CRM_Directory/CRM_VIewModels/Dashboard_VM/call_dashboard_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/Dashboard_VM/funnel_dashboard_Vm.dart';
 import '../CRM_Directory/CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../CRM_Directory/CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
@@ -20,6 +25,8 @@ import '../CRM_Directory/CRM_VIewModels/emp_infor_system/leave_request_approval_
 import '../CRM_Directory/CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 import '../CRM_Directory/CRM_VIewModels/quote_approval_list_vm/quote_approval_list_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.dart';
+import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
 import '../CRM_Directory/CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_font_size.dart';
@@ -157,13 +164,17 @@ class _Drawer extends State<CustomDrawer> {
                                 ),
                                 Container(
                                   width: size.width*.7,
-                                  child: Text(
-                                    email,
-                                    style: GoogleFonts.poppins(
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w600,
-                                        color: AllColors.whiteColor),
-                                    textAlign: TextAlign.center,
+                                  child: Tooltip(
+                                    message: email,
+                                    child: Text(
+                                      email,
+                                      style: GoogleFonts.poppins(
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w600,
+                                          color: AllColors.whiteColor),
+                                      textAlign: TextAlign.center,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -484,6 +495,25 @@ class _Drawer extends State<CustomDrawer> {
                                               Navigator.of(context);
                                               break;
 
+                                            case 'All SPR Mapping Line Items':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<PendingDraftQuoteVm>();
+                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLSPRMAPPING"));
+                                              Get.toNamed(RoutesName.allSPRMappingScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Sales Cycle Competitor List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesCycleCompetitorProductInforVm>();
+                                              SalesCycleCompetitorProductInforVm PendingDraftQuoteController=Get.put(SalesCycleCompetitorProductInforVm());
+                                              Get.toNamed(RoutesName.salesCycleCompetitorProductInforScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+
                                             case 'All Quote':
                                               IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                               home_vm.openMenu(cTitle, iconData);
@@ -499,6 +529,25 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.delete<PendingDraftQuoteVm>();
                                               PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLQuoteLineItems"));
                                               Get.toNamed(RoutesName.allQuoteLineItemScreen,);
+                                              Navigator.of(context);
+                                              break;
+
+
+                                            case 'All Sales Advice List':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesAdviseAllListVm>();
+                                              SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceHeader"));
+                                              Get.toNamed(RoutesName.allSalesAdviseList,);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'All Sales Advice Line Items':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesAdviseAllListVm>();
+                                              SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceLineItem"));
+                                              Get.toNamed(RoutesName.allSalesAdviseLineItemsScreen,);
                                               Navigator.of(context);
                                               break;
 
@@ -535,6 +584,51 @@ class _Drawer extends State<CustomDrawer> {
                                               Get.delete<BusinessTourApprovalVm>();
                                               BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
                                               Get.toNamed(RoutesName.BusinessTourApproveRejectListScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Call Dashboard':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<CallDashboardVm>();
+                                              CallDashboardVm callDashboardController=Get.put(CallDashboardVm());
+                                              Get.toNamed(RoutesName.callDashboardViewScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Funnel Dashboard':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<FunnelDashboardVm>();
+                                              FunnelDashboardVm callDashboardController=Get.put(FunnelDashboardVm());
+                                              Get.toNamed(RoutesName.funnelDashboardViewScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Commit Dashboard':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<CommitDashboardVm>();
+                                              CommitDashboardVm callDashboardController=Get.put(CommitDashboardVm());
+                                              Get.toNamed(RoutesName.commitDashboardViewScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Sales Dashboard ':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<SalesDashboardVm>();
+                                              SalesDashboardVm callDashboardController=Get.put(SalesDashboardVm());
+                                              Get.toNamed(RoutesName.salesDashboardViewScreen);
+                                              Navigator.of(context);
+                                              break;
+
+                                            case 'Pending DSAR Dashboard':
+                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+                                              home_vm.openMenu(cTitle, iconData);
+                                              Get.delete<PendingDsarDashboardVm>();
+                                              PendingDsarDashboardVm callDashboardController=Get.put(PendingDsarDashboardVm());
+                                              Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
                                               Navigator.of(context);
                                               break;
 

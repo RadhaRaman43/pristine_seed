@@ -429,7 +429,7 @@ class AddNewTaskScreen extends StatelessWidget{
                     }
 
                     if(taskMaster_page_controller.Method_of_call_controller.text.isEmpty || taskMaster_page_controller.Method_of_call_controller == null){
-                      Utils.sanckBarError('Method of Call!', "Please Enter Method of Call");
+                      Utils.sanckBarError('Mode of Call!', "Please Enter Mode of Call");
                       return  ;
                     }
 
@@ -843,8 +843,8 @@ class AddNewTaskScreen extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Method Of Call*',
-            labelText: 'Method of Call*',
+            hintText: 'Mode Of Call*',
+            labelText: 'Mode of Call*',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),

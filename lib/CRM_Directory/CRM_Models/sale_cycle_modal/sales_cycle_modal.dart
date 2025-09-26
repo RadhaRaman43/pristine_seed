@@ -86,6 +86,10 @@ class SalesCycleModal {
   int? quoteSubmitted;
   int? confirmDecisionDate;
   int? confirmExpectedRevenue;
+  dynamic? crmWonOrderValue;
+  String? wonBy;
+  String? wonOn;
+  int? isMarkRateContract;
   String? frontlinerValue;
   String? branchHeadValue;
   String? zoneHeadValue;
@@ -182,6 +186,10 @@ class SalesCycleModal {
         this.quoteSubmitted,
         this.confirmDecisionDate,
         this.confirmExpectedRevenue,
+        this.crmWonOrderValue,
+        this.wonBy,
+        this.wonOn,
+        this.isMarkRateContract,
         this.frontlinerValue,
         this.branchHeadValue,
         this.zoneHeadValue,
@@ -279,6 +287,10 @@ class SalesCycleModal {
     quoteSubmitted = json['quote_submitted'];
     confirmDecisionDate = json['confirm_decision_date'];
     confirmExpectedRevenue = json['confirm_expected_revenue'];
+    crmWonOrderValue = json['crm_won_order_value'];
+    wonBy = json['won_by'];
+    wonOn = json['won_on'];
+    isMarkRateContract = json['is_mark_rate_contract'];
     frontlinerValue = json['frontliner_value'];
     branchHeadValue = json['branch_head_value'];
     zoneHeadValue = json['zone_head_value'];
@@ -380,6 +392,10 @@ class SalesCycleModal {
     data['quote_submitted'] = this.quoteSubmitted;
     data['confirm_decision_date'] = this.confirmDecisionDate;
     data['confirm_expected_revenue'] = this.confirmExpectedRevenue;
+    data['crm_won_order_value'] = this.crmWonOrderValue;
+    data['won_by'] = this.wonBy;
+    data['won_on'] = this.wonOn;
+    data['is_mark_rate_contract'] = this.isMarkRateContract;
     data['frontliner_value'] = this.frontlinerValue;
     data['branch_head_value'] = this.branchHeadValue;
     data['zone_head_value'] = this.zoneHeadValue;

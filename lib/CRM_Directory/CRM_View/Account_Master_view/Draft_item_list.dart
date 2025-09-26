@@ -148,7 +148,15 @@ class DraftItemList extends StatelessWidget{
           accountMaster_page_controller.view = 'FromDraft';
          // print('Adreesss..${accountMaster_page_controller.Account_Master_Draft_list[position].address}');
           accountMaster_page_controller.getEmployeeMemberApi();
+          accountMaster_page_controller.getCompanyProfileTypeApi("");
           accountMaster_page_controller.getCompanyProfileSubTypeApi();
+          accountMaster_page_controller.getGeoPostalCodeApi();
+          accountMaster_page_controller.getStateMasterApi('', 'state');
+          accountMaster_page_controller.getStateMasterApi('', 'city');
+          accountMaster_page_controller.getStateMasterApi('', 'district');
+          accountMaster_page_controller.getShippingStateMasterApi('','state');
+          accountMaster_page_controller.getShippingStateMasterApi('','city');
+          accountMaster_page_controller.getShippingStateMasterApi('','district');
           accountMaster_page_controller.fillDraftDetails(accountMaster_page_controller.Account_Master_Draft_list1, position);
           Get.toNamed(RoutesName.add_New_AccountMaster_screen);
          // accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
