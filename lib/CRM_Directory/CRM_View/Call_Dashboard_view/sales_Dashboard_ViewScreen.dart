@@ -11,6 +11,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_VIewModels/Dashboard_VM/Sales_Dashboard_Vm.dart';
@@ -77,8 +78,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Visibility(
-                              visible: dashboard_view_Controller.userType !=
-                                  'Branch Head',
+                              visible: dashboard_view_Controller.userType != 'Branch Head',
                               child: _buildActionChip("Cluster")),
                           SizedBox(width: 8),
                           _buildActionChip("Region"),
@@ -103,124 +103,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    /*Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: dashboard_view_Controller.ClusterName_Controller.value,
-                        decoration: InputDecoration(
-                            hintText: "Cluster Name",
-                            labelText: "Cluster Name",
-                            //suffixIcon: Icon(Icons.email),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-          
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-          
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: dashboard_view_Controller.RegionName_Controller.value,
-                        decoration: InputDecoration(
-                            hintText: "Region Name",
-                            labelText: "Region Name",
-                            //suffixIcon: Icon(Icons.email),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-          
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-          
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: dashboard_view_Controller.SalesPersonName_Controller.value,
-                        decoration: InputDecoration(
-                            hintText: "Sales Person Name",
-                            labelText: "Sales Person Name",
-                            //suffixIcon: Icon(Icons.email),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-          
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-          
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: dashboard_view_Controller.SalesPersonER_Code_Controller.value,
-                        decoration: InputDecoration(
-                            hintText: "Sales Person ER Code",
-                            labelText: "Sales Person ER Code",
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-          
-                      ),
-                    ),
-                    SizedBox(height: 10,),*/
                     Container(
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -287,9 +169,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              /*border: Border.all(
-                          color: AllColors.blackColor, // Set the border color here
-                        ),*/
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: AllColors.textColor
                             ),
@@ -308,26 +187,18 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                Obx(
-                                      () {
+                                Obx(() {
                                     return IconButton(
                                       onPressed: () {
                                         dashboard_view_Controller.toggleCrtd();
-                                        if (dashboard_view_Controller
-                                            .isExpandCrtd.value ==
-                                            true) {
-                                          print(
-                                              "If......${dashboard_view_Controller.isExpandCrtd.value}");
+                                        if (dashboard_view_Controller.isExpandCrtd.value == true) {
+                                          print("If......${dashboard_view_Controller.isExpandCrtd.value}");
                                         } else {
-                                          print(
-                                              "else......${dashboard_view_Controller.isExpandCrtd.value}");
+                                          print("else......${dashboard_view_Controller.isExpandCrtd.value}");
                                         }
                                       },
                                       icon: Icon(
-                                        dashboard_view_Controller
-                                            .isExpandCrtd.value
-                                            ? Icons.arrow_drop_up
-                                            : Icons.arrow_drop_down,
+                                        dashboard_view_Controller.isExpandCrtd.value ? Icons.arrow_drop_up : Icons.arrow_drop_down,
                                         size: 25,
                                         color: AllColors.whiteColor,
                                       ),
@@ -372,19 +243,14 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                     fontWeight: FontWeight.w600,
                                   ),
                                 ),
-                                Obx(
-                                      () {
+                                Obx(() {
                                     return IconButton(
                                       onPressed: () {
                                         dashboard_view_Controller.toggleFunnelCrtd();
-                                        if (dashboard_view_Controller
-                                            .isExpandFunnel.value ==
-                                            true) {
-                                          print(
-                                              "If......${dashboard_view_Controller.isExpandCrtd.value}");
+                                        if (dashboard_view_Controller.isExpandFunnel.value == true) {
+                                          print("If......${dashboard_view_Controller.isExpandCrtd.value}");
                                         } else {
-                                          print(
-                                              "else......${dashboard_view_Controller.isExpandCrtd.value}");
+                                          print("else......${dashboard_view_Controller.isExpandCrtd.value}");
                                         }
                                       },
                                       icon: Icon(
@@ -593,13 +459,15 @@ class SalesDashboardViewscreen extends StatelessWidget{
               SizedBox(height: 3,),
               ListItemBind("Total Accounts :",dashboard_view_Controller.salesDashboardList[0].totalAccount ),
               SizedBox(height: 3,),
-              ListItemBind("Acc. Covered in C/M :",dashboard_view_Controller.salesDashboardList[0].accountCoveredCurrentMonth ),
+              ListItemBind("Acc. Covered in Current Month :",dashboard_view_Controller.salesDashboardList[0].accountCoveredCurrentMonth ),
               SizedBox(height: 3,),
-              ListItemBind("Acc. Covered in P/M :",dashboard_view_Controller.salesDashboardList[0].accountCoveredPreviousMonth ),
+              ListItemBind("Acc. Covered Till Previous Month(Financial Year) :",dashboard_view_Controller.salesDashboardList[0].accountCoveredPreviousMonth ),
               SizedBox(height: 3,),
-              ListItemBind("Fresh Acc. Covered in C/M :",dashboard_view_Controller.salesDashboardList[0].freshAccountCoveredCurrentMonth ),
+              ListItemBind("New Acc. Covered in Current Month :",dashboard_view_Controller.salesDashboardList[0].freshAccountCoveredCurrentMonth ),
               SizedBox(height: 3,),
               ListItemBind("Total Acc. Covered :",dashboard_view_Controller.salesDashboardList[0].totalAccountCovered ),
+              SizedBox(height: 3,),
+              ListItemBind("Working Days :",dashboard_view_Controller.salesDashboardList[0].workingDays ),
               SizedBox(height: 3,),
               ListItemBind("New Call :", dashboard_view_Controller.salesDashboardList[0].newCall),
               SizedBox(height: 3,),
@@ -609,27 +477,29 @@ class SalesDashboardViewscreen extends StatelessWidget{
               SizedBox(height: 3,),
               ListItemBind("Total Calls :", dashboard_view_Controller.salesDashboardList[0].totalCall),
               SizedBox(height: 3,),
-              ListItemBind("Total Order :", dashboard_view_Controller.salesDashboardList[0].totalOrders),
+              ListItemBind("Total Won Order Count(CRM) :", dashboard_view_Controller.salesDashboardList[0].totalOrders),
+              SizedBox(height: 3,),
+              ListItemBind("Order Value :", dashboard_view_Controller.salesDashboardList[0].ordersValue),
               SizedBox(height: 3,),
               ListItemBind("Call Rate :", dashboard_view_Controller.salesDashboardList[0].callRate),
               SizedBox(height: 3,),
-              ListItemBind("Call Rate Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].callRateTargetAchieve),
+              ListItemBind("Call Rate Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].callRateTargetAchieve),
               SizedBox(height: 3,),
-              ListItemBind("New Call :", dashboard_view_Controller.salesDashboardList[0].newCall),
+              ListItemBind("New Call(%) :", dashboard_view_Controller.salesDashboardList[0].newCall),
               SizedBox(height: 3,),
-              ListItemBind("New Call Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].newCallTargetAchieve),
+              ListItemBind("New Call Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].newCallTargetAchieve),
               SizedBox(height: 3,),
               ListItemBind("Strike Rate: :", dashboard_view_Controller.salesDashboardList[0].strikeRate),
               SizedBox(height: 3,),
-              ListItemBind("Strike Rate Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].strikeRateTargetAchieve),
+              ListItemBind("Strike Rate Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].strikeRateTargetAchieve),
               SizedBox(height: 3,),
               ListItemBind("DSAR % :", dashboard_view_Controller.salesDashboardList[0].dsarPer),
               SizedBox(height: 3,),
-              ListItemBind("DSAR  Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].dsarTargetAchieve),
+              ListItemBind("DSAR  Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].dsarTargetAchieve),
               SizedBox(height: 3,),
               ListItemBind("Average Order Size :", dashboard_view_Controller.salesDashboardList[0].avgOrderSize),
               SizedBox(height: 3,),
-              ListItemBind("Target Vs Ach. :", dashboard_view_Controller.salesDashboardList[0].targetAchievement),
+              ListItemBind("Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].targetAchievement),
               SizedBox(height: 3,),
               ListItemBind("Business Tour Plan (No of Days) :", dashboard_view_Controller.salesDashboardList[0].businessTourDays),
               SizedBox(height: 3,),
@@ -788,7 +658,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                 ),
               ),
               SizedBox(height: 5,),
-              Text("C/M Funnel",
+              Text("Current Month Funnel",
                 style: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontSize: AllFontSize.fourtine,
@@ -805,7 +675,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               SizedBox(height: 3,),
               Divider(height: 1, thickness: 2, color: Colors.grey,),
               SizedBox(height: 3,),
-              Text("C/F/M Funnel",
+              Text("Current Financial Year Funnel",
                 style: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontSize: AllFontSize.fourtine,
@@ -906,17 +776,17 @@ class SalesDashboardViewscreen extends StatelessWidget{
                 height: 70,
                   child: MonthWiseDataFunnel(context)),
               SizedBox(height: 3,),
-              ListItemBind("New Prospects Generated in C/M :",dashboard_view_Controller.salesDashboardList[0].newProspectsGeneratedCurrentMonth ),
+              ListItemBind("New Prospects Generated in Current Month :",dashboard_view_Controller.salesDashboardList[0].newProspectsGeneratedCurrentMonth ),
               SizedBox(height: 3,),
-              ListItemBind("Carry Forward Prospects From P/M :",dashboard_view_Controller.salesDashboardList[0].carryForwardProspectsPreviousMonths ),
+              ListItemBind("Carry Forward Prospects From Previous Month :",dashboard_view_Controller.salesDashboardList[0].carryForwardProspectsPreviousMonths ),
               SizedBox(height: 3,),
               ListItemBind("Previous Month Order Won :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderWon ),
               SizedBox(height: 3,),
               ListItemBind("Previous Month Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderLost ),
               SizedBox(height: 3,),
-              ListItemBind("C/M Order Won :",dashboard_view_Controller.salesDashboardList[0].currentMonthOrderWon ),
+              ListItemBind("Current Month Order Won :",dashboard_view_Controller.salesDashboardList[0].currentMonthOrderWon ),
               SizedBox(height: 3,),
-              ListItemBind("P/M Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderLost ),
+              ListItemBind("Previous Month Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderLost ),
               SizedBox(height: 3,),
               ListItemBind("Order Lost FY :",dashboard_view_Controller.salesDashboardList[0].orderLostFy ),
               SizedBox(height: 3,),
@@ -966,7 +836,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
   Widget BindDataListView(BuildContext context, int pos){
     return  Container(
       margin: EdgeInsets.only(left: 10),
-      width: 80,
+      //width: 80,
       decoration: BoxDecoration(
         color: Colors.green[50],
         border: Border.all(
@@ -974,42 +844,54 @@ class SalesDashboardViewscreen extends StatelessWidget{
           width: 1.0, // Adjust the border width if necessary
         ),
         borderRadius: BorderRadius.circular(10.0),
+
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthName??"",
-            style: GoogleFonts.poppins(
-              color: AllColors.blackColor,
-              fontSize: AllFontSize.twelve,
-              fontWeight: FontWeight.w500,
+      child: Padding(
+        padding: EdgeInsets.only(left: 5,right: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthName??"",
+              style: GoogleFonts.poppins(
+                color: AllColors.blackColor,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          Text(
-            '${dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthYearValue??""}',
-            style: GoogleFonts.poppins(
-              color: Colors.green,
-              fontSize: AllFontSize.twelve,
-              fontWeight: FontWeight.w500,
+            Text(
+              '${dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthYearValue??""}',
+              style: GoogleFonts.poppins(
+                color: Colors.green,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
   Widget ListItemBind(String Tag, dynamic Value){
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(Tag,
-          style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
-            fontWeight: FontWeight.w500,
+        Flexible(
+          child: Tooltip(
+            message: Tag,
+            child: Text(Tag,
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
-        Spacer(),
+        //Spacer(),
+        SizedBox(width: 5,),
         Text(
           "${Value}",
           style: GoogleFonts.poppins(
@@ -1037,15 +919,15 @@ class SalesDashboardViewscreen extends StatelessWidget{
               SizedBox(height: 3,),
               ListItemBind("Booking Ach. Prev. Month (%) :",dashboard_view_Controller.salesDashboardList[0].bookingAchiveCurrentMonthPer ),
               SizedBox(height: 3,),
-              ListItemBind("Booking Commitment C/M :",dashboard_view_Controller.salesDashboardList[0].bookingCommitmentCurrentMonth ),
+              ListItemBind("Booking Commitment Current Month :",dashboard_view_Controller.salesDashboardList[0].bookingCommitmentCurrentMonth ),
               SizedBox(height: 3,),
-              ListItemBind("Actual Booking C/M :",dashboard_view_Controller.salesDashboardList[0].actualBookingCurrentMonth ),
+              ListItemBind("Actual Booking Current Month :",dashboard_view_Controller.salesDashboardList[0].actualBookingCurrentMonth ),
               SizedBox(height: 3,),
-              ListItemBind("Booking Ach. C/M (%):",dashboard_view_Controller.salesDashboardList[0].bookingAchiveCurrentMonthPer ),
+              ListItemBind("Booking Ach. Current Month (%):",dashboard_view_Controller.salesDashboardList[0].bookingAchiveCurrentMonthPer ),
               SizedBox(height: 3,),
-              ListItemBind("Booking AO C/M :",dashboard_view_Controller.salesDashboardList[0].bookingAoCurrentMonth ),
+              ListItemBind("Booking AO Current Month :",dashboard_view_Controller.salesDashboardList[0].bookingAoCurrentMonth ),
               SizedBox(height: 3,),
-              ListItemBind("AO Vs Booking Ach. C/M (%):",dashboard_view_Controller.salesDashboardList[0].aoVsBookingAchiveCurrentMonthPer ),
+              ListItemBind("AO Vs Booking Ach. Current Month (%):",dashboard_view_Controller.salesDashboardList[0].aoVsBookingAchiveCurrentMonthPer ),
               SizedBox(height: 3,),
               ListItemBind("Booking AO Current FY:",dashboard_view_Controller.salesDashboardList[0].bookingAoCurrentFy ),
               SizedBox(height: 3,),
@@ -1053,12 +935,11 @@ class SalesDashboardViewscreen extends StatelessWidget{
               SizedBox(height: 3,),
               ListItemBind("AO Vs Booking Ach. FY (%):",dashboard_view_Controller.salesDashboardList[0].aoVsBookingAchiveFyPer ),
               SizedBox(height: 3,),
-              ListItemBind("Order Over 15/20 Lakhs C/M:",dashboard_view_Controller.salesDashboardList[0].ordersAbove15LakhCurrentMonth ),
+              ListItemBind("Order Over 15/20 Lakhs Current Month:",dashboard_view_Controller.salesDashboardList[0].ordersAbove15LakhCurrentMonth ),
               SizedBox(height: 3,),
               ListItemBind("Order Over 15/20 Lakhs FY:",dashboard_view_Controller.salesDashboardList[0].ordersAbove15LakhFy ),
               SizedBox(height: 3,),
-
-              Text("Month wise commitment",
+              Text("Month wise commitment (CRM)",
                 style: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontSize: AllFontSize.fourtine,
@@ -1124,7 +1005,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
   Widget BindDataCommitmentListView(BuildContext context, int pos){
     return  Container(
       margin: EdgeInsets.only(left: 10),
-      width: 80,
+      //width: 80,
       decoration: BoxDecoration(
         color: Colors.green[50],
         border: Border.all(
@@ -1133,26 +1014,95 @@ class SalesDashboardViewscreen extends StatelessWidget{
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            dashboard_view_Controller.monthWiseCommitmentList[pos].monthName??"",
-            style: GoogleFonts.poppins(
-              color: AllColors.blackColor,
-              fontSize: AllFontSize.twelve,
-              fontWeight: FontWeight.w500,
+      child: Padding(
+        padding: EdgeInsets.only(left: 5,right: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              dashboard_view_Controller.monthWiseCommitmentList[pos].monthName??"",
+              style: GoogleFonts.poppins(
+                color: AllColors.blackColor,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          Text(
-            '${dashboard_view_Controller.monthWiseCommitmentList[pos].monthYearValue??""}',
-            style: GoogleFonts.poppins(
-              color: Colors.green,
-              fontSize: AllFontSize.twelve,
-              fontWeight: FontWeight.w500,
+            Text(
+              '${dashboard_view_Controller.monthWiseCommitmentList[pos].monthYearValue??""}',
+              style: GoogleFonts.poppins(
+                color: Colors.green,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget MonthWiseCollectionPlan(BuildContext context){
+    ScrollController scrollController = ScrollController();
+    if(dashboard_view_Controller.monthWiseCollectionCommitmentList.isNotEmpty){
+      return ListView.builder(
+          controller: scrollController,
+          padding: EdgeInsets.only(bottom: 10),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: dashboard_view_Controller.monthWiseCollectionCommitmentList.value.length,
+          itemBuilder: (BuildContext context, int index) {
+            return BindDataMonthWiseCollectionPlan(context, index);
+          });
+    }
+    else {
+      return SizedBox();
+    }
+
+  }
+
+  Widget BindDataMonthWiseCollectionPlan(BuildContext context, int pos){
+    return  Container(
+      margin: EdgeInsets.only(left: 10),
+      //width: 80,
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        border: Border.all(
+          color: Colors.grey, // Set the border color here
+          width: 1.0, // Adjust the border width if necessary
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: 5,right: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              dashboard_view_Controller.monthWiseCollectionCommitmentList[pos].monthName??"",
+              style: GoogleFonts.poppins(
+                color: AllColors.blackColor,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              'Commitment: ${dashboard_view_Controller.monthWiseCollectionCommitmentList[pos].monthYearCollectionCommitmentValue??""}',
+              style: GoogleFonts.poppins(
+                color: Colors.green,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              'Actual: ${dashboard_view_Controller.monthWiseCollectionCommitmentList[pos].monthYearActualCollectionValue??""}',
+              style: GoogleFonts.poppins(
+                color: Colors.green,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1179,7 +1129,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
   Widget BindDataAOvsBookingListView(BuildContext context, int pos){
     return  Container(
       margin: EdgeInsets.only(left: 10),
-      width: 90,
+      //width: 90,
       decoration: BoxDecoration(
         color: Colors.green[50],
         border: Border.all(
@@ -1188,26 +1138,29 @@ class SalesDashboardViewscreen extends StatelessWidget{
         ),
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthName??"",
-            style: GoogleFonts.poppins(
-              color: AllColors.blackColor,
-              fontSize: AllFontSize.twelve,
-              fontWeight: FontWeight.w500,
+      child: Padding(
+        padding: EdgeInsets.only(left: 5,right: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthName??"",
+              style: GoogleFonts.poppins(
+                color: AllColors.blackColor,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          Text(
-            '${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearBookingAoValue??""}/ \n ${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearActualBookingValue??""}' ,
-            style: GoogleFonts.poppins(
-              color: Colors.green,
-              fontSize: AllFontSize.twelve,
-              fontWeight: FontWeight.w500,
+            Text(
+              '${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearBookingAoValue??""}/ \n ${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearActualBookingValue??""}' ,
+              style: GoogleFonts.poppins(
+                color: Colors.green,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1221,28 +1174,60 @@ class SalesDashboardViewscreen extends StatelessWidget{
           child: Column(
             children: [
               SizedBox(height: 3,),
-              ListItemBind("Prev. Month Collection Commitment:",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionCommitment ),
+              ListItemBind("Collection Commitment Previous Month:",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionCommitment ),
               SizedBox(height: 3,),
-              ListItemBind("Prev. Month Collection (Actual) :",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionActual ),
+              ListItemBind("Actual Collection Previous Month :",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionActual ),
               SizedBox(height: 3,),
-              ListItemBind("Collection Plan Vs Ach. :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer ),
+              ListItemBind("Collection Plan Vs Ach.(%) :",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionPlanAchivePer ),
               SizedBox(height: 3,),
-              ListItemBind("Collection Commitment (This Month) :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionCommitment ),
+              ListItemBind("Collection Commitment Current Month :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionCommitment ),
               SizedBox(height: 3,),
               ListItemBind("Actual Collection This Month  :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionActual ),
               SizedBox(height: 3,),
-              ListItemBind("Collection Plan Vs Ach. (% C/M) :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer ),
+              ListItemBind("Collection Plan Vs Ach.Current Month (%) :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanAchivePer ),
               SizedBox(height: 3,),
-              ListItemBind("Month wise Collection Plan Vs Ach. (%):",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer ),
+              Text("Monthwise Collection Plan Vs Ach. (%)",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
+              Container(
+                  height: 70,
+                  child: MonthWiseCollectionPlan(context)),
+              Divider(
+                height: 1, thickness: 2, color: Colors.grey,
+              ),
+
+              ListItemBind("Collection Plan Vs Ach. Financial Year (%) :","${dashboard_view_Controller.salesDashboardList[0].financialYearCollectionCommitmentVsActualCollectionAchive?[0].financialYearActualCollectionValue}/ "
+                  "${dashboard_view_Controller.salesDashboardList[0].financialYearCollectionCommitmentVsActualCollectionAchive?[0].financialYearCollectionCommitmentValue}="
+                  "${dashboard_view_Controller.salesDashboardList[0].financialYearCollectionCommitmentVsActualCollectionAchive?[0].financialYearCollectionValuePer}"),
               SizedBox(height: 3,),
-              ListItemBind("Collection Plan Vs Ach. FY (%):", dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer),
+              ListItemBind("Total Bank Guarantee :",dashboard_view_Controller.salesDashboardList[0].totalBankGrantee ),
               SizedBox(height: 3,),
-              ListItemBind("Bank Guarantee :", dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer),
+              ListItemBind("Total EMSD :",dashboard_view_Controller.salesDashboardList[0].totalEmsd ),
               SizedBox(height: 3,),
-              ListItemBind("EMSD :", dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanVsAchievementPer),
+              ListItemBind("Due Bank Guarantee :",dashboard_view_Controller.salesDashboardList[0].totalDueBankGrantee ),
               SizedBox(height: 3,),
-              ListItemBind("Outstanding FY :", dashboard_view_Controller.salesDashboardList[0].totalCall),
+              ListItemBind("Due Date EMSD :",dashboard_view_Controller.salesDashboardList[0].totalDueEmsd ),
               SizedBox(height: 3,),
+              ListItemBind("Outstanding Financial Year :",dashboard_view_Controller.salesDashboardList[0].totalOutstanding ),
+              SizedBox(height: 3,),
+              ListItemBind("0–30 :",dashboard_view_Controller.salesDashboardList[0].a030 ),
+              SizedBox(height: 3,),
+              ListItemBind("31–60 :",dashboard_view_Controller.salesDashboardList[0].a3160 ),
+              SizedBox(height: 3,),
+              ListItemBind("61-90 :",dashboard_view_Controller.salesDashboardList[0].a6190 ),
+              SizedBox(height: 3,),
+              ListItemBind("91-180 :",dashboard_view_Controller.salesDashboardList[0].a91180 ),
+              SizedBox(height: 3,),
+              ListItemBind("181-365 :",dashboard_view_Controller.salesDashboardList[0].a181365 ),
+              SizedBox(height: 3,),
+              ListItemBind("366-Above :",dashboard_view_Controller.salesDashboardList[0].a366Above ),
+              SizedBox(height: 3,),
+
 
             ],
           ),
@@ -1380,8 +1365,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       color: AllColors.redColor, width: 1),
                                 )),
                             onPressed: () {
-                              dashboard_view_Controller
-                                  .clearAllFilterController();
+                              dashboard_view_Controller.clearAllFilterController();
+                              dashboard_view_Controller.pageNumber = 0;
                               dashboard_view_Controller.salesDashboardData();
                               Get.back();
                             },
@@ -1412,7 +1397,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
       child: Column(
         children: [
           SizedBox(height: 10),
-          /*Container(
+          Container(
             //margin: EdgeInsets.only(left: 15.0, right: 15.0),
             decoration: BoxDecoration(
               border: Border.all(
@@ -1449,11 +1434,10 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       onChanged: (value) {
                         dashboard_view_Controller.character.value = value ?? "";
                         dashboard_view_Controller.DateRange('day');
-                        dashboard_view_Controller
-                            .filterCustomDateController.value.text =
+                        dashboard_view_Controller.filterCustomDateController.value.text =
                         '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                         dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.callDashboardData();
+                        dashboard_view_Controller.salesDashboardData();
                         Get.back();
                       },
                     );
@@ -1471,11 +1455,10 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       onChanged: (value) {
                         dashboard_view_Controller.character.value = value ?? "";
                         dashboard_view_Controller.DateRange('week');
-                        dashboard_view_Controller
-                            .filterCustomDateController.value.text =
+                        dashboard_view_Controller.filterCustomDateController.value.text =
                         '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                         dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.callDashboardData();
+                        dashboard_view_Controller.salesDashboardData();
                         Get.back();
                       },
                     );
@@ -1497,7 +1480,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             .filterCustomDateController.value.text =
                         '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                         dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.callDashboardData();
+                        dashboard_view_Controller.salesDashboardData();
                         Get.back();
                       },
                     );
@@ -1515,11 +1498,31 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       onChanged: (value) {
                         dashboard_view_Controller.character.value = value ?? "";
                         dashboard_view_Controller.DateRange('quarterly');
-                        dashboard_view_Controller
-                            .filterCustomDateController.value.text =
+                        dashboard_view_Controller.filterCustomDateController.value.text =
                         '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                         dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.callDashboardData();
+                        dashboard_view_Controller.salesDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Previous Financial Year',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Previous Financial Year',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                        dashboard_view_Controller.DateRange('previousfinancialyear');
+                        dashboard_view_Controller.filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.salesDashboardData();
                         Get.back();
                       },
                     );
@@ -1537,11 +1540,31 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       onChanged: (value) {
                         dashboard_view_Controller.character.value = value ?? "";
                         dashboard_view_Controller.DateRange('financial');
-                        dashboard_view_Controller
-                            .filterCustomDateController.value.text =
+                        dashboard_view_Controller.filterCustomDateController.value.text =
                         '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                         dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.callDashboardData();
+                        dashboard_view_Controller.salesDashboardData();
+                        Get.back();
+                      },
+                    );
+                  }),
+                  Obx(() {
+                    return RadioListTile<String>(
+                      title: const Text(
+                        'Next Financial Year',
+                        style: TextStyle(fontSize: AllFontSize.sisxteen),
+                      ),
+                      value: 'Next Financial Year',
+                      dense: true,
+                      groupValue:
+                      dashboard_view_Controller.character.value.toString(),
+                      onChanged: (value) {
+                        dashboard_view_Controller.character.value = value ?? "";
+                        dashboard_view_Controller.DateRange('nextfinancialyear');
+                        dashboard_view_Controller.filterCustomDateController.value.text =
+                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                        dashboard_view_Controller.pageNumber = 0;
+                        dashboard_view_Controller.salesDashboardData();
                         Get.back();
                       },
                     );
@@ -1567,8 +1590,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                 ],
               ),
             ),
-          ),*/
-          filterWithCustomDate(context),
+          ),
+          //filterWithCustomDate(context),
           /*SizedBox(height: 10),
           bindTaskStatus(context),
           SizedBox(height: 10),
@@ -1585,9 +1608,75 @@ class SalesDashboardViewscreen extends StatelessWidget{
           bindClusterNameFilter(context),
           SizedBox(height: 10),
           bindRegionNameFilter(context),
-        ],
+          SizedBox(height: 10),
+          bindAccountOwnerFilter(context),
+        ]
       ),
     );
+  }
+
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: dashboard_view_Controller.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.SelectedEmployee_Member_list.isNotEmpty?"Employee Name":null,
+            hintText: "Employee Name",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Employee Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          dashboard_view_Controller.SelectedEmployee_Member_list.value = selectedList;
+          dashboard_view_Controller.EmployeeNameFilter_controller.value.text = selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
   }
 
   filterWithCustomDate(BuildContext context) {
