@@ -10,6 +10,7 @@ import '../../../constants/app_colors.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_DSAR_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
 import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
@@ -60,6 +61,7 @@ class TaskApprovalvm extends GetxController{
   var ApproveReject_Controller = TextEditingController();
   var RejectReason_Controller = TextEditingController();
   var managerRemarksController=TextEditingController().obs;
+  var AccountOwner_controller=TextEditingController().obs;
 
   RxBool RejectBool=false.obs;
   RxBool ApproveBool=false.obs;
@@ -70,6 +72,9 @@ class TaskApprovalvm extends GetxController{
   RxBool isExpandGeoInfo = true.obs;
   RxBool isExpandDSAR = false.obs;
   RxBool isExpandInfraDeatils = true.obs;
+
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
 
   void toggle() {
     isExpandDetails.value = !isExpandDetails.value;
@@ -98,6 +103,8 @@ class TaskApprovalvm extends GetxController{
   RxList<TaskMasterGetModel> Task_Master_list_line_Wise=<TaskMasterGetModel>[].obs;
   RxList<String> SaleCycleActiveTypeList = <String>[].obs;
   RxList<TaskDSARModel> TaskDSAR_Master_list = <TaskDSARModel>[].obs;
+  var AccountOwnerForApi;
+
 
   @override
   Future<void> onInit() async {
@@ -108,7 +115,101 @@ class TaskApprovalvm extends GetxController{
     SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
     approveRejectList.value = ['Approve', 'Reject'];
 
+    if(this.isAdminWritePermission==1){
+      EmployeeMasterGet('');
+    }
+    else{
+      getEmployeeMemberApi();
+    }
+
     getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
+  }
+
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }
+    Map data = {
+      'filter_name': '',
+      'filter_email': query,
+      'filter_location_id': '',
+      'email_id': email,
+      'rowsPerPage': 50,
+      'pageNumber': 0,
+    };
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    return employee_Member_list.value;
+  }
+  getEmployeeMemberApi() {
+    Map data = {
+      "email_id": email,
+      "flag": "GeoLevelLower"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
   }
 
   Future<void>refreshList() async{
@@ -229,6 +330,10 @@ class TaskApprovalvm extends GetxController{
     filterTaskCreationOnController.value.clear();
     createdOnStartToEnd.value = "";
     is_Active = -1;
+
+    AccountOwnerForApi = '';
+    AccountOwner_controller.value.clear();
+    SelectedEmployee_Member_list.value = [];
   }
 
 
@@ -253,6 +358,13 @@ class TaskApprovalvm extends GetxController{
     }else if(IsActive == 'No'){
       is_Active = 0;
     }
+    AccountOwnerForApi = '';
+    if(AccountOwner_controller.value.text.isNotEmpty){
+      AccountOwnerForApi = AccountOwner_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
     try{
       Map data={
         "filter_task_id":"",
@@ -267,11 +379,11 @@ class TaskApprovalvm extends GetxController{
         "filter_is_infra_lead": 0,
         "filter_is_sales_cycle_active": is_Active.toString(),
         "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
-        "filter_created_by": isAdminWritePermission == "0"?email:"",
+        "filter_created_by": "",
         "filter_approved_by": "",
         "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
-        "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
+        "filter_task_owner":isAdminWritePermission=='1'?"":email,
         "filter_is_closed_completed": 0,
         "filter_day_flag":'All',
         "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
@@ -280,12 +392,13 @@ class TaskApprovalvm extends GetxController{
         "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
         "filter_zone_head_value": "",
         "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+        "filter_task_owner_new":  AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
       print("Data Json....${data}");
       loading.value=true;
-      _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
+      _api.TaskMstGetApprovalListApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
         print(onValue);
         if(jsonResponse is List){

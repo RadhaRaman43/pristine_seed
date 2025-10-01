@@ -11,6 +11,7 @@ import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
@@ -111,7 +112,8 @@ class Taskmastervm extends GetxController{
     var PhoneNo_Controller=TextEditingController().obs;
     var product_category_controller=TextEditingController().obs;
     var method_of_call_controller=TextEditingController().obs;
-    var account_owner_controller=TextEditingController().obs;
+    //var account_owner_controller=TextEditingController().obs;
+    var AccountOwner_controller=TextEditingController().obs;
 
     //todo update task controllers
     var userRegionUpdateController = TextEditingController();
@@ -164,6 +166,10 @@ class Taskmastervm extends GetxController{
     RxList<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
     RxList<String> Item_Category_code_list = <String>[].obs;
     RxList<String> isInfraLeadList =["Yes", "No"].obs;
+    RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+    RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+    var AccountOwnerForApi;
+
 
     @override
     void onInit() async {
@@ -185,7 +191,100 @@ class Taskmastervm extends GetxController{
         SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
         approveRejectList.value = ['Approve', 'Reject'];
         Item_Category_Selected_list.value = [];
+      if(this.isAdminWritePermission==1){
+          EmployeeMasterGet('');
+      }
+      else{
+          getEmployeeMemberApi();
+      }
 
+    }
+
+    Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+        if (query == '') {
+            return const Iterable<EmployeeMemberModel>.empty();
+        }
+        Map data = {
+            'filter_name': '',
+            'filter_email': query,
+            'filter_location_id': '',
+            'email_id': email,
+            'rowsPerPage': 50,
+            'pageNumber': 0,
+        };
+        String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+        try {
+            final jsonResponse = json.decode(employee_response);
+
+            if (jsonResponse is List) {
+                print(jsonResponse);
+                List<EmployeeMemberModel> response =
+                jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+                print('condition..'+response[0].condition.toString());
+                if (response[0].condition == 'True') {
+                    print(jsonResponse);
+                    employee_Member_list.value = response;
+
+                } else {
+                    // Utils.sanckBarException('False!', response[0].message!);
+                    employee_Member_list.value = [];
+                }
+            } else {
+                Utils.sanckBarException('False!', jsonResponse.message);
+                employee_Member_list.value = [];
+            }
+        } catch (e) {
+            Utils.sanckBarException('Exception!', e.toString());
+            employee_Member_list.value = [];
+        }
+        return employee_Member_list.value;
+    }
+    getEmployeeMemberApi() {
+        Map data = {
+            "email_id": email,
+            "flag": "GeoLevelLower"
+        };
+        print(data);
+        loading.value = true;
+        try {
+            _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+                    (value) {
+                    print(value);
+                    final JsonResponse = json.decode(value);
+                    if (JsonResponse is List) {
+                        List<EmployeeMemberModel> response =
+                        JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                            .toList();
+                        if (response != null &&
+                            response.length > 0 &&
+                            response[0].condition == "True") {
+                            loading.value = false;
+                            employee_Member_list.value=response;
+                            //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+                        } else {
+                            loading.value = false;
+                            employee_Member_list.value=[];
+                            //Utils.showErrorToastification("Error!", "No Date Found");
+                            //service_installation_details_list.value=[];
+                        }
+                    } else {
+                        loading.value = false;
+                        // service_indent_header_list.value = [];
+                        Utils.showExceptionToastification("Api Error!", JsonResponse);
+                    }
+                },
+            ).onError(
+                    (error, stackTrace) {
+                    print(error);
+                    //service_indent_header_list.value = [];
+                },
+            );
+        } catch (e) {
+            loading.value = false;
+            employee_Member_list.value = [];
+            print(e);
+        }
     }
 
 
@@ -237,6 +336,13 @@ class Taskmastervm extends GetxController{
         }else if(IsActive == 'No'){
             is_Active = 0;
         }
+        AccountOwnerForApi = '';
+        if(AccountOwner_controller.value.text.isNotEmpty){
+            AccountOwnerForApi = AccountOwner_controller.value.text
+                .split(',')
+                .map((e) => e.trim())
+                .join('|');
+        }
         try{
             Map data={
                 "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.text,
@@ -248,7 +354,6 @@ class Taskmastervm extends GetxController{
                 "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
                 "filter_last_activity_status": "",
                 "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
-                //"filter_is_infra_lead": infraLeadValue.value,
                 "filter_is_infra_lead": -1,
                 "filter_is_sales_cycle_active": is_Active.toString(),
                 "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
@@ -256,18 +361,22 @@ class Taskmastervm extends GetxController{
                 "filter_approved_by": "",
                 "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
-                "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
+                "filter_task_owner":isAdminWritePermission=='1'?"":email,
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
-                "filter_task_owner":isAdminWritePermission=='1'?"":email,
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
                 "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
                 "filter_frontliner_value": "",
                 "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
                 "filter_zone_head_value": "",
                 "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+                "filter_task_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
+                //"filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
+
+
+
             };
             print("Data Json....${data}");
             loading.value=true;
@@ -1440,7 +1549,7 @@ class Taskmastervm extends GetxController{
        lastActivityStatus_Controller.value.clear();
        product_category_controller.value.clear();
        method_of_call_controller.value.clear();
-       account_owner_controller.value.clear();
+       //account_owner_controller.value.clear();
        Type_of_call_controller.clear();
        Method_of_call_controller.clear();
        Sale_cycle_Id_controller.clear();
@@ -1452,6 +1561,9 @@ class Taskmastervm extends GetxController{
        createdOnStartToEnd.value = "";
        Task_status_controller.text = "All";
        SaleCycleActive_Controller.text = "All";
+       AccountOwnerForApi = '';
+       AccountOwner_controller.value.clear();
+       SelectedEmployee_Member_list.value = [];
   }
 
 }

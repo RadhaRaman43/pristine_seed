@@ -1,4 +1,5 @@
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,6 +13,7 @@ import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
 import '../../../../reources/routes/routes_name.dart';
 import '../../../../view/custom_drawer.dart';
+import '../../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
@@ -979,13 +981,9 @@ class SalesCycleScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindSaleCycleIdDropDown(context),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               Obx((){
                                 return Visibility(
                                   visible: salesCycleController.filterQuoteAcceptedFlag.value=='',
@@ -1000,17 +998,14 @@ class SalesCycleScreen extends StatelessWidget{
                               }),
 
                               bindTaskId(),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               bindSaleCycleStatusDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindApprovalStatusDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+
+                              bindAccountOwnerFilter(context),
+                              SizedBox(height: 10,),
 
                               TextField(
                                 controller: salesCycleController.accountNameController.value,
@@ -1040,9 +1035,7 @@ class SalesCycleScreen extends StatelessWidget{
                                 },
                               ),
 
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               TextField(
                                 controller: salesCycleController.accountCodeController.value,
@@ -1072,39 +1065,25 @@ class SalesCycleScreen extends StatelessWidget{
                                 },
                               ),
 
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindSaleCycleOwner(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              //bindSaleCycleOwner(),
+                              SizedBox(height: 10,),
 
                               bindProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindPurchaseProcess(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
 
                               bindCompProfileTypeDropDown(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindIsCommintdrpdown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindSolutionAccepted(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                             /*  bindProposedSolution(context),
                               SizedBox(
                                 height: 10,
@@ -1380,7 +1359,7 @@ class SalesCycleScreen extends StatelessWidget{
                                   Get.back();
                                   salesCycleController.pageNumber = 0;
                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, '', '', '');
-                                  //TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.SaleCycleActive_Controller.text, '', '', TaskMaster_page_controller.Task_status_controller.text.toString());
+                                  //salesCycleController.getTaskMaster(0, salesCycleController.SaleCycleActive_Controller.text, '', '', salesCycleController.Task_status_controller.text.toString());
 
 
                                 },
@@ -1517,7 +1496,7 @@ class SalesCycleScreen extends StatelessWidget{
         // Update the TextField with the selected
         salesCycleController.SaleCycleStatusController.value.text =
             _displaySaleCycleStatusForOption(selection).toString();
-        //print('IsActive.....${TaskMaster_page_controller.Task_status_controller.text}');
+        //print('IsActive.....${salesCycleController.Task_status_controller.text}');
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1679,7 +1658,7 @@ class SalesCycleScreen extends StatelessWidget{
         // Update the TextField with the selected
         salesCycleController.ApprovalStatusController.value.text =
             _displayApprovalStatusForOption(selection).toString();
-        //print('IsActive.....${TaskMaster_page_controller.Task_status_controller.text}');
+        //print('IsActive.....${salesCycleController.Task_status_controller.text}');
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1763,6 +1742,72 @@ class SalesCycleScreen extends StatelessWidget{
         );
       },
     );*/
+  }
+
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: salesCycleController.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: salesCycleController.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: salesCycleController.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Sales Cycle Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Sales Cycle Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          salesCycleController.SelectedEmployee_Member_list.value =
+              selectedList;
+          salesCycleController.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
   }
 
  Widget bindSaleCycleIdDropDown(BuildContext context) {

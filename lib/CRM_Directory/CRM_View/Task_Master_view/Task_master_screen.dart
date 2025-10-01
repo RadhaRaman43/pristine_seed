@@ -1,5 +1,6 @@
 
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -15,6 +16,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
@@ -1366,7 +1368,7 @@ class TaskMasterScreen extends StatelessWidget {
                               width: 80,
                               alignment: Alignment.center,
                               child: Text('Approve',
-                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                /*TaskMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
                                 style: GoogleFonts.poppins(
                                   color: AllColors.blackColor,
                                   fontSize: AllFontSize.fourtine,
@@ -1411,7 +1413,7 @@ class TaskMasterScreen extends StatelessWidget {
                                 width: 80,
                                 alignment: Alignment.center,
                                 child: Text('Reject',
-                                  /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                  /*TaskMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
                                   style: GoogleFonts.poppins(
                                     color: AllColors.blackColor,
                                     fontSize: AllFontSize.fourtine,
@@ -1481,7 +1483,7 @@ class TaskMasterScreen extends StatelessWidget {
                               width: 60,
                               alignment: Alignment.center,
                               child: Text('Cancel',
-                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                /*TaskMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
                                 style: GoogleFonts.poppins(
                                   color: AllColors.blackColor,
                                   fontSize: AllFontSize.twelve,
@@ -1508,7 +1510,7 @@ class TaskMasterScreen extends StatelessWidget {
                               width: 60,
                               alignment: Alignment.center,
                               child: Text('Confirm',
-                                /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
+                                /*TaskMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files',*/
                                 style: GoogleFonts.poppins(
                                   color: AllColors.blackColor,
                                   fontSize: AllFontSize.twelve,
@@ -1557,7 +1559,7 @@ class TaskMasterScreen extends StatelessWidget {
           TaskMaster_page_controller.RejectBool.value = true;
           TaskMaster_page_controller.ApproveBool.value = false;
         }
-        //print('IsActive.....${accountMaster_page_controller.IsActive_controller.text}');
+        //print('IsActive.....${TaskMaster_page_controller.IsActive_controller.text}');
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1653,7 +1655,7 @@ class TaskMasterScreen extends StatelessWidget {
 
 
   void showFilterBottomSheet(BuildContext context) {
-    //accountMaster_page_controller.IsActive_controller.clear();
+    //TaskMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1719,112 +1721,56 @@ class TaskMasterScreen extends StatelessWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               bindTaskStatusDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindTaskId(),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               bindAccountName(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindAccountCode(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindAccountOwnerFilter(context),
+                              SizedBox(height: 10,),
 
                               bindTypeOfCall(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindMethodOfcall(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                             /* bindIsInfraLeadDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),*/
+                              SizedBox(height: 10,),
                               bindLastActivityStatus(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindSaleCycleActiveDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindSaleCycleId(),
                               SizedBox(height: 10,),
                               bindProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindCreatedOn(context),
 
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindCreatedBy(),
                               SizedBox(height: 10,),
-
-                              filterAccountOwner(),
-                              SizedBox(height: 10,),
-
-                              /*  filterIsClosedCompleted(),
-                              SizedBox(height: 10,),*/
-
-                              /*   filterDayFlag( ),
+                             /* bindCreatedBy(),
                               SizedBox(height: 10,),*/
 
                               filterWithTaskDueDate(context),
                               SizedBox(height: 10,),
 
                               bindEmailId(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindPhoneNo(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindPostalCode(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindDistrict(),
-                              SizedBox(
-                                height: 10,
-                              ),
-
-                             /* bindFrontLinerValue(),
-                              SizedBox(
-                                height: 10,
-                              ),*/
+                              SizedBox(height: 10,),
 
                               bindBranchHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
-
-                             /* bindZoneHead(),
-                              SizedBox(
-                                height: 10,
-                              ),*/
-
+                              SizedBox(height: 10,),
                               bindClusterHead(),
                               SizedBox(
                                 height: 10,
@@ -1858,17 +1804,13 @@ class TaskMasterScreen extends StatelessWidget {
                               TaskMaster_page_controller.pageNumber = 0;
                               TaskMaster_page_controller.getTaskMaster(
                                   TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active
-                                      .toString(),
+                                  TaskMaster_page_controller.is_Active.toString(),
                                   '',
                                   '',
-                                  TaskMaster_page_controller
-                                      .Task_status_controller.text.toString()
-                                  ,
+                                  TaskMaster_page_controller.Task_status_controller.text.toString(),
                                   TaskMaster_page_controller.date_filter,
                                   TaskMaster_page_controller.is_done.value);
-                              //TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.IsActive_controller.text);
-                            },
+                             },
                             child: Text(
                               'Submit',
                               style: GoogleFonts.poppins(
@@ -1895,25 +1837,13 @@ class TaskMasterScreen extends StatelessWidget {
                               TaskMaster_page_controller.pageNumber = 0;
                               TaskMaster_page_controller.getTaskMaster(
                                   TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active
-                                      .toString(),
+                                  TaskMaster_page_controller.is_Active.toString(),
                                   '',
                                   '',
-                                  TaskMaster_page_controller
-                                      .Task_status_controller.text.toString()
-                                  ,
+                                  TaskMaster_page_controller.Task_status_controller.text.toString(),
                                   TaskMaster_page_controller.date_filter,
                                   TaskMaster_page_controller.is_done.value);
 
-
-                              //accountMaster_page_controller.Address_controller.clear();
-                              // accountMaster_page_controller.Annual_Revenue_Controller.clear();
-                              //accountMaster_page_controller.No_Of_Emp_Controller.clear();
-                              //accountMaster_page_controller.no_of_employees_min = '';
-                              // accountMaster_page_controller.no_of_employees_max = '';
-                              // accountMaster_page_controller.annual_revenue_min = '';
-                              //accountMaster_page_controller.annual_revenue_max = '';
-                              //accountMaster_page_controller.account_cat_type_controller.clear();
 
                             },
                             child: Text(
@@ -2217,8 +2147,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Code',
-          hintText: 'Account Code',
+          labelText: 'Customer Code',
+          hintText: 'Customer Code',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -2239,6 +2169,71 @@ class TaskMasterScreen extends StatelessWidget {
       },
     );
   }
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: TaskMaster_page_controller.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: TaskMaster_page_controller.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Task Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Task Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          TaskMaster_page_controller.SelectedEmployee_Member_list.value =
+              selectedList;
+          TaskMaster_page_controller.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
+  }
 
   bindAccountName() {
     return TextField(
@@ -2247,8 +2242,8 @@ class TaskMasterScreen extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Name',
-          hintText: 'Account Name',
+          labelText: 'Customer Name',
+          hintText: 'Customer Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -2357,319 +2352,6 @@ class TaskMasterScreen extends StatelessWidget {
     );
   }
 
-  //todo comment code for new filter added in api and filter is not work properly
-/*  void showFilterBottomSheet(BuildContext context) {
-    TaskMaster_page_controller.pageNumber = 0;
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return SingleChildScrollView(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min, // Ensure minimal height
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
-                    SizedBox(width: 5,),
-                    Text(
-                      "Filter ",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.twentee,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    Spacer(),
-                    InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 18.0),
-                        child: Icon(
-                          Icons.cancel,
-                          color: AllColors.primaryDark1,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Center(
-                  child: Divider(
-                    height: 1,
-                    color: AllColors.primaryDark1,
-                  )),
-              SingleChildScrollView(
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        bindTaskStatusDropDown(context),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: TaskMaster_page_controller.filterTask_Id_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Task Id',
-                              hintText: 'Task Id',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(
-                          height: 10,
-                        ),
-
-
-                        TextField(
-                          controller: TaskMaster_page_controller.account_Name_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Account Name',
-                            hintText: 'Account Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: TaskMaster_page_controller.Contact_Name_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Contact Name',
-                            hintText: 'Contact Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: TaskMaster_page_controller.Type_of_call_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Type Of Call',
-                            hintText: 'Type Of Call',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        bindIsInfraLeadDropDown(context),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        bindSaleCycleActiveDropDown(context),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: TaskMaster_page_controller.Sale_cycle_Id_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Sale Cycle Id',
-                            hintText: 'Sale Cycle Id',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-
-                        SizedBox(height: 10,),
-
-                        */ /*filterWithTaskCreationOn( context),
-
-                        SizedBox(height: 10,),
-                        filterWithTaskDueDate( context),
-                        SizedBox(height: 10,),*/ /*
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: size.width * 0.4,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark,
-                                      width: 1),
-                                )),
-                                onPressed: () {
-                                  TaskMaster_page_controller.account_name.value = TaskMaster_page_controller.account_Name_controller.text;
-                                  Get.back();
-                                  TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.SaleCycleActive_Controller.text, TaskMaster_page_controller.filterTask_Id_controller.text, '', TaskMaster_page_controller.Task_status_controller.text.toString(), TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-
-
-                                },
-                                child: Text(
-                                  'Submit',
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: size.width * 0.4,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.redColor, width: 1),
-                                )),
-                                onPressed: () {
-                                  Get.back();
-                                  TaskMaster_page_controller.filterTask_Id_controller.clear();
-                                  TaskMaster_page_controller.Task_status_controller.clear();
-                                  TaskMaster_page_controller.account_Name_controller.clear();
-                                  TaskMaster_page_controller.account_name.value = "";
-                                  TaskMaster_page_controller.Contact_Name_controller.clear();
-                                  TaskMaster_page_controller.Type_of_call_controller.clear();
-                                  TaskMaster_page_controller.SaleCycleActive_Controller.clear();
-                                  TaskMaster_page_controller.Sale_cycle_Id_controller.clear();
-                                  TaskMaster_page_controller.isInfraLeadFilterController.clear();
-                                  TaskMaster_page_controller.filterTaskCreationOnController.value.clear();
-                                  TaskMaster_page_controller.filterTaskDuedateController.value.clear();
-                                  TaskMaster_page_controller.getTaskMaster(0, 'All', '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-
-                                },
-                                child: Text(
-                                  'Reset',
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.redColor,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-        );
-      },
-    );
-  }*/
 
   Widget bindTaskStatusDropDown(context) {
     return DropdownMenu<String>(
@@ -3601,8 +3283,8 @@ class TaskMasterScreen extends StatelessWidget {
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten
             ),
             suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Task Due Date',
-            labelText: 'Task Due Date',
+            hintText: 'Due Date',
+            labelText: 'Due Date',
             hintStyle: GoogleFonts.poppins(
                 color: AllColors.lightblackColor,
                 fontWeight: FontWeight.w300,
@@ -3770,32 +3452,6 @@ class TaskMasterScreen extends StatelessWidget {
     );
   }
 
-  filterAccountOwner() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.account_owner_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Owner',
-          hintText: 'Account Owner',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
 
   filterIsClosedCompleted() {
     return TextField(

@@ -1609,13 +1609,13 @@ class SalesDashboardViewscreen extends StatelessWidget{
           SizedBox(height: 10),
           bindRegionNameFilter(context),
           SizedBox(height: 10),
-          bindAccountOwnerFilter(context),
+          bindEmployeeNameFilter(context),
         ]
       ),
     );
   }
 
-  bindAccountOwnerFilter(BuildContext context) {
+  bindEmployeeNameFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: dashboard_view_Controller.employee_Member_list,

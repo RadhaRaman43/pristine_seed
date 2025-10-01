@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,6 +12,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
 
 class TaskApprovalListScreen extends StatelessWidget{
@@ -232,36 +234,6 @@ class TaskApprovalListScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Task Status : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskStatus!,
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .taskStatus!,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(taskStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -445,7 +417,6 @@ class TaskApprovalListScreen extends StatelessWidget{
                   ),
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -476,7 +447,6 @@ class TaskApprovalListScreen extends StatelessWidget{
                   ),
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -515,7 +485,6 @@ class TaskApprovalListScreen extends StatelessWidget{
                   ),
                 ],
               ),
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -549,29 +518,6 @@ class TaskApprovalListScreen extends StatelessWidget{
                   ),
                 ],
               ),
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Is Infra Lead : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    TaskMaster_page_controller
-                        .Task_Master_list[position].isInfraLead == 1
-                        ? "Yes"
-                        : "No",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -636,36 +582,6 @@ class TaskApprovalListScreen extends StatelessWidget{
                   ],
                 ),
               ),
-              /* Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Method of Call : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[position]
-                        .methodOfCall!,
-                    child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .methodOfCall!,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w300),
-                    ),
-                  ),
-                ),
-              ],
-            ),*/
             ],
           ),
           /*trailing: Icon(Icons.remove_red_eye, color: AllColors.textColor,),*/
@@ -674,7 +590,7 @@ class TaskApprovalListScreen extends StatelessWidget{
   }
 
   void showFilterBottomSheet(BuildContext context) {
-    //accountMaster_page_controller.IsActive_controller.clear();
+    //TaskMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -740,21 +656,17 @@ class TaskApprovalListScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               bindTaskId(),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               bindAccountName(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindAccountCode(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+
+                              bindAccountOwnerFilter(context),
+                              SizedBox(height: 10,),
+
 
                               bindTypeOfCall(),
                               SizedBox(
@@ -933,8 +845,8 @@ class TaskApprovalListScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Name',
-          hintText: 'Account Name',
+          labelText: 'Customer Name',
+          hintText: 'Customer Name',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -960,8 +872,8 @@ class TaskApprovalListScreen extends StatelessWidget{
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Code',
-          hintText: 'Account Code',
+          labelText: 'Customer Code',
+          hintText: 'Customer Code',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -981,6 +893,72 @@ class TaskApprovalListScreen extends StatelessWidget{
         // Handle the text field value changes if needed
       },
     );
+  }
+
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: TaskMaster_page_controller.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: TaskMaster_page_controller.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Task Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Task Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          TaskMaster_page_controller.SelectedEmployee_Member_list.value =
+              selectedList;
+          TaskMaster_page_controller.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
   }
 
   bindTypeOfCall() {

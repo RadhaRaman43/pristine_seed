@@ -26,6 +26,7 @@ import '../../../main.dart';
 import '../../../models/service_managment_model_directory/bulk_indent_model/bulk_item_master_model.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
@@ -323,6 +324,11 @@ class SalesCycleVm extends GetxController {
   RxString filterQuoteAcceptedFlag = "Open".obs;
 
   RxList<BulkItemMasterGetModel> item_no_list = <BulkItemMasterGetModel>[].obs;
+  RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
+
+  var AccountOwnerForApi;
+  var AccountOwner_controller=TextEditingController().obs;
 
   @override
   Future<void> onInit() async {
@@ -330,9 +336,102 @@ class SalesCycleVm extends GetxController {
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     clearAllFieldOfFilter();
+    if(this.isAdminWritePermission==1){
+      EmployeeMasterGet('');
+    }
+    else{
+      getEmployeeMemberApi();
+    }
     getsalesCycleData(pageNumber, "", "", '');
     itemCategorySelectedlist.value = [];
     super.onInit();
+  }
+
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }
+    Map data = {
+      'filter_name': '',
+      'filter_email': query,
+      'filter_location_id': '',
+      'email_id': email,
+      'rowsPerPage': 50,
+      'pageNumber': 0,
+    };
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    return employee_Member_list.value;
+  }
+  getEmployeeMemberApi() {
+    Map data = {
+      "email_id": email,
+      "flag": "GeoLevelLower"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
   }
 
   Future<void> refreshList() async {
@@ -393,80 +492,42 @@ class SalesCycleVm extends GetxController {
     if (salesCycleOwnerController.value.text.isNotEmpty) {
       emailForUpdate = extractEmail(salesCycleOwnerController.value.text);
     }
+    AccountOwnerForApi = '';
+    if(AccountOwner_controller.value.text.isNotEmpty){
+      AccountOwnerForApi = AccountOwner_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
     try {
       Map data = {
-        "filter_sales_cycle_id": saleCycleId.isNotEmpty
-            ? saleCycleId
-            : saleCycleController.value.text,
-        "filter_task_id": filterTask_Id_controller.value.text.isEmpty
-            ? ""
-            : filterTask_Id_controller.value.text,
-        "filter_account_code": accountCodeController.value.text.isEmpty
-            ? ""
-            : accountCodeController.value.text,
-        "filter_account_name": accountNameController.value.text.isEmpty
-            ? ""
-            : accountNameController.value.text,
-        "filter_sales_cycle_owner": salesCycleOwnerController.value.text.isEmpty
+        "filter_sales_cycle_id": saleCycleId.isNotEmpty ? saleCycleId : saleCycleController.value.text,
+        "filter_task_id": filterTask_Id_controller.value.text.isEmpty ? "" : filterTask_Id_controller.value.text,
+        "filter_account_code": accountCodeController.value.text.isEmpty ? "" : accountCodeController.value.text,
+        "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
+        "filter_sales_cycle_owner": ''/*salesCycleOwnerController.value.text.isEmpty
             ? (isAdminWritePermission=="1"?"":email)
-            : emailForUpdate.toLowerCase(),
-        "filter_product_category": productCategoryController.value.text.isEmpty
-            ? ""
-            : productCategoryController.value.text,
-        "filter_purchase_process": purchaseProcessController.value.text.isEmpty
-            ? ""
-            : purchaseProcessController.value.text,
-        "filter_proposed_solution":
-            proposedSolutionController.value.text.isEmpty
-                ? ""
-                : proposedSolutionController.value.text,
-        "filter_expected_closure_date": extClosureStartToEnd.value.isEmpty
-            ? ""
-            : extClosureStartToEnd.value,
-        "filter_sales_cycle_status":
-            SaleCycleStatusController.value.text.isEmpty ||
-                    SaleCycleStatusController.value.text == 'All'
-                ? ''
-                : SaleCycleStatusController.value.text,
-        "filter_sales_cycle_approval_status":
-            ApprovalStatusController.value.text.isEmpty ||
-                    ApprovalStatusController.value.text == 'All'
-                ? ''
-                : ApprovalStatusController.value.text,
+            : emailForUpdate.toLowerCase()*/,
+        "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,
+        "filter_proposed_solution": proposedSolutionController.value.text.isEmpty ? "" : proposedSolutionController.value.text,
+        "filter_expected_closure_date": extClosureStartToEnd.value.isEmpty ? "" : extClosureStartToEnd.value,
+        "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All' ? '' : SaleCycleStatusController.value.text,
+        "filter_sales_cycle_approval_status": ApprovalStatusController.value.text.isEmpty || ApprovalStatusController.value.text == 'All' ? '' : ApprovalStatusController.value.text,
         "filter_sales_cycle_quote_accepted": filterQuoteAcceptedFlag.value,
-        "is_commit": isCommitController.value.text.isEmpty
-            ? -1
-            : (isCommitController.value.text == "Yes" ? 1 : 0),
-        "filter_solution_accepted":
-            solutionAcceptedController.value.text.isEmpty
-                ? -1
-                : (solutionAcceptedController.value.text == "Yes" ? 1 : 0),
-        "filter_created_by": createdByController.value.text.isEmpty
-            ? ""
-            : createdByController.value.text,
+        "is_commit": isCommitController.value.text.isEmpty ? -1 : (isCommitController.value.text == "Yes" ? 1 : 0),
+        "filter_solution_accepted": solutionAcceptedController.value.text.isEmpty ? -1 : (solutionAcceptedController.value.text == "Yes" ? 1 : 0),
+        "filter_created_by": createdByController.value.text.isEmpty ? "" : createdByController.value.text,
         "filter_approved_by": "",
-        "filter_created_on":
-            createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
-        "filter_company_profile_type":
-            companyProfileTypeController.value.text.isEmpty
-                ? ""
-                : companyProfileTypeController.value.text,
-        "filter_postal_code": postalCodeController.value.text.isEmpty
-            ? ""
-            : postalCodeController.value.text,
-        "filter_district": district_controller.value.text.isEmpty
-            ? ""
-            : district_controller.value.text,
+        "filter_created_on": createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
+        "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty ? "" : companyProfileTypeController.value.text,
+        "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
+        "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
         "filter_frontliner_value": "",
-        "filter_branch_head_value":
-            branch_head_value_controller.value.text.isEmpty
-                ? ""
-                : branch_head_value_controller.value.text,
+        "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty ? "" : branch_head_value_controller.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value":
-            cluster_head_value_controller.value.text.isEmpty
-                ? ""
-                : cluster_head_value_controller.value.text,
+        "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty ? "" : cluster_head_value_controller.value.text,
+        "filter_sales_cycle_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };
@@ -4423,6 +4484,10 @@ class SalesCycleVm extends GetxController {
     extClosureStartToEnd.value = "";
     SaleCycleStatusController.value.text = 'All';
     ApprovalStatusController.value.text = 'All';
+
+    AccountOwnerForApi = '';
+    AccountOwner_controller.value.clear();
+    SelectedEmployee_Member_list.value = [];
   }
 
   void clearAllFieldOfQuoteFilter() {

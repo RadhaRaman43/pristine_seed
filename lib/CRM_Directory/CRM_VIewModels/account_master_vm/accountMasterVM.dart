@@ -99,6 +99,7 @@ class Accountmastervm extends GetxController{
 
   var account_name_controller = TextEditingController();
   var account_code_controller = TextEditingController();
+  var AccountOwner_controller=TextEditingController().obs;
   var account_type_controller = TextEditingController();
   var account_cat_type_controller = TextEditingController();
   var gst_registration_type_controller = TextEditingController().obs;
@@ -167,6 +168,7 @@ class Accountmastervm extends GetxController{
   RxList<String> UploadImageTypeList = <String>[].obs;
   RxList<String> IsActiveTypeAllList = <String>[].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
+  RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<PostalCodeModel> geoPostal_Code_list = <PostalCodeModel>[].obs;
   RxList<CompanyProfileMstModel> CompanyProfileMst_list = <CompanyProfileMstModel>[].obs;
   RxList<AddressMasterModel> AddressMst_list = <AddressMasterModel>[].obs;
@@ -204,6 +206,9 @@ class Accountmastervm extends GetxController{
   var cluster_head__value_controller = TextEditingController().obs;
 
 
+  var AccountOwnerForApi;
+
+
   @override
   void onInit() async {
     super.onInit();
@@ -228,9 +233,54 @@ class Accountmastervm extends GetxController{
     getGeoPostalCodeApi();
     getSateListApi();
     getTatResponseMasterApi();
+    if(this.isAdminWritePermission==1){
+      EmployeeMasterGet('');
+    }
+    else{
+      getEmployeeMemberApi();
+    }
 
 
 
+  }
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }
+    Map data = {
+      'filter_name': '',
+      'filter_email': query,
+      'filter_location_id': '',
+      'email_id': email,
+      'rowsPerPage': 50,
+      'pageNumber': 0,
+    };
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    return employee_Member_list.value;
   }
 
   void toggleCheckbox() {
@@ -307,6 +357,13 @@ class Accountmastervm extends GetxController{
     }else if(IsActive == 'No'){
       is_Active = 0;
     }
+    AccountOwnerForApi = '';
+    if(AccountOwner_controller.value.text.isNotEmpty){
+      AccountOwnerForApi = AccountOwner_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
     print('isActiveInAPi...${is_Active}');
     print('is Admin.....${isAdminWritePermission}');
     try{
@@ -314,6 +371,7 @@ class Accountmastervm extends GetxController{
         "filter_account_code":account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
         "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
         "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
+        "filter_account_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
         "filter_phone_no":  PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text,
         "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
@@ -1652,6 +1710,31 @@ class Accountmastervm extends GetxController{
     }catch(e){
         print("Catch Block...${e}");
     }
+  }
+  clearAcountMasterFilter(){
+    print("reset filter data");
+    AccountOwnerForApi = '';
+    AccountOwner_controller.value.clear();
+    SelectedEmployee_Member_list.value = [];
+
+    account_code_controller.clear();
+    account_name_controller.clear();
+    account_type_controller.clear();
+    comp_prof_type_controller.clear();
+    stateName_controller.clear();
+    IsActive_controller.clear();
+    PhoneNo_Controller.clear();
+    EmailId_Controller.clear();
+    postal_code_controller.value.clear();
+    district_controller.value.clear();
+    created_by_controller.value.clear();
+    frontliner_controller.value.clear();
+    branch_head__value_controller.value.clear();
+    zone_head__value_controller.value.clear();
+    cluster_head__value_controller.value.clear();
+    pageNumber=0;
+    getAccountMaster(pageNumber,'All');
+
   }
 
   clearFilterController(){

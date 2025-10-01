@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -10,6 +11,7 @@ import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/CompanyTypeModel.dart';
+import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 
@@ -828,44 +830,21 @@ class AccountmasterScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               bindAccountCode(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindAccountName(),
-                    
-                              SizedBox(
-                                height: 10,
-                              ),
-                    
-                    
+                              SizedBox(height: 10,),
                               bindAccountTypeDropDown(context),
-                    
-                              SizedBox(
-                                height: 10,
-                              ),
-                    
-                              /*bindAccCatogeryTypeDropDown(context),
-                    
-                          SizedBox(
-                            height: 10,
-                          ),*/
-                    
+                              SizedBox(height: 10),
+                              bindAccountOwnerFilter(context),
+                              SizedBox(height: 10,),
                               bindEmailId(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindPhoneNo(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               /*
                           TextField(
                             controller: accountMaster_page_controller.Address_controller,
@@ -899,17 +878,11 @@ class AccountmasterScreen extends StatelessWidget{
                             height: 10,
                           ),*/
                               bindSateName(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindPostalCode(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindDistrict(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               /* bindAnualRevenueDropDown(context),
                           SizedBox(
                             height: 10,
@@ -919,24 +892,15 @@ class AccountmasterScreen extends StatelessWidget{
                             height: 10,
                           ),*/
                               bindIsActiveDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
-
+                              SizedBox(height: 10,),
                               bindBranchHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                              /* bindZoneHead(),
                               SizedBox(
                                 height: 10,
                               ),*/
                               bindClusterHead(),
-                    
-                              SizedBox(
-                                height: 10,
-                              ),
-
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -983,21 +947,8 @@ class AccountmasterScreen extends StatelessWidget{
                             )),
                             onPressed: () {
                               Get.back();
-                              accountMaster_page_controller.account_code_controller.clear();
-                              accountMaster_page_controller.account_name_controller.clear();
-                              accountMaster_page_controller.account_type_controller.clear();
-                              accountMaster_page_controller.comp_prof_type_controller.clear();
-                              accountMaster_page_controller.stateName_controller.clear();
-                              accountMaster_page_controller.IsActive_controller.clear();
-                              accountMaster_page_controller.PhoneNo_Controller.clear();
-                              accountMaster_page_controller.EmailId_Controller.clear();
-                              accountMaster_page_controller.postal_code_controller.value.clear();
-                              accountMaster_page_controller.district_controller.value.clear();
-                              accountMaster_page_controller.created_by_controller.value.clear();
-                              accountMaster_page_controller.frontliner_controller.value.clear();
-                              accountMaster_page_controller.branch_head__value_controller.value.clear();
-                              accountMaster_page_controller.zone_head__value_controller.value.clear();
-                              accountMaster_page_controller.cluster_head__value_controller.value.clear();
+                              accountMaster_page_controller.clearAcountMasterFilter();
+
                               //accountMaster_page_controller.Address_controller.clear();
                               // accountMaster_page_controller.Annual_Revenue_Controller.clear();
                               //accountMaster_page_controller.No_Of_Emp_Controller.clear();
@@ -1006,8 +957,6 @@ class AccountmasterScreen extends StatelessWidget{
                              // accountMaster_page_controller.annual_revenue_min = '';
                               //accountMaster_page_controller.annual_revenue_max = '';
                               //accountMaster_page_controller.account_cat_type_controller.clear();
-                             accountMaster_page_controller.pageNumber=0;
-                              accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber,'All');
 
                             },
                             child: Text(
@@ -1082,9 +1031,73 @@ class AccountmasterScreen extends StatelessWidget{
       ),
     );
   }
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: accountMaster_page_controller.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: accountMaster_page_controller.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: accountMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Account Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Account Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          accountMaster_page_controller.SelectedEmployee_Member_list.value =
+              selectedList;
+          accountMaster_page_controller.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
 
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
 
- /* Widget bindAccountTypeDropDown(context){
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+  
+  /* Widget bindAccountTypeDropDown(context){
     return Autocomplete<CustomList>(
       displayStringForOption: _displayAccTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {

@@ -247,7 +247,12 @@ class SalesCycleRepository{
   Future<String> salesCycleMstMarkRateContractApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.salesCycleMstMarkRateContract,sessionManagement);
   }
-
+  Future<String> EmployeeMamberGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.employeeMemberGet,sessionManagement);
+  }
+  Future<String> EmployeeMatserGetApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.get_employee_master,sessionManagement);
+  }
 
 
 

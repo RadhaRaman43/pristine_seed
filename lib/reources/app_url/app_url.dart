@@ -228,7 +228,7 @@ class AppUrl {
      static const String GeoGetPincodeHierarchy = "$BASE_URL/api/GeographicalSetup/GeoGetPincodeHierarchy";
      static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
      static const String TaskMstRejectReopen = "$BASE_URL/api/CRM/Task/TaskMstRejectReopen";
-     static const String TaskMstGetApprovalList = "$BASE_URL  /api/CRM/Task/TaskMstGetApprovalList";
+     static const String TaskMstGetApprovalList = "$BASE_URL/api/CRM/Task/TaskMstGetApprovalList";
 
 
      //todo sales cycle
