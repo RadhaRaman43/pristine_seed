@@ -156,6 +156,27 @@ class SessionManagement {
     }
   }
 
+  Future<void> setisHeadofficePermission(String isHeadofficePermission) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('Is_Head_Office_Permission', isHeadofficePermission);
+  }
+  Future<String?> getisHeadofficePermission() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var Is_Head_Office_Permission = prefs.getString('Is_Head_Office_Permission');
+      if (Is_Head_Office_Permission == null || Is_Head_Office_Permission == "") return null;
+      return Is_Head_Office_Permission;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<void> setIs(String Is_Admin_Permission) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('Is_Admin_Permission', Is_Admin_Permission);
+  }
+
+
   Future<void> setEmpId(String emp_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('emp_id', emp_id);

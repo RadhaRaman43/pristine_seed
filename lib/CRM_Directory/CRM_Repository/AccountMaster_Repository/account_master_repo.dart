@@ -96,4 +96,7 @@ class AccountMasterRepo {
   Future<String> PincodeMasterGet(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.PincodeMasterGet,sessionManagement);
   }
+  Future<String> AccountMstDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.AccountMstDelete,sessionManagement);
+  }
 }

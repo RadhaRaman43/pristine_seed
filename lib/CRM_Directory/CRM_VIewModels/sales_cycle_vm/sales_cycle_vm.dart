@@ -73,7 +73,9 @@ class SalesCycleVm extends GetxController {
   RxBool loading = false.obs;
   String email = "";
   String userType = "";
-  String isAdminWritePermission = "";
+  //String isAdminWritePermission.value = "";
+  RxString isAdminWritePermission = "".obs;
+  RxString isHeadofficePermission = "".obs;
   String consigneeId = "";
   RxString FromPage = "Sales".obs;
   RxString routingForSalesAdvise = "".obs;
@@ -334,9 +336,10 @@ class SalesCycleVm extends GetxController {
   Future<void> onInit() async {
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
-    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     clearAllFieldOfFilter();
-    if(this.isAdminWritePermission==1){
+    if(this.isAdminWritePermission.value==1){
       EmployeeMasterGet('');
     }
     else{
@@ -485,8 +488,7 @@ class SalesCycleVm extends GetxController {
     return input.trim();
   }
 
-  getsalesCycleData(
-      int page_no, String saleCycleId, String flag, String fromPage) {
+  getsalesCycleData(int page_no, String saleCycleId, String flag, String fromPage) {
     FromPage.value = fromPage;
     String emailForUpdate = "";
     if (salesCycleOwnerController.value.text.isNotEmpty) {
@@ -505,9 +507,7 @@ class SalesCycleVm extends GetxController {
         "filter_task_id": filterTask_Id_controller.value.text.isEmpty ? "" : filterTask_Id_controller.value.text,
         "filter_account_code": accountCodeController.value.text.isEmpty ? "" : accountCodeController.value.text,
         "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
-        "filter_sales_cycle_owner": ''/*salesCycleOwnerController.value.text.isEmpty
-            ? (isAdminWritePermission=="1"?"":email)
-            : emailForUpdate.toLowerCase()*/,
+        "filter_sales_cycle_owner": isAdminWritePermission.value=="1"?"":email,
         "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty ? "" : proposedSolutionController.value.text,
@@ -531,18 +531,6 @@ class SalesCycleVm extends GetxController {
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };
-      /*{
-        "filter_sales_cycle_id": saleCycleId.isNotEmpty?saleCycleId:saleCycleController.value.text,
-        "filter_task_id": "",
-        "filter_account_name": accountNameController.value.text.isEmpty?"":accountNameController.value.text,
-        "filter_contact_name": contactNameController.value.text.isEmpty?'':contactNameController.value.text,
-        "filter_sales_cycle_status": SaleCycleStatusController.value.text.isEmpty || SaleCycleStatusController.value.text == 'All'?'':SaleCycleStatusController.value.text,
-        "filter_sales_cycle_approval_status": ApprovalStatusController.value.text.isEmpty || ApprovalStatusController.value.text == 'All'?'':ApprovalStatusController.value.text,
-        "filter_created_by": email,
-        "filter_approved_by": "",
-        "row_per_page": rowsPerPage,
-        "page_number": page_no
-  };*/
       loading.value = true;
       _api.salesCycleMstGetApihit(data, sessionManagement).then(
         (onValue) {
@@ -651,6 +639,50 @@ class SalesCycleVm extends GetxController {
       );
     } catch (e) {
       loading.value = false;
+      print(e);
+    }
+  }
+
+  SalesCycleMstDelete(int index) {
+    Map data = {
+      "account_code": saleCycleList[index].salesCycleId,
+      "created_by": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.SalesCycleMstDelete(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<SalesCycleUpdateStatusModal> response =
+            JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+            if (response != null && response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              saleCycleList.removeAt(index);
+              Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
+
+            } else {
+              loading.value = false;
+              Utils.sanckBarError("False Message !", response[0].message.toString());
+              //Account_Master_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
       print(e);
     }
   }
@@ -877,7 +909,7 @@ class SalesCycleVm extends GetxController {
         "filter_product_category": productCategoryController.value.text.isEmpty
             ? ""
             : productCategoryController.value.text,
-        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission=="1"?"":saleCycleList[0].salesCycleOwner),
+        "filter_created_by": FromPage == "QuoteApprovalPage" ? "" :( isAdminWritePermission.value=="1"?"":saleCycleList[0].salesCycleOwner),
         "filter_created_on":
             createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
         "filter_frontliner_value": "",
@@ -1502,14 +1534,12 @@ class SalesCycleVm extends GetxController {
                 itemMstGetBySalesIdList.clear();
               }
               itemMstGetBySalesIdList.addAll(response);
-              total_rows_items =
-                  int.parse(itemMstGetBySalesIdList[0].totalRows!);
+              total_rows_items = int.parse(itemMstGetBySalesIdList[0].totalRows!);
               print('Total rows ${total_rows_items}');
               Get.toNamed(RoutesName.ItemListBySalesCycle_Screen);
             } else {
               itemMstGetBySalesIdList.value=[];
-              Utils.showErrorToastification(
-                  "False Message !", response[0].message.toString());
+              Utils.showErrorToastification("False Message !", response[0].message.toString());
               loading.value = false;
             }
           } else {

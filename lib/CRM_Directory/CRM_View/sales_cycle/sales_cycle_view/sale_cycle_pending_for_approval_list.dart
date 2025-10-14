@@ -1,5 +1,6 @@
 
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
 import '../../../../constants/static_methods.dart';
 import '../../../../view/custom_drawer.dart';
+import '../../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_pending_for_approval_vm.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
@@ -345,45 +347,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     );
   }
 
-  Widget _buildClickableLabel({
-    required String label,
-    required String? value,
-    required VoidCallback onTap,
-    double? width,
-  }) {
-    return Row(
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            width: width,
-            child: Tooltip(
-              message: value ?? "",
-              child: Text(
-                value ?? "",
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.poppins(
-                  color: Colors.blueAccent,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w500,
-                  decoration: TextDecoration.underline,
-                  decorationStyle: TextDecorationStyle.wavy,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
 
   void showFilterBottomSheet(BuildContext context) {
@@ -448,23 +411,15 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindSaleCycleIdDropDown(context),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               bindTaskId(),
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
 
                               bindSaleCycleStatusDropDown(context),
 
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               TextField(
                                 controller: salesCyclePendingForApprovalController.accountNameController.value,
@@ -494,9 +449,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                 },
                               ),
 
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               TextField(
                                 controller: salesCyclePendingForApprovalController.accountCodeController.value,
@@ -526,39 +479,27 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                 },
                               ),
 
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindSaleCycleOwner(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              //bindSaleCycleOwner(),
+                              bindAccountOwnerFilter(context),
+
+                              SizedBox(height: 10,),
 
                               bindProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindPurchaseProcess(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
 
                               bindCompProfileTypeDropDown(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindIsCommintdrpdown(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindSolutionAccepted(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               /*  bindProposedSolution(context),
                               SizedBox(
                                 height: 10,
@@ -566,13 +507,9 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
 
                               bindPostalCode(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindDistrict(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
 
                               /* bindFrontLinerValue(),
@@ -580,31 +517,21 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                 height: 10,
                               ),*/
                               bindBranchHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               /* bindZoneHead(),
                               SizedBox(
                                 height: 10,
                               ),*/
                               bindClusterHead(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindCreatedBy(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindExpectedClosureDate(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                               bindCreatedOn(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
 
                             ],
                           ),
@@ -919,35 +846,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     );
   }
 
-/*  bindFrontLinerValue() {
-    return TextField(
-      controller: salesCycleController.frontliner_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'FrontLiner Value',
-          hintText: 'FrontLiner Value',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
 
   bindClusterHead() {
     return TextField(
@@ -979,36 +877,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     );
   }
 
-  /*bindZoneHead() {
-    return TextField(
-      controller: salesCycleController.zone_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Zone Head Value',
-          hintText: 'Zone Head Value',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
-
   bindBranchHead() {
     return TextField(
       controller: salesCyclePendingForApprovalController.branch_head_value_controller.value,
@@ -1039,6 +907,71 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     );
   }
 
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: salesCyclePendingForApprovalController.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: salesCyclePendingForApprovalController.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: salesCyclePendingForApprovalController.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Sales Cycle Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Sales Cycle Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value =
+              selectedList;
+          salesCyclePendingForApprovalController.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
+  }
   bindSaleCycleOwner() {
     return TextField(
       controller: salesCyclePendingForApprovalController.salesCycleOwnerController.value,

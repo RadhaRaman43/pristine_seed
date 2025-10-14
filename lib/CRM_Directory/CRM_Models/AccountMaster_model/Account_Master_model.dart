@@ -1,5 +1,6 @@
 class AccountMasterModel {
   String? condition;
+  String? message;
   String? totalRows;
   String? accountCode;
   String? accountName;
@@ -47,6 +48,7 @@ class AccountMasterModel {
 
   AccountMasterModel(
       {this.condition,
+        this.message,
         this.totalRows,
         this.accountCode,
         this.accountName,
@@ -94,6 +96,7 @@ class AccountMasterModel {
 
   AccountMasterModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
+    message = json['message'];
     totalRows = json['total_rows'];
     accountCode = json['account_code'];
     accountName = json['account_name'];
@@ -145,6 +148,7 @@ class AccountMasterModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['condition'] = this.condition;
+    data['message'] = this.message;
     data['total_rows'] = this.totalRows;
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;

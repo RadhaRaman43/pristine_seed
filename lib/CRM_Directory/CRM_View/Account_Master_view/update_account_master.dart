@@ -287,7 +287,7 @@ class UpdateAccountMaster extends StatelessWidget{
      ),
        drawer: CustomDrawer(),
        floatingActionButton: Visibility(
-         visible:accountMaster_page_controller.view=='Account' && accountMaster_page_controller.isAdminWritePermission=="0"?true:false ,
+         visible:accountMaster_page_controller.view=='Account' && accountMaster_page_controller.isHeadofficePermission!="1"?true:false ,
          child: Container(
            margin: EdgeInsets.only(left: 30),
            child: DefaultButton(

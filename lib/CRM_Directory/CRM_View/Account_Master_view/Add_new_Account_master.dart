@@ -126,7 +126,8 @@ class AddNewAccountMaster extends StatelessWidget{
               ),
               Spacer(),
               Visibility(
-                visible: accountMaster_page_controller.isAdminWritePermission=='0'?true:false,
+               // visible: accountMaster_page_controller.isAdminWritePermission=='0'?true:false,
+                visible: accountMaster_page_controller.isHeadofficePermission == '0' ? true : false,
                 child: ActionChip(
                   elevation: 2,
                   padding: EdgeInsets.all(5),

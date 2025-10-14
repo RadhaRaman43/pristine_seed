@@ -60,6 +60,7 @@ class Accountmastervm extends GetxController{
   int total_rows = 0;
   RxString FromPage="".obs;
   RxString isAdminWritePermission = "".obs;
+  RxString isHeadofficePermission = "".obs;
   String email="";
   String UserName="";
   String accountName='';
@@ -216,6 +217,8 @@ class Accountmastervm extends GetxController{
     email=await sessionManagement.getEmail() ?? '';
     UserName=await sessionManagement.getName() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
+    print("isAd.... ${isHeadofficePermission} and ${isAdminWritePermission}");
     getAccountMaster(pageNumber ,is_Active.toString());
     getDraftAccountMaster(pageNumber ,is_Active.toString());
     getAccCategoryApi();
@@ -236,9 +239,7 @@ class Accountmastervm extends GetxController{
     if(this.isAdminWritePermission==1){
       EmployeeMasterGet('');
     }
-    else{
-      getEmployeeMemberApi();
-    }
+
 
 
 
@@ -281,6 +282,51 @@ class Accountmastervm extends GetxController{
       employee_Member_list.value = [];
     }
     return employee_Member_list.value;
+  }
+
+
+  AccountMstDelete(String? account_code, int index) {
+    Map data = {
+      "account_code": account_code,
+      "created_by": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.AccountMstDelete(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<AccountMasterModel> response =
+            JsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+            if (response != null && response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              Account_Master_list.removeAt(index);
+              Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
+
+            } else {
+              loading.value = false;
+              Utils.sanckBarError("False Message !", response[0].message.toString());
+              //Account_Master_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
   }
 
   void toggleCheckbox() {
@@ -745,6 +791,8 @@ class Accountmastervm extends GetxController{
       print(e);
     }
   }
+
+
 
 
   getCompanyProfileSubTypeApi(/*String? companyProfileType*/) {

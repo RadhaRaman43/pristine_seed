@@ -45,6 +45,7 @@ class Taskmastervm extends GetxController{
     int rowsPerPage = 10;
     int total_rows = 0;
     String isAdminWritePermission = "";
+    RxString isHeadofficePermission = "".obs;
     String email="";
     int is_Active = -1;
     String ApproveReject = '';
@@ -177,6 +178,7 @@ class Taskmastervm extends GetxController{
 
         email=await sessionManagement.getEmail() ?? '';
         isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+        isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
         print("emais...${email}");
         print("isadminwritepermissionTask....${isAdminWritePermission.toString()}");
         getMenuList();

@@ -62,7 +62,8 @@ class AccountmasterScreen extends StatelessWidget{
               ),
               Spacer(),
               Visibility(
-                visible: accountMaster_page_controller.isAdminWritePermission=="0"?true:false,
+                //visible:accountMaster_page_controller.isAdminWritePermission=="0"  ? true:false ,
+                visible:accountMaster_page_controller.isHeadofficePermission!="1"  ? true:false ,
                 child: IconButton(onPressed: () {
                   accountMaster_page_controller.DraftId = '';
                   accountMaster_page_controller.account_type_controller.text='New Account';
@@ -207,20 +208,21 @@ class AccountmasterScreen extends StatelessWidget{
           subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              buildInfoRow("Customer Code", controller.accountCode),
-              buildInfoRow("Customer Name", controller.accountName),
-              buildInfoRow("Customer Type", controller.accountType),
-              buildInfoRow("Company Type", controller.companyProfileType),
-              buildInfoRow("Company Sub Type", controller.companyProfileSubType),
-              buildInfoRow("Email Id", controller.emailId),
-              buildInfoRow("Phone No.", controller.phoneNo),
-              buildInfoRow("Created By", controller.accountOwnerFullName),
-             buildInfoRow("Created On", createdOn),
-              buildInfoRow("Region Name", controller.branchHeadValue),
+
+              buildInfoRow(context,"Customer Code", controller.accountCode,account_code:accountMaster_page_controller.Account_Master_list[position].accountCode??"",index: position),
+              buildInfoRow(context,"Customer Name", controller.accountName),
+              buildInfoRow(context,"Customer Type", controller.accountType),
+              buildInfoRow(context,"Company Type", controller.companyProfileType),
+              buildInfoRow(context,"Company Sub Type", controller.companyProfileSubType),
+              buildInfoRow(context,"Email Id", controller.emailId),
+              buildInfoRow(context,"Phone No.", controller.phoneNo),
+              buildInfoRow(context,"Created By", controller.accountOwnerFullName),
+              buildInfoRow(context,"Created On", createdOn),
+              buildInfoRow(context,"Region Name", controller.branchHeadValue),
              // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-              buildInfoRow("Cluster Name", controller.clustureHeadValue),
+              buildInfoRow(context,"Cluster Name", controller.clustureHeadValue),
               //buildInfoRow("Address", controller.permanentAddress!.address! + ","+ controller.permanentAddress!.address2! + ", " + controller.permanentAddress!.city! + ","+ "\n" + controller.permanentAddress!.district! + ","+ controller.permanentAddress!.stateName! + ","+  controller.permanentAddress!.postCode!),
-              buildInfoRow("Address", fullAddress),
+              buildInfoRow(context,"Address", fullAddress),
              // buildInfoRow("Shipping Address", fullAddress),
               Align(
                 alignment: Alignment.centerRight,
@@ -235,462 +237,6 @@ class AccountmasterScreen extends StatelessWidget{
             ],
           ),
 
-          /* Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Account Code : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .accountCode??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .accountCode??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Account Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .accountName??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .accountName??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Account Type : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .accountType??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .accountType??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 2,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Company Type : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    accountMaster_page_controller
-                        .Account_Master_list[position]
-                        .companyProfileType??"",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Company Sub Type : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .3,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .companyProfileSubType??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .companyProfileSubType??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Email Id : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .emailId??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .emailId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Phone No.: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .phoneNo??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .phoneNo??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Created By: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .createdBy??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .createdBy??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Frontliner Value: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .frontlinerValue??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .frontlinerValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Branch Head Value ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .branchHeadValue??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .branchHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Zone Head Value ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .zoneHeadValue??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .zoneHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Cluster Head Value ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .clustureHeadValue??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .clustureHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Address : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .permanentAddress!.address??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .permanentAddress!.address??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 3),
-              *//*Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Account Category Type : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .2,
-                    child: Tooltip(
-                      message: accountMaster_page_controller
-                          .Account_Master_list[position]
-                          .accountCategoryType??"",
-                      child: Text(
-                        accountMaster_page_controller
-                            .Account_Master_list[position]
-                            .accountCategoryType??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),*//*
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    "Is Active : ${isActive}",
-                    style: GoogleFonts.poppins(
-                        color: Colors.blue,
-                        fontSize: AllFontSize.twelve,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-            ],
-          ),*/
-        /*leading: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            bindAvatar(accountMaster_page_controller.Account_Master_list[position].profile),
-            VerticalDivider(color: Colors.grey),
-          ],
-        ),*/
          trailing: InkWell(
            child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
          ),
@@ -698,7 +244,130 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-  Widget buildInfoRow(String label, String? value) {
+  Widget buildInfoRow(BuildContext context,String label, String? value,{String? account_code, int? index}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween, // 👈 space between text and icon
+        children: [
+          // Left section (label + value)
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "$label: ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Flexible(
+                  child: Tooltip(
+                    message: value ?? "",
+                    child: Text(
+                      value ?? "",
+                      overflow: TextOverflow.ellipsis,
+                      style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Right side — delete icon
+          if (label == "Customer Code")
+            Obx(() {
+              return Visibility(
+                visible: accountMaster_page_controller.isAdminWritePermission == "1" &&
+                    accountMaster_page_controller.isHeadofficePermission == "0",
+                child:  GestureDetector(
+                  onTap: (){
+                    showConfirmCompleteDialog(context,account_code!,index!);
+                  },
+                    child: Icon(Icons.delete, color: Colors.red)),
+              );
+            }),
+        ],
+      ),
+    );
+
+  }
+
+  showConfirmCompleteDialog(BuildContext context,String account_code, int index){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete This Account?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                //print("position account master.....${index}");
+                accountMaster_page_controller.AccountMstDelete(account_code,index);
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+  /*Widget buildInfoRow(String label, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -711,7 +380,7 @@ class AccountmasterScreen extends StatelessWidget{
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w500),
           ),
-          Expanded(
+          Flexible(
             child: Tooltip(
               message: value ?? "",
               child: Text(
@@ -724,10 +393,16 @@ class AccountmasterScreen extends StatelessWidget{
               ),
             ),
           ),
+          if(label=="Customer Code")
+          Obx((){
+            return Visibility(
+                visible:label=="Customer Code"&& accountMaster_page_controller.isAdminWritePermission=="1" && accountMaster_page_controller.isHeadofficePermission=='0',
+                child: Icon(Icons.delete,color: Colors.red,));
+          }),
         ],
       ),
     );
-  }
+  }*/
 
 
   Widget bindAvatar(String? profile){

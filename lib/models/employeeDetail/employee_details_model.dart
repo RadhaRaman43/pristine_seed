@@ -36,6 +36,7 @@ class EmployeeDetailsGetResponse {
   String? geoName;
   String? geoValue;
   int? isAdminWritePermission;
+  int? isHeadofficePermission;
   String? clusterName;
   String? regionName;
   String? salesPersonEmpCode;
@@ -86,6 +87,7 @@ class EmployeeDetailsGetResponse {
         this.geoName,
         this.geoValue,
         this.isAdminWritePermission,
+        this.isHeadofficePermission,
         this.clusterName,
         this.regionName,
         this.salesPersonEmpCode,
@@ -136,6 +138,7 @@ class EmployeeDetailsGetResponse {
     geoName = json['geo_name'];
     geoValue = json['geo_value'];
     isAdminWritePermission = json['is_admin_write_permission'];
+    isHeadofficePermission = json['is_headoffice_permission'];
     clusterName = json['cluster_name'];
     regionName = json['region_name'];
     salesPersonEmpCode = json['sales_person_emp_code'];
@@ -193,6 +196,7 @@ class EmployeeDetailsGetResponse {
     data['geo_name'] = this.geoName;
     data['geo_value'] = this.geoValue;
     data['is_admin_write_permission'] = this.isAdminWritePermission;
+    data['is_headoffice_permission'] = this.isHeadofficePermission;
     data['cluster_name'] = this.clusterName;
     data['region_name'] = this.regionName;
     data['sales_person_emp_code'] = this.salesPersonEmpCode;

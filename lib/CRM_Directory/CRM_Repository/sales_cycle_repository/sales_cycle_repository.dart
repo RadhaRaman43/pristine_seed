@@ -9,6 +9,11 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.salesCycleMstGet,sessionManagement);
   }
 
+  Future<String> SalesCycleMstGetApprovalList(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleMstGetApprovalList,sessionManagement);
+  }
+
+
 
   Future<String> salesCycleMstUpdateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.salesCycleMstUpdate,sessionManagement);
@@ -151,7 +156,6 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.SalesCycleMstStatusChange,sessionManagement);
   }
 
-
   Future<String> SalesCycleMstUpdateSuspectApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.SalesCycleMstUpdateSuspect,sessionManagement);
   }
@@ -217,8 +221,6 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.salesAdviceLineItemUpdate,sessionManagement);
   }
 
-
-
   Future<String> itemMasterGetApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.itemMasterGet,sessionManagement);
   }
@@ -239,7 +241,6 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.salesCycleCompetitorProductInformationGet,sessionManagement);
   }
 
-
   Future<String> salesAdviceHeaderGetNewApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.salesAdviceHeaderGetNew,sessionManagement);
   }
@@ -254,7 +255,8 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.get_employee_master,sessionManagement);
   }
 
-
-
+  Future<String> SalesCycleMstDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.SalesCycleMstDelete,sessionManagement);
+  }
 
 }

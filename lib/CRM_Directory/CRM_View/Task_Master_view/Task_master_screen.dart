@@ -70,13 +70,14 @@ class TaskMasterScreen extends StatelessWidget {
                 ),
                 Spacer(),
                 Visibility(
-                  visible: TaskMaster_page_controller.isAdminWritePermission == '0'?true:false,
+                  //visible: TaskMaster_page_controller.isAdminWritePermission == '0'?true:false,
+                  visible:TaskMaster_page_controller.isHeadofficePermission!="1"  ? true:false ,
                   child: IconButton(onPressed: () {
                     //TaskMaster_page_controller.clearCreateTaskController();
-                    TaskMaster_page_controller
-                        .getItemCategoryMstWithoutTaskIdApi();
+                    TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
                     TaskMaster_page_controller.getEmpMstEmailByApi();
                     Get.toNamed(RoutesName.addNewTaskMaster_screen);
+
                   }, icon: Icon(Icons.add)),
                 ),
 
