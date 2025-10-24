@@ -21,6 +21,7 @@ import '../../CRM_Models/TaskMaster_model/task_category_model.dart';
 import '../../CRM_Models/TaskMaster_model/task_update_infra_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/alongWithPersonModel.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
+import '../../CRM_Models/sale_cycle_modal/sales_cycle_update_status_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/selectedAlongWithPersonNameModel.dart';
 import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
 
@@ -44,7 +45,7 @@ class Taskmastervm extends GetxController{
     int pageNumber = 0;
     int rowsPerPage = 10;
     int total_rows = 0;
-    String isAdminWritePermission = "";
+    RxString isAdminWritePermission = "".obs;
     RxString isHeadofficePermission = "".obs;
     String email="";
     int is_Active = -1;
@@ -177,10 +178,10 @@ class Taskmastervm extends GetxController{
       super.onInit();
 
         email=await sessionManagement.getEmail() ?? '';
-        isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+        isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
         isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
         print("emais...${email}");
-        print("isadminwritepermissionTask....${isAdminWritePermission.toString()}");
+        print("isAdminWritePermission.valueTask....${isAdminWritePermission.value.toString()}");
         getMenuList();
         print("List${userGeoHierarchyy.length}");
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
@@ -193,7 +194,7 @@ class Taskmastervm extends GetxController{
         SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
         approveRejectList.value = ['Approve', 'Reject'];
         Item_Category_Selected_list.value = [];
-      if(this.isAdminWritePermission==1){
+      if(this.isAdminWritePermission.value==1){
           EmployeeMasterGet('');
       }
       else{
@@ -363,7 +364,7 @@ class Taskmastervm extends GetxController{
                 "filter_approved_by": "",
                 "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
                 "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
-                "filter_task_owner":isAdminWritePermission=='1'?"":email,
+                "filter_task_owner":isAdminWritePermission.value=='1'?"":email,
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
@@ -924,6 +925,47 @@ class Taskmastervm extends GetxController{
         }
     }
 
+    TaskMstDelete(int index) {
+        Map data = {
+            "task_id": Task_Master_list[index].taskId,
+            "created_by": email
+        };
+        print(data);
+        loading.value = true;
+        try {
+            _api.TaskMstDelete(data, sessionManagement).then((value) {
+                    print(value);
+                    final JsonResponse = json.decode(value);
+                    if (JsonResponse is List) {
+                        List<SalesCycleUpdateStatusModal> response =
+                        JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+                        if (response != null && response.length > 0 && response[0].condition == "True") {
+                            loading.value = false;
+                            Task_Master_list.removeAt(index);
+                            Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
+
+                        } else {
+                            loading.value = false;
+                            Utils.sanckBarError("False Message !", response[0].message.toString());
+                            //Account_Master_list.value=[];
+                        }
+                    } else {
+                        loading.value = false;
+                        // service_indent_header_list.value = [];
+                        Utils.showExceptionToastification("Api Error!", JsonResponse);
+                    }
+                },
+            ).onError(
+                    (error, stackTrace) {
+                    print(error);
+                    //service_indent_header_list.value = [];
+                },
+            );
+        } catch (e) {
+            loading.value = false;
+            print(e);
+        }
+    }
     getItemCategoryMstApi(String? taskId) {
         this.loading.value = true;
         Map<String, String> data = {

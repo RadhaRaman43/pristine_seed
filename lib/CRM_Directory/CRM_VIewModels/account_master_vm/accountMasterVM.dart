@@ -243,6 +243,8 @@ class Accountmastervm extends GetxController{
 
 
 
+
+
   }
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
     if (query == '') {
@@ -284,7 +286,6 @@ class Accountmastervm extends GetxController{
     return employee_Member_list.value;
   }
 
-
   AccountMstDelete(String? account_code, int index) {
     Map data = {
       "account_code": account_code,
@@ -324,7 +325,6 @@ class Accountmastervm extends GetxController{
       );
     } catch (e) {
       loading.value = false;
-      employee_Member_list.value = [];
       print(e);
     }
   }

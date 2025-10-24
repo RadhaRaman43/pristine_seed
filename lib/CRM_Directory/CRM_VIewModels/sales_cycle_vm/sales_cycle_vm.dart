@@ -682,7 +682,6 @@ class SalesCycleVm extends GetxController {
       );
     } catch (e) {
       loading.value = false;
-      employee_Member_list.value = [];
       print(e);
     }
   }

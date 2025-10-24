@@ -199,6 +199,7 @@ class AppUrl {
      static const String AccountCategoryTypeMstGet = "$BASE_URL/api/CRM/Master/AccountCategoryTypeMstGet";
      //todo radha raman
      static const String AccountMstDelete = "$BASE_URL/api/CRM/Account/AccountMstDelete";
+     static const String ContactMstDelete = "$BASE_URL/api/CRM/Contact/ContactMstDelete";
 
      //todo contact master repo.....
      static const String ContactMstGet = "$BASE_URL/api/CRM/Contact/ContactMstGet";
@@ -231,6 +232,8 @@ class AppUrl {
      static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
      static const String TaskMstRejectReopen = "$BASE_URL/api/CRM/Task/TaskMstRejectReopen";
      static const String TaskMstGetApprovalList = "$BASE_URL/api/CRM/Task/TaskMstGetApprovalList";
+     //todo radha raman
+     static const String TaskMstDelete = "$BASE_URL/api/CRM/Task/TaskMstDelete";
 
 
      //todo sales cycle

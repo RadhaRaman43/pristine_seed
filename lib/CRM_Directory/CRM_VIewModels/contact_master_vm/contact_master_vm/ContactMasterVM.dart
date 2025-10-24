@@ -15,6 +15,7 @@ import '../../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/Department_name_modal.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/Designation_modal.dart';
 import '../../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
+import '../../../CRM_Models/sale_cycle_modal/sales_cycle_update_status_modal.dart';
 import '../../../CRM_Repository/Contact_Master_Repo/Contact_Master_Repo/contact_master_repo.dart';
 import '../../account_master_vm/accountMasterVM.dart';
 
@@ -31,7 +32,8 @@ class ContactMasterVM extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   String email="";
-  String isAdminWritePermission = "";
+  RxString isAdminWritePermission = "".obs;
+  RxString isHeadofficePermission = "".obs;
   bool updateContact=false;
   bool insideOut=false;
   RxString FromPage="".obs;
@@ -70,7 +72,8 @@ class ContactMasterVM extends GetxController{
     super.onInit();
 
     email=await sessionManagement.getEmail() ?? '';
-    isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     getContactMasterList(pageNumber,"","","");
     getDecisionRoleMaster();
 
@@ -121,7 +124,7 @@ class ContactMasterVM extends GetxController{
         "filter_department_name": depart_name,
         "email_id": emailId_controller.value.text.isEmpty?"":emailId_controller.value.text,
         "phone_no": phone_no_controller.value.text.isEmpty?"":phone_no_controller.value.text,
-        "created_by": isAdminWritePermission == "0"?email:"",
+        "created_by": isAdminWritePermission.value == "0"?email:"",
         "row_per_page": rowsPerPage.toString(),
         "page_number": pageNumber.toString()
       };
@@ -178,7 +181,7 @@ class ContactMasterVM extends GetxController{
       "filter_address": "",
       "filter_state_name": "",
       "filter_is_active": "-1",
-      "filter_created_by": isAdminWritePermission=="1"?"":email,
+      "filter_created_by": isAdminWritePermission.value=="1"?"":email,
       "row_per_page": 50,
       "page_number": 0,
       "no_of_employees_min": "",
@@ -524,6 +527,49 @@ class ContactMasterVM extends GetxController{
     depart_name_controller.clear();
     emailId_controller.clear();
     phone_no_controller.clear();
+  }
+
+  ContactMstDelete(int index) {
+    Map data = {
+      "account_code": contact_master_list[index].accountCode,
+      "contact_code": contact_master_list[index].contactCode,
+      "created_by": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.ContactMstDelete(data, sessionManagement).then((value) {
+        print(value);
+        final JsonResponse = json.decode(value);
+        if (JsonResponse is List) {
+          List<SalesCycleUpdateStatusModal> response =
+          JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+          if (response != null && response.length > 0 && response[0].condition == "True") {
+            loading.value = false;
+            contact_master_list.removeAt(index);
+            Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
+
+          } else {
+            loading.value = false;
+            Utils.sanckBarError("False Message !", response[0].message.toString());
+            //Account_Master_list.value=[];
+          }
+        } else {
+          loading.value = false;
+          // service_indent_header_list.value = [];
+          Utils.showExceptionToastification("Api Error!", JsonResponse);
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
   }
 
 

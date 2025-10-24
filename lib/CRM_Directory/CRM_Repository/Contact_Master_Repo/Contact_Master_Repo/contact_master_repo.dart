@@ -35,5 +35,9 @@ class ContactMasterRepo{
     return _apiService.postApi(data, AppUrl.ContactMstGetAll,sessionManagement);
   }
 
+  Future<String> ContactMstDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.ContactMstDelete,sessionManagement);
+  }
+
 
 }

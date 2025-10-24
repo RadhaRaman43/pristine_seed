@@ -86,9 +86,15 @@ class TaskMasterRepo{
   Future<String> EmployeeMamberGetApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.employeeMemberGet,sessionManagement);
   }
+
   Future<String> EmployeeMatserGetApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.get_employee_master,sessionManagement);
   }
+  Future<String> TaskMstDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.TaskMstDelete,sessionManagement);
+  }
+
+
 
 
 }

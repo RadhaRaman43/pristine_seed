@@ -70,8 +70,8 @@ class TaskMasterScreen extends StatelessWidget {
                 ),
                 Spacer(),
                 Visibility(
-                  //visible: TaskMaster_page_controller.isAdminWritePermission == '0'?true:false,
-                  visible:TaskMaster_page_controller.isHeadofficePermission!="1"  ? true:false ,
+                  //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
+                  visible:TaskMaster_page_controller.isHeadofficePermission.value!="1"  ? true:false ,
                   child: IconButton(onPressed: () {
                     //TaskMaster_page_controller.clearCreateTaskController();
                     TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
@@ -630,15 +630,13 @@ class TaskMasterScreen extends StatelessWidget {
     } else {
       return Center(
         //child: Image.asset("assests/images/no_record_found.gif",),
-        child: Image.asset(
-          "assests/images/no_data_remove.png", width: 300, height: 180,),
+        child: Image.asset("assests/images/no_data_remove.png", width: 300, height: 180,),
       );
     }
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    String taskStatus = TaskMaster_page_controller.Task_Master_list[position]
-        .taskStatus!;
+    String taskStatus = TaskMaster_page_controller.Task_Master_list[position].taskStatus!.toLowerCase();
 
     int IsReadyForApprove = TaskMaster_page_controller
         .Task_Master_list[position].isReadyForApprove!;
@@ -673,36 +671,7 @@ class TaskMasterScreen extends StatelessWidget {
           },
           subtitle: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Task Status : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskStatus!,
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .taskStatus!,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(taskStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -1061,29 +1030,6 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Is Infra Lead : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    TaskMaster_page_controller
-                        .Task_Master_list[position].isInfraLead == 1
-                        ? "Yes"
-                        : "No",
-                    style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
-              ),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1148,101 +1094,165 @@ class TaskMasterScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              /* Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Method of Call : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
+            ],
+          ),
+          title: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Task Status : ",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w500,
                 ),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: TaskMaster_page_controller
-                        .Task_Master_list[position]
-                        .methodOfCall!,
-                    child: Text(
-                      TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .methodOfCall!,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w300),
+              ),
+
+              Flexible(
+                child: Tooltip(
+                  message: TaskMaster_page_controller.Task_Master_list[position].taskStatus!,
+                  child: Text(
+                    TaskMaster_page_controller.Task_Master_list[position].taskStatus!,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: GoogleFonts.poppins(
+                      color: getStatusColor(taskStatus),
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
-              ],
-            ),*/
+              ),
+
+              const Spacer(), // force icons to the far right
+
+              // icons row (mainAxisSize.min so contents don't expand)
+              SizedBox(width: 20,),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  taskStatus == 'pending for approval' ?
+                  InkWell(
+                    onTap: () {
+                      if (IsReadyForApprove == 1) {
+                        showApprovRejectDialog(context, TaskMaster_page_controller
+                            .Task_Master_list[position]
+                            .taskId!);
+                      } else {
+                        TaskMaster_page_controller.getTaskMaster(
+                            0,
+                            TaskMaster_page_controller.is_Active.toString(),
+                            TaskMaster_page_controller.Task_Master_list[position]
+                                .taskId,
+                            'View',
+                            'GET FROM TASK ID',
+                            TaskMaster_page_controller.date_filter,
+                            TaskMaster_page_controller.is_done.value);
+                      }
+                    },
+                    child: Icon(Icons.update, color: Colors.blue,),
+                  ) : (taskStatus.toLowerCase() == 'approved' || taskStatus.toLowerCase() == 'rejected' ? InkWell(
+                    onTap: () {
+                      TaskMaster_page_controller.getTaskMaster(
+                          0,
+                          TaskMaster_page_controller.is_Active.toString(),
+                          TaskMaster_page_controller.Task_Master_list[position].taskId,
+                          'View',
+                          'GET FROM TASK ID',
+                          TaskMaster_page_controller.date_filter,
+                          TaskMaster_page_controller.is_done.value);
+
+                      // TaskMaster_page_controller.getTaskMstDSARList(TaskMaster_page_controller.Task_Master_list[position].taskId);
+                      // TaskMaster_page_controller.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[position].taskId);
+                    },
+                    child: Icon(Icons.remove_red_eye_outlined, color: Colors.blue,),
+                  ) : SizedBox()),
+
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.isAdminWritePermission.value == "1" &&
+                          TaskMaster_page_controller.isHeadofficePermission.value == "0",
+                      child: GestureDetector(
+                        onTap: () => showConfirmCompleteDialog(context, position!),
+                        child: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Icon(Icons.delete, color: Colors.red),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
             ],
           ),
 
-          /*trailing: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            InkWell(
-              onTap: (){
-                if(IsReadyForApprove == 1){
-                  showApprovRejectDialog(context, TaskMaster_page_controller
-                      .Task_Master_list[position]
-                      .taskId!);
-                }else {
-                  TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-                }
-              },
-              child: Icon(Icons.update,  color: Colors.blue,),
-            ),
-            InkWell(
-              onTap: (){
-                TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId , 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-
-              },
-              child: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
-            )
-          ],
-        ),*/
-          trailing: taskStatus == 'PENDING FOR APPROVAL' ?
-          InkWell(
-            onTap: () {
-              if (IsReadyForApprove == 1) {
-                showApprovRejectDialog(context, TaskMaster_page_controller
-                    .Task_Master_list[position]
-                    .taskId!);
-              } else {
-                TaskMaster_page_controller.getTaskMaster(
-                    0,
-                    TaskMaster_page_controller.is_Active.toString(),
-                    TaskMaster_page_controller.Task_Master_list[position]
-                        .taskId,
-                    'View',
-                    'GET FROM TASK ID',
-                    TaskMaster_page_controller.date_filter,
-                    TaskMaster_page_controller.is_done.value);
-              }
-            },
-            child: Icon(Icons.update, color: Colors.blue,),
-          ) : (taskStatus.toLowerCase() == 'approved' || taskStatus.toLowerCase() == 'rejected' ? InkWell(
-            onTap: () {
-              TaskMaster_page_controller.getTaskMaster(
-                  0,
-                  TaskMaster_page_controller.is_Active.toString(),
-                  TaskMaster_page_controller.Task_Master_list[position].taskId,
-                  'View',
-                  'GET FROM TASK ID',
-                  TaskMaster_page_controller.date_filter,
-                  TaskMaster_page_controller.is_done.value);
-
-              // TaskMaster_page_controller.getTaskMstDSARList(TaskMaster_page_controller.Task_Master_list[position].taskId);
-              // TaskMaster_page_controller.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[position].taskId);
-            },
-            child: Icon(Icons.remove_red_eye_outlined, color: Colors.blue,),
-          ) : SizedBox())
-
       ),
+    );
+  }
+
+  showConfirmCompleteDialog(BuildContext context, int index){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete This Task?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                //print("position account master.....${index}");
+                TaskMaster_page_controller.TaskMstDelete(index);
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
     );
   }
 

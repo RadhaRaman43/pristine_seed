@@ -48,14 +48,18 @@ class ContactMasterScreen extends StatelessWidget{
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {
-                contact_vm_controller.resetAllContactCreativeField('Icon');
-                contact_vm_controller.insideOut = true;
-                //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
-                contact_vm_controller.getAccountMaster("");
-                contact_vm_controller.getDecisionRoleMaster();
-                Get.toNamed(RoutesName.addNewContactMaster_screen);
-              }, icon: Icon(Icons.add)),
+              Visibility(
+                //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
+                visible:contact_vm_controller.isHeadofficePermission.value!="1"  ? true:false ,
+                child: IconButton(onPressed: () {
+                  contact_vm_controller.resetAllContactCreativeField('Icon');
+                  contact_vm_controller.insideOut = true;
+                  //contact_vm_controller.IsHeDecisionMakerController.value.text = "No";
+                  contact_vm_controller.getAccountMaster("");
+                  contact_vm_controller.getDecisionRoleMaster();
+                  Get.toNamed(RoutesName.addNewContactMaster_screen);
+                }, icon: Icon(Icons.add)),
+              ),
 
               Container(
                 child: IconButton(onPressed: () {
@@ -475,70 +479,73 @@ class ContactMasterScreen extends StatelessWidget{
         onTap: () {
           //accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
         },
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              "Contact Code : ",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+
+            Flexible(
+              child: Tooltip(
+                message: contact_vm_controller.contact_master_list[position].contactCode?? "",
+                child: Text(
+                  contact_vm_controller.contact_master_list[position].contactCode?? "",
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.fourtine,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+
+            const Spacer(), // force icons to the far right
+
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Visibility(
+                  //visible: TaskMaster_page_controller.isAdminWritePermission.value == '0'?true:false,
+                  visible:contact_vm_controller.isHeadofficePermission.value!="1"  ? true:false ,
+                  child: InkWell(
+                    onTap: (){
+                      contact_vm_controller.FromPage.value="";
+                      contact_vm_controller.insideOut = true;
+                      contact_vm_controller.upDateContact('OutSide', position);
+                    },
+                    child:Icon(Icons.update) ,
+                  ),
+                ),
+                Obx(() {
+                  return Visibility(
+                    visible: contact_vm_controller.isAdminWritePermission.value == "1" &&
+                        contact_vm_controller.isHeadofficePermission.value == "0",
+                    child: GestureDetector(
+                      onTap: () => showConfirmCompleteDialog(context, position!),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Icon(Icons.delete, color: Colors.red),
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
         subtitle: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Contact Code : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: contact_vm_controller
-                        .contact_master_list[position]
-                        .contactCode?? "",
-                    child: Text(
-                      contact_vm_controller
-                          .contact_master_list[position]
-                          .contactCode?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
-            SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Contact Name : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .3,
-                  child: Tooltip(
-                    message: contact_vm_controller
-                        .contact_master_list[position]
-                        .contactName?? "",
-                    child: Text(
-                      contact_vm_controller
-                          .contact_master_list[position]
-                          .contactName?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style:GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            //_buildLabelWithValue( "Contact Code : ",contact_vm_controller.contact_master_list[position].contactCode?? "" ),
+            //SizedBox(height: 3),
+            _buildLabelWithValue( "Contact Name : ",contact_vm_controller.contact_master_list[position].contactName?? "" ),
             SizedBox(
               height: 2,
             ),
@@ -552,8 +559,7 @@ class ContactMasterScreen extends StatelessWidget{
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w500),
                 ),
-                Container(
-                  width: size.width * .4,
+                Flexible(
                   child: Tooltip(
                     message: contact_vm_controller
                         .contact_master_list[position]
@@ -585,168 +591,116 @@ class ContactMasterScreen extends StatelessWidget{
             SizedBox(
               height: 2,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Email Id : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: contact_vm_controller
-                        .contact_master_list[position]
-                        .emailId?? "",
-                    child: Text(
-                      contact_vm_controller
-                          .contact_master_list[position]
-                          .emailId?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildLabelWithValue( "Email Id : ",contact_vm_controller.contact_master_list[position].emailId?? "" ),
             SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Phone No. : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                contact_vm_controller
-                    .contact_master_list[position]
-                      .phoneNo ?? "",
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
+            _buildLabelWithValue( "Phone No. : ",contact_vm_controller.contact_master_list[position].phoneNo?? "" ),
             SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Department Name : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Tooltip(
-                    message: contact_vm_controller
-                        .contact_master_list[position]
-                        .departmentName?? "",
-                    child: Text(
-                      contact_vm_controller
-                          .contact_master_list[position]
-                          .departmentName?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildLabelWithValue( "Department Name : ",contact_vm_controller.contact_master_list[position].departmentName?? "" ),
             SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Reporting Person : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Tooltip(
-                    message: contact_vm_controller
-                        .contact_master_list[position]
-                        .reportingPerson?? "",
-                    child: Text(
-                      contact_vm_controller
-                          .contact_master_list[position]
-                          .reportingPerson?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildLabelWithValue( "Reporting Person : ",contact_vm_controller.contact_master_list[position].reportingPerson?? "" ),
+
             SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Created By : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Tooltip(
-                    message: contact_vm_controller
-                        .contact_master_list[position]
-                        .createdFullName?? "",
-                    child: Text(
-                      contact_vm_controller
-                          .contact_master_list[position]
-                          .createdFullName?? "",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildLabelWithValue( "Created By : ",contact_vm_controller.contact_master_list[position].createdFullName?? "" ),
 
           ],
         ),
-       // leading: bindAvatar( contact_vm_controller.contact_master_list[position].contactName?[0].toUpperCase()?? ""),
-        trailing: InkWell(
-          onTap: (){
-            contact_vm_controller.FromPage.value="";
-            /*contact_vm_controller.getAccMasterBuyCodeApi(contact_vm_controller
-                .contact_master_list[position]
-                .accountCode?? "");*/
-            contact_vm_controller.insideOut = true;
-            contact_vm_controller.upDateContact('OutSide', position);
-          },
-          child: /*contact_vm_controller.isAdminWritePermission == "0" ?*/Icon(Icons.update) /*Icon(Icons.remove_red_eye)*/,
-        ),
+
       ),
+    );
+  }
+
+  Widget _buildLabelWithValue(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value,
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: AllColors.textColor,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  showConfirmCompleteDialog(BuildContext context, int index){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete This Contact?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                //print("position account master.....${index}");
+                contact_vm_controller.ContactMstDelete(index);
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
     );
   }
 
