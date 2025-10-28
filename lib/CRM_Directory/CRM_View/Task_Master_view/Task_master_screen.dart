@@ -743,9 +743,8 @@ class TaskMasterScreen extends StatelessWidget {
                         fontSize: AllFontSize.fourtine,
                         fontWeight: FontWeight.w500),
                   ),
-                  InkWell(
-                    child: Container(
-                      width: size.width * .4,
+                  Flexible(
+                    child: InkWell(
                       child: Tooltip(
                         message: TaskMaster_page_controller
                             .Task_Master_list[position]
@@ -767,14 +766,14 @@ class TaskMasterScreen extends StatelessWidget {
                             decorationStyle: TextDecorationStyle.wavy,),
                         ),
                       ),
+                      onTap: () {
+                        account_vm_controller.view = 'FromTaskMainScreen';
+                        contact_vm_controller.view = 'VIEWMainScreen';
+                        account_vm_controller.getAccMasterBuyCodeApi(
+                            TaskMaster_page_controller.Task_Master_list[position]
+                                .accountCode);
+                      },
                     ),
-                    onTap: () {
-                      account_vm_controller.view = 'FromTaskMainScreen';
-                      contact_vm_controller.view = 'VIEWMainScreen';
-                      account_vm_controller.getAccMasterBuyCodeApi(
-                          TaskMaster_page_controller.Task_Master_list[position]
-                              .accountCode);
-                    },
                   ),
                 ],
               ),
@@ -982,7 +981,7 @@ class TaskMasterScreen extends StatelessWidget {
                         TaskMaster_page_controller
                             .Task_Master_list[position]
                             .createdFullName! +
-                            "| ${StaticMethod.dateTimeToDate(
+                            " | ${StaticMethod.dateTimeToDate(
                                 TaskMaster_page_controller
                                     .Task_Master_list[position]
                                     .createdOn!)}",
@@ -1097,39 +1096,40 @@ class TaskMasterScreen extends StatelessWidget {
             ],
           ),
           title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Task Status : ",
-                style: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-
-              Flexible(
-                child: Tooltip(
-                  message: TaskMaster_page_controller.Task_Master_list[position].taskStatus!,
-                  child: Text(
-                    TaskMaster_page_controller.Task_Master_list[position].taskStatus!,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: GoogleFonts.poppins(
-                      color: getStatusColor(taskStatus),
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Task Status : ",
+                      style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                  ),
+                    Flexible(
+                      child: Tooltip(
+                        message: TaskMaster_page_controller.Task_Master_list[position].taskStatus!,
+                        child: Text(
+                          TaskMaster_page_controller.Task_Master_list[position].taskStatus!,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: GoogleFonts.poppins(
+                            color: getStatusColor(taskStatus),
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-
-              const Spacer(), // force icons to the far right
-
-              // icons row (mainAxisSize.min so contents don't expand)
-              SizedBox(width: 20,),
               Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   taskStatus == 'pending for approval' ?
                   InkWell(
@@ -1183,8 +1183,9 @@ class TaskMasterScreen extends StatelessWidget {
                   }),
                 ],
               ),
+
             ],
-          ),
+          )
 
       ),
     );

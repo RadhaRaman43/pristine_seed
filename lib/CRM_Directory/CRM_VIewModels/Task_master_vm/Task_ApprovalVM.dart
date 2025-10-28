@@ -29,6 +29,7 @@ class TaskApprovalvm extends GetxController{
   int total_rows = 0;
   String email="";
   String isAdminWritePermission = "";
+  RxString isHeadofficePermission = "".obs;
   int is_Active = -1;
   RxString createdOnStartToEnd="".obs;
   RxList<String> approveRejectList = <String>[].obs;
@@ -112,6 +113,7 @@ class TaskApprovalvm extends GetxController{
     super.onInit();
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
     approveRejectList.value = ['Approve', 'Reject'];
 

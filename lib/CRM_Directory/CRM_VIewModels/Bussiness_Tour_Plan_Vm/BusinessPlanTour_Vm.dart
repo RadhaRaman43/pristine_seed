@@ -151,8 +151,8 @@ class BusinessPlanTourViewModel extends GetxController{
                 BusinessTourPlanList.clear();
               }
               BusinessTourPlanList.addAll(response);
-              print('listSize.....${BusinessTourPlanList.length}');
               total_rows = int.parse(BusinessTourPlanList[0].totalRows!);
+              print('listSize.....${BusinessTourPlanList.length} and ${total_rows}');
 
             } else {
               loading.value = false;

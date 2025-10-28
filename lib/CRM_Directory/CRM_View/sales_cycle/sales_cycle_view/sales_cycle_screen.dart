@@ -337,29 +337,30 @@ class SalesCycleScreen extends StatelessWidget{
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                Text(
-                  "Sales Cycle Stage : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .35,
-                  child: Tooltip(
-                    message: salesCycleController.saleCycleList[position].salesCycleStatus??"",
-                    child: Text(salesCycleController.saleCycleList[position].salesCycleStatus??"",
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    "Sales Cycle Stage : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    child: Tooltip(
+                      message: salesCycleController.saleCycleList[position].salesCycleStatus??"",
+                      child: Text(salesCycleController.saleCycleList[position].salesCycleStatus??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
             Obx(() {
@@ -377,7 +378,8 @@ class SalesCycleScreen extends StatelessWidget{
 
           ],
         ),
-          subtitle:Column(
+          
+        subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 

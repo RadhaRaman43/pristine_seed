@@ -901,8 +901,6 @@ class FunnelDashboardView extends StatelessWidget{
                                 height: 10,
                               ),
 
-
-
                             ],
                           ),
                         ),
@@ -1139,8 +1137,6 @@ class FunnelDashboardView extends StatelessWidget{
           SizedBox(height: 10),
           bindCustomerNameFilter(context),
           SizedBox(height: 10),
-          bindAccountOwnerFilter(context),
-          SizedBox(height: 10),
           bindProductCategoryFilter(context),
           SizedBox(height: 10),
           bindIsCommitDropDown(context),
@@ -1148,6 +1144,8 @@ class FunnelDashboardView extends StatelessWidget{
           bindClusterNameFilter(context),
           SizedBox(height: 10),
           bindRegionNameFilter(context),
+          SizedBox(height: 10),
+          bindAccountOwnerFilter(context),
 
 
 
@@ -1368,8 +1366,8 @@ class FunnelDashboardView extends StatelessWidget{
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
-            labelText: dashboard_view_Controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
-            hintText: "Account Owner",
+            labelText: dashboard_view_Controller.SelectedEmployee_Member_list.isNotEmpty?"Sale Cycle Owner":null,
+            hintText: "Sale Cycle Owner",
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -1377,7 +1375,7 @@ class FunnelDashboardView extends StatelessWidget{
           // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
-              " Account Owner",
+              " Sale Cycle Owner",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,
@@ -1472,7 +1470,6 @@ class FunnelDashboardView extends StatelessWidget{
             padding: EdgeInsets.only(top: 20, left: 10, right: 10),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
               hintText: "Search...",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -1490,7 +1487,475 @@ class FunnelDashboardView extends StatelessWidget{
 
   }
 
-  bindClusterNameFilter(BuildContext context) {
+  Widget bindClusterNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = dashboard_view_Controller.clusterGetByEmailList;
+      if (availableItems.isNotEmpty &&
+          dashboard_view_Controller.SelectedCluster_list.isEmpty) {
+        dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
+        dashboard_view_Controller.clusterName_controller.value.text =
+            availableItems.map((e) => e.geoValue).join(', ');
+        dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+      }
+    });
+
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectedCluster_list;
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <ClusterModal>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectedCluster_list);
+
+              List<ClusterModal> allItems =
+                  dashboard_view_Controller.clusterGetByEmailList;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty
+                    ? allItems
+                    : allItems
+                    .where((c) =>
+                    (c.geoValue ?? "").toLowerCase().contains(query))
+                    .toList();
+
+                final allSelected =
+                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Clusters',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected
+                                      .clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No clusters found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") ==
+                                  (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectedCluster_list
+                                        .assignAll(tempSelected);
+                                    dashboard_view_Controller
+                                        .clusterName_controller.value.text =
+                                        tempSelected
+                                            .map((e) => e.geoValue)
+                                            .join(', ');
+                                    dashboard_view_Controller
+                                        .getRegionsWithClusterFilterGetByEmail();
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Done'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Cluster Name", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Cluster",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget bindRegionNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
+      if (availableItems.isNotEmpty &&
+          dashboard_view_Controller.SelectedRegion_list.isEmpty) {
+        dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
+        dashboard_view_Controller.RegionName_controller.value.text =
+            availableItems.map((e) => e.geoValue).join(', ');
+
+      }
+    });
+
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectedRegion_list;
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <RegionWithClusterFilterModal>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectedRegion_list);
+
+              final allItems =
+                  dashboard_view_Controller.regionwithclusterGetByEmailList;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty
+                    ? allItems
+                    : allItems
+                    .where((c) =>
+                    (c.geoValue ?? "").toLowerCase().contains(query))
+                    .toList();
+
+                final allSelected =
+                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Regions',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No regions found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") ==
+                                  (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectedRegion_list
+                                        .assignAll(tempSelected);
+                                    dashboard_view_Controller.RegionName_controller
+                                        .value.text =
+                                        tempSelected
+                                            .map((e) => e.geoValue)
+                                            .join(', ');
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Done'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Region Name", // 👈 Label like before
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Region",
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey.shade600,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  /*bindClusterNameFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<ClusterModal>.multiSelection(
         items: dashboard_view_Controller.clusterGetByEmailList,
@@ -1526,10 +1991,8 @@ class FunnelDashboardView extends StatelessWidget{
           );
         },
         onChanged: (List<ClusterModal> selectedList) {
-          dashboard_view_Controller.SelectedCluster_list.value =
-              selectedList;
-          dashboard_view_Controller.clusterName_controller.value.text =
-              selectedList.map((e) => e.geoValue).join(', ');
+          dashboard_view_Controller.SelectedCluster_list.value = selectedList;
+          dashboard_view_Controller.clusterName_controller.value.text = selectedList.map((e) => e.geoValue).join(', ');
           dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
         },
 
@@ -1555,9 +2018,11 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
 
-  }
+  }*/
 
-  bindRegionNameFilter(BuildContext context) {
+
+
+  /*bindRegionNameFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<RegionWithClusterFilterModal>.multiSelection(
         items: dashboard_view_Controller.regionwithclusterGetByEmailList,
@@ -1620,7 +2085,7 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
 
-  }
+  }*/
 
   bindQuoteSubmitted(BuildContext context) {
     return DropdownMenu<String>(

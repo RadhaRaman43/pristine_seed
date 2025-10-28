@@ -25,6 +25,7 @@ class FunnelDashboardVm extends GetxController{
   SessionManagement sessionManagement = SessionManagement();
   RxBool loading = false.obs;
   RxBool isShimmerLoading = false.obs;
+  RxBool isSelectAllClusterValue = true.obs;
   String email = "";
   String isAdminWritePermission = "";
 
@@ -94,6 +95,7 @@ class FunnelDashboardVm extends GetxController{
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     funnelDashboardData();
+    getClustersGetByEmail();
     if(this.isAdminWritePermission==1){
       EmployeeMasterGet('');
     }
@@ -101,7 +103,7 @@ class FunnelDashboardVm extends GetxController{
       getEmployeeMemberApi();
     }
     getItemCategoryMstWithoutTaskIdApi();
-    getClustersGetByEmail();
+
     getAccountMaster(pageNumber);
   }
 

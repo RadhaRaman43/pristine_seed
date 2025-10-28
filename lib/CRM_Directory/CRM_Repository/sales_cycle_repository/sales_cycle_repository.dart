@@ -259,4 +259,7 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.SalesCycleMstDelete,sessionManagement);
   }
 
+  Future<String> QuoteMstDelete(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data, AppUrl.QuoteMstDelete,sessionManagement);
+  }
 }

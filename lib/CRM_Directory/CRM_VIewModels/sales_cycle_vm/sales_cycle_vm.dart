@@ -686,6 +686,49 @@ class SalesCycleVm extends GetxController {
     }
   }
 
+  QuoteMstDelete(int index) {
+    Map data = {
+      "quote_id": quoteList[index].quoteId,
+      "created_by": email
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.QuoteMstDelete(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<SalesCycleUpdateStatusModal> response =
+            JsonResponse.map((e) => SalesCycleUpdateStatusModal.fromJson(e)).toList();
+            if (response != null && response.length > 0 && response[0].condition == "True") {
+              loading.value = false;
+              quoteList.removeAt(index);
+              Utils.sanckBarSuccess('Success Message!',response[0].message.toString());
+
+            } else {
+              loading.value = false;
+              Utils.sanckBarError("False Message !", response[0].message.toString());
+              //Account_Master_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      print(e);
+    }
+  }
+
   ProductCategoryWiseAmtGet(int page_no, String saleCycleId) {
     try {
       Map data = {

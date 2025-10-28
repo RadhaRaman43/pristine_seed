@@ -183,37 +183,37 @@ class TaskApprovalListScreen extends StatelessWidget{
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Task Status : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width*0.34,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskStatus??"",
-                      child: Text(
-                        TaskMaster_page_controller
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Task Status : ",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Flexible(
+                      child: Tooltip(
+                        message: TaskMaster_page_controller
                             .Task_Master_list[position]
                             .taskStatus??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(taskStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
+                        child: Text(
+                          TaskMaster_page_controller
+                              .Task_Master_list[position]
+                              .taskStatus??"",
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.poppins(
+                              color: getStatusColor(taskStatus),
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -221,7 +221,8 @@ class TaskApprovalListScreen extends StatelessWidget{
                     return  Visibility(
                       visible: TaskMaster_page_controller
                           .Task_Master_list[position]
-                          .isReadyForApprove.toString()=='1' && TaskMaster_page_controller.Task_Master_list[position].createdBy?.toLowerCase()!=TaskMaster_page_controller.email.toLowerCase()?true:false,
+                          .isReadyForApprove.toString()=='1' && TaskMaster_page_controller.Task_Master_list[position].createdBy?.toLowerCase()!=TaskMaster_page_controller.email.toLowerCase()
+                          && TaskMaster_page_controller.isHeadofficePermission!="1"?true:false,
                       child: IconButton(onPressed: () {
                         TaskMaster_page_controller.showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
                       }, icon: Icon(Icons.update)),
@@ -230,6 +231,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                 ],
               ),
               Icon(Icons.remove_red_eye, color: AllColors.textColor,),
+
             ],
           ),
           subtitle: Column(

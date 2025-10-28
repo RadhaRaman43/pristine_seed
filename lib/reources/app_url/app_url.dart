@@ -237,6 +237,9 @@ class AppUrl {
 
 
      //todo sales cycle
+     //todo radha raman
+     static const String QuoteMstDelete = "$BASE_URL/api/CRM/Quote/QuoteMstDelete";
+
      static const String salesCycleMstGet = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstGet";
      static const String salesCycleMstUpdate = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstUpdate";
      static const String salesCycleMstApproveReject = "$BASE_URL/api/CRM/SalesCycle/SalesCycleMstApproveReject";

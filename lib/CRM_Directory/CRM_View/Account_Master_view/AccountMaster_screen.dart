@@ -205,11 +205,60 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.getGeoPostalCodeApi();
 
           },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    "Customer Code: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    child: Tooltip(
+                      message: controller.accountCode??"",
+                      child: Text(controller.accountCode??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            InkWell(
+              child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
+            ),
+            SizedBox(width: 5,),
+            Obx(() {
+              return Visibility(
+                visible: accountMaster_page_controller.isAdminWritePermission == "1" &&
+                    accountMaster_page_controller.isHeadofficePermission == "0",
+                child:  GestureDetector(
+                    onTap: (){
+                      showConfirmCompleteDialog(context,accountMaster_page_controller.Account_Master_list[position].accountCode??"",position!);
+                    },
+                    child: Icon(Icons.delete, color: Colors.red)),
+              );
+            }),
+
+          ],
+        ),
+       /* InkWell(
+          child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
+        )*/
           subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
 
-              buildInfoRow(context,"Customer Code", controller.accountCode,account_code:accountMaster_page_controller.Account_Master_list[position].accountCode??"",index: position),
+             // buildInfoRow(context,"Customer Code", controller.accountCode,account_code:accountMaster_page_controller.Account_Master_list[position].accountCode??"",index: position),
               buildInfoRow(context,"Customer Name", controller.accountName),
               buildInfoRow(context,"Customer Type", controller.accountType),
               buildInfoRow(context,"Company Type", controller.companyProfileType),
@@ -237,9 +286,7 @@ class AccountmasterScreen extends StatelessWidget{
             ],
           ),
 
-         trailing: InkWell(
-           child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
-         ),
+
       ),
     );
   }
@@ -281,19 +328,6 @@ class AccountmasterScreen extends StatelessWidget{
               ],
             ),
           ),
-          // Right side — delete icon
-          if (label == "Customer Code")
-            Obx(() {
-              return Visibility(
-                visible: accountMaster_page_controller.isAdminWritePermission == "1" &&
-                    accountMaster_page_controller.isHeadofficePermission == "0",
-                child:  GestureDetector(
-                  onTap: (){
-                    showConfirmCompleteDialog(context,account_code!,index!);
-                  },
-                    child: Icon(Icons.delete, color: Colors.red)),
-              );
-            }),
         ],
       ),
     );

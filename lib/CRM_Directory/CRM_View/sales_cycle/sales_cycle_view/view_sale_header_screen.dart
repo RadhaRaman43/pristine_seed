@@ -4217,12 +4217,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         : true,
                     child: Container(
                       child: Visibility(
-                        visible: saleCycleController.saleCycleList[0]
-                                        .isReadySendForApproval ==
-                                    1 &&
-                                saleCycleController
-                                        .saleCycleList[0].isSalesCycleClosed !=
-                                    1 &&
+                        visible: saleCycleController.saleCycleList[0].isReadySendForApproval == 1 &&
+                                saleCycleController.saleCycleList[0].isSalesCycleClosed != 1 &&
                                 flagForManage == "Quote"
                             ? true
                             : false,
@@ -4263,6 +4259,24 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         color: Colors.blueAccent,
                         size: 30,
                       )),
+
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Visibility(
+                    visible: saleCycleController.isAdminWritePermission.value == "1" &&
+                        saleCycleController.isHeadofficePermission.value == "0" &&
+                        saleCycleController.quoteList[index].quoteStatus  != 'Approved'? true:false,
+                    child: InkWell(
+                        onTap: () {
+                          showConfirmCompleteDialog(context,index);
+                        },
+                        child: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                          size: 30,
+                        )),
+                  ),
                 ],
               ),
             ),
@@ -4897,6 +4911,70 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           ],
         ),*/
       ),
+    );
+  }
+  showConfirmCompleteDialog(BuildContext context, int index){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.red.shade100, // light red background
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.delete,
+                  color: Colors.red,
+                  size: 28,
+                ),
+              ),
+              SizedBox(width: 20,),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("Delete",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.sisxteen,
+                          fontWeight: FontWeight.w700),
+                    ),
+                    Text("Do You Want to Delete This Quote?",
+                      style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500),
+                      softWrap: true,
+                    ),
+                  ],
+                ),
+              ),
+
+            ],
+          ),
+
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancel",style: TextStyle(color: AllColors.redColor),),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                saleCycleController.QuoteMstDelete(index);
+              },
+              child: Text("Delete",style: TextStyle(color: AllColors.greenblue),),
+            ),
+          ],
+        );
+      },
     );
   }
 
