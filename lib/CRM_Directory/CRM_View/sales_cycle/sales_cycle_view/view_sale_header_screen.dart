@@ -3009,8 +3009,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   bindData("Sales Cycle Owner",saleCycleController.saleCycleList[0].salesCycleOwnerName ?? ""),
 
                   SizedBox(height: 3,),
-                  bindData("Manager Name",saleCycleController.saleCycleList[0].approvedFullName ?? ''),
-
+                  bindData("Reporting Manager",saleCycleController.saleCycleList[0].approvedFullName ?? ''),
+                  SizedBox(height: 3,),
+                  bindData("Approved/Rejected By",saleCycleController.saleCycleList[0].finalApprovedFullName ?? ''),
                   SizedBox(height: 3,),
                   bindData("Approved/Rejected On",dateTimeApprovedOn.toString()),
                   SizedBox(height: 3,),
@@ -3030,7 +3031,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Identify Decision Maker",
+                        "Decision Maker",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -3064,7 +3065,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        "Sales Cycle Commit",
+                        "Is Commit",
                         style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -3086,6 +3087,39 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     ],
                   ),
+                  SizedBox(height: 3,),
+                  Obx((){
+                    return Visibility(
+                      visible:saleCycleController.isAdminWritePermission.value!=1
+                          && saleCycleController.saleCycleList[0].salesCycleStatus == 'Propose'?true:false ,
+                      child: Row(
+                        children: [
+                          Text(
+                            "Is Mark Rate Contract",
+                            style: GoogleFonts.poppins(
+                              color: AllColors.primaryDark1,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          Spacer(),
+                          Text(
+                            saleCycleController.saleCycleList[0].isMarkRateContract == 0
+                                ? 'No'
+                                : 'Yes',
+                            style: GoogleFonts.poppins(
+                              color: saleCycleController.saleCycleList[0]
+                                  .isMarkRateContract ==
+                                  1?AllColors.greenblue:AllColors.redColor,
+                              fontSize: AllFontSize.fourtine,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
+
                   SizedBox(height: 3,),
                   bindData("Reopen Remarks",saleCycleController.saleCycleList[0].reopenRemarks ?? ""),
                   SizedBox(height: 3,),

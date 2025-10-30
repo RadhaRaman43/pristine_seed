@@ -16,6 +16,7 @@ class SalesCycleModal {
   String? salesCycleRemarks;
   String? approvedBy;
   String? approvedFullName;
+  String? finalApprovedFullName;
   String? approvedOn;
   String? rejectReason;
   String? createdBy;
@@ -116,6 +117,7 @@ class SalesCycleModal {
         this.salesCycleRemarks,
         this.approvedBy,
         this.approvedFullName,
+        this.finalApprovedFullName,
         this.approvedOn,
         this.rejectReason,
         this.createdBy,
@@ -216,6 +218,7 @@ class SalesCycleModal {
     salesCycleRemarks = json['sales_cycle_remarks'];
     approvedBy = json['approved_by'];
     approvedFullName = json['approved_full_name'];
+    finalApprovedFullName = json['final_approved_full_name'];
     approvedOn = json['approved_on'];
     rejectReason = json['reject_reason'];
     createdBy = json['created_by'];
@@ -319,6 +322,7 @@ class SalesCycleModal {
     data['sales_cycle_remarks'] = this.salesCycleRemarks;
     data['approved_by'] = this.approvedBy;
     data['approved_full_name'] = this.approvedFullName;
+    data['final_approved_full_name'] = this.finalApprovedFullName;
     data['approved_on'] = this.approvedOn;
     data['reject_reason'] = this.rejectReason;
     data['created_by'] = this.createdBy;

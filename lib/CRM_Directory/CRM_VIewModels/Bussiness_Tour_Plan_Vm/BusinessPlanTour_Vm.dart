@@ -34,6 +34,8 @@ class BusinessPlanTourViewModel extends GetxController{
   int total_rows = 0;
   RxBool loading = false.obs;
   RxBool meetingWith = true.obs;
+  RxBool tourType = true.obs;
+  RxBool selectMeetingWith = false.obs;
   String StartDate = '', EndDate = '', Tour_Id = '', CustomerId = '';
   RxString isSendForApproval = ''.obs;
   RxString filterStatusFlag = 'PENDING'.obs;
@@ -89,7 +91,7 @@ class BusinessPlanTourViewModel extends GetxController{
   var TourPlanRemarks_Controller = TextEditingController();
   var TourPlanObjective_Controller = TextEditingController();
   var tourDate_Controller = TextEditingController();
-  var TourType_Controller = TextEditingController();
+  var TourType_Controller = TextEditingController().obs;
 
   var ApproveReject_Controller = TextEditingController();
   var RejectReason_Controller = TextEditingController();
@@ -419,12 +421,14 @@ class BusinessPlanTourViewModel extends GetxController{
         "tour_type": TourType_Controller.value.text.isEmpty?'':TourType_Controller.value.text,
         "accompanied_with": jsonEncode(SelectedAlongPersonWith_list1),
         "customer": CustomerId,
-        "meeting_with": jsonEncode(SelectedMeetingWith_List1),
+        "meeting_with": TourType_Controller.value.text.toString().trim().toLowerCase()=="client meeting"?jsonEncode(SelectedMeetingWith_List1):MeetingWith_controller.value.text,
+        //"meeting_with": MeetingWith_controller.value.text,
         "objective": TourPlanObjective_Controller.value.text.isEmpty?"":TourPlanObjective_Controller.value.text,
         "remark": TourPlanRemarks_Controller.value.text.isEmpty?"":TourPlanRemarks_Controller.value.text,
         "email_id": email
       };
       loading.value = true;
+      print("data is ${data}");
       _api.BusinessTourPlanLineCreate(data, sessionManagement).then(
             (onValue) {
           final jsonResponse = json.decode(onValue);
@@ -930,7 +934,9 @@ class BusinessPlanTourViewModel extends GetxController{
     TourPlanRemarks_Controller.clear();
     TourPlanObjective_Controller.clear();
     tourDate_Controller.clear();
-    TourType_Controller.clear();
+    TourType_Controller.value.clear();
+    SelectedAlongPersonWith_list.value=[];
+    SelectedMeetingWith_List.value=[];
   }
 
 }

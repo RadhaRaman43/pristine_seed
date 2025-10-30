@@ -75,7 +75,7 @@ class AddTourLinesPage extends StatelessWidget{
                  Utils.sanckBarError('Tour Date!', "Please Select Tour Data");
                  return  ;
                }
-               if(businessTourPlanController.TourType_Controller.text.isEmpty){
+               if(businessTourPlanController.TourType_Controller.value.text.isEmpty){
                  Utils.sanckBarError('Tour Type!', "Please Select tour Type");
                  return  ;
                }
@@ -120,7 +120,12 @@ class AddTourLinesPage extends StatelessWidget{
                      SizedBox(height: 15,),
                      BindTourDate(context),
                      SizedBox(height: 10,),
-                     BindTourTypeDropDown(context),
+                     Obx((){
+                       return Visibility(
+                         visible: businessTourPlanController.tourType.value,
+                           child:  BindTourTypeDropDown(context));
+                     }),
+
                      SizedBox(height: 10,),
                      bindAccompaniedWithDropDown(context),
                      SizedBox(height: 10,),
@@ -148,10 +153,12 @@ class AddTourLinesPage extends StatelessWidget{
                      bindTourPlanAccountDropDown(context),
                      SizedBox(height: 10,),
                      Obx((){
+                       print("client meeting with ${businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()}");
                        return Visibility(
-                           visible: businessTourPlanController.meetingWith.value,
-                           child: bindMeetingWithDropDown(context));
+                           visible: businessTourPlanController.meetingWith.value && businessTourPlanController.tourType.value?true:false ,
+                           child:businessTourPlanController.TourType_Controller.value.text.toString().trim().toLowerCase()=="client meeting"? bindMeetingWithDropDown(context):MeetingWithTextField(context));
                      }),
+
                      SizedBox(height: 10,),
                      Obx(() {
                        return
@@ -276,7 +283,7 @@ class AddTourLinesPage extends StatelessWidget{
         width: double.infinity,
         child: DropdownMenu<TouringDistrictModel>(
           width: size.width-30,
-          controller:  businessTourPlanController.TourType_Controller,
+          controller:  businessTourPlanController.TourType_Controller.value,
           label: Text(
             "Tour Type",
             style: GoogleFonts.poppins(
@@ -306,8 +313,13 @@ class AddTourLinesPage extends StatelessWidget{
           ),
           onSelected: (TouringDistrictModel? selection) {
             print(selection);
-            businessTourPlanController.TourType_Controller.text =
-                _displayTourTypeForOption(selection!).toString();
+            businessTourPlanController.tourType.value=false;
+            businessTourPlanController.tourType.value=true;
+            businessTourPlanController.TourType_Controller.value.clear();
+            businessTourPlanController.MeetingWith_controller.value.clear();
+            businessTourPlanController.SelectedMeetingWith_List.value=[];
+            businessTourPlanController.TourType_Controller.value.text = _displayTourTypeForOption(selection!).toString();
+            businessTourPlanController.selectMeetingWith.value=true;
 
           },
 
@@ -335,6 +347,39 @@ class AddTourLinesPage extends StatelessWidget{
           decoration: InputDecoration(
               hintText: "Objective*",
               labelText: "Objective*",
+              //suffixIcon: Icon(Icons.email),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: AllFontSize.ten,
+                  horizontal: AllFontSize.ten),
+
+              /* focusedBorder: OutlineInputBorder(
+                                   borderSide: BorderSide(color: Colors.blue)
+                               ),*/
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10)
+              )
+          ),
+
+        ),
+      ),
+    );
+  }
+
+  Widget MeetingWithTextField(context){
+    return Padding(
+      padding: const EdgeInsets.only(left: 15, right: 15),
+      child: Container(
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10)
+        ),
+        //padding: EdgeInsets.only(left: 10.0, right: 10.0),
+        child: TextFormField(
+          controller: businessTourPlanController
+              .MeetingWith_controller.value,
+          decoration: InputDecoration(
+              hintText: "Meeting With*",
+              labelText: "Meeting With*",
               //suffixIcon: Icon(Icons.email),
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.ten,
