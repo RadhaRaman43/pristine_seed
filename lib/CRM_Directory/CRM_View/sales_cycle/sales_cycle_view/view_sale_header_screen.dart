@@ -3104,9 +3104,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            saleCycleController.saleCycleList[0].isMarkRateContract == 0
-                                ? 'No'
-                                : 'Yes',
+                            saleCycleController.saleCycleList[0].isMarkRateContract == 0 ? 'No' : 'Yes',
                             style: GoogleFonts.poppins(
                               color: saleCycleController.saleCycleList[0]
                                   .isMarkRateContract ==
@@ -3119,11 +3117,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       ),
                     );
                   }),
-
                   SizedBox(height: 3,),
                   bindData("Reopen Remarks",saleCycleController.saleCycleList[0].reopenRemarks ?? ""),
                   SizedBox(height: 3,),
-
                   Visibility(
                     // visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROSPECT" || saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase()=="PROPOSE"?true:false,
                     visible: true,
@@ -3268,8 +3264,6 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: 3,),
-
-
                   Row(
                     children: [
                       Text(

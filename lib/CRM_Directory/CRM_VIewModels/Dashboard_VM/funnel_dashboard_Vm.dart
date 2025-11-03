@@ -69,6 +69,7 @@ class FunnelDashboardVm extends GetxController{
   var clusterName_controller=TextEditingController().obs;
   var RegionName_controller=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
+  var filter_created_on_cont=TextEditingController().obs;
 
   var CustomerNameApi;
   var ProductCategoryForApi;
@@ -185,6 +186,7 @@ class FunnelDashboardVm extends GetxController{
         "email_id": email,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
+        "filter_created_on": filter_created_on_cont.value.text,
         "filter_commit": (IsCommit_controller.value.text.isEmpty||IsCommit_controller.value.text=='All')?"-1":isCommitForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
@@ -629,6 +631,7 @@ class FunnelDashboardVm extends GetxController{
     QuoteAccepted_controller.value.text = "All";
     IsCommit_controller.value.text = 'ALL';
     StageName_controller.value.clear();
+    filter_created_on_cont.value.clear();
     clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     RegionName_controller.value.clear();

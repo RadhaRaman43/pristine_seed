@@ -63,6 +63,7 @@ class CommitDashboardVm extends GetxController{
   var clusterName_controller=TextEditingController().obs;
   var RegionName_controller=TextEditingController().obs;
   var CustomerName_controller=TextEditingController().obs;
+  var filter_created_on_cont=TextEditingController().obs;
 
 
   var CustomerNameApi;
@@ -155,7 +156,7 @@ class CommitDashboardVm extends GetxController{
 
   }
 
-  Future<void> commitDashboardData() async {
+  Future<void>  commitDashboardData() async {
     CustomerNameApi="";
     if(CustomerName_controller.value.text.isNotEmpty){
       CustomerNameApi = CustomerName_controller.value.text
@@ -217,6 +218,7 @@ class CommitDashboardVm extends GetxController{
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
+        "filter_created_on": filter_created_on_cont.value.text.isEmpty?"": filter_created_on_cont.value.text,
         "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
         "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
@@ -554,6 +556,7 @@ class CommitDashboardVm extends GetxController{
     StageName_controller.value.clear();
     clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
+    filter_created_on_cont.value.clear();
     RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];
     SelectedEmployee_Member_list.value = [];

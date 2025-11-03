@@ -42,6 +42,8 @@ class AddNewDsarScreen extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    TaskMaster_page_controller.Contact_Name_controller.text=TaskMaster_page_controller.Task_Master_list[0].contactName ??"";
+    TaskMaster_page_controller.contact_code_for_dsar.value = TaskMaster_page_controller.Task_Master_list[0].contactCode ??"";
     return WillPopScope(
         onWillPop: () async {
           TaskMaster_page_controller.isInfraLeadValue.value=false;
@@ -463,10 +465,6 @@ class AddNewDsarScreen extends StatelessWidget{
                     ),
                   );
               }),
-
-
-
-
 
               Container(
                 padding: EdgeInsets.only(left: 15.0, right: 15.0),

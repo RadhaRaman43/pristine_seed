@@ -884,8 +884,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
-      controller:saleCycleController.createdOnCnontroller
-          .value,
+      controller:saleCycleController.createdOnCnontroller.value,
       readOnly: true,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(

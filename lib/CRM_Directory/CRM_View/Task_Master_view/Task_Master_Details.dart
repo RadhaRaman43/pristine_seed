@@ -22,6 +22,7 @@ import '../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 
 class TaskMasterDetails extends StatelessWidget{
+
   TaskMasterDetails({super.key});
   final TaskMaster_page_controller=Get.put(Taskmastervm());
   SalesCycleVm salesCycleController=Get.put(SalesCycleVm());
