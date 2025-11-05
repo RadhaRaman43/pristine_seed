@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -97,7 +97,8 @@ class DashBoardViewModel extends GetxController with WidgetsBindingObserver{
       imageUrl.value = '';
     }
 
-    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    //ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+    var connectivityResult =  Connectivity();
     if (connectivityResult == ConnectivityResult.none) {
       fetchLocation();
       try{

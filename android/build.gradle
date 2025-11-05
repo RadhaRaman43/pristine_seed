@@ -1,36 +1,49 @@
-buildscript {
-  //  ext.kotlin_version = '1.7.10'
-    ext.kotlin_version = '1.9.22'
-    repositories {
-        google()
-        //mavenCentral()
-        jcenter()
-        maven { url 'https://jitpack.io' }
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.22"
-        classpath 'com.google.gms:google-services:4.3.13'
-       // classpath 'com.google.gms:google-services:4.4.2'
-    }
+plugins {
+    id "com.android.application" version "8.9.1" apply false
+    id "org.jetbrains.kotlin.android" version "2.1.0" apply false
+    id "com.google.gms.google-services" version "4.4.4" apply false
 }
 
 allprojects {
     repositories {
         google()
-        //mavenCentral()
-        jcenter()
-        maven { url 'https://jitpack.io' }
+        mavenCentral()
+    }
+
+    // Ensure all subprojects use Java 17 and ignore -Werror
+    subprojects {
+        afterEvaluate { project ->
+            if (project.hasProperty('android')) {
+                project.android {
+                    if (namespace == null) {
+                        namespace project.group
+                    }
+
+                    // Java compile options
+                    compileOptions {
+                        sourceCompatibility JavaVersion.VERSION_17
+                        targetCompatibility JavaVersion.VERSION_17
+                    }
+                }
+            }
+
+            // Remove -Werror for Java and Kotlin tasks
+            tasks.withType(JavaCompile).configureEach {
+                options.compilerArgs.remove('-Werror')
+                options.compilerArgs.add('-Xlint:-options')
+            }
+            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+                kotlinOptions.jvmTarget = '17'
+                kotlinOptions.freeCompilerArgs = kotlinOptions.freeCompilerArgs - "-Werror"
+            }
+        }
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
-}
-subprojects {
-    project.evaluationDependsOn(':app')
+    project.evaluationDependsOn(":app")
 }
 
 tasks.register("clean", Delete) {

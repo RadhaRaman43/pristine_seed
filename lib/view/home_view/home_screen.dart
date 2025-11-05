@@ -1,5 +1,4 @@
-import 'package:carousel_slider/carousel_options.dart';
-import 'package:carousel_slider/carousel_slider.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -11,8 +10,6 @@ import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/login_view/login_screen.dart';
 import 'package:navigation_drawer_flutter/viewModel/home_vm/HomeViewModel.dart';
 import 'package:navigation_drawer_flutter/viewModel/notification_vm/notification_vm.dart';
-import 'package:stylish_bottom_bar/helpers/enums.dart';
-import 'package:stylish_bottom_bar/model/options.dart';
 import 'package:stylish_bottom_bar/stylish_bottom_bar.dart';
 import '../../CRM_Directory/CRM_View/DashboardCRM_Screen.dart';
 import '../../constants/app_font_size.dart';

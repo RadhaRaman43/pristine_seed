@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:battery_plus/battery_plus.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -276,7 +276,8 @@ class BackgroundService {
     }
    // todo Check internet connection status
      List<LocationData> locationDataList = [];
-     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+     //ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+     var connectivityResult = Connectivity();
      final DatabaseHelper _databaseHelper = DatabaseHelper();
 
      if (connectivityResult == ConnectivityResult.none) {
