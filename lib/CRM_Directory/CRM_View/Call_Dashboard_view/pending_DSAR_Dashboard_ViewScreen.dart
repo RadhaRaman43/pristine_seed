@@ -1,5 +1,11 @@
 import 'dart:math';
 
+import 'dart:ui' as ui;
+import 'dart:io';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:media_store_plus/media_store_plus.dart';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
@@ -29,6 +35,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
   final dashboard_view_Controller = Get.put(PendingDsarDashboardVm());
   final TaskMaster_page_controller=Get.put(Taskmastervm());
   Size size=Get.size;
+  final GlobalKey _chartKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -49,11 +56,20 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                   'Pending DSAR Dashboard',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
-                    fontSize: 17.0,
+                    fontSize: 15.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Spacer(),
+                Tooltip(
+                  message: "Take Screenshot",
+                  child: IconButton(
+                    icon: const Icon(Icons.camera_alt_outlined),
+                    onPressed: () async {
+                      await takeScreenshot(context, _chartKey);
+                    },
+                  ),
+                ),
                 IconButton(onPressed: () {
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
@@ -151,14 +167,6 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              /*Text(
-                                    '${dashboard_view_Controller.totalSuspectPrice}',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.green,
-                                      fontSize: AllFontSize.twelve,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),*/
                             ],
                           ),
                           Column(
@@ -171,14 +179,6 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              /*Text(
-                                    '${dashboard_view_Controller.totalProspectPrice}',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.orange,
-                                      fontSize: AllFontSize.twelve,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),*/
                             ],
                           ),
                           Column(
@@ -191,14 +191,6 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              /*Text(
-                                    '${dashboard_view_Controller.totalProposePrice}',
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.blue,
-                                      fontSize: AllFontSize.twelve,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),*/
                             ],
                           ),
                         ],
@@ -302,6 +294,160 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
       );
     });
   }
+  Future<void> takeScreenshot(BuildContext context, GlobalKey<State<StatefulWidget>> chartKey) async {
+
+    ValueNotifier<double> progress = ValueNotifier(0.0);
+    showProgressDialog(context, progress);
+
+    try {
+      progress.value = 0.10;
+
+      RenderRepaintBoundary boundary =
+      chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+
+      ui.Image chartImage = await boundary.toImage(pixelRatio: 3.0);
+
+      progress.value = 0.25;
+
+      var chartBytes =
+      await chartImage.toByteData(format: ui.ImageByteFormat.png);
+      var chartUint8 = chartBytes!.buffer.asUint8List();
+
+      const double textSectionHeight = 80;
+      const double spacing = 20;
+
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+
+      final double width = chartImage.width.toDouble();
+      final double height =
+          chartImage.height.toDouble() + textSectionHeight + spacing;
+
+      final bgPaint = Paint()..color = const Color(0xFFFBF6F6);
+      canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
+
+      drawVerticalLabels(canvas);
+      final chartUiImage = await decodeImageFromList(chartUint8);
+      canvas.drawImage(
+          chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
+
+      final picture = recorder.endRecording();
+
+      progress.value = 0.45;
+
+      final finalImage =
+      await picture.toImage(width.toInt(), height.toInt());
+
+      var finalBytes =
+      await finalImage.toByteData(format: ui.ImageByteFormat.png);
+      var pngBytes = finalBytes!.buffer.asUint8List();
+
+      progress.value = 0.65;
+
+      // ---------------- Save to Gallery ------------------------
+      await MediaStore.ensureInitialized();
+      MediaStore.appFolder = "PristineSeed";
+
+      String tempFilePath = await saveTempImage(pngBytes);
+
+      progress.value = 0.80;
+
+      final saveInfo = await MediaStore().saveFile(
+        tempFilePath: tempFilePath,
+        dirType: DirType.photo,
+        dirName: DirName.dcim,
+      );
+
+      progress.value = 1.0; // close loading dialog
+
+      if (saveInfo != null && saveInfo.isSuccessful) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Screenshot saved to Gallery!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to save screenshot')),
+        );
+      }
+
+    } catch (e) {
+      Get.back();
+      print("Screenshot error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+    finally{
+      Get.back();
+    }
+  }
+  void showProgressDialog(BuildContext context, ValueNotifier<double> progress) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return ValueListenableBuilder<double>(
+          valueListenable: progress,
+          builder: (context, value, _) {
+            return AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Saving screenshot..."),
+                  const SizedBox(height: 20),
+                  LinearProgressIndicator(value: value),
+                  const SizedBox(height: 10),
+                  Text("${(value * 100).toStringAsFixed(0)}%",style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700),),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void drawVerticalLabels(ui.Canvas canvas) {
+    double startY = 20;      // top padding
+    double gap = 35;         // space between labels
+    double x = 20;           // left margin
+
+    List<Map<String, dynamic>> labels = [
+      {"text": "Follow-Up Call", "color": Color(0xFF3694D3)},
+      {"text": "New Call", "color": Color(0xFF086D1E)},
+      {"text": "Payment Call", "color": Color(0xFFCC5A37)},
+    ];
+
+    for (var item in labels) {
+      final tp = TextPainter(
+        text: TextSpan(
+          text: item["text"],
+          style: TextStyle(
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
+            color: item["color"],
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+
+      tp.layout();
+
+      tp.paint(canvas, Offset(x, startY));
+      startY += tp.height + gap;
+    }
+  }
+
+  Future<String> saveTempImage(var bytes) async {
+    final tempDir = await getTemporaryDirectory();
+    final file = File(
+        "${tempDir.path}/CallDashboard_${DateTime.now().millisecondsSinceEpoch}.png");
+    await file.writeAsBytes(bytes);
+    return file.path;
+  }
 
   Widget BindDashboardBarChartData(BuildContext context) {
     /*if (dashboard_view_Controller.isShimmerLoading.value) {
@@ -331,138 +477,141 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
         padding: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            height: 450,
-            width: chartWidth,
-            child: BarChart(
-              BarChartData(
-                alignment: BarChartAlignment.start,
-                maxY: maxY,
-                barGroups: _createBarGroups(),
-                barTouchData: BarTouchData(
-                  enabled: true,
-                  touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
-                    if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
-                    final rodIndex = response.spot!.touchedRodDataIndex;
-                    final groupIndex = response.spot!.touchedBarGroupIndex;
-                    String? record = dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].geoValue == null?dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].employee : dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].geoValue;
+          child: RepaintBoundary(
+            key: _chartKey,
+            child: SizedBox(
+              height: 450,
+              width: chartWidth,
+              child: BarChart(
+                BarChartData(
+                  alignment: BarChartAlignment.start,
+                  maxY: maxY,
+                  barGroups: _createBarGroups(),
+                  barTouchData: BarTouchData(
+                    enabled: true,
+                    touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
+                      if (!event.isInterestedForInteractions || response == null || response.spot == null) return;
+                      final rodIndex = response.spot!.touchedRodDataIndex;
+                      final groupIndex = response.spot!.touchedBarGroupIndex;
+                      String? record = dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].geoValue == null?dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].employee : dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].geoValue;
 
-                    dashboard_view_Controller.geoValueName.value = record??"";
-                    if(dashboard_view_Controller.selectedOption == 'Region'){
-                      dashboard_view_Controller.RegionNameForApi = record??"";
-                    }else if(dashboard_view_Controller.selectedOption == 'Cluster'){
-                      dashboard_view_Controller.ClusterNameForApi = record??"";
-                    }else if(dashboard_view_Controller.selectedOption == 'Employee'){
-                      dashboard_view_Controller.EmployeeEmailIdForApi = dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].emailId??"";
-                    }
-
-                    print('geoNameValue...${record}');
-
-
-                    switch (rodIndex) {
-                      case 0:
-                        dashboard_view_Controller.TypeOfCallForApi = 'Follow-Up Call';
-                        dashboard_view_Controller.rodName.value = 'Follow-Up Call';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
-                        break;
-                      case 1:
-                        dashboard_view_Controller.TypeOfCallForApi = 'New Call';
-                        dashboard_view_Controller.rodName.value = 'New Call';
-                        // dashboard_view_Controller.geoValueName.value = record??"";
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
-                        break;
-                      case 2:
-                        dashboard_view_Controller.TypeOfCallForApi = 'Payment Call';
-                        dashboard_view_Controller.rodName.value = 'Payment Call';
-                        // dashboard_view_Controller.geoValueName.value = record??"";
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
-                        break;
-                    }
-                  },
-                  touchTooltipData: BarTouchTooltipData(
-                    // tooltipBgColor: Colors.lightBlue[50],
-                    tooltipPadding: EdgeInsets.all(8),
-                    tooltipRoundedRadius: 8,
-                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
-                      final record = dashboard_view_Controller.pendingDSARDashboardRecordList[group.x.toInt()];
-                      String name = dashboard_view_Controller.selectedOption.value == 'Employee'
-                          ? record.employee ?? ""
-                          : record.geoValue ?? "";
-
-
-
-                      String valueLabel;
-                      switch (rodIndex) {
-                        case 0:
-                          valueLabel = 'Follow-up: ${rod.toY.toInt()}';
-
-                          break;
-                        case 1:
-                          valueLabel = 'New Call: ${rod.toY.toInt()}';
-
-                          break;
-                        case 2:
-                          valueLabel = 'Payment: ${rod.toY.toInt()}';
-
-                          break;
-                        default:
-                          valueLabel = 'Value: ${rod.toY.toInt()}';
-
+                      dashboard_view_Controller.geoValueName.value = record??"";
+                      if(dashboard_view_Controller.selectedOption == 'Region'){
+                        dashboard_view_Controller.RegionNameForApi = record??"";
+                      }else if(dashboard_view_Controller.selectedOption == 'Cluster'){
+                        dashboard_view_Controller.ClusterNameForApi = record??"";
+                      }else if(dashboard_view_Controller.selectedOption == 'Employee'){
+                        dashboard_view_Controller.EmployeeEmailIdForApi = dashboard_view_Controller.pendingDSARDashboardRecordList[groupIndex].emailId??"";
                       }
 
-                      return BarTooltipItem(
-                        '$name\n$valueLabel',
-                        const TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
-                      );
+                      print('geoNameValue...${record}');
+
+
+                      switch (rodIndex) {
+                        case 0:
+                          dashboard_view_Controller.TypeOfCallForApi = 'Follow-Up Call';
+                          dashboard_view_Controller.rodName.value = 'Follow-Up Call';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          break;
+                        case 1:
+                          dashboard_view_Controller.TypeOfCallForApi = 'New Call';
+                          dashboard_view_Controller.rodName.value = 'New Call';
+                          // dashboard_view_Controller.geoValueName.value = record??"";
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          break;
+                        case 2:
+                          dashboard_view_Controller.TypeOfCallForApi = 'Payment Call';
+                          dashboard_view_Controller.rodName.value = 'Payment Call';
+                          // dashboard_view_Controller.geoValueName.value = record??"";
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                          break;
+                      }
                     },
-                  ),
-                ),
-                titlesData: FlTitlesData(
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      interval: interval,
-                      getTitlesWidget: (value, meta) {
-                        return Text(
-                          value.toInt().toString(),
-                          style: TextStyle(fontSize: 10, color: Colors.black),
+                    touchTooltipData: BarTouchTooltipData(
+                      // tooltipBgColor: Colors.lightBlue[50],
+                      tooltipPadding: EdgeInsets.all(8),
+                      tooltipRoundedRadius: 8,
+                      getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                        final record = dashboard_view_Controller.pendingDSARDashboardRecordList[group.x.toInt()];
+                        String name = dashboard_view_Controller.selectedOption.value == 'Employee'
+                            ? record.employee ?? ""
+                            : record.geoValue ?? "";
+
+
+
+                        String valueLabel;
+                        switch (rodIndex) {
+                          case 0:
+                            valueLabel = 'Follow-up: ${rod.toY.toInt()}';
+
+                            break;
+                          case 1:
+                            valueLabel = 'New Call: ${rod.toY.toInt()}';
+
+                            break;
+                          case 2:
+                            valueLabel = 'Payment: ${rod.toY.toInt()}';
+
+                            break;
+                          default:
+                            valueLabel = 'Value: ${rod.toY.toInt()}';
+
+                        }
+
+                        return BarTooltipItem(
+                          '$name\n$valueLabel',
+                          const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
                         );
                       },
                     ),
                   ),
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50, getTitlesWidget: _getTopTitles,)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 60,
-                      getTitlesWidget: _getBottomTitles,
+                  titlesData: FlTitlesData(
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        interval: interval,
+                        getTitlesWidget: (value, meta) {
+                          return Text(
+                            value.toInt().toString(),
+                            style: TextStyle(fontSize: 10, color: Colors.black),
+                          );
+                        },
+                      ),
+                    ),
+                    topTitles: AxisTitles(sideTitles: SideTitles(showTitles: true, reservedSize: 50, getTitlesWidget: _getTopTitles,)),
+                    rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 60,
+                        getTitlesWidget: _getBottomTitles,
+                      ),
                     ),
                   ),
-                ),
-                borderData: FlBorderData(
-                  show: true,
-                  border: Border(
-                    left: BorderSide(color: Colors.grey, width: 1),
-                    bottom: BorderSide(color: Colors.grey, width: 1),
+                  borderData: FlBorderData(
+                    show: true,
+                    border: Border(
+                      left: BorderSide(color: Colors.grey, width: 1),
+                      bottom: BorderSide(color: Colors.grey, width: 1),
+                    ),
                   ),
-                ),
-                gridData: FlGridData(
-                  show: true,
-                  drawVerticalLine: false,
-                  getDrawingHorizontalLine: (value) {
-                    return FlLine(
-                      color: Colors.grey.withOpacity(0.2),
-                      strokeWidth: 1,
-                    );
-                  },
+                  gridData: FlGridData(
+                    show: true,
+                    drawVerticalLine: false,
+                    getDrawingHorizontalLine: (value) {
+                      return FlLine(
+                        color: Colors.grey.withOpacity(0.2),
+                        strokeWidth: 1,
+                      );
+                    },
+                  ),
                 ),
               ),
             ),
@@ -564,7 +713,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text('${followUpCall}    ${newCall}    ${paymentCall}', style: TextStyle(
+              Text('${followUpCall=="0"?"":followUpCall}    ${newCall=='0'?"":newCall}    ${paymentCall=='0'?"":paymentCall}', style: TextStyle(
                   fontSize: 10, color: AllColors.blackColor
               ),),
               Text(
@@ -578,16 +727,6 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
             ],
           ),
         ),
-        /*child: Transform.rotate(
-          angle: -0.5, // approx -28.6 degrees (negative to tilt upward)
-          child: Text(
-            name,
-            style: TextStyle(fontSize: 12, color: AllColors.blackColor),
-            softWrap: false,
-            overflow: TextOverflow.ellipsis,
-            textAlign: TextAlign.center,
-          ),
-        ),*/
       );
     } else {
       return SizedBox.shrink();
@@ -1547,6 +1686,93 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
   }
 
   bindTaskStatus(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<String>.multiSelection(
+        items: dashboard_view_Controller.TaskStatusListTypeList,
+        itemAsString: (String u) => u,
+        selectedItems: dashboard_view_Controller.selectedTaskStatusList,
+        enabled: true,
+
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: const TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: dashboard_view_Controller.selectedTaskStatusList.isNotEmpty
+                ? "Task Status"
+                : null,
+            hintText: "Task Status",
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
+        ),
+
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Task Status",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.join(', '),
+              style: const TextStyle(color: Colors.black),
+            ),
+          );
+        },
+
+        onChanged: (_) {},
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          showSelectedItems: false, // hides suffix check
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: const EdgeInsets.only(top: 20, left: 12, right: 12),
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          containerBuilder: (ctx, popupWidget) {
+            return Column(
+              children: [
+                Expanded(
+                  child: AbsorbPointer(
+                    absorbing: true, // disables taps on items only
+                    child: popupWidget,
+                  ),
+                ),
+              ],
+            );
+          },
+
+          // ✅ Item builder — no suffix, no interaction
+          itemBuilder: (context, item, isSelected) {
+            return ListTile(
+              dense: true,
+              title: Text(
+                item,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                ),
+              ),
+            );
+          },
+        ),
+      );
+    });
+  }
+
+  /*bindTaskStatus(BuildContext context) {
     return Obx((){
       return DropdownSearch<String>.multiSelection(
         items: dashboard_view_Controller.TaskStatusListTypeList,
@@ -1609,7 +1835,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
       );
     });
 
-  }
+  }*/
 
   bindLastActivityStatus(BuildContext context) {
     return Obx((){
@@ -1807,7 +2033,232 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
   }
 
-  bindAccountOwnerFilter(BuildContext context) {
+
+  Widget bindAccountOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    });
+
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.fullName).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <EmployeeMemberModel>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectedEmployee_Member_list);
+
+              List<EmployeeMemberModel> allItems =
+                  dashboard_view_Controller.employee_Member_list;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty
+                    ? allItems
+                    : allItems
+                    .where((c) =>
+                    (c.fullName ?? "").toLowerCase().contains(query))
+                    .toList();
+
+                final allSelected =
+                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Account Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected
+                                      .clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No clusters found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.fullName ?? "") ==
+                                  (item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.fullName ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.fullName ?? "") ==
+                                          (item.fullName ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectedEmployee_Member_list
+                                        .assignAll(tempSelected);
+                                    dashboard_view_Controller.AccountOwner_controller.value.text =
+                                        tempSelected.map((e) => e.fullName).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Done'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Account Owner", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Account Owner",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  /*bindAccountOwnerFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: dashboard_view_Controller.employee_Member_list,
@@ -1871,7 +2322,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
       );
     });
 
-  }
+  }*/
 
   bindProductCategoryFilter(BuildContext context) {
     return Obx((){

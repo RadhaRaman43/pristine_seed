@@ -1,3 +1,9 @@
+
+import 'dart:ui' as ui;
+import 'dart:io';
+import 'package:flutter/rendering.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:media_store_plus/media_store_plus.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +32,7 @@ class FunnelDashboardView extends StatelessWidget{
   final dashboard_view_Controller = Get.put(FunnelDashboardVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
+  final GlobalKey _chartKey = GlobalKey();
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
       option;
@@ -58,6 +65,15 @@ class FunnelDashboardView extends StatelessWidget{
                     ),
                   ),
                   Spacer(),
+                  Tooltip(
+                    message: "Take Screenshot",
+                    child: IconButton(
+                      icon: const Icon(Icons.camera_alt_outlined),
+                      onPressed: () async {
+                        await takeScreenshot(context, _chartKey);
+                      },
+                    ),
+                  ),
                   IconButton(onPressed: () {
                     showFilterBottomSheet(context);
                   }, icon: Icon(Icons.filter_alt_sharp))
@@ -87,160 +103,163 @@ class FunnelDashboardView extends StatelessWidget{
                         Container(
                             padding: EdgeInsets.only(left: 15.0, bottom: 0.0, top: 15.0),
                             child:
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Active Funnel',
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontSize: AllFontSize.fourtine,
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                SizedBox(height: 10,),
-                                Obx((){
-                                  return Padding(
-                                    padding: const EdgeInsets.only(left: 8.0 ,right: 25),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        InkWell(
-                                          onTap: (){
-                                            dashboard_view_Controller.clearAllFilterController();
-                                            dashboard_view_Controller.SelectedTabForApi = 'Suspect';
-                                            dashboard_view_Controller.pageNumber = 0;
-                                            dashboard_view_Controller.funnelDashboardData();
-                                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
-                                          },
-                                          child: Container(
-                                            width: 90,
-                                            decoration: BoxDecoration(
-                                              color: Colors.green[50],
-                                              border: Border.all(
-                                                color: AllColors.skyBlue, // Set the border color here
-                                                width: 1.0, // Adjust the border width if necessary
-                                              ),
-                                              borderRadius: BorderRadius.circular(10.0),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  '1. Suspect',
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.blackColor,
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${dashboard_view_Controller.totalSuspectPrice}',
-                                                  style: GoogleFonts.poppins(
-                                                    color: Colors.green,
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: (){
-                                            dashboard_view_Controller.clearAllFilterController();
-                                            dashboard_view_Controller.SelectedTabForApi = 'Prospect';
-                                            dashboard_view_Controller.pageNumber = 0;
-                                            dashboard_view_Controller.funnelDashboardData();
-                                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
-                                          },
-                                          child: Container(
-                                            width: 90,
-                                            decoration: BoxDecoration(
-                                              color: Colors.amber[50],
-                                              border: Border.all(
-                                                color: AllColors.skyBlue, // Set the border color here
-                                                width: 1.0, // Adjust the border width if necessary
-                                              ),
-                                              borderRadius: BorderRadius.circular(10.0),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  '2. Prospect',
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.blackColor,
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${dashboard_view_Controller.totalProspectPrice}',
-                                                  style: GoogleFonts.poppins(
-                                                    color: Colors.orange,
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          onTap: (){
-                                            dashboard_view_Controller.clearAllFilterController();
-                                            dashboard_view_Controller.SelectedTabForApi = 'Propose';
-                                            dashboard_view_Controller.pageNumber = 0;
-                                            dashboard_view_Controller.funnelDashboardData();
-                                           // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
-                                          },
-                                          child: Container(
-                                            width: 90,
-                                            decoration: BoxDecoration(
-                                              color: Colors.blue[50],
-                                              border: Border.all(
-                                                color: AllColors.skyBlue, // Set the border color here
-                                                width: 1.0, // Adjust the border width if necessary
-                                              ),
-                                              borderRadius: BorderRadius.circular(10.0),
-                                            ),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                  '3. Propose',
-                                                  style: GoogleFonts.poppins(
-                                                    color: AllColors.blackColor,
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  '${dashboard_view_Controller.totalProposePrice}',
-                                                  style: GoogleFonts.poppins(
-                                                    color: Colors.blue,
-                                                    fontSize: AllFontSize.twelve,
-                                                    fontWeight: FontWeight.w500,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                            RepaintBoundary(
+                              key: _chartKey,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Active Funnel',
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.primaryDark1,
+                                      fontSize: AllFontSize.fourtine,
+                                      fontWeight: FontWeight.w700,
                                     ),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Obx((){
+                                    return Padding(
+                                      padding: const EdgeInsets.only(left: 8.0 ,right: 25),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          InkWell(
+                                            onTap: (){
+                                              dashboard_view_Controller.clearAllFilterController();
+                                              dashboard_view_Controller.SelectedTabForApi = 'Suspect';
+                                              dashboard_view_Controller.pageNumber = 0;
+                                              dashboard_view_Controller.funnelDashboardData();
+                                             // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                            },
+                                            child: Container(
+                                              width: 90,
+                                              decoration: BoxDecoration(
+                                                color: Colors.green[50],
+                                                border: Border.all(
+                                                  color: AllColors.skyBlue, // Set the border color here
+                                                  width: 1.0, // Adjust the border width if necessary
+                                                ),
+                                                borderRadius: BorderRadius.circular(10.0),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    '1. Suspect',
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.blackColor,
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '${dashboard_view_Controller.totalSuspectPrice}',
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.green,
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: (){
+                                              dashboard_view_Controller.clearAllFilterController();
+                                              dashboard_view_Controller.SelectedTabForApi = 'Prospect';
+                                              dashboard_view_Controller.pageNumber = 0;
+                                              dashboard_view_Controller.funnelDashboardData();
+                                             // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                            },
+                                            child: Container(
+                                              width: 90,
+                                              decoration: BoxDecoration(
+                                                color: Colors.amber[50],
+                                                border: Border.all(
+                                                  color: AllColors.skyBlue, // Set the border color here
+                                                  width: 1.0, // Adjust the border width if necessary
+                                                ),
+                                                borderRadius: BorderRadius.circular(10.0),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    '2. Prospect',
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.blackColor,
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '${dashboard_view_Controller.totalProspectPrice}',
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.orange,
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: (){
+                                              dashboard_view_Controller.clearAllFilterController();
+                                              dashboard_view_Controller.SelectedTabForApi = 'Propose';
+                                              dashboard_view_Controller.pageNumber = 0;
+                                              dashboard_view_Controller.funnelDashboardData();
+                                             // dashboard_view_Controller.getDashboardUserWiseData(dashboard_view_Controller.pageNumber);
+                                            },
+                                            child: Container(
+                                              width: 90,
+                                              decoration: BoxDecoration(
+                                                color: Colors.blue[50],
+                                                border: Border.all(
+                                                  color: AllColors.skyBlue, // Set the border color here
+                                                  width: 1.0, // Adjust the border width if necessary
+                                                ),
+                                                borderRadius: BorderRadius.circular(10.0),
+                                              ),
+                                              child: Column(
+                                                children: [
+                                                  Text(
+                                                    '3. Propose',
+                                                    style: GoogleFonts.poppins(
+                                                      color: AllColors.blackColor,
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '${dashboard_view_Controller.totalProposePrice}',
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.blue,
+                                                      fontSize: AllFontSize.twelve,
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
 
-                                  );
-                                })
-
-                              ],
+                                    );
+                                  }),
+                                  Obx(() {
+                                    return BindDashboardFunnelChartData(context);
+                                  }),
+                                ],
+                              ),
                             ),
-
-
                         ),
 
-                        Obx(() {
+                        /*Obx(() {
                           return BindDashboardFunnelChartData(context);
-                        }),
+                        }),*/
                         Container(
                             padding: EdgeInsets.only(left: 15.0, bottom: 10.0),
                             child:
@@ -292,6 +311,130 @@ class FunnelDashboardView extends StatelessWidget{
         ),
     );
 
+  }
+  Future<void> takeScreenshot(BuildContext context, GlobalKey<State<StatefulWidget>> chartKey) async {
+
+    ValueNotifier<double> progress = ValueNotifier(0.0);
+    showProgressDialog(context, progress);
+
+    try {
+      progress.value = 0.10;
+
+      RenderRepaintBoundary boundary =
+      chartKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+
+      ui.Image chartImage = await boundary.toImage(pixelRatio: 3.0);
+
+      progress.value = 0.25;
+
+      var chartBytes =
+      await chartImage.toByteData(format: ui.ImageByteFormat.png);
+      var chartUint8 = chartBytes!.buffer.asUint8List();
+
+      const double textSectionHeight = 80;
+      const double spacing = 20;
+
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+
+      final double width = chartImage.width.toDouble();
+      final double height =
+          chartImage.height.toDouble() + textSectionHeight + spacing;
+
+      final bgPaint = Paint()..color = const Color(0xFFFBF6F6);
+      canvas.drawRect(Rect.fromLTWH(0, 0, width, height), bgPaint);
+
+
+      final chartUiImage = await decodeImageFromList(chartUint8);
+      canvas.drawImage(
+          chartUiImage, Offset(0, textSectionHeight + spacing), Paint());
+
+      final picture = recorder.endRecording();
+
+      progress.value = 0.45;
+
+      final finalImage =
+      await picture.toImage(width.toInt(), height.toInt());
+
+      var finalBytes =
+      await finalImage.toByteData(format: ui.ImageByteFormat.png);
+      var pngBytes = finalBytes!.buffer.asUint8List();
+
+      progress.value = 0.65;
+
+      // ---------------- Save to Gallery ------------------------
+      await MediaStore.ensureInitialized();
+      MediaStore.appFolder = "PristineSeed";
+
+      String tempFilePath = await saveTempImage(pngBytes);
+
+      progress.value = 0.80;
+
+      final saveInfo = await MediaStore().saveFile(
+        tempFilePath: tempFilePath,
+        dirType: DirType.photo,
+        dirName: DirName.dcim,
+      );
+
+      progress.value = 1.0; // close loading dialog
+
+      if (saveInfo != null && saveInfo.isSuccessful) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Screenshot saved to Gallery!')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to save screenshot')),
+        );
+      }
+
+    } catch (e) {
+      Get.back();
+      print("Screenshot error: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
+    finally{
+      Get.back();
+    }
+  }
+  void showProgressDialog(BuildContext context, ValueNotifier<double> progress) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return ValueListenableBuilder<double>(
+          valueListenable: progress,
+          builder: (context, value, _) {
+            return AlertDialog(
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text("Saving screenshot..."),
+                  const SizedBox(height: 20),
+                  LinearProgressIndicator(value: value),
+                  const SizedBox(height: 10),
+                  Text("${(value * 100).toStringAsFixed(0)}%",style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.sisxteen,
+                      fontWeight: FontWeight.w700),),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+
+  Future<String> saveTempImage(var bytes) async {
+    final tempDir = await getTemporaryDirectory();
+    final file = File(
+        "${tempDir.path}/CallDashboard_${DateTime.now().millisecondsSinceEpoch}.png");
+    await file.writeAsBytes(bytes);
+    return file.path;
   }
 
   Widget BindDashboardFunnelChartData(BuildContext context) {
@@ -1416,7 +1559,231 @@ class FunnelDashboardView extends StatelessWidget{
 
   }
 
-  bindAccountOwnerFilter(BuildContext context) {
+  Widget bindAccountOwnerFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    });
+
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.fullName).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <EmployeeMemberModel>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectedEmployee_Member_list);
+
+              List<EmployeeMemberModel> allItems =
+                  dashboard_view_Controller.employee_Member_list;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty
+                    ? allItems
+                    : allItems
+                    .where((c) =>
+                    (c.fullName ?? "").toLowerCase().contains(query))
+                    .toList();
+
+                final allSelected =
+                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Sale Cycle Owner',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected
+                                      .clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No clusters found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.fullName ?? "") ==
+                                  (item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.fullName ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.fullName ?? "") ==
+                                          (item.fullName ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectedEmployee_Member_list
+                                        .assignAll(tempSelected);
+                                    dashboard_view_Controller.AccountOwner_controller.value.text =
+                                        tempSelected.map((e) => e.fullName).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Done'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Sale Cycle Owner", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Sale Cycle Owner",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
+  /*bindAccountOwnerFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: dashboard_view_Controller.employee_Member_list,
@@ -1480,7 +1847,7 @@ class FunnelDashboardView extends StatelessWidget{
       );
     });
 
-  }
+  }*/
 
   bindProductCategoryFilter(BuildContext context) {
     return Obx((){
@@ -1789,17 +2156,18 @@ class FunnelDashboardView extends StatelessWidget{
       if (availableItems.isNotEmpty &&
           dashboard_view_Controller.SelectedRegion_list.isEmpty) {
         dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
-        dashboard_view_Controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+        dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(', ');
+        print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
 
+      }
+      else{
+        print("region does not bind first time");
       }
     });
 
     return Obx(() {
       final selected = dashboard_view_Controller.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {

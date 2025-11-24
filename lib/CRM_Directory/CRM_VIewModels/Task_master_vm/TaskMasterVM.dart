@@ -446,6 +446,14 @@ class Taskmastervm extends GetxController{
         List<TaskSalesProductCategoryLinesModel> lines = Item_Category_Selected_list.map((item) => TaskSalesProductCategoryLinesModel(productCategoryCode: item.categoryCode!)).toList();
         List<Selectedalongwithpersonnamemodel> personName = SelectedAlongPersonWith_list.map((item) => Selectedalongwithpersonnamemodel(empId: item.empId!)).toList();
 
+        var apiTime = '';
+        if(VisitTime_controller.value.text.isNotEmpty) {
+          final uiTime = VisitTime_controller.value.text.trim();
+          final cleanTime = uiTime.replaceAll(RegExp(r'\s+'), ' ');
+          final parsedTime = DateFormat('hh:mm a', 'en_US').parse(cleanTime);
+          apiTime = DateFormat('HH:mm').format(parsedTime);
+        }
+
         try{
             Map<String, dynamic> data={
                 "account_name": account_name.value.isNotEmpty?account_name.value:"",
@@ -459,7 +467,7 @@ class Taskmastervm extends GetxController{
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "payment_sale_cycle_id": Sale_cycle_Id_controller.text.isEmpty?'':Sale_cycle_Id_controller.text,
                 "date_of_visit": todayDate.isEmpty?"":todayDate,
-                "time_of_visit": VisitTime_controller.value.text.isEmpty?"":VisitTime_controller.value.text,
+                "time_of_visit": VisitTime_controller.value.text.isEmpty?"":apiTime,
                 //"is_infra_lead": isInfraLeadFilterController.text =='Yes'?1:0,
                 "is_infra_lead": 0,
                 "lines": lines.map((line) => line.toJson()).toList(),
@@ -517,15 +525,23 @@ class Taskmastervm extends GetxController{
         }
         int? budgetAmt = int.tryParse(BudgetAmt_controller.text.toString()) ?? 0;
         int? estimatedAmt = int.tryParse(ExpectedAmt_controller.text.toString()) ?? 0;
+        var apiTime = '';
+        if(NextInterTime_controller.value.text.isNotEmpty) {
+          final uiTime = NextInterTime_controller.value.text.trim();
+          final cleanTime = uiTime.replaceAll(RegExp(r'\s+'), ' ');
+          final parsedTime = DateFormat('hh:mm a', 'en_US').parse(cleanTime);
+          apiTime = DateFormat('HH:mm').format(parsedTime);
+        }
+
         try{
             Map data={
                 "task_id": TaskID,
-               // "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
+                // "is_infra_lead": isInfraLead.value.text=="Yes"?1:0,
                 "is_infra_lead": 0,
                 "dsar_status": DSAR_Status_type_controller.value.text.isEmpty?'':DSAR_Status_type_controller.value.text,
                 "type_of_call": Type_of_call_controller.text.isEmpty?'':Type_of_call_controller.text,
                 "next_interaction_date": NextInterDate.isEmpty?'':NextInterDate,
-                "next_interaction_time": NextInterTime_controller.text.isEmpty?'':NextInterTime_controller.text,
+                "next_interaction_time": NextInterTime_controller.text.isEmpty?'':apiTime,
                 "remarks": DSAR_Remarks_controller.text.isEmpty?'':DSAR_Remarks_controller.text,
                 "est_closure_date": EstClosureDate.isEmpty?'':EstClosureDate,
                 "budget_amount": budgetAmt,

@@ -18,8 +18,6 @@ import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
-
-
 class SalesCycleScreen extends StatelessWidget{
   SalesCycleScreen({super.key});
 
@@ -483,6 +481,16 @@ class SalesCycleScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Exp. Closure Date : ",
                 value: salesCycleController.saleCycleList[position].estClosureDate,
+                //width: size.width * 0.3,
+              ),
+              _buildLabelWithValue(
+                label: "Expected Revenue : ",
+                value: '₹ ${salesCycleController.saleCycleList[position].estBudgetAmount}',
+                //width: size.width * 0.3,
+              ),
+              _buildLabelWithValue(
+                label: "Exp. Budget Amt. : ",
+                value: '₹ ${salesCycleController.saleCycleList[position].budgetAmount}',
                 //width: size.width * 0.3,
               ),
               _buildLabelWithValue(
@@ -1136,7 +1144,7 @@ class SalesCycleScreen extends StatelessWidget{
 
   Widget bindFilterData(TextEditingController value,String hintdata){
     return  TextField(
-      controller: salesCycleController.saleCycleController.value,
+      controller: value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),

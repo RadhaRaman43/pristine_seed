@@ -1,4 +1,3 @@
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +7,6 @@ import 'package:intl/intl.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
-import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
@@ -29,165 +27,165 @@ class SalesDashboardViewscreen extends StatelessWidget{
       Get.toNamed(RoutesName.homeScreen);
       return false;
     },
-    child: Scaffold(
-        appBar:  AppBar(
-          backgroundColor: AllColors.primaryDark1,
-          iconTheme: IconThemeData(
-            color: AllColors.whiteColor,
-          ),
-          title:Row(
-            children: [
-              Text(
-                'Sales Dashboard',
-                style: GoogleFonts.poppins(
-                  color: AllColors.whiteColor,
-                  fontSize: 17.0,
-                  fontWeight: FontWeight.w700,
-                ),
+        child: Scaffold(
+          appBar:  AppBar(
+              backgroundColor: AllColors.primaryDark1,
+              iconTheme: IconThemeData(
+                color: AllColors.whiteColor,
               ),
-              Spacer(),
-              IconButton(onPressed: () {
-                showFilterBottomSheet(context);
-              }, icon: Icon(Icons.filter_alt_sharp))
-            ],
-          )
-      ),
-        drawer: CustomDrawer(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Obx(() {
-                return Visibility(
-                  visible: dashboard_view_Controller.loading.value,
-                  child: LinearProgressIndicator(
-                    backgroundColor: AllColors.green,
-                    color: AllColors.textColor,
-                  ),
-                );
-              }),
-              Visibility(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                        minWidth: MediaQuery.of(context).size.width),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 8), // optional spacing
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Visibility(
-                              visible: dashboard_view_Controller.userType != 'Branch Head',
-                              child: _buildActionChip("Cluster")),
-                          SizedBox(width: 8),
-                          _buildActionChip("Region"),
-                          SizedBox(width: 8),
-                          _buildActionChip("Employee"),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                visible: dashboard_view_Controller.userType != 'Frontliners',
-              ),
-              Container(
-                margin: EdgeInsets.only(top: 15.0,left: 10,right: 10),
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: AllColors.grayColor, // Set the border color here
-                    width: 1.0, // Adjust the border width if necessary
-                  ),
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: dashboard_view_Controller.PeriodFrom_Controller.value,
-                        decoration: InputDecoration(
-                            hintText: "Period From",
-                            labelText: "Period From",
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-          
-                      ),
-                    ),
-                    SizedBox(height: 10,),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
-                        ),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: TextFormField(
-                        readOnly: true,
-                        controller: dashboard_view_Controller.PeriodTo_Controller.value,
-                        decoration: InputDecoration(
-                            hintText: "Period To",
-                            labelText: "Period To",
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-          
-                      ),
-                    ),
-          
-                    SizedBox(height: 10,),
-          
-                    Card(
+              title:Row(
+                children: [
+                  Text(
+                    'Sales Dashboard',
+                    style: GoogleFonts.poppins(
                       color: AllColors.whiteColor,
-                      elevation: 10,
-                      margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: AllColors.textColor
-                            ),
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Icon(Icons.task, color: AllColors.whiteColor,),
-                                ),
-                                Text(
-                                  "CRM Tasks",
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.whiteColor,
-                                    fontSize: AllFontSize.twentee,
-                                    fontWeight: FontWeight.w600,
+                      fontSize: 17.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Spacer(),
+                  IconButton(onPressed: () {
+                    showFilterBottomSheet(context);
+                  }, icon: Icon(Icons.filter_alt_sharp))
+                ],
+              )
+          ),
+          drawer: CustomDrawer(),
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                Obx(() {
+                  return Visibility(
+                    visible: dashboard_view_Controller.loading.value,
+                    child: LinearProgressIndicator(
+                      backgroundColor: AllColors.green,
+                      color: AllColors.textColor,
+                    ),
+                  );
+                }),
+                Visibility(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minWidth: MediaQuery.of(context).size.width),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 8), // optional spacing
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Visibility(
+                                visible: dashboard_view_Controller.userType != 'Branch Head',
+                                child: _buildActionChip("Cluster")),
+                            SizedBox(width: 8),
+                            _buildActionChip("Region"),
+                            SizedBox(width: 8),
+                            _buildActionChip("Employee"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  visible: dashboard_view_Controller.userType != 'Frontliners',
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 15.0,left: 10,right: 10),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AllColors.grayColor, // Set the border color here
+                      width: 1.0, // Adjust the border width if necessary
+                    ),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AllColors.grayColor, // Set the border color here
+                            width: 1.0, // Adjust the border width if necessary
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: TextFormField(
+                          readOnly: true,
+                          controller: dashboard_view_Controller.PeriodFrom_Controller.value,
+                          decoration: InputDecoration(
+                              hintText: "Period From",
+                              labelText: "Period From",
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+                      SizedBox(height: 10,),
+                      Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AllColors.grayColor, // Set the border color here
+                            width: 1.0, // Adjust the border width if necessary
+                          ),
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        child: TextFormField(
+                          readOnly: true,
+                          controller: dashboard_view_Controller.PeriodTo_Controller.value,
+                          decoration: InputDecoration(
+                              hintText: "Period To",
+                              labelText: "Period To",
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: AllFontSize.ten,
+                                  horizontal: AllFontSize.ten),
+                              focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.blue)
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                              )
+                          ),
+
+                        ),
+                      ),
+
+                      SizedBox(height: 10,),
+
+                      Card(
+                        color: AllColors.whiteColor,
+                        elevation: 10,
+                        margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: AllColors.textColor
+                              ),
+                              child:Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Icon(Icons.task, color: AllColors.whiteColor,),
                                   ),
-                                ),
-                                Obx(() {
+                                  Text(
+                                    "CRM Tasks",
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.whiteColor,
+                                      fontSize: AllFontSize.twentee,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Obx(() {
                                     return IconButton(
                                       onPressed: () {
                                         dashboard_view_Controller.toggleCrtd();
@@ -204,46 +202,46 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       ),
                                     );
                                   },
-                                )
-          
-                              ],
+                                  )
+
+                                ],
+                              ),
                             ),
-                          ),
-                          Obx(() {
-                            return CRMTaskDetailCard(context);
-                          }),
-                        ],
+                            Obx(() {
+                              return CRMTaskDetailCard(context);
+                            }),
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 10,),
-          
-                    Card(
-                      color: AllColors.whiteColor,
-                      elevation: 10,
-                      margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: AllColors.textColor
-                            ),
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Icon(Icons.auto_graph, color: AllColors.whiteColor,),
-                                ),
-                                Text(
-                                  "Funnel",
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.whiteColor,
-                                    fontSize: AllFontSize.twentee,
-                                    fontWeight: FontWeight.w600,
+                      SizedBox(height: 10,),
+
+                      Card(
+                        color: AllColors.whiteColor,
+                        elevation: 10,
+                        margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: AllColors.textColor
+                              ),
+                              child:Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Icon(Icons.auto_graph, color: AllColors.whiteColor,),
                                   ),
-                                ),
-                                Obx(() {
+                                  Text(
+                                    "CRM Funnel",
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.whiteColor,
+                                      fontSize: AllFontSize.twentee,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Obx(() {
                                     return IconButton(
                                       onPressed: () {
                                         dashboard_view_Controller.toggleFunnelCrtd();
@@ -263,155 +261,155 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       ),
                                     );
                                   },
-                                )
-          
-                              ],
+                                  )
+
+                                ],
+                              ),
                             ),
-                          ),
-                          Obx(() {
-                            return FunnelDetailCard(context);
-                          }),
-                        ],
+                            Obx(() {
+                              return FunnelDetailCard(context);
+                            }),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    SizedBox(height: 10,),
+                      SizedBox(height: 10,),
 
-                    Card(
-                      color: AllColors.whiteColor,
-                      elevation: 10,
-                      margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: AllColors.textColor
-                            ),
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Icon(Icons.business, color: AllColors.whiteColor,),
-                                ),
-                                Text(
-                                  "Business Central Booking",
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.whiteColor,
-                                    fontSize: AllFontSize.twentee,
-                                    fontWeight: FontWeight.w600,
+                      Card(
+                        color: AllColors.whiteColor,
+                        elevation: 10,
+                        margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: AllColors.textColor
+                              ),
+                              child:Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Icon(Icons.business, color: AllColors.whiteColor,),
                                   ),
-                                ),
-                                Obx(
-                                      () {
-                                    return IconButton(
-                                      onPressed: () {
-                                        dashboard_view_Controller.toggleBussinessCrtd();
-                                        if (dashboard_view_Controller
-                                            .isExpandBussiness.value ==
-                                            true) {
-                                          print(
-                                              "If......${dashboard_view_Controller.isExpandBussiness.value}");
-                                        } else {
-                                          print(
-                                              "else......${dashboard_view_Controller.isExpandBussiness.value}");
-                                        }
-                                      },
-                                      icon: Icon(
-                                        dashboard_view_Controller
-                                            .isExpandBussiness.value
-                                            ? Icons.arrow_drop_up
-                                            : Icons.arrow_drop_down,
-                                        size: 25,
-                                        color: AllColors.whiteColor,
-                                      ),
-                                    );
-                                  },
-                                )
-
-                              ],
-                            ),
-                          ),
-                          Obx(() {
-                            return BusinessCentreBookingCard(context);
-                          }),
-                        ],
-                      ),
-                    ),
-
-                    SizedBox(height: 10,),
-
-                    Card(
-                      color: AllColors.whiteColor,
-                      elevation: 10,
-                      margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
-                      child: Column(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10.0),
-                                color: AllColors.textColor
-                            ),
-                            child:Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 10),
-                                  child: Icon(Icons.list_alt_outlined, color: AllColors.whiteColor,),
-                                ),
-                                Text(
-                                  "Collection",
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.whiteColor,
-                                    fontSize: AllFontSize.twentee,
-                                    fontWeight: FontWeight.w600,
+                                  Text(
+                                    "Business Central Booking",
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.whiteColor,
+                                      fontSize: AllFontSize.twentee,
+                                      fontWeight: FontWeight.w600,
+                                    ),
                                   ),
-                                ),
-                                Obx(
-                                      () {
-                                    return IconButton(
-                                      onPressed: () {
-                                        dashboard_view_Controller.toggleCollectionCrtd();
-                                        if (dashboard_view_Controller
-                                            .isExpandCollection.value ==
-                                            true) {
-                                          print(
-                                              "If......${dashboard_view_Controller.isExpandBussiness.value}");
-                                        } else {
-                                          print(
-                                              "else......${dashboard_view_Controller.isExpandBussiness.value}");
-                                        }
-                                      },
-                                      icon: Icon(
-                                        dashboard_view_Controller
-                                            .isExpandCollection.value
-                                            ? Icons.arrow_drop_up
-                                            : Icons.arrow_drop_down,
-                                        size: 25,
-                                        color: AllColors.whiteColor,
-                                      ),
-                                    );
-                                  },
-                                )
+                                  Obx(
+                                        () {
+                                      return IconButton(
+                                        onPressed: () {
+                                          dashboard_view_Controller.toggleBussinessCrtd();
+                                          if (dashboard_view_Controller
+                                              .isExpandBussiness.value ==
+                                              true) {
+                                            print(
+                                                "If......${dashboard_view_Controller.isExpandBussiness.value}");
+                                          } else {
+                                            print(
+                                                "else......${dashboard_view_Controller.isExpandBussiness.value}");
+                                          }
+                                        },
+                                        icon: Icon(
+                                          dashboard_view_Controller
+                                              .isExpandBussiness.value
+                                              ? Icons.arrow_drop_up
+                                              : Icons.arrow_drop_down,
+                                          size: 25,
+                                          color: AllColors.whiteColor,
+                                        ),
+                                      );
+                                    },
+                                  )
 
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          Obx(() {
-                            return CollectionCard(context);
-                          }),
-                        ],
+                            Obx(() {
+                              return BusinessCentreBookingCard(context);
+                            }),
+                          ],
+                        ),
                       ),
-                    ),
-          
-                  ],
+
+                      SizedBox(height: 10,),
+
+                      Card(
+                        color: AllColors.whiteColor,
+                        elevation: 10,
+                        margin: EdgeInsets.only(left: 0, right: 0, bottom: 5),
+                        child: Column(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  color: AllColors.textColor
+                              ),
+                              child:Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 10),
+                                    child: Icon(Icons.list_alt_outlined, color: AllColors.whiteColor,),
+                                  ),
+                                  Text(
+                                    "Collection",
+                                    style: GoogleFonts.poppins(
+                                      color: AllColors.whiteColor,
+                                      fontSize: AllFontSize.twentee,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Obx(
+                                        () {
+                                      return IconButton(
+                                        onPressed: () {
+                                          dashboard_view_Controller.toggleCollectionCrtd();
+                                          if (dashboard_view_Controller
+                                              .isExpandCollection.value ==
+                                              true) {
+                                            print(
+                                                "If......${dashboard_view_Controller.isExpandBussiness.value}");
+                                          } else {
+                                            print(
+                                                "else......${dashboard_view_Controller.isExpandBussiness.value}");
+                                          }
+                                        },
+                                        icon: Icon(
+                                          dashboard_view_Controller
+                                              .isExpandCollection.value
+                                              ? Icons.arrow_drop_up
+                                              : Icons.arrow_drop_down,
+                                          size: 25,
+                                          color: AllColors.whiteColor,
+                                        ),
+                                      );
+                                    },
+                                  )
+
+                                ],
+                              ),
+                            ),
+                            Obx(() {
+                              return CollectionCard(context);
+                            }),
+                          ],
+                        ),
+                      ),
+
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      )
+        )
     );
   }
 
@@ -453,55 +451,55 @@ class SalesDashboardViewscreen extends StatelessWidget{
           margin: EdgeInsets.only(left: 10.0, right: 10.0),
           child: Column(
             children: [
-              ListItemBind("Existing Accounts :",dashboard_view_Controller.salesDashboardList[0].existingAccount ),
+              ListItemBind("Existing Accounts :",dashboard_view_Controller.salesDashboardList[0].existingaccount ),
               SizedBox(height: 3,),
-              ListItemBind("New Account Created :",dashboard_view_Controller.salesDashboardList[0].newAccount ),
+              ListItemBind("New Account Created :",dashboard_view_Controller.salesDashboardList[0].newaccount ),
               SizedBox(height: 3,),
-              ListItemBind("Total Accounts :",dashboard_view_Controller.salesDashboardList[0].totalAccount ),
+              ListItemBind("Total Accounts :",dashboard_view_Controller.salesDashboardList[0].totalaccount ),
               SizedBox(height: 3,),
-              ListItemBind("Acc. Covered in Current Month :",dashboard_view_Controller.salesDashboardList[0].accountCoveredCurrentMonth ),
+              ListItemBind("Acc. Covered in Current Month :",dashboard_view_Controller.salesDashboardList[0].accountcoveredcurrentmonth ),
               SizedBox(height: 3,),
-              ListItemBind("Acc. Covered Till Previous Month(Financial Year) :",dashboard_view_Controller.salesDashboardList[0].accountCoveredPreviousMonth ),
+              ListItemBind("Acc. Covered Till Previous Month(Financial Year) :",dashboard_view_Controller.salesDashboardList[0].accountcoveredpreviousmonth ),
               SizedBox(height: 3,),
-              ListItemBind("New Acc. Covered in Current Month :",dashboard_view_Controller.salesDashboardList[0].freshAccountCoveredCurrentMonth ),
+              ListItemBind("New Acc. Covered in Current Month :",dashboard_view_Controller.salesDashboardList[0].freshaccountcoveredcurrentmonth ),
               SizedBox(height: 3,),
-              ListItemBind("Total Acc. Covered :",dashboard_view_Controller.salesDashboardList[0].totalAccountCovered ),
+              ListItemBind("Total Acc. Covered :",dashboard_view_Controller.salesDashboardList[0].totalaccountcovered ),
               SizedBox(height: 3,),
-              ListItemBind("Working Days :",dashboard_view_Controller.salesDashboardList[0].workingDays ),
+              ListItemBind("Working Days :",dashboard_view_Controller.salesDashboardList[0].workingdays ),
               SizedBox(height: 3,),
-              ListItemBind("New Call :", dashboard_view_Controller.salesDashboardList[0].newCall),
+              ListItemBind("New Call :", dashboard_view_Controller.salesDashboardList[0].newcall),
               SizedBox(height: 3,),
-              ListItemBind("Follow Up Call :", dashboard_view_Controller.salesDashboardList[0].followUpCall),
+              ListItemBind("Follow Up Call :", dashboard_view_Controller.salesDashboardList[0].followupcall),
               SizedBox(height: 3,),
-              ListItemBind("Payment Call :", dashboard_view_Controller.salesDashboardList[0].paymentCall),
+              ListItemBind("Payment Call :", dashboard_view_Controller.salesDashboardList[0].paymentcall),
               SizedBox(height: 3,),
-              ListItemBind("Total Calls :", dashboard_view_Controller.salesDashboardList[0].totalCall),
+              ListItemBind("Total Calls :", dashboard_view_Controller.salesDashboardList[0].totalcall),
               SizedBox(height: 3,),
-              ListItemBind("Total Won Order Count(CRM) :", dashboard_view_Controller.salesDashboardList[0].totalOrders),
+              ListItemBind("Total Won Order Count(CRM) :", dashboard_view_Controller.salesDashboardList[0].totalorders),
               SizedBox(height: 3,),
-              ListItemBind("Order Value :", dashboard_view_Controller.salesDashboardList[0].ordersValue),
+              ListItemBind("Order Value :", dashboard_view_Controller.salesDashboardList[0].ordersvalue),
               SizedBox(height: 3,),
-              ListItemBind("Call Rate :", dashboard_view_Controller.salesDashboardList[0].callRate),
+              ListItemBind("Call Rate :", dashboard_view_Controller.salesDashboardList[0].callrate),
               SizedBox(height: 3,),
-              ListItemBind("Call Rate Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].callRateTargetAchieve),
+              ListItemBind("Call Rate Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].callratetargetachieve),
               SizedBox(height: 3,),
-              ListItemBind("New Call(%) :", dashboard_view_Controller.salesDashboardList[0].newCall),
+              ListItemBind("New Call(%) :", dashboard_view_Controller.salesDashboardList[0].newcall),
               SizedBox(height: 3,),
-              ListItemBind("New Call Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].newCallTargetAchieve),
+              ListItemBind("New Call Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].newcalltargetachieve),
               SizedBox(height: 3,),
-              ListItemBind("Strike Rate: :", dashboard_view_Controller.salesDashboardList[0].strikeRate),
+              ListItemBind("Strike Rate: :", dashboard_view_Controller.salesDashboardList[0].strikerate),
               SizedBox(height: 3,),
-              ListItemBind("Strike Rate Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].strikeRateTargetAchieve),
+              ListItemBind("Strike Rate Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].strikeratetargetachieve),
               SizedBox(height: 3,),
-              ListItemBind("DSAR % :", dashboard_view_Controller.salesDashboardList[0].dsarPer),
+              ListItemBind("DSAR % :", dashboard_view_Controller.salesDashboardList[0].dsarper),
               SizedBox(height: 3,),
-              ListItemBind("DSAR  Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].dsarTargetAchieve),
+              ListItemBind("DSAR  Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].dsartargetachieve),
               SizedBox(height: 3,),
-              ListItemBind("Average Order Size :", dashboard_view_Controller.salesDashboardList[0].avgOrderSize),
+              ListItemBind("Average Order Size :", dashboard_view_Controller.salesDashboardList[0].avgordersize),
               SizedBox(height: 3,),
-              ListItemBind("Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].targetAchievement),
+              ListItemBind("Target Vs Ach.(%) :", dashboard_view_Controller.salesDashboardList[0].targetachievement),
               SizedBox(height: 3,),
-              ListItemBind("Business Tour Plan (No of Days) :", dashboard_view_Controller.salesDashboardList[0].businessTourDays),
+              ListItemBind("Business Tour Plan (No of Days) :", dashboard_view_Controller.salesDashboardList[0].businesstourdays),
               SizedBox(height: 3,),
 
 
@@ -512,8 +510,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
     }else{
       return  Obx(() {
         return Visibility(
-          visible: dashboard_view_Controller.loading.value,
-          child: SizedBox()
+            visible: dashboard_view_Controller.loading.value,
+            child: SizedBox()
         );
       });
     }
@@ -619,7 +617,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             onPressed: () {
                               dashboard_view_Controller.FilterFunnel.value = "Won";
                               dashboard_view_Controller.salesDashboardData();
-                              },
+                            },
                           );
                         }),
                         SizedBox(width: 8), // optional spacing between chips
@@ -647,7 +645,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             onPressed: () {
                               dashboard_view_Controller.FilterFunnel.value="Loss";
                               dashboard_view_Controller.salesDashboardData();
-                              },
+                            },
                           );
                         }),
                         SizedBox(width: 8),
@@ -665,13 +663,13 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].currentMonthPropose ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].currentmonthsuspect ),
               SizedBox(height: 3,),
-              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].currentMonthProspect ),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].currentmonthprospect ),
               SizedBox(height: 3,),
-              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].currentMonthPropose ),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].currentmonthpropose ),
               SizedBox(height: 3,),
-              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].currentMonthTotalFunnel ),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].currentmonthtotalfunnel ),
               SizedBox(height: 3,),
               Divider(height: 1, thickness: 2, color: Colors.grey,),
               SizedBox(height: 3,),
@@ -682,13 +680,13 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearSuspect ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].currentfinancialyearsuspect ),
               SizedBox(height: 3,),
-              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearProspect ),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].currentfinancialyearprospect ),
               SizedBox(height: 3,),
-              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearPropose ),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].currentfinancialyearpropose ),
               SizedBox(height: 3,),
-              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].currentFinancialYearTotalFunnel ),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].currentfinancialyeartotalfunnel ),
               SizedBox(height: 3,),
               Divider(height: 1, thickness: 2, color: Colors.grey,),
               SizedBox(height: 3,),
@@ -699,13 +697,13 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].firstQuaterSuspect ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].firstquatersuspect ),
               SizedBox(height: 3,),
-              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].firstQuaterProspect ),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].firstquaterprospect ),
               SizedBox(height: 3,),
-              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].firstQuaterPropose ),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].firstquaterpropose ),
               SizedBox(height: 3,),
-              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].firstQuaterTotalFunnel ),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].firstquatertotalfunnel ),
               SizedBox(height: 3,),
               Divider(height: 1, thickness: 2, color: Colors.grey,),
               SizedBox(height: 3,),
@@ -717,13 +715,13 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].secondQuaterSuspect ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].secondquatersuspect ),
               SizedBox(height: 3,),
-              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].secondQuaterProspect ),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].secondquaterprospect ),
               SizedBox(height: 3,),
-              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].secondQuaterPropose),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].secondquaterpropose),
               SizedBox(height: 3,),
-              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].secondQuaterTotalFunnel ),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].secondquatertotalfunnel ),
               SizedBox(height: 3,),
               Divider(height: 1, thickness: 2, color: Colors.grey,),
               SizedBox(height: 3,),
@@ -735,13 +733,13 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterSuspect ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].thirdquatersuspect ),
               SizedBox(height: 3,),
-              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterProspect ),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].thirdquaterprospect ),
               SizedBox(height: 3,),
-              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterPropose ),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].thirdquaterpropose ),
               SizedBox(height: 3,),
-              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].thirdQuaterTotalFunnel ),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].thirdquatertotalfunnel ),
               SizedBox(height: 3,),
               Divider(height: 1, thickness: 2, color: Colors.grey,),
               SizedBox(height: 3,),
@@ -753,16 +751,44 @@ class SalesDashboardViewscreen extends StatelessWidget{
                   fontWeight: FontWeight.w700,
                 ),
               ),
-              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterSuspect ),
+              ListItemBind("Suspect :",dashboard_view_Controller.salesDashboardList[0].fourthquatersuspect ),
               SizedBox(height: 3,),
-              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterProspect ),
+              ListItemBind("Prospect :",dashboard_view_Controller.salesDashboardList[0].fourthquaterprospect ),
               SizedBox(height: 3,),
-              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterPropose ),
+              ListItemBind("Propose :",dashboard_view_Controller.salesDashboardList[0].fourthquaterpropose ),
               SizedBox(height: 3,),
-              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].fourthQuaterTotalFunnel ),
+              ListItemBind("Total Funnel :",dashboard_view_Controller.salesDashboardList[0].fourthquatertotalfunnel ),
               SizedBox(height: 3,),
               Divider(height: 1, thickness: 2, color: Colors.grey,),
               SizedBox(height: 3,),
+              Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Tooltip(
+                  message: "Financial Year Total Funnel :",
+                  child: Text("Financial Year Total Funnel :",
+                    style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+              //Spacer(),
+              SizedBox(width: 5,),
+              Text("${dashboard_view_Controller.salesDashboardList[0].totalfunnelfinancialyear??""}",
+                style: GoogleFonts.poppins(
+                  color: AllColors.textColor,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+
+
 
               Text("Month wise total funnel",
                 style: GoogleFonts.poppins(
@@ -773,24 +799,24 @@ class SalesDashboardViewscreen extends StatelessWidget{
               ),
               SizedBox(height: 5,),
               Container(
-                height: 70,
+                  height: 70,
                   child: MonthWiseDataFunnel(context)),
               SizedBox(height: 3,),
-              ListItemBind("New Prospects Generated in Current Month :",dashboard_view_Controller.salesDashboardList[0].newProspectsGeneratedCurrentMonth ),
+              ListItemBind("New Prospects Generated in Current Month :",dashboard_view_Controller.salesDashboardList[0].newprospectsgeneratedcurrentmonth ),
               SizedBox(height: 3,),
-              ListItemBind("Carry Forward Prospects From Previous Month :",dashboard_view_Controller.salesDashboardList[0].carryForwardProspectsPreviousMonths ),
+              ListItemBind("Carry Forward Prospects From Previous Month :",dashboard_view_Controller.salesDashboardList[0].carryforwardprospectspreviousmonths ),
               SizedBox(height: 3,),
-              ListItemBind("Previous Month Order Won :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderWon ),
+              ListItemBind("Previous Month Order Won :",dashboard_view_Controller.salesDashboardList[0].previousmonthorderwon ),
               SizedBox(height: 3,),
-              ListItemBind("Previous Month Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderLost ),
+              ListItemBind("Previous Month Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousmonthorderlost ),
               SizedBox(height: 3,),
-              ListItemBind("Current Month Order Won :",dashboard_view_Controller.salesDashboardList[0].currentMonthOrderWon ),
+              ListItemBind("Current Month Order Won :",dashboard_view_Controller.salesDashboardList[0].currentmonthorderwon ),
               SizedBox(height: 3,),
-              ListItemBind("Previous Month Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousMonthOrderLost ),
+              ListItemBind("Previous Month Order Lost :",dashboard_view_Controller.salesDashboardList[0].previousmonthorderlost ),
               SizedBox(height: 3,),
-              ListItemBind("Order Lost FY :",dashboard_view_Controller.salesDashboardList[0].orderLostFy ),
+              ListItemBind("Order Lost FY :",dashboard_view_Controller.salesDashboardList[0].orderlostfy ),
               SizedBox(height: 3,),
-              ListItemBind("Order Won FY :",dashboard_view_Controller.salesDashboardList[0].orderWonFy ),
+              ListItemBind("Order Won FY :",dashboard_view_Controller.salesDashboardList[0].orderwonfy ),
               SizedBox(height: 3,),
 
 
@@ -834,6 +860,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
   }
 
   Widget BindDataListView(BuildContext context, int pos){
+    print("data....,,,...${dashboard_view_Controller.monthWiseTotalFunnelList[pos]?.monthyearvalue}");
     return  Container(
       margin: EdgeInsets.only(left: 10),
       //width: 80,
@@ -852,7 +879,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthName??"",
+              dashboard_view_Controller.monthWiseTotalFunnelList[pos]?.monthname??"",
               style: GoogleFonts.poppins(
                 color: AllColors.blackColor,
                 fontSize: AllFontSize.twelve,
@@ -860,7 +887,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               ),
             ),
             Text(
-              '${dashboard_view_Controller.monthWiseTotalFunnelList[pos].monthYearValue??""}',
+              '${dashboard_view_Controller.monthWiseTotalFunnelList[pos]?.monthyearvalue??""}',
               style: GoogleFonts.poppins(
                 color: Colors.green,
                 fontSize: AllFontSize.twelve,
@@ -913,31 +940,31 @@ class SalesDashboardViewscreen extends StatelessWidget{
           child: Column(
             children: [
               SizedBox(height: 5,),
-              ListItemBind("Commitment Prev. Month :",dashboard_view_Controller.salesDashboardList[0].commitmentPreMonth ),
+              ListItemBind("Commitment Prev. Month :",dashboard_view_Controller.salesDashboardList[0].commitmentpremonth ),
               SizedBox(height: 3,),
-              ListItemBind("Actual Booking Prev. Month :",dashboard_view_Controller.salesDashboardList[0].actualBookingPrevMonth ),
+              ListItemBind("Actual Booking Prev. Month :",dashboard_view_Controller.salesDashboardList[0].actualbookingprevmonth ),
               SizedBox(height: 3,),
-              ListItemBind("Booking Ach. Prev. Month (%) :",dashboard_view_Controller.salesDashboardList[0].bookingAchiveCurrentMonthPer ),
+              ListItemBind("Booking Ach. Prev. Month (%) :",dashboard_view_Controller.salesDashboardList[0].bookingachivecurrentmonthper ),
               SizedBox(height: 3,),
-              ListItemBind("Booking Commitment Current Month :",dashboard_view_Controller.salesDashboardList[0].bookingCommitmentCurrentMonth ),
+              ListItemBind("Booking Commitment Current Month :",dashboard_view_Controller.salesDashboardList[0].bookingcommitmentcurrentmonth ),
               SizedBox(height: 3,),
-              ListItemBind("Actual Booking Current Month :",dashboard_view_Controller.salesDashboardList[0].actualBookingCurrentMonth ),
+              ListItemBind("Actual Booking Current Month :",dashboard_view_Controller.salesDashboardList[0].actualbookingcurrentmonth ),
               SizedBox(height: 3,),
-              ListItemBind("Booking Ach. Current Month (%):",dashboard_view_Controller.salesDashboardList[0].bookingAchiveCurrentMonthPer ),
+              ListItemBind("Booking Ach. Current Month (%):",dashboard_view_Controller.salesDashboardList[0].bookingachivecurrentmonthper ),
               SizedBox(height: 3,),
-              ListItemBind("Booking AO Current Month :",dashboard_view_Controller.salesDashboardList[0].bookingAoCurrentMonth ),
+              ListItemBind("Booking AO Current Month :",dashboard_view_Controller.salesDashboardList[0].bookingaocurrentmonth ),
               SizedBox(height: 3,),
-              ListItemBind("AO Vs Booking Ach. Current Month (%):",dashboard_view_Controller.salesDashboardList[0].aoVsBookingAchiveCurrentMonthPer ),
+              ListItemBind("AO Vs Booking Ach. Current Month (%):",dashboard_view_Controller.salesDashboardList[0].aovsbookingachivecurrentmonthper ),
               SizedBox(height: 3,),
-              ListItemBind("Booking AO Current FY:",dashboard_view_Controller.salesDashboardList[0].bookingAoCurrentFy ),
+              ListItemBind("Booking AO Current FY:",dashboard_view_Controller.salesDashboardList[0].bookingaocurrentfy ),
               SizedBox(height: 3,),
-              ListItemBind("Actual Booking Current FY:",dashboard_view_Controller.salesDashboardList[0].actualBookingCurrentFy ),
+              ListItemBind("Actual Booking Current FY:",dashboard_view_Controller.salesDashboardList[0].actualbookingcurrentfy ),
               SizedBox(height: 3,),
-              ListItemBind("AO Vs Booking Ach. FY (%):",dashboard_view_Controller.salesDashboardList[0].aoVsBookingAchiveFyPer ),
+              ListItemBind("AO Vs Booking Ach. FY (%):",dashboard_view_Controller.salesDashboardList[0].aovsbookingachivefyper ),
               SizedBox(height: 3,),
-              ListItemBind("Order Over 15/20 Lakhs Current Month:",dashboard_view_Controller.salesDashboardList[0].ordersAbove15LakhCurrentMonth ),
+              ListItemBind("Order Over 15/20 Lakhs Current Month:",dashboard_view_Controller.salesDashboardList[0].ordersabove15Lakhcurrentmonth ),
               SizedBox(height: 3,),
-              ListItemBind("Order Over 15/20 Lakhs FY:",dashboard_view_Controller.salesDashboardList[0].ordersAbove15LakhFy ),
+              ListItemBind("Order Over 15/20 Lakhs FY:",dashboard_view_Controller.salesDashboardList[0].ordersabove15Lakhfy ),
               SizedBox(height: 3,),
               Text("Month wise commitment (CRM)",
                 style: GoogleFonts.poppins(
@@ -950,6 +977,83 @@ class SalesDashboardViewscreen extends StatelessWidget{
               Container(
                   height: 70,
                   child: MonthWiseCommitment(context)),
+
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Tooltip(
+                      message: "Financial Year Month Wise Commitment :",
+                      child: Text("Financial Year Month Wise Commitment :",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  //Spacer(),
+                  SizedBox(width: 5,),
+                  Text('${dashboard_view_Controller.salesDashboardList[0].totalmonthwisecommitment?[0]?.monthyearvalue??""}',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+
+              Divider(
+                height: 1, thickness: 2, color: Colors.grey,
+              ),
+              SizedBox(height: 5,),
+
+              Text("Month wise Final Booking Commitment",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+
+              SizedBox(height: 5,),
+              Container(
+                  height: 70,
+                  child: bindMonthWiseFinalBookingCommitment(context),),
+
+              SizedBox(height: 5,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Tooltip(
+                      message: "Financial Year Month Wise Final Booking Commitment :",
+                      child: Text("Financial Year Month Wise Final Booking Commitment :",
+                        style: GoogleFonts.poppins(
+                          color: AllColors.primaryDark1,
+                          fontSize: AllFontSize.fourtine,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                  //Spacer(),
+                  SizedBox(width: 5,),
+                  Text('${dashboard_view_Controller.salesDashboardList[0].totalmonthwisefinalbookingcommitment?[0]?.monthyearvalue??""}',
+                    style: GoogleFonts.poppins(
+                      color: AllColors.textColor,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+
               Divider(
                 height: 1, thickness: 2, color: Colors.grey,
               ),
@@ -965,6 +1069,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               Container(
                   height: 70,
                   child: MonthWiseAOVsBookingAch(context)),
+
               SizedBox(height: 3,),
 
 
@@ -1020,7 +1125,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              dashboard_view_Controller.monthWiseCommitmentList[pos].monthName??"",
+              dashboard_view_Controller.monthWiseCommitmentList[pos]?.monthname??"",
               style: GoogleFonts.poppins(
                 color: AllColors.blackColor,
                 fontSize: AllFontSize.twelve,
@@ -1028,7 +1133,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               ),
             ),
             Text(
-              '${dashboard_view_Controller.monthWiseCommitmentList[pos].monthYearValue??""}',
+              '${dashboard_view_Controller.monthWiseCommitmentList[pos]?.monthyearvalue??""}',
               style: GoogleFonts.poppins(
                 color: Colors.green,
                 fontSize: AllFontSize.twelve,
@@ -1078,7 +1183,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              dashboard_view_Controller.monthWiseCollectionCommitmentList[pos].monthName??"",
+              dashboard_view_Controller.monthWiseCollectionCommitmentList[pos]?.monthname??"",
               style: GoogleFonts.poppins(
                 color: AllColors.blackColor,
                 fontSize: AllFontSize.twelve,
@@ -1086,7 +1191,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               ),
             ),
             Text(
-              'Commitment: ${dashboard_view_Controller.monthWiseCollectionCommitmentList[pos].monthYearCollectionCommitmentValue??""}',
+              'Commitment: ${dashboard_view_Controller.monthWiseCollectionCommitmentList[pos]?.monthyearcollectioncommitmentvalue??""}',
               style: GoogleFonts.poppins(
                 color: Colors.green,
                 fontSize: AllFontSize.twelve,
@@ -1094,7 +1199,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               ),
             ),
             Text(
-              'Actual: ${dashboard_view_Controller.monthWiseCollectionCommitmentList[pos].monthYearActualCollectionValue??""}',
+              'Actual: ${dashboard_view_Controller.monthWiseCollectionCommitmentList[pos]?.monthyearactualcollectionvalue??""}',
               style: GoogleFonts.poppins(
                 color: Colors.green,
                 fontSize: AllFontSize.twelve,
@@ -1126,6 +1231,25 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
   }
 
+  Widget bindMonthWiseFinalBookingCommitment(BuildContext context){
+    ScrollController scrollController = ScrollController();
+    if(dashboard_view_Controller.monthWiseFinalBookingList.isNotEmpty){
+      return ListView.builder(
+          controller: scrollController,
+          padding: EdgeInsets.only(bottom: 10),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: dashboard_view_Controller.monthWiseFinalBookingList.value.length,
+          itemBuilder: (BuildContext context, int index) {
+            return monthWiseFinalBookingCommitment(context, index);
+          });
+    }
+    else {
+      return SizedBox();
+    }
+
+  }
+
   Widget BindDataAOvsBookingListView(BuildContext context, int pos){
     return  Container(
       margin: EdgeInsets.only(left: 10),
@@ -1144,7 +1268,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthName??"",
+              dashboard_view_Controller.monthWiseAoVsBookingList[pos]?.monthname??"",
               style: GoogleFonts.poppins(
                 color: AllColors.blackColor,
                 fontSize: AllFontSize.twelve,
@@ -1152,7 +1276,45 @@ class SalesDashboardViewscreen extends StatelessWidget{
               ),
             ),
             Text(
-              '${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearBookingAoValue??""}/ \n ${dashboard_view_Controller.monthWiseAoVsBookingList[pos].monthYearActualBookingValue??""}' ,
+              '${dashboard_view_Controller.monthWiseAoVsBookingList[pos]?.monthyearbookingaovalue??""}/ \n ${dashboard_view_Controller.monthWiseAoVsBookingList[pos]?.monthyearactualbookingvalue??""}' ,
+              style: GoogleFonts.poppins(
+                color: Colors.green,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  Widget monthWiseFinalBookingCommitment(BuildContext context, int pos){
+    return  Container(
+      margin: EdgeInsets.only(left: 10),
+      //width: 90,
+      decoration: BoxDecoration(
+        color: Colors.green[50],
+        border: Border.all(
+          color: Colors.grey, // Set the border color here
+          width: 1.0, // Adjust the border width if necessary
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child: Padding(
+        padding: EdgeInsets.only(left: 5,right: 5),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              dashboard_view_Controller.monthWiseFinalBookingList[pos]?.monthname??"",
+              style: GoogleFonts.poppins(
+                color: AllColors.blackColor,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            Text(
+              '${dashboard_view_Controller.monthWiseFinalBookingList[pos]?.monthyearvalue??""}}' ,
               style: GoogleFonts.poppins(
                 color: Colors.green,
                 fontSize: AllFontSize.twelve,
@@ -1174,17 +1336,17 @@ class SalesDashboardViewscreen extends StatelessWidget{
           child: Column(
             children: [
               SizedBox(height: 3,),
-              ListItemBind("Collection Commitment Previous Month:",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionCommitment ),
+              ListItemBind("Collection Commitment Previous Month:",dashboard_view_Controller.salesDashboardList[0].prevmonthcollectioncommitment ),
               SizedBox(height: 3,),
-              ListItemBind("Actual Collection Previous Month :",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionActual ),
+              ListItemBind("Actual Collection Previous Month :",dashboard_view_Controller.salesDashboardList[0].prevmonthcollectionactual ),
               SizedBox(height: 3,),
-              ListItemBind("Collection Plan Vs Ach.(%) :",dashboard_view_Controller.salesDashboardList[0].prevMonthCollectionPlanAchivePer ),
+              ListItemBind("Collection Plan Vs Ach.(%) :",dashboard_view_Controller.salesDashboardList[0].prevmonthcollectionplanachiveper ),
               SizedBox(height: 3,),
-              ListItemBind("Collection Commitment Current Month :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionCommitment ),
+              ListItemBind("Collection Commitment Current Month :",dashboard_view_Controller.salesDashboardList[0].currentmonthcollectioncommitment ),
               SizedBox(height: 3,),
-              ListItemBind("Actual Collection This Month  :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionActual ),
+              ListItemBind("Actual Collection This Month  :",dashboard_view_Controller.salesDashboardList[0].currentmonthcollectionactual ),
               SizedBox(height: 3,),
-              ListItemBind("Collection Plan Vs Ach.Current Month (%) :",dashboard_view_Controller.salesDashboardList[0].currentMonthCollectionPlanAchivePer ),
+              ListItemBind("Collection Plan Vs Ach.Current Month (%) :",dashboard_view_Controller.salesDashboardList[0].currentmonthcollectionplanachiveper ),
               SizedBox(height: 3,),
               Text("Monthwise Collection Plan Vs Ach. (%)",
                 style: GoogleFonts.poppins(
@@ -1201,19 +1363,19 @@ class SalesDashboardViewscreen extends StatelessWidget{
                 height: 1, thickness: 2, color: Colors.grey,
               ),
 
-              ListItemBind("Collection Plan Vs Ach. Financial Year (%) :","${dashboard_view_Controller.salesDashboardList[0].financialYearCollectionCommitmentVsActualCollectionAchive?[0].financialYearActualCollectionValue}/ "
-                  "${dashboard_view_Controller.salesDashboardList[0].financialYearCollectionCommitmentVsActualCollectionAchive?[0].financialYearCollectionCommitmentValue}="
-                  "${dashboard_view_Controller.salesDashboardList[0].financialYearCollectionCommitmentVsActualCollectionAchive?[0].financialYearCollectionValuePer}"),
+              ListItemBind("Collection Plan Vs Ach. Financial Year (%) :","${dashboard_view_Controller.salesDashboardList[0].financialyearcollectioncommitmentvsactualcollectionachive?[0]?.financialyearactualcollectionvalue}/ "
+                  "${dashboard_view_Controller.salesDashboardList[0].financialyearcollectioncommitmentvsactualcollectionachive?[0]?.financialyearcollectioncommitmentvalue}="
+                  "${dashboard_view_Controller.salesDashboardList[0].financialyearcollectioncommitmentvsactualcollectionachive?[0]?.financialyearcollectionvalueper}"),
               SizedBox(height: 3,),
-              ListItemBind("Total Bank Guarantee :",dashboard_view_Controller.salesDashboardList[0].totalBankGrantee ),
+              ListItemBind("Total Bank Guarantee :",dashboard_view_Controller.salesDashboardList[0].totalbankgrantee ),
               SizedBox(height: 3,),
-              ListItemBind("Total EMSD :",dashboard_view_Controller.salesDashboardList[0].totalEmsd ),
+              ListItemBind("Total EMSD :",dashboard_view_Controller.salesDashboardList[0].totalemsd ),
               SizedBox(height: 3,),
-              ListItemBind("Due Bank Guarantee :",dashboard_view_Controller.salesDashboardList[0].totalDueBankGrantee ),
+              ListItemBind("Due Bank Guarantee :",dashboard_view_Controller.salesDashboardList[0].totalduebankgrantee ),
               SizedBox(height: 3,),
-              ListItemBind("Due Date EMSD :",dashboard_view_Controller.salesDashboardList[0].totalDueEmsd ),
+              ListItemBind("Due Date EMSD :",dashboard_view_Controller.salesDashboardList[0].totaldueemsd ),
               SizedBox(height: 3,),
-              ListItemBind("Outstanding Financial Year :",dashboard_view_Controller.salesDashboardList[0].totalOutstanding ),
+              ListItemBind("Outstanding Financial Year :",dashboard_view_Controller.salesDashboardList[0].totaloutstanding ),
               SizedBox(height: 3,),
               ListItemBind("0–30 :",dashboard_view_Controller.salesDashboardList[0].a030 ),
               SizedBox(height: 3,),
@@ -1225,7 +1387,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
               SizedBox(height: 3,),
               ListItemBind("181-365 :",dashboard_view_Controller.salesDashboardList[0].a181365 ),
               SizedBox(height: 3,),
-              ListItemBind("366-Above :",dashboard_view_Controller.salesDashboardList[0].a366Above ),
+              ListItemBind("366-Above :",dashboard_view_Controller.salesDashboardList[0].a366above ),
               SizedBox(height: 3,),
 
 
@@ -1395,204 +1557,204 @@ class SalesDashboardViewscreen extends StatelessWidget{
     return Container(
       width: double.infinity,
       child: Column(
-        children: [
-          SizedBox(height: 10),
-          Container(
-            //margin: EdgeInsets.only(left: 15.0, right: 15.0),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: AllColors.grayColor, // Set the border color here
-                width: 1.0, // Adjust the border width if necessary
+          children: [
+            SizedBox(height: 10),
+            Container(
+              //margin: EdgeInsets.only(left: 15.0, right: 15.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: AllColors.grayColor, // Set the border color here
+                  width: 1.0, // Adjust the border width if necessary
+                ),
+                borderRadius: BorderRadius.circular(10.0),
               ),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            child: InputDecorator(
-              decoration: InputDecoration(
-                labelText: 'Date Ranges',
-                labelStyle: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontWeight: FontWeight.w700,
-                    fontSize: AllFontSize.twentee),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide(),
-                  borderRadius: BorderRadius.circular(10.0),
+              child: InputDecorator(
+                decoration: InputDecoration(
+                  labelText: 'Date Ranges',
+                  labelStyle: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontWeight: FontWeight.w700,
+                      fontSize: AllFontSize.twentee),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(),
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Day',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Day',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                          dashboard_view_Controller.DateRange('day');
+                          dashboard_view_Controller.filterCustomDateController.value.text =
+                          '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.salesDashboardData();
+                          Get.back();
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Weakly',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Weakly',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                          dashboard_view_Controller.DateRange('week');
+                          dashboard_view_Controller.filterCustomDateController.value.text =
+                          '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.salesDashboardData();
+                          Get.back();
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Month',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Month',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                          dashboard_view_Controller.DateRange('month');
+                          dashboard_view_Controller
+                              .filterCustomDateController.value.text =
+                          '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.salesDashboardData();
+                          Get.back();
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Quarterly',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Quarterly',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                          dashboard_view_Controller.DateRange('quarterly');
+                          dashboard_view_Controller.filterCustomDateController.value.text =
+                          '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.salesDashboardData();
+                          Get.back();
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Previous Financial Year',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Previous Financial Year',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                          dashboard_view_Controller.DateRange('previousfinancialyear');
+                          dashboard_view_Controller.filterCustomDateController.value.text =
+                          '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.salesDashboardData();
+                          Get.back();
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Financial Year',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Financial Year',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                          dashboard_view_Controller.DateRange('financial');
+                          dashboard_view_Controller.filterCustomDateController.value.text =
+                          '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.salesDashboardData();
+                          Get.back();
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Next Financial Year',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Next Financial Year',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                          dashboard_view_Controller.DateRange('nextfinancialyear');
+                          dashboard_view_Controller.filterCustomDateController.value.text =
+                          '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
+                          dashboard_view_Controller.pageNumber = 0;
+                          dashboard_view_Controller.salesDashboardData();
+                          Get.back();
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return RadioListTile<String>(
+                        title: const Text(
+                          'Custom',
+                          style: TextStyle(fontSize: AllFontSize.sisxteen),
+                        ),
+                        value: 'Custom',
+                        dense: true,
+                        groupValue:
+                        dashboard_view_Controller.character.value.toString(),
+                        onChanged: (value) {
+                          dashboard_view_Controller.character.value = value ?? "";
+                        },
+                      );
+                    }),
+                    Obx(() {
+                      return filterWithCustomDate(context);
+                    })
+                  ],
                 ),
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Day',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Day',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                        dashboard_view_Controller.DateRange('day');
-                        dashboard_view_Controller.filterCustomDateController.value.text =
-                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.salesDashboardData();
-                        Get.back();
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Weakly',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Weakly',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                        dashboard_view_Controller.DateRange('week');
-                        dashboard_view_Controller.filterCustomDateController.value.text =
-                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.salesDashboardData();
-                        Get.back();
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Month',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Month',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                        dashboard_view_Controller.DateRange('month');
-                        dashboard_view_Controller
-                            .filterCustomDateController.value.text =
-                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.salesDashboardData();
-                        Get.back();
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Quarterly',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Quarterly',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                        dashboard_view_Controller.DateRange('quarterly');
-                        dashboard_view_Controller.filterCustomDateController.value.text =
-                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.salesDashboardData();
-                        Get.back();
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Previous Financial Year',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Previous Financial Year',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                        dashboard_view_Controller.DateRange('previousfinancialyear');
-                        dashboard_view_Controller.filterCustomDateController.value.text =
-                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.salesDashboardData();
-                        Get.back();
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Financial Year',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Financial Year',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                        dashboard_view_Controller.DateRange('financial');
-                        dashboard_view_Controller.filterCustomDateController.value.text =
-                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.salesDashboardData();
-                        Get.back();
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Next Financial Year',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Next Financial Year',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                        dashboard_view_Controller.DateRange('nextfinancialyear');
-                        dashboard_view_Controller.filterCustomDateController.value.text =
-                        '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
-                        dashboard_view_Controller.pageNumber = 0;
-                        dashboard_view_Controller.salesDashboardData();
-                        Get.back();
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return RadioListTile<String>(
-                      title: const Text(
-                        'Custom',
-                        style: TextStyle(fontSize: AllFontSize.sisxteen),
-                      ),
-                      value: 'Custom',
-                      dense: true,
-                      groupValue:
-                      dashboard_view_Controller.character.value.toString(),
-                      onChanged: (value) {
-                        dashboard_view_Controller.character.value = value ?? "";
-                      },
-                    );
-                  }),
-                  Obx(() {
-                    return filterWithCustomDate(context);
-                  })
-                ],
-              ),
             ),
-          ),
-          //filterWithCustomDate(context),
-          /*SizedBox(height: 10),
+            //filterWithCustomDate(context),
+            /*SizedBox(height: 10),
           bindTaskStatus(context),
           SizedBox(height: 10),
           bindCustomerNameFilter(context),
@@ -1604,18 +1766,18 @@ class SalesDashboardViewscreen extends StatelessWidget{
           bindProductCategoryFilter(context),
           SizedBox(height: 10),
           bindAccountOwnerFilter(context),*/
-          SizedBox(height: 10),
-          bindClusterNameFilter(context),
-          SizedBox(height: 10),
-          bindRegionNameFilter(context),
-          SizedBox(height: 10),
-          bindEmployeeNameFilter(context),
-        ]
+            SizedBox(height: 10),
+            bindClusterNameFilter(context),
+            SizedBox(height: 10),
+            bindRegionNameFilter(context),
+            SizedBox(height: 10),
+            bindEmployeeNameFilter(context),
+          ]
       ),
     );
   }
 
-  bindEmployeeNameFilter(BuildContext context) {
+  /*bindEmployeeNameFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: dashboard_view_Controller.employee_Member_list,
@@ -1677,6 +1839,230 @@ class SalesDashboardViewscreen extends StatelessWidget{
       );
     });
 
+  }*/
+
+  Widget bindEmployeeNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    });
+
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.fullName).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <EmployeeMemberModel>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectedEmployee_Member_list);
+
+              List<EmployeeMemberModel> allItems =
+                  dashboard_view_Controller.employee_Member_list;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty
+                    ? allItems
+                    : allItems
+                    .where((c) =>
+                    (c.fullName ?? "").toLowerCase().contains(query))
+                    .toList();
+
+                final allSelected =
+                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Employee',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected
+                                      .clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No clusters found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.fullName ?? "") ==
+                                  (item.fullName ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.fullName ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.fullName ?? "") ==
+                                          (item.fullName ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectedEmployee_Member_list
+                                        .assignAll(tempSelected);
+                                    dashboard_view_Controller.EmployeeNameFilter_controller.value.text =
+                                        tempSelected.map((e) => e.fullName).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Done'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Employee Name", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Employee Name",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   filterWithCustomDate(BuildContext context) {
@@ -2214,7 +2600,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
     });
   }
 
-  /*bindClusterNameFilter(BuildContext context) {
+/*bindClusterNameFilter(BuildContext context) {
     return Obx(() {
       return DropdownSearch<ClusterModal>.multiSelection(
         items: dashboard_view_Controller.clusterGetByEmailList,

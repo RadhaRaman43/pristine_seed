@@ -531,6 +531,7 @@ class SalesCycleVm extends GetxController {
         "row_per_page": rowsPerPage,
         "page_number": page_no
       };
+      print('sale data ${data}');
       loading.value = true;
       _api.salesCycleMstGetApihit(data, sessionManagement).then(
         (onValue) {
@@ -1158,19 +1159,14 @@ class SalesCycleVm extends GetxController {
           final jsonResponse = json.decode(onValue);
           print(onValue);
           if (jsonResponse is List) {
-            List<SalesCycleByIdModel> response = jsonResponse
-                .map((e) => SalesCycleByIdModel.fromJson(e))
-                .toList();
-            if (response != null &&
-                response.length > 0 &&
-                response[0].condition?.toLowerCase() == "true") {
+            List<SalesCycleByIdModel> response = jsonResponse.map((e) => SalesCycleByIdModel.fromJson(e)).toList();
+            if (response != null && response.length > 0 && response[0].condition?.toLowerCase() == "true") {
               if (pageNumber == 0) {
                 get_SalesCycleProductById_List.clear();
               }
               get_SalesCycleProductById_List.addAll(response);
               print('listSize.....${saleCycleList.length}');
-              total_rows_sale_cyle_item =
-                  int.parse(get_SalesCycleProductById_List[0].totalRows!);
+              total_rows_sale_cyle_item = int.parse(get_SalesCycleProductById_List[0].totalRows!);
             } else {
               // Utils.showErrorToastification("Else!", "No Record Found");
               get_SalesCycleProductById_List.value = [];
@@ -2443,7 +2439,7 @@ class SalesCycleVm extends GetxController {
       if (response.statusCode == 200) {
         final bytes = response.bodyBytes;
         print("Bytes: ${bytes.length}");
-        Directory? downloadsDir;
+          Directory? downloadsDir;
         if (Platform.isAndroid) {
           downloadsDir = Directory('/storage/emulated/0/Download');
         } else if (Platform.isIOS) {
@@ -2896,7 +2892,7 @@ class SalesCycleVm extends GetxController {
                             Get.toNamed(RoutesName.approvedQuotationListScreen);
                           },
                           child: Container(
-                            child: Text(
+                            child: Text(updateQuoteAccetedCycleController.value.text == "WON"? "WON":
                               'Select Quotation',
                               style: GoogleFonts.poppins(
                                 color: AllColors.blackColor,
@@ -3853,16 +3849,12 @@ class SalesCycleVm extends GetxController {
 
     _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
       try {
-        List<GetMasterTypeModel> emp_masterResponse = (json.decode(value)
-                as List<dynamic>)
-            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>))
-            .toList();
+        List<GetMasterTypeModel> emp_masterResponse = (json.decode(value) as List<dynamic>)
+            .map((i) => GetMasterTypeModel.fromJson(i as Map<String, dynamic>)).toList();
 
-        if (emp_masterResponse.isNotEmpty &&
-            emp_masterResponse[0]?.condition.toString() == "True") {
+        if (emp_masterResponse.isNotEmpty && emp_masterResponse[0]?.condition.toString() == "True") {
           get_PurchaseTimeFrame_list.value = emp_masterResponse[0].list!;
-          print(
-              'master list....${get_PurchaseTimeFrame_list.length.toString()}');
+          print('master list....${get_PurchaseTimeFrame_list.length.toString()}');
         } else {
           get_PurchaseTimeFrame_list.value = [];
           print(

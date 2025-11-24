@@ -1,3 +1,4 @@
+/*
 class SaleDashboardDataModel {
   String? condition;
   String? message;
@@ -663,4 +664,563 @@ class FinancialYearCollectionCommitmentVsActualCollectionAchive {
         this.financialYearCollectionValuePer;
     return data;
   }
+}*/
+
+class SaleDashboardDataModel {
+  String? condition;
+  String? message;
+  String? periodfrom;
+  String? periodto;
+  String? salepersonname;
+  String? salepersonempcode;
+  String? regionhead;
+  String? clusterhead;
+  dynamic? newaccount;
+  dynamic? existingaccount;
+  dynamic? totalaccount;
+  dynamic? accountcoveredcurrentmonth;
+  dynamic? accountcoveredpreviousmonth;
+  dynamic? freshaccountcoveredcurrentmonth;
+  dynamic? totalaccountcovered;
+  dynamic? workingdays;
+  dynamic? newcall;
+  dynamic? followupcall;
+  dynamic? paymentcall;
+  dynamic? totalcall;
+  dynamic? totalorders;
+  String? ordersvalue;
+  dynamic? callrate;
+  dynamic? callratetargetachieve;
+  dynamic? newcallper;
+  dynamic? newcalltargetachieve;
+  dynamic? strikerate;
+  dynamic? strikeratetargetachieve;
+  dynamic? dsarper;
+  dynamic? dsartargetachieve;
+  String? avgordersize;
+  dynamic? targetachievement;
+  dynamic? businesstourdays;
+  String? currentmonthsuspect;
+  String? currentmonthprospect;
+  String? currentmonthpropose;
+  String? currentfinancialyearsuspect;
+  String? currentfinancialyearprospect;
+  String? currentfinancialyearpropose;
+  String? currentmonthtotalfunnel;
+  String? currentfinancialyeartotalfunnel;
+  List<MonthWiseTotalFunnel?>? monthwisetotalfunnel;
+  String? firstquatersuspect;
+  String? firstquaterprospect;
+  String? firstquaterpropose;
+  String? firstquatertotalfunnel;
+  String? secondquatersuspect;
+  String? secondquaterprospect;
+  String? secondquaterpropose;
+  String? secondquatertotalfunnel;
+  String? thirdquatersuspect;
+  String? thirdquaterprospect;
+  String? thirdquaterpropose;
+  String? thirdquatertotalfunnel;
+  String? fourthquatersuspect;
+  String? fourthquaterprospect;
+  String? fourthquaterpropose;
+  String? fourthquatertotalfunnel;
+  String? totalfunnelfinancialyear;
+  String? newprospectsgeneratedcurrentmonth;
+  String? carryforwardprospectspreviousmonths;
+  String? previousmonthorderwon;
+  String? previousmonthorderlost;
+  String? currentmonthorderwon;
+  String? currentmonthorderlost;
+  String? orderlostfy;
+  String? orderwonfy;
+  String? commitmentpremonth;
+  String? bookingcommitmentcurrentmonth;
+  String? actualbookingprevmonth;
+  String? actualbookingcurrentmonth;
+  dynamic? bookingachiveprevmonthper;
+  dynamic? bookingachivecurrentmonthper;
+  String? bookingaocurrentmonth;
+  dynamic? aovsbookingachivecurrentmonthper;
+  String? bookingaocurrentfy;
+  String? actualbookingcurrentfy;
+  dynamic? aovsbookingachivefyper;
+  dynamic? ordersabove15Lakhcurrentmonth;
+  dynamic? ordersabove20Lakhcurrentmonth;
+  dynamic? ordersabove15Lakhfy;
+  dynamic? ordersabove20Lakhfy;
+  List<MonthWiseCommitment?>? monthwisecommitment;
+  List<TotalMonthWiseCommitment?>? totalmonthwisecommitment;
+  List<MonthWiseFinalBookingCommitment?>? monthwisefinalbookingcommitment;
+  List<TotalMonthWiseFinalBookingCommitment?>? totalmonthwisefinalbookingcommitment;
+  List<MonthWiseAoVsBookingAchive?>? monthwiseaovsbookingachive;
+  String? prevmonthcollectioncommitment;
+  String? prevmonthcollectionactual;
+  String? currentmonthcollectioncommitment;
+  String? currentmonthcollectionactual;
+  dynamic? prevmonthcollectionplanachiveper;
+  dynamic? currentmonthcollectionplanachiveper;
+  List<MonthWiseCollectionCommitmentVsActualCollectionAchive?>? monthwisecollectioncommitmentvsactualcollectionachive;
+  List<FinancialYearCollectionCommitmentVsActualCollectionAchive?>? financialyearcollectioncommitmentvsactualcollectionachive;
+  String? totalbankgrantee;
+  String? totalduebankgrantee;
+  String? totalemsd;
+  String? totaldueemsd;
+  String? a030;
+  String? a3160;
+  String? a6190;
+  String? a91180;
+  String? a181365;
+  String? a366above;
+  String? totaloutstanding;
+
+  SaleDashboardDataModel({this.condition,this.message, this.periodfrom, this.periodto, this.salepersonname, this.salepersonempcode, this.regionhead, this.clusterhead, this.newaccount, this.existingaccount, this.totalaccount, this.accountcoveredcurrentmonth, this.accountcoveredpreviousmonth, this.freshaccountcoveredcurrentmonth, this.totalaccountcovered, this.workingdays, this.newcall, this.followupcall, this.paymentcall, this.totalcall, this.totalorders, this.ordersvalue, this.callrate, this.callratetargetachieve, this.newcallper, this.newcalltargetachieve, this.strikerate, this.strikeratetargetachieve, this.dsarper, this.dsartargetachieve, this.avgordersize, this.targetachievement, this.businesstourdays, this.currentmonthsuspect, this.currentmonthprospect, this.currentmonthpropose, this.currentfinancialyearsuspect, this.currentfinancialyearprospect, this.currentfinancialyearpropose, this.currentmonthtotalfunnel, this.currentfinancialyeartotalfunnel, this.monthwisetotalfunnel, this.firstquatersuspect, this.firstquaterprospect, this.firstquaterpropose, this.firstquatertotalfunnel, this.secondquatersuspect, this.secondquaterprospect, this.secondquaterpropose, this.secondquatertotalfunnel, this.thirdquatersuspect, this.thirdquaterprospect, this.thirdquaterpropose, this.thirdquatertotalfunnel, this.fourthquatersuspect, this.fourthquaterprospect, this.fourthquaterpropose, this.fourthquatertotalfunnel, this.totalfunnelfinancialyear, this.newprospectsgeneratedcurrentmonth, this.carryforwardprospectspreviousmonths, this.previousmonthorderwon, this.previousmonthorderlost, this.currentmonthorderwon, this.currentmonthorderlost, this.orderlostfy, this.orderwonfy, this.commitmentpremonth, this.bookingcommitmentcurrentmonth, this.actualbookingprevmonth, this.actualbookingcurrentmonth, this.bookingachiveprevmonthper, this.bookingachivecurrentmonthper, this.bookingaocurrentmonth, this.aovsbookingachivecurrentmonthper, this.bookingaocurrentfy, this.actualbookingcurrentfy, this.aovsbookingachivefyper, this.ordersabove15Lakhcurrentmonth, this.ordersabove20Lakhcurrentmonth, this.ordersabove15Lakhfy, this.ordersabove20Lakhfy, this.monthwisecommitment, this.totalmonthwisecommitment, this.monthwisefinalbookingcommitment, this.totalmonthwisefinalbookingcommitment, this.monthwiseaovsbookingachive, this.prevmonthcollectioncommitment, this.prevmonthcollectionactual, this.currentmonthcollectioncommitment, this.currentmonthcollectionactual, this.prevmonthcollectionplanachiveper, this.currentmonthcollectionplanachiveper, this.monthwisecollectioncommitmentvsactualcollectionachive, this.financialyearcollectioncommitmentvsactualcollectionachive, this.totalbankgrantee, this.totalduebankgrantee, this.totalemsd, this.totaldueemsd, this.a030, this.a3160, this.a6190, this.a91180, this.a181365, this.a366above, this.totaloutstanding});
+
+  SaleDashboardDataModel.fromJson(Map<String, dynamic> json) {
+    condition = json['condition'];
+    message = json['message'];
+    periodfrom = json['period_from'];
+    periodto = json['period_to'];
+    salepersonname = json['sale_person_name'];
+    salepersonempcode = json['sale_person_emp_code'];
+    regionhead = json['region_head'];
+    clusterhead = json['cluster_head'];
+    newaccount = json['new_account'];
+    existingaccount = json['existing_account'];
+    totalaccount = json['total_account'];
+    accountcoveredcurrentmonth = json['account_covered_current_month'];
+    accountcoveredpreviousmonth = json['account_covered_previous_month'];
+    freshaccountcoveredcurrentmonth = json['fresh_account_covered_current_month'];
+    totalaccountcovered = json['total_account_covered'];
+    workingdays = json['working_days'];
+    newcall = json['new_call'];
+    followupcall = json['follow_up_call'];
+    paymentcall = json['payment_call'];
+    totalcall = json['total_call'];
+    totalorders = json['total_orders'];
+    ordersvalue = json['orders_value'];
+    callrate = json['call_rate'];
+    callratetargetachieve = json['call_rate_target_achieve'];
+    newcallper = json['new_call_per'];
+    newcalltargetachieve = json['new_call_target_achieve'];
+    strikerate = json['strike_rate'];
+    strikeratetargetachieve = json['strike_rate_target_achieve'];
+    dsarper = json['dsar_per'];
+    dsartargetachieve = json['dsar_target_achieve'];
+    avgordersize = json['avg_order_size'];
+    targetachievement = json['target_achievement'];
+    businesstourdays = json['business_tour_days'];
+    currentmonthsuspect = json['current_month_suspect'];
+    currentmonthprospect = json['current_month_prospect'];
+    currentmonthpropose = json['current_month_propose'];
+    currentfinancialyearsuspect = json['current_financial_year_suspect'];
+    currentfinancialyearprospect = json['current_financial_year_prospect'];
+    currentfinancialyearpropose = json['current_financial_year_propose'];
+    currentmonthtotalfunnel = json['current_month_total_funnel'];
+    currentfinancialyeartotalfunnel = json['current_financial_year_total_funnel'];
+    if (json['month_wise_total_funnel'] != null) {
+      monthwisetotalfunnel = <MonthWiseTotalFunnel>[];
+      json['month_wise_total_funnel'].forEach((v) {
+        monthwisetotalfunnel!.add(MonthWiseTotalFunnel.fromJson(v));
+      });
+    }
+    firstquatersuspect = json['first_quater_suspect'];
+    firstquaterprospect = json['first_quater_prospect'];
+    firstquaterpropose = json['first_quater_propose'];
+    firstquatertotalfunnel = json['first_quater_total_funnel'];
+    secondquatersuspect = json['second_quater_suspect'];
+    secondquaterprospect = json['second_quater_prospect'];
+    secondquaterpropose = json['second_quater_propose'];
+    secondquatertotalfunnel = json['second_quater_total_funnel'];
+    thirdquatersuspect = json['third_quater_suspect'];
+    thirdquaterprospect = json['third_quater_prospect'];
+    thirdquaterpropose = json['third_quater_propose'];
+    thirdquatertotalfunnel = json['third_quater_total_funnel'];
+    fourthquatersuspect = json['fourth_quater_suspect'];
+    fourthquaterprospect = json['fourth_quater_prospect'];
+    fourthquaterpropose = json['fourth_quater_propose'];
+    fourthquatertotalfunnel = json['fourth_quater_total_funnel'];
+    totalfunnelfinancialyear = json['total_funnel_financial_year'];
+    newprospectsgeneratedcurrentmonth = json['new_prospects_generated_current_month'];
+    carryforwardprospectspreviousmonths = json['carry_forward_prospects_previous_months'];
+    previousmonthorderwon = json['previous_month_order_won'];
+    previousmonthorderlost = json['previous_month_order_lost'];
+    currentmonthorderwon = json['current_month_order_won'];
+    currentmonthorderlost = json['current_month_order_lost'];
+    orderlostfy = json['order_lost_fy'];
+    orderwonfy = json['order_won_fy'];
+    commitmentpremonth = json['commitment_pre_month'];
+    bookingcommitmentcurrentmonth = json['booking_commitment_current_month'];
+    actualbookingprevmonth = json['actual_booking_prev_month'];
+    actualbookingcurrentmonth = json['actual_booking_current_month'];
+    bookingachiveprevmonthper = json['booking_achive_prev_month_per'];
+    bookingachivecurrentmonthper = json['booking_achive_current_month_per'];
+    bookingaocurrentmonth = json['booking_ao_current_month'];
+    aovsbookingachivecurrentmonthper = json['ao_vs_booking_achive_current_month_per'];
+    bookingaocurrentfy = json['booking_ao_current_fy'];
+    actualbookingcurrentfy = json['actual_booking_current_fy'];
+    aovsbookingachivefyper = json['ao_vs_booking_achive_fy_per'];
+    ordersabove15Lakhcurrentmonth = json['orders_above_15_Lakh_current_month'];
+    ordersabove20Lakhcurrentmonth = json['orders_above_20_Lakh_current_month'];
+    ordersabove15Lakhfy = json['orders_above_15_Lakh_fy'];
+    ordersabove20Lakhfy = json['orders_above_20_Lakh_fy'];
+    if (json['month_wise_commitment'] != null) {
+      monthwisecommitment = <MonthWiseCommitment>[];
+      json['month_wise_commitment'].forEach((v) {
+        monthwisecommitment!.add(MonthWiseCommitment.fromJson(v));
+      });
+    }
+    if (json['total_month_wise_commitment'] != null) {
+      totalmonthwisecommitment = <TotalMonthWiseCommitment>[];
+      json['total_month_wise_commitment'].forEach((v) {
+        totalmonthwisecommitment!.add(TotalMonthWiseCommitment.fromJson(v));
+      });
+    }
+    if (json['month_wise_final_booking_commitment'] != null) {
+      monthwisefinalbookingcommitment = <MonthWiseFinalBookingCommitment>[];
+      json['month_wise_final_booking_commitment'].forEach((v) {
+        monthwisefinalbookingcommitment!.add(MonthWiseFinalBookingCommitment.fromJson(v));
+      });
+    }
+    if (json['total_month_wise_final_booking_commitment'] != null) {
+      totalmonthwisefinalbookingcommitment = <TotalMonthWiseFinalBookingCommitment>[];
+      json['total_month_wise_final_booking_commitment'].forEach((v) {
+        totalmonthwisefinalbookingcommitment!.add(TotalMonthWiseFinalBookingCommitment.fromJson(v));
+      });
+    }
+    if (json['month_wise_ao_vs_booking_achive'] != null) {
+      monthwiseaovsbookingachive = <MonthWiseAoVsBookingAchive>[];
+      json['month_wise_ao_vs_booking_achive'].forEach((v) {
+        monthwiseaovsbookingachive!.add(MonthWiseAoVsBookingAchive.fromJson(v));
+      });
+    }
+    prevmonthcollectioncommitment = json['prev_month_collection_commitment'];
+    prevmonthcollectionactual = json['prev_month_collection_actual'];
+    currentmonthcollectioncommitment = json['current_month_collection_commitment'];
+    currentmonthcollectionactual = json['current_month_collection_actual'];
+    prevmonthcollectionplanachiveper = json['prev_month_collection_plan_achive_per'];
+    currentmonthcollectionplanachiveper = json['current_month_collection_plan_achive_per'];
+    if (json['month_wise_collection_commitment_vs_actual_collection_achive'] != null) {
+      monthwisecollectioncommitmentvsactualcollectionachive = <MonthWiseCollectionCommitmentVsActualCollectionAchive>[];
+      json['month_wise_collection_commitment_vs_actual_collection_achive'].forEach((v) {
+        monthwisecollectioncommitmentvsactualcollectionachive!.add(MonthWiseCollectionCommitmentVsActualCollectionAchive.fromJson(v));
+      });
+    }
+    if (json['financial_year_collection_commitment_vs_actual_collection_achive'] != null) {
+      financialyearcollectioncommitmentvsactualcollectionachive = <FinancialYearCollectionCommitmentVsActualCollectionAchive>[];
+      json['financial_year_collection_commitment_vs_actual_collection_achive'].forEach((v) {
+        financialyearcollectioncommitmentvsactualcollectionachive!.add(FinancialYearCollectionCommitmentVsActualCollectionAchive.fromJson(v));
+      });
+    }
+    totalbankgrantee = json['total_bank_grantee'];
+    totalduebankgrantee = json['total_due_bank_grantee'];
+    totalemsd = json['total_emsd'];
+    totaldueemsd = json['total_due_emsd'];
+    a030 = json['a_0_30'];
+    a3160 = json['a_31_60'];
+    a6190 = json['a_61_90'];
+    a91180 = json['a_91_180'];
+    a181365 = json['a_181_365'];
+    a366above = json['a_366_above'];
+    totaloutstanding = json['total_outstanding'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['condition'] = condition;
+    data['message'] = this.message;
+    data['period_from'] = periodfrom;
+    data['period_to'] = periodto;
+    data['sale_person_name'] = salepersonname;
+    data['sale_person_emp_code'] = salepersonempcode;
+    data['region_head'] = regionhead;
+    data['cluster_head'] = clusterhead;
+    data['new_account'] = newaccount;
+    data['existing_account'] = existingaccount;
+    data['total_account'] = totalaccount;
+    data['account_covered_current_month'] = accountcoveredcurrentmonth;
+    data['account_covered_previous_month'] = accountcoveredpreviousmonth;
+    data['fresh_account_covered_current_month'] = freshaccountcoveredcurrentmonth;
+    data['total_account_covered'] = totalaccountcovered;
+    data['working_days'] = workingdays;
+    data['new_call'] = newcall;
+    data['follow_up_call'] = followupcall;
+    data['payment_call'] = paymentcall;
+    data['total_call'] = totalcall;
+    data['total_orders'] = totalorders;
+    data['orders_value'] = ordersvalue;
+    data['call_rate'] = callrate;
+    data['call_rate_target_achieve'] = callratetargetachieve;
+    data['new_call_per'] = newcallper;
+    data['new_call_target_achieve'] = newcalltargetachieve;
+    data['strike_rate'] = strikerate;
+    data['strike_rate_target_achieve'] = strikeratetargetachieve;
+    data['dsar_per'] = dsarper;
+    data['dsar_target_achieve'] = dsartargetachieve;
+    data['avg_order_size'] = avgordersize;
+    data['target_achievement'] = targetachievement;
+    data['business_tour_days'] = businesstourdays;
+    data['current_month_suspect'] = currentmonthsuspect;
+    data['current_month_prospect'] = currentmonthprospect;
+    data['current_month_propose'] = currentmonthpropose;
+    data['current_financial_year_suspect'] = currentfinancialyearsuspect;
+    data['current_financial_year_prospect'] = currentfinancialyearprospect;
+    data['current_financial_year_propose'] = currentfinancialyearpropose;
+    data['current_month_total_funnel'] = currentmonthtotalfunnel;
+    data['current_financial_year_total_funnel'] = currentfinancialyeartotalfunnel;
+    data['month_wise_total_funnel'] =monthwisetotalfunnel != null ? monthwisetotalfunnel!.map((v) => v?.toJson()).toList() : null;
+    data['first_quater_suspect'] = firstquatersuspect;
+    data['first_quater_prospect'] = firstquaterprospect;
+    data['first_quater_propose'] = firstquaterpropose;
+    data['first_quater_total_funnel'] = firstquatertotalfunnel;
+    data['second_quater_suspect'] = secondquatersuspect;
+    data['second_quater_prospect'] = secondquaterprospect;
+    data['second_quater_propose'] = secondquaterpropose;
+    data['second_quater_total_funnel'] = secondquatertotalfunnel;
+    data['third_quater_suspect'] = thirdquatersuspect;
+    data['third_quater_prospect'] = thirdquaterprospect;
+    data['third_quater_propose'] = thirdquaterpropose;
+    data['third_quater_total_funnel'] = thirdquatertotalfunnel;
+    data['fourth_quater_suspect'] = fourthquatersuspect;
+    data['fourth_quater_prospect'] = fourthquaterprospect;
+    data['fourth_quater_propose'] = fourthquaterpropose;
+    data['fourth_quater_total_funnel'] = fourthquatertotalfunnel;
+    data['total_funnel_financial_year'] = totalfunnelfinancialyear;
+    data['new_prospects_generated_current_month'] = newprospectsgeneratedcurrentmonth;
+    data['carry_forward_prospects_previous_months'] = carryforwardprospectspreviousmonths;
+    data['previous_month_order_won'] = previousmonthorderwon;
+    data['previous_month_order_lost'] = previousmonthorderlost;
+    data['current_month_order_won'] = currentmonthorderwon;
+    data['current_month_order_lost'] = currentmonthorderlost;
+    data['order_lost_fy'] = orderlostfy;
+    data['order_won_fy'] = orderwonfy;
+    data['commitment_pre_month'] = commitmentpremonth;
+    data['booking_commitment_current_month'] = bookingcommitmentcurrentmonth;
+    data['actual_booking_prev_month'] = actualbookingprevmonth;
+    data['actual_booking_current_month'] = actualbookingcurrentmonth;
+    data['booking_achive_prev_month_per'] = bookingachiveprevmonthper;
+    data['booking_achive_current_month_per'] = bookingachivecurrentmonthper;
+    data['booking_ao_current_month'] = bookingaocurrentmonth;
+    data['ao_vs_booking_achive_current_month_per'] = aovsbookingachivecurrentmonthper;
+    data['booking_ao_current_fy'] = bookingaocurrentfy;
+    data['actual_booking_current_fy'] = actualbookingcurrentfy;
+    data['ao_vs_booking_achive_fy_per'] = aovsbookingachivefyper;
+    data['orders_above_15_Lakh_current_month'] = ordersabove15Lakhcurrentmonth;
+    data['orders_above_20_Lakh_current_month'] = ordersabove20Lakhcurrentmonth;
+    data['orders_above_15_Lakh_fy'] = ordersabove15Lakhfy;
+    data['orders_above_20_Lakh_fy'] = ordersabove20Lakhfy;
+    data['month_wise_commitment'] =monthwisecommitment != null ? monthwisecommitment!.map((v) => v?.toJson()).toList() : null;
+    data['total_month_wise_commitment'] =totalmonthwisecommitment != null ? totalmonthwisecommitment!.map((v) => v?.toJson()).toList() : null;
+    data['month_wise_final_booking_commitment'] =monthwisefinalbookingcommitment != null ? monthwisefinalbookingcommitment!.map((v) => v?.toJson()).toList() : null;
+    data['total_month_wise_final_booking_commitment'] =totalmonthwisefinalbookingcommitment != null ? totalmonthwisefinalbookingcommitment!.map((v) => v?.toJson()).toList() : null;
+    data['month_wise_ao_vs_booking_achive'] =monthwiseaovsbookingachive != null ? monthwiseaovsbookingachive!.map((v) => v?.toJson()).toList() : null;
+    data['prev_month_collection_commitment'] = prevmonthcollectioncommitment;
+    data['prev_month_collection_actual'] = prevmonthcollectionactual;
+    data['current_month_collection_commitment'] = currentmonthcollectioncommitment;
+    data['current_month_collection_actual'] = currentmonthcollectionactual;
+    data['prev_month_collection_plan_achive_per'] = prevmonthcollectionplanachiveper;
+    data['current_month_collection_plan_achive_per'] = currentmonthcollectionplanachiveper;
+    data['month_wise_collection_commitment_vs_actual_collection_achive'] =monthwisecollectioncommitmentvsactualcollectionachive != null ? monthwisecollectioncommitmentvsactualcollectionachive!.map((v) => v?.toJson()).toList() : null;
+    data['financial_year_collection_commitment_vs_actual_collection_achive'] =financialyearcollectioncommitmentvsactualcollectionachive != null ? financialyearcollectioncommitmentvsactualcollectionachive!.map((v) => v?.toJson()).toList() : null;
+    data['total_bank_grantee'] = totalbankgrantee;
+    data['total_due_bank_grantee'] = totalduebankgrantee;
+    data['total_emsd'] = totalemsd;
+    data['total_due_emsd'] = totaldueemsd;
+    data['a_0_30'] = a030;
+    data['a_31_60'] = a3160;
+    data['a_61_90'] = a6190;
+    data['a_91_180'] = a91180;
+    data['a_181_365'] = a181365;
+    data['a_366_above'] = a366above;
+    data['total_outstanding'] = totaloutstanding;
+    return data;
+  }
 }
+
+class TotalMonthWiseCommitment {
+  String? monthyearvalue;
+
+  TotalMonthWiseCommitment({this.monthyearvalue});
+
+  TotalMonthWiseCommitment.fromJson(Map<String, dynamic> json) {
+    monthyearvalue = json['month_year_value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['month_year_value'] = monthyearvalue;
+    return data;
+  }
+}
+
+class TotalMonthWiseFinalBookingCommitment {
+  String? monthyearvalue;
+
+  TotalMonthWiseFinalBookingCommitment({this.monthyearvalue});
+
+  TotalMonthWiseFinalBookingCommitment.fromJson(Map<String, dynamic> json) {
+    monthyearvalue = json['month_year_value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['month_year_value'] = monthyearvalue;
+    return data;
+  }
+}
+class FinancialYearCollectionCommitmentVsActualCollectionAchive {
+  String? financialyearcollectioncommitmentvalue;
+  String? financialyearactualcollectionvalue;
+  dynamic? financialyearcollectionvalueper;
+
+  FinancialYearCollectionCommitmentVsActualCollectionAchive({this.financialyearcollectioncommitmentvalue, this.financialyearactualcollectionvalue, this.financialyearcollectionvalueper});
+
+  FinancialYearCollectionCommitmentVsActualCollectionAchive.fromJson(Map<String, dynamic> json) {
+    financialyearcollectioncommitmentvalue = json['financial_year_collection_commitment_value'];
+    financialyearactualcollectionvalue = json['financial_year_actual_collection_value'];
+    financialyearcollectionvalueper = json['financial_year_collection_value_per'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['financial_year_collection_commitment_value'] = financialyearcollectioncommitmentvalue;
+    data['financial_year_actual_collection_value'] = financialyearactualcollectionvalue;
+    data['financial_year_collection_value_per'] = financialyearcollectionvalueper;
+    return data;
+  }
+}
+
+class MonthWiseAoVsBookingAchive {
+  String? monthyeardate;
+  String? monthyearname;
+  String? monthname;
+  String? monthyearbookingaovalue;
+  String? monthyearactualbookingvalue;
+  String? monthyearaoachivevalue;
+
+  MonthWiseAoVsBookingAchive({this.monthyeardate, this.monthyearname, this.monthname, this.monthyearbookingaovalue, this.monthyearactualbookingvalue, this.monthyearaoachivevalue});
+
+  MonthWiseAoVsBookingAchive.fromJson(Map<String, dynamic> json) {
+    monthyeardate = json['month_year_date'];
+    monthyearname = json['month_year_name'];
+    monthname = json['month_name'];
+    monthyearbookingaovalue = json['month_year_booking_ao_value'];
+    monthyearactualbookingvalue = json['month_year_actual_booking_value'];
+    monthyearaoachivevalue = json['month_year_ao_achive_value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['month_year_date'] = monthyeardate;
+    data['month_year_name'] = monthyearname;
+    data['month_name'] = monthname;
+    data['month_year_booking_ao_value'] = monthyearbookingaovalue;
+    data['month_year_actual_booking_value'] = monthyearactualbookingvalue;
+    data['month_year_ao_achive_value'] = monthyearaoachivevalue;
+    return data;
+  }
+}
+
+class MonthWiseCollectionCommitmentVsActualCollectionAchive {
+  String? monthyeardate;
+  String? monthyearname;
+  String? monthname;
+  String? monthyearcollectioncommitmentvalue;
+  String? monthyearactualcollectionvalue;
+
+  MonthWiseCollectionCommitmentVsActualCollectionAchive({this.monthyeardate, this.monthyearname, this.monthname, this.monthyearcollectioncommitmentvalue, this.monthyearactualcollectionvalue});
+
+  MonthWiseCollectionCommitmentVsActualCollectionAchive.fromJson(Map<String, dynamic> json) {
+    monthyeardate = json['month_year_date'];
+    monthyearname = json['month_year_name'];
+    monthname = json['month_name'];
+    monthyearcollectioncommitmentvalue = json['month_year_collection_commitment_value'];
+    monthyearactualcollectionvalue = json['month_year_actual_collection_value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['month_year_date'] = monthyeardate;
+    data['month_year_name'] = monthyearname;
+    data['month_name'] = monthname;
+    data['month_year_collection_commitment_value'] = monthyearcollectioncommitmentvalue;
+    data['month_year_actual_collection_value'] = monthyearactualcollectionvalue;
+    return data;
+  }
+}
+
+class MonthWiseCommitment {
+  String? monthyeardate;
+  String? monthyearname;
+  String? monthname;
+  String? monthyearvalue;
+
+  MonthWiseCommitment({this.monthyeardate, this.monthyearname, this.monthname, this.monthyearvalue});
+
+  MonthWiseCommitment.fromJson(Map<String, dynamic> json) {
+    monthyeardate = json['month_year_date'];
+    monthyearname = json['month_year_name'];
+    monthname = json['month_name'];
+    monthyearvalue = json['month_year_value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['month_year_date'] = monthyeardate;
+    data['month_year_name'] = monthyearname;
+    data['month_name'] = monthname;
+    data['month_year_value'] = monthyearvalue;
+    return data;
+  }
+}
+
+class MonthWiseFinalBookingCommitment {
+  String? monthyeardate;
+  String? monthyearname;
+  String? monthname;
+  String? monthyearvalue;
+
+  MonthWiseFinalBookingCommitment({this.monthyeardate, this.monthyearname, this.monthname, this.monthyearvalue});
+
+  MonthWiseFinalBookingCommitment.fromJson(Map<String, dynamic> json) {
+    monthyeardate = json['month_year_date'];
+    monthyearname = json['month_year_name'];
+    monthname = json['month_name'];
+    monthyearvalue = json['month_year_value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['month_year_date'] = monthyeardate;
+    data['month_year_name'] = monthyearname;
+    data['month_name'] = monthname;
+    data['month_year_value'] = monthyearvalue;
+    return data;
+  }
+}
+
+class MonthWiseTotalFunnel {
+  String? monthyeardate;
+  String? monthyearname;
+  String? monthname;
+  String? monthyearvalue;
+
+  MonthWiseTotalFunnel({this.monthyeardate, this.monthyearname, this.monthname, this.monthyearvalue});
+
+  MonthWiseTotalFunnel.fromJson(Map<String, dynamic> json) {
+    monthyeardate = json['month_year_date'];
+    monthyearname = json['month_year_name'];
+    monthname = json['month_name'];
+    monthyearvalue = json['month_year_value'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['month_year_date'] = monthyeardate;
+    data['month_year_name'] = monthyearname;
+    data['month_name'] = monthname;
+    data['month_year_value'] = monthyearvalue;
+    return data;
+  }
+}
+

@@ -5,6 +5,8 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.CAMERA"/>
@@ -17,11 +19,10 @@
     <uses-permission android:name="android.permission.ACCESS_COURSE_LOCATION"/>
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission android:name="android.permission.ACTION_REQUEST_SCHEDULE_EXACT_ALARM " />
-    <uses-permission android:name="android.permission.USE_EXACT_ALARM"
-        tools:ignore="ExactAlarm" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" tools:ignore="ExactAlarm" />
+
     <application
+        android:requestLegacyExternalStorage="true"
         android:label="Service Management"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">

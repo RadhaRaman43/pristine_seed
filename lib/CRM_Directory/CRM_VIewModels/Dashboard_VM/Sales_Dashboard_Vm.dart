@@ -58,10 +58,11 @@ class SalesDashboardVm extends GetxController{
 
 
   RxList<SaleDashboardDataModel> salesDashboardList = <SaleDashboardDataModel>[].obs;
-  RxList<MonthWiseTotalFunnel> monthWiseTotalFunnelList = <MonthWiseTotalFunnel>[].obs;
-  RxList<MonthWiseCommitment> monthWiseCommitmentList = <MonthWiseCommitment>[].obs;
-  RxList<MonthWiseCollectionCommitmentVsActualCollectionAchive> monthWiseCollectionCommitmentList = <MonthWiseCollectionCommitmentVsActualCollectionAchive>[].obs;
-  RxList<MonthWiseAoVsBookingAchive> monthWiseAoVsBookingList = <MonthWiseAoVsBookingAchive>[].obs;
+  RxList<MonthWiseTotalFunnel?> monthWiseTotalFunnelList = <MonthWiseTotalFunnel>[].obs;
+  RxList<MonthWiseCommitment?> monthWiseCommitmentList = <MonthWiseCommitment>[].obs;
+  RxList<MonthWiseCollectionCommitmentVsActualCollectionAchive?> monthWiseCollectionCommitmentList = <MonthWiseCollectionCommitmentVsActualCollectionAchive>[].obs;
+  RxList<MonthWiseAoVsBookingAchive?> monthWiseAoVsBookingList = <MonthWiseAoVsBookingAchive>[].obs;
+  RxList<MonthWiseFinalBookingCommitment?> monthWiseFinalBookingList = <MonthWiseFinalBookingCommitment>[].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
 
@@ -251,27 +252,29 @@ class SalesDashboardVm extends GetxController{
             .map((e) => SaleDashboardDataModel.fromJson(e))
             .toList();
 
-        if (response.isNotEmpty &&
-            response[0].condition?.toLowerCase() == "true") {
+        if (response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
           salesDashboardList.value = response;
-          monthWiseTotalFunnelList.value = response[0].monthWiseTotalFunnel ?? [];
+          monthWiseTotalFunnelList.value = response[0].monthwisetotalfunnel ?? [];
           print('length.....${monthWiseTotalFunnelList.length}');
-          monthWiseCommitmentList.value = response[0].monthWiseCommitment ?? [];
-          monthWiseCollectionCommitmentList.value = response[0].monthWiseCollectionCommitmentVsActualCollectionAchive ?? [];
-          monthWiseAoVsBookingList.value = response[0].monthWiseAoVsBookingAchive ?? [];
-          ClusterName_Controller.value.text = response[0].clusterHead??"";
-          RegionName_Controller.value.text = response[0].regionHead??"";
-          SalesPersonName_Controller.value.text = response[0].salePersonName??"";
-          SalesPersonER_Code_Controller.value.text = response[0].salePersonEmpCode??"";
-          PeriodFrom_Controller.value.text = response[0].periodFrom??"";
-          PeriodTo_Controller.value.text = response[0].periodTo??"";
-          print('baisgdiuasgi du${response[0].clusterHead??""}');
+
+          monthWiseCommitmentList.value = response[0].monthwisecommitment ?? [];
+          monthWiseCollectionCommitmentList.value = response[0].monthwisecollectioncommitmentvsactualcollectionachive ?? [];
+          monthWiseAoVsBookingList.value = response[0].monthwiseaovsbookingachive ?? [];
+          monthWiseFinalBookingList.value = response[0].monthwisefinalbookingcommitment ?? [];
+          ClusterName_Controller.value.text = response[0].clusterhead??"";
+          RegionName_Controller.value.text = response[0].regionhead??"";
+          SalesPersonName_Controller.value.text = response[0].salepersonname??"";
+          SalesPersonER_Code_Controller.value.text = response[0].salepersonempcode??"";
+          PeriodFrom_Controller.value.text = response[0].periodfrom??"";
+          PeriodTo_Controller.value.text = response[0].periodto??"";
+          print('baisgdiuasgi du${response[0].clusterhead??""}');
 
         } else {
           Utils.showErrorToastification(
               "False Message !", response[0].message.toString());
           monthWiseTotalFunnelList.value = [];
           monthWiseCommitmentList.value = [];
+          monthWiseFinalBookingList.value = [];
           monthWiseAoVsBookingList.value = [];
           monthWiseCollectionCommitmentList.value = [];
         }
@@ -388,6 +391,12 @@ class SalesDashboardVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterNameFilter_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
           }else {
             loading.value = false;
             clusterGetByEmailList.value=[];

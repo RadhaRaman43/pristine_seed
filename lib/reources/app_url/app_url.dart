@@ -293,6 +293,7 @@ class AppUrl {
 
       static const String SalesCycleMstDelete="$BASE_URL/api/CRM/SalesCycle/SalesCycleMstDelete";
 
+
    //todo SalesAdvise
      static const String salesAdviceHeaderGet="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGet";
      static const String salesAdviceHeaderGetBySalesAdviceId="$BASE_URL/api/CRM/SalesAdvice/SalesAdviceHeaderGetBySalesAdviceId";

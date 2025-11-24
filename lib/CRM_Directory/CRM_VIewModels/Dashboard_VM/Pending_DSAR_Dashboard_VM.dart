@@ -504,6 +504,12 @@ class PendingDsarDashboardVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
           }else {
             loading.value = false;
             clusterGetByEmailList.value=[];
