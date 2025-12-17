@@ -29,7 +29,7 @@ class CommitDashboardVm extends GetxController{
   RxString character = 'Month'.obs;
   RxString rodName = ''.obs;
   RxString geoValueName = ''.obs;
-
+  RxString isAdminWritePermission = "".obs;
   int pageNumber = 0;
   int rowsPerPage = 10;
   RxInt total_rows = 0.obs;
@@ -50,8 +50,8 @@ class CommitDashboardVm extends GetxController{
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
-  RxList<String> quoteAcceptedList = ["ALL","WON", "LOSS"].obs;
-  RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
+  RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
+  RxList<String> isCommitList = ["All","Yes", "No"].obs;
 
   var filterCustomDateController=TextEditingController().obs;
   var AccountOwner_controller=TextEditingController().obs;
@@ -73,6 +73,7 @@ class CommitDashboardVm extends GetxController{
   var RegionNameForApi;
   var QuoteAcceptedForApi;
   var StageNameForApi;
+  var isCommitForApi;
   var EmployeeEmailIdForApi = '';
 
   @override
@@ -81,12 +82,15 @@ class CommitDashboardVm extends GetxController{
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
     selectedSalesStageStatusList.value = ["All"];
+    QuoteAccepted_controller.value.text = "All";
+    IsCommit_controller.value.text = 'All';
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //commitDashboardData();
-    getEmployeeMemberApi();
+    isAdminWritePermission == 1 ? getEmployeeMemberApi(): getEmployeeTeamMemberGetByClusterRegionApi();
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
     getAccountMaster(pageNumber);
@@ -208,13 +212,24 @@ class CommitDashboardVm extends GetxController{
           .join('||');
     }
 
+    if (IsCommit_controller.value.text.isNotEmpty) {
+      if(IsCommit_controller.value.text == 'ALL'){
+        isCommitForApi = '-1';
+      }else if(IsCommit_controller.value.text == 'YES'){
+        isCommitForApi = '1';
+      }else if(IsCommit_controller.value.text == 'NO'){
+        isCommitForApi = '0';
+      }
+
+    }
+
     try {
       Map<String, String> data = {
         "flag": selectedOption.value,
         "email_id": email,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
-        "filter_commit": "1",
+        "filter_commit": (IsCommit_controller.value.text.isEmpty||IsCommit_controller.value.text=='All')?"-1":isCommitForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
@@ -268,7 +283,7 @@ class CommitDashboardVm extends GetxController{
         "emp_email_id": EmployeeEmailIdForApi.isEmpty?"":EmployeeEmailIdForApi,
         "start_date": formattedStartDate.value,
         "end_date": formattedEndDate.value,
-        "filter_commit": "1",
+        "filter_commit": (IsCommit_controller.value.text.isEmpty||IsCommit_controller.value.text=='All')?"-1":isCommitForApi,
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
@@ -326,6 +341,57 @@ class CommitDashboardVm extends GetxController{
     loading.value = true;
     try {
       _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+
+  getEmployeeTeamMemberGetByClusterRegionApi() {
+    Map data = {
+      "cluster_name": "",
+      "email_id": email,
+      "region_name": "",
+      "flag": "GeoLevelLowerWithClusterRegion"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeTeamMemberGetByClusterRegion(data, sessionManagement).then(
             (value) {
           print(value);
           final JsonResponse = json.decode(value);
@@ -563,12 +629,12 @@ class CommitDashboardVm extends GetxController{
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
     QuoteAccepted_controller.value.text = "All";
-    IsCommit_controller.value.text = 'ALL';
+    IsCommit_controller.value.text = 'All';
     StageName_controller.value.clear();
-    clusterName_controller.value.clear();
+  //  clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     filter_created_on_cont.value.clear();
-    RegionName_controller.value.clear();
+  //  RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];
     SelectedEmployee_Member_list.value = [];
     SelectedProductCategory_list.value = [];

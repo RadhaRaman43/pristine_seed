@@ -39,6 +39,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
   static String _displayCommitStatusForOption(String option) => option;
 
+  final NumberFormat formatter = NumberFormat.decimalPattern('en_IN');
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -487,14 +489,14 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         sideTitles: SideTitles(
                           showTitles: true,
                           interval: interval,
-                          reservedSize: 60,
+                          reservedSize: 80,
                           getTitlesWidget: (value, meta) {
                             // Skip top label
                             if (value == meta.max) {
                               return const SizedBox.shrink();
                             }
                             return Text(
-                              value.toInt().toString(),
+                                formatter.format(value.toInt()),
                               style: const TextStyle(fontSize: 12, color: Colors.black),
                             );
                           },
@@ -587,9 +589,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
       final record = dashboard_view_Controller.commitDashboardRecordList[index];
       double Width = 50;
       if(dashboard_view_Controller.userType == 'Frontliners'){
-        Width = 100;
+        Width = 85;
       }else if(dashboard_view_Controller.userType == 'Branch Head' && dashboard_view_Controller.selectedOption == 'Region') {
-        Width = 100;
+        Width = 85;
       }else{
         Width = 50;
       }
@@ -627,7 +629,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
           quarterTurns: 4,
           child: Column(
             children: [
-              Text('${TotalCall.toString()}', style: TextStyle(
+              Text('${formatter.format(TotalCall)}', style: TextStyle(
                   fontSize: 10, color: AllColors.redColor
               ),),
               Text(
@@ -842,11 +844,11 @@ class CommitDashboardViewscreen extends StatelessWidget{
                     child: Tooltip(
                       message: dashboard_view_Controller
                           .commitDashboardUserWiseDataList[position]
-                          .taskId!,
+                          .taskId??"",
                       child: Text(
                         dashboard_view_Controller
                             .commitDashboardUserWiseDataList[position]
-                            .taskId!,
+                            .taskId??"",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -1540,8 +1542,6 @@ class CommitDashboardViewscreen extends StatelessWidget{
             ),
           ),
           SizedBox(height: 10),
-          bindFilterCreatedOn(context),
-          SizedBox(height: 10),
           bindSalesStageStatus(context),
           SizedBox(height: 10),
           bindQuoteSubmitted(context),
@@ -1557,6 +1557,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
           bindRegionNameFilter(context),
           SizedBox(height: 10),
           bindAccountOwnerFilter(context),
+          SizedBox(height: 10),
+          bindFilterCreatedOn(context),
 
 
 
@@ -1991,7 +1993,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Select Account Owner',
+                                  'Sales Cycle Owner',
                                   style: GoogleFonts.poppins(
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
                                 ),
@@ -2120,7 +2122,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Account Owner", // 👈 Label restored here
+            labelText:selectedText != null
+                ?  "Sales Cycle Owner": "", // 👈 Label restored here
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -2132,7 +2135,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
               Expanded(
                 child: selectedText == null
                     ? Text(
-                  "Account Owner",
+                  "Sales Cycle Owner",
                   style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: AllFontSize.sisxteen,

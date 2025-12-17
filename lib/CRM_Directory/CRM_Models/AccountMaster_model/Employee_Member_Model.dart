@@ -36,6 +36,20 @@ class EmployeeMemberModel {
   String? level;
   String? geoName;
   String? geoValue;
+  int? isAdminWritePermission;
+  int? isHeadofficePermission;
+  String? clusterName;
+  String? regionName;
+  String? salesPersonEmpCode;
+  String? salesPersonName;
+  String? calendarCode;
+  String? attendanceStartDate;
+  int? isTargetConsidered;
+  int? isDownloadPermission;
+  String? userType;
+  String? userTypeName;
+  String? locationName;
+  String? userFullName;
 
   EmployeeMemberModel(
       {this.condition,
@@ -74,7 +88,21 @@ class EmployeeMemberModel {
         this.isGeoTag,
         this.level,
         this.geoName,
-        this.geoValue});
+        this.geoValue,
+        this.isAdminWritePermission,
+        this.isHeadofficePermission,
+        this.clusterName,
+        this.regionName,
+        this.salesPersonEmpCode,
+        this.salesPersonName,
+        this.calendarCode,
+        this.attendanceStartDate,
+        this.isTargetConsidered,
+        this.isDownloadPermission,
+        this.userType,
+        this.userTypeName,
+        this.locationName,
+        this.userFullName});
 
   EmployeeMemberModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -114,6 +142,20 @@ class EmployeeMemberModel {
     level = json['level'];
     geoName = json['geo_name'];
     geoValue = json['geo_value'];
+    isAdminWritePermission = json['is_admin_write_permission'];
+    isHeadofficePermission = json['is_headoffice_permission'];
+    clusterName = json['cluster_name'];
+    regionName = json['region_name'];
+    salesPersonEmpCode = json['sales_person_emp_code'];
+    salesPersonName = json['sales_person_name'];
+    calendarCode = json['calendar_code'];
+    attendanceStartDate = json['attendance_start_date'];
+    isTargetConsidered = json['is_target_considered'];
+    isDownloadPermission = json['is_download_permission'];
+    userType = json['user_type'];
+    userTypeName = json['user_type_name'];
+    locationName = json['location_name'];
+    userFullName = json['user_full_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -155,6 +197,20 @@ class EmployeeMemberModel {
     data['level'] = this.level;
     data['geo_name'] = this.geoName;
     data['geo_value'] = this.geoValue;
+    data['is_admin_write_permission'] = this.isAdminWritePermission;
+    data['is_headoffice_permission'] = this.isHeadofficePermission;
+    data['cluster_name'] = this.clusterName;
+    data['region_name'] = this.regionName;
+    data['sales_person_emp_code'] = this.salesPersonEmpCode;
+    data['sales_person_name'] = this.salesPersonName;
+    data['calendar_code'] = this.calendarCode;
+    data['attendance_start_date'] = this.attendanceStartDate;
+    data['is_target_considered'] = this.isTargetConsidered;
+    data['is_download_permission'] = this.isDownloadPermission;
+    data['user_type'] = this.userType;
+    data['user_type_name'] = this.userTypeName;
+    data['location_name'] = this.locationName;
+    data['user_full_name'] = this.userFullName;
     return data;
   }
 }
