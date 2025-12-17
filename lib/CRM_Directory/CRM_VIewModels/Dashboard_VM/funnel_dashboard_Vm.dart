@@ -644,9 +644,9 @@ class FunnelDashboardVm extends GetxController{
     IsCommit_controller.value.text = 'ALL';
     StageName_controller.value.clear();
     filter_created_on_cont.value.clear();
-    clusterName_controller.value.clear();
+    //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
-    RegionName_controller.value.clear();
+    //RegionName_controller.value.clear();
     SelectedAccount_Master_list.value = [];
     SelectedEmployee_Member_list.value = [];
     SelectedProductCategory_list.value = [];

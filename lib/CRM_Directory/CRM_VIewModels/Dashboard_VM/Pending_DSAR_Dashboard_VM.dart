@@ -652,9 +652,9 @@ class PendingDsarDashboardVm extends GetxController{
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
-    clusterName_controller.value.clear();
+    //clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
-    RegionName_controller.value.clear();
+    //RegionName_controller.value.clear();
     selectedDSARStatusList.value = [];
     SelectedAccount_Master_list.value = [];
     selectedTypeCallList.value = [];

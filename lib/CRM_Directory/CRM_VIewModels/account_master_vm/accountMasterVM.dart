@@ -1874,9 +1874,9 @@ class Accountmastervm extends GetxController{
     district_controller.value.clear();
     created_by_controller.value.clear();
     frontliner_controller.value.clear();
-    RegionName_controller.value.clear();
+    //RegionName_controller.value.clear();
     zone_head__value_controller.value.clear();
-    clusterName_controller.value.clear();
+    //clusterName_controller.value.clear();
     pageNumber=0;
     getAccountMaster(pageNumber,'All');
 
@@ -1895,9 +1895,9 @@ class Accountmastervm extends GetxController{
     district_controller.value.clear();
     created_by_controller.value.clear();
     frontliner_controller.value.clear();
-    RegionName_controller.value.clear();
+    //RegionName_controller.value.clear();
     zone_head__value_controller.value.clear();
-    clusterName_controller.value.clear();
+    //clusterName_controller.value.clear();
     created_by_controller.value.clear();
     //accountMaster_page_controller.Address_controller.clear();
     // accountMaster_page_controller.Annual_Revenue_Controller.clear();

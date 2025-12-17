@@ -7,6 +7,8 @@ import 'package:get/get.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_competitor_product_infor_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -25,7 +27,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   final _api = SalesCycleRepository();
   SessionManagement sessionManagement = SessionManagement();
 
-  var cluster_head_value_controller = TextEditingController().obs;
+  var clusterName_controller = TextEditingController().obs;
   var createdByController = TextEditingController().obs;
   var district_controller = TextEditingController().obs;
   var postalCodeController = TextEditingController().obs;
@@ -39,7 +41,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   var filterQuoteValidityController = TextEditingController().obs;
   var filterQuoteIdController = TextEditingController().obs;
   var productCategoryController = TextEditingController().obs;
-  var branch_head_value_controller = TextEditingController().obs;
+  var RegionName_controller = TextEditingController().obs;
   var createdOnCnontroller = TextEditingController().obs;
   var filterItemCodeController = TextEditingController().obs;
   var filterQuoteAcceptedController = TextEditingController().obs;
@@ -59,15 +61,109 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   RxString extClosureStartToEnd="".obs;
   RxString quoteValidityStartToEnd="".obs;
 
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
 
   @override
   void onInit() async{
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
-    getGalesCycleCompetitorProductInformationGet(pageNumber);
+    //getGalesCycleCompetitorProductInformationGet(pageNumber);
+    getClustersGetByEmail();
     // TODO: implement onInit
     super.onInit();
+  }
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getGalesCycleCompetitorProductInformationGet(pageNumber);
+
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
   }
 
   getGalesCycleCompetitorProductInformationGet(int pageNumber) {
@@ -90,9 +186,9 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
       "filter_postal_code": "",
       "filter_district": "",
       "filter_frontliner_value": "",
-      "filter_branch_head_value": branch_head_value_controller.value.text.isNotEmpty?branch_head_value_controller.value.text:"",
+      "filter_branch_head_value": RegionName_controller.value.text.isNotEmpty?RegionName_controller.value.text:"",
       "filter_zone_head_value": "",
-      "filter_clusture_head_value": cluster_head_value_controller.value.text.isNotEmpty? cluster_head_value_controller.value.text:"",
+      "filter_clusture_head_value": clusterName_controller.value.text.isNotEmpty? clusterName_controller.value.text:"",
       "row_per_page": rowsPerPage,
       "page_number": pageNumber
     };
@@ -145,8 +241,8 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     filterExpectedClosuredateController.value.clear();
     extClosureStartToEnd.value="";
     createdOnStartToEnd.value="";
-    cluster_head_value_controller.value.clear();
-    branch_head_value_controller.value.clear();
+    clusterName_controller.value.clear();
+    RegionName_controller.value.clear();
   }
 
 }

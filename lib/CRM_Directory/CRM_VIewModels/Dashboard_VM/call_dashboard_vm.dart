@@ -648,8 +648,8 @@ class CallDashboardVm extends GetxController{
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
     clusterName_controller.value.clear();
-    CustomerName_controller.value.clear();
-    RegionName_controller.value.clear();
+    //CustomerName_controller.value.clear();
+    //RegionName_controller.value.clear();
     selectedDSARStatusList.value = [];
     SelectedAccount_Master_list.value = [];
     selectedTypeCallList.value = [];

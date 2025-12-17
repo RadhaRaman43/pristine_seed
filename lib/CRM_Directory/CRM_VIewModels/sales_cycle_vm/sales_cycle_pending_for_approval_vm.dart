@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -31,8 +33,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   RxString extClosureStartToEnd = "".obs;
   RxString quoteValidityStartToEnd = "".obs;
   var isCommitController = TextEditingController().obs;
-  var branch_head_value_controller = TextEditingController().obs;
-  var cluster_head_value_controller = TextEditingController().obs;
+  var RegionName_controller = TextEditingController().obs;
+  var clusterName_controller = TextEditingController().obs;
   var createdByController = TextEditingController().obs;
   var district_controller = TextEditingController().obs;
   var postalCodeController = TextEditingController().obs;
@@ -56,6 +58,11 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
 
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -67,7 +74,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     else{
       getEmployeeMemberApi();
     }
-    getsalesCycleData(pageNumber);
+    //getsalesCycleData(pageNumber);
+    getClustersGetByEmail();
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
@@ -157,6 +165,95 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     }
   }
 
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getsalesCycleData(pageNumber);
+
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
   getsalesCycleData(int page_no) {
     try {
       AccountOwnerForApi = '';
@@ -188,9 +285,9 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
         "filter_frontliner_value": "",
-        "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty ? "" : branch_head_value_controller.value.text,
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty ? "" : RegionName_controller.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty ? "" : cluster_head_value_controller.value.text,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty ? "" : clusterName_controller.value.text,
         "item_code_name": "",
         "filter_sales_cycle_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "row_per_page": rowsPerPage,
@@ -249,8 +346,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     proposedSolutionController.value.clear();
     postalCodeController.value.clear();
     district_controller.value.clear();
-    branch_head_value_controller.value.clear();
-    cluster_head_value_controller.value.clear();
+    RegionName_controller.value.clear();
+    clusterName_controller.value.clear();
     createdByController.value.clear();
     filterExpectedClosuredateController.value.clear();
     createdOnCnontroller.value.clear();

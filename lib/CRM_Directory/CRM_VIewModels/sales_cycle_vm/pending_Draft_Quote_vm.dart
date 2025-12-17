@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/Pending_Draft_Quote_model.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -38,8 +40,8 @@ class PendingDraftQuoteVm extends GetxController{
   var cbh_Approval_controller=TextEditingController().obs;
   var category_Approval_controller=TextEditingController().obs;
   var gm_Approval_controller=TextEditingController().obs;
-  var region_name_controller=TextEditingController().obs;
-  var cluster_head_value_controller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
   var createdOnCnontroller=TextEditingController().obs;
   var createdByCnontroller=TextEditingController().obs;
   var itemCodeController=TextEditingController().obs;
@@ -57,11 +59,19 @@ class PendingDraftQuoteVm extends GetxController{
   RxList<String> QuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", ].obs;
   RxList<String> approvedRejectedStatusList = ["All", "APPROVED", "REJECTED", ].obs;
   RxList<String> AllQuoteStatusList = ["All", "DRAFT", "PENDING FOR APPROVAL", "APPROVED", "REJECTED", ].obs;
+
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
+
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
-    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
+    //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
+    getClustersGetByEmail();
     super.onInit();
   }
 
@@ -69,6 +79,94 @@ class PendingDraftQuoteVm extends GetxController{
     getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
   }
 
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
+
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
 
   getPendingDraftQuoteList(int pageNumberForQuote,String flagFilter){
     try{
@@ -90,9 +188,9 @@ class PendingDraftQuoteVm extends GetxController{
           "filter_created_by": isAdminWritePermission == '1'?'':email,
           "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
           "filter_frontliner_value": "",
-          "filter_branch_head_value": region_name_controller.value.text.isEmpty?"":region_name_controller.value.text,
+          "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
           "filter_zone_head_value": "",
-          "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+          "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
           "filter_spr_no": "",
           "filter_item_code": itemCodeController.value.text.isEmpty?"":itemCodeController.value.text,
           "filter_item_name": itemNameController.value.text.isEmpty?"":itemNameController.value.text,
@@ -157,10 +255,10 @@ class PendingDraftQuoteVm extends GetxController{
     gm_Approval_controller.value.clear();
     productCategoryController.value.clear();
     createdOnCnontroller.value.clear();
-    cluster_head_value_controller.value.clear();
+    //clusterName_controller.value.clear();
     filterQuoteSaleCycleController.value.clear();
     createdByCnontroller.value.clear();
-    region_name_controller.value.clear();
+    //RegionName_controller.value.clear();
     quoteStatusController.value.clear();
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
