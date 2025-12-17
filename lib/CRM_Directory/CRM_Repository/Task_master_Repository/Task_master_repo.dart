@@ -94,7 +94,13 @@ class TaskMasterRepo{
     return _apiService.postApi(data, AppUrl.TaskMstDelete,sessionManagement);
   }
 
+  Future<String> clustersGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.ClustersGetByEmail, sessionManagement, data);
+  }
 
+  Future<String> RegionsWithClusterFilterGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.RegionsWithClusterFilterGetByEmail, sessionManagement, data);
+  }
 
 
 }
