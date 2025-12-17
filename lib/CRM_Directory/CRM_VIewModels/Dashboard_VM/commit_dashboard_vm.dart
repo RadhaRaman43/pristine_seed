@@ -85,7 +85,7 @@ class CommitDashboardVm extends GetxController{
     selectedSalesStageStatusList.value = ["All"];
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    commitDashboardData();
+    //commitDashboardData();
     getEmployeeMemberApi();
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
@@ -420,7 +420,9 @@ class CommitDashboardVm extends GetxController{
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
               clusterName_controller.value.text =
                   clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+
               getRegionsWithClusterFilterGetByEmail();
+
             }
           }else {
             loading.value = false;
@@ -466,6 +468,9 @@ class CommitDashboardVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            commitDashboardData();
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];
