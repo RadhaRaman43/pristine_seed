@@ -26,7 +26,9 @@ import '../../CRM_Models/AccountMaster_model/Company_Prof_Mst_Model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/State_master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Tat_Response_model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/Address_Master_Model/PincodeMaster_Model.dart';
 import '../../CRM_Models/Address_Master_Model/PostalCode_Model.dart';
 import '../../CRM_Models/Address_Master_Model/address_master_model.dart';
@@ -195,6 +197,11 @@ class Accountmastervm extends GetxController{
   RxList<AddressMasterModel> address_master_list = <AddressMasterModel>[].obs;
   List<UserGeoHierarchy> userGeoHierarchyy = <UserGeoHierarchy>[].obs;
 
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
 
   //todo new filter controller
   //var account_code_controller = TextEditingController().obs;
@@ -202,9 +209,9 @@ class Accountmastervm extends GetxController{
   var district_controller = TextEditingController().obs;
   var created_by_controller = TextEditingController().obs;
   var frontliner_controller = TextEditingController().obs;
-  var branch_head__value_controller = TextEditingController().obs;
+  var RegionName_controller = TextEditingController().obs;
   var zone_head__value_controller = TextEditingController().obs;
-  var cluster_head__value_controller = TextEditingController().obs;
+  var clusterName_controller = TextEditingController().obs;
 
 
   var AccountOwnerForApi;
@@ -219,7 +226,8 @@ class Accountmastervm extends GetxController{
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     print("isAd.... ${isHeadofficePermission} and ${isAdminWritePermission}");
-    getAccountMaster(pageNumber ,is_Active.toString());
+    getClustersGetByEmail();
+    //getAccountMaster(pageNumber ,is_Active.toString());
     getDraftAccountMaster(pageNumber ,is_Active.toString());
     getAccCategoryApi();
     getAccountTypeApi();
@@ -395,6 +403,95 @@ class Accountmastervm extends GetxController{
     getDraftAccountMaster(pageNumber ,'All');
   }
 
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getAccountMaster(pageNumber ,is_Active.toString());
+            
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
    getAccountMaster(int page_no, String IsActive)  {
     if(IsActive == 'All'){
       is_Active = -1;
@@ -427,9 +524,9 @@ class Accountmastervm extends GetxController{
         "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
         "filter_account_owner": isAdminWritePermission == '0'?email:'',
         "filter_frontliner_value": "",
-        "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value": cluster_head__value_controller.value.text.isEmpty?"":cluster_head__value_controller.value.text,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "filter_is_active": is_Active.toString(),
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
@@ -560,9 +657,9 @@ class Accountmastervm extends GetxController{
         "filter_created_by": created_by_controller.value.text.isEmpty?"":created_by_controller.value.text,
         "filter_account_owner":isAdminWritePermission == '0'?email:'' ,
         "filter_frontliner_value": "",
-        "filter_branch_head_value": branch_head__value_controller.value.text.isEmpty?"":branch_head__value_controller.value.text,
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": "",
-        "filter_clusture_head_value": cluster_head__value_controller.value.text.isEmpty?"":cluster_head__value_controller.value.text,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
@@ -1777,9 +1874,9 @@ class Accountmastervm extends GetxController{
     district_controller.value.clear();
     created_by_controller.value.clear();
     frontliner_controller.value.clear();
-    branch_head__value_controller.value.clear();
+    RegionName_controller.value.clear();
     zone_head__value_controller.value.clear();
-    cluster_head__value_controller.value.clear();
+    clusterName_controller.value.clear();
     pageNumber=0;
     getAccountMaster(pageNumber,'All');
 
@@ -1798,9 +1895,9 @@ class Accountmastervm extends GetxController{
     district_controller.value.clear();
     created_by_controller.value.clear();
     frontliner_controller.value.clear();
-    branch_head__value_controller.value.clear();
+    RegionName_controller.value.clear();
     zone_head__value_controller.value.clear();
-    cluster_head__value_controller.value.clear();
+    clusterName_controller.value.clear();
     created_by_controller.value.clear();
     //accountMaster_page_controller.Address_controller.clear();
     // accountMaster_page_controller.Annual_Revenue_Controller.clear();

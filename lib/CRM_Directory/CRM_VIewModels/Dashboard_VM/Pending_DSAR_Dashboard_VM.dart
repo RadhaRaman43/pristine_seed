@@ -89,7 +89,6 @@ class PendingDsarDashboardVm extends GetxController{
     selectedDSARStatusList.insert(0, CallStatusMasterModel(taskStatus: 'All'));
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    callDashboardData();
     //getDashboardUserWiseData(pageNumber);
     CallDSARsMasterApiHit();
     CallMasterApiHit();
@@ -555,6 +554,9 @@ class PendingDsarDashboardVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            callDashboardData();
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];

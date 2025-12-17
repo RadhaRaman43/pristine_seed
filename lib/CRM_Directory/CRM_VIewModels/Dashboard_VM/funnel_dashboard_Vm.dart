@@ -95,8 +95,9 @@ class FunnelDashboardVm extends GetxController{
     IsCommit_controller.value.text = 'ALL';
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    funnelDashboardData();
     getClustersGetByEmail();
+    //funnelDashboardData();
+
     if(this.isAdminWritePermission==1){
       EmployeeMasterGet('');
     }
@@ -494,9 +495,10 @@ class FunnelDashboardVm extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+
               getRegionsWithClusterFilterGetByEmail();
+
             }
           }else {
             loading.value = false;
@@ -542,6 +544,10 @@ class FunnelDashboardVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            funnelDashboardData();
+
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];

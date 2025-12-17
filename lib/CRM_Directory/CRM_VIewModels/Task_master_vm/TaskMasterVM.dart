@@ -12,6 +12,8 @@ import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Account_Master_model.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/Contact_Master_modal/Contact_Master_modal/conract_master_modal.dart';
 import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
 import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
@@ -106,9 +108,9 @@ class Taskmastervm extends GetxController{
     var district_controller=TextEditingController().obs;
     var created_by_controller=TextEditingController().obs;
     var frontliner_controller=TextEditingController().obs;
-    var cluster_head_value_controller=TextEditingController().obs;
+    var clusterName_controller=TextEditingController().obs;
     var zone_head_value_controller=TextEditingController().obs;
-    var branch_head_value_controller=TextEditingController().obs;
+    var RegionName_controller=TextEditingController().obs;
     var EmailId_Controller=TextEditingController().obs;
     var lastActivityStatus_Controller=TextEditingController().obs;
     var PhoneNo_Controller=TextEditingController().obs;
@@ -172,6 +174,11 @@ class Taskmastervm extends GetxController{
     RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
     var AccountOwnerForApi;
 
+    RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+    RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+    RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+    RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
 
     @override
     void onInit() async {
@@ -185,7 +192,9 @@ class Taskmastervm extends GetxController{
         getMenuList();
         print("List${userGeoHierarchyy.length}");
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
-        getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
+        //getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
+        
+        getClustersGetByEmail();
         getAccountMaster(pageNumber);
         CallStatusMasterApiHit('Call');
         MethodOfCallMasterApiHit();
@@ -318,6 +327,96 @@ class Taskmastervm extends GetxController{
     }
 
     RxInt infraLeadValue=0.obs;
+
+    void getClustersGetByEmail() {
+      try{
+        Map<String, String> data={
+          "email_id":email
+        };
+        loading.value=true;
+        print("data is ${data}");
+        _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+          print(onValue);
+          final jsonResponse = json.decode(onValue);
+          if(jsonResponse is List){
+            List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+            if(response.length>0 && response[0].condition=="True"){
+              loading.value = false;
+              clusterGetByEmailList.value=response;
+              if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+                SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+                clusterName_controller.value.text =
+                    clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+                getRegionsWithClusterFilterGetByEmail();
+              }
+            }else {
+              loading.value = false;
+              clusterGetByEmailList.value=[];
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+        ).onError(
+              (error, stackTrace) {
+            print(error);
+          },
+        );
+      }catch(e){
+        loading.value = false;
+        print(e);
+      }finally{
+        loading.value = false;
+      }
+    }
+    void getRegionsWithClusterFilterGetByEmail() {
+      var selectedCluster="";
+      if(clusterName_controller.value.text.isNotEmpty){
+        selectedCluster = clusterName_controller.value.text
+            .split(',')
+            .map((e) => e.trim())
+            .join('||');
+      }
+      try{
+        Map<String, String> data={
+          "email_id":email,
+          "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+        };
+        loading.value=true;
+        print("data is ${data}");
+        _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+          print(onValue);
+          final jsonResponse = json.decode(onValue);
+          if(jsonResponse is List){
+            List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+            if(response.length>0 && response[0].condition=="True"){
+              loading.value = false;
+              regionwithclusterGetByEmailList.value=response;
+              RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+              print('region....${RegionName_controller.value.text}');
+              getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
+
+            }else {
+              loading.value = false;
+              regionwithclusterGetByEmailList.value=[];
+            }
+          } else {
+            loading.value = false;
+          }
+        },
+        ).onError(
+              (error, stackTrace) {
+            print(error);
+          },
+        );
+      }catch(e){
+        loading.value = false;
+        print(e);
+      }finally{
+        loading.value = false;
+      }
+    }
+    
     getTaskMaster(int page_no, String IsActive, String? taskId,
         String flag, String status, RxString date_filter, int is_done, ){
         if(isInfraLeadFilterController.text=="All"){
@@ -370,9 +469,9 @@ class Taskmastervm extends GetxController{
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
                 "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
                 "filter_frontliner_value": "",
-                "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
+                "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
                 "filter_zone_head_value": "",
-                "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+                "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
                 "filter_task_owner_new": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
@@ -1601,9 +1700,9 @@ class Taskmastervm extends GetxController{
        district_controller.value.clear();
        created_by_controller.value.clear();
        frontliner_controller.value.clear();
-       cluster_head_value_controller.value.clear();
+       clusterName_controller.value.clear();
        zone_head_value_controller.value.clear();
-       branch_head_value_controller.value.clear();
+       RegionName_controller.value.clear();
        EmailId_Controller.value.clear();
        PhoneNo_Controller.value.clear();
        lastActivityStatus_Controller.value.clear();

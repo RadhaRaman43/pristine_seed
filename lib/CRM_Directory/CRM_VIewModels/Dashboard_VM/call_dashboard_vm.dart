@@ -89,7 +89,7 @@ class CallDashboardVm extends GetxController{
     TaskStatusListTypeList.value = ['All','Pending','Pending For Approval', 'Approved', 'Rejected'];
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
-    callDashboardData();
+    //callDashboardData();
     //getDashboardUserWiseData(pageNumber);
     CallDSARsMasterApiHit();
     CallMasterApiHit();
@@ -549,6 +549,9 @@ class CallDashboardVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            callDashboardData();
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];
