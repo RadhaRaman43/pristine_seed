@@ -31,6 +31,7 @@ class CallDashboardVm extends GetxController{
   RxString character = 'Month'.obs;
   RxString rodName = ''.obs;
   RxString geoValueName = ''.obs;
+  RxString isAdminWritePermission = "".obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -86,14 +87,18 @@ class CallDashboardVm extends GetxController{
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     TaskStatusListTypeList.value = ['All','Pending','Pending For Approval', 'Approved', 'Rejected'];
+    selectedTaskStatusList.value = ["All"];
+    selectedTypeCallList.add(CallStatusMasterModel(taskStatus: "All",),);
+    selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //callDashboardData();
     //getDashboardUserWiseData(pageNumber);
     CallDSARsMasterApiHit();
     CallMasterApiHit();
-    getEmployeeMemberApi();
+    isAdminWritePermission == 1 ? EmployeeMasterGet(""): getEmployeeTeamMemberGetByClusterRegionApi();
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
     getAccountMaster(pageNumber);
@@ -342,6 +347,11 @@ class CallDashboardVm extends GetxController{
           List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
             loading.value = false;
+            DSARStatus_Master_list.add(
+              CallStatusMasterModel(
+                taskStatus: "All",
+              ),
+            );
             DSARStatus_Master_list.addAll(response);
 
           }else {
@@ -377,6 +387,11 @@ class CallDashboardVm extends GetxController{
           List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
             loading.value = false;
+            TypeCall_Master_list.add(
+              CallStatusMasterModel(
+                taskStatus: "All",
+              ),
+            );
             TypeCall_Master_list.addAll(response);
 
           }else {
@@ -409,6 +424,99 @@ class CallDashboardVm extends GetxController{
     loading.value = true;
     try {
       _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+  Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
+    if (query == '') {
+      return const Iterable<EmployeeMemberModel>.empty();
+    }
+    Map data = {
+      'filter_name': '',
+      'filter_email': query,
+      'filter_location_id': '',
+      'email_id': email,
+      "filter_cluster_name": "",
+      "filter_region_name": "",
+      'rowsPerPage': 50,
+      'pageNumber': 0,
+    };
+    String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
+    try {
+      final jsonResponse = json.decode(employee_response);
+
+      if (jsonResponse is List) {
+        print(jsonResponse);
+        List<EmployeeMemberModel> response =
+        jsonResponse.map((data) => EmployeeMemberModel.fromJson(data)).toList();
+        print('condition..'+response[0].condition.toString());
+        if (response[0].condition == 'True') {
+          print(jsonResponse);
+          employee_Member_list.value = response;
+
+        } else {
+          // Utils.sanckBarException('False!', response[0].message!);
+          employee_Member_list.value = [];
+        }
+      } else {
+        Utils.sanckBarException('False!', jsonResponse.message);
+        employee_Member_list.value = [];
+      }
+    } catch (e) {
+      Utils.sanckBarException('Exception!', e.toString());
+      employee_Member_list.value = [];
+    }
+    return employee_Member_list.value;
+  }
+
+
+  getEmployeeTeamMemberGetByClusterRegionApi() {
+    Map data = {
+      "cluster_name": "",
+      "email_id": email,
+      "region_name": "",
+      "flag": "GeoLevelLowerWithClusterRegion"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeTeamMemberGetByClusterRegion(data, sessionManagement).then(
             (value) {
           print(value);
           final JsonResponse = json.decode(value);
@@ -647,8 +755,8 @@ class CallDashboardVm extends GetxController{
     AccountOwner_controller.value.clear();
     typeOfCall_controller.value.clear();
     ProductCategory_controller.value.clear();
-    clusterName_controller.value.clear();
-    //CustomerName_controller.value.clear();
+    //clusterName_controller.value.clear();
+    CustomerName_controller.value.clear();
     //RegionName_controller.value.clear();
     selectedDSARStatusList.value = [];
     SelectedAccount_Master_list.value = [];
@@ -657,7 +765,9 @@ class CallDashboardVm extends GetxController{
     SelectedProductCategory_list.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
-    selectedTaskStatusList.value = [];
+    selectedTaskStatusList.value = ["All"];
+    selectedTypeCallList.add(CallStatusMasterModel(taskStatus: "All",),);
+    selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 

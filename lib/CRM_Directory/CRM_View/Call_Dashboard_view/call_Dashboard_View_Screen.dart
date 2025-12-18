@@ -2060,7 +2060,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: Text(
-                                  'Select Account Owner',
+                                  'Task Owner',
                                   style: GoogleFonts.poppins(
                                       fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
                                 ),
@@ -2128,7 +2128,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                         // List
                         Expanded(
                           child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
+                              ? const Center(child: Text('No record found'))
                               : ListView.builder(
                             padding:
                             const EdgeInsets.symmetric(vertical: 8),
@@ -2189,7 +2189,8 @@ class CallDashboardViewScreen extends StatelessWidget {
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Account Owner", // 👈 Label restored here
+            labelText: selectedText != null
+                ?"Task Owner":"", // 👈 Label restored here
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -2201,7 +2202,7 @@ class CallDashboardViewScreen extends StatelessWidget {
               Expanded(
                 child: selectedText == null
                     ? Text(
-                  "Account Owner",
+                  "Task Owner",
                   style: GoogleFonts.poppins(
                     color: Colors.black,
                     fontSize: AllFontSize.sisxteen,
