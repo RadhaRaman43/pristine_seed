@@ -139,8 +139,6 @@ class BussinessTourApproveRejected extends StatelessWidget{
                               },
                             );
                           }),
-                          // optional spacing between chips
-
                         ],
                       ),
                     ),
@@ -177,8 +175,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
               businessTourPlanController.rowsPerPage) >
               0) total_page += 1;
 
-          print(
-              "last index ${businessTourPlanController.pageNumber} ${businessTourPlanController.total_rows} ${businessTourPlanController.rowsPerPage} ${total_page}");
+          print("last index ${businessTourPlanController.pageNumber} ${businessTourPlanController.total_rows} ${businessTourPlanController.rowsPerPage} ${total_page}");
 
 
           if (businessTourPlanController.pageNumber + 1 < total_page) {
@@ -231,71 +228,58 @@ class BussinessTourApproveRejected extends StatelessWidget{
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildLabelWithValue(
-              label: "Tour ID : ",
+              label: "Tour ID :",
               value: businessTourPlanController.BusinessTourApproveRejectList[position].tourId,
             ),
             _buildLabelWithValue(
-              label: "Cluster: ",
+              label: "Cluster :",
               value: businessTourPlanController.BusinessTourApproveRejectList[position].cluster,
-              //width: size.width * 0.36,
             ),
             _buildLabelWithValue(
-              label: "Region : ",
+              label: "Region :",
               value: businessTourPlanController.BusinessTourApproveRejectList[position].region,
-              // width: size.width * 0.36,
-
             ),
             _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].frontliners,
-              // width: size.width * 0.36,
-
+              label: "Touring Region :",
+              value: businessTourPlanController.BusinessTourApproveRejectList[position].touringRegion,
             ),
             _buildLabelWithValue(
-              label: "Touring Region : ",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].frontliners,
-              // width: size.width * 0.36,
-
-            ),
-            _buildLabelWithValue(
-              label: "Status : ",
+              label: "Status :",
               value: businessTourPlanController.BusinessTourApproveRejectList[position].status,
-              // width: size.width * 0.36,
               color: getStatusColor(saleCycleStatus),
             ),
             _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].frontliners,
-              // width: size.width * 0.36,
-
+              label: "Start Date :",
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApproveRejectList[position].startDate??"")
             ),
             _buildLabelWithValue(
-              label: "Reporting Manager : ",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].reportingManager,
-              // width: size.width * 0.36,
-
+              label: "End Date :",
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApproveRejectList[position].endDate??"")
             ),
-
             _buildLabelWithValue(
-              label: "Created By: ",
+              label: "Reporting Manager :",
+              value: businessTourPlanController.BusinessTourApproveRejectList[position].accountReportingFullName,
+            ),
+            _buildLabelWithValue(
+              label: "Created By :",
               value: businessTourPlanController.BusinessTourApproveRejectList[position].accountCreateFullName,
-              //: size.width * 0.33,
             ),
-
-
             _buildLabelWithValue(
-              label: "Created On: ",
+              label: "Created On :",
               value: createdOn,
-              //: size.width * 0.33,
             ),
-
-
             _buildLabelWithValue(
-              label: "Completed On: ",
+              label: "Completed On :",
               value: complatedOn,
-              //: size.width * 0.33,
             ),
-
+            _buildLabelWithValue(
+              label: "Approved/Rejected By :",
+              value: businessTourPlanController.BusinessTourApproveRejectList[position].accountApproveFullName,
+            ),
+            _buildLabelWithValue(
+              label: "Approved On	 :",
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApproveRejectList[position].approvedOn??"")
+            ),
           ],
         ),
 
@@ -331,6 +315,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w500,
               ),
+              maxLines: 1,
             ),
           ),
         ),

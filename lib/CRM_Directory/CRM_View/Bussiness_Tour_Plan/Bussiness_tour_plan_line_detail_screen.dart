@@ -31,7 +31,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
               color: AllColors.whiteColor,
             ),
             title:Tooltip(
-              message: 'Business Tour Plan Line Details',
+              message: 'Business Tour Line List',
               child: Text(
                 'Business Tour Plan Line Details',
                 style: GoogleFonts.poppins(
@@ -134,32 +134,30 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Tour Id: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].tourID,
-                //width: size.width * 0.36,
+              ),
+              _buildLabelWithValue(
+                label: "Cluster: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].cluster,
               ),
               _buildLabelWithValue(
                 label: "Region: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].region,
-                //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
                 label: "Touring Region: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].touringRegion,
-                //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
                 label: "Touring District: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].touringDistrict,
-                //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
                 label: "Tour Type: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].tourType,
-                //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
                 label: "Customer: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].customer,
-                //width: size.width * 0.36,
               ),
               _buildLabelWithValue(
                 label: "Customer Name: ",
@@ -168,68 +166,43 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
               _buildLabelWithValue(
                 label: "Meeting With : ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].meetingWith,
-                // width: size.width * 0.36,
-
               ),
               _buildLabelWithValue(
                 label: "No Of Days : ",
                 value:  businessTourPlanController.BusinessTourPlanLineDetailList[position].noOfDays.toString(),
-                // width: size.width * 0.36,
-
               ),
               _buildLabelWithValue(
                 label: "Objective : ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].objective,
-                // width: size.width * 0.36,
-
               ),
               _buildLabelWithValue(
                 label: "Status : ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].approvalStatus,
-                // width: size.width * 0.36,
                 color: getStatusColor(saleCycleStatus),
               ),
               _buildLabelWithValue(
                 label: "Remarks : ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].remarks,
-                // width: size.width * 0.36,
-
               ),
               _buildLabelWithValue(
                 label: "Accompanied With : ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].accompaniedWith,
-                // width: size.width * 0.36,
-
               ),
-
               _buildLabelWithValue(
-                label: "Region Name : ",
-                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].region,
-                // width: size.width * 0.36,
-
+                label: "Created By: ",
+                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].createdBy,
               ),
-
-              _buildLabelWithValue(
-                label: "Cluster Name: ",
-                value: businessTourPlanController.BusinessTourPlanLineDetailList[position].cluster,
-                //: size.width * 0.33,
-              ),
-
               _buildLabelWithValue(
                 label: "Owner Name: ",
                 value: businessTourPlanController.BusinessTourPlanLineDetailList[position].ownerName,
-                //: size.width * 0.33,
               ),
               _buildLabelWithValue(
                 label: "Created On: ",
                 value: createdOn,
-                //: size.width * 0.33,
               ),
-
               _buildLabelWithValue(
                 label: "Tour Date: ",
                 value: tourDate,
-                //: size.width * 0.33,
               ),
 
             ],

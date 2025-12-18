@@ -13,17 +13,18 @@ class BusinessTourApprovalModel {
   String? status;
   String? startDate;
   String? endDate;
-  String? month;
-  String? year;
+  dynamic? month;
+  dynamic? year;
   String? createdBy;
   String? createdOn;
   String? completedOn;
-  String? rejectReason;
-  String? approvedBy;
-  String? approvedOn;
+  dynamic? rejectReason;
+  dynamic? approvedBy;
+  dynamic? approvedOn;
   String? reportingManager;
   String? accountCreateFullName;
   String? accountApproveFullName;
+  String? accountReportingFullName;
 
   BusinessTourApprovalModel(
       {this.condition,
@@ -50,7 +51,8 @@ class BusinessTourApprovalModel {
         this.approvedOn,
         this.reportingManager,
         this.accountCreateFullName,
-        this.accountApproveFullName});
+        this.accountApproveFullName,
+        this.accountReportingFullName});
 
   BusinessTourApprovalModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -78,6 +80,7 @@ class BusinessTourApprovalModel {
     reportingManager = json['reporting_manager'];
     accountCreateFullName = json['account_create_full_name'];
     accountApproveFullName = json['account_approve_full_name'];
+    accountReportingFullName = json['account_reporting_full_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -107,6 +110,7 @@ class BusinessTourApprovalModel {
     data['reporting_manager'] = this.reportingManager;
     data['account_create_full_name'] = this.accountCreateFullName;
     data['account_approve_full_name'] = this.accountApproveFullName;
+    data['account_reporting_full_name'] = this.accountReportingFullName;
     return data;
   }
 }

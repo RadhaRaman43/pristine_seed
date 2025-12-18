@@ -297,87 +297,63 @@ class BussinessTourPlanScreen extends StatelessWidget{
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /*_buildLabelWithValue(
-              label: "Tour ID : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].tourId,
-            ),*/
             _buildLabelWithValue(
               label: "Cluster: ",
               value: businessTourPlanController.BusinessTourPlanList[position].cluster,
-              //width: size.width * 0.36,
             ),
             _buildLabelWithValue(
               label: "Region : ",
               value: businessTourPlanController.BusinessTourPlanList[position].region,
-              // width: size.width * 0.36,
-
-            ),
-            _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
-              // width: size.width * 0.36,
-
             ),
             _buildLabelWithValue(
               label: "Touring Region : ",
               value: businessTourPlanController.BusinessTourPlanList[position].touringRegion,
-              // width: size.width * 0.36,
-
             ),
             _buildLabelWithValue(
               label: "Status : ",
               value: businessTourPlanController.BusinessTourPlanList[position].status,
-              // width: size.width * 0.36,
               color: getStatusColor(saleCycleStatus),
             ),
             _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].frontliners,
-              // width: size.width * 0.36,
-
+              label: "Start Date : ",
+              value: businessTourPlanController.BusinessTourPlanList[position].startDate,
+            ),
+            _buildLabelWithValue(
+              label: "End Date : ",
+              value: businessTourPlanController.BusinessTourPlanList[position].endDate,
             ),
             _buildLabelWithValue(
               label: "Reporting Manager : ",
-              value: businessTourPlanController.BusinessTourPlanList[position].reportingManager,
-              // width: size.width * 0.36,
-
+              value: businessTourPlanController.BusinessTourPlanList[position].reportingFullName,
             ),
-
             _buildLabelWithValue(
               label: "Created By: ",
               value: businessTourPlanController.BusinessTourPlanList[position].createdFullName,
-              //: size.width * 0.33,
             ),
-
-
             _buildLabelWithValue(
               label: "Created On: ",
               value: createdOn,
-              //: size.width * 0.33,
             ),
-
-            _buildLabelWithValue(
-              label: "Reject Reason",
-              value: businessTourPlanController.BusinessTourPlanList[position].rejectReason,
-              //: size.width * 0.33,
+            Visibility(
+              visible: (saleCycleStatus=="Rejected" || saleCycleStatus=="REJECTED" || saleCycleStatus=="APPROVED"|| saleCycleStatus=="Approved"),
+              child: _buildLabelWithValue(
+                label: "Reject Reason",
+                value: businessTourPlanController.BusinessTourPlanList[position].rejectReason,
+              ),
             ),
-
             _buildLabelWithValue(
               label: "Approved/Rejected By: ",
               value: businessTourPlanController.BusinessTourPlanList[position].approvedFullName,
-              //: size.width * 0.33,
             ),
-
-            _buildLabelWithValue(
-              label: "Approve On: ",
-              value: approvedOn,
-              //: size.width * 0.33,
-            ),
+            Visibility(
+                visible: (saleCycleStatus=="Rejected" || saleCycleStatus=="REJECTED" || saleCycleStatus=="APPROVED"|| saleCycleStatus=="Approved"),
+                child: _buildLabelWithValue(
+                label: "Approve On: ",
+                value: approvedOn,
+              ),),
 
           ],
         ),
-
-        //trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
   }

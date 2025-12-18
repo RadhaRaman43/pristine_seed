@@ -40,7 +40,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
                   'Business Tour Approval List',
                   style: GoogleFonts.poppins(
                     color: AllColors.whiteColor,
-                    fontSize: 17.0,
+                    fontSize: 15.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -161,65 +161,49 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
               value: businessTourPlanController.BusinessTourApprovalList[position].tourId,
             ),
             _buildLabelWithValue(
-              label: "Cluster: ",
+              label: "Cluster : ",
               value: businessTourPlanController.BusinessTourApprovalList[position].cluster,
-              //width: size.width * 0.36,
+            ),
+            _buildLabelWithValue(
+              label: "Zone : ",
+              value: businessTourPlanController.BusinessTourApprovalList[position].zone,
             ),
             _buildLabelWithValue(
               label: "Region : ",
               value: businessTourPlanController.BusinessTourApprovalList[position].region,
-              // width: size.width * 0.36,
-
-            ),
-            _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].frontliners,
-              // width: size.width * 0.36,
-
             ),
             _buildLabelWithValue(
               label: "Touring Region : ",
               value: businessTourPlanController.BusinessTourApprovalList[position].frontliners,
-              // width: size.width * 0.36,
-
             ),
             _buildLabelWithValue(
               label: "Status : ",
               value: businessTourPlanController.BusinessTourApprovalList[position].status,
-              // width: size.width * 0.36,
               color: getStatusColor(saleCycleStatus),
             ),
             _buildLabelWithValue(
-              label: "Frontliners : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].frontliners,
-              // width: size.width * 0.36,
-
+              label: "Start Date : ",
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApprovalList[position].startDate ?? ""),
+            ),
+            _buildLabelWithValue(
+              label: "End Date : ",
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApprovalList[position].endDate ?? ""),
             ),
             _buildLabelWithValue(
               label: "Reporting Manager : ",
-              value: businessTourPlanController.BusinessTourApprovalList[position].reportingManager,
-              // width: size.width * 0.36,
-
+              value: businessTourPlanController.BusinessTourApprovalList[position].accountReportingFullName,
             ),
-
             _buildLabelWithValue(
               label: "Created By: ",
               value: businessTourPlanController.BusinessTourApprovalList[position].accountCreateFullName,
-              //: size.width * 0.33,
             ),
-
-
             _buildLabelWithValue(
               label: "Created On: ",
               value: createdOn,
-              //: size.width * 0.33,
             ),
-
-
             _buildLabelWithValue(
               label: "Completed On: ",
               value: complatedOn,
-              //: size.width * 0.33,
             ),
 
           ],

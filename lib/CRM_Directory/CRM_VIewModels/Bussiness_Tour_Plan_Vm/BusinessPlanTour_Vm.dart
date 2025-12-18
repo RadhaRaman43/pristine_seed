@@ -288,7 +288,7 @@ class BusinessPlanTourViewModel extends GetxController{
       Map data = {
         "tour_id": filterTourIdController.value.text.isEmpty?"":filterTourIdController.value.text,
         "account_code": "",
-        "created_by": filterCreatedByController.value.text.isEmpty?"":filterCreatedByController.value.text,
+        "created_by": filterCreatedByController.value.text.isEmpty? email:filterCreatedByController.value.text,
         "created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "tour_date_on": filterTourDateController.value.text.isEmpty?"":filterTourDateController.value.text,
         "branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,

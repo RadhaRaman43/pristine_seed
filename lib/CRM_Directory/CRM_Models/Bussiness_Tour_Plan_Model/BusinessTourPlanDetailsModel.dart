@@ -10,17 +10,18 @@ class BusinessTourPlanDetailsModel {
   String? status;
   String? startDate;
   String? endDate;
-  String? month;
-  String? year;
+  dynamic? month;
+  dynamic? year;
   String? createdBy;
   String? createdOn;
   String? completedOn;
-  String? rejectReason;
-  String? approvedBy;
-  String? approvedOn;
+  dynamic? rejectReason;
+  dynamic? approvedBy;
+  dynamic? approvedOn;
   String? reportingManager;
   String? createdFullName;
   String? approvedFullName;
+  String? reportingFullName;
   List<Lines>? lines;
 
   BusinessTourPlanDetailsModel(
@@ -46,6 +47,7 @@ class BusinessTourPlanDetailsModel {
         this.reportingManager,
         this.createdFullName,
         this.approvedFullName,
+        this.reportingFullName,
         this.lines});
 
   BusinessTourPlanDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -71,7 +73,8 @@ class BusinessTourPlanDetailsModel {
     reportingManager = json['reporting_manager'];
     createdFullName = json['created_full_name'];
     approvedFullName = json['approved_full_name'];
-    if (json['lines'] != null) {
+    reportingFullName = json['reporting_full_name'];
+    if (json['lines'] != dynamic) {
       lines = <Lines>[];
       json['lines'].forEach((v) {
         lines!.add(new Lines.fromJson(v));
@@ -103,7 +106,8 @@ class BusinessTourPlanDetailsModel {
     data['reporting_manager'] = this.reportingManager;
     data['created_full_name'] = this.createdFullName;
     data['approved_full_name'] = this.approvedFullName;
-    if (this.lines != null) {
+    data['reporting_full_name'] = this.reportingFullName;
+    if (this.lines != dynamic) {
       data['lines'] = this.lines!.map((v) => v.toJson()).toList();
     }
     return data;
@@ -122,6 +126,7 @@ class Lines {
   String? objective;
   String? remark;
   String? createdOn;
+  String? customerName;
 
   Lines(
       {this.tourId,
@@ -134,7 +139,8 @@ class Lines {
         this.meetingWith,
         this.objective,
         this.remark,
-        this.createdOn});
+        this.createdOn,
+        this.customerName});
 
   Lines.fromJson(Map<String, dynamic> json) {
     tourId = json['tour_id'];
@@ -148,6 +154,7 @@ class Lines {
     objective = json['objective'];
     remark = json['remark'];
     createdOn = json['created_on'];
+    customerName = json['customer_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -163,6 +170,7 @@ class Lines {
     data['objective'] = this.objective;
     data['remark'] = this.remark;
     data['created_on'] = this.createdOn;
+    data['customer_name'] = this.customerName;
     return data;
   }
 }

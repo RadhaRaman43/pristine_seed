@@ -827,279 +827,84 @@ class BusinessTourPlanDeatil extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "Tour ID",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        businessTourPlanController
-                                .BusinessTourPlanDetails_list[0].tourId ??
-                            "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.sisxteen,
-                          fontWeight: FontWeight.w500,
-                          //decorationStyle: TextDecorationStyle.wavy,
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildLabelWithValue(label: "Tour ID ", value: businessTourPlanController.BusinessTourPlanDetails_list[0].tourId ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Cluster",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        businessTourPlanController
-                                .BusinessTourPlanDetails_list[0].cluster ??
-                            "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildLabelWithValue(label: "Cluster", value: businessTourPlanController.BusinessTourPlanDetails_list[0].cluster ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Region",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        businessTourPlanController
-                                .BusinessTourPlanDetails_list[0].region ??
-                            "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildLabelWithValue(label: "Region", value: businessTourPlanController.BusinessTourPlanDetails_list[0].region ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Frontliners",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        businessTourPlanController
-                                .BusinessTourPlanDetails_list[0].frontliners ??
-                            "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildLabelWithValue(label: "Touring Region", value: businessTourPlanController.BusinessTourPlanDetails_list[0].touringRegion ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        "Touring Region",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        businessTourPlanController
-                                .BusinessTourPlanDetails_list[0]
-                                .touringRegion ??
-                            "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
+                  _buildLabelWithValue(label: "Reporting Manager", value: businessTourPlanController.BusinessTourPlanDetails_list[0].reportingFullName ?? "",),
                   SizedBox(
                     height: 3,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Reporting Manager",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                  _buildLabelWithValue(label: "Status", value: Status, color:  getStatusColor(Status)),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  _buildLabelWithValue(label: "Start Date", value:StartDate ?? "",),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  _buildLabelWithValue(label: "End Date", value:EndDate ?? "",),
+                  SizedBox(
+                    height: 3,
+                  ),
+                  _buildLabelWithValue(label: "Created On", value:dateTimeCreatedOn ?? "",),
+                  SizedBox(
+                    height: 3,
+                  ),
 
-                      Container(
-                        width: size.width*0.34,
-                        child: Tooltip(
-                          message:businessTourPlanController
-                              .BusinessTourPlanDetails_list[0]
-                              .reportingManager ??
-                              "" ,
-                          child: Text(
-                            businessTourPlanController
-                                    .BusinessTourPlanDetails_list[0]
-                                    .reportingManager ??
-                                "",
-                            style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Status",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        Status,
-                        style: GoogleFonts.poppins(
-                          color: getStatusColor(Status),
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Start Date",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        StartDate ?? "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "End Date",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        EndDate ?? "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        "Created On",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      Spacer(),
-                      Text(
-                        dateTimeCreatedOn ?? "",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 3,
-                  ),
                 ],
               ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    double? width,
+    Color color = AllColors.textColor,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -1202,255 +1007,53 @@ class BusinessTourPlanDeatil extends StatelessWidget {
             SizedBox(
               height: 10,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Line No. ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  (businessTourPlanController
-                      .BusinessTourHourLines[index].lineNo
-                      .toString()),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Touring District : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  businessTourPlanController
-                          .BusinessTourHourLines[index].touringDistrict ??
-                      "",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Tour Date : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  TourDate.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Tour Type : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  businessTourPlanController
-                          .BusinessTourHourLines[index].tourType ??
-                      "",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Accompanied With : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Tooltip(
-                    message: AccompaniedWith,
-                    child: Text(
-                      AccompaniedWith,
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.twelve,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Customer : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  businessTourPlanController
-                      .BusinessTourHourLines[index].customer
-                      .toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Meeting With : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  MeetingWith,
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Objective : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Tooltip(
-                    message: businessTourPlanController
-                        .BusinessTourHourLines[index].objective
-                        .toString(),
-                    child: Text(
-                      businessTourPlanController
-                          .BusinessTourHourLines[index].objective
-                          .toString(),
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.twelve,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Remark : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Tooltip(
-                    message: businessTourPlanController
-                        .BusinessTourHourLines[index].remark,
-                    child: Text(
-                      businessTourPlanController
-                          .BusinessTourHourLines[index].remark
-                          .toString(),
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.twelve,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Created On : ",
-                  style: GoogleFonts.poppins(
-                    color: AllColors.primaryDark1,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  dateCreatedOn.toString(),
-                  style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.twelve,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
+            bindLineData(context,"Tour ID :",businessTourPlanController.BusinessTourHourLines[index].tourId.toString()),
+            bindLineData(context,"Line No. :",businessTourPlanController.BusinessTourHourLines[index].lineNo.toString()),
+            bindLineData(context,"Touring District : ",businessTourPlanController.BusinessTourHourLines[index].touringDistrict ?? ""),
+            bindLineData(context,"Tour Date : ",TourDate.toString()),
+            bindLineData(context,"Tour Type : ", businessTourPlanController.BusinessTourHourLines[index].tourType ?? ""),
+            bindLineData(context,"Accompanied With : ", AccompaniedWith),
+            bindLineData(context,"Customer : ", businessTourPlanController.BusinessTourHourLines[index].customer ?? ""),
+            bindLineData(context,"Customer Name : ", businessTourPlanController.BusinessTourHourLines[index].customerName ?? ""),
+            bindLineData(context,"Meeting With : ", MeetingWith),
+            bindLineData(context,"Objective : ", businessTourPlanController.BusinessTourHourLines[index].objective ?? ""),
+            bindLineData(context,"Remark : ", businessTourPlanController.BusinessTourHourLines[index].remark ?? ""),
+            bindLineData(context,"Created On : ", dateCreatedOn.toString()),
           ],
         ),
       ),
+    );
+  }
+
+  Widget bindLineData(BuildContext context,String fixData,String data){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          fixData,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.twelve,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: data,
+            child: Text(
+
+              data,
+              style: GoogleFonts.poppins(
+                color: AllColors.textColor,
+                fontSize: AllFontSize.twelve,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
