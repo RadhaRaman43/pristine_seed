@@ -10,6 +10,8 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/emp_infor_modal/annual_holiday_modal.dart';
 import '../../CRM_Models/emp_infor_modal/leave_type_modal.dart';
 import '../../CRM_Models/emp_infor_modal/mark_leave_modal.dart';
@@ -60,8 +62,13 @@ class EmpMarkLeaveRequestVm extends GetxController{
   //todo filter..
   final StartDate_filter_controller=TextEditingController();
   final EndDate_filter_controller=TextEditingController();
+  final createdOn_filter_controller=TextEditingController();
   final leaveCode_filter_controller=TextEditingController();
   final leaveId_filter_controller=TextEditingController();
+  final leave_reason_filter_controller=TextEditingController();
+
+  var RegionName_controller = TextEditingController().obs;
+  var clusterName_controller = TextEditingController().obs;
 
 
   RxList<MarkLeaveRequestModal> employee_leave_data_list=<MarkLeaveRequestModal>[].obs;
@@ -74,14 +81,107 @@ class EmpMarkLeaveRequestVm extends GetxController{
   RxList<ShortLeaveTimeModel> ShortleaveTime_list=<ShortLeaveTimeModel>[].obs;
   RxList<AnnualHolidaysModel> Annual_Holidays_list=<AnnualHolidaysModel>[].obs;
 
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail()??"";
-    getEmployeeLeaveData(filterStatus.value, pageNumber);
+    getClustersGetByEmail();
+    //getEmployeeLeaveData(filterStatus.value, pageNumber);
   }
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getEmployeeLeaveData(filterStatus.value, pageNumber);
 
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
 
   getEmployeeLeaveData(String status, int pageNumber){
     Map data= {
@@ -91,7 +191,10 @@ class EmpMarkLeaveRequestVm extends GetxController{
       "status": status,
       "start_date":StartDate_filter_controller.value.text.isEmpty?"":StartDate_filter_controller.value.text,
       "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
-      "leave_reason": "",
+      "leave_reason": leave_reason_filter_controller.value.text.isEmpty?"":leave_reason_filter_controller.value.text,
+      "region": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+      "clusture": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+      "created_on": createdOn_filter_controller.value.text.isEmpty?"":createdOn_filter_controller.value.text,
       "pageNumber": pageNumber,
       "rowsPerPage": rowsPerPage
     };

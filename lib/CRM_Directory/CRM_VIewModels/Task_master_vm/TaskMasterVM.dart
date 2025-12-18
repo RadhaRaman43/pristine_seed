@@ -1700,9 +1700,9 @@ class Taskmastervm extends GetxController{
        district_controller.value.clear();
        created_by_controller.value.clear();
        frontliner_controller.value.clear();
-       clusterName_controller.value.clear();
+       //clusterName_controller.value.clear();
        zone_head_value_controller.value.clear();
-       RegionName_controller.value.clear();
+       //RegionName_controller.value.clear();
        EmailId_Controller.value.clear();
        PhoneNo_Controller.value.clear();
        lastActivityStatus_Controller.value.clear();

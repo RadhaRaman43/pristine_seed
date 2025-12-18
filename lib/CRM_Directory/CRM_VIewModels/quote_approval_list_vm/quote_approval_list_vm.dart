@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -31,9 +33,9 @@ class QuoteApprovalListVm extends GetxController{
   var filterQuoteSaleCycleController=TextEditingController().obs;
 
   var createdOnCnontroller=TextEditingController().obs;
-  var branch_head_value_controller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
   var zone_head_value_controller=TextEditingController().obs;
-  var cluster_head_value_controller=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
   var frontliner_controller=TextEditingController().obs;
   var createdByController=TextEditingController().obs;
   var companyProfileTypeController=TextEditingController().obs;
@@ -48,10 +50,17 @@ class QuoteApprovalListVm extends GetxController{
 
 
   RxList<SalesCycleQuoteHeaderModal> quoteApprovalList=<SalesCycleQuoteHeaderModal>[].obs;
+
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
-    getQuoteHeaderData(pageNumberForQuote);
+    //getQuoteHeaderData(pageNumberForQuote);
+    getClustersGetByEmail();
     super.onInit();
   }
 
@@ -59,7 +68,94 @@ class QuoteApprovalListVm extends GetxController{
     getQuoteHeaderData(pageNumberForQuote);
   }
 
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getQuoteHeaderData(pageNumberForQuote);
 
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
   getQuoteHeaderData(int pageNumberForQuote){
     try{
       Map data={
@@ -79,9 +175,9 @@ class QuoteApprovalListVm extends GetxController{
         "filter_created_by": email,
         "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
         "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
-        "filter_branch_head_value": branch_head_value_controller.value.text.isEmpty?"":branch_head_value_controller.value.text,
+        "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": zone_head_value_controller.value.text.isEmpty?"":zone_head_value_controller.value.text,
-        "filter_clusture_head_value": cluster_head_value_controller.value.text.isEmpty?"":cluster_head_value_controller.value.text,
+        "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
       };
@@ -153,9 +249,9 @@ class QuoteApprovalListVm extends GetxController{
     productCategoryController.value.clear();
     createdOnCnontroller.value.clear();
     frontliner_controller.value.clear();
-    branch_head_value_controller.value.clear();
+    RegionName_controller.value.clear();
     zone_head_value_controller.value.clear();
-    cluster_head_value_controller.value.clear();
+    clusterName_controller.value.clear();
     filterQuoteSaleCycleController.value.clear();
     createdOnStartToEnd.value = "";
     extClosureStartToEnd.value = "";
