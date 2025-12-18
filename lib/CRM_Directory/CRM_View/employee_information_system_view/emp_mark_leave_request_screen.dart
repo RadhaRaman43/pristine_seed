@@ -1058,8 +1058,8 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
           suffixIcon: Icon(Icons.calendar_month),
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'End Date',
-          hintText: 'End Date',
+          labelText: 'Created On',
+          hintText: 'Created On',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1266,6 +1266,10 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                         SizedBox(
                           height: 10,
                         ),
+                        bindfilterText(context,'Created By',employeeMarkLeaveController.CreatedBy_filter_controller),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -1278,6 +1282,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                                   employeeMarkLeaveController.EndDate_filter_controller.clear();
                                   employeeMarkLeaveController.leaveId_filter_controller.clear();
                                   employeeMarkLeaveController.leave_reason_filter_controller.clear();
+                                  employeeMarkLeaveController.CreatedBy_filter_controller.clear();
                                   employeeMarkLeaveController.createdOn_filter_controller.clear();
                                   employeeMarkLeaveController.pageNumber=0;
                                   employeeMarkLeaveController.getEmployeeLeaveData(

@@ -66,6 +66,7 @@ class EmpMarkLeaveRequestVm extends GetxController{
   final leaveCode_filter_controller=TextEditingController();
   final leaveId_filter_controller=TextEditingController();
   final leave_reason_filter_controller=TextEditingController();
+  final CreatedBy_filter_controller=TextEditingController();
 
   var RegionName_controller = TextEditingController().obs;
   var clusterName_controller = TextEditingController().obs;
@@ -185,9 +186,9 @@ class EmpMarkLeaveRequestVm extends GetxController{
 
   getEmployeeLeaveData(String status, int pageNumber){
     Map data= {
-      "created_by": email,
+      "created_by": CreatedBy_filter_controller.value.text.isEmpty?email:CreatedBy_filter_controller.value.text,
       "leave_id": leaveId_filter_controller.value.text.isEmpty?"":leaveId_filter_controller.value.text,
-      "leave_code": leaveCode_controller.value.text.isEmpty?"":leaveCode_controller.value.text.isEmpty,
+      "leave_code": leaveCode_controller.value.text.isEmpty?"":leaveCode_controller.value.text,
       "status": status,
       "start_date":StartDate_filter_controller.value.text.isEmpty?"":StartDate_filter_controller.value.text,
       "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
