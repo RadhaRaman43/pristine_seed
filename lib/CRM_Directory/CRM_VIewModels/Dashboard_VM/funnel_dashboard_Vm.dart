@@ -412,6 +412,8 @@ class FunnelDashboardVm extends GetxController{
       'filter_email': query,
       'filter_location_id': '',
       'email_id': email,
+      "filter_cluster_name": "",
+      "filter_region_name": "",
       'rowsPerPage': 50,
       'pageNumber': 0,
     };

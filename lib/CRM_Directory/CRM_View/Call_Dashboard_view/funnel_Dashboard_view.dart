@@ -1688,7 +1688,7 @@ class FunnelDashboardView extends StatelessWidget{
                         // List
                         Expanded(
                           child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
+                              ? const Center(child: Text('No Record Found!'))
                               : ListView.builder(
                             padding:
                             const EdgeInsets.symmetric(vertical: 8),
