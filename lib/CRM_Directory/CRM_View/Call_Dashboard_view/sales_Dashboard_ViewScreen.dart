@@ -1970,7 +1970,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         // List
                         Expanded(
                           child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
+                              ? const Center(child: Text('No record found'))
                               : ListView.builder(
                             padding:
                             const EdgeInsets.symmetric(vertical: 8),
@@ -2031,7 +2031,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Employee Name", // 👈 Label restored here
+            labelText: selectedText != null
+                ?"Employee Name":"", // 👈 Label restored here
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),

@@ -40,6 +40,8 @@ class FunnelDashboardView extends StatelessWidget{
   static String _displayCommitStatusForOption(String option) =>
       option;
 
+  final NumberFormat formatter = NumberFormat.decimalPattern('en_IN');
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -109,14 +111,62 @@ class FunnelDashboardView extends StatelessWidget{
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Active Funnel',
-                                    style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        'Active Funnel',
+                                        style: GoogleFonts.poppins(
+                                          color: AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      Spacer(),
+                                      InkWell(
+                                        onTap: (){
+                                          dashboard_view_Controller.onRefereshMethod();
+                                        },
+                                        child: Icon(Icons.refresh),
+                                      ),
+                                      SizedBox(width: 10,)
+                                    ],
                                   ),
+                                  SizedBox(height: 10,),
+                                  Obx((){
+                                    return Container(
+                                      //width: 90,
+                                      margin: EdgeInsets.only(left: 0,right: 10),
+                                      decoration: BoxDecoration(
+                                        color: AllColors.grayColor,
+                                        border: Border.all(
+                                          color: AllColors.grayColor, // Set the border color here
+                                          width: 1.0, // Adjust the border width if necessary
+                                        ),
+                                        borderRadius: BorderRadius.circular(10.0),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            'Total :- ',
+                                            style: GoogleFonts.poppins(
+                                              color: AllColors.blackColor,
+                                              fontSize: AllFontSize.twelve,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          Text(
+                                            '₹ ${formatter.format(double.tryParse(dashboard_view_Controller.totalFunnelPrice.value) ?? 0)}',
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.black,
+                                              fontSize: AllFontSize.twelve,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }),
+
                                   SizedBox(height: 10,),
                                   Obx((){
                                     return Padding(
@@ -153,7 +203,7 @@ class FunnelDashboardView extends StatelessWidget{
                                                     ),
                                                   ),
                                                   Text(
-                                                    '${dashboard_view_Controller.totalSuspectPrice}',
+                                                    '₹ ${formatter.format(double.tryParse(dashboard_view_Controller.totalSuspectPrice.value) ?? 0)}',
                                                     style: GoogleFonts.poppins(
                                                       color: Colors.green,
                                                       fontSize: AllFontSize.twelve,
@@ -193,7 +243,7 @@ class FunnelDashboardView extends StatelessWidget{
                                                     ),
                                                   ),
                                                   Text(
-                                                    '${dashboard_view_Controller.totalProspectPrice}',
+                                                    '₹ ${formatter.format(double.tryParse(dashboard_view_Controller.totalProspectPrice.value) ?? 0)}',
                                                     style: GoogleFonts.poppins(
                                                       color: Colors.orange,
                                                       fontSize: AllFontSize.twelve,
@@ -233,7 +283,7 @@ class FunnelDashboardView extends StatelessWidget{
                                                     ),
                                                   ),
                                                   Text(
-                                                    '${dashboard_view_Controller.totalProposePrice}',
+                                                    '₹ ${formatter.format(double.tryParse(dashboard_view_Controller.totalProposePrice.value) ?? 0)}',
                                                     style: GoogleFonts.poppins(
                                                       color: Colors.blue,
                                                       fontSize: AllFontSize.twelve,
@@ -1273,8 +1323,6 @@ class FunnelDashboardView extends StatelessWidget{
             ),
           ),
           SizedBox(height: 10),
-          bindFilterCreatedOn(context),
-          SizedBox(height: 10),
           bindSalesStageStatus(context),
           SizedBox(height: 10),
           bindQuoteSubmitted(context),
@@ -1290,6 +1338,8 @@ class FunnelDashboardView extends StatelessWidget{
           bindRegionNameFilter(context),
           SizedBox(height: 10),
           bindAccountOwnerFilter(context),
+          SizedBox(height: 10),
+          bindFilterCreatedOn(context),
 
 
 
@@ -1496,7 +1546,11 @@ class FunnelDashboardView extends StatelessWidget{
   bindCustomerNameFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<AccountMasterModel>.multiSelection(
-        items: dashboard_view_Controller.Account_Master_list,
+       // items: dashboard_view_Controller.Account_Master_list,
+        asyncItems: (String filter) async {
+          return await dashboard_view_Controller.getAccountMaster(filter);
+        },
+
         itemAsString: (AccountMasterModel u) => u.accountName??"",
         selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
         dropdownDecoratorProps: DropDownDecoratorProps(
@@ -1537,6 +1591,7 @@ class FunnelDashboardView extends StatelessWidget{
 
         popupProps: PopupPropsMultiSelection.dialog(
           showSearchBox: true,
+          searchDelay: const Duration(milliseconds: 500),
           searchFieldProps: TextFieldProps(
             padding: EdgeInsets.only(top: 20, left: 10, right: 10),
             decoration: InputDecoration(
@@ -1749,7 +1804,8 @@ class FunnelDashboardView extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: "Sale Cycle Owner", // 👈 Label restored here
+            labelText: selectedText != null
+                ?  "Sales Cycle Owner": "", // 👈 Label restored here
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),

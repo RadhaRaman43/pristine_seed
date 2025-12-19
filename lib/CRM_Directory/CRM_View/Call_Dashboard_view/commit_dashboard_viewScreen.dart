@@ -2061,7 +2061,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         // List
                         Expanded(
                           child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
+                              ? const Center(child: Text('No record found'))
                               : ListView.builder(
                             padding:
                             const EdgeInsets.symmetric(vertical: 8),

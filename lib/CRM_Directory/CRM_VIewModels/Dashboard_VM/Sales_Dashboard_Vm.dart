@@ -89,7 +89,7 @@ class SalesDashboardVm extends GetxController{
       EmployeeMasterGet('');
     }
     else{
-      getEmployeeMemberApi();
+      getEmployeeTeamMemberGetByClusterRegionApi();
     }
 
 
@@ -267,7 +267,7 @@ class SalesDashboardVm extends GetxController{
           SalesPersonER_Code_Controller.value.text = response[0].salepersonempcode??"";
           PeriodFrom_Controller.value.text = response[0].periodfrom??"";
           PeriodTo_Controller.value.text = response[0].periodto??"";
-          print('baisgdiuasgi du${response[0].clusterhead??""}');
+
 
         } else {
           Utils.showErrorToastification(
@@ -336,6 +336,56 @@ class SalesDashboardVm extends GetxController{
     loading.value = true;
     try {
       _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+  getEmployeeTeamMemberGetByClusterRegionApi() {
+    Map data = {
+      "cluster_name": "",
+      "email_id": email,
+      "region_name": "",
+      "flag": "GeoLevelLowerWithClusterRegion"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeTeamMemberGetByClusterRegion(data, sessionManagement).then(
             (value) {
           print(value);
           final JsonResponse = json.decode(value);

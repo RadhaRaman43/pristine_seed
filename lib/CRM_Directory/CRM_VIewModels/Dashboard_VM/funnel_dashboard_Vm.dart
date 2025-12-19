@@ -36,6 +36,7 @@ class FunnelDashboardVm extends GetxController{
   RxString totalSuspectPrice = ''.obs;
   RxString totalProspectPrice = ''.obs;
   RxString totalProposePrice = ''.obs;
+  RxString totalFunnelPrice = ''.obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -56,7 +57,7 @@ class FunnelDashboardVm extends GetxController{
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
-  RxList<String> quoteAcceptedList = ["ALL","WON", "LOSS"].obs;
+  RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
   RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
 
   var filterCustomDateController=TextEditingController().obs;
@@ -102,11 +103,11 @@ class FunnelDashboardVm extends GetxController{
       EmployeeMasterGet('');
     }
     else{
-      getEmployeeMemberApi();
+      getEmployeeTeamMemberGetByClusterRegionApi();
     }
     getItemCategoryMstWithoutTaskIdApi();
 
-    getAccountMaster(pageNumber);
+    getAccountMaster("");
   }
 
 
@@ -214,7 +215,9 @@ class FunnelDashboardVm extends GetxController{
           totalProposePrice.value =  funnelDashboardList[0].totalProposePrice.toString();
           totalProspectPrice.value = funnelDashboardList[0].totalProspectPrice.toString();
           totalSuspectPrice.value = funnelDashboardList[0].totalSuspectPrice.toString();
-          print('propose...${totalProposePrice}');
+          final total = (funnelDashboardList[0].totalProposePrice + funnelDashboardList[0].totalProspectPrice + funnelDashboardList[0].totalSuspectPrice);
+          totalFunnelPrice.value = total.toString();
+          print('bdajhsfgyuspropose...${totalFunnelPrice}');
 
         } else {
           Utils.showErrorToastification(
@@ -364,6 +367,56 @@ class FunnelDashboardVm extends GetxController{
     loading.value = true;
     try {
       _api.EmployeeMamberGetApiHit(data, sessionManagement).then(
+            (value) {
+          print(value);
+          final JsonResponse = json.decode(value);
+          if (JsonResponse is List) {
+            List<EmployeeMemberModel> response =
+            JsonResponse.map((e) => EmployeeMemberModel.fromJson(e))
+                .toList();
+            if (response != null &&
+                response.length > 0 &&
+                response[0].condition == "True") {
+              loading.value = false;
+              employee_Member_list.value=response;
+              //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
+
+            } else {
+              loading.value = false;
+              employee_Member_list.value=[];
+              //Utils.showErrorToastification("Error!", "No Date Found");
+              //service_installation_details_list.value=[];
+            }
+          } else {
+            loading.value = false;
+            // service_indent_header_list.value = [];
+            Utils.showExceptionToastification("Api Error!", JsonResponse);
+          }
+        },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          //service_indent_header_list.value = [];
+        },
+      );
+    } catch (e) {
+      loading.value = false;
+      employee_Member_list.value = [];
+      print(e);
+    }
+  }
+
+  getEmployeeTeamMemberGetByClusterRegionApi() {
+    Map data = {
+      "cluster_name": "",
+      "email_id": email,
+      "region_name": "",
+      "flag": "GeoLevelLowerWithClusterRegion"
+    };
+    print(data);
+    loading.value = true;
+    try {
+      _api.EmployeeTeamMemberGetByClusterRegion(data, sessionManagement).then(
             (value) {
           print(value);
           final JsonResponse = json.decode(value);
@@ -571,7 +624,7 @@ class FunnelDashboardVm extends GetxController{
     }
   }
 
-  void getAccountMaster(int page_no){
+  /*void getAccountMaster(int page_no){
     try{
       Map<String, String> data={
         "filter_account_code":'',
@@ -624,7 +677,53 @@ class FunnelDashboardVm extends GetxController{
       loading.value = false;
       print(e);
     }
+  }*/
+
+  Future<List<AccountMasterModel>> getAccountMaster(
+      String searchText) async {
+    print("API HIT WITH: $searchText");
+    try {
+      Map<String, String> data = {
+        "filter_account_code": '',
+        "filter_account_name": searchText, // 👈 SEARCH HERE
+        "filter_account_type": '',
+        "filter_email_id": '',
+        "filter_phone_no": '',
+        "filter_company_profile_type": '',
+        "filter_state_name": '',
+        "filter_postal_code": '',
+        "filter_district": '',
+        "filter_created_by": '',
+        "filter_account_owner": email,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": '',
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": '',
+        "filter_is_active": '-1',
+        "row_per_page": '20',
+        "page_number": '0'
+      };
+      print("data is master....${data}");
+      final response =
+      await _api.AccountMasterGetApiHit(data, sessionManagement);
+
+      final jsonResponse = json.decode(response);
+
+      if (jsonResponse is List) {
+        List<AccountMasterModel> list =
+        jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+
+        if (list.isNotEmpty && list[0].condition == "True") {
+          return list;
+        }
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
   }
+
 
   clearAllFilterController(){
     character.value = 'Month';
