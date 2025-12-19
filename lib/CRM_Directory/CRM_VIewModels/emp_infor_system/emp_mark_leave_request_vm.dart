@@ -212,7 +212,16 @@ class EmpMarkLeaveRequestVm extends GetxController{
           print("response...${response.length}");
           if(response!=null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
             print("hhh...${employee_leave_data_list.value.length}");
-            employee_leave_data_list.value = response;
+
+            //employee_leave_data_list.value = response;
+
+            loading.value = false;
+            if (pageNumber == 0) {
+              employee_leave_data_list.clear();
+            }
+            employee_leave_data_list.addAll(response);
+            total_rows = employee_leave_data_list[0].rowCount!;
+            print('listSize.....${employee_leave_data_list.length} and ${total_rows}');
           }else{
             employee_leave_data_list.value=[];
           }

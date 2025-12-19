@@ -195,24 +195,14 @@ class BussinessTourPlanScreen extends StatelessWidget{
 
 
   Widget BindCustomerListView(context) {
-
     if (businessTourPlanController.BusinessTourPlanList.value.isNotEmpty && businessTourPlanController.BusinessTourPlanList.value.length > 0) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
-        if (scrollController.position.pixels ==
-            scrollController.position.maxScrollExtent) {
-          // You have reached the end of the list
-          int total_page = (businessTourPlanController.total_rows /
-              businessTourPlanController.rowsPerPage)
-              .toInt();
+        if (scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+          int total_page = (businessTourPlanController.total_rows / businessTourPlanController.rowsPerPage).toInt();
           if ((businessTourPlanController.total_rows %
-              businessTourPlanController.rowsPerPage) >
-              0) total_page += 1;
-
-          print(
-              "last index ${businessTourPlanController.pageNumber} ${businessTourPlanController.total_rows} ${businessTourPlanController.rowsPerPage} ${total_page}");
-
-
+              businessTourPlanController.rowsPerPage) > 0) total_page += 1;
+          print("last index ${businessTourPlanController.pageNumber} ${businessTourPlanController.total_rows} ${businessTourPlanController.rowsPerPage} ${total_page}");
           if (businessTourPlanController.pageNumber + 1 < total_page) {
             businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber + 1,);
             businessTourPlanController.pageNumber += 1;

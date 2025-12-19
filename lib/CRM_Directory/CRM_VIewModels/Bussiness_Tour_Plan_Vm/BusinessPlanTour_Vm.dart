@@ -254,7 +254,8 @@ class BusinessPlanTourViewModel extends GetxController{
           if (jsonResponse is List) {
             List<BussinessTourPlanModel> response =
             jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
-            if (response.length > 0 && response[0].condition == "True") {
+            if (response.length > 0 && response[0].condition == "Tru"
+                "e") {
               loading.value = false;
               if (page_no == 0) {
                 BusinessTourPlanList.clear();

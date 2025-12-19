@@ -204,6 +204,22 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
     if(employeeMarkLeaveController.employee_leave_data_list.value.isNotEmpty &&
         employeeMarkLeaveController.employee_leave_data_list.value != null) {
       ScrollController scrollController = ScrollController();
+      scrollController.addListener(() {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          // You have reached the end of the list
+          int total_page = (employeeMarkLeaveController.total_rows /
+              employeeMarkLeaveController.rowsPerPage).toInt();
+          if ((employeeMarkLeaveController.total_rows % employeeMarkLeaveController.rowsPerPage) > 0) total_page += 1;
+          print("radha");
+          print("last index ${employeeMarkLeaveController.pageNumber} ${employeeMarkLeaveController.total_rows} ${employeeMarkLeaveController.rowsPerPage} ${total_page}");
+          if (employeeMarkLeaveController.pageNumber + 1 < total_page) {
+            print("radha1");
+            employeeMarkLeaveController.getEmployeeLeaveData(employeeMarkLeaveController.filterStatus.value, employeeMarkLeaveController.pageNumber+1);
+            employeeMarkLeaveController.pageNumber += 1;
+          }
+        }
+      });
       return Expanded(
         child: ListView.separated(
             padding: EdgeInsets.only(bottom: 100 ),
@@ -290,21 +306,17 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
               _buildLabelWithValue(
                 label: "Status : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].status,
-                // width: size.width * 0.36,
+                value: employeeMarkLeaveController.employee_leave_data_list[index].status,
                 color: getStatusColor(status),
               ),
 
               _buildLabelWithValue(
                 label: "Leave Description : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].leaveDescription,
+                value: employeeMarkLeaveController.employee_leave_data_list[index].leaveDescription,
               ),
               _buildLabelWithValue(
                 label: "Leave Reason : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].leaveReason,
+                value: employeeMarkLeaveController.employee_leave_data_list[index].leaveReason,
               ),
               _buildLabelWithValue(
                 label: "Start Date : ",
@@ -317,8 +329,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
               _buildLabelWithValue(
                 label: "No of Days : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].noOfDays.toString(),
+                value: employeeMarkLeaveController.employee_leave_data_list[index].noOfDays.toString(),
               ),
 
               Visibility(
@@ -327,28 +338,23 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                   children: [
                     _buildLabelWithValue(
                       label: "Approved Start Date: ",
-                      value: employeeMarkLeaveController
-                          .employee_leave_data_list[index].approvedFromDate,
+                      value: employeeMarkLeaveController.employee_leave_data_list[index].approvedFromDate,
                     ),
                     _buildLabelWithValue(
                       label: "Approved End Date: ",
-                      value: employeeMarkLeaveController
-                          .employee_leave_data_list[index].approvedToDate
+                      value: employeeMarkLeaveController.employee_leave_data_list[index].approvedToDate
                     ),
                     _buildLabelWithValue(
                         label: "Approved No. of days : ",
-                        value:employeeMarkLeaveController
-                            .employee_leave_data_list[index].noOfApprovedDays.toString()
+                        value:employeeMarkLeaveController.employee_leave_data_list[index].noOfApprovedDays.toString()
                     ),
                     _buildLabelWithValue(
                         label: "Approved Leave Description : ",
-                        value:employeeMarkLeaveController
-                            .employee_leave_data_list[index].approvedLeaveDescription
+                        value:employeeMarkLeaveController.employee_leave_data_list[index].approvedLeaveDescription
                     ),
                     _buildLabelWithValue(
                         label: "Manager Remarks : ",
-                        value:employeeMarkLeaveController
-                            .employee_leave_data_list[index].managerRemarks
+                        value:employeeMarkLeaveController.employee_leave_data_list[index].managerRemarks
                     ),
                     _buildLabelWithValue(
                       label: "Approved On : ",
@@ -360,8 +366,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
               _buildLabelWithValue(
                 label: "Created By: ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].createdFullName,
+                value: employeeMarkLeaveController.employee_leave_data_list[index].createdFullName,
               ),
               _buildLabelWithValue(
                 label: "Created On : ",
@@ -377,497 +382,13 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                       label: "Rejected On : ",
                       value: approved_date,
                     ),
-
                     _buildLabelWithValue(
                       label: "Reject Remarks : ",
-                      value: employeeMarkLeaveController
-                          .employee_leave_data_list[index].rejectRemarks,
+                      value: employeeMarkLeaveController.employee_leave_data_list[index].rejectRemarks,
                     ),
                   ],
                 ),
               ),
-             /* Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Emp Name :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].createdFullName??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].createdFullName??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Status :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].status??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].status??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Created On :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: createdOn??"",
-                      child: Text(
-                        createdOn??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              *//*Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Is Half Day :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Tooltip(
-                    message: employeeMarkLeaveController
-                        .employee_leave_data_list[index].isHalfDay == 1?"Yes":"No",
-                    child: Text(
-                      employeeMarkLeaveController
-                          .employee_leave_data_list[index].isHalfDay == 1?"Yes":"No",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Is Short Leave :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].isShortLeave == 1?"Yes":"No",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].isShortLeave == 1?"Yes":"No",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Short Leave Time :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].shortLeaveTime??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].shortLeaveTime??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),*//*
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Leave Description :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].leaveDescription??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].leaveDescription??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Leave Reason :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].leaveReason??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].leaveReason??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Start Date :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: startDate??"",
-                      child: Text(
-                        startDate??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'End Date :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: endDate??"",
-                      child: Text(
-                        endDate??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'No of Days :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].noOfDays.toString(),
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].noOfDays.toString(),
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Reporting Manager :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Spacer(),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message:employeeMarkLeaveController
-                          .employee_leave_data_list[index].approvedFullName??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].approvedFullName??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-
-              Visibility(
-                visible: employeeMarkLeaveController.employee_leave_data_list[index].status?.toLowerCase() == 'approved',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Approved On :',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Spacer(),
-                    Tooltip(
-                      message: approved_date??"",
-                      child: Text(
-                        approved_date??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-
-
-                  ],
-                ),
-              ),
-
-
-
-              Visibility(
-                visible: employeeMarkLeaveController.employee_leave_data_list[index].status?.toLowerCase() == 'rejected',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Rejected On:',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Tooltip(
-                      message: approved_date??"",
-                      child: Text(
-                        approved_date??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-
-
-                  ],
-                ),
-              ),
-
-              Visibility(
-                visible: employeeMarkLeaveController.filterStatus == 'Rejected',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Rejected Remarks:',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Flexible(
-                      child: Tooltip(
-                        message: employeeMarkLeaveController
-                            .employee_leave_data_list[index].rejectRemarks??"",
-                        child: Text(
-                          employeeMarkLeaveController
-                              .employee_leave_data_list[index].rejectRemarks??"",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),*/
             ],
           ),
 
