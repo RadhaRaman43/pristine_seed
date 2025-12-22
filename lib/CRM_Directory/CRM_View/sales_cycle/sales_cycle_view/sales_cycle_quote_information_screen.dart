@@ -132,11 +132,7 @@ class QuoteInformationScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus!
-                              .toLowerCase() ==
-                          'draft'
-                      ? false
-                      : true,
+                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() == 'draft' ? false : true,
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       return [
@@ -155,10 +151,9 @@ class QuoteInformationScreen extends StatelessWidget {
                             //saleCycleController.reportDownload("quoteReport");
                           },
                         ),
-                        if (saleCycleController.quoteHeaderdata[0]
-                                    .isReadySendForApproval ==
-                                0 &&
-                            saleCycleController.quoteHeaderdata[0].isSpr == 1)
+                        /*if (saleCycleController.isHeadofficePermission != 0 &&
+                            saleCycleController.quoteHeaderdata[0].isSpr == 1)*/
+                        if(saleCycleController.isHeadofficePermission != 0 && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved")
                           PopupMenuItem(
                             child: Row(
                               children: [
@@ -171,9 +166,7 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                             onTap: () {
                               saleCycleController.reportSprDownload(
-                                  "quoteSprReport",
-                                  saleCycleController
-                                      .quoteHeaderdata[0].quoteId!);
+                                  "quoteSprReport", saleCycleController.quoteHeaderdata[0].quoteId!);
                             },
                           ),
                       ];

@@ -341,7 +341,6 @@ class Taskmastervm extends GetxController{
           if(jsonResponse is List){
             List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
             if(response.length>0 && response[0].condition=="True"){
-              loading.value = false;
               clusterGetByEmailList.value=response;
               if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
                 SelectedCluster_list.assignAll(clusterGetByEmailList.value);
@@ -350,11 +349,8 @@ class Taskmastervm extends GetxController{
                 getRegionsWithClusterFilterGetByEmail();
               }
             }else {
-              loading.value = false;
               clusterGetByEmailList.value=[];
             }
-          } else {
-            loading.value = false;
           }
         },
         ).onError(
@@ -363,7 +359,6 @@ class Taskmastervm extends GetxController{
           },
         );
       }catch(e){
-        loading.value = false;
         print(e);
       }finally{
         loading.value = false;
@@ -390,27 +385,21 @@ class Taskmastervm extends GetxController{
           if(jsonResponse is List){
             List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
             if(response.length>0 && response[0].condition=="True"){
-              loading.value = false;
               regionwithclusterGetByEmailList.value=response;
               RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
               print('region....${RegionName_controller.value.text}');
               getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
 
             }else {
-              loading.value = false;
               regionwithclusterGetByEmailList.value=[];
             }
-          } else {
-            loading.value = false;
           }
         },
-        ).onError(
-              (error, stackTrace) {
+        ).onError((error, stackTrace) {
             print(error);
           },
         );
       }catch(e){
-        loading.value = false;
         print(e);
       }finally{
         loading.value = false;
@@ -418,7 +407,7 @@ class Taskmastervm extends GetxController{
     }
     
     getTaskMaster(int page_no, String IsActive, String? taskId,
-        String flag, String status, RxString date_filter, int is_done, ){
+        String flag, String status, RxString date_filter, int is_done, ) async {
         if(isInfraLeadFilterController.text=="All"){
             infraLeadValue.value=-1;
         }
@@ -476,19 +465,15 @@ class Taskmastervm extends GetxController{
                 "row_per_page": rowsPerPage.toString(),
                 "page_number": page_no.toString()
                 //"filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
-
-
-
             };
             print("Data Json....${data}");
             loading.value=true;
-            _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
-                final jsonResponse = json.decode(onValue);
+            var onValue =_api.TaskMasterGetApiHit(data, sessionManagement);
+                final jsonResponse = json.decode(await onValue);
                 print(onValue);
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
                         if(page_no==0){
                             Task_Master_list.clear();
                         }
@@ -515,23 +500,11 @@ class Taskmastervm extends GetxController{
 
 
                     }else {
-                        loading.value = false;
                         Task_Master_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
-            },
-            ).onError(
-                    (error, stackTrace) {
-                    print(error);
-                    loading.value = false;
-                },
-            );
         }catch(e){
-            loading.value = false;
             print(e);
         }
         finally{
@@ -579,7 +552,7 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         //Task_Master_list.addAll(response);
                         Utils.showToastification('Success!', response[0].message.toString());
                        // Get.offAllNamed(RoutesName.taskMaster_screen);
@@ -591,26 +564,25 @@ class Taskmastervm extends GetxController{
                         Get.toNamed(RoutesName.taskMaster_screen);
 
                     }else {
-                        loading.value = false;
                         Task_Master_list.value=[];
                         Utils.showErrorToastification('Error!', response[0].message.toString());
                         print('execption1...${response[0].message.toString()}}');
 
                     }
                 } else {
-                    loading.value = false;
                     print('execption2...r}');
 
                 }
             },
-            ).onError(
-                    (error, stackTrace) {
+            ).onError((error, stackTrace) {
                         print('execption3...${error}');
                 },
             );
         }catch(e){
-            loading.value = false;
             print('execption4...${e}');
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -659,7 +631,7 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         //Task_Master_list.addAll(response);
                         Utils.showToastification('Success!', response[0].message.toString());
                         getTaskMaster(0, 'All', TaskID, "DSAR",'GET FROM TASK ID', date_filter, is_done.value);
@@ -680,14 +652,10 @@ class Taskmastervm extends GetxController{
 
 
                     }else {
-                        loading.value = false;
                         Utils.showErrorToastification('Error!', response[0].message.toString());
                         //Task_Master_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
@@ -717,7 +685,6 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
                         //Task_Master_list.addAll(response);
                         Utils.showToastification('Success!', response[0].message.toString());
                        // Get.offAllNamed(RoutesName.taskMaster_screen);
@@ -726,14 +693,12 @@ class Taskmastervm extends GetxController{
                         Get.toNamed(RoutesName.taskMaster_screen);
 
                     }else {
-                        loading.value = false;
                         Utils.showErrorToastification('Error!', response[0].message.toString());
                         print(response[0].message.toString());
                         //Task_Master_list.value=[];
 
                     }
                 } else {
-                    loading.value = false;
                     print('APi Not hit');
 
                 }
@@ -744,8 +709,10 @@ class Taskmastervm extends GetxController{
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -763,7 +730,7 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         //Task_Master_list.addAll(response);
                         Utils.showToastification('Success!', response[0].message.toString());
                         // Get.offAllNamed(RoutesName.taskMaster_screen);
@@ -772,26 +739,24 @@ class Taskmastervm extends GetxController{
                         Get.toNamed(RoutesName.taskMasterDetails_screen);
 
                     }else {
-                        loading.value = false;
                         Utils.showErrorToastification('Error!', response[0].message.toString());
                         print(response[0].message.toString());
                         //Task_Master_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-                    print('APi Not hit');
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                     print(error);
+                    loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -814,7 +779,7 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<ContactMstGetListModal> response = jsonResponse.map((e) => ContactMstGetListModal.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         if(pageNumber==0){
                             contact_master_list.clear();
                         }
@@ -823,23 +788,22 @@ class Taskmastervm extends GetxController{
                         print('Total rows ${total_rows}');
 
                     }else {
-                        loading.value = false;
                         contact_master_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                     print(error);
+                    loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -860,30 +824,28 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<TaskDSARModel> response = jsonResponse.map((e) => TaskDSARModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         TaskDSAR_Master_list.value=response;
                         print("Success...1 ${response.toString()}");
 
                     }else {
-                        loading.value = false;
                         TaskDSAR_Master_list.value=[];
                         print("UnSuccess... ${response.toString()}");
 
                     }
-                } else {
-                    loading.value = false;
-                    print("UnSuccessfull... ");
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                     print(error);
+                    loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print("jdsdhud...${e}");
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -908,30 +870,28 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<AccountMasterModel> response = jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
                         if(page_no==0){
                             Account_Master_list.clear();
                         }
                         Account_Master_list.addAll(response);
 
                     }else {
-                        loading.value = false;
                         Account_Master_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                     print(error);
+                    loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -947,26 +907,25 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         CallStatus_Master_list.value = response;
 
                     }else {
-                        loading.value = false;
                         CallStatus_Master_list.value=[];
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                         print('call list...${error}');
+                        loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -981,27 +940,26 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         DSARStatus_Master_list.addAll(response);
 
                     }else {
-                        loading.value = false;
                         DSARStatus_Master_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                     print(error);
+                    loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -1016,27 +974,26 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
                     if(response != null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         MethodOfCall_Master_list.addAll(response);
 
                     }else {
-                        loading.value = false;
                         MethodOfCall_Master_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                     print(error);
+                    loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -1280,7 +1237,7 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<SalesCycleModal> response = jsonResponse.map((e) => SalesCycleModal.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
+
                         if(page_no==0){
                             Sales_Id_list.clear();
                         }
@@ -1288,23 +1245,22 @@ class Taskmastervm extends GetxController{
                         total_rows=int.parse(Sales_Id_list[0].totalRows!);
 
                     }else {
-                        loading.value = false;
                         Sales_Id_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                     print(error);
+                    loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 
@@ -1494,6 +1450,7 @@ class Taskmastervm extends GetxController{
 
                 }
 
+
             },
         ).onError(
                 (error, stackTrace) {
@@ -1521,28 +1478,26 @@ class Taskmastervm extends GetxController{
                 if(jsonResponse is List){
                     List<AlongWithPersonModel> response = jsonResponse.map((e) => AlongWithPersonModel.fromJson(e)).toList();
                     if(response!= null && response.length>0 && response[0].condition=="True"){
-                        loading.value = false;
                         AlongPersonWith_list.value = response;
                         print('asjhdgsau1 ${AlongPersonWith_list.length}');
 
                     }else {
-                        loading.value = false;
                         AlongPersonWith_list.value=[];
 
                     }
-                } else {
-                    loading.value = false;
-
                 }
             },
             ).onError(
                     (error, stackTrace) {
                         print('asjhdgsau5 ${error}');
+                        loading.value = false;
                 },
             );
         }catch(e){
-            loading.value = false;
             print(e);
+        }
+        finally{
+          loading.value = false;
         }
     }
 

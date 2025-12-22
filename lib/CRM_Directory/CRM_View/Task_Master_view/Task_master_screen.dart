@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../component/back_button.dart';
+import '../../../component/circular_loading.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../reources/routes/routes_name.dart';
@@ -94,307 +95,254 @@ class TaskMasterScreen extends StatelessWidget {
             )
         ),
         drawer: CustomDrawer(),
-        body: RefreshIndicator(
-          onRefresh: TaskMaster_page_controller.refreshList,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              children: [
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Obx(() {
-                          return ActionChip(
-                            elevation: 2,
-                            padding: EdgeInsets.only(
-                                right: 15, top: 2, left: 15, bottom: 2),
-                            backgroundColor: TaskMaster_page_controller.is_done
-                                .value == 0 &&
-                                TaskMaster_page_controller.filter.value ==
-                                    'Running'
-                                ? AllColors.primaryDark1
-                                : AllColors.grayColor,
-                            shadowColor: Colors.black,
-                            shape: StadiumBorder(
-                                side: BorderSide(
-                                    color: AllColors.grayColor)),
-                            //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                            //CircleAvatar
-                            label: Text('Running',
-                                style: GoogleFonts.poppins(
-                                  color: TaskMaster_page_controller.is_done
-                                      .value == 0 &&
-                                      TaskMaster_page_controller.filter.value ==
-                                          'Running'
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                            onPressed: () {
-                              TaskMaster_page_controller
-                                  .isInfraLeadFilterController.text = "All";
-                              TaskMaster_page_controller
-                                  .SaleCycleActive_Controller.text = "All";
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller
-                                  .date_filter.value = "Today";
-                              TaskMaster_page_controller
-                                  .is_done.value = 0;
-                              TaskMaster_page_controller
-                                  .filter.value = "Running";
-                              TaskMaster_page_controller
-                                  .getTaskMaster(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active
-                                      .toString(),
-                                  '',
-                                  '',
-                                  TaskMaster_page_controller.Task_status_controller.value.text,
-                                  TaskMaster_page_controller.date_filter,
-                                  TaskMaster_page_controller.is_done.value);
-                            }, //Text
-                          );
-                        }),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        Obx(() {
-                          return ActionChip(
-                            elevation: 2,
-                            padding: EdgeInsets.only(
-                                right: 15, top: 2, left: 15, bottom: 2),
-                            backgroundColor: TaskMaster_page_controller.
-                            is_done.value == 1 &&
-                                TaskMaster_page_controller.filter.value ==
-                                    'Completed'
-                                ? AllColors.primaryDark1
-                                : AllColors.grayColor,
-                            shadowColor: Colors.black,
-                            shape: StadiumBorder(
-                                side: BorderSide(
-                                    color: AllColors.grayColor)),
-                            //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                            //CircleAvatar
-                            label: Text('Completed',
-                                style: GoogleFonts.poppins(
-                                  color: TaskMaster_page_controller.
-                                  is_done.value == 1 &&
-                                      TaskMaster_page_controller.filter.value ==
-                                          'Completed'
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                            onPressed: () {
-                              TaskMaster_page_controller
-                                  .isInfraLeadFilterController.text = "All";
-                              TaskMaster_page_controller
-                                  .SaleCycleActive_Controller.text = "All";
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.is_done.value = 1;
-                              TaskMaster_page_controller.date_filter.value = "";
-                              TaskMaster_page_controller
-                                  .filter.value = "Completed";
-                              TaskMaster_page_controller
-                                  .getTaskMaster(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active
-                                      .toString(),
-                                  '',
-                                  '',
-                                  TaskMaster_page_controller.Task_status_controller.value.text,
-                                  TaskMaster_page_controller.date_filter,
-                                  TaskMaster_page_controller.is_done.value);
-                            }, //Text
-                          );
-                        }),
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        Obx(() {
-                          return ActionChip(
-                            elevation: 2,
-                            padding: EdgeInsets.only(
-                                right: 15, top: 2, left: 15, bottom: 2),
-                            backgroundColor: TaskMaster_page_controller.
-                            is_done.value == 0 &&
-                                TaskMaster_page_controller.filter.value ==
-                                    'Pending DSAR'
-                                ? AllColors.primaryDark1
-                                : AllColors.grayColor,
-                            shadowColor: Colors.black,
-                            shape: StadiumBorder(
-                                side: BorderSide(
-                                    color: AllColors.grayColor)),
-                            //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                            //CircleAvatar
-                            label: Text('Pending DSAR',
-                                style: GoogleFonts.poppins(
-                                  color: TaskMaster_page_controller.
-                                  is_done.value == 0 &&
-                                      TaskMaster_page_controller.filter.value ==
-                                          'Pending DSAR'
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                            onPressed: () {
-                              TaskMaster_page_controller
-                                  .isInfraLeadFilterController.text = "All";
-                              TaskMaster_page_controller
-                                  .SaleCycleActive_Controller.text = "All";
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.is_done.value = 0;
-                              TaskMaster_page_controller.date_filter.value = "";
-                              TaskMaster_page_controller
-                                  .filter.value = "Pending DSAR";
-                              TaskMaster_page_controller
-                                  .getTaskMaster(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active
-                                      .toString(),
-                                  '',
-                                  '',
-                                  'Pending DSAR',
-                                  TaskMaster_page_controller.date_filter,
-                                  TaskMaster_page_controller.is_done.value);
-                            }, //Text
-                          );
-                        }),
+        body: Obx((){
+          print("circular loading..${TaskMaster_page_controller.loading.value}");
+          if(TaskMaster_page_controller.loading.value)
+            return const FullScreenLoader();
+          return Visibility(child: RefreshIndicator(
+            onRefresh: TaskMaster_page_controller.refreshList,
+            child: Container(
+              width: double.infinity,
+              height: double.infinity,
+              child: Column(
+                children: [
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.loading.value,
+                      child: LinearProgressIndicator(
+                        backgroundColor: AllColors.green,
+                        color: AllColors.textColor,
+                      ),
+                    );
+                  }),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Container(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.only(
+                                  right: 15, top: 2, left: 15, bottom: 2),
+                              backgroundColor: TaskMaster_page_controller.is_done
+                                  .value == 0 &&
+                                  TaskMaster_page_controller.filter.value ==
+                                      'Running'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: AllColors.grayColor)),
+                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                              //CircleAvatar
+                              label: Text('Running',
+                                  style: GoogleFonts.poppins(
+                                    color: TaskMaster_page_controller.is_done.value == 0 &&
+                                        TaskMaster_page_controller.filter.value == 'Running'
+                                        ? AllColors.whiteColor
+                                        : AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              onPressed: () {
+                                TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                                TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
+                                TaskMaster_page_controller.pageNumber = 0;
+                                TaskMaster_page_controller.date_filter.value = "Today";
+                                TaskMaster_page_controller.is_done.value = 0;
+                                TaskMaster_page_controller.filter.value = "Running";
+                                TaskMaster_page_controller.getTaskMaster(
+                                    TaskMaster_page_controller.pageNumber,
+                                    TaskMaster_page_controller.is_Active.toString(), '', '',
+                                    TaskMaster_page_controller.Task_status_controller.value.text,
+                                    TaskMaster_page_controller.date_filter,
+                                    TaskMaster_page_controller.is_done.value);
+                              }, //Text
+                            );
+                          }),
+                          SizedBox(
+                            width: size.width * 0.02,
+                          ),
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.only(
+                                  right: 15, top: 2, left: 15, bottom: 2),
+                              backgroundColor: TaskMaster_page_controller.
+                              is_done.value == 1 && TaskMaster_page_controller.filter.value == 'Completed'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: AllColors.grayColor)),
+                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                              //CircleAvatar
+                              label: Text('Completed',
+                                  style: GoogleFonts.poppins(
+                                    color: TaskMaster_page_controller.
+                                    is_done.value == 1 &&
+                                        TaskMaster_page_controller.filter.value ==
+                                            'Completed'
+                                        ? AllColors.whiteColor
+                                        : AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              onPressed: () {
+                                TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
+                                TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
+                                TaskMaster_page_controller.pageNumber = 0;
+                                TaskMaster_page_controller.is_done.value = 1;
+                                TaskMaster_page_controller.date_filter.value = "";
+                                TaskMaster_page_controller.filter.value = "Completed";
+                                TaskMaster_page_controller.getTaskMaster(
+                                    TaskMaster_page_controller.pageNumber,
+                                    TaskMaster_page_controller.is_Active.toString(),
+                                    '',
+                                    '',
+                                    TaskMaster_page_controller.Task_status_controller.value.text,
+                                    TaskMaster_page_controller.date_filter,
+                                    TaskMaster_page_controller.is_done.value);
+                              }, //Text
+                            );
+                          }),
+                          SizedBox(
+                            width: size.width * 0.02,
+                          ),
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.only(
+                                  right: 15, top: 2, left: 15, bottom: 2),
+                              backgroundColor: TaskMaster_page_controller.
+                              is_done.value == 0 &&
+                                  TaskMaster_page_controller.filter.value ==
+                                      'Pending DSAR'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: AllColors.grayColor)),
+                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                              //CircleAvatar
+                              label: Text('Pending DSAR',
+                                  style: GoogleFonts.poppins(
+                                    color: TaskMaster_page_controller.
+                                    is_done.value == 0 &&
+                                        TaskMaster_page_controller.filter.value ==
+                                            'Pending DSAR'
+                                        ? AllColors.whiteColor
+                                        : AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              onPressed: () {
+                                TaskMaster_page_controller
+                                    .isInfraLeadFilterController.text = "All";
+                                TaskMaster_page_controller
+                                    .SaleCycleActive_Controller.text = "All";
+                                TaskMaster_page_controller.pageNumber = 0;
+                                TaskMaster_page_controller.is_done.value = 0;
+                                TaskMaster_page_controller.date_filter.value = "";
+                                TaskMaster_page_controller
+                                    .filter.value = "Pending DSAR";
+                                TaskMaster_page_controller
+                                    .getTaskMaster(
+                                    TaskMaster_page_controller.pageNumber,
+                                    TaskMaster_page_controller.is_Active
+                                        .toString(),
+                                    '',
+                                    '',
+                                    'Pending DSAR',
+                                    TaskMaster_page_controller.date_filter,
+                                    TaskMaster_page_controller.is_done.value);
+                              }, //Text
+                            );
+                          }),
 
-                        SizedBox(
-                          width: size.width * 0.02,
-                        ),
-                        Obx(() {
-                          return ActionChip(
-                            elevation: 2,
-                            padding: EdgeInsets.only(
-                                right: 15, top: 2, left: 15, bottom: 2),
-                            backgroundColor: TaskMaster_page_controller.
-                            is_done.value == 0 &&
-                                TaskMaster_page_controller.filter.value == 'All'
-                                ? AllColors.primaryDark1
-                                : AllColors.grayColor,
-                            shadowColor: Colors.black,
-                            shape: StadiumBorder(
-                                side: BorderSide(
-                                    color: AllColors.grayColor)),
-                            //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                            //CircleAvatar
-                            label: Text('All ',
-                                style: GoogleFonts.poppins(
-                                  color: TaskMaster_page_controller.
-                                  is_done.value == 0 &&
-                                      TaskMaster_page_controller.filter.value ==
-                                          'All'
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                )),
-                            onPressed: () {
-                              TaskMaster_page_controller
-                                  .isInfraLeadFilterController.text = "All";
-                              TaskMaster_page_controller
-                                  .SaleCycleActive_Controller.text = "All";
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.is_done.value = 0;
-                              TaskMaster_page_controller.date_filter.value =
-                              "All";
-                              TaskMaster_page_controller
-                                  .filter.value = "All";
-                              TaskMaster_page_controller
-                                  .getTaskMaster(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active
-                                      .toString(),
-                                  '',
-                                  '',
-                                  TaskMaster_page_controller.Task_status_controller.value.text,
-                                  TaskMaster_page_controller.date_filter,
-                                  TaskMaster_page_controller.is_done.value);
-                            }, //Text
-                          );
-                        }),
-                      ],
+                          SizedBox(
+                            width: size.width * 0.02,
+                          ),
+                          Obx(() {
+                            return ActionChip(
+                              elevation: 2,
+                              padding: EdgeInsets.only(
+                                  right: 15, top: 2, left: 15, bottom: 2),
+                              backgroundColor: TaskMaster_page_controller.
+                              is_done.value == 0 &&
+                                  TaskMaster_page_controller.filter.value == 'All'
+                                  ? AllColors.primaryDark1
+                                  : AllColors.grayColor,
+                              shadowColor: Colors.black,
+                              shape: StadiumBorder(
+                                  side: BorderSide(
+                                      color: AllColors.grayColor)),
+                              //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                              //CircleAvatar
+                              label: Text('All ',
+                                  style: GoogleFonts.poppins(
+                                    color: TaskMaster_page_controller.
+                                    is_done.value == 0 &&
+                                        TaskMaster_page_controller.filter.value ==
+                                            'All'
+                                        ? AllColors.whiteColor
+                                        : AllColors.primaryDark1,
+                                    fontSize: AllFontSize.fourtine,
+                                    fontWeight: FontWeight.w500,
+                                  )),
+                              onPressed: () {
+                                TaskMaster_page_controller
+                                    .isInfraLeadFilterController.text = "All";
+                                TaskMaster_page_controller
+                                    .SaleCycleActive_Controller.text = "All";
+                                TaskMaster_page_controller.pageNumber = 0;
+                                TaskMaster_page_controller.is_done.value = 0;
+                                TaskMaster_page_controller.date_filter.value =
+                                "All";
+                                TaskMaster_page_controller
+                                    .filter.value = "All";
+                                TaskMaster_page_controller
+                                    .getTaskMaster(
+                                    TaskMaster_page_controller.pageNumber,
+                                    TaskMaster_page_controller.is_Active
+                                        .toString(),
+                                    '',
+                                    '',
+                                    TaskMaster_page_controller.Task_status_controller.value.text,
+                                    TaskMaster_page_controller.date_filter,
+                                    TaskMaster_page_controller.is_done.value);
+                              }, //Text
+                            );
+                          }),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Obx(() {
-                  return Visibility(
-                    visible: TaskMaster_page_controller.is_done.value == 0 &&
-                        TaskMaster_page_controller.filter.value == "Running"
-                        ? true
-                        : false,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            Obx(() {
-                              return ActionChip(
-                                elevation: 2,
-                                padding: EdgeInsets.only(
-                                    right: 15, top: 2, left: 15, bottom: 2),
-                                backgroundColor: TaskMaster_page_controller
-                                    .date_filter.value ==
-                                    "Today"
-                                    ? AllColors.primaryDark1
-                                    : AllColors.grayColor,
-                                shadowColor: Colors.black,
-                                shape: StadiumBorder(
-                                    side: BorderSide(
-                                        color: AllColors.grayColor)),
-                                //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                //CircleAvatar
-                                label: Text("Today Calls",
-                                    style: GoogleFonts.poppins(
-                                      color: TaskMaster_page_controller
-                                          .date_filter.value ==
-                                          "Today"
-                                          ? AllColors.whiteColor
-                                          : AllColors.primaryDark1,
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                                onPressed: () {
-                                  TaskMaster_page_controller.pageNumber = 0;
-                                  TaskMaster_page_controller
-                                      .date_filter.value = "Today";
-                                  TaskMaster_page_controller.is_done.value = 0;
-                                  TaskMaster_page_controller
-                                      .getTaskMaster(
-                                      TaskMaster_page_controller.pageNumber,
-                                      TaskMaster_page_controller.is_Active
-                                          .toString(),
-                                      '',
-                                      '',
-                                      TaskMaster_page_controller.Task_status_controller.value.text,
-                                      TaskMaster_page_controller.date_filter,
-                                      TaskMaster_page_controller.is_done.value);
-                                }, //Text
-                              );
-                            }),
-                            SizedBox(
-                              width: size.width * 0.02,
-                            ),
-                            Obx(
-                                  () {
+                  Obx(() {
+                    return Visibility(
+                      visible: TaskMaster_page_controller.is_done.value == 0 &&
+                          TaskMaster_page_controller.filter.value == "Running"
+                          ? true
+                          : false,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Container(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Obx(() {
                                 return ActionChip(
                                   elevation: 2,
                                   padding: EdgeInsets.only(
                                       right: 15, top: 2, left: 15, bottom: 2),
                                   backgroundColor: TaskMaster_page_controller
                                       .date_filter.value ==
-                                      "Future"
+                                      "Today"
                                       ? AllColors.primaryDark1
                                       : AllColors.grayColor,
                                   shadowColor: Colors.black,
@@ -403,22 +351,21 @@ class TaskMasterScreen extends StatelessWidget {
                                           color: AllColors.grayColor)),
                                   //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                   //CircleAvatar
-                                  label: Text("Future Calls",
+                                  label: Text("Today Calls",
                                       style: GoogleFonts.poppins(
                                         color: TaskMaster_page_controller
                                             .date_filter.value ==
-                                            "Future"
+                                            "Today"
                                             ? AllColors.whiteColor
                                             : AllColors.primaryDark1,
                                         fontSize: AllFontSize.fourtine,
                                         fontWeight: FontWeight.w500,
                                       )),
                                   onPressed: () {
-                                    TaskMaster_page_controller
-                                        .date_filter.value = "Future";
                                     TaskMaster_page_controller.pageNumber = 0;
-                                    TaskMaster_page_controller.is_done.value =
-                                    0;
+                                    TaskMaster_page_controller
+                                        .date_filter.value = "Today";
+                                    TaskMaster_page_controller.is_done.value = 0;
                                     TaskMaster_page_controller
                                         .getTaskMaster(
                                         TaskMaster_page_controller.pageNumber,
@@ -428,147 +375,199 @@ class TaskMasterScreen extends StatelessWidget {
                                         '',
                                         TaskMaster_page_controller.Task_status_controller.value.text,
                                         TaskMaster_page_controller.date_filter,
-                                        TaskMaster_page_controller.is_done
-                                            .value);
+                                        TaskMaster_page_controller.is_done.value);
                                   }, //Text
                                 );
-                              },
-                            ),
+                              }),
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              Obx(
+                                    () {
+                                  return ActionChip(
+                                    elevation: 2,
+                                    padding: EdgeInsets.only(
+                                        right: 15, top: 2, left: 15, bottom: 2),
+                                    backgroundColor: TaskMaster_page_controller
+                                        .date_filter.value ==
+                                        "Future"
+                                        ? AllColors.primaryDark1
+                                        : AllColors.grayColor,
+                                    shadowColor: Colors.black,
+                                    shape: StadiumBorder(
+                                        side: BorderSide(
+                                            color: AllColors.grayColor)),
+                                    //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                    //CircleAvatar
+                                    label: Text("Future Calls",
+                                        style: GoogleFonts.poppins(
+                                          color: TaskMaster_page_controller
+                                              .date_filter.value ==
+                                              "Future"
+                                              ? AllColors.whiteColor
+                                              : AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                    onPressed: () {
+                                      TaskMaster_page_controller
+                                          .date_filter.value = "Future";
+                                      TaskMaster_page_controller.pageNumber = 0;
+                                      TaskMaster_page_controller.is_done.value =
+                                      0;
+                                      TaskMaster_page_controller
+                                          .getTaskMaster(
+                                          TaskMaster_page_controller.pageNumber,
+                                          TaskMaster_page_controller.is_Active
+                                              .toString(),
+                                          '',
+                                          '',
+                                          TaskMaster_page_controller.Task_status_controller.value.text,
+                                          TaskMaster_page_controller.date_filter,
+                                          TaskMaster_page_controller.is_done
+                                              .value);
+                                    }, //Text
+                                  );
+                                },
+                              ),
 
-                            SizedBox(
-                              width: size.width * 0.02,
-                            ),
-                            Obx(
-                                  () {
-                                return ActionChip(
-                                  elevation: 2,
-                                  padding: EdgeInsets.all(2),
-                                  backgroundColor: TaskMaster_page_controller
-                                      .date_filter.value ==
-                                      "Breached"
-                                      ? AllColors.primaryDark1
-                                      : AllColors.grayColor,
-                                  shadowColor: Colors.black,
-                                  shape: StadiumBorder(
-                                      side: BorderSide(
-                                          color: AllColors.grayColor)),
-                                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                  //CircleAvatar
-                                  label: Text('Lapsed Calls',
-                                      style: GoogleFonts.poppins(
-                                        color: TaskMaster_page_controller
-                                            .date_filter.value ==
-                                            "Breached"
-                                            ? AllColors.whiteColor
-                                            : AllColors.primaryDark1,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  onPressed: () {
-                                    TaskMaster_page_controller
-                                        .date_filter.value = "Breached";
-                                    TaskMaster_page_controller.pageNumber = 0;
-                                    TaskMaster_page_controller.is_done.value =
-                                    0;
-                                    TaskMaster_page_controller
-                                        .getTaskMaster(
-                                        TaskMaster_page_controller.pageNumber,
-                                        TaskMaster_page_controller.is_Active
-                                            .toString(),
-                                        '',
-                                        '',
-                                        TaskMaster_page_controller.Task_status_controller.value.text,
-                                        TaskMaster_page_controller.date_filter,
-                                        TaskMaster_page_controller.is_done
-                                            .value);
-                                  }, //Text
-                                );
-                              },
-                            ),
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              Obx(
+                                    () {
+                                  return ActionChip(
+                                    elevation: 2,
+                                    padding: EdgeInsets.all(2),
+                                    backgroundColor: TaskMaster_page_controller
+                                        .date_filter.value ==
+                                        "Breached"
+                                        ? AllColors.primaryDark1
+                                        : AllColors.grayColor,
+                                    shadowColor: Colors.black,
+                                    shape: StadiumBorder(
+                                        side: BorderSide(
+                                            color: AllColors.grayColor)),
+                                    //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                    //CircleAvatar
+                                    label: Text('Lapsed Calls',
+                                        style: GoogleFonts.poppins(
+                                          color: TaskMaster_page_controller
+                                              .date_filter.value ==
+                                              "Breached"
+                                              ? AllColors.whiteColor
+                                              : AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                    onPressed: () {
+                                      TaskMaster_page_controller
+                                          .date_filter.value = "Breached";
+                                      TaskMaster_page_controller.pageNumber = 0;
+                                      TaskMaster_page_controller.is_done.value =
+                                      0;
+                                      TaskMaster_page_controller
+                                          .getTaskMaster(
+                                          TaskMaster_page_controller.pageNumber,
+                                          TaskMaster_page_controller.is_Active
+                                              .toString(),
+                                          '',
+                                          '',
+                                          TaskMaster_page_controller.Task_status_controller.value.text,
+                                          TaskMaster_page_controller.date_filter,
+                                          TaskMaster_page_controller.is_done
+                                              .value);
+                                    }, //Text
+                                  );
+                                },
+                              ),
 
-                            SizedBox(
-                              width: size.width * 0.02,
-                            ),
-                            Obx(
-                                  () {
-                                return ActionChip(
-                                  elevation: 2,
-                                  padding: EdgeInsets.only(
-                                      right: 35, top: 2, left: 35, bottom: 2),
-                                  backgroundColor: TaskMaster_page_controller
-                                      .date_filter.value ==
-                                      "ALL"
-                                      ? AllColors.primaryDark1
-                                      : AllColors.grayColor,
-                                  shadowColor: Colors.black,
-                                  shape: StadiumBorder(
-                                      side: BorderSide(
-                                          color: AllColors.grayColor)),
-                                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                  //CircleAvatar
-                                  label: Text('All Calls',
-                                      style: GoogleFonts.poppins(
-                                        color: TaskMaster_page_controller
-                                            .date_filter.value ==
-                                            "ALL"
-                                            ? AllColors.whiteColor
-                                            : AllColors.primaryDark1,
-                                        fontSize: AllFontSize.fourtine,
-                                        fontWeight: FontWeight.w500,
-                                      )),
-                                  onPressed: () {
-                                    TaskMaster_page_controller
-                                        .date_filter.value = "ALL";
-                                    TaskMaster_page_controller.pageNumber = 0;
-                                    TaskMaster_page_controller.is_done.value =
-                                    0;
-                                    TaskMaster_page_controller
-                                        .getTaskMaster(
-                                        TaskMaster_page_controller.pageNumber,
-                                        TaskMaster_page_controller.is_Active
-                                            .toString(),
-                                        '',
-                                        '',
-                                        TaskMaster_page_controller.Task_status_controller.value.text,
-                                        TaskMaster_page_controller.date_filter,
-                                        TaskMaster_page_controller.is_done
-                                            .value);
-                                  }, //Text
-                                );
-                              },
-                            ),
-                          ],
+                              SizedBox(
+                                width: size.width * 0.02,
+                              ),
+                              Obx(
+                                    () {
+                                  return ActionChip(
+                                    elevation: 2,
+                                    padding: EdgeInsets.only(
+                                        right: 35, top: 2, left: 35, bottom: 2),
+                                    backgroundColor: TaskMaster_page_controller
+                                        .date_filter.value ==
+                                        "ALL"
+                                        ? AllColors.primaryDark1
+                                        : AllColors.grayColor,
+                                    shadowColor: Colors.black,
+                                    shape: StadiumBorder(
+                                        side: BorderSide(
+                                            color: AllColors.grayColor)),
+                                    //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
+                                    //CircleAvatar
+                                    label: Text('All Calls',
+                                        style: GoogleFonts.poppins(
+                                          color: TaskMaster_page_controller
+                                              .date_filter.value ==
+                                              "ALL"
+                                              ? AllColors.whiteColor
+                                              : AllColors.primaryDark1,
+                                          fontSize: AllFontSize.fourtine,
+                                          fontWeight: FontWeight.w500,
+                                        )),
+                                    onPressed: () {
+                                      TaskMaster_page_controller
+                                          .date_filter.value = "ALL";
+                                      TaskMaster_page_controller.pageNumber = 0;
+                                      TaskMaster_page_controller.is_done.value =
+                                      0;
+                                      TaskMaster_page_controller
+                                          .getTaskMaster(
+                                          TaskMaster_page_controller.pageNumber,
+                                          TaskMaster_page_controller.is_Active
+                                              .toString(),
+                                          '',
+                                          '',
+                                          TaskMaster_page_controller.Task_status_controller.value.text,
+                                          TaskMaster_page_controller.date_filter,
+                                          TaskMaster_page_controller.is_done
+                                              .value);
+                                    }, //Text
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+                  }),
 
-                Obx(() {
+                  /*Obx(() {
+                  print("loading ${TaskMaster_page_controller.loading.value}");
                   return Visibility(
                     visible: TaskMaster_page_controller.loading.value,
                     child: LinearProgressIndicator(
-                      backgroundColor: AllColors.primaryDark1,
+                      backgroundColor: AllColors.green,
                       color: AllColors.textColor,
                     ),
                   );
-                }),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                        left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
-                    child: Obx(() {
-                      return BindCustomerListView(context);
-                    }),
-                  ),
-                )
+                }),*/
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: Container(
+                      padding: EdgeInsets.only(
+                          left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
+                      child: Obx(() {
+                        return BindCustomerListView(context);
+                      }),
+                    ),
+                  )
 
 
-              ],
+                ],
+              ),
             ),
-          ),
-        ),
+          ));
+        })
+
       ),
     );
   }

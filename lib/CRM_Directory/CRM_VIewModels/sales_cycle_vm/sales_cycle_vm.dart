@@ -108,23 +108,16 @@ class SalesCycleVm extends GetxController {
   //RxString filter = "Sales cycle".obs;
   RxString filter = "Customer Need Identity".obs;
   RxList<SalesCycleModal> saleCycleList = <SalesCycleModal>[].obs;
-  RxList<ProductCategoryWiseAmtModel> budgetAmountList =
-      <ProductCategoryWiseAmtModel>[].obs;
-  RxList<SalesCycleQuoteHeaderModal> quoteList =
-      <SalesCycleQuoteHeaderModal>[].obs;
+  RxList<ProductCategoryWiseAmtModel> budgetAmountList = <ProductCategoryWiseAmtModel>[].obs;
+  RxList<SalesCycleQuoteHeaderModal> quoteList = <SalesCycleQuoteHeaderModal>[].obs;
   RxList<QuoteWonModel> quoteWonList = <QuoteWonModel>[].obs;
-  RxList<getApprovalPersonMadol> approvalPersonList =
-      <getApprovalPersonMadol>[].obs;
-  RxList<SalesCycleQuoteInformationModal> quoteHeaderdata =
-      <SalesCycleQuoteInformationModal>[].obs;
+  RxList<getApprovalPersonMadol> approvalPersonList = <getApprovalPersonMadol>[].obs;
+  RxList<SalesCycleQuoteInformationModal> quoteHeaderdata = <SalesCycleQuoteInformationModal>[].obs;
   RxList<salesCycle.QuoteItems> quoteLinedata = <salesCycle.QuoteItems>[].obs;
   RxList<ItemQuoteModal> itemMstGetByQuoteIdList = <ItemQuoteModal>[].obs;
-  RxList<ItemMasterBySalesId_Model> itemMstGetBySalesIdList =
-      <ItemMasterBySalesId_Model>[].obs;
-  RxList<SalesCycleUpdateStatusModal> quoteLineCreate =
-      <SalesCycleUpdateStatusModal>[].obs;
-  RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list =
-      <SalesCycleQuoteHeaderModal>[].obs;
+  RxList<ItemMasterBySalesId_Model> itemMstGetBySalesIdList = <ItemMasterBySalesId_Model>[].obs;
+  RxList<SalesCycleUpdateStatusModal> quoteLineCreate = <SalesCycleUpdateStatusModal>[].obs;
+  RxList<SalesCycleQuoteHeaderModal> Quote_Selected_list = <SalesCycleQuoteHeaderModal>[].obs;
 
 
 
@@ -1497,8 +1490,7 @@ class SalesCycleVm extends GetxController {
               getApprovalPersonList(quoteHeaderdata[0].quoteId!);
               if(flag=="fromsalescycleproduct"){
                 Get.toNamed(RoutesName.salesCycleProduct);
-                salesCycleProductCheckedList.value =
-                    List.generate(quoteLinedata.length, (_) => false);
+                salesCycleProductCheckedList.value = List.generate(quoteLinedata.length, (_) => false);
                 competitorMappSalesCycleProducts.value=quoteLinedata;
                 return;
               }

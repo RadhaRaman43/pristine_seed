@@ -1019,7 +1019,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     ),
                                     Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                       children: [
                                         bindConfirmExpectedRevenue(context),
                                         Visibility(
@@ -1179,121 +1179,29 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                             : false,
                                         child: GestureDetector(
                                           onTap: () {
-                                            saleCycleController
-                                                .clearAllFieldOfQuoteFilter();
-                                            saleCycleController.contactCode
-                                                .value = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .contactCode ??
-                                                "";
-                                            saleCycleController.accountCode
-                                                .value = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .accountCode ??
-                                                "";
-                                            saleCycleController
-                                                .accountNameController
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .accountName ??
-                                                "";
-                                            saleCycleController
-                                                .contactNameController
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .contactName ??
-                                                "";
-                                            saleCycleController
-                                                .ApprovalStatusController
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .actualSalesCycleApprovalStatus ??
-                                                "";
-                                            saleCycleController
-                                                .expectedClosuredateController
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .estClosureDate ??
-                                                "";
-                                            saleCycleController
-                                                .contactQuoteCommitController
-                                                .value
-                                                .text = "No";
-                                            saleCycleController
-                                                .selectedItem.value = -1;
-                                            saleCycleController
-                                                .shippingController
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingAddress ??
-                                                "";
-                                            saleCycleController
-                                                .shippingAddress2Controller
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingAddress2 ??
-                                                "";
-                                            saleCycleController
-                                                .Shipping_PostCode_Controller
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingPostCode ??
-                                                "";
-                                            saleCycleController
-                                                .Shipping_City_Controller
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingCity ??
-                                                "";
-                                            saleCycleController
-                                                .Shipping_District_Controller
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingDistrict ??
-                                                "";
-                                            saleCycleController
-                                                .Shipping_State_Controller
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingStateName ??
-                                                "";
-                                            saleCycleController
-                                                .Shipping_phone_Controller
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingPhoneNo ??
-                                                "";
-                                            saleCycleController
-                                                .Shipping_email_Controller
-                                                .value
-                                                .text = saleCycleController
-                                                    .saleCycleList[0]
-                                                    .shippingEmailId ??
-                                                "";
-                                            saleCycleController
-                                                .itemCategorySelectedlist
-                                                .value = [];
-                                            saleCycleController
-                                                .getItemCategoryMstApi(
-                                                    saleCycleController
-                                                        .saleCycleList[0]
-                                                        .salesCycleId!,
-                                                    saleCycleController
-                                                        .saleCycleList[0]
-                                                        .taskId!);
-                                            Get.toNamed(RoutesName
-                                                .salesCycleCreateQuoteScreen);
+                                            saleCycleController.clearAllFieldOfQuoteFilter();
+                                            saleCycleController.contactCode.value = saleCycleController.saleCycleList[0].contactCode ?? "";
+                                            saleCycleController.accountCode.value = saleCycleController.saleCycleList[0].accountCode ?? "";
+                                            saleCycleController.accountNameController.value.text = saleCycleController.saleCycleList[0].accountName ?? "";
+                                            saleCycleController.contactNameController.value.text = saleCycleController.saleCycleList[0].contactName ?? "";
+                                            saleCycleController.ApprovalStatusController.value.text = saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus ?? "";
+                                            saleCycleController.expectedClosuredateController.value.text = saleCycleController.saleCycleList[0].estClosureDate ?? "";
+                                            saleCycleController.contactQuoteCommitController.value.text = "No";
+                                            saleCycleController.selectedItem.value = -1;
+                                            saleCycleController.shippingController.value.text = saleCycleController.saleCycleList[0].shippingAddress ?? "";
+                                            saleCycleController.shippingAddress2Controller.value.text = saleCycleController.saleCycleList[0].shippingAddress2 ?? "";
+                                            saleCycleController.Shipping_PostCode_Controller.value.text = saleCycleController.saleCycleList[0].shippingPostCode ?? "";
+                                            saleCycleController.Shipping_City_Controller.value.text = saleCycleController.saleCycleList[0].shippingCity ?? "";
+                                            saleCycleController.Shipping_District_Controller.value.text = saleCycleController.saleCycleList[0].shippingDistrict ?? "";
+                                            saleCycleController.Shipping_State_Controller.value.text = saleCycleController.saleCycleList[0].shippingStateName ?? "";
+                                            saleCycleController.Shipping_phone_Controller.value.text = saleCycleController.saleCycleList[0].shippingPhoneNo ?? "";
+                                            saleCycleController.Shipping_email_Controller.value.text = saleCycleController
+                                                    .saleCycleList[0].shippingEmailId ?? "";
+                                            saleCycleController.itemCategorySelectedlist.value = [];
+                                            saleCycleController.getItemCategoryMstApi(
+                                                    saleCycleController.saleCycleList[0].salesCycleId?? "",
+                                                    saleCycleController.saleCycleList[0].taskId?? "");
+                                            Get.toNamed(RoutesName.salesCycleCreateQuoteScreen);
                                           },
                                           child: Container(
                                             child: Padding(
