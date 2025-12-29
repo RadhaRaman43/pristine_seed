@@ -210,7 +210,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
               salesCycleCompetitorProductInformationList.addAll(response);
               total_rows = int.parse(salesCycleCompetitorProductInformationList[0].totalRows!);
             } else {
-              Utils.showErrorToastification("False Message", response[0].message.toString());
+              Utils.sanckBarError("False Message", response[0].message.toString());
             }
           } else {
             loading.value = false;

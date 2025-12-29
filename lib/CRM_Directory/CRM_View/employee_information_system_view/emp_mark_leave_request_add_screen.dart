@@ -516,7 +516,7 @@ class EmpMarkLeaveRequestAddScreen extends StatelessWidget {
       padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<LeaveTypeModel>(
         width: MediaQuery.of(context).size.width - 20,
-        controller: employee_Mark_Leave_Controller.leaveCode_controller,
+        controller: employee_Mark_Leave_Controller.leaveCode_filter_controller.value,
         label: Text(
           "Type Of Leave",
           style: GoogleFonts.poppins(
@@ -545,7 +545,7 @@ class EmpMarkLeaveRequestAddScreen extends StatelessWidget {
         ),
         onSelected: (LeaveTypeModel? selection) {
           print(selection!.description);
-          employee_Mark_Leave_Controller.leaveCode_controller.text =
+          employee_Mark_Leave_Controller.leaveCode_filter_controller.value.text =
               _displayleavetypeForOption(selection).toString();
           employee_Mark_Leave_Controller.CompOffDate_controller.clear();
           employee_Mark_Leave_Controller.babyName_controller.clear();
@@ -600,7 +600,7 @@ class EmpMarkLeaveRequestAddScreen extends StatelessWidget {
       },
       onSelected: (LeaveTypeModel selection) {
         print(selection.description);
-        employee_Mark_Leave_Controller.leaveCode_controller.text =
+        employee_Mark_Leave_Controller.leaveCode_filter_controller.value.text =
             _displayleavetypeForOption(selection).toString();
         employee_Mark_Leave_Controller.CompOffDate_controller.clear();
         employee_Mark_Leave_Controller.babyName_controller.clear();
@@ -635,11 +635,11 @@ class EmpMarkLeaveRequestAddScreen extends StatelessWidget {
               employee_Mark_Leave_Controller.isComprehensiveLeave.value = false;
               employee_Mark_Leave_Controller.isPaternityLeave.value = false;
             }
-            employee_Mark_Leave_Controller.leaveCode_controller.text = value;
+            employee_Mark_Leave_Controller.leaveCode_filter_controller.value.text = value;
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = employee_Mark_Leave_Controller.leaveCode_controller.text,
+            ..text = employee_Mark_Leave_Controller.leaveCode_filter_controller.value.text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(

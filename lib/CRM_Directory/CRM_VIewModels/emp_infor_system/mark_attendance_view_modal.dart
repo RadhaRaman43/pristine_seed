@@ -226,51 +226,51 @@ class MarkAttendanceViewmodel extends GetxController{
 
   employeeLeaveMarkData(String leaveAction){
     if(StartDate_controller.value.text.isEmpty){
-      Utils.showToastification('Start Date!', "Please Select Start Date");
+      Utils.sanckBarSuccess('Start Date!', "Please Select Start Date");
       return;
     }
      if(EndDate_controller.value.text.isEmpty){
-      Utils.showToastification('End Date!', "Please Select End Date");
+      Utils.sanckBarSuccess('End Date!', "Please Select End Date");
       return;
     }
      if(isShortLeave.value && selectedRadio.value == 0 ){
-      Utils.showToastification('Short Leave', 'Please Select Short Leave Timing');
+      Utils.sanckBarSuccess('Short Leave', 'Please Select Short Leave Timing');
       return;
     }
      if(isShortLeave.value && Datedifference > 1 ){
-      Utils.showToastification('Short Leave', 'Short Leave Apply for Only One Day');
+      Utils.sanckBarSuccess('Short Leave', 'Short Leave Apply for Only One Day');
       return;
     }
      if(leaveCode_controller.value.text.isEmpty){
-      Utils.showToastification('Leave Type!', "Please Select Type of Leave");
+      Utils.sanckBarSuccess('Leave Type!', "Please Select Type of Leave");
       return;
     }
      if(leaveCode_controller.value.text == 'Comprehensive Leave (COMPL)' && CompOffDate_controller.value.text.isEmpty ){
-      Utils.showToastification('Comp Off Date!', "Please Enter Comp Off Date");
+      Utils.sanckBarSuccess('Comp Off Date!', "Please Enter Comp Off Date");
       return;
     }
      if(leaveCode_controller.value.text == 'Comprehensive Leave (COMPL)' && CompOffDate_controller.value.text.isNotEmpty && Datedifference > 1 ){
-      Utils.showToastification('Comp Off Date!', "You can't apply comprehensive leave more than one day");
+      Utils.sanckBarSuccess('Comp Off Date!', "You can't apply comprehensive leave more than one day");
       return;
     }
      if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && isTwinBabies_cobtroller.value.text.isEmpty ){
-      Utils.showToastification('Is Twin Babies!', "Please Enter Is twin Babies");
+      Utils.sanckBarSuccess('Is Twin Babies!', "Please Enter Is twin Babies");
       return;
     }
      if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && babyName_controller.value.text.isEmpty ){
-      Utils.showToastification('Baby Name!', "Please Enter Baby Name");
+      Utils.sanckBarSuccess('Baby Name!', "Please Enter Baby Name");
       return;
     }
      if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && babyGender_controller.value.text.isEmpty ){
-      Utils.showToastification('Baby Gender!', "Please Enter Baby Gender");
+      Utils.sanckBarSuccess('Baby Gender!', "Please Enter Baby Gender");
       return;
     }
      if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && babyBirthDate_controller.value.text.isEmpty ){
-      Utils.showToastification('Baby Birth Date!', "Please Enter Baby Birth Date");
+      Utils.sanckBarSuccess('Baby Birth Date!', "Please Enter Baby Birth Date");
       return;
     }
      if(babyLeaveRerason_controller.value.text.isEmpty){
-      Utils.showToastification('Leave Reason!', "Please Enter Leave Reason");
+      Utils.sanckBarSuccess('Leave Reason!', "Please Enter Leave Reason");
       return;
     }
     Map data={
@@ -306,12 +306,12 @@ class MarkAttendanceViewmodel extends GetxController{
               AttendanceLeaveModal.fromJson(e)).toList();
           if(response!=null && response.length>0 && response[0].condition=="True"){
             employee_leave_mark.value = response;
-            Utils.showToastification('Success', '${response[0].message}');
+            Utils.sanckBarSuccess('Success', '${response[0].message}');
             clearField();
             Get.offAllNamed(RoutesName.empMarkLeaveScreen);
           }else{
             employee_leave_mark.value=[];
-            Utils.showErrorToastification('Error!', '${response[0].message}');
+            Utils.sanckBarError('Error!', '${response[0].message}');
           }
         }
       }catch(e){

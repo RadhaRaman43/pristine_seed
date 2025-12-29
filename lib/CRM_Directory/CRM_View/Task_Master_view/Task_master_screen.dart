@@ -20,6 +20,8 @@ import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_VIewModels/Task_master_vm/TaskMasterVM.dart';
 import '../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
@@ -47,6 +49,14 @@ class TaskMasterScreen extends StatelessWidget {
 
   static String _displayIsInfraLeadForOption(String option) =>
       option;
+
+  static String _displayTypeOfCallForOption(CallStatusMasterModel option) =>
+      option.taskStatus!;
+
+  static String _displayMethodOfCallForOption(CallStatusMasterModel option) =>
+      option.taskStatus!;
+  static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
+      option.categoryName!;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +87,8 @@ class TaskMasterScreen extends StatelessWidget {
                   visible:TaskMaster_page_controller.isHeadofficePermission.value!="1"  ? true:false ,
                   child: IconButton(onPressed: () {
                     //TaskMaster_page_controller.clearCreateTaskController();
+                    TaskMaster_page_controller.resetAllFieldOfFilter();
+                    TaskMaster_page_controller.CallStatusMasterApiHit('Call');
                     TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
                     TaskMaster_page_controller.getEmpMstEmailByApi();
                     Get.toNamed(RoutesName.addNewTaskMaster_screen);
@@ -89,6 +101,7 @@ class TaskMasterScreen extends StatelessWidget {
                   /*TaskMaster_page_controller.Task_status_controller.text = "All";
                   //TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
                   TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";*/
+                  TaskMaster_page_controller.CallStatusMasterApiHit('Call',filter: "0");
                   showFilterBottomSheet(context);
                 }, icon: Icon(Icons.filter_alt_sharp))
               ],
@@ -1745,10 +1758,11 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(height: 10,),
                               bindAccountOwnerFilter(context),
                               SizedBox(height: 10,),
-
-                              bindTypeOfCall(),
+                              //bindTypeOfCall(),
+                              bindTypeOfCallDropDown(context),
                               SizedBox(height: 10,),
-                              bindMethodOfcall(),
+                              //bindMethodOfcall(),
+                              bindMethodOfCallDropDown(context),
                               SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(),
                               SizedBox(height: 10,),
@@ -1759,7 +1773,8 @@ class TaskMasterScreen extends StatelessWidget {
 
                               bindSaleCycleId(),
                               SizedBox(height: 10,),
-                              bindProductCategory(),
+                              //bindProductCategory(),
+                              bindProductCategoryDropDown(context),
                               SizedBox(height: 10,),
                               bindCreatedOn(context),
 
@@ -1848,6 +1863,8 @@ class TaskMasterScreen extends StatelessWidget {
                                 )),
                             onPressed: () {
                               Get.back();
+                              TaskMaster_page_controller.Selection_CallStatus_Master_list.value=[];
+                              TaskMaster_page_controller.Selection_MethodOfCall_Master_list.value=[];
                               TaskMaster_page_controller.resetAllFieldOfFilter();
                               TaskMaster_page_controller.pageNumber = 0;
                               TaskMaster_page_controller.getTaskMaster(
@@ -3825,9 +3842,493 @@ class TaskMasterScreen extends StatelessWidget {
     );
   }
 
+  bindTypeOfCallDropDown(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: TaskMaster_page_controller.CallStatus_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
+        selectedItems: TaskMaster_page_controller.Selection_CallStatus_Master_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.Selection_CallStatus_Master_list.isNotEmpty
+                ? "Type Of Call"
+                : null,
+            hintText: "Type Of Call",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Type Of Call",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join('|'),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          TaskMaster_page_controller.Selection_CallStatus_Master_list.value = selectedList;
+          TaskMaster_page_controller.Type_of_call_controller.value.text =
+              selectedList.map((e) => e.taskStatus).join(', ');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.taskStatus ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+  bindMethodOfCallDropDown(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: TaskMaster_page_controller.MethodOfCall_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
+        selectedItems: TaskMaster_page_controller.Selection_MethodOfCall_Master_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.Selection_MethodOfCall_Master_list.isNotEmpty
+                ? "Mode Of Call"
+                : null,
+            hintText: "Mode Of Call",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Mode Of Call",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          TaskMaster_page_controller.Selection_MethodOfCall_Master_list.value = selectedList;
+          TaskMaster_page_controller.method_of_call_controller.value.text =
+              selectedList.map((e) => e.taskStatus).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.taskStatus ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+
+  /*Widget bindTypeOfCallDropDown(context){
+    return Autocomplete<CallStatusMasterModel>(
+      displayStringForOption: _displayTypeOfCallForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return TaskMaster_page_controller.CallStatus_Master_list;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return TaskMaster_page_controller.CallStatus_Master_list
+            .where((CallStatusMasterModel option) {
+          return option.taskStatus
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (CallStatusMasterModel selection) {
+        TaskMaster_page_controller.Type_of_call_controller.text = _displayTypeOfCallForOption(selection).toString();
+
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onTap: (){
+            if(focusNode.hasFocus){
+              focusNode.unfocus();
+            }else{
+              focusNode.requestFocus();
+            }
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = TaskMaster_page_controller.Type_of_call_controller
+                .text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            hintText: 'Type Of Call',
+            labelText: 'Type Of Call',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<CallStatusMasterModel> onSelected,
+          Iterable<CallStatusMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final CallStatusMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.taskStatus.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }*/
+
+ /* Widget bindMethodOfCallDropDown(context){
+    return Autocomplete<CallStatusMasterModel>(
+      displayStringForOption: _displayMethodOfCallForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return TaskMaster_page_controller.MethodOfCall_Master_list;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return TaskMaster_page_controller.MethodOfCall_Master_list
+            .where((CallStatusMasterModel option) {
+          return option.taskStatus
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (CallStatusMasterModel selection) {
+        TaskMaster_page_controller.method_of_call_controller.value.text = _displayMethodOfCallForOption(selection).toString();
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onTap: (){
+            if(focusNode.hasFocus){
+              focusNode.unfocus();
+            }else{
+              focusNode.requestFocus();
+            }
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller..text = TaskMaster_page_controller.method_of_call_controller.value.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            hintText: 'Mode Of Call',
+            labelText: 'Mode of Call',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<CallStatusMasterModel> onSelected,
+          Iterable<CallStatusMasterModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.9,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final CallStatusMasterModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.taskStatus.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }*/
+
+
+  Widget bindProductCategoryDropDown(context){
+    return Autocomplete<ItemCategoryMstModel>(
+      displayStringForOption: _displayItemCatMasterForOption,
+      optionsBuilder: (TextEditingValue textEditingValue) {
+        if (textEditingValue.text.isEmpty) {
+          return TaskMaster_page_controller.Item_Category_master_list_without_task;
+          // return const Iterable<VehicleTypeResponse>.empty();
+        }
+        return TaskMaster_page_controller.Item_Category_master_list_without_task
+            .where((ItemCategoryMstModel option) {
+          return option.categoryName
+              .toString()
+              .toLowerCase()
+              .contains(textEditingValue.text.toLowerCase());
+        }).toList();
+      },
+      onSelected: (ItemCategoryMstModel selection) {
+        // Update the TextField with the selected
+        TaskMaster_page_controller.product_category_controller.value.text =
+            _displayItemCatMasterForOption(selection).toString();
+
+        if (!TaskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
+          TaskMaster_page_controller.Item_Category_Selected_list.add(selection);
+          Utils.showToastification('Success', 'Add Successfully');
+        }else{
+          Utils.showErrorToastification('Error', 'Already Selected');
+        }
+
+        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
+      },
+      fieldViewBuilder: (BuildContext context, TextEditingController controller,
+          FocusNode focusNode, VoidCallback onFieldSubmitted) {
+        return TextField(
+          onTap: (){
+            if(focusNode.hasFocus){
+              focusNode.unfocus();
+            }else{
+              focusNode.requestFocus();
+            }
+          },
+          cursorColor: AllColors.primaryDark1,
+          controller: controller
+            ..text = TaskMaster_page_controller.product_category_controller.value.text,
+          focusNode: focusNode,
+          //onSubmitted: onFieldSubmitted,
+          decoration: InputDecoration(
+            suffixIcon: IconButton(
+              color: AllColors.primaryDark1,
+              onPressed: (){
+                if(focusNode.hasFocus){
+                  focusNode.unfocus();
+                }else{
+                  focusNode.requestFocus();
+                }
+              },
+              icon: Icon(Icons.arrow_drop_down),
+            ),
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+            hintText: 'Product Category',
+            labelText: 'Product Category',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))
+            ),
+          ),
+        );
+      },
+      optionsViewBuilder: (BuildContext context,
+          AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
+          Iterable<ItemCategoryMstModel> suggestions) {
+        return Align(
+          alignment: Alignment.topLeft,
+          child: Material(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+            elevation: 4.0,
+            child: Container(
+              width: size.width*.7,
+              constraints: BoxConstraints(maxHeight: 200),
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: suggestions.length,
+                itemBuilder: (context, index) {
+                  final ItemCategoryMstModel option =
+                  suggestions.elementAt(index);
+                  return GestureDetector(
+                    onTap: () {
+                      onSelected(option);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text(
+                        option.categoryName.toString(),
+                        style: GoogleFonts.poppins(
+                            color: AllColors.blackColor,
+                            fontWeight: FontWeight.w300,
+                            fontSize: AllFontSize
+                                .sisxteen // Change the text color here
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  bindMethodOfcall() {
+    return TextField(
+      cursorColor: AllColors.primaryDark1,
+      controller: TaskMaster_page_controller.method_of_call_controller.value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: 'Mode Of Call',
+          hintText: 'Mode Of Call',
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+    );
+  }
+
   bindTypeOfCall() {
     return TextField(
-      controller: TaskMaster_page_controller.Type_of_call_controller,
+      controller: TaskMaster_page_controller.Type_of_call_controller.value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
@@ -3885,6 +4386,8 @@ class TaskMasterScreen extends StatelessWidget {
     );
   }
 
+
+
   bindProductCategory() {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -3894,33 +4397,6 @@ class TaskMasterScreen extends StatelessWidget {
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
           labelText: 'Product Category',
           hintText: 'Product Category',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindMethodOfcall() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.method_of_call_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Mode Of Call',
-          hintText: 'Mode Of Call',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,

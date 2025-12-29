@@ -188,18 +188,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible: (saleCycleController.FromPage.value == "Sales" ||
-                          saleCycleController.FromPage.value ==
-                              "FromTaskScreen" ||
+                  visible: (saleCycleController.FromPage.value == "Sales" || saleCycleController.FromPage.value == "FromTaskScreen" ||
                           saleCycleController.FromPage.value == "Task") &&
-                      saleCycleController
-                              .saleCycleList[0].salesCycleApprovalStatus
-                              ?.toLowerCase() !=
-                          "rejected" &&
+                      saleCycleController.saleCycleList[0].salesCycleApprovalStatus?.toLowerCase() != "rejected" &&
                       (saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase() ==
-                              saleCycleController.email.toLowerCase() ||
-                          saleCycleController.userType.toLowerCase() ==
-                              'branch head' ||
+                              saleCycleController.email.toLowerCase() || saleCycleController.userType.toLowerCase() == 'branch head' ||
                           saleCycleController.isAdminWritePermission == "1"),
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
@@ -275,8 +268,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       //todo markrate contract
                       if (saleCycleController.saleCycleList[0].salesCycleStatus?.toLowerCase() == "propose" &&
                           saleCycleController.saleCycleList[0].quoteAccepted?.toLowerCase() == "open" &&
-                          saleCycleController.isAdminWritePermission.value!=1 &&
-                          saleCycleController.saleCycleList[0].isMarkRateContract == 0) {
+                          saleCycleController.userType.toLowerCase()!="frontliners" &&
+                          saleCycleController.saleCycleList[0].isMarkRateContract == 0)
+                      {
                         items.add(
                           PopupMenuItem(
                             child: Row(
@@ -444,23 +438,12 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                 height: 10,
                               ),
                               Visibility(
-                                visible: (saleCycleController.saleCycleList[0]
-                                                    .quoteAccepted
-                                                    ?.toUpperCase() ==
-                                                "OPEN" &&
-                                            saleCycleController.saleCycleList[0]
-                                                    .salesCycleStatus!
-                                                    .toUpperCase() ==
-                                                "SUSPECT") &&
-                                        !(saleCycleController.FromPage.value ==
-                                            "FromDashboard") &&
-                                        saleCycleController.email
-                                                .toLowerCase() ==
-                                            saleCycleController.saleCycleList[0]
-                                                .salesCycleOwner
-                                                ?.toLowerCase()
-                                    ? true
-                                    : false,
+                                visible: (saleCycleController.saleCycleList[0].quoteAccepted?.toUpperCase() == "OPEN" &&
+                                            saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() == "SUSPECT") &&
+                                        !(saleCycleController.FromPage.value == "FromDashboard") &&
+                                        saleCycleController.email.toLowerCase() ==
+                                            saleCycleController.saleCycleList[0].salesCycleOwner?.toLowerCase()
+                                    ? true : false,
                                 child: Column(
                                   children: [
                                     SizedBox(
@@ -471,18 +454,8 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           EdgeInsets.fromLTRB(15, 5, 15, 10),
                                       child: DefaultButton(
                                         press: () {
-                                          saleCycleController
-                                              .salesCycleMstUpdateApiHit(
-                                                  saleCycleController
-                                                      .saleCycleList[0],
-                                                  saleCycleController
-                                                      .proposedSolutionController
-                                                      .value
-                                                      .text,
-                                                  "",
-                                                  "",
-                                                  "",
-                                                  "save");
+                                          saleCycleController.salesCycleMstUpdateApiHit(saleCycleController.saleCycleList[0],
+                                                  saleCycleController.proposedSolutionController.value.text, "", "", "", "save");
                                           //saleCycleController.ProductCategoryWiseAmtCreateApiHit(0);
                                         },
                                         text: "Save",
@@ -542,34 +515,14 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                       width: size.width / 2,
                                       child: DefaultButton(
                                         press: () {
-                                          if (saleCycleController
-                                                  .productCategoryController
-                                                  .value
-                                                  .text
-                                                  .isEmpty ||
-                                              saleCycleController
-                                                      .productCategoryController
-                                                      .value
-                                                      .text ==
-                                                  "") {
-                                            Utils.showErrorToastification(
-                                                "Product Category",
-                                                "Please select product category");
+                                          if (saleCycleController.productCategoryController.value.text.isEmpty ||
+                                              saleCycleController.productCategoryController.value.text == "") {
+                                            Utils.showErrorToastification("Product Category", "Please select product category");
                                             return;
                                           }
-                                          if (saleCycleController
-                                                  .expectedAmountController
-                                                  .value
-                                                  .text
-                                                  .isEmpty ||
-                                              saleCycleController
-                                                      .expectedAmountController
-                                                      .value
-                                                      .text ==
-                                                  "") {
-                                            Utils.showErrorToastification(
-                                                "Expected Amount",
-                                                "Please enter expected amount");
+                                          if (saleCycleController.expectedAmountController.value.text.isEmpty ||
+                                              saleCycleController.expectedAmountController.value.text == "") {
+                                            Utils.showErrorToastification("Expected Amount", "Please enter expected amount");
                                             return;
                                           }
 
@@ -603,12 +556,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   }),
                   Obx(() {
                     return Visibility(
-                      visible: saleCycleController
-                                  .saleCycleList[0].salesCycleStatus!
-                                  .toUpperCase() ==
-                              "PROSPECT"
-                          ? true
-                          : false,
+                      visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() == "PROSPECT" ? true : false,
                       child: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Container(
@@ -971,41 +919,24 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   }),
                   Obx(() {
                     return Visibility(
-                        visible: saleCycleController
-                                        .saleCycleList[0].salesCycleStatus!
-                                        .toUpperCase() ==
-                                    "PROSPECT" &&
-                                saleCycleController.filter.value ==
-                                    'Customer Need Identity'
+                        visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() ==
+                                    "PROSPECT" && saleCycleController.filter.value == 'Customer Need Identity'
                             ? true
                             : false,
                         child: bindCustomerNeedIdentity(context));
                   }),
                   Obx(() {
                     return Visibility(
-                      visible: saleCycleController
-                                  .saleCycleList[0].salesCycleStatus!
-                                  .toUpperCase() ==
-                              "PROPOSE"
-                          ? true
-                          : false,
+                      visible: saleCycleController.saleCycleList[0].salesCycleStatus!.toUpperCase() == "PROPOSE" ? true : false,
                       child: Container(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Visibility(
-                                visible: (saleCycleController
-                                            .userType
-                                            .toLowerCase() ==
-                                        "branch head" ||
-                                    saleCycleController
-                                            .isAdminWritePermission ==
-                                        "1" ||
-                                    saleCycleController
-                                            .saleCycleList[0].createdBy
-                                            ?.toLowerCase() ==
-                                        saleCycleController.email
-                                            .toLowerCase()),
+                                visible: (saleCycleController.userType.toLowerCase() == "branch head" ||
+                                    saleCycleController.isAdminWritePermission == "1" ||
+                                    saleCycleController.saleCycleList[0].createdBy?.toLowerCase() ==
+                                        saleCycleController.email.toLowerCase()),
                                 child: Column(
                                   children: [
                                     Row(
@@ -1093,11 +1024,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               child: DefaultButton(
                                                 press: () {
                                                   showProposeConfirmationDialog(
-                                                      context,
-                                                      saleCycleController
-                                                              .saleCycleList[0]
-                                                              .salesCycleId ??
-                                                          "");
+                                                      context, saleCycleController.saleCycleList[0].salesCycleId ?? "");
                                                 },
                                                 text: "Save",
                                               ),

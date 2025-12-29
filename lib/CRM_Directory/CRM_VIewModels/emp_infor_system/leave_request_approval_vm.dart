@@ -303,9 +303,9 @@ class LeaveRequestApprovalVm extends GetxController{
           if( response[0].condition?.toLowerCase()=="true"){
             pageNumber=0;
             getEmployeeLeaveRequestRejectApproveDataGet("pending for approval", pageNumber);
-          Utils.showToastification("Success", response[0].message.toString());
+          Utils.sanckBarSuccess("Success", response[0].message.toString());
           }else{
-            Utils.showErrorToastification("Error Message!", response[0].message.toString());
+            Utils.sanckBarError("Error Message!", response[0].message.toString());
           }
         }
       }catch(e){

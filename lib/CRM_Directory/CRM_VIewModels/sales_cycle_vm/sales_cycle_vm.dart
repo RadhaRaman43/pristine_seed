@@ -417,13 +417,13 @@ class SalesCycleVm extends GetxController {
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -764,7 +764,7 @@ class SalesCycleVm extends GetxController {
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -807,7 +807,7 @@ class SalesCycleVm extends GetxController {
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -911,7 +911,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleUpdateStatusModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
 
               /* if(flag != ''){
@@ -970,7 +970,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               pageNumber = 0;
@@ -985,7 +985,7 @@ class SalesCycleVm extends GetxController {
             } else {
               print("message ${response[0].message.toString()}");
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -1197,14 +1197,14 @@ class SalesCycleVm extends GetxController {
               showBranchHead.value = false;
               showClusterHead.value = false;
               showGeneralManager.value = false;
-              //Utils.showErrorToastification("Else!", "No Record Found");
+              //Utils.sanckBarError("Else!", "No Record Found");
               approvalPersonList.value = [];
             }
           } else {
 
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", jsonResponse);
+            Utils.sanckBarException("Api Error!", jsonResponse);
           }
         } catch (e) {
           print(e);
@@ -1225,22 +1225,11 @@ class SalesCycleVm extends GetxController {
     Map data = {
       "sales_cycle_id": SalesId,
       "created_by": email,
-      "item_code": itemCodeController.value.text.isNotEmpty
-          ? itemCodeController.value.text
-          : "",
-      "item_description": updateItemDescriptionController.value.text.isNotEmpty
-          ? updateItemDescriptionController.value.text
-          : "",
-      "category_name": categoryNameController.value.text.isNotEmpty
-          ? categoryNameController.value.text
-          : "",
-      "competitor_name":
-          updateCompetitorNameProductController.value.text.isNotEmpty
-              ? updateCompetitorNameProductController.value.text
-              : "",
-      "loss_reason": updateLossReasonProductController.value.text.isNotEmpty
-          ? updateLossReasonProductController.value.text
-          : "",
+      "item_code": itemCodeController.value.text.isNotEmpty ? itemCodeController.value.text : "",
+      "item_description": updateItemDescriptionController.value.text.isNotEmpty ? updateItemDescriptionController.value.text : "",
+      "category_name": categoryNameController.value.text.isNotEmpty ? categoryNameController.value.text : "",
+      "competitor_name": updateCompetitorNameProductController.value.text.isNotEmpty ? updateCompetitorNameProductController.value.text : "",
+      "loss_reason": updateLossReasonProductController.value.text.isNotEmpty ? updateLossReasonProductController.value.text : "",
       "rowsPerPage": rowsPerPage,
       "pageNumber": pageNumber
     };
@@ -1260,13 +1249,13 @@ class SalesCycleVm extends GetxController {
               print('listSize.....${saleCycleList.length}');
               total_rows_sale_cyle_item = int.parse(get_SalesCycleProductById_List[0].totalRows!);
             } else {
-              // Utils.showErrorToastification("Else!", "No Record Found");
+              // Utils.sanckBarError("Else!", "No Record Found");
               get_SalesCycleProductById_List.value = [];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            // Utils.showExceptionToastification("Api Error!", jsonResponse);
+            // Utils.sanckBarException("Api Error!", jsonResponse);
           }
         } catch (e) {
           print(e);
@@ -1293,8 +1282,7 @@ class SalesCycleVm extends GetxController {
         "contact_name": contactNameController.value.text,
         "quote_validity": quoteValidityController.value.text,
         "exp_closure_date": expectedClosuredateController.value.text,
-        "quote_commit":
-            contactQuoteCommitController.value.text == "Yes" ? 1 : 0,
+        "quote_commit": contactQuoteCommitController.value.text == "Yes" ? 1 : 0,
         "consignee_id": consigneeId,
         "created_by": email,
         "kind_attention": kindAttentionController.value.text
@@ -1321,7 +1309,7 @@ class SalesCycleVm extends GetxController {
             expectedClosuredateController.value.clear();
             productCategoryController.value.clear();*/
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -1366,7 +1354,7 @@ class SalesCycleVm extends GetxController {
             response.isNotEmpty &&
             response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
-          Utils.showToastification("Success!", response[0].message.toString());
+          Utils.sanckBarSuccess("Success!", response[0].message.toString());
           getItemCategoryMstApi(SalesId, TaskID);
           filterQuoteAcceptedFlag.value = "";
           clearAllFieldOfFilter();
@@ -1375,13 +1363,13 @@ class SalesCycleVm extends GetxController {
           //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         } else {
           loading.value = false;
-          Utils.showErrorToastification(
+          Utils.sanckBarError(
               "Error!", "Please select at least single product category");
           getItemCategoryMstApi(SalesId, TaskID);
         }
       } else {
         loading.value = false;
-        Utils.showExceptionToastification(
+        Utils.sanckBarException(
             "Api Error!", JsonResponse.toString());
       }
     } catch (error, stackTrace) {
@@ -1412,7 +1400,7 @@ class SalesCycleVm extends GetxController {
                   pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
               //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -1519,7 +1507,7 @@ class SalesCycleVm extends GetxController {
                Get.toNamed(RoutesName.quoteInformationScreen);}
             }*/
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -1592,7 +1580,7 @@ class SalesCycleVm extends GetxController {
               }
             } else {
               itemMstGetByQuoteIdList.value=[];
-              /*Utils.showErrorToastification(
+              /*Utils.sanckBarError(
                   "False Message !", response[0].message.toString());*/
               if (flag == "Add") {
                 Get.toNamed(RoutesName.quoteItemList);
@@ -1668,7 +1656,7 @@ class SalesCycleVm extends GetxController {
               Get.toNamed(RoutesName.ItemListBySalesCycle_Screen);
             } else {
               itemMstGetBySalesIdList.value=[];
-              Utils.showErrorToastification("False Message !", response[0].message.toString());
+              Utils.sanckBarError("False Message !", response[0].message.toString());
               loading.value = false;
             }
           } else {
@@ -1768,7 +1756,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               loading.value = false;
 
@@ -1795,7 +1783,7 @@ class SalesCycleVm extends GetxController {
             } else {
               print("message ${response[0].message.toString()}");
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -1804,14 +1792,14 @@ class SalesCycleVm extends GetxController {
         },
       ).onError(
         (error, stackTrace) {
-          Utils.showErrorToastification("Error Message !", error.toString());
+          Utils.sanckBarError("Error Message !", error.toString());
           loading.value = false;
           print(error);
         },
       );
     } catch (e) {
       // Utils.sanckBarException("Message !", e.toString());
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     } finally {
@@ -1837,14 +1825,14 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleUpdateStatusModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               loading.value = false;
               pageNumber = 0;
               //itemMstGetByQuoteIdApiHit(pageNumber,quoteHeaderdata[0].quoteId, "", '');
               getQuoteHeaderInformation(quoteHeaderdata[0].quoteId, flag);
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -1883,7 +1871,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleUpdateStatusModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               ProductCategoryWiseAmtGet(pageNumber, salesCycleId.value);
@@ -1892,7 +1880,7 @@ class SalesCycleVm extends GetxController {
               expectedAmountController.value.clear();
               loading.value = false;
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -1930,7 +1918,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleUpdateStatusModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               ProductCategoryWiseAmtGet(pageNumber, salesCycleId.value);
@@ -1939,7 +1927,7 @@ class SalesCycleVm extends GetxController {
               expectedAmountController.value.clear();
               loading.value = false;
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -1974,12 +1962,12 @@ class SalesCycleVm extends GetxController {
             List<ItemQuoteModal> response =
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               loading.value = false;
               getQuoteHeaderInformation(quoteId.value, quoteApprovalPage.value);
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -2019,12 +2007,12 @@ class SalesCycleVm extends GetxController {
             List<ItemQuoteModal> response =
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               loading.value = false;
               getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -2094,14 +2082,14 @@ class SalesCycleVm extends GetxController {
             List<ItemQuoteModal> response =
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               loading.value = false;
               quoteSendForApprovalApiHit();
               //todo commented by nirupma
               // getQuoteHeaderInformation(quoteId.value, "");
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -2133,7 +2121,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => ItemQouteWithReportModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               loading.value = false;
               itemQuoteReportList.value = response;
@@ -2149,10 +2137,10 @@ class SalesCycleVm extends GetxController {
                 }
               });*/
               getQuoteHeaderInformation(quoteId.value, quoteApprovalPage.value);
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message", response[0].message.toString());
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -2191,7 +2179,7 @@ class SalesCycleVm extends GetxController {
             List<ItemQuoteModal> response =
                 jsonResponse.map((e) => ItemQuoteModal.fromJson(e)).toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               loading.value = false;
               pageNumber = 0;
@@ -2199,7 +2187,7 @@ class SalesCycleVm extends GetxController {
              // Get.offAllNamed(RoutesName.quoteApprovalListScreen);
               // getQuoteHeaderInformation(quoteId, "quoteApprovalScreen");
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -2261,7 +2249,7 @@ class SalesCycleVm extends GetxController {
     }).onError((error, stackTrace) {
       productCategoryList.value = [];
       itemCategorySelectedlist.value = [];
-      Utils.showErrorToastification('Api Exception onError', error.toString());
+      Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
     }).whenComplete(() {
       this.loading.value = false;
@@ -2293,7 +2281,7 @@ class SalesCycleVm extends GetxController {
             response.isNotEmpty &&
             response[0].condition?.toLowerCase() == "true") {
           loading.value = false;
-          Utils.showToastification("Success!", response[0].message.toString());
+          Utils.sanckBarSuccess("Success!", response[0].message.toString());
           pageNumberForQuote = 0;
           getQuoteHeaderData(
               pageNumberForQuote, saleCycleList[0].salesCycleId!, '');
@@ -2305,11 +2293,11 @@ class SalesCycleVm extends GetxController {
           kindAttentionController.value.clear();
         } else {
           loading.value = false;
-          Utils.showErrorToastification("Error!",  response[0].message.toString());
+          Utils.sanckBarError("Error!",  response[0].message.toString());
         }
       } else {
         loading.value = false;
-        Utils.showExceptionToastification(
+        Utils.sanckBarException(
             "Api Error!", JsonResponse.toString());
       }
     } catch (error, stackTrace) {
@@ -2348,7 +2336,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               pageNumberForItem = 0;
@@ -2366,7 +2354,7 @@ class SalesCycleVm extends GetxController {
             } else {
               print("message ${response[0].message.toString()}");
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -2402,7 +2390,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleUpdateStatusModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               getSaleCycleProductByIdList(pageNumber, SalesCycleid);
@@ -2410,7 +2398,7 @@ class SalesCycleVm extends GetxController {
               //getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesCycleid);
               loading.value = false;
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -2744,7 +2732,7 @@ class SalesCycleVm extends GetxController {
                   itemQuoteReportList[0].quoteReportUrl!, "quoteReport");
             } else {
               print("Else....");
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -2797,7 +2785,7 @@ class SalesCycleVm extends GetxController {
               //fileDownload(itemQuoteReportList.value);
             } else {
               print("Else....");
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -3053,12 +3041,12 @@ class SalesCycleVm extends GetxController {
                               onPressed: () {
                                 if (competitorNameController
                                     .value.text.isEmpty) {
-                                  Utils.showErrorToastification(
+                                  Utils.sanckBarError(
                                       'Error', 'Please Enter Competitor Name');
                                   return;
                                 } else if (quoteRejectReasonController
                                     .value.text.isEmpty) {
-                                  Utils.showErrorToastification('Error',
+                                  Utils.sanckBarError('Error',
                                       'Please Enter Reject Reason Name');
                                   return;
                                 }
@@ -4144,7 +4132,7 @@ class SalesCycleVm extends GetxController {
         if(jsonResponse is List){
           List<SalesCycleApproveRejectModal> response = jsonResponse.map((e) => SalesCycleApproveRejectModal.fromJson(e)).toList();
           if(response[0].condition=="True"){
-            Utils.showToastification("Message !", response[0].message.toString());
+            Utils.sanckBarSuccess("Message !", response[0].message.toString());
             filterQuoteAcceptedFlag.value="";
             pageNumber=0;
             getsalesCycleData(pageNumber, saleCycleList.salesCycleId.toString(), "", FromPage.value);
@@ -4152,7 +4140,7 @@ class SalesCycleVm extends GetxController {
           }else {
             print("message ${response[0].message.toString()}");
             loading.value = false;
-            Utils.showErrorToastification("False Message !", response[0].message.toString());
+            Utils.sanckBarError("False Message !", response[0].message.toString());
 
           }
         } else {
@@ -4188,7 +4176,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition!.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               clearAllFieldOfFilter();
@@ -4199,7 +4187,7 @@ class SalesCycleVm extends GetxController {
             } else {
               print("message ${response[0].message.toString()}");
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4241,7 +4229,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition!.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               filterQuoteAcceptedFlag.value = 'Loss';
@@ -4255,7 +4243,7 @@ class SalesCycleVm extends GetxController {
             } else {
               print("message ${response[0].message.toString()}");
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4332,7 +4320,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition!.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               clearSaleProductListController();
@@ -4341,7 +4329,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4384,7 +4372,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition!.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Success !", response[0].message.toString());
               loading.value = false;
               pageNumber = 0;
@@ -4395,7 +4383,7 @@ class SalesCycleVm extends GetxController {
               print("message ${response[0].message.toString()}");
               loading.value = false;
 
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4431,13 +4419,13 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleQuoteInformationModal.fromJson(e))
                 .toList();
             if (response[0].condition!.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Success !", response[0].message.toString());
               loading.value = false;
               getQuoteHeaderInformation(quoteId, quoteApprovalPage.value);
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4450,7 +4438,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -4480,7 +4468,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               if(approRejeStatus=="Update"){
@@ -4499,7 +4487,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4513,7 +4501,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -4545,7 +4533,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition == "True") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               clearAllFieldOfFilter();
@@ -4555,7 +4543,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               print("False Message......");
             }
@@ -4570,7 +4558,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -4686,7 +4674,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               pageNumber = 0;
@@ -4696,7 +4684,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4710,7 +4698,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -4744,7 +4732,7 @@ class SalesCycleVm extends GetxController {
                   itemQuoteReportList[0].quoteReportUrl!, "quoteWithReport");
             } else {
               print("Else....");
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
               loading.value = false;
             }
@@ -4794,14 +4782,14 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               filterQuoteAcceptedFlag.value = "";
               getQuoteHeaderInformation(quoteid, quoteApprovalPage.value);
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -4815,7 +4803,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -4951,7 +4939,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition!.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               RegExp regExp = RegExp(r'\(\s*(\w+-\d+)\s*\)');
               final match = regExp.firstMatch(response[0].message.toString());
@@ -4969,7 +4957,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5060,7 +5048,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5074,7 +5062,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -5113,12 +5101,12 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesAdviseHeaderLineModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification("Message", response[0].message.toString());
+              Utils.sanckBarSuccess("Message", response[0].message.toString());
               getSalesAdviseHeaderLine(salesAdviseHeaderLineList[0].salesAdviceId??"");
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5132,7 +5120,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }finally{
@@ -5159,13 +5147,13 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesAdviseHeaderLineModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message", response[0].message.toString());
               getSalesAdviseHeaderLine(salesAdviseHeaderLineList[0].salesAdviceId??"");
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5179,7 +5167,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -5204,12 +5192,12 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesAdviseHeaderLineModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message", response[0].message.toString());
               getSalesAdviseHeaderLine(salesAdviseHeaderLineList[0].salesAdviceId??"");
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5223,7 +5211,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }finally{
@@ -5247,14 +5235,14 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesAdviseHeaderLineModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message", response[0].message.toString());
               pageNumberSalesAdvise=0;
               getSalesAdviseData(pageNumberSalesAdvise,salesAdviseLinesDataList.salesCycleId??"",salesAdviseLinesDataList.quoteId??"","");
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5268,7 +5256,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }finally{
@@ -5317,7 +5305,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Success !", response[0].message.toString());
               pageNumber = 0;
               clearSaleProductListController();
@@ -5328,7 +5316,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5341,7 +5329,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       loading.value = false;
       print(e);
     }
@@ -5396,7 +5384,7 @@ class SalesCycleVm extends GetxController {
 
   getsalesAdviceLineItemUpdate(advise.QuoteItems salesAdviseLinesDataList) {
     if(erpItemNameController.value.text=="" || erpItemNameController.value.text.isEmpty){
-      Utils.showErrorToastification("Error", "Please Select ERP Item Name.");
+      Utils.sanckBarError("Error", "Please Select ERP Item Name.");
       return;
     }
     loading.value = true;
@@ -5418,10 +5406,10 @@ class SalesCycleVm extends GetxController {
             if (response[0].condition?.toLowerCase() == "true") {
               getSalesAdviseHeaderLine(salesAdviseLinesDataList.salesAdviceId!);
               erpItemNameController.value.text="";
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Success !", response[0].message.toString());
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5434,7 +5422,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       print(e);
     }
     finally{
@@ -5465,10 +5453,10 @@ class SalesCycleVm extends GetxController {
               getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber, salesCycleId);
               //getsalesCycleData(pageNumber, salesCycleId, "ViewHeader", 'Sales');
 
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Success !", response[0].message.toString());
             } else {
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5481,7 +5469,7 @@ class SalesCycleVm extends GetxController {
         },
       );
     } catch (e) {
-      Utils.showErrorToastification("Message !", e.toString());
+      Utils.sanckBarError("Message !", e.toString());
       print(e);
     }
     finally{
@@ -5608,10 +5596,10 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-             Utils.showToastification("Success", response[0].message.toString());
+             Utils.sanckBarSuccess("Success", response[0].message.toString());
              getsalesCycleCompetitorProductGetBySalesCycleId(pageNumber ,SalesId);
             } else {
-              Utils.showErrorToastification("False Message", response[0].message.toString());
+              Utils.sanckBarError("False Message", response[0].message.toString());
             }
           } else {
             loading.value = false;
@@ -5670,7 +5658,7 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification(
+              Utils.sanckBarSuccess(
                   "Message !", response[0].message.toString());
               pageNumber = 0;
               clearSaleProductListController();
@@ -5682,7 +5670,7 @@ class SalesCycleVm extends GetxController {
               loading.value = false;
             } else {
               loading.value = false;
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "False Message !", response[0].message.toString());
             }
           } else {
@@ -5720,11 +5708,11 @@ class SalesCycleVm extends GetxController {
                 .map((e) => SalesCycleApproveRejectModal.fromJson(e))
                 .toList();
             if (response[0].condition?.toLowerCase() == "true") {
-              Utils.showToastification("Success", response[0].message.toString());
+              Utils.sanckBarSuccess("Success", response[0].message.toString());
               pageNumber=0;
               getsalesCycleData(pageNumber,SalesId,"ViewHeader", FromPage.value);
             } else {
-              Utils.showErrorToastification("False Message", response[0].message.toString());
+              Utils.sanckBarError("False Message", response[0].message.toString());
             }
           } else {
             loading.value = false;

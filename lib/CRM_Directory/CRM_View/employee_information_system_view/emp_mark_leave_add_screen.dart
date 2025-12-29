@@ -68,20 +68,12 @@ class EmpMarkLeaveAddScreen extends StatelessWidget {
                           height: 10,
                         ),
                         bindEndDatePicker(context),
-                        /*Row(
-                                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                       children: [
-
-
-                                       ],
-                                     ),*/
                         SizedBox(
                           height: 10,
                         ),
                         Obx(() {
                           return Visibility(
-                            visible: employee_Mark_Leave_Controller
-                                .isDateDifferenceShow.value,
+                            visible: employee_Mark_Leave_Controller.isDateDifferenceShow.value,
                             child: Container(
                               alignment: Alignment.centerLeft,
                               child: Text(
@@ -114,13 +106,10 @@ class EmpMarkLeaveAddScreen extends StatelessWidget {
                                 ),
                                 Obx(() {
                                   return Checkbox(
-                                    value: employee_Mark_Leave_Controller
-                                        .isHalfDay.value,
+                                    value: employee_Mark_Leave_Controller.isHalfDay.value,
                                     onChanged: (value) {
-                                      print(
-                                          'ishalfLeave${employee_Mark_Leave_Controller.isHalfDay.value}');
-                                      employee_Mark_Leave_Controller
-                                          .onHalfDayChanged(value);
+                                      print('ishalfLeave${employee_Mark_Leave_Controller.isHalfDay.value}');
+                                      employee_Mark_Leave_Controller.onHalfDayChanged(value);
                                     },
                                   );
                                 })
@@ -158,8 +147,7 @@ class EmpMarkLeaveAddScreen extends StatelessWidget {
                         ),
                         Obx(() {
                           return Visibility(
-                            visible: employee_Mark_Leave_Controller
-                                .isShortLeave.value,
+                            visible: employee_Mark_Leave_Controller.isShortLeave.value,
                             child: Column(
                               children: [
                                 Row(
@@ -168,20 +156,12 @@ class EmpMarkLeaveAddScreen extends StatelessWidget {
                                     Radio(
                                         value: 1,
                                         groupValue:
-                                            employee_Mark_Leave_Controller
-                                                .selectedRadio.value,
+                                            employee_Mark_Leave_Controller.selectedRadio.value,
                                         onChanged: (value) {
-                                          employee_Mark_Leave_Controller
-                                              .selectRadio(value!);
-                                          employee_Mark_Leave_Controller
-                                                  .ShortLeaveTiming =
-                                              (employee_Mark_Leave_Controller
-                                                      .ShortleaveTime_list[0]
-                                                      .morningLeaveStart! +
-                                                  " - " +
-                                                  employee_Mark_Leave_Controller
-                                                      .ShortleaveTime_list[0]
-                                                      .morningLeaveEnd!);
+                                          employee_Mark_Leave_Controller.selectRadio(value!);
+                                          employee_Mark_Leave_Controller.ShortLeaveTiming =
+                                              (employee_Mark_Leave_Controller.ShortleaveTime_list[0].morningLeaveStart! + " - " +
+                                                  employee_Mark_Leave_Controller.ShortleaveTime_list[0].morningLeaveEnd!);
                                         }),
                                     Text(employee_Mark_Leave_Controller
                                         .ShortleaveTime_list.length>0?
@@ -516,8 +496,7 @@ class EmpMarkLeaveAddScreen extends StatelessWidget {
       child: DropdownMenu<LeaveTypeModel>(
         width: MediaQuery.of(context).size.width - 20,
         controller: employee_Mark_Leave_Controller.leaveCode_controller,
-        label: Text(
-          "Type Of Leave",
+        label: Text("Type Of Leave",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
@@ -570,153 +549,15 @@ class EmpMarkLeaveAddScreen extends StatelessWidget {
           }
           FocusScope.of(context).unfocus();
         },
-        dropdownMenuEntries: employee_Mark_Leave_Controller.leaveType_data_list
-            .map<DropdownMenuEntry<LeaveTypeModel>>((LeaveTypeModel e) {
+        dropdownMenuEntries: employee_Mark_Leave_Controller.leaveType_data_list.map<DropdownMenuEntry<LeaveTypeModel>>((LeaveTypeModel e) {
           return DropdownMenuEntry<LeaveTypeModel>(
               value: e,
               label: e.description!,
               style: ButtonStyle(
-                foregroundColor:
-                    MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+                foregroundColor: MaterialStateProperty.all<Color>(AllColors.primaryDark1),
               ));
         }).toList(),
       ),
-    );
-    return Autocomplete<LeaveTypeModel>(
-      displayStringForOption: _displayleavetypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) async {
-        if (textEditingValue.text.isEmpty) {
-          return employee_Mark_Leave_Controller.leaveType_data_list.value;
-        }
-
-        return employee_Mark_Leave_Controller.leaveType_data_list
-            .where((LeaveTypeModel option) {
-          return option.description
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (LeaveTypeModel selection) {
-        print(selection.description);
-        employee_Mark_Leave_Controller.leaveCode_controller.text =
-            _displayleavetypeForOption(selection).toString();
-        employee_Mark_Leave_Controller.CompOffDate_controller.clear();
-        employee_Mark_Leave_Controller.babyName_controller.clear();
-        employee_Mark_Leave_Controller.babyGender_controller.clear();
-        employee_Mark_Leave_Controller.babyBirthDate_controller.clear();
-
-        employee_Mark_Leave_Controller.leave_selection.value = selection;
-        //employee_Mark_Leave_Controller.task_no = selection.leaveCode!;
-
-        if (selection.description == 'Comprehensive Leave') {
-          employee_Mark_Leave_Controller.isComprehensiveLeave.value = true;
-          employee_Mark_Leave_Controller.isPaternityLeave.value = false;
-          employee_Mark_Leave_Controller.isTwinBabies_cobtroller.text = "";
-        } else if (selection.description == 'Paternity Leave') {
-          employee_Mark_Leave_Controller.isComprehensiveLeave.value = false;
-          employee_Mark_Leave_Controller.isPaternityLeave.value = true;
-          employee_Mark_Leave_Controller.isTwinBabies_cobtroller.text = "No";
-        } else {
-          employee_Mark_Leave_Controller.isComprehensiveLeave.value = false;
-          employee_Mark_Leave_Controller.isPaternityLeave.value = false;
-          employee_Mark_Leave_Controller.isTwinBabies_cobtroller.text = "";
-        }
-
-        FocusScope.of(context).unfocus();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          onChanged: (value) {
-            if (value.isEmpty) {
-              // FocusScope.of(context).unfocus();
-              employee_Mark_Leave_Controller.isComprehensiveLeave.value = false;
-              employee_Mark_Leave_Controller.isPaternityLeave.value = false;
-            }
-            employee_Mark_Leave_Controller.leaveCode_controller.text = value;
-          },
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = employee_Mark_Leave_Controller.leaveCode_controller.text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-              hintText: 'Type Of Leave',
-              labelText: 'Type of Leave',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<LeaveTypeModel> onSelected,
-          Iterable<LeaveTypeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              color: AllColors.grayColor,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final LeaveTypeModel option = suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            width: size.width * .8,
-                            child: Tooltip(
-                              message: option.description.toString() +
-                                  " (${option.leaveCode.toString()})",
-                              child: Text(
-                                option.description.toString() +
-                                    " (${option.leaveCode.toString()})",
-                                style: GoogleFonts.poppins(
-                                    color: AllColors.blackColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize
-                                        .sisxteen // Change the text color here
-                                    ),
-                              ),
-                            ),
-                          ),
-                          Divider(
-                            height: 0.3,
-                            color: AllColors.lightgreyColor,
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 

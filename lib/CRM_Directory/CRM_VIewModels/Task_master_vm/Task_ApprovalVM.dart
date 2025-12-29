@@ -200,13 +200,13 @@ class TaskApprovalvm extends GetxController{
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -592,13 +592,13 @@ class TaskApprovalvm extends GetxController{
           List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
             loading.value = false;
-            Utils.showToastification('Success!', response[0].message.toString());
+            Utils.sanckBarSuccess('Success!', response[0].message.toString());
             pageNumber=0;
             getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
             Get.toNamed(RoutesName.taskApproval_List);
           }else {
             loading.value = false;
-            Utils.showErrorToastification('Error!', response[0].message.toString());
+            Utils.sanckBarError('Error!', response[0].message.toString());
             print(response[0].message.toString());
             //Task_Master_list.value=[];
 

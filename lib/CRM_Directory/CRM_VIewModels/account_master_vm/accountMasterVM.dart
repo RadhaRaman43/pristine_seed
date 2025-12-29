@@ -322,7 +322,7 @@ class Accountmastervm extends GetxController{
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -867,13 +867,13 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -920,14 +920,14 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               CompanyProfileMst_list.value=[];
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             CompanyProfileMst_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -975,14 +975,14 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               StateMasterPinCode_list.value=[];
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -1031,14 +1031,14 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               ShippingStateMasterPinCode_list.value=[];
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -1123,14 +1123,14 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               get_Comp_Profile_type_list.value=[];
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             get_Comp_Profile_type_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -1172,13 +1172,13 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               geoPostal_Code_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -1262,12 +1262,12 @@ class Accountmastervm extends GetxController{
           Navigator.of(context).pop();
           UploadImageType_controller.clear();
           UploadImage.value = false;
-          Utils.showToastification('Success!', responseData[0].message.toString());
+          Utils.sanckBarSuccess('Success!', responseData[0].message.toString());
           await getAccMasterBuyCodeApi(AccountCode);
           Get.toNamed(RoutesName.update_AccountMaster_screen);
         } else {
           loading.value = false;
-          Utils.showErrorToastification('Failed!', responseData[0].message.toString());
+          Utils.sanckBarError('Failed!', responseData[0].message.toString());
         }
       } else {
         loading.value = false;
@@ -1336,14 +1336,14 @@ class Accountmastervm extends GetxController{
             } else {
               loading.value = false;
               TatResponseMaster_list.value=[];
-              Utils.showErrorToastification(
+              Utils.sanckBarError(
                   "Error!", "No Calender Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -1387,14 +1387,14 @@ class Accountmastervm extends GetxController{
 
               } else {
                 AccountMasterGetCode_list.value=[];
-                Utils.showErrorToastification(
+                Utils.sanckBarError(
                     "Error!", "No Data Found");
                 //service_installation_details_list.value=[];
               }
             } else {
 
               // service_indent_header_list.value = [];
-              Utils.showExceptionToastification("Api Error!", JsonResponse);
+              Utils.sanckBarException("Api Error!", JsonResponse);
             }
           }catch(e){
             print(e);
@@ -1496,7 +1496,7 @@ class Accountmastervm extends GetxController{
 
      //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
           if(flag == 'Create'){
-            Utils.showToastification("Success!", response[0].message??"Account Create Successful");
+            Utils.sanckBarSuccess("Success!", response[0].message??"Account Create Successful");
             if(FromPage == "Task"){
               clearController();
               TaskMaster_page_controller.clearCreateTaskController();
@@ -1521,7 +1521,7 @@ class Accountmastervm extends GetxController{
               Get.toNamed(RoutesName.accountMaster_screen);
             }
           }else if(flag == 'Update'){
-            Utils.showToastification("Success!", response[0].message??"Account Update Successful");
+            Utils.sanckBarSuccess("Success!", response[0].message??"Account Update Successful");
             viewRequestDetails(response);
             clearAccoundController();
             IsActive_controller.text = 'All';
@@ -1535,20 +1535,20 @@ class Accountmastervm extends GetxController{
         } else {
           loading.value = false;
          // AccountMasterGetCode_list.value = [];
-          Utils.showErrorToastification("Error!", response[0].message??"");
+          Utils.sanckBarError("Error!", response[0].message??"");
           //service_installation_details_list.value=[];
         }
       } else {
         loading.value = false;
         // service_indent_header_list.value = [];
-        Utils.showExceptionToastification("Api Error!", JsonResponse);
+        Utils.sanckBarException("Api Error!", JsonResponse);
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
       print("Exce3ption....$error");
       //service_indent_header_list.value = [];
-      Utils.showExceptionToastification("catch Api Error!", error.toString());
+      Utils.sanckBarException("catch Api Error!", error.toString());
     }
   }
 
@@ -1619,7 +1619,7 @@ class Accountmastervm extends GetxController{
             response[0].condition == "True") {
           if(flag == 'Create'){
             print("ttttttttttt");
-            Utils.showToastification("Success!", "Account is Save In Draft Successful");
+            Utils.sanckBarSuccess("Success!", "Account is Save In Draft Successful");
             clearAccoundController();
             //deleteAccountData(DraftId);
             pageNumber=0;
@@ -1628,7 +1628,7 @@ class Accountmastervm extends GetxController{
             Get.toNamed(RoutesName.accountMaster_screen);
           }else if(flag == 'Update'){
             print("Update....");
-            Utils.showToastification("Success!", "Draft Account is Update Successful");
+            Utils.sanckBarSuccess("Success!", "Draft Account is Update Successful");
             viewRequestDetails(response);
             clearAccoundController();
             pageNumber=0;
@@ -1639,16 +1639,16 @@ class Accountmastervm extends GetxController{
           //Get.toNamed(RoutesName.update_AccountMaster_screen);
           //viewRequestDetails(response);
         } else {
-          Utils.showErrorToastification("Error!", response[0].message??"");
+          Utils.sanckBarError("Error!", response[0].message??"");
         }
       } else {
-        Utils.showExceptionToastification("Response Error!", JsonResponse);
+        Utils.sanckBarException("Response Error!", JsonResponse);
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
       print("Exce3ption....${error}");
-      Utils.showExceptionToastification("Api Error!", error.toString());
+      Utils.sanckBarException("Api Error!", error.toString());
       //service_indent_header_list.value = [];
     }
     finally{
@@ -1689,7 +1689,7 @@ class Accountmastervm extends GetxController{
           if(flag == 'Create') {
             if(page == 'New'){
               print("ttttttttttt");
-              Utils.showToastification("Success!", "Add Successful");
+              Utils.sanckBarSuccess("Success!", "Add Successful");
               getCompanyProfileSubTypeApi(/*comp_prof_type_controller.value.text*/);
               compProfileRemrk.value = true;
               compProfileRemrk.value = false;
@@ -1697,7 +1697,7 @@ class Accountmastervm extends GetxController{
               print('compSubType.....${comp_prof_sub_type_controller.value.text}');
               CompProfileDescription_Controller.clear();
             }else if(page == 'Update'){
-              Utils.showToastification("Success!", "Add Successful");
+              Utils.sanckBarSuccess("Success!", "Add Successful");
               getAccMasterBuyCodeApi(AccountCode);
               getCompanyProfileSubTypeApi(/*comp_prof_type_controller.value.text*/);
               compProfileRemrk.value = true;
@@ -1712,13 +1712,13 @@ class Accountmastervm extends GetxController{
         } else {
           loading.value = false;
           //AccountMasterGetCode_list.value = [];
-          Utils.showErrorToastification("Error!", response[0].message??"");
+          Utils.sanckBarError("Error!", response[0].message??"");
           //service_installation_details_list.value=[];
         }
       } else {
         loading.value = false;
         // service_indent_header_list.value = [];
-        Utils.showExceptionToastification("Api Error!", JsonResponse);
+        Utils.sanckBarException("Api Error!", JsonResponse);
       }
     } catch (error, stackTrace) {
       print(error);
@@ -2011,7 +2011,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             view_contract_list.value=[];
             Get.toNamed(RoutesName.viewContacts_screen);
-           // Utils.showToastification('No Data Found', 'No Data Found');
+           // Utils.sanckBarSuccess('No Data Found', 'No Data Found');
 
           }
         } else {
@@ -2059,7 +2059,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             AddressMst_list.value=[];
             Get.toNamed(RoutesName.viewAddress_screen);
-            Utils.showToastification('No date', 'No Data Found');
+            Utils.sanckBarSuccess('No date', 'No Data Found');
 
           }
         } else {
@@ -2112,7 +2112,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             view_contract_list.value=[];
             Get.toNamed(RoutesName.AccountDashboardCount_Screen);
-            Utils.showToastification('No Data Found', 'No Data Found');
+            Utils.sanckBarSuccess('No Data Found', 'No Data Found');
 
 
           }
@@ -2236,7 +2236,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             AccountDashboardDataList.value=[];
             print('Nodatafound');
-            Utils.showToastification('No date', 'No Data Found');
+            Utils.sanckBarSuccess('No date', 'No Data Found');
 
           }
         } else {
@@ -2316,7 +2316,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             AccountDashboardDataSalesList.value=[];
             print('NodatafoundSales');
-            Utils.showToastification('No date', 'No Data Found');
+            Utils.sanckBarSuccess('No date', 'No Data Found');
 
           }
         } else {
@@ -2378,7 +2378,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             AccountDashboardDataQuotationList.value=[];
             print('NodatafoundSales');
-            Utils.showToastification('No date', 'No Data Found');
+            Utils.sanckBarSuccess('No date', 'No Data Found');
 
           }
         } else {
@@ -2407,7 +2407,7 @@ class Accountmastervm extends GetxController{
     salesCycleController.filterExpectedClosuredateController.value.clear();
     salesCycleController.filterQuoteValidityController.value.clear();
     TaskMaster_page_controller.Contact_Name_controller.clear();
-    TaskMaster_page_controller.Type_of_call_controller.clear();
+    TaskMaster_page_controller.Type_of_call_controller.value.clear();
     TaskMaster_page_controller.SaleCycleActive_Controller.clear();
     TaskMaster_page_controller.Sale_cycle_Id_controller.clear();
     TaskMaster_page_controller.isInfraLeadFilterController.clear();
@@ -2494,7 +2494,7 @@ class Accountmastervm extends GetxController{
         // Assuming `crmDatabase` has a method called `deleteItem`
         // Replace `deleteItem` with the actual method name for deletion in your database helper class
         await crmDatabase.deleteItem(id);
-        //Utils.showToastification('Account', 'Data deleted successfully');
+        //Utils.sanckBarSuccess('Account', 'Data deleted successfully');
         print('Data deleted successfully.');
       } else {
         print('Invalid draft ID: $draftId');
@@ -2540,7 +2540,7 @@ class Accountmastervm extends GetxController{
             loading.value = false;
             address_master_list.value=[];
             // Get.toNamed(RoutesName.viewAddress_screen);
-           // Utils.showToastification('No date Found', 'No Data Found');
+           // Utils.sanckBarSuccess('No date Found', 'No Data Found');
 
           }
         } else {
@@ -2706,7 +2706,7 @@ class Accountmastervm extends GetxController{
                                           Shipping_State_Controller.value.text;
                                     }else{
                                       print("onjghjhg");
-                                      Utils.showErrorToastification('Error ', "Please select address.");
+                                      Utils.sanckBarError('Error ', "Please select address.");
                                     }
                                   }
                                   catch(e){

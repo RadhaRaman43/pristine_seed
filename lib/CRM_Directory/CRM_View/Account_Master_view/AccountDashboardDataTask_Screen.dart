@@ -747,7 +747,7 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
                         ),
 
                         TextField(
-                          controller: TaskMaster_page_controller.Type_of_call_controller,
+                          controller: TaskMaster_page_controller.Type_of_call_controller.value,
                           decoration: InputDecoration(
                               contentPadding: EdgeInsets.symmetric(
                                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
@@ -857,7 +857,7 @@ class AccountdashboarddatalistScreen extends StatelessWidget{
                                 onPressed: () {
                                   Get.back();
                                   TaskMaster_page_controller.Contact_Name_controller.clear();
-                                  TaskMaster_page_controller.Type_of_call_controller.clear();
+                                  TaskMaster_page_controller.Type_of_call_controller.value.clear();
                                   TaskMaster_page_controller.SaleCycleActive_Controller.clear();
                                   TaskMaster_page_controller.Sale_cycle_Id_controller.clear();
                                   TaskMaster_page_controller.isInfraLeadFilterController.clear();

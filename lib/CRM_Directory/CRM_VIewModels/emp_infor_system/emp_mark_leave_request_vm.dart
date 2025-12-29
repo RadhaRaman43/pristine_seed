@@ -51,7 +51,6 @@ class EmpMarkLeaveRequestVm extends GetxController{
   final StartDate_controller=TextEditingController();
   final EndDate_controller=TextEditingController();
   final CompOffDate_controller=TextEditingController();
-  final leaveCode_controller=TextEditingController();
   final isTwinBabies_cobtroller=TextEditingController();
   final babyName_controller=TextEditingController();
   final babyGender_controller=TextEditingController();
@@ -63,11 +62,11 @@ class EmpMarkLeaveRequestVm extends GetxController{
   final StartDate_filter_controller=TextEditingController();
   final EndDate_filter_controller=TextEditingController();
   final createdOn_filter_controller=TextEditingController();
-  final leaveCode_filter_controller=TextEditingController();
   final leaveId_filter_controller=TextEditingController();
   final leave_reason_filter_controller=TextEditingController();
   final CreatedBy_filter_controller=TextEditingController();
 
+  final leaveCode_filter_controller=TextEditingController().obs;
   var RegionName_controller = TextEditingController().obs;
   var clusterName_controller = TextEditingController().obs;
 
@@ -75,13 +74,15 @@ class EmpMarkLeaveRequestVm extends GetxController{
   RxList<MarkLeaveRequestModal> employee_leave_data_list=<MarkLeaveRequestModal>[].obs;
   RxList<MarkLeaveRequestModal> employee_leave_data_Approval_list=<MarkLeaveRequestModal>[].obs;
   RxList<MarkLeaveRequestModal> employee_leave_mark=<MarkLeaveRequestModal>[].obs;
-  RxList<LeaveTypeModel> leaveType_data_list=<LeaveTypeModel>[].obs;
+
 
   Rx<LeaveTypeModel> leave_selection=LeaveTypeModel().obs;
 
   RxList<ShortLeaveTimeModel> ShortleaveTime_list=<ShortLeaveTimeModel>[].obs;
   RxList<AnnualHolidaysModel> Annual_Holidays_list=<AnnualHolidaysModel>[].obs;
 
+  RxList<LeaveTypeModel> leaveType_data_list=<LeaveTypeModel>[].obs;
+  RxList<LeaveTypeModel> select_leaveType_data_list=<LeaveTypeModel>[].obs;
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
@@ -92,9 +93,11 @@ class EmpMarkLeaveRequestVm extends GetxController{
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail()??"";
+    getLeaveTypeData();
     getClustersGetByEmail();
     //getEmployeeLeaveData(filterStatus.value, pageNumber);
   }
+
   void getClustersGetByEmail() {
     try{
       Map<String, String> data={
@@ -188,7 +191,7 @@ class EmpMarkLeaveRequestVm extends GetxController{
     Map data= {
       "created_by": CreatedBy_filter_controller.value.text.isEmpty?email:CreatedBy_filter_controller.value.text,
       "leave_id": leaveId_filter_controller.value.text.isEmpty?"":leaveId_filter_controller.value.text,
-      "leave_code": leaveCode_controller.value.text.isEmpty?"":leaveCode_controller.value.text,
+      "leave_code": leaveCode_filter_controller.value.text.isEmpty?"":leaveCode_filter_controller.value.text,
       "status": status,
       "start_date":StartDate_filter_controller.value.text.isEmpty?"":StartDate_filter_controller.value.text,
       "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
@@ -395,51 +398,51 @@ class EmpMarkLeaveRequestVm extends GetxController{
 
   employeeLeaveMarkData(String leaveAction){
     if(StartDate_controller.value.text.isEmpty){
-      Utils.showToastification('Start Date!', "Please Select Start Date");
+      Utils.sanckBarSuccess('Start Date!', "Please Select Start Date");
       return;
     }
     if(EndDate_controller.value.text.isEmpty){
-      Utils.showToastification('End Date!', "Please Select End Date");
+      Utils.sanckBarSuccess('End Date!', "Please Select End Date");
       return;
     }
    /* if(isShortLeave.value && selectedRadio.value == 0 ){
-      Utils.showToastification('Short Leave', 'Please Select Short Leave Timing');
+      Utils.sanckBarSuccess('Short Leave', 'Please Select Short Leave Timing');
       return;
     }
     if(isShortLeave.value && Datedifference > 1 ){
-      Utils.showToastification('Short Leave', 'Short Leave Apply for Only One Day');
+      Utils.sanckBarSuccess('Short Leave', 'Short Leave Apply for Only One Day');
       return;
     }*/
-    if(leaveCode_controller.value.text.isEmpty){
-      Utils.showToastification('Leave Type!', "Please Select Type of Leave");
+    if(leaveCode_filter_controller.value.text.isEmpty){
+      Utils.sanckBarSuccess('Leave Type!', "Please Select Type of Leave");
       return;
     }
    /* if(leaveCode_controller.value.text == 'Comprehensive Leave (COMPL)' && CompOffDate_controller.value.text.isEmpty ){
-      Utils.showToastification('Comp Off Date!', "Please Enter Comp Off Date");
+      Utils.sanckBarSuccess('Comp Off Date!', "Please Enter Comp Off Date");
       return;
     }
     if(leaveCode_controller.value.text == 'Comprehensive Leave (COMPL)' && CompOffDate_controller.value.text.isNotEmpty && Datedifference > 1 ){
-      Utils.showToastification('Comp Off Date!', "You can't apply comprehensive leave more than one day");
+      Utils.sanckBarSuccess('Comp Off Date!', "You can't apply comprehensive leave more than one day");
       return;
     }
     if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && isTwinBabies_cobtroller.value.text.isEmpty ){
-      Utils.showToastification('Is Twin Babies!', "Please Enter Is twin Babies");
+      Utils.sanckBarSuccess('Is Twin Babies!', "Please Enter Is twin Babies");
       return;
     }
     if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && babyName_controller.value.text.isEmpty ){
-      Utils.showToastification('Baby Name!', "Please Enter Baby Name");
+      Utils.sanckBarSuccess('Baby Name!', "Please Enter Baby Name");
       return;
     }
     if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && babyGender_controller.value.text.isEmpty ){
-      Utils.showToastification('Baby Gender!', "Please Enter Baby Gender");
+      Utils.sanckBarSuccess('Baby Gender!', "Please Enter Baby Gender");
       return;
     }
     if(leaveCode_controller.value.text == 'Paternity Leave (PAL)' && babyBirthDate_controller.value.text.isEmpty ){
-      Utils.showToastification('Baby Birth Date!', "Please Enter Baby Birth Date");
+      Utils.sanckBarSuccess('Baby Birth Date!', "Please Enter Baby Birth Date");
       return;
     }*/
     if(leave_Reason_controller.value.text.isEmpty){
-      Utils.showToastification('Leave Reason!', "Please Enter Leave Reason");
+      Utils.sanckBarSuccess('Leave Reason!', "Please Enter Leave Reason");
       return;
     }
     Map data={
@@ -475,12 +478,12 @@ class EmpMarkLeaveRequestVm extends GetxController{
               MarkLeaveRequestModal.fromJson(e)).toList();
           if(response!=null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
             employee_leave_mark.value = response;
-            Utils.showToastification('Success', '${response[0].message}');
+            Utils.sanckBarSuccess('Success', '${response[0].message}');
             clearField();
             Get.offAllNamed(RoutesName.empMarkLeaveRequestScreen);
           }else{
             employee_leave_mark.value=[];
-            Utils.showErrorToastification('Error!', '${response[0].message}');
+            Utils.sanckBarError('Error!', '${response[0].message}');
           }
         }
       }catch(e){
@@ -508,7 +511,7 @@ class EmpMarkLeaveRequestVm extends GetxController{
     isLeaveType.value = true;
     isComprehensiveLeave.value = false;
     isPaternityLeave.value = false;
-    leaveCode_controller.clear();
+    leaveCode_filter_controller.value.clear();
     CompOffDate_controller.clear();
     isTwinBabies_cobtroller.clear();
     babyName_controller.clear();
