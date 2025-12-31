@@ -13,7 +13,9 @@ class SalesCycleRepository{
     return _apiService.postApi(data, AppUrl.SalesCycleMstGetApprovalList,sessionManagement);
   }
 
-
+  Future<String> getItemCategoryMstWithoutTaskIdApiHit(var data,SessionManagement sessionManagement) async{
+    return _apiService.getApi(AppUrl.ItemCategoryMstGet, sessionManagement, data);
+  }
 
   Future<String> salesCycleMstUpdateApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.postApi(data, AppUrl.salesCycleMstUpdate,sessionManagement);
@@ -269,5 +271,9 @@ class SalesCycleRepository{
 
   Future<String> RegionsWithClusterFilterGetByEmailApiHit(var data,SessionManagement sessionManagement) async{
     return _apiService.getApi(AppUrl.RegionsWithClusterFilterGetByEmail, sessionManagement, data);
+  }
+
+  Future<String> getCompanyTypeMasterGet(var data,SessionManagement sessionManagement) async{
+    return _apiService.postApi(data,AppUrl.CompanyTypeMasterGet, sessionManagement);
   }
 }

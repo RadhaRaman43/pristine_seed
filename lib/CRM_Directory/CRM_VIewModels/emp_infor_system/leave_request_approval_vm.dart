@@ -10,6 +10,8 @@ import 'package:navigation_drawer_flutter/utils/app_utils.dart';
 
 import '../../../reources/routes/routes_name.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/emp_infor_modal/annual_holiday_modal.dart';
 import '../../CRM_Models/emp_infor_modal/leave_type_modal.dart';
 import '../../CRM_Models/emp_infor_modal/mark_leave_modal.dart';
@@ -66,6 +68,10 @@ class LeaveRequestApprovalVm extends GetxController{
   final leaveId_filter_controller=TextEditingController();
   final createdBy_filter_controller=TextEditingController();
   final leave_reason_filter_controller=TextEditingController();
+  final createdOn_filter_controller=TextEditingController();
+
+  var RegionName_controller = TextEditingController().obs;
+  var clusterName_controller = TextEditingController().obs;
 
 
   final reject_remarks_controller=TextEditingController();
@@ -79,18 +85,111 @@ class LeaveRequestApprovalVm extends GetxController{
 
   RxList<MarkLeaveRequestModal> employee_leave_data_Approval_list=<MarkLeaveRequestModal>[].obs;
 
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
 
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
     email = await sessionManagement.getEmail()??"";
-    getEmployeeLeaveRequestRejectApproveDataGet(filterStatus.value, pageNumber);
+    //getEmployeeLeaveRequestRejectApproveDataGet(filterStatus.value, pageNumber);
+    getClustersGetByEmail();
     getLeaveTypeData();
   }
 
 
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getEmployeeLeaveRequestRejectApproveDataGet(filterStatus.value, pageNumber);
 
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
 
   getEmployeeLeaveRequestRejectApproveDataGet(String status, int pageNumber){
     Map data= {
@@ -101,7 +200,10 @@ class LeaveRequestApprovalVm extends GetxController{
       "filter_end_date": EndDate_filter_controller.value.text.isNotEmpty?EndDate_filter_controller.value.text:"",
       "filter_leave_code": leaveCode_filter_controller.value.text.isNotEmpty?leaveCode_filter_controller.value.text:"",
       "filter_created_by": createdBy_filter_controller.value.text.isNotEmpty?createdBy_filter_controller.value.text:"",
+      "filter_created_on": createdOn_filter_controller.value.text.isNotEmpty?createdOn_filter_controller.value.text:"",
       "leave_reason": leave_reason_filter_controller.value.text.isNotEmpty?leave_reason_filter_controller.value.text:"",
+      "region": RegionName_controller.value.text.isNotEmpty?RegionName_controller.value.text:"",
+      "clusture": clusterName_controller.value.text.isNotEmpty?clusterName_controller.value.text:"",
       "pageNumber": pageNumber,
       "rowsPerPage": rowsPerPage
     };
@@ -201,9 +303,9 @@ class LeaveRequestApprovalVm extends GetxController{
           if( response[0].condition?.toLowerCase()=="true"){
             pageNumber=0;
             getEmployeeLeaveRequestRejectApproveDataGet("pending for approval", pageNumber);
-          Utils.showToastification("Success", response[0].message.toString());
+          Utils.sanckBarSuccess("Success", response[0].message.toString());
           }else{
-            Utils.showErrorToastification("Error Message!", response[0].message.toString());
+            Utils.sanckBarError("Error Message!", response[0].message.toString());
           }
         }
       }catch(e){

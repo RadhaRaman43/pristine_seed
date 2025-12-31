@@ -13,6 +13,8 @@ import '../../../main.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
+import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
+import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessPlanReport_Model.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BusinessTourPlanDetailsModel.dart';
 import '../../CRM_Models/Bussiness_Tour_Plan_Model/BussinessTourPlanLineDetailsModal.dart';
@@ -58,13 +60,22 @@ class BusinessPlanTourViewModel extends GetxController{
   RxList<BusinessPlanReportModel> ReportList = <BusinessPlanReportModel>[].obs;
 
   var filterTourIdController = TextEditingController().obs;
-  var filterClusterNameController = TextEditingController().obs;
   var filterTouringRegionController = TextEditingController().obs;
   var filterTouringNameController = TextEditingController().obs;
   var filterCreatedByController = TextEditingController().obs;
 
+  final StartDate_filter_controller=TextEditingController().obs;
+  final EndDate_filter_controller=TextEditingController().obs;
+  final createdOn_filter_controller=TextEditingController().obs;
+  var RegionName_controller = TextEditingController().obs;
+  var clusterName_controller = TextEditingController().obs;
 
-  var filterRegionController = TextEditingController().obs;
+  RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
+  RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
+  RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+
+
   var filterTourDateController = TextEditingController().obs;
   var filterCreatedOnController = TextEditingController().obs;
 
@@ -105,8 +116,9 @@ class BusinessPlanTourViewModel extends GetxController{
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
-    getBusinessTourPlanData(pageNumber);
-    getBusinessTourPlanAllLineGet(pageNumber);
+    getClustersGetByEmail();
+    //getBusinessTourPlanData(pageNumber);
+    //getBusinessTourPlanAllLineGet(pageNumber);
     super.onInit();
   }
 
@@ -128,6 +140,96 @@ class BusinessPlanTourViewModel extends GetxController{
     }
   }
 
+  void getClustersGetByEmail() {
+    try{
+      Map<String, String> data={
+        "email_id":email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.clustersGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            clusterGetByEmailList.value=response;
+            if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
+              SelectedCluster_list.assignAll(clusterGetByEmailList.value);
+              clusterName_controller.value.text =
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              getRegionsWithClusterFilterGetByEmail();
+            }
+          }else {
+            loading.value = false;
+            clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+  void getRegionsWithClusterFilterGetByEmail() {
+    var selectedCluster="";
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('||');
+    }
+    try{
+      Map<String, String> data={
+        "email_id":email,
+        "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=response;
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            print('region....${RegionName_controller.value.text}');
+            getBusinessTourPlanData(pageNumber);
+            getBusinessTourPlanAllLineGet(pageNumber);
+
+          }else {
+            loading.value = false;
+            regionwithclusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
   getBusinessTourPlanData(int page_no)  {
     try {
       Map data = {
@@ -135,6 +237,11 @@ class BusinessPlanTourViewModel extends GetxController{
         "tour_id": filterTourIdController.value.text.isEmpty?"":filterTourIdController.value.text,
         "touring_region": filterTouringRegionController.value.text.isEmpty?"":filterTouringRegionController.value.text,
         "email_id": email,
+        "branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+        "clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+        "start_date": StartDate_filter_controller.value.text.isEmpty?"":StartDate_filter_controller.value.text,
+        "end_date": EndDate_filter_controller.value.text.isEmpty?"":EndDate_filter_controller.value.text,
+        "filter_created_on": createdOn_filter_controller.value.text.isEmpty?"":createdOn_filter_controller.value.text,
         "status": filterStatusFlag.value,
         "rowsPerPage": rowsPerPage,
         "pageNumber": page_no
@@ -147,7 +254,8 @@ class BusinessPlanTourViewModel extends GetxController{
           if (jsonResponse is List) {
             List<BussinessTourPlanModel> response =
             jsonResponse.map((e) => BussinessTourPlanModel.fromJson(e)).toList();
-            if (response.length > 0 && response[0].condition == "True") {
+            if (response.length > 0 && response[0].condition == "Tru"
+                "e") {
               loading.value = false;
               if (page_no == 0) {
                 BusinessTourPlanList.clear();
@@ -181,11 +289,11 @@ class BusinessPlanTourViewModel extends GetxController{
       Map data = {
         "tour_id": filterTourIdController.value.text.isEmpty?"":filterTourIdController.value.text,
         "account_code": "",
-        "created_by": filterCreatedByController.value.text.isEmpty?"":filterCreatedByController.value.text,
+        "created_by": filterCreatedByController.value.text.isEmpty? email:filterCreatedByController.value.text,
         "created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "tour_date_on": filterTourDateController.value.text.isEmpty?"":filterTourDateController.value.text,
-        "branch_head_value": filterRegionController.value.text.isEmpty?"":filterRegionController.value.text,
-        "clusture_head_value": filterClusterNameController.value.text.isEmpty?"":filterClusterNameController.value.text,
+        "branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
+        "clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "district": "",
         "status": "",
         "touring_region": filterTouringRegionController.value.text.isEmpty?"":filterTouringRegionController.value.text,
@@ -915,11 +1023,11 @@ class BusinessPlanTourViewModel extends GetxController{
     print("Clear Filed");
     filterCreatedByController.value.clear();
     filterTourIdController.value.clear();
+    StartDate_filter_controller.value.clear();
+    EndDate_filter_controller.value.clear();
+    createdOn_filter_controller.value.clear();
     filterTouringRegionController.value.clear();
     filterTouringNameController.value.clear();
-    filterClusterNameController.value.clear();
-
-    filterRegionController.value.clear();
     filterTourDateController.value.clear();
     filterCreatedOnController.value.clear();
     createdOnStartToEnd.value="";

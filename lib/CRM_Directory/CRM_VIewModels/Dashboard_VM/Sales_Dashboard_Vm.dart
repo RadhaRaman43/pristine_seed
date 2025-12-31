@@ -10,6 +10,7 @@ import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_Models/dashboard_models/SalesDashboard_Model/SalesDashboard_Model.dart';
+import '../../CRM_Models/dashboard_models/SalesDashboard_Model/department_modal.dart';
 import '../../CRM_Repository/dashboard_repository/dashboard_repo.dart';
 
 class SalesDashboardVm extends GetxController{
@@ -45,6 +46,7 @@ class SalesDashboardVm extends GetxController{
   var ClusterNameForApi;
   var RegionNameForApi;
   var EmployeeNameForApi;
+  var DepartNameForApi;
 
   var PeriodTo_Controller = TextEditingController().obs;
   var PeriodFrom_Controller = TextEditingController().obs;
@@ -55,6 +57,7 @@ class SalesDashboardVm extends GetxController{
   var clusterNameFilter_controller=TextEditingController().obs;
   var RegionNameFilter_controller=TextEditingController().obs;
   var EmployeeNameFilter_controller=TextEditingController().obs;
+  var DepartmentNameFilter_controller=TextEditingController().obs;
 
 
   RxList<SaleDashboardDataModel> salesDashboardList = <SaleDashboardDataModel>[].obs;
@@ -66,6 +69,8 @@ class SalesDashboardVm extends GetxController{
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
 
+  RxList<DepartmnetModal> Department_List = <DepartmnetModal>[].obs;
+  RxList<DepartmnetModal> SelectDepartment_List = <DepartmnetModal>[].obs;
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
@@ -85,6 +90,7 @@ class SalesDashboardVm extends GetxController{
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     salesDashboardData();
     getClustersGetByEmail();
+    getDepartmentList();
     if(this.isAdminWritePermission==1){
       EmployeeMasterGet('');
     }
@@ -221,6 +227,15 @@ class SalesDashboardVm extends GetxController{
           .map((e) => e.trim())
           .join('|');
     }
+
+    DepartNameForApi='';
+    if(DepartmentNameFilter_controller.value.text.isNotEmpty){
+      DepartNameForApi = DepartmentNameFilter_controller.value.text
+          .split(',')
+          .map((e) => e.trim())
+          .join('|');
+    }
+
     EmployeeNameForApi = '';
     if(EmployeeNameFilter_controller.value.text.isNotEmpty){
       EmployeeNameForApi = EmployeeNameFilter_controller.value.text
@@ -238,6 +253,7 @@ class SalesDashboardVm extends GetxController{
         "end_date": formattedEndDate.value,
         "funnel_filter": FilterFunnel.value,
         "emp_email_id": EmployeeNameForApi.isEmpty?"":EmployeeNameForApi,
+        "department_id": DepartNameForApi.isEmpty?"":DepartNameForApi,
         "flag": selectedOption.value
       };
 
@@ -270,7 +286,7 @@ class SalesDashboardVm extends GetxController{
 
 
         } else {
-          Utils.showErrorToastification(
+          Utils.sanckBarError(
               "False Message !", response[0].message.toString());
           monthWiseTotalFunnelList.value = [];
           monthWiseCommitmentList.value = [];
@@ -353,13 +369,13 @@ class SalesDashboardVm extends GetxController{
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -403,13 +419,13 @@ class SalesDashboardVm extends GetxController{
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -450,6 +466,43 @@ class SalesDashboardVm extends GetxController{
           }else {
             loading.value = false;
             clusterGetByEmailList.value=[];
+          }
+        } else {
+          loading.value = false;
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }finally{
+      loading.value = false;
+    }
+  }
+
+  void getDepartmentList() {
+    try{
+      Map<String, dynamic> data={
+        "flag": "GetBusCen",
+        "created_by": email
+      };
+      loading.value=true;
+      print("data is ${data}");
+      _api.departmentGetInsert(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<DepartmnetModal> response = jsonResponse.map((e) => DepartmnetModal.fromJson(e)).toList();
+          if(response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            Department_List.value=response;
+          }else {
+            loading.value = false;
+            Department_List.value=[];
           }
         } else {
           loading.value = false;
@@ -518,12 +571,15 @@ class SalesDashboardVm extends GetxController{
     ClusterNameForApi = '';
     RegionNameForApi = '';
     EmployeeNameForApi = '';
+    DepartNameForApi = '';
     clusterNameFilter_controller.value.clear();
     RegionNameFilter_controller.value.clear();
     filterCustomDateController.value.clear();
     EmployeeNameFilter_controller.value.clear();
+    DepartmentNameFilter_controller.value.clear();
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
+    SelectDepartment_List.value = [];
     SelectedEmployee_Member_list.value = [];
     DateRange("financial");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';

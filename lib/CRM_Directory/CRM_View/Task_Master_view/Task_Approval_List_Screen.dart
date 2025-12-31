@@ -15,6 +15,9 @@ import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
+import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_VIewModels/Task_master_vm/Task_ApprovalVM.dart';
 
 class TaskApprovalListScreen extends StatelessWidget{
@@ -661,75 +664,48 @@ class TaskApprovalListScreen extends StatelessWidget{
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: 5,),
-                              bindTaskId(),
+                              bindData(context,'Task Id',TaskMaster_page_controller.filterTask_Id_controller),
                               SizedBox(height: 5,),
-                              bindAccountName(),
+                              bindData(context,'Customer Name',TaskMaster_page_controller.account_Name_controller),
                               SizedBox(height: 10,),
-                              bindAccountCode(),
+                              bindData(context,'Customer Code',TaskMaster_page_controller.account_code_controller),
                               SizedBox(height: 10,),
-
-                              bindAccountOwnerFilter(context),
+                              //bindTypeOfCall(),
+                              bindTypeOfCallDropDown(context),
                               SizedBox(height: 10,),
-
-
-                              bindTypeOfCall(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindMethodOfcall(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindCompProfileTypeDropDown(),
+                              //bindMethodOfcall(),
+                              bindMethodOfCallDropDown(context),
                               SizedBox(height: 10,),
-                              /*bindIsInfraLeadDropDown(context),
-                              SizedBox(
-                                height: 10,
-                              ),*/
-                              bindLastActivityStatus(),
+                              /*bindCreatedBy(),
+                              SizedBox(height: 10,),*/
+                              /*filterAccountOwner(),
+                              SizedBox(height: 10,),*/
+                              bindCompProfileTypeDropDown(context),
+                              SizedBox(height: 10,),
+                              bindLastActivityStatus(context),
                               SizedBox(height: 10,),
                               bindSaleCycleActiveDropDown(context),
                               SizedBox(height: 10,),
-
-                              bindSaleCycleId(),
-                              SizedBox(height: 10,),
-                              bindProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindCreatedOn(context),
-
-                              SizedBox(
-                                height: 10,
-                              ),
-                              bindCreatedBy(),
-                              SizedBox(height: 10,),
-
-                              filterAccountOwner(),
-                              SizedBox(height: 10,),
-
-                              filterPinCode(),
-                              SizedBox(height: 10,),
-
-                              filterDistrict(),
-                              SizedBox(height: 10,),
-
                               filterWithTaskDueDate(context),
                               SizedBox(height: 10,),
-
-
+                              bindData(context,'Pin Code',TaskMaster_page_controller.postalCodeController.value),
+                              SizedBox(height: 10,),
+                              bindData(context,'District',TaskMaster_page_controller.district_controller.value),
+                              SizedBox(height: 10,),
                               //bindBranchHead(),
                               bindClusterNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
-
+                              SizedBox(height: 10,),
                               //bindClusterHead(),
                               bindRegionNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
-
+                              SizedBox(height: 10,),
+                              bindAccountOwnerFilter(context),
+                              SizedBox(height: 10,),
+                              bindCreatedOn(context),
+                              SizedBox(height: 10,),
+                              bindProductCategory(context),
+                              SizedBox(height: 10,),
+                              bindProductCategoryTypeDropDown(context),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -788,8 +764,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                               TaskMaster_page_controller.pageNumber = 0;
                               TaskMaster_page_controller.getTaskMasterApprovalList(
                                   TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active
-                                      .toString(),
+                                  TaskMaster_page_controller.is_Active.toString(),
                                  );
                             },
                             child: Text(
@@ -814,14 +789,14 @@ class TaskApprovalListScreen extends StatelessWidget{
     );
   }
 
-  bindTaskId() {
+  bindData(BuildContext context,String labelText, TextEditingController controller) {
     return TextField(
-      controller: TaskMaster_page_controller.filterTask_Id_controller,
+      controller: controller,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Task Id',
-          hintText: 'Task Id',
+          labelText: labelText,
+          hintText: labelText,
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -838,63 +813,6 @@ class TaskApprovalListScreen extends StatelessWidget{
           )
       ),
       cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  bindAccountName() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.account_Name_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Customer Name',
-          hintText: 'Customer Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindAccountCode() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.account_code_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Customer Code',
-          hintText: 'Customer Code',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
       onChanged: (value) {
         // Handle the text field value changes if needed
       },
@@ -967,130 +885,131 @@ class TaskApprovalListScreen extends StatelessWidget{
 
   }
 
-  bindTypeOfCall() {
-    return TextField(
-      controller: TaskMaster_page_controller.Type_of_call_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Type Of Call',
-          hintText: 'Type Of Call',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+  bindCompProfileTypeDropDown(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CompanyTypeModal>.multiSelection(
+        items: TaskMaster_page_controller.company_profile_type_list,
+        itemAsString: (CompanyTypeModal u) => u.description ?? "",
+        selectedItems: TaskMaster_page_controller.selected_company_type_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
+            hintText: "Company Profile Type",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Company Profile Type",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.description).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CompanyTypeModal> selectedList) {
+          TaskMaster_page_controller.selected_company_type_list.value = selectedList;
+          TaskMaster_page_controller.companyProfileTypeController.value.text =
+              selectedList.map((e) => e.description).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.description ?? ""),
+          ),
+        ),
+      );
+    });
   }
-
-  bindMethodOfcall() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.method_of_call_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Mode Of Call',
-          hintText: 'Mode Of Call',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+  bindLastActivityStatus(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: TaskMaster_page_controller.DSARStatus_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
+        selectedItems: TaskMaster_page_controller.selectedDSARStatusList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText:
+            TaskMaster_page_controller.selectedDSARStatusList.isNotEmpty
+                ? "Last Activity Status"
+                : null,
+            hintText: "Last Activity Status",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindCompProfileTypeDropDown() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.companyProfileTypeController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Company Profile Type',
-          hintText: 'Company Profile Type',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Last Activity Status",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          TaskMaster_page_controller.selectedDSARStatusList.value = selectedList;
+          TaskMaster_page_controller.lastActivityStatus_Controller.value.text =
+              selectedList.map((e) => e.taskStatus).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-
-  bindLastActivityStatus() {
-    return TextField(
-      controller: TaskMaster_page_controller.lastActivityStatus_Controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Last Activity Status ',
-          hintText: 'Last Activity Status',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.taskStatus ?? ""),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
+        ),
+      );
+    });
   }
 
   Widget bindSaleCycleActiveDropDown(context) {
     return DropdownMenu<String>(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width - 15,
+      width: MediaQuery.of(context).size.width - 15,
       controller: TaskMaster_page_controller.SaleCycleActive_Controller,
       label: Text(
         "Sale Cycle Active",
@@ -1136,125 +1055,314 @@ class TaskApprovalListScreen extends StatelessWidget{
 
   }
 
-  bindSaleCycleId() {
-    return TextField(
-      controller: TaskMaster_page_controller.Sale_cycle_Id_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Sale Cycle Id',
-          hintText: 'Sale Cycle Id',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+  bindTypeOfCallDropDown(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: TaskMaster_page_controller.CallStatus_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
+        selectedItems: TaskMaster_page_controller.Selection_CallStatus_Master_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.Selection_CallStatus_Master_list.isNotEmpty ? "Type Of Call" : null,
+            hintText:  "All" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "All",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          TaskMaster_page_controller.Selection_CallStatus_Master_list.value = selectedList;
+          TaskMaster_page_controller.Type_of_call_controller.value.text =
+              selectedList.where((e) => e.taskStatus?.toLowerCase() != 'all').map((e) => e.taskStatus).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.taskStatus ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+  bindMethodOfCallDropDown(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: TaskMaster_page_controller.MethodOfCall_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
+        selectedItems: TaskMaster_page_controller.Selection_MethodOfCall_Master_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.Selection_MethodOfCall_Master_list.isNotEmpty ? "Mode Of Call" : null,
+            hintText: "All",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "All",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          TaskMaster_page_controller.Selection_MethodOfCall_Master_list.value = selectedList;
+          TaskMaster_page_controller.method_of_call_controller.value.text =
+              selectedList.where((e) => e.taskStatus?.toLowerCase() != 'all').map((e) => e.taskStatus).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.taskStatus ?? ""),
+          ),
+        ),
+      );
+    });
   }
 
-  bindProductCategory() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.product_category_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Product Category',
-          hintText: 'Product Category',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+  bindProductCategory(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: TaskMaster_page_controller.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
+        selectedItems: TaskMaster_page_controller.Selected_Item_Category_master_list_without_task,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
+            hintText:  "Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.value = selectedList;
+          TaskMaster_page_controller.product_category_controller.value.text =
+              selectedList.map((e) => e.categoryName).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.categoryName ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+  Widget bindProductCategoryTypeDropDown(context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width - 15,
+      controller: TaskMaster_page_controller.product_category_type_Controller.value,
+      label: Text(
+        "Product Category Type",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.sisxteen,
+            fontWeight: FontWeight.w500),
       ),
+
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        TaskMaster_page_controller.product_category_type_Controller.value.text =
+            _displaySaleCycleActiveForOption(selection!).toString();
+      },
+      dropdownMenuEntries: TaskMaster_page_controller.productCategoryTypeList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e, label: e!, style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(
+              AllColors.primaryDark1),));
+      }).toList(),
     );
+
   }
 
   bindCreatedOn(BuildContext context) {
     return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
-      readOnly: true,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-        suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Select Start Date -End Date',
-        labelText: 'Created On',
-        hintStyle: GoogleFonts.poppins(
-            color: AllColors.lightblackColor,
-            fontWeight: FontWeight.w300,
-            fontSize: AllFontSize.ten),
-        labelStyle: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontWeight: FontWeight.w500,
-            fontSize: AllFontSize.sisxteen),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+        cursorColor: AllColors.primaryDark1,
+        controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Created On',
+            labelText: 'Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
-      onTap: () async {
-        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
-        DateTimeRange? picked = await showDateRangePicker(
-          context: context,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2200),
-          /* initialDateRange: DateTimeRange(
-          start: DateTime.now(),
-          end: DateTime.now().add(Duration(days: 7)),
-        ),*/
-          builder: (BuildContext context, Widget? child) {
-            return Theme(
-              data: ThemeData.light().copyWith(
-                primaryColor: AllColors.primaryDark1,
-                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                buttonTheme: ButtonThemeData(
-                  textTheme: ButtonTextTheme.primary,
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(
+                      primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                      textTheme: ButtonTextTheme.primary),
                 ),
-              ),
-              child: child!,
-            );
-          },
-        );
+                child: child!,
+              );
+            },
 
-        if (picked != null) {
-          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
-          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          TaskMaster_page_controller.createdOnStartToEnd.value="$startDate@$endDate";
-          TaskMaster_page_controller.filterTaskCreationOnController.value.text = '$startDate - $endDate';
-        } else {
-          TaskMaster_page_controller.filterTaskCreationOnController.value.text = '';
-          TaskMaster_page_controller.createdOnStartToEnd.value="";
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text = outputFormat.format(date);
+          else
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text = "";
         }
-      },
+
     );
   }
+
 
   filterWithTaskDueDate(BuildContext context) {
     return TextField(
@@ -1320,177 +1428,6 @@ class TaskApprovalListScreen extends StatelessWidget{
 
     );
   }
-
-  bindCreatedBy() {
-    return TextField(
-      controller: TaskMaster_page_controller.created_by_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Created By',
-          hintText: 'Created By',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterAccountOwner() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.account_owner_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Account Owner',
-          hintText: 'Account Owner',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  filterPinCode() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.postalCodeController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Pin Code',
-          hintText: 'Pin Code',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  filterDistrict() {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: TaskMaster_page_controller.district_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'District',
-          hintText: 'District',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  /*bindBranchHead() {
-    return TextField(
-      controller: TaskMaster_page_controller.branch_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region Name',
-          hintText: 'Region Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-  bindClusterHead() {
-    return TextField(
-      controller: TaskMaster_page_controller.cluster_head_value_controller
-          .value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Name',
-          hintText: 'Cluster Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -12,6 +12,7 @@ import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/dashboard_models/SalesDashboard_Model/department_modal.dart';
 import '../../CRM_VIewModels/Dashboard_VM/Sales_Dashboard_Vm.dart';
 
 class SalesDashboardViewscreen extends StatelessWidget{
@@ -1771,6 +1772,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
             SizedBox(height: 10),
             bindRegionNameFilter(context),
             SizedBox(height: 10),
+            bindDepartmnetIdFilter(context),
+            SizedBox(height: 10),
             bindEmployeeNameFilter(context),
           ]
       ),
@@ -1841,11 +1844,223 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
   }*/
 
+  Widget bindDepartmnetIdFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+    });
+    return Obx(() {
+      final selected = dashboard_view_Controller.SelectDepartment_List;
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.departmentId).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <DepartmnetModal>[];
+              tempSelected.addAll(dashboard_view_Controller.SelectDepartment_List);
+
+              List<DepartmnetModal> allItems = dashboard_view_Controller.Department_List;
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty
+                    ? allItems : allItems.where((c) =>
+                    (c.departmentId ?? "").toLowerCase().contains(query)).toList();
+
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Department',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.black),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ),
+
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No record found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.departmentId ?? "") ==
+                                  (item.departmentId ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.departmentId ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.departmentId ?? "") ==
+                                          (item.departmentId ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    dashboard_view_Controller.SelectDepartment_List.assignAll(tempSelected);
+                                    dashboard_view_Controller.DepartmentNameFilter_controller.value.text =
+                                        tempSelected.map((e) => e.departmentId).join(', ');
+
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Done'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: selectedText != null
+                ?"Department Name":"", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Department Name",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
   Widget bindEmployeeNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
     });
-
     return Obx(() {
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty
@@ -2011,7 +2226,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                     dashboard_view_Controller.SelectedEmployee_Member_list
                                         .assignAll(tempSelected);
                                     dashboard_view_Controller.EmployeeNameFilter_controller.value.text =
-                                        tempSelected.map((e) => e.fullName).join(', ');
+                                        tempSelected.map((e) => e.fullName).join('| ');
 
                                     Navigator.of(context).pop();
                                   },

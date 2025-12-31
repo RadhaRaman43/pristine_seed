@@ -65,6 +65,7 @@ class AddNewTaskScreen extends StatelessWidget{
     return WillPopScope(
         onWillPop: () async {
       //Get.offAllNamed(RoutesName.taskMaster_screen);
+          taskMaster_page_controller.resetAllFieldOfFilter();
           taskMaster_page_controller.clearCreateTaskController();
       Get.toNamed(RoutesName.taskMaster_screen);
       return false;
@@ -408,7 +409,7 @@ class AddNewTaskScreen extends StatelessWidget{
                       Utils.sanckBarError('Account Name!', "Please Enter Account Name");
                       return  ;
                     }
-                    if(taskMaster_page_controller.Type_of_call_controller.text!="New Call" &&
+                    if(taskMaster_page_controller.Type_of_call_controller.value.text!="New Call" &&
                        ( taskMaster_page_controller.Contact_Name_controller.text.isEmpty ||
                            taskMaster_page_controller.Contact_Name_controller == null) ){
                       Utils.sanckBarError('Contact Name!', "Please Enter Contact Name");
@@ -418,12 +419,12 @@ class AddNewTaskScreen extends StatelessWidget{
                       Utils.sanckBarError('Contact NAme!', "Please Enter Contact Name");
                       return  ;
                     }*/
-                    if(taskMaster_page_controller.Type_of_call_controller.text.isEmpty || taskMaster_page_controller.Type_of_call_controller == null){
+                    if(taskMaster_page_controller.Type_of_call_controller.value.text.isEmpty || taskMaster_page_controller.Type_of_call_controller.value.text == null){
                       Utils.sanckBarError('Type of Call!', "Please Enter Type Of Call");
                       return  ;
                     }
 
-                    if(taskMaster_page_controller.Type_of_call_controller.text == "Payment Call" && taskMaster_page_controller.Sale_cycle_Id_controller.text.isEmpty){
+                    if(taskMaster_page_controller.Type_of_call_controller.value.text == "Payment Call" && taskMaster_page_controller.Sale_cycle_Id_controller.text.isEmpty){
                       Utils.sanckBarError('Sales Id!', "Please Enter Sales Id");
                       return  ;
                     }
@@ -684,10 +685,10 @@ class AddNewTaskScreen extends StatelessWidget{
         }).toList();
       },
       onSelected: (CallStatusMasterModel selection) {
-        taskMaster_page_controller.Type_of_call_controller.text =
+        taskMaster_page_controller.Type_of_call_controller.value.text =
             _displayTypeOfCallForOption(selection).toString();
         taskMaster_page_controller.isSalesNecessaryController.value.clear();
-        if( taskMaster_page_controller.Type_of_call_controller.text == 'Payment Call' || taskMaster_page_controller.Type_of_call_controller.text == 'Follow-Up Call'){
+        if( taskMaster_page_controller.Type_of_call_controller.value.text == 'Payment Call' || taskMaster_page_controller.Type_of_call_controller.value.text == 'Follow-Up Call'){
           taskMaster_page_controller.PaymentCall.value = true;
         }else{
           taskMaster_page_controller.PaymentCall.value = false;
@@ -706,8 +707,7 @@ class AddNewTaskScreen extends StatelessWidget{
           },
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = taskMaster_page_controller.Type_of_call_controller
-                .text,
+            ..text = taskMaster_page_controller.Type_of_call_controller.value.text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(

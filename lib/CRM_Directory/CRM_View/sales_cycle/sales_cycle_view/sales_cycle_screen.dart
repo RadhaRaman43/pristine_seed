@@ -12,10 +12,13 @@ import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
 import '../../../../reources/routes/routes_name.dart';
+import '../../../../utils/app_utils.dart';
 import '../../../../view/custom_drawer.dart';
 import '../../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
+import '../../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../../CRM_VIewModels/account_master_vm/accountMasterVM.dart';
 import '../../../CRM_VIewModels/contact_master_vm/contact_master_vm/ContactMasterVM.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
@@ -34,6 +37,12 @@ class SalesCycleScreen extends StatelessWidget{
       option;
 
   static String _displayCustomerNeedIdentityStatusForOption(String option) =>
+      option;
+
+  static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
+      option.categoryName!;
+
+  static String _displaySaleCycleActiveForOption(String option) =>
       option;
 
   Size size=Get.size;
@@ -724,8 +733,9 @@ class SalesCycleScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-
                               SizedBox(height: 10,),
+                              bindSaleCycleStagesDropDown(context),
+                              SizedBox(height: 5,),
                               bindFilterData(salesCycleController.saleCycleController.value, 'Sale Cycle Id'),
                               SizedBox(height: 5,),
                               Obx((){
@@ -741,34 +751,36 @@ class SalesCycleScreen extends StatelessWidget{
                                 ) );
                               }),
                               bindFilterData(salesCycleController.filterTask_Id_controller.value, 'Task Id'),
-                              SizedBox(height: 5,),
-                              bindSaleCycleStatusDropDown(context),
                               SizedBox(height: 10,),
                               bindApprovalStatusDropDown(context),
-                              SizedBox(height: 10,),
-
-                              bindAccountOwnerFilter(context),
                               SizedBox(height: 10,),
                               bindFilterData(salesCycleController.accountNameController.value, 'Customer Name'),
                               SizedBox(height: 10,),
                               bindFilterData(salesCycleController.accountCodeController.value, 'Customer Code'),
                               SizedBox(height: 10,),
-                              //bindSaleCycleOwner(),
-                              //SizedBox(height: 10,),
-                              bindFilterData(salesCycleController.productCategoryController.value, 'Product Category'),
+                              //bindFilterData(salesCycleController.productCategoryController.value, 'Product Category'),
+                              bindProductCategoryDropDown(context),
+                              SizedBox(height: 10,),
+                              bindProductCategoryTypeDropDown(context),
                               SizedBox(height: 10,),
                               bindFilterData(salesCycleController.purchaseProcessController.value, 'Purchase Process'),
                               SizedBox(height: 10,),
-                              bindFilterData(salesCycleController.companyProfileTypeController.value, 'Company Profile Type'),
+                              //bindFilterData(salesCycleController.companyProfileTypeController.value, 'Company Profile Type'),
+                              bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
                               bindIsCommintdrpdown(context),
                               SizedBox(height: 10,),
-
                               bindSolutionAccepted(context),
                               SizedBox(height: 10,),
                               bindFilterData(salesCycleController.postalCodeController.value, 'Pin Code'),
                               SizedBox(height: 10,),
                               bindFilterData(salesCycleController.district_controller.value, 'District'),
+                              SizedBox(height: 10,),
+                              bindExpectedClosureDate(context),
+                              SizedBox(height: 10,),
+                              bindFilterData(salesCycleController.createdByController.value, 'Created By'),
+                              SizedBox(height: 10,),
+                              bindCreatedOn(context),
                               SizedBox(height: 10,),
                               //bindFilterData(salesCycleController.branch_head_value_controller.value, 'Region Name'),
                               bindRegionNameFilter(context),
@@ -776,13 +788,7 @@ class SalesCycleScreen extends StatelessWidget{
                               //bindFilterData(salesCycleController.cluster_head_value_controller.value, 'Cluster Name'),
                               bindClusterNameFilter(context),
                               SizedBox(height: 10,),
-                              bindFilterData(salesCycleController.createdByController.value, 'Created By'),
-                              SizedBox(height: 10,),
-
-                              bindExpectedClosureDate(context),
-                              SizedBox(height: 10,),
-
-                              bindCreatedOn(context),
+                              bindSaleCycleOwnerFilter(context),
                               SizedBox(height: 10,),
 
                             ],
@@ -858,7 +864,7 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
-  Widget bindSaleCycleStatusDropDown(BuildContext context){
+  Widget bindSaleCycleStagesDropDown(BuildContext context){
     return Container(
       padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<String>(
@@ -1079,7 +1085,7 @@ class SalesCycleScreen extends StatelessWidget{
     );*/
   }
 
-  bindAccountOwnerFilter(BuildContext context) {
+  bindSaleCycleOwnerFilter(BuildContext context) {
     return Obx((){
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: salesCycleController.employee_Member_list,
@@ -1145,6 +1151,113 @@ class SalesCycleScreen extends StatelessWidget{
 
   }
 
+  bindProductCategoryDropDown(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: salesCycleController.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
+        selectedItems: salesCycleController.Selected_Item_Category_master_list_without_task,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: salesCycleController.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
+            hintText:  "Product Category" ,
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          salesCycleController.Selected_Item_Category_master_list_without_task.value = selectedList;
+          salesCycleController.productCategoryController.value.text =
+              selectedList.map((e) => e.categoryName).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.categoryName ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+
+
+  Widget bindProductCategoryTypeDropDown(context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width - 15,
+      controller: salesCycleController.product_category_type_Controller.value,
+      label: Text(
+        "Product Category Type",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.sisxteen,
+            fontWeight: FontWeight.w500),
+      ),
+
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        salesCycleController.product_category_type_Controller.value.text =
+            _displaySaleCycleActiveForOption(selection!).toString();
+      },
+      dropdownMenuEntries: salesCycleController.productCategoryTypeList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e, label: e!, style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(
+              AllColors.primaryDark1),));
+      }).toList(),
+    );
+
+  }
+
   Widget bindFilterData(TextEditingController value,String hintdata){
     return  TextField(
       controller: value,
@@ -1175,65 +1288,6 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
-  bindCreatedBy() {
-    return TextField(
-      controller: salesCycleController.createdByController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Created By',
-          hintText: 'Created By',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  bindSaleCycleOwner() {
-    return TextField(
-      controller: salesCycleController.salesCycleOwnerController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Sales Cycle Owner',
-          hintText: 'Sales Cycle Owner',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
 
   Widget bindSolutionAccepted(BuildContext context) {
     return Container(
@@ -1293,6 +1347,65 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
+  bindCompProfileTypeDropDown(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CompanyTypeModal>.multiSelection(
+        items: salesCycleController.company_profile_type_list,
+        itemAsString: (CompanyTypeModal u) => u.description ?? "",
+        selectedItems: salesCycleController.selected_company_type_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: salesCycleController.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
+            hintText: "Company Profile Type",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Company Profile Type",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.description).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CompanyTypeModal> selectedList) {
+          salesCycleController.selected_company_type_list.value = selectedList;
+          salesCycleController.companyProfileTypeController.value.text =
+              selectedList.map((e) => e.description).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.description ?? ""),
+          ),
+        ),
+      );
+    });
+  }
   bindIsCommintdrpdown(BuildContext context) {
     return DropdownMenu<String>(
       width: MediaQuery
@@ -1340,33 +1453,6 @@ class SalesCycleScreen extends StatelessWidget{
           foregroundColor: MaterialStateProperty.all<Color>(
               AllColors.primaryDark1),));
       }).toList(),
-    );
-  }
-
-  Widget bindProposedSolution(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: salesCycleController.proposedSolutionController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
-          hintText: 'Proposed Solution',
-          labelText: 'Proposed Solution',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
     );
   }
 
@@ -1433,7 +1519,7 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
-  bindCreatedOn(BuildContext context) {
+ /* bindCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
       controller: salesCycleController.createdOnCnontroller.value,
@@ -1442,7 +1528,7 @@ class SalesCycleScreen extends StatelessWidget{
         contentPadding: EdgeInsets.symmetric(
             vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         suffixIcon: Icon(Icons.calendar_month),
-        hintText: 'Select Start Date -End Date',
+        hintText: 'Created On',
         labelText: 'Created On',
         hintStyle: GoogleFonts.poppins(
             color: AllColors.lightblackColor,
@@ -1489,6 +1575,66 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.createdOnStartToEnd.value="";
         }
       },
+    );
+  }*/
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: salesCycleController.createdOnCnontroller.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Created On',
+            labelText: 'Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(
+                      primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                      textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            salesCycleController.createdOnCnontroller.value.text = outputFormat.format(date);
+          else
+            salesCycleController.createdOnCnontroller.value.text = "";
+        }
+
     );
   }
 

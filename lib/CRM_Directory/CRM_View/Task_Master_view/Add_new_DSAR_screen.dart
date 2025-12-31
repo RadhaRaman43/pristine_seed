@@ -53,7 +53,7 @@ class AddNewDsarScreen extends StatelessWidget{
       TaskMaster_page_controller.typeOfCall.value = false;
       TaskMaster_page_controller.ItemCateDropDown.value = false;
       TaskMaster_page_controller.DSAR_Status_type_controller.value.clear();
-      TaskMaster_page_controller.Type_of_call_controller.clear();
+      TaskMaster_page_controller.Type_of_call_controller.value.clear();
       TaskMaster_page_controller.ItemCat_type_controller.clear();
       TaskMaster_page_controller.NextInterdate_controller.clear();
       TaskMaster_page_controller.NextInterTime_controller.clear();
@@ -573,11 +573,11 @@ class AddNewDsarScreen extends StatelessWidget{
         }
 
         if(TaskMaster_page_controller.DSAR_Status_type_controller.value.text == "Reschedule"  && TaskMaster_page_controller.Task_Master_list[0].typeOfCall == "New Call"){
-          TaskMaster_page_controller.Type_of_call_controller.text= "New Call";
+          TaskMaster_page_controller.Type_of_call_controller.value.text= "New Call";
           TaskMaster_page_controller.typeOfCall.value = false;
           TaskMaster_page_controller.typeOfCall.value = true;
         }else{
-          TaskMaster_page_controller.Type_of_call_controller.clear();
+          TaskMaster_page_controller.Type_of_call_controller.value.clear();
           TaskMaster_page_controller.typeOfCall.value = false;
           TaskMaster_page_controller.typeOfCall.value = true;
         }
@@ -702,7 +702,7 @@ class AddNewDsarScreen extends StatelessWidget{
       onSelected: (CallStatusMasterModel selection) {
         //print(selection.loginEmailId);
         // Update the TextField with the selected
-        TaskMaster_page_controller.Type_of_call_controller.text =
+        TaskMaster_page_controller.Type_of_call_controller.value.text =
             _displayTypeOfCallForOption(selection).toString();
         //taskMaster_page_controller.AccountOwner = selection.loginEmailId!;
       },
@@ -711,8 +711,7 @@ class AddNewDsarScreen extends StatelessWidget{
         return TextField(
           cursorColor: AllColors.primaryDark1,
           controller: controller
-            ..text = TaskMaster_page_controller.Type_of_call_controller
-                .text,
+            ..text = TaskMaster_page_controller.Type_of_call_controller.value.text,
           focusNode: focusNode,
           //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(

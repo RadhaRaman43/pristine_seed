@@ -258,7 +258,7 @@ class PendingDsarDashboardVm extends GetxController{
           print('baisgdiuasgi du${response}');
 
         } else {
-          Utils.showErrorToastification(
+          Utils.sanckBarError(
               "False Message !", response[0].message.toString());
           pendingDSARDashboardRecordList.value = [];
         }
@@ -433,13 +433,13 @@ class PendingDsarDashboardVm extends GetxController{
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -526,13 +526,13 @@ class PendingDsarDashboardVm extends GetxController{
             } else {
               loading.value = false;
               employee_Member_list.value=[];
-              //Utils.showErrorToastification("Error!", "No Date Found");
+              //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(

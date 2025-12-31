@@ -10,6 +10,8 @@ import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
+import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -51,6 +53,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   var SaleCycleStatusController = TextEditingController().obs;
   var ApprovalStatusController = TextEditingController().obs;
   var filterExpectedClosuredateController = TextEditingController().obs;
+  var product_category_type_Controller = TextEditingController().obs;
 
   var AccountOwnerForApi;
   var AccountOwner_controller=TextEditingController().obs;
@@ -62,12 +65,20 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<CompanyTypeModal> company_profile_type_list = <CompanyTypeModal>[].obs;
+  RxList<CompanyTypeModal> selected_company_type_list = <CompanyTypeModal>[].obs;
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
 
   @override
   Future<void> onInit() async {
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    product_category_type_Controller.value.text="Contains";
+    getItemCategoryMstWithoutTaskIdApi();
+    getCompanyTypeMasterGet();
     if(this.isAdminWritePermission==1){
       EmployeeMasterGet('');
     }
@@ -76,6 +87,71 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     }
     //getsalesCycleData(pageNumber);
     getClustersGetByEmail();
+  }
+
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+  getCompanyTypeMasterGet() {
+    this.loading.value = true;
+    Map<String, dynamic> data = {
+      "filter_description": "",
+      "row_per_page": 999,
+      "page_number": 0
+    };
+
+    _api.getCompanyTypeMasterGet(data, sessionManagement).then((value) {
+      print("company profile...${value}");
+      try {
+        List<CompanyTypeModal> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
+          company_profile_type_list.value=Response;
+        } else {
+          company_profile_type_list.value=[];
+        }
+      } catch (e) {
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
@@ -149,7 +225,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
           } else {
             loading.value = false;
             // service_indent_header_list.value = [];
-            Utils.showExceptionToastification("Api Error!", JsonResponse);
+            Utils.sanckBarException("Api Error!", JsonResponse);
           }
         },
       ).onError(
@@ -270,6 +346,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
         "filter_sales_cycle_owner": isAdminWritePermission=="1"?"":email,
         "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
+        "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,
         "filter_proposed_solution": proposedSolutionController.value.text.isEmpty ? "" : proposedSolutionController.value.text,
         "filter_expected_closure_date": extClosureStartToEnd.value.isEmpty ? "" : extClosureStartToEnd.value,
@@ -280,7 +357,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "filter_solution_accepted": solutionAcceptedController.value.text.isEmpty ? -1 : (solutionAcceptedController.value.text == "Yes" ? 1 : 0),
         "filter_created_by": createdByController.value.text.isEmpty ? "" : createdByController.value.text,
         "filter_approved_by": "",
-        "filter_created_on": createdOnStartToEnd.value.isEmpty ? "" : createdOnStartToEnd.value,
+        "filter_created_on": createdOnCnontroller.value.text.isEmpty ? "" : createdOnCnontroller.value.text,
         "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty ? "" : companyProfileTypeController.value.text,
         "filter_postal_code": postalCodeController.value.text.isEmpty ? "" : postalCodeController.value.text,
         "filter_district": district_controller.value.text.isEmpty ? "" : district_controller.value.text,
@@ -332,6 +409,10 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   }
   void clearAllFieldOfFilter() {
     print("Clear Filed");
+    product_category_type_Controller.value.text="Contains";
+    selected_company_type_list.value=[];
+    Selected_Item_Category_master_list_without_task.value=[];
+
     saleCycleController.value.clear();
     salesCycleOwnerController.value.clear();
     filterTask_Id_controller.value.clear();

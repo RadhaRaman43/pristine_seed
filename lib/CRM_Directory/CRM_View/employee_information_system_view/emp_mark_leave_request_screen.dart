@@ -16,6 +16,7 @@ import '../../../utils/app_utils.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/emp_infor_modal/leave_type_modal.dart';
 import '../../CRM_VIewModels/emp_infor_system/emp_mark_leave_request_vm.dart';
 import '../../CRM_VIewModels/emp_infor_system/mark_attendance_view_modal.dart';
 
@@ -58,6 +59,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
         drawer: CustomDrawer(),
         floatingActionButton: FloatingActionButton(
             onPressed: () {
+              employeeMarkLeaveController.leaveCode_filter_controller.value.clear();
               employeeMarkLeaveController.getLeaveTypeData();
               employeeMarkLeaveController.getShortLeaveTime();
               employeeMarkLeaveController.getAnnualHolidaysList();
@@ -204,6 +206,22 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
     if(employeeMarkLeaveController.employee_leave_data_list.value.isNotEmpty &&
         employeeMarkLeaveController.employee_leave_data_list.value != null) {
       ScrollController scrollController = ScrollController();
+      scrollController.addListener(() {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          // You have reached the end of the list
+          int total_page = (employeeMarkLeaveController.total_rows /
+              employeeMarkLeaveController.rowsPerPage).toInt();
+          if ((employeeMarkLeaveController.total_rows % employeeMarkLeaveController.rowsPerPage) > 0) total_page += 1;
+          print("radha");
+          print("last index ${employeeMarkLeaveController.pageNumber} ${employeeMarkLeaveController.total_rows} ${employeeMarkLeaveController.rowsPerPage} ${total_page}");
+          if (employeeMarkLeaveController.pageNumber + 1 < total_page) {
+            print("radha1");
+            employeeMarkLeaveController.getEmployeeLeaveData(employeeMarkLeaveController.filterStatus.value, employeeMarkLeaveController.pageNumber+1);
+            employeeMarkLeaveController.pageNumber += 1;
+          }
+        }
+      });
       return Expanded(
         child: ListView.separated(
             padding: EdgeInsets.only(bottom: 100 ),
@@ -290,21 +308,17 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
               _buildLabelWithValue(
                 label: "Status : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].status,
-                // width: size.width * 0.36,
+                value: employeeMarkLeaveController.employee_leave_data_list[index].status,
                 color: getStatusColor(status),
               ),
 
               _buildLabelWithValue(
                 label: "Leave Description : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].leaveDescription,
+                value: "${employeeMarkLeaveController.employee_leave_data_list[index].leaveDescription}(${employeeMarkLeaveController.employee_leave_data_list[index].leaveCode})",
               ),
               _buildLabelWithValue(
                 label: "Leave Reason : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].leaveReason,
+                value: employeeMarkLeaveController.employee_leave_data_list[index].leaveReason,
               ),
               _buildLabelWithValue(
                 label: "Start Date : ",
@@ -317,8 +331,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
               _buildLabelWithValue(
                 label: "No of Days : ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].noOfDays.toString(),
+                value: employeeMarkLeaveController.employee_leave_data_list[index].noOfDays.toString(),
               ),
 
               Visibility(
@@ -327,28 +340,23 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                   children: [
                     _buildLabelWithValue(
                       label: "Approved Start Date: ",
-                      value: employeeMarkLeaveController
-                          .employee_leave_data_list[index].approvedFromDate,
+                      value: employeeMarkLeaveController.employee_leave_data_list[index].approvedFromDate,
                     ),
                     _buildLabelWithValue(
                       label: "Approved End Date: ",
-                      value: employeeMarkLeaveController
-                          .employee_leave_data_list[index].approvedToDate
+                      value: employeeMarkLeaveController.employee_leave_data_list[index].approvedToDate
                     ),
                     _buildLabelWithValue(
                         label: "Approved No. of days : ",
-                        value:employeeMarkLeaveController
-                            .employee_leave_data_list[index].noOfApprovedDays.toString()
+                        value:employeeMarkLeaveController.employee_leave_data_list[index].noOfApprovedDays.toString()
                     ),
                     _buildLabelWithValue(
                         label: "Approved Leave Description : ",
-                        value:employeeMarkLeaveController
-                            .employee_leave_data_list[index].approvedLeaveDescription
+                        value:employeeMarkLeaveController.employee_leave_data_list[index].approvedLeaveDescription
                     ),
                     _buildLabelWithValue(
                         label: "Manager Remarks : ",
-                        value:employeeMarkLeaveController
-                            .employee_leave_data_list[index].managerRemarks
+                        value:employeeMarkLeaveController.employee_leave_data_list[index].managerRemarks
                     ),
                     _buildLabelWithValue(
                       label: "Approved On : ",
@@ -360,8 +368,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
               _buildLabelWithValue(
                 label: "Created By: ",
-                value: employeeMarkLeaveController
-                    .employee_leave_data_list[index].createdFullName,
+                value: employeeMarkLeaveController.employee_leave_data_list[index].createdFullName,
               ),
               _buildLabelWithValue(
                 label: "Created On : ",
@@ -377,497 +384,13 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                       label: "Rejected On : ",
                       value: approved_date,
                     ),
-
                     _buildLabelWithValue(
                       label: "Reject Remarks : ",
-                      value: employeeMarkLeaveController
-                          .employee_leave_data_list[index].rejectRemarks,
+                      value: employeeMarkLeaveController.employee_leave_data_list[index].rejectRemarks,
                     ),
                   ],
                 ),
               ),
-             /* Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Emp Name :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].createdFullName??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].createdFullName??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Status :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].status??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].status??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Created On :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: createdOn??"",
-                      child: Text(
-                        createdOn??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              *//*Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Is Half Day :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Tooltip(
-                    message: employeeMarkLeaveController
-                        .employee_leave_data_list[index].isHalfDay == 1?"Yes":"No",
-                    child: Text(
-                      employeeMarkLeaveController
-                          .employee_leave_data_list[index].isHalfDay == 1?"Yes":"No",
-                      style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Is Short Leave :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].isShortLeave == 1?"Yes":"No",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].isShortLeave == 1?"Yes":"No",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Short Leave Time :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].shortLeaveTime??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].shortLeaveTime??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),*//*
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Leave Description :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].leaveDescription??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].leaveDescription??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Leave Reason :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].leaveReason??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].leaveReason??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Start Date :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: startDate??"",
-                      child: Text(
-                        startDate??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'End Date :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: endDate??"",
-                      child: Text(
-                        endDate??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'No of Days :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Flexible(
-                    child: Tooltip(
-                      message: employeeMarkLeaveController
-                          .employee_leave_data_list[index].noOfDays.toString(),
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].noOfDays.toString(),
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Reporting Manager :',
-                    style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Spacer(),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message:employeeMarkLeaveController
-                          .employee_leave_data_list[index].approvedFullName??"",
-                      child: Text(
-                        employeeMarkLeaveController
-                            .employee_leave_data_list[index].approvedFullName??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ),
-
-
-                ],
-              ),
-
-              Visibility(
-                visible: employeeMarkLeaveController.employee_leave_data_list[index].status?.toLowerCase() == 'approved',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Approved On :',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Spacer(),
-                    Tooltip(
-                      message: approved_date??"",
-                      child: Text(
-                        approved_date??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-
-
-                  ],
-                ),
-              ),
-
-
-
-              Visibility(
-                visible: employeeMarkLeaveController.employee_leave_data_list[index].status?.toLowerCase() == 'rejected',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Rejected On:',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Tooltip(
-                      message: approved_date??"",
-                      child: Text(
-                        approved_date??"",
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-
-
-                  ],
-                ),
-              ),
-
-              Visibility(
-                visible: employeeMarkLeaveController.filterStatus == 'Rejected',
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Rejected Remarks:',
-                      style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    Flexible(
-                      child: Tooltip(
-                        message: employeeMarkLeaveController
-                            .employee_leave_data_list[index].rejectRemarks??"",
-                        child: Text(
-                          employeeMarkLeaveController
-                              .employee_leave_data_list[index].rejectRemarks??"",
-                          style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),*/
             ],
           ),
 
@@ -1058,8 +581,8 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
           suffixIcon: Icon(Icons.calendar_month),
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'End Date',
-          hintText: 'End Date',
+          labelText: 'Created On',
+          hintText: 'Created On',
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -1147,38 +670,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
   }
 
 
-
-
-  bindLeaveCode(BuildContext context) {
-    return  TextField(
-      controller: employeeMarkLeaveController.leaveCode_filter_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Leave Code',
-          hintText: 'Leave Code',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-
-    );
-  }
-
-
-
   void showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -1240,10 +731,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                         SizedBox(
                           height: 10,
                         ),
-                        bindLeaveCode(context),
-                        SizedBox(
-                          height: 10,
-                        ),
                         bindRegionNameFilter(context),
                         SizedBox(
                           height: 10,
@@ -1252,7 +739,11 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                         SizedBox(
                           height: 10,
                         ),
-                        bindfilterText(context,'Leave Id',employeeMarkLeaveController.leaveId_filter_controller),
+                        bindLeaveCode(context),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        bindfilterText(context,'Leave Reason',employeeMarkLeaveController.leave_reason_filter_controller),
                         SizedBox(
                           height: 10,
                         ),
@@ -1266,6 +757,10 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                         SizedBox(
                           height: 10,
                         ),
+                        bindfilterText(context,'Created By',employeeMarkLeaveController.CreatedBy_filter_controller),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -1273,12 +768,14 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                               child: DefaultButton(
                                 text: 'Reset',
                                 press: (){
-                                  employeeMarkLeaveController.leaveCode_filter_controller.clear();
+                                  employeeMarkLeaveController.leaveCode_filter_controller.value.clear();
                                   employeeMarkLeaveController.StartDate_filter_controller.clear();
                                   employeeMarkLeaveController.EndDate_filter_controller.clear();
                                   employeeMarkLeaveController.leaveId_filter_controller.clear();
                                   employeeMarkLeaveController.leave_reason_filter_controller.clear();
+                                  employeeMarkLeaveController.CreatedBy_filter_controller.clear();
                                   employeeMarkLeaveController.createdOn_filter_controller.clear();
+                                  employeeMarkLeaveController.select_leaveType_data_list.value=[];
                                   employeeMarkLeaveController.pageNumber=0;
                                   employeeMarkLeaveController.getEmployeeLeaveData(
                                       employeeMarkLeaveController.filterStatus.value, employeeMarkLeaveController.pageNumber);
@@ -1312,6 +809,277 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
       },
     );
   }
+
+  static String _displayleavetypeForOption(LeaveTypeModel option) =>
+      /*option.description! + " (" +*/ option.leaveCode! /*+ ")"*/;
+  Widget bindLeaveCode(context) {
+    return Container(
+      padding: const EdgeInsets.only(right: 15),
+      child: DropdownMenu<LeaveTypeModel>(
+        width: MediaQuery.of(context).size.width - 20,
+        controller: employeeMarkLeaveController.leaveCode_filter_controller.value,
+        label: Text(
+          "Leave Code",
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w700),
+        ),
+        inputDecorationTheme: const InputDecorationTheme(
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: AllColors.primaryDark1,
+            ),
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(
+                color: AllColors.primaryDark1), // Change the color to green
+          ),
+          filled: false,
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        ),
+        onSelected: (LeaveTypeModel? selection) {
+          print(selection!.description);
+          employeeMarkLeaveController.leaveCode_filter_controller.value.text =
+              _displayleavetypeForOption(selection).toString();
+
+          FocusScope.of(context).unfocus();
+        },
+        dropdownMenuEntries: employeeMarkLeaveController.leaveType_data_list
+            .map<DropdownMenuEntry<LeaveTypeModel>>((LeaveTypeModel e) {
+          return DropdownMenuEntry<LeaveTypeModel>(
+              value: e,
+              label: e.description!,
+              style: ButtonStyle(
+                foregroundColor:
+                MaterialStateProperty.all<Color>(AllColors.primaryDark1),
+              ));
+        }).toList(),
+      ),
+    );
+  }
+
+  /*Widget bindLeaveCode(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = employeeMarkLeaveController.leaveType_data_list;
+      *//*if (availableItems.isNotEmpty &&
+          employeeMarkLeaveController.select_leaveType_data_list.isEmpty) {
+        employeeMarkLeaveController.select_leaveType_data_list.assignAll(availableItems);
+        employeeMarkLeaveController.leaveCode_filter_controller.value.text = availableItems.map((e) => e.leaveCode).join(', ');
+      }*//*
+    });
+
+    return Obx(() {
+      final selected = employeeMarkLeaveController.select_leaveType_data_list;
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.leaveCode).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <LeaveTypeModel>[];
+              tempSelected.addAll(employeeMarkLeaveController.select_leaveType_data_list);
+              List<LeaveTypeModel> allItems = employeeMarkLeaveController.leaveType_data_list;
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
+                    (c.leaveCode ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Leave Code',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ],
+                          ),
+                        ),
+                        //const Divider(height: 1),
+                        // const SizedBox(height: 8),
+                        // Search Field
+
+                        *//*Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),*//*
+
+                        const SizedBox(height: 8),
+                        *//*Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),*//*
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty ? const Center(child: Text('No clusters found')) :
+                          ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.leaveCode ?? "") ==
+                                  (item.leaveCode ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.leaveCode ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.leaveCode ?? "") ==
+                                          (item.leaveCode ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    employeeMarkLeaveController.select_leaveType_data_list.assignAll(tempSelected);
+                                    employeeMarkLeaveController.leaveCode_filter_controller.value.text = tempSelected.map((e) => e.leaveCode).join(', ');
+                                    //employeeMarkLeaveController.getRegionsWithClusterFilterGetByEmail();
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: const Text('Done'),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Leave Code", // 👈 Label restored here
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Leave Code",
+                  style: GoogleFonts.poppins(
+                    color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }*/
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -1349,15 +1117,9 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
+                    (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1383,7 +1145,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
                               TextButton(
@@ -1395,7 +1157,8 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                             ],
                           ),
                         ),
-
+                        const Divider(height: 1),
+                        const SizedBox(height: 8),
                         // Search Field
                         Padding(
                           padding:
@@ -1422,8 +1185,6 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                         ),
 
                         const SizedBox(height: 8),
-
-                        // Select All
                         Padding(
                           padding:
                           const EdgeInsets.symmetric(horizontal: 8.0),
@@ -1487,15 +1248,9 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    employeeMarkLeaveController.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    employeeMarkLeaveController
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    employeeMarkLeaveController
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                    employeeMarkLeaveController.SelectedCluster_list.assignAll(tempSelected);
+                                    employeeMarkLeaveController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(', ');
+                                    employeeMarkLeaveController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
@@ -1578,25 +1333,15 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
               final searchController = TextEditingController();
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(employeeMarkLeaveController.SelectedRegion_list);
-
-              final allItems =
-                  employeeMarkLeaveController.regionwithclusterGetByEmailList;
+              final allItems = employeeMarkLeaveController.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
-
+                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
+                    (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
                 return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.75,
                     child: Column(
@@ -1642,8 +1387,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
+                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
                                 icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   searchController.clear();
@@ -1682,9 +1426,7 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
+                          child: filtered.isEmpty ? const Center(child: Text('No regions found')) : ListView.builder(
                             padding:
                             const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
@@ -1721,13 +1463,8 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    employeeMarkLeaveController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    employeeMarkLeaveController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
+                                    employeeMarkLeaveController.SelectedRegion_list.assignAll(tempSelected);
+                                    employeeMarkLeaveController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(', ');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),
@@ -1756,15 +1493,14 @@ class EmpMarkLeaveRequestScreen extends StatelessWidget{
           child: Row(
             children: [
               Expanded(
-                child: selectedText == null
-                    ? Text(
+                child: selectedText == null ? Text(
                   "Select Region",
                   style: GoogleFonts.poppins(
                     color: Colors.grey.shade600,
                     fontSize: AllFontSize.sisxteen,
                   ),
-                )
-                    : SingleChildScrollView(
+                ) :
+                SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Text(
                     selectedText,

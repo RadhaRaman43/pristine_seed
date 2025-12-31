@@ -79,623 +79,117 @@ class _Drawer extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: AllColors.primaryDark1,
-      width: size.width * 0.8,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              width: 330,
-              height: size.height * .42 ,
-              decoration: BoxDecoration(
-                color: AllColors.primaryDark1,
-              ),
-              // width: double.infinity,
-              child: DrawerHeader(
-                child: Container(
-                  child: Column(
-                    children: [
-                      ListTile(
-                        contentPadding: EdgeInsets.zero,
-                        leading: InkWell(
-                          onTap: () {
-                            Get.offAllNamed(RoutesName.homeScreen);
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 40,
-                            child: ClipOval(
-                              child: Image.asset("assests/images/pristine_pfulfill.png")
-                             //Image.network(dashBoard_vm.imageUrl.toString(),height: 40,width: 40,fit: BoxFit.cover,) ,
-                            ),
-                          ),
-                        ),
-                        trailing: SizedBox(
-                          width: 100, // Set your desired width here
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              //todo comment notification.....
-
-                              /*Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: Icon(
-                                  Icons.notification_add,
-                                  color: Colors.white,
-                                  size: 20,
-                                ),
-                              ),*/
-
-                              SizedBox(width: size.width * .02,),
-
-                              bindprofileMenu(),
-                            ],
-                          ),
-                        ),
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          /// 🔹 CUSTOM HEADER (NO DrawerHeader)
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
+            color: AllColors.primaryDark1,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.zero,
+                  leading: InkWell(
+                    onTap: () {
+                      Get.offAllNamed(RoutesName.homeScreen);
+                    },
+                    child: ClipOval(
+                      child: Image.asset(
+                        "assests/images/pristine_pfulfill.png",
+                        height: 40,
+                        width: 40,
                       ),
-                      Center(
-                        child: Container(
-                           // margin: EdgeInsets.only(top: 8.0),
-                            child: Column(
-                              children: [
-                                Container(
-                                  height:120,
-                                  width:120,
-                                  decoration: BoxDecoration(
-                                   border: Border.all(color: Colors.white,width: 2),
-                                    borderRadius: BorderRadius.circular(80)
-                                  ),
-                                  child: ClipOval(
-                                    child: Image.network(dashBoard_vm.imageUrl.toString(),width: 90,
-                                      height: 90,  fit: BoxFit.cover,),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 8,
-                                ),
-                                Text(
-                                  name.toUpperCase(),
-                                  style: GoogleFonts.poppins(
-                                      fontSize: AllFontSize.fourtine,
-                                      fontWeight: FontWeight.w600,
-                                      color: AllColors.whiteColor),
-                                ),
-                                SizedBox(
-                                  height: 8.0,
-                                ),
-                                Container(
-                                  width: size.width*.7,
-                                  child: Tooltip(
-                                    message: email,
-                                    child: Text(
-                                      email,
-                                      style: GoogleFonts.poppins(
-                                          fontSize: AllFontSize.fourtine,
-                                          fontWeight: FontWeight.w600,
-                                          color: AllColors.whiteColor),
-                                      textAlign: TextAlign.center,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            )),
-                      )
-                    ],
+                    ),
+                  ),
+                  trailing: bindprofileMenu(),
+                ),
+                const SizedBox(height: 8),
+                Container(
+                  height: 100,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.white, width: 2),
+                    shape: BoxShape.circle,
+                  ),
+                  child: ClipOval(
+                    child:dashBoard_vm.imageUrl.toString().isEmpty? Image.asset(
+                      "assests/images/pristine_pfulfill.png",
+                    )
+                        : Image.network(dashBoard_vm.imageUrl.toString(), fit: BoxFit.cover,),
                   ),
                 ),
-              ),
-            ),
-            // SizedBox(height: 1,),
-            SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(bottom: 20),
-                height: size.height*.61,
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: globalMenuList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    String title = globalMenuList[index].title.toString();
-                    return SingleChildScrollView(
-                      child: ExpansionTile(
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              ListView.builder(
-                                padding: EdgeInsets.zero,
-                                itemBuilder: (context, cindex) {
-                                  String cTitle = globalMenuList[index]
-                                      .children![cindex]!
-                                      .title
-                                      .toString();
 
-                                  return SingleChildScrollView(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(left: 20.0),
-                                      child: ListTile(
-                                        onTap: () async {
-                                          sessionManagement.setCountry(cTitle);
-                                          switch (cTitle) {
-                                            case 'Installation Request':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              Get.toNamed(RoutesName.installation_screen,preventDuplicates: false);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Navigator.of(context);
-                                          /*home_vm.openMenu(cTitle,
-                                                  Icon(_getChildIconForIndex(index)))*/;
+                const SizedBox(height: 8),
 
-                                              break;
-                                            case 'Corrective Request':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.corrective_screen,preventDuplicates: false);
-
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Preventive Request':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.preventive_screen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Customer Complain':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.complain_customer_page,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Check In/Out':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                             home_vm.openMenu(cTitle, iconData);
-                                               Get.toNamed(RoutesName.checkIn_screen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Check In':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.checkInApproval,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'User Expense':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.myExpenseScreen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Expense':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.expenseApprovarScreen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                            case 'User Route':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.showRouteScreen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Return Indent':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                               Get.toNamed(RoutesName.returnIndentScreen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-                                            case 'Order List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.order_screen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Orders Approval':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.order_approval_screen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Indent List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.indentListscreen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                            case 'Bulk Indent List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.bulk_indent_screen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                            case 'User Inventory':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.toNamed(RoutesName.service_inventory_screen,preventDuplicates: false);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                              //todo crm routing.....
-
-
-                                            case 'Accounts Master':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<Accountmastervm>();
-                                              var controller=Get.put(Accountmastervm());
-                                              //Get.offAllNamed(RoutesName.accountMaster_screen,);
-                                              Get.toNamed(RoutesName.accountMaster_screen,);
-                                            /*  accountMaster_page_controller.clearController();
-                                              accountMaster_page_controller.pageNumber = 0;
-                                              accountMaster_page_controller.getAccountMaster(0 ,accountMaster_page_controller.IsActive_controller.text);*/
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Contacts Master':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<ContactMasterVM>();
-                                              var controller=Get.put(ContactMasterVM());
-                                              //Get.offAllNamed(RoutesName.contactMaster_screen);
-                                             /* contact_vm_controller.clearAllFilterContoller();
-                                              contact_vm_controller.pageNumber = 0;*/
-                                              Get.toNamed(RoutesName.contactMaster_screen);
-                                              //contact_vm_controller.getContactMasterList(0,"","","");
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Account Draft':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<Accountmastervm>();
-                                              var controller=Get.put(Accountmastervm());
-                                              //accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                                              // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
-                                           /*   accountMaster_page_controller.clearFilterController();
-                                              accountMaster_page_controller.pageNumber = 0;
-                                              accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString())*/;
-                                              Get.toNamed(RoutesName.Draft_item_list);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'All Contacts Master':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<AllContactMasterVm>();
-                                              var controller=Get.put(AllContactMasterVm());
-                                              //accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                                              // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
-                                            /*  allContactMastercontroller.pageNumber = 0;
-                                              allContactMastercontroller.getContactMasterAllList(allContactMastercontroller.pageNumber);*/
-                                              Get.toNamed(RoutesName.allContactMasterScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Tasks':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<Taskmastervm>();
-                                              var controller=Get.put(Taskmastervm());
-                                              //Get.offAllNamed(RoutesName.taskMaster_screen);
-                                             // TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
-                                             /* TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
-                                              TaskMaster_page_controller.date_filter.value = "Today";
-                                              TaskMaster_page_controller.is_done.value = 0;
-                                              TaskMaster_page_controller.filter.value = "Running";
-                                              TaskMaster_page_controller.resetAllFieldOfFilter();
-                                              accountMaster_page_controller.FromPage.value = '';
-                                              contact_vm_controller.FromPage.value ='';
-                                              TaskMaster_page_controller.pageNumber = 0;*/
-                                              Get.toNamed(RoutesName.taskMaster_screen);
-                                              //TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
-                                              Navigator.of(context);
-                                              break;
-                                            case 'Task Approval List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<TaskApprovalvm>();
-                                             /* TaskApproval_page_controller.resetAllFieldOfFilter();
-                                              TaskApproval_page_controller.pageNumber = 0;*/
-                                              var controller=Get.put(TaskApprovalvm());
-                                              Get.toNamed(RoutesName.taskApproval_List);
-                                              //TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '','');
-                                              Navigator.of(context);
-                                              break;
-                                            case 'Sales Cycle':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<SalesCycleVm>();
-                                              var controller=Get.put(SalesCycleVm());
-                                            /*  accountMaster_page_controller.FromPage.value = '';
-                                              contact_vm_controller.FromPage.value ='';
-                                              saleCycleController.filterQuoteAcceptedFlag.value="Open";
-                                              saleCycleController.clearAllFieldOfFilter();
-                                              saleCycleController.pageNumber = 0;*/
-                                              Get.toNamed(RoutesName.salesCycleScreen,);
-                                              //saleCycleController.getsalesCycleData(saleCycleController.pageNumber, "", "",'');
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Quote Approval List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<QuoteApprovalListVm>();
-                                              final quoteApprovalController=Get.put(QuoteApprovalListVm());
-                                             /* quoteApprovalController.pageNumberForQuote = 0;
-                                              quoteApprovalController.getQuoteHeaderData(0);*/
-                                              Get.toNamed(RoutesName.quoteApprovalListScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            /*case 'Mark Leave':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<MarkAttendanceViewmodel>();
-                                              MarkAttendanceViewmodel employeeMarkLeaveController=Get.put(MarkAttendanceViewmodel());
-                                              Get.toNamed(RoutesName.empMarkLeaveScreen,);
-                                              Navigator.of(context);
-                                              break;*/
-                                            case 'Mark Leave Request':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<EmpMarkLeaveRequestVm>();
-                                              EmpMarkLeaveRequestVm employeeMarkLeaveController=Get.put(EmpMarkLeaveRequestVm());
-                                              Get.toNamed(RoutesName.empMarkLeaveRequestScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Leave Request Approval':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<LeaveRequestApprovalVm>();
-                                              LeaveRequestApprovalVm employeeMarkLeaveController=Get.put(LeaveRequestApprovalVm());
-                                              Get.toNamed(RoutesName.empMarkLeaveRequestApprovalScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                            case 'Sales Cycle Approval List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<SalesCyclePendingForApprovalVm>();
-                                              SalesCyclePendingForApprovalVm employeeMarkLeaveController=Get.put(SalesCyclePendingForApprovalVm());
-                                              //employeeMarkLeaveController.getsalesCycleData(employeeMarkLeaveController.pageNumber,);
-                                              Get.toNamed(RoutesName.salesCyclePendingForApprovalListScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Pending Draft Quote':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<PendingDraftQuoteVm>();
-                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("PENDING & PENDING FOR APPROVAL"));
-                                            /*  pendingDraftQuoteController.pageNumberForQuote=0;
-                                              pendingDraftQuoteController.getPendingDraftQuoteList(0);*/
-                                              Get.toNamed(RoutesName.pendingDraftQuoteScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Approved / Rejected Quote':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<PendingDraftQuoteVm>();
-                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("APPROVED & REJECTED"));
-                                              Get.toNamed(RoutesName.approvedRejectedQuoteScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'All SPR Mapping Line Items':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<PendingDraftQuoteVm>();
-                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLSPRMAPPING"));
-                                              Get.toNamed(RoutesName.allSPRMappingScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Sales Cycle Competitor List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<SalesCycleCompetitorProductInforVm>();
-                                              SalesCycleCompetitorProductInforVm PendingDraftQuoteController=Get.put(SalesCycleCompetitorProductInforVm());
-                                              Get.toNamed(RoutesName.salesCycleCompetitorProductInforScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                            case 'All Quote':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<PendingDraftQuoteVm>();
-                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("All"));
-                                              Get.toNamed(RoutesName.allQuoteScreenScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'All Quote Line Items':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<PendingDraftQuoteVm>();
-                                              PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLQuoteLineItems"));
-                                              Get.toNamed(RoutesName.allQuoteLineItemScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                            case 'All Sales Advice List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<SalesAdviseAllListVm>();
-                                              SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceHeader"));
-                                              Get.toNamed(RoutesName.allSalesAdviseList,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'All Sales Advice Line Items':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<SalesAdviseAllListVm>();
-                                              SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceLineItem"));
-                                              Get.toNamed(RoutesName.allSalesAdviseLineItemsScreen,);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Business Tour Plan':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<BusinessPlanTourViewModel>();
-                                              BusinessPlanTourViewModel BusinessTourPlanController=Get.put(BusinessPlanTourViewModel());
-                                              Get.toNamed(RoutesName.BusinessTourPlanScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Business Tour Plan Line Details':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<BusinessPlanTourViewModel>();
-                                              BusinessPlanTourViewModel BusinessTourPlanLineDetailsController=Get.put(BusinessPlanTourViewModel());
-                                              Get.toNamed(RoutesName.BusinessTourPlanLineDetailScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Business Tour Approval List':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<BusinessTourApprovalVm>();
-                                              BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
-                                              Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Approved / Rejected Business Tour Plan':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<BusinessTourApprovalVm>();
-                                              BusinessTourApprovalVm BusinessTourApprovalController=Get.put(BusinessTourApprovalVm());
-                                              Get.toNamed(RoutesName.BusinessTourApproveRejectListScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Call Dashboard':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<CallDashboardVm>();
-                                              CallDashboardVm callDashboardController=Get.put(CallDashboardVm());
-                                              Get.toNamed(RoutesName.callDashboardViewScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Funnel Dashboard':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<FunnelDashboardVm>();
-                                              FunnelDashboardVm callDashboardController=Get.put(FunnelDashboardVm());
-                                              Get.toNamed(RoutesName.funnelDashboardViewScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Commit Dashboard':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<CommitDashboardVm>();
-                                              CommitDashboardVm callDashboardController=Get.put(CommitDashboardVm());
-                                              Get.toNamed(RoutesName.commitDashboardViewScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Sales Dashboard ':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<SalesDashboardVm>();
-                                              SalesDashboardVm callDashboardController=Get.put(SalesDashboardVm());
-                                              Get.toNamed(RoutesName.salesDashboardViewScreen);
-                                              Navigator.of(context);
-                                              break;
-
-                                            case 'Pending DSAR Dashboard':
-                                              IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
-                                              home_vm.openMenu(cTitle, iconData);
-                                              Get.delete<PendingDsarDashboardVm>();
-                                              PendingDsarDashboardVm callDashboardController=Get.put(PendingDsarDashboardVm());
-                                              Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
-                                              Navigator.of(context);
-                                              break;
-
-
-                                          }
-                                        },
-                                        leading: Icon(
-                                          StaticMethod.getChildIconForIndex(cTitle),
-                                          color: AllColors.whiteColor,
-                                        ),
-                                        title: Text(
-                                          cTitle,
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                          style: TextStyle(
-                                            color: AllColors.whiteColor,
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 15,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                //itemCount: globalMenuList.length,
-                                itemCount:
-                                    globalMenuList[index].children!.length,
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                              ),
-                            ],
-                          ),
-                        ],
-                        leading: Icon(
-                         // _getIconForIndex(index),
-                          _getIconForIndex(title),
-                          color: AllColors.whiteColor,
-                        ),
-                        title: Text(
-                          title,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                          style: TextStyle(
-                            color: AllColors.whiteColor,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    );
-                  },
+                Text(
+                  name.toUpperCase(),
+                  style: GoogleFonts.poppins(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
+
+                Tooltip(
+                  message: email,
+                  child: Text(
+                    email,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Divider(),
+          ...List.generate(globalMenuList.length, (index) {
+            final title = globalMenuList[index].title.toString();
+
+            return ExpansionTile(
+              leading: Icon(
+                _getIconForIndex(title),
+                color: Colors.white,
+              ),
+              title: Text(
+                title,
+                style: const TextStyle(color: Colors.white),
+              ),
+              children: globalMenuList[index].children!.map((child) {
+                final cTitle = child!.title.toString();
+
+                return ListTile(
+                  leading: Icon(
+                    StaticMethod.getChildIconForIndex(cTitle),
+                    color: Colors.white,
+                  ),
+                  title: Text(
+                    cTitle,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  onTap: () {
+                    _handleNavigation(cTitle);
+                  },
+                );
+              }).toList(),
+            );
+          }),
+        ],
       ),
     );
   }
 
+
   @override
   void initState() {
-    // TODO : implement initState  ......
-
     getMenuList();
     print("NAme.......${email}");
-    //MrDrawer();
+
   }
 
   Future<void> getMenuList() async {
@@ -704,7 +198,6 @@ class _Drawer extends State<CustomDrawer> {
 
     IsCRM= int.parse( await sessionManagement.getIsCrm() ?? '0');
     await sessionManagement.getMenuList().then((menuList) {
-      // Use setState to update the UI with the fetched menu list
       setState(() {
         globalMenuList = menuList;
       });
@@ -792,10 +285,6 @@ class _Drawer extends State<CustomDrawer> {
       ),
     );
   }
-
-
-
-
   ConfirmationDialog(context){
     showDialog(
         context: context,
@@ -885,6 +374,349 @@ class _Drawer extends State<CustomDrawer> {
           );
 
         });
+  }
+
+  void _handleNavigation(String cTitle) {
+
+      sessionManagement.setCountry(cTitle);
+      switch (cTitle) {
+        case 'Installation Request':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          Get.toNamed(RoutesName.installation_screen,preventDuplicates: false);
+          home_vm.openMenu(cTitle, iconData);
+          Navigator.of(context);
+          /*home_vm.openMenu(cTitle,
+                                                  Icon(_getChildIconForIndex(index)))*/;
+
+          break;
+        case 'Corrective Request':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.corrective_screen,preventDuplicates: false);
+
+          Navigator.of(context);
+          break;
+
+        case 'Preventive Request':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.preventive_screen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Customer Complain':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.complain_customer_page,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Check In/Out':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.checkIn_screen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Check In':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.checkInApproval,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'User Expense':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.myExpenseScreen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Expense':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.expenseApprovarScreen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+
+        case 'User Route':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.showRouteScreen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Return Indent':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.returnIndentScreen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+        case 'Order List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.order_screen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Orders Approval':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.order_approval_screen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Indent List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.indentListscreen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+
+        case 'Bulk Indent List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.bulk_indent_screen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+
+        case 'User Inventory':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.toNamed(RoutesName.service_inventory_screen,preventDuplicates: false);
+          Navigator.of(context);
+          break;
+
+        case 'Accounts Master':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<Accountmastervm>();
+          Get.toNamed(RoutesName.accountMaster_screen,);
+          Navigator.of(context);
+          break;
+
+        case 'Contacts Master':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<ContactMasterVM>();
+          Get.toNamed(RoutesName.contactMaster_screen);
+          Navigator.of(context);
+          break;
+
+        case 'Account Draft':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<Accountmastervm>();
+          Get.toNamed(RoutesName.Draft_item_list);
+          Navigator.of(context);
+          break;
+
+        case 'All Contacts Master':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<AllContactMasterVm>();
+          Get.toNamed(RoutesName.allContactMasterScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Tasks':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<Taskmastervm>();
+          Get.toNamed(RoutesName.taskMaster_screen);
+          Navigator.of(context);
+          break;
+        case 'Task Approval List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<TaskApprovalvm>();
+          Get.toNamed(RoutesName.taskApproval_List);
+          Navigator.of(context);
+          break;
+        case 'Sales Cycle':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<SalesCycleVm>();
+          Get.toNamed(RoutesName.salesCycleScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'Quote Approval List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<QuoteApprovalListVm>();
+          Get.toNamed(RoutesName.quoteApprovalListScreen,);
+          Navigator.of(context);
+          break;
+        case 'Mark Leave Request':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<EmpMarkLeaveRequestVm>();
+          Get.toNamed(RoutesName.empMarkLeaveRequestScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'Leave Request Approval':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<LeaveRequestApprovalVm>();
+          Get.toNamed(RoutesName.empMarkLeaveRequestApprovalScreen,);
+          Navigator.of(context);
+          break;
+
+
+        case 'Sales Cycle Approval List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<SalesCyclePendingForApprovalVm>();
+          Get.toNamed(RoutesName.salesCyclePendingForApprovalListScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'Pending Draft Quote':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<PendingDraftQuoteVm>();
+          Get.toNamed(RoutesName.pendingDraftQuoteScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'Approved / Rejected Quote':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<PendingDraftQuoteVm>();
+          Get.toNamed(RoutesName.approvedRejectedQuoteScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'All SPR Mapping Line Items':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<PendingDraftQuoteVm>();
+          Get.toNamed(RoutesName.allSPRMappingScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'Sales Cycle Competitor List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<SalesCycleCompetitorProductInforVm>();
+          Get.toNamed(RoutesName.salesCycleCompetitorProductInforScreen,);
+          Navigator.of(context);
+          break;
+
+
+        case 'All Quote':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<PendingDraftQuoteVm>();
+          Get.toNamed(RoutesName.allQuoteScreenScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'All Quote Line Items':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<PendingDraftQuoteVm>();
+          Get.toNamed(RoutesName.allQuoteLineItemScreen,);
+          Navigator.of(context);
+          break;
+
+
+        case 'All Sales Advice List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<SalesAdviseAllListVm>();
+          Get.toNamed(RoutesName.allSalesAdviseList,);
+          Navigator.of(context);
+          break;
+
+        case 'All Sales Advice Line Items':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<SalesAdviseAllListVm>();
+          Get.toNamed(RoutesName.allSalesAdviseLineItemsScreen,);
+          Navigator.of(context);
+          break;
+
+        case 'Business Tour Plan':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<BusinessPlanTourViewModel>();
+          Get.toNamed(RoutesName.BusinessTourPlanScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Business Tour Plan Line Details':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<BusinessPlanTourViewModel>();
+          Get.toNamed(RoutesName.BusinessTourPlanLineDetailScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Business Tour Approval List':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<BusinessTourApprovalVm>();
+          Get.toNamed(RoutesName.BusinessTourApprovalListScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Approved / Rejected Business Tour Plan':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<BusinessTourApprovalVm>();
+          Get.toNamed(RoutesName.BusinessTourApproveRejectListScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Call Dashboard':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<CallDashboardVm>();
+          Get.toNamed(RoutesName.callDashboardViewScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Funnel Dashboard':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<FunnelDashboardVm>();
+          Get.toNamed(RoutesName.funnelDashboardViewScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Commit Dashboard':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<CommitDashboardVm>();
+          Get.toNamed(RoutesName.commitDashboardViewScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Sales Dashboard ':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<SalesDashboardVm>();
+          Get.toNamed(RoutesName.salesDashboardViewScreen);
+          Navigator.of(context);
+          break;
+
+        case 'Pending DSAR Dashboard':
+          IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
+          home_vm.openMenu(cTitle, iconData);
+          Get.delete<PendingDsarDashboardVm>();
+          Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
+          Navigator.of(context);
+          break;
+
+
+
+    }
   }
 
 

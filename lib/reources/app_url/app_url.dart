@@ -232,8 +232,10 @@ class AppUrl {
      static const String PincodeMasterGet = "$BASE_URL/api/CRM/Master/PincodeMasterGetByPincode";
      static const String TaskMstRejectReopen = "$BASE_URL/api/CRM/Task/TaskMstRejectReopen";
      static const String TaskMstGetApprovalList = "$BASE_URL/api/CRM/Task/TaskMstGetApprovalList";
+
      //todo radha raman
      static const String TaskMstDelete = "$BASE_URL/api/CRM/Task/TaskMstDelete";
+     static const String CompanyTypeMasterGet = "$BASE_URL/api/CRM/Master/CompanyTypeMasterGet";
 
 
      //todo sales cycle
