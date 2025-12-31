@@ -1407,8 +1407,7 @@ class FunnelDashboardView extends StatelessWidget{
             final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
             dashboard_view_Controller.formattedStartDate.value = startDate;
             dashboard_view_Controller.formattedEndDate.value = endDate;
-            dashboard_view_Controller.filterCustomDateController.value.text =
-            '$startDate - $endDate';
+            dashboard_view_Controller.filterCustomDateController.value.text = '$startDate - $endDate';
           } else {
             dashboard_view_Controller.filterCustomDateController.value.text = '';
             dashboard_view_Controller.formattedStartDate.value = '';
