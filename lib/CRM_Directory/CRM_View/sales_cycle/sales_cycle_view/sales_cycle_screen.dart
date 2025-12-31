@@ -777,13 +777,10 @@ class SalesCycleScreen extends StatelessWidget{
                               bindFilterData(salesCycleController.district_controller.value, 'District'),
                               SizedBox(height: 10,),
                               bindExpectedClosureDate(context),
-
                               SizedBox(height: 10,),
                               bindFilterData(salesCycleController.createdByController.value, 'Created By'),
                               SizedBox(height: 10,),
                               bindCreatedOn(context),
-                              SizedBox(height: 10,),
-                              bindFilterData(salesCycleController.reportingManagerController.value, 'Reporting Manager'),
                               SizedBox(height: 10,),
                               //bindFilterData(salesCycleController.branch_head_value_controller.value, 'Region Name'),
                               bindRegionNameFilter(context),

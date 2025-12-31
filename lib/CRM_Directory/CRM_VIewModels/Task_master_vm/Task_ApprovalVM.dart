@@ -13,8 +13,11 @@ import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/Employee_Member_Model.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Call_Status_Master_model.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_DSAR_model.dart';
 import '../../CRM_Models/TaskMaster_model/Task_Master_model.dart';
+import '../../CRM_Models/TaskMaster_model/company_type_modal.dart';
 import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
 
 class TaskApprovalvm extends GetxController{
@@ -42,6 +45,7 @@ class TaskApprovalvm extends GetxController{
   var account_Name_controller = TextEditingController();
   var filterTask_Id_controller = TextEditingController();
   var product_category_controller=TextEditingController().obs;
+  var product_category_type_Controller = TextEditingController().obs;
   var method_of_call_controller=TextEditingController().obs;
   var postalCodeController=TextEditingController().obs;
   var district_controller=TextEditingController().obs;
@@ -55,7 +59,7 @@ class TaskApprovalvm extends GetxController{
   var lastActivityStatus_Controller=TextEditingController().obs;
   var PhoneNo_Controller=TextEditingController().obs;
   var account_owner_controller=TextEditingController().obs;
-  var Type_of_call_controller = TextEditingController();
+  var Type_of_call_controller = TextEditingController().obs;
   var companyProfileTypeController=TextEditingController().obs;
   var Sale_cycle_Id_controller = TextEditingController();
   var filterTaskDuedateController=TextEditingController().obs;
@@ -115,6 +119,20 @@ class TaskApprovalvm extends GetxController{
   var AccountOwnerForApi;
 
 
+
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
+  RxList<CompanyTypeModal> company_profile_type_list = <CompanyTypeModal>[].obs;
+  RxList<CompanyTypeModal> selected_company_type_list = <CompanyTypeModal>[].obs;
+  RxList<CallStatusMasterModel> CallStatus_Master_list=<CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> Selection_CallStatus_Master_list=<CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> MethodOfCall_Master_list=<CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> Selection_MethodOfCall_Master_list=<CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> DSARStatus_Master_list = <CallStatusMasterModel>[].obs;
+  RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
+
+
   @override
   Future<void> onInit() async {
     // TODO: implement onInit
@@ -124,7 +142,12 @@ class TaskApprovalvm extends GetxController{
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
     approveRejectList.value = ['Approve', 'Reject'];
-
+    product_category_type_Controller.value.text="Contains";
+    getCompanyTypeMasterGet();
+    getItemCategoryMstWithoutTaskIdApi();
+    CallStatusMasterApiHit('Call');
+    MethodOfCallMasterApiHit();
+    CallDSARsMasterApiHit();
     if(this.isAdminWritePermission==1){
       EmployeeMasterGet('');
     }
@@ -133,6 +156,110 @@ class TaskApprovalvm extends GetxController{
     }
     getClustersGetByEmail();
     //getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
+  }
+
+  getCompanyTypeMasterGet() {
+    this.loading.value = true;
+    Map<String, dynamic> data = {
+      "filter_description": "",
+      "row_per_page": 999,
+      "page_number": 0
+    };
+
+    _api.getCompanyTypeMasterGet(data, sessionManagement).then((value) {
+      print("company profile...${value}");
+      try {
+        List<CompanyTypeModal> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
+          company_profile_type_list.value=Response;
+        } else {
+          company_profile_type_list.value=[];
+        }
+      } catch (e) {
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+  CallDSARsMasterApiHit(){
+    try{
+      Map<String, String> data={
+        "filter_type_of_call": "dsar",
+      };
+      loading.value=true;
+      _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
+            DSARStatus_Master_list.add(
+              CallStatusMasterModel(
+                taskStatus: "All",
+              ),
+            );
+            DSARStatus_Master_list.addAll(response);
+
+          }else {
+            loading.value = false;
+            DSARStatus_Master_list.value=[];
+
+          }
+        } else {
+          loading.value = false;
+
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+        },
+      );
+    }catch(e){
+      loading.value = false;
+      print(e);
+    }
   }
 
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
@@ -254,7 +381,7 @@ class TaskApprovalvm extends GetxController{
         "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
         "filter_task_status": 'GET FROM TASK ID',
         "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
-        "filter_type_of_call":  Type_of_call_controller.text.isEmpty?"":Type_of_call_controller.text,
+        "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":Type_of_call_controller.value.text,
         "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
         "filter_last_activity_status": "",
         "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
@@ -313,8 +440,87 @@ class TaskApprovalvm extends GetxController{
     }
   }
 
+  CallStatusMasterApiHit(String flag){
+    try{
+      Map<String, String> data={
+        "filter_type_of_call": flag,
+      };
+      loading.value=true;
+      _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+        print(onValue);
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
+          if(response!= null && response.length>0 && response[0].condition=="True"){
+            CallStatus_Master_list.value=[];
+            Selection_CallStatus_Master_list.value =[];
+            CallStatus_Master_list.add(CallStatusMasterModel(taskStatus: "All",),);
+            Selection_CallStatus_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
 
+            CallStatus_Master_list.addAll(response);
+
+          }else {
+            CallStatus_Master_list.value=[];
+            Selection_CallStatus_Master_list.value=[];
+          }
+        }
+      },).onError((error, stackTrace) {
+        print('call list...${error}');
+        loading.value = false;
+      },
+      );
+    }catch(e){
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
+  MethodOfCallMasterApiHit(){
+    try{
+      Map<String, String> data={
+        "filter_type_of_call": "method",
+      };
+      loading.value=true;
+      _api.CallStatusMasterGetApiHit(data, sessionManagement).then((onValue){
+        final jsonResponse = json.decode(onValue);
+        if(jsonResponse is List){
+          List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
+          if(response != null && response.length>0 && response[0].condition=="True"){
+            MethodOfCall_Master_list.value=[];
+            Selection_MethodOfCall_Master_list.value=[];
+              MethodOfCall_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
+              Selection_MethodOfCall_Master_list.add(CallStatusMasterModel(taskStatus: "All"));
+
+            MethodOfCall_Master_list.addAll(response);
+
+
+          }else {
+            MethodOfCall_Master_list.value=[];
+            Selection_MethodOfCall_Master_list.value=[];
+
+          }
+        }
+      },
+      ).onError(
+            (error, stackTrace) {
+          print(error);
+          loading.value = false;
+        },
+      );
+    }catch(e){
+      print(e);
+    }
+    finally{
+      loading.value = false;
+    }
+  }
   void resetAllFieldOfFilter() {
+    Selection_CallStatus_Master_list.value=[];
+    Selection_MethodOfCall_Master_list.value=[];
+    selected_company_type_list.value=[];
+    Selected_Item_Category_master_list_without_task.value=[];
+    product_category_type_Controller.value.text="Contains";
     account_code_controller.clear();
     account_Name_controller.clear();
     companyProfileTypeController.value.clear();
@@ -331,7 +537,7 @@ class TaskApprovalvm extends GetxController{
     product_category_controller.value.clear();
     method_of_call_controller.value.clear();
     account_owner_controller.value.clear();
-    Type_of_call_controller.clear();
+    Type_of_call_controller.value.clear();
     method_of_call_controller.value.clear();
     Sale_cycle_Id_controller.clear();
     filterTask_Id_controller.clear();
@@ -393,7 +599,7 @@ class TaskApprovalvm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -464,21 +670,22 @@ class TaskApprovalvm extends GetxController{
     }
     try{
       Map data={
-        "filter_task_id":"",
+        "filter_task_id":filterTask_Id_controller.text.isEmpty?"":filterTask_Id_controller.text,
         "filter_account_code": account_code_controller.text.isEmpty?"":account_code_controller.text,
         "filter_account_name": account_Name_controller.text.isEmpty?"":account_Name_controller.text,
         "filter_task_status": 'PENDING FOR APPROVAL',
         "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
-        "filter_type_of_call":  Type_of_call_controller.text.isEmpty?"":Type_of_call_controller.text,
+        "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
+        "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":Type_of_call_controller.value.text,
         "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
-        "filter_last_activity_status": "",
+        "filter_last_activity_status": lastActivityStatus_Controller.value.text.isEmpty?"":lastActivityStatus_Controller.value.text,
         "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
         "filter_is_infra_lead": 0,
         "filter_is_sales_cycle_active": is_Active.toString(),
         "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
         "filter_created_by": "",
         "filter_approved_by": "",
-        "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
+        "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
         "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
         "filter_task_owner":isAdminWritePermission=='1'?"":email,
         "filter_is_closed_completed": 0,

@@ -4682,7 +4682,7 @@ class SalesCycleVm extends GetxController {
     Selected_Item_Category_master_list_without_task.value=[];
     selected_company_type_list.value=[];
     createdOnCnontroller.value.clear();
-    productCategoryController.value.text="Contains";
+    product_category_type_Controller.value.text="Contains";
     saleCycleController.value.clear();
     salesCycleOwnerController.value.clear();
     filterTask_Id_controller.value.clear();

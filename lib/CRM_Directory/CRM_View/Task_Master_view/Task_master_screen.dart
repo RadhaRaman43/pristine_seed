@@ -1765,7 +1765,7 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(height: 10,),
                               bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
-                              bindFilterData(context,'Last Activity Status',TaskMaster_page_controller.lastActivityStatus_Controller.value),
+                              bindLastActivityStatus(context),
                               SizedBox(height: 10,),
                               bindSaleCycleActiveDropDown(context),
                               SizedBox(height: 10,),
@@ -1848,10 +1848,7 @@ class TaskMasterScreen extends StatelessWidget {
                                 )),
                             onPressed: () {
                               Get.back();
-                              TaskMaster_page_controller.Selection_CallStatus_Master_list.value=[];
-                              TaskMaster_page_controller.Selection_MethodOfCall_Master_list.value=[];
-                              TaskMaster_page_controller.selected_company_type_list.value=[];
-                              TaskMaster_page_controller.Item_Category_master_list_without_task.value=[];
+
                               TaskMaster_page_controller.resetAllFieldOfFilter();
                               TaskMaster_page_controller.pageNumber = 0;
                               TaskMaster_page_controller.getTaskMaster(
@@ -1918,7 +1915,68 @@ class TaskMasterScreen extends StatelessWidget {
     );
   }
 
-
+  bindLastActivityStatus(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: TaskMaster_page_controller.DSARStatus_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
+        selectedItems: TaskMaster_page_controller.selectedDSARStatusList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText:
+            TaskMaster_page_controller.selectedDSARStatusList.isNotEmpty
+                ? "Last Activity Status"
+                : null,
+            hintText: "Last Activity Status",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Last Activity Status",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          TaskMaster_page_controller.selectedDSARStatusList.value = selectedList;
+          TaskMaster_page_controller.lastActivityStatus_Controller.value.text =
+              selectedList.map((e) => e.taskStatus).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.taskStatus ?? ""),
+          ),
+        ),
+      );
+    });
+  }
 
   bindFrontLinerValue() {
     return TextField(
@@ -3302,149 +3360,6 @@ class TaskMasterScreen extends StatelessWidget {
 
     );
   }
-
-
-  /*Widget bindTypeOfCallDropDown(BuildContext context) {
-
-    return Obx(() {
-      final selected = TaskMaster_page_controller.Selection_CallStatus_Master_list;
-      final selectedText = selected.isEmpty ? null : selected.map((e) => e.taskStatus).join('| ');
-      return GestureDetector(
-        onTap: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
-            builder: (context) {
-              final tempSelected = <CallStatusMasterModel>[];
-              tempSelected.addAll(TaskMaster_page_controller.Selection_CallStatus_Master_list);
-              return StatefulBuilder(builder: (context, setState) {
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 50,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(2)),
-                        ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Select Type Of Call',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Divider(height: 1),
-
-                        // List
-                        Expanded(
-                          child: TaskMaster_page_controller.CallStatus_Master_list.isEmpty ? const Center(child: Text('No regions found')) : ListView.builder(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            itemCount: TaskMaster_page_controller.CallStatus_Master_list.length,
-                            itemBuilder: (context, idx) {
-                              final item = TaskMaster_page_controller.CallStatus_Master_list[idx];
-                              //final isSel = tempSelected.any((s) => (s.taskStatus ?? "") == (item.taskStatus ?? ""));
-                              final isSel = tempSelected.any((s) => (s.taskStatus ?? "") == (item.taskStatus ?? ""));
-                              return CheckboxListTile(
-                                title: Text(item.taskStatus ?? ""),
-                                value: isSel,
-                                onChanged: (v) {
-                                  setState(() {
-                                    if (v == true) {
-                                      if (!isSel) tempSelected.add(item);
-                                    } else {
-                                      tempSelected.removeWhere((s) => (s.taskStatus ?? "") == (item.taskStatus ?? ""));
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                          ),
-                        ),
-
-                        // Done button
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    TaskMaster_page_controller.Selection_CallStatus_Master_list.assignAll(tempSelected);
-                                    TaskMaster_page_controller.Type_of_call_controller.value.text = tempSelected.map((e) => e.taskStatus).join(', ');
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Done'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
-            },
-          );
-        },
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: "Type Of Call", // 👈 Label like before
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: selectedText == null ? Text(
-                  "Select Type Of Call",
-                  style: GoogleFonts.poppins(
-                    color: Colors.grey.shade600,
-                    fontSize: AllFontSize.sisxteen,
-                  ),
-                ) : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    selectedText,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              const Icon(Icons.arrow_drop_down),
-            ],
-          ),
-        ),
-      );
-    });
-  }*/
-
   bindTypeOfCallDropDown(BuildContext context) {
     return Obx(() {
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
@@ -3457,6 +3372,14 @@ class TaskMasterScreen extends StatelessWidget {
             filled: false,
             labelText: TaskMaster_page_controller.Selection_CallStatus_Master_list.isNotEmpty ? "Type Of Call" : null,
             hintText:  "All" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -3503,7 +3426,6 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
-
   bindMethodOfCallDropDown(BuildContext context) {
     return Obx(() {
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
@@ -3516,6 +3438,14 @@ class TaskMasterScreen extends StatelessWidget {
             filled: false,
             labelText: TaskMaster_page_controller.Selection_MethodOfCall_Master_list.isNotEmpty ? "Mode Of Call" : null,
             hintText: "All",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -3563,7 +3493,6 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
-
   bindProductCategoryDropDown(BuildContext context) {
     return Obx(() {
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
@@ -3576,6 +3505,14 @@ class TaskMasterScreen extends StatelessWidget {
             filled: false,
             labelText: TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
             hintText:  "Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -3622,124 +3559,6 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
-
-  /*Widget bindProductCategoryDropDown(context){
-    return Autocomplete<ItemCategoryMstModel>(
-      displayStringForOption: _displayItemCatMasterForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return TaskMaster_page_controller.Item_Category_master_list_without_task;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return TaskMaster_page_controller.Item_Category_master_list_without_task
-            .where((ItemCategoryMstModel option) {
-          return option.categoryName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (ItemCategoryMstModel selection) {
-        // Update the TextField with the selected
-        TaskMaster_page_controller.product_category_controller.value.text =
-            _displayItemCatMasterForOption(selection).toString();
-
-        if (!TaskMaster_page_controller.Item_Category_Selected_list.contains(selection)) {
-          TaskMaster_page_controller.Item_Category_Selected_list.add(selection);
-          Utils.showToastification('Success', 'Add Successfully');
-        }else{
-          Utils.showErrorToastification('Error', 'Already Selected');
-        }
-
-        // TaskMaster_page_controller.AccountOwner = selection.loginEmailId!;
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          onTap: (){
-            if(focusNode.hasFocus){
-              focusNode.unfocus();
-            }else{
-              focusNode.requestFocus();
-            }
-          },
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = TaskMaster_page_controller.product_category_controller.value.text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-            suffixIcon: IconButton(
-              color: AllColors.primaryDark1,
-              onPressed: (){
-                if(focusNode.hasFocus){
-                  focusNode.unfocus();
-                }else{
-                  focusNode.requestFocus();
-                }
-              },
-              icon: Icon(Icons.arrow_drop_down),
-            ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Product Category',
-            labelText: 'Product Category',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10))
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<ItemCategoryMstModel> onSelected,
-          Iterable<ItemCategoryMstModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final ItemCategoryMstModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.categoryName.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
-
   Widget bindProductCategoryTypeDropDown(context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width - 15,
@@ -3786,7 +3605,6 @@ class TaskMasterScreen extends StatelessWidget {
     );
 
   }
-
   bindCompProfileTypeDropDown(BuildContext context) {
     return Obx(() {
       return DropdownSearch<CompanyTypeModal>.multiSelection(
@@ -3799,6 +3617,14 @@ class TaskMasterScreen extends StatelessWidget {
             filled: false,
             labelText: TaskMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
             hintText: "Company Profile Type",
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),

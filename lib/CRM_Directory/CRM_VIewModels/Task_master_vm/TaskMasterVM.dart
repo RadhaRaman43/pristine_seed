@@ -189,6 +189,7 @@ class Taskmastervm extends GetxController{
     RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
     RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
     RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+    RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
 
 
     @override
@@ -476,7 +477,7 @@ class Taskmastervm extends GetxController{
                 "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
                 "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":Type_of_call_controller.value.text,
                 "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
-                "filter_last_activity_status": "",
+                "filter_last_activity_status": lastActivityStatus_Controller.value.text.isEmpty?"":lastActivityStatus_Controller.value.text,
                 "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
                 "filter_is_infra_lead": -1,
                 "filter_is_sales_cycle_active": is_Active.toString(),
@@ -1721,6 +1722,11 @@ class Taskmastervm extends GetxController{
     }
 
   void resetAllFieldOfFilter() {
+    Selection_CallStatus_Master_list.value=[];
+    Selection_MethodOfCall_Master_list.value=[];
+    selected_company_type_list.value=[];
+    Selected_Item_Category_master_list_without_task.value=[];
+    selectedDSARStatusList.value=[];
        product_category_type_Controller.value.text="Contains";
        account_code_controller.clear();
        account_Name_controller.clear();
