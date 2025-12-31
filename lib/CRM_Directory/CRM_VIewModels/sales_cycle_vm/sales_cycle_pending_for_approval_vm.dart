@@ -412,7 +412,6 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     product_category_type_Controller.value.text="Contains";
     selected_company_type_list.value=[];
     Selected_Item_Category_master_list_without_task.value=[];
-
     saleCycleController.value.clear();
     salesCycleOwnerController.value.clear();
     filterTask_Id_controller.value.clear();

@@ -1463,34 +1463,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     );
   }
 
-  Widget bindProposedSolution(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: salesCyclePendingForApprovalController.proposedSolutionController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.seven, horizontal: AllFontSize.ten),
-          hintText: 'Proposed Solution',
-          labelText: 'Proposed Solution',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-
 
   bindExpectedClosureDate(BuildContext context) {
     return TextField(
