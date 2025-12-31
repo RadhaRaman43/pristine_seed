@@ -4681,6 +4681,7 @@ class SalesCycleVm extends GetxController {
     print("Clear Filed");
     Selected_Item_Category_master_list_without_task.value=[];
     selected_company_type_list.value=[];
+    createdOnCnontroller.value.clear();
     productCategoryController.value.text="Contains";
     saleCycleController.value.clear();
     salesCycleOwnerController.value.clear();
