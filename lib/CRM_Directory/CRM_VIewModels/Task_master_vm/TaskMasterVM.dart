@@ -378,7 +378,7 @@ class Taskmastervm extends GetxController{
               if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
                 SelectedCluster_list.assignAll(clusterGetByEmailList.value);
                 clusterName_controller.value.text =
-                    clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+                    clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
                 getRegionsWithClusterFilterGetByEmail();
               }
             }else {
@@ -403,7 +403,7 @@ class Taskmastervm extends GetxController{
         selectedCluster = clusterName_controller.value.text
             .split(',')
             .map((e) => e.trim())
-            .join('||');
+            .join('|');
       }
       try{
         Map<String, String> data={
@@ -419,7 +419,7 @@ class Taskmastervm extends GetxController{
             List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
             if(response.length>0 && response[0].condition=="True"){
               regionwithclusterGetByEmailList.value=response;
-              RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+              RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
               print('region....${RegionName_controller.value.text}');
               getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
 

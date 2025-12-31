@@ -259,7 +259,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
               clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -288,7 +288,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -305,7 +305,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
-            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
             getsalesCycleData(pageNumber);
 

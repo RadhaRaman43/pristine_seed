@@ -676,7 +676,7 @@ class DraftItemList extends StatelessWidget{
           accountMaster_page_controller.SelectedCluster_list.isEmpty) {
         accountMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
         accountMaster_page_controller.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         accountMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -849,7 +849,7 @@ class DraftItemList extends StatelessWidget{
                                         .clusterName_controller.value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     accountMaster_page_controller
                                         .getRegionsWithClusterFilterGetByEmail();
 
@@ -912,7 +912,7 @@ class DraftItemList extends StatelessWidget{
           accountMaster_page_controller.SelectedRegion_list.isEmpty) {
         accountMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
         accountMaster_page_controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -1083,7 +1083,7 @@ class DraftItemList extends StatelessWidget{
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),

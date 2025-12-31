@@ -2042,7 +2042,7 @@ class TaskMasterScreen extends StatelessWidget {
       if (availableItems.isNotEmpty &&
           TaskMaster_page_controller.SelectedCluster_list.isEmpty) {
         TaskMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
-        TaskMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(', ');
+        TaskMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
         TaskMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -2197,7 +2197,7 @@ class TaskMasterScreen extends StatelessWidget {
                                         .clusterName_controller.value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     TaskMaster_page_controller
                                         .getRegionsWithClusterFilterGetByEmail();
 
@@ -2260,7 +2260,7 @@ class TaskMasterScreen extends StatelessWidget {
           TaskMaster_page_controller.SelectedRegion_list.isEmpty) {
         TaskMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
         TaskMaster_page_controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -2431,7 +2431,7 @@ class TaskMasterScreen extends StatelessWidget {
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),

@@ -828,7 +828,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
           saleCycleController.SelectedRegion_list.isEmpty) {
         saleCycleController.SelectedRegion_list.assignAll(availableItems);
         saleCycleController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -999,7 +999,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),
@@ -1058,7 +1058,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
           saleCycleController.SelectedCluster_list.isEmpty) {
         saleCycleController.SelectedCluster_list.assignAll(availableItems);
         saleCycleController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         saleCycleController.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -1231,7 +1231,7 @@ class SalesAdviseHeaderScreen extends StatelessWidget{
                                         .clusterName_controller.value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     saleCycleController
                                         .getRegionsWithClusterFilterGetByEmail();
 

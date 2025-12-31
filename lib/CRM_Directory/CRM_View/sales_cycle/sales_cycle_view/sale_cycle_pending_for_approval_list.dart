@@ -805,7 +805,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCyclePendingForApprovalController.SelectedRegion_list.isEmpty) {
         salesCyclePendingForApprovalController.SelectedRegion_list.assignAll(availableItems);
         salesCyclePendingForApprovalController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -976,7 +976,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),
@@ -1035,7 +1035,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCyclePendingForApprovalController.SelectedCluster_list.isEmpty) {
         salesCyclePendingForApprovalController.SelectedCluster_list.assignAll(availableItems);
         salesCyclePendingForApprovalController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         salesCyclePendingForApprovalController.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -1205,7 +1205,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                     salesCyclePendingForApprovalController.SelectedCluster_list.assignAll(tempSelected);
                                     salesCyclePendingForApprovalController.clusterName_controller.value.text = tempSelected
                                         .map((e) => e.geoValue)
-                                        .join(', ');
+                                        .join('|');
                                     salesCyclePendingForApprovalController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();

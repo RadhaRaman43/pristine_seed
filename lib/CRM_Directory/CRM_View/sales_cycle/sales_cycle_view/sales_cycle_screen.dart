@@ -1708,7 +1708,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.SelectedRegion_list.isEmpty) {
         salesCycleController.SelectedRegion_list.assignAll(availableItems);
         salesCycleController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -1879,7 +1879,7 @@ class SalesCycleScreen extends StatelessWidget{
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),
@@ -1938,7 +1938,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.SelectedCluster_list.isEmpty) {
         salesCycleController.SelectedCluster_list.assignAll(availableItems);
         salesCycleController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         salesCycleController.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -1962,8 +1962,7 @@ class SalesCycleScreen extends StatelessWidget{
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(salesCycleController.SelectedCluster_list);
 
-              List<ClusterModal> allItems =
-                  salesCycleController.clusterGetByEmailList;
+              List<ClusterModal> allItems = salesCycleController.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
@@ -2111,9 +2110,8 @@ class SalesCycleScreen extends StatelessWidget{
                                         .clusterName_controller.value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
-                                    salesCycleController
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                            .join('|');
+                                    salesCycleController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },

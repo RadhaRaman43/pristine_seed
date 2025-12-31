@@ -1043,7 +1043,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
           businessTourPlanController.SelectedCluster_list.isEmpty) {
         businessTourPlanController.SelectedCluster_list.assignAll(availableItems);
         businessTourPlanController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -1052,7 +1052,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
       final selected = businessTourPlanController.SelectedCluster_list;
       final selectedText = selected.isEmpty
           ? null
-          : selected.map((e) => e.geoValue).join(', ');
+          : selected.map((e) => e.geoValue).join('|');
 
       return GestureDetector(
         onTap: () async {
@@ -1210,15 +1210,10 @@ class BussinessTourPlanScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    businessTourPlanController.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    businessTourPlanController
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    businessTourPlanController
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                    businessTourPlanController.SelectedCluster_list.assignAll(tempSelected);
+                                    businessTourPlanController.clusterName_controller.value.text =
+                                        tempSelected.map((e) => e.geoValue).join('|');
+                                    businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
@@ -1279,7 +1274,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
           businessTourPlanController.SelectedRegion_list.isEmpty) {
         businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
         businessTourPlanController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -1287,7 +1282,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
       final selected = businessTourPlanController.SelectedRegion_list;
       final selectedText = selected.isEmpty
           ? null
-          : selected.map((e) => e.geoValue).join(', ');
+          : selected.map((e) => e.geoValue).join('|');
 
       return GestureDetector(
         onTap: () async {
@@ -1450,7 +1445,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),
