@@ -10618,7 +10618,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           saleCycleController.SelectedRegion_list.isEmpty) {
         saleCycleController.SelectedRegion_list.assignAll(availableItems);
         saleCycleController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -10789,7 +10789,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),
@@ -10848,7 +10848,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           saleCycleController.SelectedCluster_list.isEmpty) {
         saleCycleController.SelectedCluster_list.assignAll(availableItems);
         saleCycleController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         saleCycleController.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -11021,7 +11021,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                         .clusterName_controller.value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     saleCycleController
                                         .getRegionsWithClusterFilterGetByEmail();
 
@@ -11975,29 +11975,17 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                     ))
                               ],
                             ),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10,),
                             filterWithQuoteId(context),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10,),
                             filterWithQuoteProductCategory(),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10,),
                             filterWithQuoteStatus(context),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10,),
                             filterWithQuoteValidity(context),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10,),
                             filterWithQuoteClosureDate(context),
-                            SizedBox(
-                              height: 10,
-                            ),
+                            SizedBox(height: 10,),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

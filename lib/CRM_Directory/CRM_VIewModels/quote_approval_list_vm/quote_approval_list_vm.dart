@@ -4,9 +4,11 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_quote_header_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -26,6 +28,7 @@ class QuoteApprovalListVm extends GetxController{
 
 
   var filterQuoteIdController=TextEditingController().obs;
+  var filterQuoteVersionController=TextEditingController().obs;
   var filterQuoteAccountNameController=TextEditingController().obs;
   var filterQuoteContactNameController=TextEditingController().obs;
   var filterQuoteValidityController=TextEditingController().obs;
@@ -47,6 +50,7 @@ class QuoteApprovalListVm extends GetxController{
   var gm_Approval_controller=TextEditingController().obs;
   var filterQuoteStatusController=TextEditingController().obs;
   var productCategoryController=TextEditingController().obs;
+  var product_category_type_Controller = TextEditingController().obs;
 
 
   RxList<SalesCycleQuoteHeaderModal> quoteApprovalList=<SalesCycleQuoteHeaderModal>[].obs;
@@ -55,17 +59,57 @@ class QuoteApprovalListVm extends GetxController{
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
+
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
 
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
     //getQuoteHeaderData(pageNumberForQuote);
+    product_category_type_Controller.value.text="Contains";
+    getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
     super.onInit();
   }
 
   Future<void>refreshList() async{
     getQuoteHeaderData(pageNumberForQuote);
+  }
+
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
   }
 
   void getClustersGetByEmail() {
@@ -172,6 +216,7 @@ class QuoteApprovalListVm extends GetxController{
         "filter_exp_closure_date": extClosureStartToEnd.value.isNotEmpty?extClosureStartToEnd.value:"",
         "filter_quote_status":"Under Approval",
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
+        "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_created_by": email,
         "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
         "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
@@ -181,20 +226,6 @@ class QuoteApprovalListVm extends GetxController{
         "row_per_page": rowsPerPage,
         "page_number": pageNumberForQuote
       };
-      /* {
-        "filter_quote_id": filterQuoteIdController.value.text.isNotEmpty?filterQuoteIdController.value.text:"",
-        "filter_sales_cycle_id": filterQuoteSaleCycleController.value.text.isNotEmpty?filterQuoteSaleCycleController.value.text:"" ,
-        "filter_account_name": filterQuoteAccountNameController.value.text.isNotEmpty?filterQuoteAccountNameController.value.text:"",
-        "filter_contact_name": filterQuoteContactNameController.value.text.isNotEmpty?filterQuoteContactNameController.value.text:"",
-        "filter_quote_validity": filterQuoteValidityController.value.text.isNotEmpty?filterQuoteValidityController.value.text:"",
-        "filter_contact_person_name": "",
-        "filter_exp_closure_date": filterExpectedClosuredateController.value.text.isNotEmpty?filterExpectedClosuredateController.value.text:"",
-        "filter_quote_status": "Under Approval",
-        "filter_created_by": email,
-        "filter_approved_by": "",
-        "row_per_page": rowsPerPage,
-        "page_number": pageNumberForQuote
-      };*/
       loading.value=true;
       _api.quoteHeaderGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -232,14 +263,13 @@ class QuoteApprovalListVm extends GetxController{
   }
 
   void clearAllFieldOfQuoteFilter() {
-    filterQuoteIdController.value
-        .clear();
-    filterQuoteStatusController.value
-        .clear();
-    filterExpectedClosuredateController
-        .value.clear();
-    filterQuoteValidityController.value
-        .clear();
+    product_category_type_Controller.value.text="Contains";
+    filterQuoteVersionController.value.clear();
+    Selected_Item_Category_master_list_without_task.value=[];
+    filterQuoteIdController.value.clear();
+    filterQuoteStatusController.value.clear();
+    filterExpectedClosuredateController.value.clear();
+    filterQuoteValidityController.value.clear();
     accountNameController.value.clear();
     accountCodeController.value.clear();
     rh_Approval_controller.value.clear();

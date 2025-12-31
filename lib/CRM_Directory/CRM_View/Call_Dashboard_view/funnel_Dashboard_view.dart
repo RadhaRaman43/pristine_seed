@@ -1976,7 +1976,7 @@ class FunnelDashboardView extends StatelessWidget{
           dashboard_view_Controller.SelectedCluster_list.isEmpty) {
         dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
         dashboard_view_Controller.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -2149,7 +2149,7 @@ class FunnelDashboardView extends StatelessWidget{
                                         .clusterName_controller.value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     dashboard_view_Controller
                                         .getRegionsWithClusterFilterGetByEmail();
 
@@ -2211,7 +2211,7 @@ class FunnelDashboardView extends StatelessWidget{
       if (availableItems.isNotEmpty &&
           dashboard_view_Controller.SelectedRegion_list.isEmpty) {
         dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
-        dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(', ');
+        dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
         print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
 
       }
@@ -2385,7 +2385,7 @@ class FunnelDashboardView extends StatelessWidget{
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),

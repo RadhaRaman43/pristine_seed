@@ -731,7 +731,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
           businessTourPlanController.SelectedCluster_list.isEmpty) {
         businessTourPlanController.SelectedCluster_list.assignAll(availableItems);
         businessTourPlanController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
         businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
       }
     });
@@ -904,7 +904,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                                         .clusterName_controller.value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     businessTourPlanController
                                         .getRegionsWithClusterFilterGetByEmail();
 
@@ -967,7 +967,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
           businessTourPlanController.SelectedRegion_list.isEmpty) {
         businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
         businessTourPlanController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
+            availableItems.map((e) => e.geoValue).join('|');
 
       }
     });
@@ -1138,7 +1138,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                                         .value.text =
                                         tempSelected
                                             .map((e) => e.geoValue)
-                                            .join(', ');
+                                            .join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: const Text('Done'),

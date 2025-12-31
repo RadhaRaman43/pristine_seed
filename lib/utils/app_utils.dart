@@ -63,8 +63,8 @@ class Utils{
     try {
       Toastification().show(
         context: Get.overlayContext!,
-        title: Text(title),
-        description: Text(message),
+        title: Text(title, style: TextStyle(color: AllColors.whiteColor,),),
+        description: Text(message, style: TextStyle(color: AllColors.whiteColor,),),
 
         backgroundColor: AllColors.green,
         autoCloseDuration: const Duration(seconds: 5),
@@ -80,8 +80,8 @@ class Utils{
     try {
       Toastification().show(
           context: Get.overlayContext!,
-          title:Text(title),
-          description:Text(message),
+          title: Text(title, style: TextStyle(color: AllColors.whiteColor,),),
+          description: Text(message, style: TextStyle(color: AllColors.whiteColor,),),
           backgroundColor: AllColors.redColor,
           autoCloseDuration: const Duration(seconds: 5),
           icon:Icon(Icons.error)
@@ -97,8 +97,8 @@ class Utils{
     try {
       Toastification().show(
           context: Get.overlayContext!,
-          title: Text(title),
-          description: Text(message),
+          title: Text(title, style: TextStyle(color: AllColors.whiteColor,),),
+          description: Text(message, style: TextStyle(color: AllColors.whiteColor,),),
           backgroundColor: AllColors.lightredColor,
           autoCloseDuration: const Duration(seconds: 5),
           icon:Icon(Icons.error)
