@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ import '../../../../reources/routes/routes_name.dart';
 import '../../../../view/custom_drawer.dart';
 import '../../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_competitor_product_infor_vm.dart';
 
 
@@ -20,6 +22,8 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       option;
 
   static String _displayApprovalStatusForOption(String option) =>
+      option;
+  static String _displaySaleCycleActiveForOption(String option) =>
       option;
 
   SalesCycleCompetitorProductInforScreen({super.key});
@@ -255,10 +259,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                               SizedBox(
                                 height: 10,
                               ),
-                              filterWithQuoteProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              
                               filterWithItemCode(),
                               SizedBox(
                                 height: 10,
@@ -274,9 +275,11 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                                 height: 10,
                               ),
                               filterWithQuoteCreatedOn(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindProductCategory(context),
+                              SizedBox(height: 10,),
+                              bindProductCategoryTypeDropDown(context),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -911,93 +914,120 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
     );
   }
 
-
-  Widget filterWithQuoteProductCategory() {
-    return TextField(
-      controller: saleCycleCompetitorController.productCategoryController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Product Category',
-          hintText: 'Product Category',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+  bindProductCategory(BuildContext context) {
+    return Obx(() {
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: saleCycleCompetitorController.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
+        selectedItems: saleCycleCompetitorController.Selected_Item_Category_master_list_without_task,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: saleCycleCompetitorController.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
+            hintText:  "Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          saleCycleCompetitorController.Selected_Item_Category_master_list_without_task.value = selectedList;
+          saleCycleCompetitorController.productCategoryController.value.text =
+              selectedList.map((e) => e.categoryName).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.categoryName ?? ""),
+          ),
+        ),
+      );
+    });
   }
 
-  /*Widget filterWithQuoteClusterHead() {
-    return TextField(
-      controller: saleCycleCompetitorController.cluster_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Name',
-          hintText: 'Cluster Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
+  Widget bindProductCategoryTypeDropDown(context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width - 15,
+      controller: saleCycleCompetitorController.product_category_type_Controller.value,
+      label: Text(
+        "Product Category Type",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.sisxteen,
+            fontWeight: FontWeight.w500),
+      ),
+
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        saleCycleCompetitorController.product_category_type_Controller.value.text =
+            _displaySaleCycleActiveForOption(selection!).toString();
       },
+      dropdownMenuEntries: saleCycleCompetitorController.productCategoryTypeList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e, label: e!, style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(
+              AllColors.primaryDark1),));
+      }).toList(),
     );
+
   }
 
-  Widget filterWithQuoteBranchHead() {
-    return TextField(
-      controller: saleCycleCompetitorController.branch_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region Name',
-          hintText: 'Region Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {

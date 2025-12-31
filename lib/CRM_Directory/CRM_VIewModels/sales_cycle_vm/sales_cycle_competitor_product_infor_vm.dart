@@ -9,6 +9,7 @@ import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/sale_cycle_modal/sales_cycle_competitor_product_infor_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -48,6 +49,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   var filterSalesCycleApprovalStatusController = TextEditingController().obs;
   var filterSalesCycleStatusController = TextEditingController().obs;
   var filterSalesCycleIdController = TextEditingController().obs;
+  var product_category_type_Controller = TextEditingController().obs;
 
   RxList<String> SaleCycleStatusList =
       ["All", "Suspect", "Prospect", "Propose"].obs;
@@ -65,6 +67,10 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
+  RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
+
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
 
 
   @override
@@ -73,10 +79,47 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     //getGalesCycleCompetitorProductInformationGet(pageNumber);
+    product_category_type_Controller.value.text="Contains";
+    getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
     // TODO: implement onInit
     super.onInit();
   }
+
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
+  }
+
   void getClustersGetByEmail() {
     try{
       Map<String, String> data={
@@ -174,6 +217,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
       "filter_account_name": accountNameController.value.text.isNotEmpty?accountNameController.value.text:"",
       "filter_flag": "AllCompetitorLines",
       "filter_product_category": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
+      "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
       "filter_created_by": email,
       "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
       "filter_item_code_name": filterItemCodeController.value.text.isNotEmpty?filterItemCodeController.value.text:"",
@@ -230,6 +274,8 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
   }
 
   void clearAllField() {
+    product_category_type_Controller.value.text="Contains";
+    Selected_Item_Category_master_list_without_task.value=[];
     filterSalesCycleApprovalStatusController.value.clear();
     filterQuoteAcceptedController.value.clear();
     filterSalesCycleStatusController.value.clear();

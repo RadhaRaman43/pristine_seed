@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
@@ -542,75 +543,33 @@ class AccountmasterScreen extends StatelessWidget{
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: 5,),
-                              bindAccountCode(),
+                              bindData(context,'Customer Code',accountMaster_page_controller.account_code_controller),
                               SizedBox(height: 10,),
-                              bindAccountName(),
+                              bindData(context,'Customer Name',accountMaster_page_controller.account_name_controller),
                               SizedBox(height: 10,),
                               bindAccountTypeDropDown(context),
                               SizedBox(height: 10),
-                              bindAccountOwnerFilter(context),
+                              bindData(context,'Email Id',accountMaster_page_controller.EmailId_Controller),
                               SizedBox(height: 10,),
-                              bindEmailId(),
+                              bindData(context,'Phone No.',accountMaster_page_controller.PhoneNo_Controller),
                               SizedBox(height: 10,),
-                              bindPhoneNo(),
+                              bindData(context,'Company Profile Type',accountMaster_page_controller.comp_prof_type_controller),
                               SizedBox(height: 10,),
-                              bindCompProfileTypeDropDown(),
+                              bindData(context,'State Name',accountMaster_page_controller.stateName_controller),
                               SizedBox(height: 10,),
-                              /*
-                          TextField(
-                            controller: accountMaster_page_controller.Address_controller,
-                            decoration: InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
-                                    vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                labelText: 'Address',
-                                hintText: 'Address',
-                                hintStyle: GoogleFonts.poppins(
-                                    color: AllColors.lightblackColor,
-                                    fontWeight: FontWeight.w300,
-                                    fontSize: AllFontSize.ten),
-                                labelStyle: GoogleFonts.poppins(
-                                    color: AllColors.primaryDark1,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: AllFontSize.sisxteen),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                                )
-                            ),
-                            cursorColor: AllColors.primaryDark1,
-                            onChanged: (value) {
-                              // Handle the text field value changes if needed
-                            },
-                          ),
-                    
-                          SizedBox(
-                            height: 10,
-                          ),*/
-                              bindSateName(),
+                              bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
                               SizedBox(height: 10,),
-                              bindPostalCode(),
+                              bindData(context,'District',accountMaster_page_controller.district_controller.value),
                               SizedBox(height: 10,),
-                              bindDistrict(),
-                              SizedBox(height: 10,),
-                              /* bindAnualRevenueDropDown(context),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          bindNoOfEmpDropDown(context),
-                          SizedBox(
-                            height: 10,
-                          ),*/
                               bindIsActiveDropDown(context),
                               SizedBox(height: 10,),
                               bindRegionNameFilter(context),
                               SizedBox(height: 10,),
-                             /* bindZoneHead(),
-                              SizedBox(
-                                height: 10,
-                              ),*/
                               bindClusterNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindAccountOwnerFilter(context),
+                              SizedBox(height: 10,),
+                              bindCreatedOn(context),
                               SizedBox(height: 10,),
                             ],
                           ),
@@ -660,15 +619,6 @@ class AccountmasterScreen extends StatelessWidget{
                               Get.back();
                               accountMaster_page_controller.clearAcountMasterFilter();
 
-                              //accountMaster_page_controller.Address_controller.clear();
-                              // accountMaster_page_controller.Annual_Revenue_Controller.clear();
-                              //accountMaster_page_controller.No_Of_Emp_Controller.clear();
-                              //accountMaster_page_controller.no_of_employees_min = '';
-                             // accountMaster_page_controller.no_of_employees_max = '';
-                             // accountMaster_page_controller.annual_revenue_min = '';
-                              //accountMaster_page_controller.annual_revenue_max = '';
-                              //accountMaster_page_controller.account_cat_type_controller.clear();
-
                             },
                             child: Text(
                               'Reset',
@@ -692,6 +642,37 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
+  bindData(BuildContext context, String labelText, TextEditingController controller,) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
+
+
   Widget bindAccountTypeDropDown(context) {
     return Container(
       //margin: const EdgeInsets.only(right: 15.0),
@@ -700,7 +681,7 @@ class AccountmasterScreen extends StatelessWidget{
         width: size.width-18,
         controller:  accountMaster_page_controller.account_type_controller,
         label: Text(
-          "Customer Type",
+          "Account Type",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.sisxteen,
@@ -753,7 +734,7 @@ class AccountmasterScreen extends StatelessWidget{
           dropdownSearchDecoration: InputDecoration(
             filled: false,
             labelText: accountMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
-            hintText: "Account Owner",
+            hintText: "Account Owner Name",
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
@@ -761,7 +742,7 @@ class AccountmasterScreen extends StatelessWidget{
           // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
-              " Account Owner",
+              " Account Owner Name",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,
@@ -807,114 +788,6 @@ class AccountmasterScreen extends StatelessWidget{
     });
 
   }
-  
-  /* Widget bindAccountTypeDropDown(context){
-    return Autocomplete<CustomList>(
-      displayStringForOption: _displayAccTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Acc_type_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.get_Acc_type_list
-            .where((CustomList option) {
-          return option.value
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (CustomList selection) {
-        print(selection.value);
-        // Update the TextField with the selected
-        accountMaster_page_controller.account_type_controller.text =
-            _displayAccTypeForOption(selection).toString();
-
-        accountMaster_page_controller. custome_selection.value=selection;
-
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.account_type_controller
-                .text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Type',
-            labelText: 'Account Type',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final CustomList option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.value.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
 
   Widget bindAccCatogeryTypeDropDown(context){
     return Autocomplete<GetMasterTypeModel>(
@@ -1089,113 +962,6 @@ class AccountmasterScreen extends StatelessWidget{
       ),
     );
   }
-
-
- /* Widget bindIsActiveDropDown(context) {
-    return Autocomplete<String>(
-      displayStringForOption: _displayIsActiveForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.IsActiveTypeAllList;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.IsActiveTypeAllList
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        // Update the TextField with the selected
-        accountMaster_page_controller.IsActive_controller.text =
-            _displayIsActiveForOption(selection).toString();
-        print('IsActive.....${accountMaster_page_controller.IsActive_controller.text}');
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.IsActive_controller
-                .text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Active',
-            labelText: 'Active',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
 
   Widget bindAnualRevenueDropDown(context) {
     return Autocomplete<String>(
@@ -1424,439 +1190,6 @@ class AccountmasterScreen extends StatelessWidget{
     );
   }
 
-  /*Widget bindCompProfileTypeDropDown(context){
-    return Autocomplete<CompanyTypeModel>(
-      displayStringForOption: _displayCompProfileTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Comp_Profile_type_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.get_Comp_Profile_type_list
-            .where((CompanyTypeModel option) {
-          return option.description
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (CompanyTypeModel selection) {
-        print(selection.description);
-        // Update the TextField with the selected
-        accountMaster_page_controller.comp_prof_type_controller.text =
-            _displayCompProfileTypeForOption(selection).toString();
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return TextField(
-          cursorColor: AllColors.primaryDark1,
-          controller: controller
-            ..text = accountMaster_page_controller.comp_prof_type_controller
-                .text,
-          focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
-          decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Company Profile Type',
-            labelText: 'Company Profile Type',
-              hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w500,
-                  fontSize: AllFontSize.sisxteen),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              )
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CompanyTypeModel> onSelected,
-          Iterable<CompanyTypeModel> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            elevation: 4.0,
-            child: Container(
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final CompanyTypeModel option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.description.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
-
-  bindCompProfileTypeDropDown() {
-    return TextField(
-      cursorColor:AllColors.primaryDark1,
-      controller: accountMaster_page_controller.comp_prof_type_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Company Profile Type',
-          hintText: 'Company Profile Type',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-  bindAccountCode() {
-    return TextField(
-      cursorColor:AllColors.primaryDark1,
-      controller: accountMaster_page_controller.account_code_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Customer Code',
-          hintText: 'Customer Code',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  bindAccountName() {
-    return   TextField(
-      cursorColor:AllColors.primaryDark1,
-      controller: accountMaster_page_controller.account_name_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Customer Name',
-          hintText: 'Customer Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-    );
-  }
-
-  bindEmailId() {
-    return  TextField(
-      controller: accountMaster_page_controller.EmailId_Controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Email Id',
-          hintText: 'Email Id',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-
-  }
-
-  bindPhoneNo() {
-    return     TextField(
-      controller: accountMaster_page_controller.PhoneNo_Controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Phone No.',
-          hintText: 'Phone No.',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  bindSateName() {
-    return   TextField(
-      controller: accountMaster_page_controller.stateName_controller,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'State Name',
-          hintText: 'State Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  bindPostalCode() {
-    return TextField(
-      controller: accountMaster_page_controller.postal_code_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Pin Code',
-          hintText: 'Pin Code',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  bindDistrict() {
-    return TextField(
-      controller: accountMaster_page_controller.district_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'District',
-          hintText: 'District',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
- /* bindCreatedBy() {
-    return  TextField(
-      controller: accountMaster_page_controller.created_by_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Created By',
-          hintText: 'Created By',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
-
-  bindFrontLinerValue() {
-    return  TextField(
-      controller: accountMaster_page_controller.frontliner_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'FrontLiner Value',
-          hintText: 'FrontLiner Value',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  
-
-  bindZoneHead() {
-    return   TextField(
-      controller: accountMaster_page_controller.zone_head__value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Zone Head Value',
-          hintText: 'Zone Head Value',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = accountMaster_page_controller.clusterGetByEmailList;
@@ -2323,66 +1656,65 @@ class AccountmasterScreen extends StatelessWidget{
       );
     });
   }
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: accountMaster_page_controller.created_on_controller.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Created On',
+            labelText: 'Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(
+                      primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                      textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
 
-  /*bindBranchHead() {
-    return   TextField(
-      controller: accountMaster_page_controller.branch_head__value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region Name',
-          hintText: 'Region Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            accountMaster_page_controller.created_on_controller.value.text = outputFormat.format(date);
+          else
+            accountMaster_page_controller.created_on_controller.value.text = "";
+        }
+
     );
   }
-  bindClusterHead() {
-    return TextField(
-      controller: accountMaster_page_controller.clusterName_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Name',
-          hintText: 'Cluster Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
-
-
   
 }

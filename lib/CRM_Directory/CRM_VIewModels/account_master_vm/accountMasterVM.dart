@@ -212,6 +212,7 @@ class Accountmastervm extends GetxController{
   var RegionName_controller = TextEditingController().obs;
   var zone_head__value_controller = TextEditingController().obs;
   var clusterName_controller = TextEditingController().obs;
+  var created_on_controller = TextEditingController().obs;
 
 
   var AccountOwnerForApi;
@@ -248,12 +249,9 @@ class Accountmastervm extends GetxController{
       EmployeeMasterGet('');
     }
 
-
-
-
-
-
   }
+
+
   Future<Iterable<EmployeeMemberModel>> EmployeeMasterGet(String query) async {
     if (query == '') {
       return const Iterable<EmployeeMemberModel>.empty();
@@ -526,30 +524,12 @@ class Accountmastervm extends GetxController{
         "filter_frontliner_value": "",
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
         "filter_zone_head_value": "",
+        "filter_created_on": created_on_controller.value.text.isEmpty?"":created_on_controller.value.text,
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "filter_is_active": is_Active.toString(),
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
-      /*{
-        "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
-        "filter_account_owner": "",
-        "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
-        "filter_account_category_type": account_cat_type_controller.value.text.isEmpty?"":account_cat_type_controller.value.text,
-        "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
-        "filter_address": Address_controller.value.text.isEmpty?"":Address_controller.value.text,
-        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
-        "filter_is_active": is_Active.toString(),
-        "filter_created_by": email,
-        "row_per_page": rowsPerPage.toString(),
-        "page_number": page_no.toString(),
-        "no_of_employees_min": no_of_employees_min.isEmpty?"":no_of_employees_min,
-        "no_of_employees_max": no_of_employees_max.isEmpty?"":no_of_employees_max,
-        "annual_revenue_min": annual_revenue_min.isEmpty?"":annual_revenue_min,
-        "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
-        "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
-        "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
-      };*/
       loading.value=true;
       _api.AccountMasterGetApiHit(data, sessionManagement).then((onValue){
         print(onValue);
@@ -663,25 +643,6 @@ class Accountmastervm extends GetxController{
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
-      /*{
-        "filter_account_name": account_name_controller.value.text.isEmpty?"":account_name_controller.value.text,
-        "filter_account_owner": "",
-        "filter_account_type": account_type_controller.value.text.isEmpty?"":account_type_controller.value.text,
-        "filter_account_category_type": account_cat_type_controller.value.text.isEmpty?"":account_cat_type_controller.value.text,
-        "filter_company_profile_type": comp_prof_type_controller.value.text.isEmpty?"":comp_prof_type_controller.value.text,
-        "filter_address": Address_controller.value.text.isEmpty?"":Address_controller.value.text,
-        "filter_state_name": stateName_controller.value.text.isEmpty?"":stateName_controller.value.text,
-        "filter_is_active": is_Active.toString(),
-        "filter_created_by": email,
-        "row_per_page": rowsPerPage.toString(),
-        "page_number": page_no.toString(),
-        "no_of_employees_min": no_of_employees_min.isEmpty?"":no_of_employees_min,
-        "no_of_employees_max": no_of_employees_max.isEmpty?"":no_of_employees_max,
-        "annual_revenue_min": annual_revenue_min.isEmpty?"":annual_revenue_min,
-        "annual_revenue_max": annual_revenue_max.isEmpty?"":annual_revenue_max,
-        "filter_email_id": EmailId_Controller.value.text.isEmpty?"":EmailId_Controller.value.text,
-        "filter_phone_no": PhoneNo_Controller.value.text.isEmpty?"":PhoneNo_Controller.value.text
-      };*/
       loading.value=true;
       _api.DraftAccountMstGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
@@ -752,6 +713,7 @@ class Accountmastervm extends GetxController{
     this.loading.value = true;
     Map<String, String> data = {'flag': "account_type"};
 
+    print("get account type ${data}");
     _api.getMasterTypeApiHit(data, sessionManagement).then((value) {
       try {
         List<GetMasterTypeModel> emp_masterResponse =
@@ -1862,6 +1824,7 @@ class Accountmastervm extends GetxController{
     AccountOwner_controller.value.clear();
     SelectedEmployee_Member_list.value = [];
 
+    created_on_controller.value.clear();
     account_code_controller.clear();
     account_name_controller.clear();
     account_type_controller.clear();
