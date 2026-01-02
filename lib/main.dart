@@ -50,11 +50,9 @@ void main() async{
 }
 
 Future<void> _initLocalNotifications() async {
-  // ANDROID
   const AndroidInitializationSettings androidSettings =
   AndroidInitializationSettings('@mipmap/launcher_icon');
 
-  // iOS / macOS (REQUIRED)
   const DarwinInitializationSettings iosSettings =
   DarwinInitializationSettings(
     requestAlertPermission: true,
@@ -62,31 +60,26 @@ Future<void> _initLocalNotifications() async {
     requestSoundPermission: true,
   );
 
-  // COMBINED SETTINGS
   const InitializationSettings initSettings = InitializationSettings(
     android: androidSettings,
-    iOS: iosSettings,     // ✅ REQUIRED
-    macOS: iosSettings,  // ✅ RECOMMENDED
+    iOS: iosSettings,
+    macOS: iosSettings,
   );
 
   await flutterLocalNotificationsPlugin.initialize(
     initSettings,
-    onDidReceiveNotificationResponse: (NotificationResponse response) async {
-      final String? payload = response.payload;
-      if (payload != null && payload.contains('filePath=')) {
-        final filePath = Uri.splitQueryString(payload)['filePath'];
-        if (filePath != null) {
-          await OpenFile.open(filePath);
-        }
+    onDidReceiveNotificationResponse: (response) async {
+      final payload = response.payload;
+      if (payload != null) {
+        await OpenFile.open(payload);
       }
     },
   );
 
-  // ANDROID notification channel (Android 8+ only)
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'basic_channel',
-    'Basic notifications',
-    description: 'Notification channel for basic tests',
+    'download_channel',
+    'File Downloads',
+    description: 'Notifications for downloaded files',
     importance: Importance.high,
   );
 
@@ -95,6 +88,7 @@ Future<void> _initLocalNotifications() async {
       AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 }
+
 
 /*Future<void> _initLocalNotifications() async {
   const AndroidInitializationSettings androidSettings =

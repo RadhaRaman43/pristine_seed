@@ -885,7 +885,57 @@ class BusinessPlanTourViewModel extends GetxController{
     }
   }
 
+  Future<void> fileDownload(String url) async {
+    await checkPermissions();
 
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode != 200) {
+        print("Failed to download file: ${response.statusCode}");
+        return;
+      }
+
+      final bytes = response.bodyBytes;
+      print("Bytes: ${bytes.length}");
+
+      Directory directory;
+
+      if (Platform.isAndroid) {
+        directory = Directory('/storage/emulated/0/Download');
+      } else if (Platform.isIOS) {
+        directory = await getApplicationDocumentsDirectory();
+      } else {
+        throw Exception("Unsupported platform");
+      }
+
+      String baseName =
+          'Business_Tour_Plan_${BusinessTourPlanDetails_list[0].tourId}';
+      String extension = '.pdf';
+
+      String filePath = '${directory.path}/$baseName$extension';
+      int counter = 1;
+
+      while (await File(filePath).exists()) {
+        filePath = '${directory.path}/$baseName($counter)$extension';
+        counter++;
+      }
+
+      final file = File(filePath);
+      await file.writeAsBytes(bytes);
+
+      print("File saved at: ${file.path}");
+
+      // 🔔 Show notification
+      showNotification(file.path);
+
+    } catch (e) {
+      print("Error downloading file: $e");
+    }
+  }
+
+
+/*
   Future<void> fileDownload(String url) async {
     await checkPermissions();
     try {
@@ -946,8 +996,9 @@ class BusinessPlanTourViewModel extends GetxController{
       print("Error downloading file: $e");
     }
   }
+*/
 
-  void showNotification(String path) async {
+  /*void showNotification(String path) async {
     String title = 'Business Tour Plan';
     int notificationId = Random().nextInt(100000);
 
@@ -973,7 +1024,41 @@ class BusinessPlanTourViewModel extends GetxController{
       platformDetails,
       payload: 'filePath=$path',
     );
+  }*/
+
+  void showNotification(String path) async {
+    const String title = 'Business Tour Plan';
+    final int notificationId = Random().nextInt(100000);
+
+    const AndroidNotificationDetails androidDetails =
+    AndroidNotificationDetails(
+      'download_channel', // ✅ MUST MATCH init channel
+      'File Downloads',
+      channelDescription: 'Notification for downloaded files',
+      importance: Importance.high,
+      priority: Priority.high,
+      playSound: true,
+    );
+
+    const DarwinNotificationDetails iosDetails =
+    DarwinNotificationDetails();
+
+    const NotificationDetails platformDetails =
+    NotificationDetails(
+      android: androidDetails,
+      iOS: iosDetails,
+    );
+
+    print("dhow notification after download");
+    await flutterLocalNotificationsPlugin.show(
+      notificationId,
+      title,
+      'Report downloaded successfully',
+      platformDetails,
+      payload: path, // ✅ DIRECT FILE PATH ONLY
+    );
   }
+
 
   BusinessTourPlanApproveReject(String TourId, String Status) {
     try {
