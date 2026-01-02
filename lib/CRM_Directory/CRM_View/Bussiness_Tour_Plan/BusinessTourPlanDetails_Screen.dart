@@ -111,9 +111,14 @@ class BusinessTourPlanDeatil extends StatelessWidget {
                     );
                   }),
                   Obx((){
+
                     return Visibility(
-                        visible:
-                        businessTourPlanController.isSendForApproval.value == "SendForApproval"? true : false,
+                        visible:((businessTourPlanController.BusinessTourPlanDetails_list[0].reportingManager==businessTourPlanController.email ||
+                            businessTourPlanController.isAdminWritePermission=='1')
+                            && businessTourPlanController.isHeadOfficePermission!='1'
+                            && (businessTourPlanController.isSendForApproval.value == "SendForApproval"||
+                                businessTourPlanController.isSendForApproval.value =="TourDetail")
+                            && businessTourPlanController.BusinessTourPlanDetails_list[0].status?.toLowerCase().trim()=="pending for approval") ?true:false,
                         child: IconButton(
                           icon: Icon(Icons.edit ,),
                           onPressed: (){

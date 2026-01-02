@@ -31,6 +31,7 @@ class BusinessPlanTourViewModel extends GetxController{
   SessionManagement sessionManagement = SessionManagement();
   String email = "";
   String isAdminWritePermission = "";
+  String isHeadOfficePermission = "";
   int pageNumber = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
@@ -114,6 +115,7 @@ class BusinessPlanTourViewModel extends GetxController{
   Future<void> onInit() async {
     email = await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadOfficePermission = await sessionManagement.getisHeadofficePermission() ?? '';
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
     getClustersGetByEmail();
