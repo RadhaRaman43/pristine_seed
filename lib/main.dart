@@ -50,6 +50,53 @@ void main() async{
 }
 
 Future<void> _initLocalNotifications() async {
+  // ANDROID
+  const AndroidInitializationSettings androidSettings =
+  AndroidInitializationSettings('@mipmap/launcher_icon');
+
+  // iOS / macOS (REQUIRED)
+  const DarwinInitializationSettings iosSettings =
+  DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+  );
+
+  // COMBINED SETTINGS
+  const InitializationSettings initSettings = InitializationSettings(
+    android: androidSettings,
+    iOS: iosSettings,     // ✅ REQUIRED
+    macOS: iosSettings,  // ✅ RECOMMENDED
+  );
+
+  await flutterLocalNotificationsPlugin.initialize(
+    initSettings,
+    onDidReceiveNotificationResponse: (NotificationResponse response) async {
+      final String? payload = response.payload;
+      if (payload != null && payload.contains('filePath=')) {
+        final filePath = Uri.splitQueryString(payload)['filePath'];
+        if (filePath != null) {
+          await OpenFile.open(filePath);
+        }
+      }
+    },
+  );
+
+  // ANDROID notification channel (Android 8+ only)
+  const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'basic_channel',
+    'Basic notifications',
+    description: 'Notification channel for basic tests',
+    importance: Importance.high,
+  );
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+}
+
+/*Future<void> _initLocalNotifications() async {
   const AndroidInitializationSettings androidSettings =
   AndroidInitializationSettings('@mipmap/launcher_icon');
 
@@ -81,7 +128,7 @@ Future<void> _initLocalNotifications() async {
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
-}
+}*/
 
 class MyHttpOverrides extends HttpOverrides {
   @override

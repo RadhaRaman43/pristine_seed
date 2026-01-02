@@ -68,7 +68,7 @@ class Utils{
 
         backgroundColor: AllColors.green,
         autoCloseDuration: const Duration(seconds: 5),
-        icon:Icon(Icons.check),
+        icon:Icon(Icons.check, color: AllColors.whiteColor,),
       );
     } catch (e) {
       // Handle the exception as needed
@@ -84,7 +84,7 @@ class Utils{
           description: Text(message, style: TextStyle(color: AllColors.whiteColor,),),
           backgroundColor: AllColors.redColor,
           autoCloseDuration: const Duration(seconds: 5),
-          icon:Icon(Icons.error)
+          icon:Icon(Icons.error, color: AllColors.whiteColor,)
       );
     } catch (e) {
       // Handle the exception as needed
@@ -101,7 +101,7 @@ class Utils{
           description: Text(message, style: TextStyle(color: AllColors.whiteColor,),),
           backgroundColor: AllColors.lightredColor,
           autoCloseDuration: const Duration(seconds: 5),
-          icon:Icon(Icons.error)
+          icon:Icon(Icons.error, color: AllColors.whiteColor )
       );
     } catch (e) {
       // Handle the exception as needed
