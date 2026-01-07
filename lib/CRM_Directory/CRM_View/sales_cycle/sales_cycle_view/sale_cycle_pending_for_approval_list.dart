@@ -187,7 +187,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCycleController.itemCategorySelectedlist.value = [];
           salesCycleController.getPurchaseProcessApi();
           salesCycleController.getPurchaseTimeFrameApi();
-          salesCycleController.getItemCategoryMstApi(salesCycleId ,taskId );
+          salesCycleController.getItemCategoryMstApi(salesCycleId ,taskId,"" );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleId);
           salesCycleController.pageNumber=0;
           salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleId);

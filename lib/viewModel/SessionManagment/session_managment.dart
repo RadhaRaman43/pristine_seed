@@ -482,4 +482,37 @@ class SessionManagement {
     await prefs.clear();
     return true;
   }
+
+  //todo radha raman for filters
+
+  void setSaleCycleAllStage(String allStage) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('all_stage', allStage);
+  }
+  Future<String?> getSaleCycleAllStage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('all_stage');
+  }
+  void setSaleCycleId(String sale_id) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('sale_cycle_id', sale_id);
+  }
+  Future<String?> getSaleCycleId() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('sale_cycle_id');
+  }
+
+  void setSaleCycleQuoteAccepted(String QuoteAccepted) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('QuoteAccepted', QuoteAccepted);
+  }
+  Future<String?> getQuoteAccepted() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('QuoteAccepted');
+  }
+
+  void setSaleCycleTask_Id(String Task_Id) async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('Task_Id', Task_Id);
+  }
 }

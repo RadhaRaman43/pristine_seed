@@ -81,10 +81,14 @@ class UpdateBussinessTermPage extends StatelessWidget{
                 bindWarrentyPeriod(context),
                 bindDeliveryWeeksPeriod(context),
                 bindAdvancPaymentPer(context),
+
                 bindTotalPayment(context),
+
                 bindAdvancPaymentAmt(context),
+
                 bindFinalAmt(context),
                 bindPendingAmt(context),
+
                 bindTermCondition(context),
                 bindRemarks(context),
 

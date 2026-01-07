@@ -335,7 +335,7 @@ class SalesCycleScreen extends StatelessWidget{
           salesCycleController.itemCategorySelectedlist.value = [];
           salesCycleController.getPurchaseProcessApi();
           salesCycleController.getPurchaseTimeFrameApi();
-          salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId! );
+          salesCycleController.getItemCategoryMstApi(salesCycleController.saleCycleList[position].salesCycleId! ,salesCycleController.saleCycleList[position].taskId!,"" );
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleController.saleCycleList[position].salesCycleId!);
           salesCycleController.pageNumber=0;
           salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleController.saleCycleList[position].salesCycleId!);
@@ -802,33 +802,29 @@ class SalesCycleScreen extends StatelessWidget{
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.primaryDark,
-                                  width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              salesCycleController.pageNumber = 0;
-                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "","","");
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(
+                                color: AllColors.primaryDark,
+                                width: 1),
+                          )),
+                          onPressed: () {
+                            Get.back();
+                            salesCycleController.pageNumber = 0;
+                            salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "","","");
+                          },
+                          child: Text(
+                            'Submit',
+                            style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.sisxteen,
+                                fontWeight: FontWeight.w700),
                           ),
                         ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
+                        const SizedBox(width: 3,),
+                        ElevatedButton(
                             style: ElevatedButton.styleFrom(
                                 foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
@@ -849,6 +845,28 @@ class SalesCycleScreen extends StatelessWidget{
                                   fontSize: AllFontSize.sisxteen,
                                   fontWeight: FontWeight.w700),
                             ),
+                          ),
+                        const SizedBox(width: 3,),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(
+                                color: AllColors.green, width: 1),
+                          )),
+                          onPressed: () {
+                            Get.back();
+                            salesCycleController.SaveFilterData();
+                            salesCycleController.pageNumber=0;
+                            salesCycleController.getsalesCycleData(salesCycleController.pageNumber,"","","");
+
+                          },
+                          child: Text(
+                            'SaveFilter',
+                            style: GoogleFonts.poppins(
+                                color: AllColors.green,
+                                fontSize: AllFontSize.sisxteen,
+                                fontWeight: FontWeight.w700),
                           ),
                         ),
                       ],
@@ -1966,15 +1984,9 @@ class SalesCycleScreen extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final filtered = query.isEmpty ? allItems
+                    : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1997,10 +2009,8 @@ class SalesCycleScreen extends StatelessWidget{
                           child: Row(
                             children: [
                               Expanded(
-                                child: Text(
-                                  'Select Clusters',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                child: Text('Select Clusters',
+                                  style: GoogleFonts.poppins(fontSize: 16, fontWeight: FontWeight.w600),
                                 ),
                               ),
                               TextButton(
@@ -2104,13 +2114,8 @@ class SalesCycleScreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    salesCycleController.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    salesCycleController
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    salesCycleController.SelectedCluster_list.assignAll(tempSelected);
+                                    salesCycleController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     salesCycleController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();

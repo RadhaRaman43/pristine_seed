@@ -86,13 +86,11 @@ class SalesCycleCreateQuoteScreen extends StatelessWidget{
                   return
                     Wrap(
                       spacing: 8.0,
-                      children: saleCycleController.itemCategorySelectedlist
-                          .map((category) {
+                      children: saleCycleController.itemCategorySelectedlist.map((category) {
                         return Chip(
                           label: Text(category.categoryName!),
                           onDeleted: () {
-                            saleCycleController.itemCategorySelectedlist.remove(
-                                category);
+                            saleCycleController.itemCategorySelectedlist.remove(category);
                           },
                         );
                       }).toList(),

@@ -1537,7 +1537,7 @@ class TaskMasterDetails extends StatelessWidget{
                     salesCycleController.itemCategorySelectedlist.value = [];
                     salesCycleController.getPurchaseProcessApi();
                     salesCycleController.getPurchaseTimeFrameApi();
-                    salesCycleController.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[0].salesCycleId! ,TaskMaster_page_controller.Task_Master_list[0].taskId! );
+                    salesCycleController.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[0].salesCycleId! ,TaskMaster_page_controller.Task_Master_list[0].taskId!,"" );
                     salesCycleController.ProductCategoryWiseAmtGet(0, TaskMaster_page_controller.Task_Master_list[0].salesCycleId!);
 
                   },

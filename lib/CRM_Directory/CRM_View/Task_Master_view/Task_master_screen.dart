@@ -904,10 +904,8 @@ class TaskMasterScreen extends StatelessWidget {
                       salesCycleController.getPurchaseProcessApi();
                       salesCycleController.getPurchaseTimeFrameApi();
                       salesCycleController.getItemCategoryMstApi(
-                          TaskMaster_page_controller.Task_Master_list[position]
-                              .salesCycleId!,
-                          TaskMaster_page_controller.Task_Master_list[position]
-                              .taskId!);
+                          TaskMaster_page_controller.Task_Master_list[position].salesCycleId!,
+                          TaskMaster_page_controller.Task_Master_list[position].taskId!,"");
                       salesCycleController.ProductCategoryWiseAmtGet(0,
                           TaskMaster_page_controller.Task_Master_list[position]
                               .salesCycleId!);
