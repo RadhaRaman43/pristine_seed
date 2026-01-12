@@ -797,7 +797,7 @@ class SalesCycleScreen extends StatelessWidget{
                       ),
                     ),
                   ),
-                  Container(
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -812,6 +812,7 @@ class SalesCycleScreen extends StatelessWidget{
                           )),
                           onPressed: () {
                             Get.back();
+                            salesCycleController.SaveFilterData();
                             salesCycleController.pageNumber = 0;
                             salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "","","");
                           },
@@ -834,6 +835,7 @@ class SalesCycleScreen extends StatelessWidget{
                             onPressed: () {
                               Get.back();
                               salesCycleController.clearAllFieldOfFilter();
+                              salesCycleController.clearFilterData();
                               salesCycleController.pageNumber=0;
                               salesCycleController.getsalesCycleData(salesCycleController.pageNumber,"","","");
 
@@ -851,18 +853,17 @@ class SalesCycleScreen extends StatelessWidget{
                           style: ElevatedButton.styleFrom(
                               foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(
-                                color: AllColors.green, width: 1),
+                            side: BorderSide(color: AllColors.green, width: 1),
                           )),
                           onPressed: () {
                             Get.back();
-                            salesCycleController.SaveFilterData();
-                            salesCycleController.pageNumber=0;
-                            salesCycleController.getsalesCycleData(salesCycleController.pageNumber,"","","");
+                            salesCycleController.getFilterData();
+                            *//*salesCycleController.pageNumber=0;
+                            salesCycleController.getsalesCycleData(salesCycleController.pageNumber,"","","");*//*
 
                           },
                           child: Text(
-                            'SaveFilter',
+                            'SavedFilter',
                             style: GoogleFonts.poppins(
                                 color: AllColors.green,
                                 fontSize: AllFontSize.sisxteen,
@@ -871,7 +872,53 @@ class SalesCycleScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+
+                            salesCycleController.pageNumber = 0;
+                            salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "", "");
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            Get.back();
+                            salesCycleController.clearAllFieldOfFilter();
+                            salesCycleController.clearFilterData();
+                            salesCycleController.pageNumber = 0;
+                            salesCycleController.getsalesCycleData(
+                                salesCycleController.pageNumber, "", "", "");
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            salesCycleController.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  )
                 ],
               ),
             );
@@ -882,17 +929,48 @@ class SalesCycleScreen extends StatelessWidget{
     );
   }
 
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
   Widget bindSaleCycleStagesDropDown(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: salesCycleController.SaleCycleStatusController.value,
-        label: Text(
-          "Sales Cycle Stage",
+        label: Text("Sales Cycle Stage",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
@@ -943,7 +1021,6 @@ class SalesCycleScreen extends StatelessWidget{
 
   Widget bindApprovalStatusDropDown(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only( right: 15),
       child: DropdownMenu<String>(
         width: MediaQuery
             .of(context)
@@ -1309,12 +1386,8 @@ class SalesCycleScreen extends StatelessWidget{
 
   Widget bindSolutionAccepted(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only( bottom: 10, right: 15),
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: salesCycleController.solutionAcceptedController.value,
         label: Text(
           "Solution Accepted",
@@ -1749,20 +1822,14 @@ class SalesCycleScreen extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(salesCycleController.SelectedRegion_list);
 
-              final allItems =
-                  salesCycleController.regionwithclusterGetByEmailList;
+              final allItems = salesCycleController.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
+                    (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(

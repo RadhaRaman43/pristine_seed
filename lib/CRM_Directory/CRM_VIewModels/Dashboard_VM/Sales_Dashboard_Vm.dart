@@ -97,7 +97,7 @@ class SalesDashboardVm extends GetxController{
     else{
       getEmployeeTeamMemberGetByClusterRegionApi();
     }
-
+    getFilterData();
 
   }
 
@@ -584,6 +584,40 @@ class SalesDashboardVm extends GetxController{
     DateRange("financial");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 
+  }
+
+  void SaveFilterData() async{
+    await sessionManagement.saveSalesDashboardData({
+      "start_date": formattedStartDate.value,
+      "end_date": formattedEndDate.value,
+      "filter_custom_date": filterCustomDateController.value.text,
+      "Department_Name_Filter": DepartmentNameFilter_controller.value.text,
+      "Employee_Name_Filter": EmployeeNameFilter_controller.value.text,
+
+    });
+    pageNumber = 0;
+    salesDashboardData();
+
+  }
+
+  RxString filterDataChecker = ''.obs;
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getSalesDashboardData();
+    formattedStartDate.value=getFilterData["start_date"];
+    formattedEndDate.value=getFilterData["end_date"];
+    filterCustomDateController.value.text=getFilterData["filter_custom_date"];
+    DepartmentNameFilter_controller.value.text=getFilterData["Department_Name_Filter"];
+    EmployeeNameFilter_controller.value.text=getFilterData["Employee_Name_Filter"];
+
+    pageNumber=0;
+    filterDataChecker.value='1';
+    print("filter data save ${getFilterData}");
+    salesDashboardData();
+  }
+
+  void clearFilterData() {
+    sessionManagement.clearSalesDashboardData();
   }
 
 

@@ -485,34 +485,90 @@ class SessionManagement {
 
   //todo radha raman for filters
 
-  void setSaleCycleAllStage(String allStage) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('all_stage', allStage);
+  Future<void> saveSaleCycleData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_cycle_data", jsonEncode(data));
   }
-  Future<String?> getSaleCycleAllStage() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('all_stage');
-  }
-  void setSaleCycleId(String sale_id) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('sale_cycle_id', sale_id);
-  }
-  Future<String?> getSaleCycleId() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('sale_cycle_id');
+  Future<Map<String, dynamic>> getSaleCycleData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_cycle_data");
+    return data != null ? jsonDecode(data) : {};
   }
 
-  void setSaleCycleQuoteAccepted(String QuoteAccepted) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('QuoteAccepted', QuoteAccepted);
-  }
-  Future<String?> getQuoteAccepted() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getString('QuoteAccepted');
+   Future<void> clearSaleCycleData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_cycle_data");
   }
 
-  void setSaleCycleTask_Id(String Task_Id) async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('Task_Id', Task_Id);
+  //todo dashboard
+  Future<void> saveFunnelDashboardData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("funnel_dashboard_data", jsonEncode(data));
   }
+  Future<Map<String, dynamic>> getFunnelDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("funnel_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearFunnelDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("funnel_dashboard_data");
+  }
+
+  Future<void> saveCommitDashboardData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("commit_dashboard_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getCommitDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("commit_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearCommitDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("commit_dashboard_data");
+  }
+
+  Future<void> saveCallDashboardData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("call_dashboard_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getCallDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("call_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearCallDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("call_dashboard_data");
+  }
+
+  Future<void> saveDSARDashboardData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("DSAR_dashboard_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getDSARDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("DSAR_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearDSARDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("DSAR_dashboard_data");
+  }
+
+  Future<void> saveSalesDashboardData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("DSAR_dashboard_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSalesDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("DSAR_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSalesDashboardData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("DSAR_dashboard_data");
+  }
+
 }

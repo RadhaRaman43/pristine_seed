@@ -37,6 +37,7 @@ class FunnelDashboardVm extends GetxController{
   RxString totalProspectPrice = ''.obs;
   RxString totalProposePrice = ''.obs;
   RxString totalFunnelPrice = ''.obs;
+  RxString filterDataChecker = ''.obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -108,6 +109,7 @@ class FunnelDashboardVm extends GetxController{
     getItemCategoryMstWithoutTaskIdApi();
 
     getAccountMaster("");
+    getFilterData();
   }
 
 
@@ -758,6 +760,49 @@ class FunnelDashboardVm extends GetxController{
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 
+  }
+
+  void SaveFilterData() async{
+    await sessionManagement.saveFunnelDashboardData({
+      "start_date": formattedStartDate.value,
+      "end_date": formattedEndDate.value,
+      "filter_custom_date": filterCustomDateController.value.text,
+      "filter_stage_name": StageName_controller.value.text,
+      "filter_quote_accepted": QuoteAccepted_controller.value.text,
+      "filter_customer_name": CustomerName_controller.value.text,
+      "filter_product_category": ProductCategory_controller.value.text,
+      "filter_commit": IsCommit_controller.value.text,
+      "filter_created_on": filter_created_on_cont.value.text,
+      "filter_owner_name": AccountOwner_controller.value.text,
+      "filter_region_name":RegionName_controller.value.text,
+      "filter_cluster_name": clusterName_controller.value.text,
+    });
+    /*Map getFilterData=await sessionManagement.getFunnelDashboardData();
+    print("filter data save ${getFilterData}");*/
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getFunnelDashboardData();
+    formattedStartDate.value=getFilterData["start_date"];
+    formattedEndDate.value=getFilterData["end_date"];
+    filterCustomDateController.value.text=getFilterData["filter_custom_date"];
+    StageName_controller.value.text=getFilterData["filter_stage_name"];
+    QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"];
+    CustomerName_controller.value.text=getFilterData["filter_customer_name"];
+    ProductCategory_controller.value.text=getFilterData["filter_product_category"];
+    IsCommit_controller.value.text=getFilterData["filter_commit"];
+    filter_created_on_cont.value.text=getFilterData["filter_created_on"];
+    RegionName_controller.value.text=getFilterData["filter_region_name"];
+    clusterName_controller.value.text=getFilterData["filter_cluster_name"];
+    AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
+    pageNumber=0;
+    filterDataChecker.value='1';
+    print("filter data save ${getFilterData}");
+    funnelDashboardData();
+  }
+  void clearFilterData() {
+    sessionManagement.clearFunnelDashboardData();
   }
 
 }

@@ -1487,7 +1487,51 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       ),
                     ),
                   ),
+
                   Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.salesDashboardData();
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.SaveFilterData();
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.clearFilterData();
+                            dashboard_view_Controller.clearAllFilterController();
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.salesDashboardData();
+                            Get.back();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1544,13 +1588,47 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
           },
         );
       },
+    );
+  }
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -1848,6 +1926,16 @@ class SalesDashboardViewscreen extends StatelessWidget{
     WidgetsBinding.instance.addPostFrameCallback((_) {
     });
     return Obx(() {
+      if (dashboard_view_Controller.DepartmentNameFilter_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.DepartmentNameFilter_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectDepartment_List.value =
+            List.generate(nameList.length, (index) {
+              return DepartmnetModal(
+                departmentId: nameList[index].trim(),
+              );
+            });
+      }
       final selected = dashboard_view_Controller.SelectDepartment_List;
       final selectedText = selected.isEmpty ? null : selected.map((e) => e.departmentId).join(', ');
 
@@ -2062,6 +2150,17 @@ class SalesDashboardViewscreen extends StatelessWidget{
     WidgetsBinding.instance.addPostFrameCallback((_) {
     });
     return Obx(() {
+      if (dashboard_view_Controller.EmployeeNameFilter_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.EmployeeNameFilter_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
+
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty
           ? null
@@ -2226,7 +2325,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                     dashboard_view_Controller.SelectedEmployee_Member_list
                                         .assignAll(tempSelected);
                                     dashboard_view_Controller.EmployeeNameFilter_controller.value.text =
-                                        tempSelected.map((e) => e.fullName).join('| ');
+                                        tempSelected.map((e) => e.fullName).join(', ');
 
                                     Navigator.of(context).pop();
                                   },

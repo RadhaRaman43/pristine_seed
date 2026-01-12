@@ -32,6 +32,7 @@ class CallDashboardVm extends GetxController{
   RxString rodName = ''.obs;
   RxString geoValueName = ''.obs;
   RxString isAdminWritePermission = "".obs;
+  RxString filterDataChecker = ''.obs;
 
   int pageNumber = 0;
   int rowsPerPage = 10;
@@ -96,6 +97,7 @@ class CallDashboardVm extends GetxController{
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //callDashboardData();
     //getDashboardUserWiseData(pageNumber);
+    getFilterData();
     CallDSARsMasterApiHit();
     CallMasterApiHit();
     isAdminWritePermission == 1 ? EmployeeMasterGet(""): getEmployeeTeamMemberGetByClusterRegionApi();
@@ -174,56 +176,56 @@ class CallDashboardVm extends GetxController{
       TypeOfCallForApi = typeOfCall_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     CustomerNameApi="";
     if(CustomerName_controller.value.text.isNotEmpty){
       CustomerNameApi = CustomerName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     lastActivityStatusForApi = '';
     if(lastActivity_Status_controller.value.text.isNotEmpty){
       lastActivityStatusForApi = lastActivity_Status_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     AccountOwnerForApi = '';
     if(AccountOwner_controller.value.text.isNotEmpty){
       AccountOwnerForApi = AccountOwner_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     ClusterNameForApi = '';
     if(clusterName_controller.value.text.isNotEmpty){
       ClusterNameForApi = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     RegionNameForApi = '';
     if(RegionName_controller.value.text.isNotEmpty){
       RegionNameForApi = RegionName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     ProductCategoryForApi = '';
     if(ProductCategory_controller.value.text.isNotEmpty){
       ProductCategoryForApi = ProductCategory_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     TaskStatusForApi="";
     if(task_Status_controller.value.text.isNotEmpty){
       TaskStatusForApi = task_Status_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
 
     try {
@@ -773,6 +775,48 @@ class CallDashboardVm extends GetxController{
 
   }
 
+
+  void SaveFilterData() async{
+    await sessionManagement.saveCallDashboardData({
+      "start_date": formattedStartDate.value,
+      "end_date": formattedEndDate.value,
+      "filter_custom_date": filterCustomDateController.value.text,
+      "filter_task_status": task_Status_controller.value.text,
+      "filter_customer_name": CustomerName_controller.value.text,
+      "filter_type_of_call": typeOfCall_controller.value.text,
+      "last_activity_status": lastActivity_Status_controller.value.text,
+      "filter_product_category": ProductCategory_controller.value.text,
+      "filter_owner_name": AccountOwner_controller.value.text,
+      "filter_region_name":RegionName_controller.value.text,
+      "filter_cluster_name": clusterName_controller.value.text,
+    });
+    pageNumber = 0;
+    callDashboardData();
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getCallDashboardData();
+    formattedStartDate.value=getFilterData["start_date"];
+    formattedEndDate.value=getFilterData["end_date"];
+    filterCustomDateController.value.text=getFilterData["filter_custom_date"];
+    task_Status_controller.value.text=getFilterData["filter_task_status"];
+    CustomerName_controller.value.text=getFilterData["filter_customer_name"];
+    typeOfCall_controller.value.text=getFilterData["filter_type_of_call"];
+    lastActivity_Status_controller.value.text=getFilterData["last_activity_status"];
+    ProductCategory_controller.value.text=getFilterData["filter_product_category"];
+    RegionName_controller.value.text=getFilterData["filter_region_name"];
+    clusterName_controller.value.text=getFilterData["filter_cluster_name"];
+    AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
+    pageNumber=0;
+    filterDataChecker.value='1';
+    print("filter data save ${getFilterData}");
+    callDashboardData();
+  }
+
+  void clearFilterData() {
+    sessionManagement.clearCallDashboardData();
+  }
 
 
 }

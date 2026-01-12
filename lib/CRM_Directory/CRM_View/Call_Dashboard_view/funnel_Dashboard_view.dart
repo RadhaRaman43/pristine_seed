@@ -1103,61 +1103,112 @@ class FunnelDashboardView extends StatelessWidget{
                   Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.primaryDark,
-                                  width: 1),
-                            )),
-                            onPressed: () {
-
-                              dashboard_view_Controller.pageNumber = 0;
-                              dashboard_view_Controller.funnelDashboardData();
-                              Get.back();
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();
+                            Get.back();
+                          },
+                        )),
+                        /*ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(color: AllColors.primaryDark, width: 1),
+                          )),
+                          onPressed: () {
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();
+                            Get.back();
+                          },
+                          child: Text(
+                            'Submit',
+                            style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.sisxteen,
+                                fontWeight: FontWeight.w700),
                           ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.redColor, width: 1),
-                            )),
-                            onPressed: () {
-                              dashboard_view_Controller.clearAllFilterController();
-                              dashboard_view_Controller.pageNumber = 0;
-                              dashboard_view_Controller.funnelDashboardData();
-                              Get.back();
-
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
+                        ),*/
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.SaveFilterData();
+                            /*dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();*/
+                            Get.back();
+                          },
+                        )),
+                        /*ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              foregroundColor: AllColors.green, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(
+                                color: AllColors.green,
+                                width: 1),
+                          )),
+                          onPressed: () {
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();
+                            Get.back();
+                          },
+                          child: Text(
+                            'SavedFilter',
+                            style: GoogleFonts.poppins(
+                                color: AllColors.primaryDark1,
+                                fontSize: AllFontSize.sisxteen,
+                                fontWeight: FontWeight.w700),
                           ),
-                        ),
+                        ),*/
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.clearFilterData();
+                            dashboard_view_Controller.clearAllFilterController();
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();
+                            Get.back();
+                          },
+                        )),
+                        /*ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                            side: BorderSide(
+                                color: AllColors.redColor, width: 1),
+                          )),
+                          onPressed: () {
+                            dashboard_view_Controller.clearAllFilterController();
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();
+                            Get.back();
+
+                          },
+                          child: Text(
+                            'Reset',
+                            style: GoogleFonts.poppins(
+                                color: AllColors.redColor,
+                                fontSize: AllFontSize.sisxteen,
+                                fontWeight: FontWeight.w700),
+                          ),
+                        ),*/
                       ],
                     ),
                   ),
+
+
                 ],
               ),
             );
@@ -1167,6 +1218,42 @@ class FunnelDashboardView extends StatelessWidget{
       },
     );
   }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   RadioGroupDateRangeFilter(BuildContext context){
     return Container(
@@ -1317,7 +1404,6 @@ class FunnelDashboardView extends StatelessWidget{
                     return filterWithCustomDate(context);
                   })
 
-
                 ],
               ),
             ),
@@ -1340,8 +1426,6 @@ class FunnelDashboardView extends StatelessWidget{
           bindAccountOwnerFilter(context),
           SizedBox(height: 10),
           bindFilterCreatedOn(context),
-
-
 
         ],
 
@@ -1468,7 +1552,7 @@ class FunnelDashboardView extends StatelessWidget{
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
 
-          dashboard_view_Controller.filter_created_on_cont.value.text = '$startDate - $endDate';
+          dashboard_view_Controller.filter_created_on_cont.value.text = '$startDate @ $endDate';
         } else {
 
           dashboard_view_Controller.filter_created_on_cont.value.text="";
@@ -1479,6 +1563,11 @@ class FunnelDashboardView extends StatelessWidget{
 
   bindSalesStageStatus(BuildContext context) {
     return Obx((){
+      if(dashboard_view_Controller.StageName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1' ){
+        dashboard_view_Controller.selectedSalesStageStatusList.value =
+            dashboard_view_Controller.StageName_controller.value.text
+                .split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+      }
       return DropdownSearch<String>.multiSelection(
         items: dashboard_view_Controller.SalesCycleStageStatusList,
         itemAsString: (String u) => u,
@@ -1495,8 +1584,7 @@ class FunnelDashboardView extends StatelessWidget{
         dropdownBuilder: (context, selectedItems) {
           // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
-            return Text(
-              "Sales Cycle Stage",
+            return Text("Sales Cycle Stage",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,
@@ -1506,17 +1594,15 @@ class FunnelDashboardView extends StatelessWidget{
           }
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e).join(', '),
+            //child: Text(dashboard_view_Controller.filterDataChecker.value=='1'?dashboard_view_Controller.StageName_controller.value.text:selectedItems.map((e) => e).join(', '),
+            child: Text(selectedItems.map((e) => e).join(', '),
               style: TextStyle(color: Colors.black), // Only black text
             ),
           );
         },
         onChanged: (List<String> selectedList) {
-          dashboard_view_Controller.selectedSalesStageStatusList.value =
-              selectedList;
-          dashboard_view_Controller.StageName_controller.value.text =
-              selectedList.map((e) => e).join(', ');
+          dashboard_view_Controller.selectedSalesStageStatusList.value = selectedList;
+          dashboard_view_Controller.StageName_controller.value.text = selectedList.map((e) => e).join(', ');
         },
 
         popupProps: PopupPropsMultiSelection.dialog(
@@ -1544,6 +1630,16 @@ class FunnelDashboardView extends StatelessWidget{
 
   bindCustomerNameFilter(BuildContext context) {
     return Obx((){
+      if (dashboard_view_Controller.CustomerName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.CustomerName_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedAccount_Master_list.value =
+            List.generate(nameList.length, (index) {
+              return AccountMasterModel(
+                accountName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<AccountMasterModel>.multiSelection(
        // items: dashboard_view_Controller.Account_Master_list,
         asyncItems: (String filter) async {
@@ -1582,8 +1678,7 @@ class FunnelDashboardView extends StatelessWidget{
           );
         },
         onChanged: (List<AccountMasterModel> selectedList) {
-          dashboard_view_Controller.SelectedAccount_Master_list.value =
-              selectedList;
+          dashboard_view_Controller.SelectedAccount_Master_list.value = selectedList;
           dashboard_view_Controller.CustomerName_controller.value.text =
               selectedList.map((e) => e.accountName).join(', ');
         },
@@ -1619,10 +1714,18 @@ class FunnelDashboardView extends StatelessWidget{
     });
 
     return Obx(() {
+      if (dashboard_view_Controller.AccountOwner_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.AccountOwner_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.fullName).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.fullName).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1642,15 +1745,10 @@ class FunnelDashboardView extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.fullName ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) =>
+                    (c.fullName ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1726,8 +1824,7 @@ class FunnelDashboardView extends StatelessWidget{
                             onChanged: (val) {
                               setState(() {
                                 if (val == true) {
-                                  tempSelected
-                                      .clear();
+                                  tempSelected.clear();
                                   tempSelected.addAll(allItems);
                                 } else {
                                   tempSelected.clear();
@@ -1761,8 +1858,7 @@ class FunnelDashboardView extends StatelessWidget{
                                       if (!isSel) tempSelected.add(item);
                                     } else {
                                       tempSelected.removeWhere((s) =>
-                                      (s.fullName ?? "") ==
-                                          (item.fullName ?? ""));
+                                      (s.fullName ?? "") == (item.fullName ?? ""));
                                     }
                                   });
                                 },
@@ -1803,8 +1899,7 @@ class FunnelDashboardView extends StatelessWidget{
         },
         child: InputDecorator(
           decoration: InputDecoration(
-            labelText: selectedText != null
-                ?  "Sales Cycle Owner": "", // 👈 Label restored here
+            labelText: selectedText != null ?  "Sales Cycle Owner": "", // 👈 Label restored here
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -1906,6 +2001,16 @@ class FunnelDashboardView extends StatelessWidget{
 
   bindProductCategoryFilter(BuildContext context) {
     return Obx((){
+      if (dashboard_view_Controller.ProductCategory_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.ProductCategory_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedProductCategory_list.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: dashboard_view_Controller.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName??"",
@@ -1940,8 +2045,7 @@ class FunnelDashboardView extends StatelessWidget{
           );
         },
         onChanged: (List<ItemCategoryMstModel> selectedList) {
-          dashboard_view_Controller.SelectedProductCategory_list.value =
-              selectedList;
+          dashboard_view_Controller.SelectedProductCategory_list.value = selectedList;
           dashboard_view_Controller.ProductCategory_controller.value.text =
               selectedList.map((e) => e.categoryName).join(', ');
         },
@@ -1979,9 +2083,22 @@ class FunnelDashboardView extends StatelessWidget{
             availableItems.map((e) => e.geoValue).join('|');
         dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
       }
+      if (dashboard_view_Controller.clusterName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        dashboard_view_Controller.SelectedCluster_list.value=[];
+        List<String> nameList = dashboard_view_Controller.clusterName_controller.value.text.split('|');
+
+        dashboard_view_Controller.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+
     });
 
     return Obx(() {
+
       final selected = dashboard_view_Controller.SelectedCluster_list;
       final selectedText = selected.isEmpty
           ? null
@@ -2214,10 +2331,23 @@ class FunnelDashboardView extends StatelessWidget{
         dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
         print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
 
+
       }
       else{
         print("region does not bind first time");
       }
+      if (dashboard_view_Controller.RegionName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        dashboard_view_Controller.SelectedRegion_list.value=[];
+        List<String> nameList = dashboard_view_Controller.RegionName_controller.value.text.split('|');
+
+        dashboard_view_Controller.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+
     });
 
     return Obx(() {

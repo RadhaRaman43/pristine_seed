@@ -1359,15 +1359,57 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                 height: 10,
                               ),
 
-
-
                             ],
                           ),
                         ),
                       ),
                     ),
                   ),
+
                   Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.callDashboardData();
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.SaveFilterData();
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.clearFilterData();
+                            dashboard_view_Controller.clearAllFilterController();
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.callDashboardData();
+                            Get.back();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                 /* Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1425,7 +1467,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -1433,6 +1475,40 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
         );
       },
+    );
+  }
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -1687,6 +1763,10 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
   bindTaskStatus(BuildContext context) {
     return Obx(() {
+      if(dashboard_view_Controller.task_Status_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1' ){
+        dashboard_view_Controller.selectedTaskStatusList.value =
+            dashboard_view_Controller.task_Status_controller.value.text.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
+      }
       return DropdownSearch<String>.multiSelection(
         items: dashboard_view_Controller.TaskStatusListTypeList,
         itemAsString: (String u) => u,
@@ -1839,6 +1919,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
   bindLastActivityStatus(BuildContext context) {
     return Obx((){
+      if (dashboard_view_Controller.lastActivity_Status_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.lastActivity_Status_controller.value.text.split(',');
+
+        dashboard_view_Controller.selectedDSARStatusList.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
         items: dashboard_view_Controller.DSARStatus_Master_list,
         itemAsString: (CallStatusMasterModel u) => u.taskStatus??"",
@@ -1904,6 +1994,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
   bindTypeCallFilter(BuildContext context) {
     return Obx((){
+      if (dashboard_view_Controller.typeOfCall_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.typeOfCall_controller.value.text.split(',');
+
+        dashboard_view_Controller.selectedTypeCallList.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
         items: dashboard_view_Controller.TypeCall_Master_list,
         itemAsString: (CallStatusMasterModel u) => u.taskStatus??"",
@@ -1969,6 +2069,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
   bindCustomerNameFilter(BuildContext context) {
     return Obx((){
+      if (dashboard_view_Controller.CustomerName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.CustomerName_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedAccount_Master_list.value =
+            List.generate(nameList.length, (index) {
+              return AccountMasterModel(
+                accountName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<AccountMasterModel>.multiSelection(
         items: dashboard_view_Controller.Account_Master_list,
         itemAsString: (AccountMasterModel u) => u.accountName??"",
@@ -2040,6 +2150,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     });
 
     return Obx(() {
+      if (dashboard_view_Controller.AccountOwner_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.AccountOwner_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
       final selected = dashboard_view_Controller.SelectedEmployee_Member_list;
       final selectedText = selected.isEmpty
           ? null
@@ -2327,6 +2447,16 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
   bindProductCategoryFilter(BuildContext context) {
     return Obx((){
+      if (dashboard_view_Controller.ProductCategory_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.ProductCategory_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedProductCategory_list.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: dashboard_view_Controller.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName??"",

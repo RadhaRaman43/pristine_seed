@@ -33,6 +33,7 @@ class CommitDashboardVm extends GetxController{
   int pageNumber = 0;
   int rowsPerPage = 10;
   RxInt total_rows = 0.obs;
+  RxString filterDataChecker = ''.obs;
 
   RxList<CommitDashboardModel> commitDashboardList = <CommitDashboardModel>[].obs;
   RxList<Records> commitDashboardRecordList = <Records>[].obs;
@@ -91,6 +92,7 @@ class CommitDashboardVm extends GetxController{
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //commitDashboardData();
     isAdminWritePermission == 1 ? EmployeeMasterGet(""): getEmployeeTeamMemberGetByClusterRegionApi();
+    getFilterData();
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
     getAccountMaster(pageNumber);
@@ -687,6 +689,49 @@ class CommitDashboardVm extends GetxController{
     DateRange("month");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 
+  }
+
+  void SaveFilterData() async{
+    await sessionManagement.saveCommitDashboardData({
+      "start_date": formattedStartDate.value,
+      "end_date": formattedEndDate.value,
+      "filter_custom_date": filterCustomDateController.value.text,
+      "filter_stage_name": StageName_controller.value.text,
+      "filter_quote_accepted": QuoteAccepted_controller.value.text,
+      "filter_customer_name": CustomerName_controller.value.text,
+      "filter_product_category": ProductCategory_controller.value.text,
+      "filter_commit": IsCommit_controller.value.text,
+      "filter_created_on": filter_created_on_cont.value.text,
+      "filter_owner_name": AccountOwner_controller.value.text,
+      "filter_region_name":RegionName_controller.value.text,
+      "filter_cluster_name": clusterName_controller.value.text,
+    });
+    /*Map getFilterData=await sessionManagement.getFunnelDashboardData();
+    print("filter data save ${getFilterData}");*/
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getCommitDashboardData();
+    formattedStartDate.value=getFilterData["start_date"];
+    formattedEndDate.value=getFilterData["end_date"];
+    filterCustomDateController.value.text=getFilterData["filter_custom_date"];
+    StageName_controller.value.text=getFilterData["filter_stage_name"];
+    QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"];
+    CustomerName_controller.value.text=getFilterData["filter_customer_name"];
+    ProductCategory_controller.value.text=getFilterData["filter_product_category"];
+    IsCommit_controller.value.text=getFilterData["filter_commit"];
+    filter_created_on_cont.value.text=getFilterData["filter_created_on"];
+    RegionName_controller.value.text=getFilterData["filter_region_name"];
+    clusterName_controller.value.text=getFilterData["filter_cluster_name"];
+    AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
+    pageNumber=0;
+    filterDataChecker.value='1';
+    print("filter data save ${getFilterData}");
+    commitDashboardData();
+  }
+  void clearFilterData() {
+    sessionManagement.clearCommitDashboardData();
   }
 
 }
