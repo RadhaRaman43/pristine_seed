@@ -38,9 +38,7 @@ class LoginViewModel extends GetxController{
           if(loginResponse[0].isHo=='1'){
             sessionManagement.clearSession();
            Get.offAllNamed(RoutesName.loginScreen);
-        //    Get.off(RoutesName.loginScreen);
-            Utils.sanckBarError(
-                'Message !', "Cluster User Can Not Access Mobile Application.");
+            Utils.sanckBarError('Message !', "Cluster User Can Not Access Mobile Application.");
             return;
           }
 

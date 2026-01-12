@@ -391,7 +391,6 @@ class SalesCycleScreen extends StatelessWidget{
         subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               _buildLabelWithValue(label: "Sales Cycle Id: ", value: salesCycleController.saleCycleList[position].salesCycleId,),
               _buildLabelWithValue(label: "Task Id : ", value: salesCycleController.saleCycleList[position].taskId,),
               _buildLabelWithValue(
@@ -562,6 +561,8 @@ class SalesCycleScreen extends StatelessWidget{
       ],
     );
   }
+
+
   showConfirmCompleteDialog(BuildContext context, int index){
     showDialog(
       context: context,
@@ -797,82 +798,7 @@ class SalesCycleScreen extends StatelessWidget{
                       ),
                     ),
                   ),
-                  /*Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(
-                                color: AllColors.primaryDark,
-                                width: 1),
-                          )),
-                          onPressed: () {
-                            Get.back();
-                            salesCycleController.SaveFilterData();
-                            salesCycleController.pageNumber = 0;
-                            salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "","","");
-                          },
-                          child: Text(
-                            'Submit',
-                            style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.sisxteen,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                        const SizedBox(width: 3,),
-                        ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.redColor, width: 1),
-                            )),
-                            onPressed: () {
-                              Get.back();
-                              salesCycleController.clearAllFieldOfFilter();
-                              salesCycleController.clearFilterData();
-                              salesCycleController.pageNumber=0;
-                              salesCycleController.getsalesCycleData(salesCycleController.pageNumber,"","","");
 
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        const SizedBox(width: 3,),
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(color: AllColors.green, width: 1),
-                          )),
-                          onPressed: () {
-                            Get.back();
-                            salesCycleController.getFilterData();
-                            *//*salesCycleController.pageNumber=0;
-                            salesCycleController.getsalesCycleData(salesCycleController.pageNumber,"","","");*//*
-
-                          },
-                          child: Text(
-                            'SavedFilter',
-                            style: GoogleFonts.poppins(
-                                color: AllColors.green,
-                                fontSize: AllFontSize.sisxteen,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Row(
@@ -883,7 +809,6 @@ class SalesCycleScreen extends StatelessWidget{
                           textColor: AllColors.primaryDark1,
                           onTap: () {
                             Get.back();
-
                             salesCycleController.pageNumber = 0;
                             salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "", "");
                           },
@@ -897,6 +822,7 @@ class SalesCycleScreen extends StatelessWidget{
                           textColor: AllColors.redColor,
                           onTap: () {
                             Get.back();
+                            salesCycleController.filterDataChecker.value='';
                             salesCycleController.clearAllFieldOfFilter();
                             salesCycleController.clearFilterData();
                             salesCycleController.pageNumber = 0;
@@ -913,6 +839,7 @@ class SalesCycleScreen extends StatelessWidget{
                           textColor: AllColors.green,
                           onTap: () {
                             Get.back();
+                            salesCycleController.filterDataChecker.value='';
                             salesCycleController.SaveFilterData();
                           },
                         )),
@@ -1182,6 +1109,15 @@ class SalesCycleScreen extends StatelessWidget{
 
   bindSaleCycleOwnerFilter(BuildContext context) {
     return Obx((){
+      if (salesCycleController.AccountOwner_controller.value.text.isNotEmpty && salesCycleController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCycleController.AccountOwner_controller.value.text.split(',');
+        salesCycleController.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: salesCycleController.employee_Member_list,
         itemAsString: (EmployeeMemberModel u) => u.fullName??"",
@@ -1248,6 +1184,16 @@ class SalesCycleScreen extends StatelessWidget{
 
   bindProductCategoryDropDown(BuildContext context) {
     return Obx(() {
+      if (salesCycleController.productCategoryController.value.text.isNotEmpty && salesCycleController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCycleController.productCategoryController.value.text.split(',');
+
+        salesCycleController.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: salesCycleController.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
@@ -1440,6 +1386,16 @@ class SalesCycleScreen extends StatelessWidget{
 
   bindCompProfileTypeDropDown(BuildContext context) {
     return Obx(() {
+      if (salesCycleController.companyProfileTypeController.value.text.isNotEmpty && salesCycleController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCycleController.companyProfileTypeController.value.text.split('|');
+
+        salesCycleController.selected_company_type_list.value =
+            List.generate(nameList.length, (index) {
+              return CompanyTypeModal(
+                description: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CompanyTypeModal>.multiSelection(
         items: salesCycleController.company_profile_type_list,
         itemAsString: (CompanyTypeModal u) => u.description ?? "",
@@ -2236,9 +2192,6 @@ class SalesCycleScreen extends StatelessWidget{
       );
     });
   }
-
-
-
 
 
 }

@@ -500,6 +500,24 @@ class SessionManagement {
     prefs.remove("sale_cycle_data");
   }
 
+
+  Future<void> saveTaskApproverData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("TaskApprover_dashboard_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getTaskApproverData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("TaskApprover_dashboard_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearTaskApproverData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("TaskApprover_dashboard_data");
+  }
+
+
+
+
   //todo dashboard
   Future<void> saveFunnelDashboardData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
@@ -570,5 +588,6 @@ class SessionManagement {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("DSAR_dashboard_data");
   }
+
 
 }

@@ -5835,6 +5835,7 @@ class SalesCycleVm extends GetxController {
     });
   }
 
+  RxString filterDataChecker = ''.obs;
   void SaveFilterData() async{
     await sessionManagement.saveSaleCycleData({
       'sale_cycle_stage': SaleCycleStatusController.value.text,
@@ -5854,10 +5855,12 @@ class SalesCycleVm extends GetxController {
       'district': district_controller.value.text,
       'expected_closure_date': filterExpectedClosuredateController.value.text,
       'created_by': createdByController.value.text,
+      'createdOn_Controller': createdOnCnontroller.value.text,
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
       'account_owner': AccountOwner_controller.value.text,
     });
+    filterDataChecker.value='';
 
   }
 
@@ -5881,14 +5884,17 @@ class SalesCycleVm extends GetxController {
     district_controller.value.text=getFilterData["district"];
     filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"];
     createdByController.value.text=getFilterData["created_by"];
+    createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
     RegionName_controller.value.text=getFilterData["region_name"];
     clusterName_controller.value.text=getFilterData["cluster_name"];
     AccountOwner_controller.value.text=getFilterData["account_owner"];
     pageNumber=0;
+    filterDataChecker.value='1';
     getsalesCycleData(pageNumber,"","","");
   }
 
   void clearFilterData() {
+    filterDataChecker.value='';
     sessionManagement.clearSaleCycleData();
   }
 

@@ -691,73 +691,12 @@ class TaskMasterScreen extends StatelessWidget {
           },
           subtitle: Column(
             children: [
-
+              _buildLabelWithValue(label: "Task Id: ", value: TaskMaster_page_controller.Task_Master_list[position].taskId??"",),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    "Task Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .3,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskId!,
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .taskId!,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Manager Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width*0.4,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .approvedFullName??"",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .approvedFullName??"",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Account Name : ",
+                    "Contact Name : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -797,66 +736,16 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .contactName!,
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .contactName!,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Type Of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .typeOfCall!,
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .typeOfCall!,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _buildLabelWithValue(label: "Customer Code: ", value: TaskMaster_page_controller.Task_Master_list[position].accountCode??"",),
+              _buildLabelWithValue(label: "Due Date: ", value: TaskMaster_page_controller.Task_Master_list[position].taskDueDate??"",),
+              _buildLabelWithValue(label: "Contact Name: ", value: TaskMaster_page_controller.Task_Master_list[position].contactName??"",),
+              _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
+              _buildLabelWithValue(label: "Mode Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
+              _buildLabelWithValue(label: "Task Remark: ", value: TaskMaster_page_controller.Task_Master_list[position].taskRemarks??"",),
+              _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.Task_Master_list[position].purposeOfVisit??"",),
+              _buildLabelWithValue(label: "Company Profile Type: ", value: TaskMaster_page_controller.Task_Master_list[position].companyProfileType??"",),
+              _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
+              _buildLabelWithValue(label: "Last Activity Updated On: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??"",),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -913,203 +802,21 @@ class TaskMasterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Mode of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .methodOfCall??"",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .methodOfCall??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Product Category : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .productCategory ?? "",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .productCategory ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .createdFullName! +
-                          "| ${StaticMethod.dateTimeToDate(
-                              TaskMaster_page_controller
-                                  .Task_Master_list[position]
-                                  .createdOn!)}",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .createdFullName! +
-                            " | ${StaticMethod.dateTimeToDate(
-                                TaskMaster_page_controller
-                                    .Task_Master_list[position]
-                                    .createdOn!)}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Due Date : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskDueDate,
-                      child: Text(" ${TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskDueDate ??
-                          ""} ${pipeLine} ${TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskDueTime } "
-                        ,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Remarks : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position].taskRemarks ?? "",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position].taskRemarks ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-
-                    ),
-                  ),
-                ],
-              ),
+              _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[position].productCategory??"",),
+              _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[position].alongWithPersonName??"",),
+              _buildLabelWithValue(label: "Pin Code: ", value: TaskMaster_page_controller.Task_Master_list[position].postCode??"",),
+              _buildLabelWithValue(label: "District: ", value: TaskMaster_page_controller.Task_Master_list[position].district??"",),
+              _buildLabelWithValue(label: "Cluster Name: ", value: TaskMaster_page_controller.Task_Master_list[position].clustureHeadValue??"",),
+              _buildLabelWithValue(label: "Region Name: ", value: TaskMaster_page_controller.Task_Master_list[position].branchHeadValue??"",),
+              _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
+              _buildLabelWithValue(label: "Created On: ", value:StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
+              _buildLabelWithValue(label: "Reporting Manager: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
+              _buildLabelWithValue(label: "Approved On: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].approvedOn??""),),
               Visibility(
                 visible: TaskMaster_page_controller.Task_Master_list[position]
                     .taskStatus == 'Rejected' ? true : false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Rejected Reason : ",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Tooltip(
-                        message: TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .rejectReason??"",
-                        child: Text(
-                          TaskMaster_page_controller
-                              .Task_Master_list[position]
-                              .rejectReason??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child:  _buildLabelWithValue(label: "Rejected Reason: ", value: TaskMaster_page_controller.Task_Master_list[position].rejectReason??"",),
+
               ),
             ],
           ),
@@ -1206,6 +913,38 @@ class TaskMasterScreen extends StatelessWidget {
           )
 
       ),
+    );
+  }
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    Color color = AllColors.textColor,
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -1796,6 +1535,63 @@ class TaskMasterScreen extends StatelessWidget {
                     ),
                   ),
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.getTaskMaster(
+                                TaskMaster_page_controller.pageNumber,
+                                TaskMaster_page_controller.is_Active.toString(),
+                                '',
+                                '',
+                                TaskMaster_page_controller.Task_status_controller.text.toString(),
+                                TaskMaster_page_controller.date_filter,
+                                TaskMaster_page_controller.is_done.value);
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.resetAllFieldOfFilter();
+                            TaskMaster_page_controller.clearFilterData();
+                            TaskMaster_page_controller.pageNumber = 0;
+                            TaskMaster_page_controller.getTaskMaster(
+                                TaskMaster_page_controller.pageNumber,
+                                TaskMaster_page_controller.is_Active.toString(),
+                                '',
+                                '',
+                                TaskMaster_page_controller.Task_status_controller.text.toString(),
+                                TaskMaster_page_controller.date_filter,
+                                TaskMaster_page_controller.is_done.value);
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                 /* Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1871,7 +1667,7 @@ class TaskMasterScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -1882,6 +1678,40 @@ class TaskMasterScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
   bindFilterData(BuildContext context, String labelText, TextEditingController controller) {
     return TextField(
@@ -1915,6 +1745,16 @@ class TaskMasterScreen extends StatelessWidget {
 
   bindLastActivityStatus(BuildContext context) {
     return Obx(() {
+      if (TaskMaster_page_controller.lastActivityStatus_Controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.lastActivityStatus_Controller.value.text.split('|');
+
+        TaskMaster_page_controller.selectedDSARStatusList.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
         items: TaskMaster_page_controller.DSARStatus_Master_list,
         itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
@@ -2484,6 +2324,16 @@ class TaskMasterScreen extends StatelessWidget {
   
   bindTaskOwnerFilter(BuildContext context) {
     return Obx((){
+      if (TaskMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.AccountOwner_controller.value.text.split(',');
+
+        TaskMaster_page_controller.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: TaskMaster_page_controller.employee_Member_list,
         itemAsString: (EmployeeMemberModel u) => u.fullName??"",
@@ -2551,10 +2401,7 @@ class TaskMasterScreen extends StatelessWidget {
 
   Widget bindTaskStatusDropDown(context) {
     return DropdownMenu<String>(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width - 15,
+      width: MediaQuery.of(context).size.width - 15,
       controller: TaskMaster_page_controller.Task_status_controller,
       label: Text(
         "Task Status",
@@ -3360,6 +3207,16 @@ class TaskMasterScreen extends StatelessWidget {
   }
   bindTypeOfCallDropDown(BuildContext context) {
     return Obx(() {
+      if (TaskMaster_page_controller.Type_of_call_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.Type_of_call_controller.value.text.split('|');
+
+        TaskMaster_page_controller.Selection_CallStatus_Master_list.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
         items: TaskMaster_page_controller.CallStatus_Master_list,
         itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
@@ -3426,6 +3283,16 @@ class TaskMasterScreen extends StatelessWidget {
   }
   bindMethodOfCallDropDown(BuildContext context) {
     return Obx(() {
+      if (TaskMaster_page_controller.method_of_call_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.method_of_call_controller.value.text.split('|');
+
+        TaskMaster_page_controller.Selection_MethodOfCall_Master_list.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
         items: TaskMaster_page_controller.MethodOfCall_Master_list,
         itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
@@ -3491,8 +3358,18 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
+
   bindProductCategoryDropDown(BuildContext context) {
     return Obx(() {
+      if (TaskMaster_page_controller.product_category_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.product_category_controller.value.text.split('|');
+        TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: TaskMaster_page_controller.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
@@ -3603,8 +3480,19 @@ class TaskMasterScreen extends StatelessWidget {
     );
 
   }
+
   bindCompProfileTypeDropDown(BuildContext context) {
     return Obx(() {
+      if (TaskMaster_page_controller.companyProfileTypeController.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.companyProfileTypeController.value.text.split('|');
+
+        TaskMaster_page_controller.selected_company_type_list.value =
+            List.generate(nameList.length, (index) {
+              return CompanyTypeModal(
+                description: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CompanyTypeModal>.multiSelection(
         items: TaskMaster_page_controller.company_profile_type_list,
         itemAsString: (CompanyTypeModal u) => u.description ?? "",

@@ -241,358 +241,70 @@ class TaskApprovalListScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Task Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .3,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskId??"",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .taskId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Manager Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    TaskMaster_page_controller
-                        .Task_Master_list[position]
-                        .approvedFullName??"",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Account Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .accountName??"",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .accountName??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .contactName??"",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .contactName??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Type Of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .typeOfCall??"",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .typeOfCall??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Sale Cycle ID : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Mode of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .methodOfCall??"",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .methodOfCall??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Product Category : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .productCategory ?? "",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .productCategory ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .createdFullName??"" +
-                          "| ${StaticMethod.dateTimeToDate(
-                              TaskMaster_page_controller
-                                  .Task_Master_list[position]
-                                  .createdOn??"")}",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .createdFullName??"" +
-                            "| ${StaticMethod.dateTimeToDate(
-                                TaskMaster_page_controller
-                                    .Task_Master_list[position]
-                                    .createdOn??"")}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Due Date : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskDueDate,
-                      child: Text(" ${TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskDueDate ??
-                          ""} ${pipeLine} ${TaskMaster_page_controller
-                          .Task_Master_list[position]
-                          .taskDueTime } "
-                        ,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Remarks : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: TaskMaster_page_controller
-                          .Task_Master_list[position].taskRemarks ?? "",
-                      child: Text(
-                        TaskMaster_page_controller
-                            .Task_Master_list[position].taskRemarks ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-
-                    ),
-                  ),
-                ],
-              ),
+              _buildLabelWithValue(label: "Task Id: ", value: TaskMaster_page_controller.Task_Master_list[position].taskId??"",),
+              _buildLabelWithValue(label: "Customer Name: ", value: TaskMaster_page_controller.Task_Master_list[position].accountName??"",),
+              _buildLabelWithValue(label: "Customer Code: ", value: TaskMaster_page_controller.Task_Master_list[position].accountCode??"",),
+              _buildLabelWithValue(label: "Contact Name: ", value: TaskMaster_page_controller.Task_Master_list[position].contactName??"",),
+              _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
+              _buildLabelWithValue(label: "Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
+              _buildLabelWithValue(label: "Task Remarks: ", value: TaskMaster_page_controller.Task_Master_list[position].taskRemarks??"",),
+              _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.Task_Master_list[position].purposeOfVisit??"",),
+              _buildLabelWithValue(label: "Company Profile Type: ", value: TaskMaster_page_controller.Task_Master_list[position].companyProfileType??"",),
+              _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
+              _buildLabelWithValue(label: "Last Activity Updated On: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??"",),
+              _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[position].productCategory??"",),
+              _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[position].alongWithPersonName??"",),
+              _buildLabelWithValue(label: "Due Date: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               Visibility(
                 visible: TaskMaster_page_controller.Task_Master_list[position]
                     .taskStatus == 'Rejected' ? true : false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Rejected Reason : ",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Tooltip(
-                        message: TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .rejectReason??"",
-                        child: Text(
-                          TaskMaster_page_controller
-                              .Task_Master_list[position]
-                              .methodOfCall??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child:  _buildLabelWithValue(label: "Rejected Reason: ", value: TaskMaster_page_controller.Task_Master_list[position].rejectReason??"",),
+
               ),
+              _buildLabelWithValue(label: "Pin Code: ", value: TaskMaster_page_controller.Task_Master_list[position].postCode??"",),
+              _buildLabelWithValue(label: "District: ", value: TaskMaster_page_controller.Task_Master_list[position].district??"",),
+              _buildLabelWithValue(label: "Cluster Name: ", value: TaskMaster_page_controller.Task_Master_list[position].clustureHeadValue??"",),
+              _buildLabelWithValue(label: "Region Name: ", value: TaskMaster_page_controller.Task_Master_list[position].branchHeadValue??"",),
+              _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
+              _buildLabelWithValue(label: "Created On: ", value:StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
+              _buildLabelWithValue(label: "Reporting Manager: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
+
             ],
           ),
-          /*trailing: Icon(Icons.remove_red_eye, color: AllColors.textColor,),*/
+
       ),
+    );
+  }
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    Color color = AllColors.textColor,
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -664,22 +376,16 @@ class TaskApprovalListScreen extends StatelessWidget{
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: 5,),
-                              bindData(context,'Task Id',TaskMaster_page_controller.filterTask_Id_controller),
+                              bindData(context,'Task Id',TaskMaster_page_controller.filterTask_Id_controller.value),
                               SizedBox(height: 5,),
-                              bindData(context,'Customer Name',TaskMaster_page_controller.account_Name_controller),
+                              bindData(context,'Customer Name',TaskMaster_page_controller.account_Name_controller.value),
                               SizedBox(height: 10,),
-                              bindData(context,'Customer Code',TaskMaster_page_controller.account_code_controller),
+                              bindData(context,'Customer Code',TaskMaster_page_controller.account_code_controller.value),
                               SizedBox(height: 10,),
-                              //bindTypeOfCall(),
                               bindTypeOfCallDropDown(context),
                               SizedBox(height: 10,),
-                              //bindMethodOfcall(),
                               bindMethodOfCallDropDown(context),
                               SizedBox(height: 10,),
-                              /*bindCreatedBy(),
-                              SizedBox(height: 10,),*/
-                              /*filterAccountOwner(),
-                              SizedBox(height: 10,),*/
                               bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
                               bindLastActivityStatus(context),
@@ -692,10 +398,8 @@ class TaskApprovalListScreen extends StatelessWidget{
                               SizedBox(height: 10,),
                               bindData(context,'District',TaskMaster_page_controller.district_controller.value),
                               SizedBox(height: 10,),
-                              //bindBranchHead(),
                               bindClusterNameFilter(context),
                               SizedBox(height: 10,),
-                              //bindClusterHead(),
                               bindRegionNameFilter(context),
                               SizedBox(height: 10,),
                               bindAccountOwnerFilter(context),
@@ -713,72 +417,53 @@ class TaskApprovalListScreen extends StatelessWidget{
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark,
-                                      width: 1),
-                                )),
-                            onPressed: () {
-                              Get.back();
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.getTaskMasterApprovalList(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.SaleCycleActive_Controller.text,
-                                  );
-                              //TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.IsActive_controller.text);
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.redColor, width: 1),
-                                )),
-                            onPressed: () {
-                              Get.back();
-                              TaskMaster_page_controller.resetAllFieldOfFilter();
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.getTaskMasterApprovalList(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active.toString(),
-                                 );
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.pageNumber = 0;
+                            TaskMaster_page_controller.getTaskMasterApprovalList(
+                              TaskMaster_page_controller.pageNumber,
+                              TaskMaster_page_controller.SaleCycleActive_Controller.text,
+                            );
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.resetAllFieldOfFilter();
+                            TaskMaster_page_controller.clearFilterData();
+                            TaskMaster_page_controller.pageNumber = 0;
+                            TaskMaster_page_controller.getTaskMasterApprovalList(
+                              TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(),);
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.SaveFilterData();
+                          },
+                        )),
                       ],
                     ),
-                  ),
+                  )
                 ],
               ),
             );
@@ -786,6 +471,40 @@ class TaskApprovalListScreen extends StatelessWidget{
 
         );
       },
+    );
+  }
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -818,245 +537,18 @@ class TaskApprovalListScreen extends StatelessWidget{
       },
     );
   }
-
-  bindAccountOwnerFilter(BuildContext context) {
-    return Obx((){
-      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
-        items: TaskMaster_page_controller.employee_Member_list,
-        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
-        selectedItems: TaskMaster_page_controller.SelectedEmployee_Member_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: TaskMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
-            hintText: "Task Owner",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              " Task Owner",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<EmployeeMemberModel> selectedList) {
-          TaskMaster_page_controller.SelectedEmployee_Member_list.value =
-              selectedList;
-          TaskMaster_page_controller.AccountOwner_controller.value.text =
-              selectedList.map((e) => e.fullName).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.fullName??""),
-              ),
-        ),
-      );
-    });
-
-  }
-
-  bindCompProfileTypeDropDown(BuildContext context) {
-    return Obx(() {
-      return DropdownSearch<CompanyTypeModal>.multiSelection(
-        items: TaskMaster_page_controller.company_profile_type_list,
-        itemAsString: (CompanyTypeModal u) => u.description ?? "",
-        selectedItems: TaskMaster_page_controller.selected_company_type_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: TaskMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
-            hintText: "Company Profile Type",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Company Profile Type",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.description).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<CompanyTypeModal> selectedList) {
-          TaskMaster_page_controller.selected_company_type_list.value = selectedList;
-          TaskMaster_page_controller.companyProfileTypeController.value.text =
-              selectedList.map((e) => e.description).join('|');
-        },
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          itemBuilder: (context, item, isSelected) => ListTile(
-            title: Text(item.description ?? ""),
-          ),
-        ),
-      );
-    });
-  }
-  bindLastActivityStatus(BuildContext context) {
-    return Obx(() {
-      return DropdownSearch<CallStatusMasterModel>.multiSelection(
-        items: TaskMaster_page_controller.DSARStatus_Master_list,
-        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
-        selectedItems: TaskMaster_page_controller.selectedDSARStatusList,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText:
-            TaskMaster_page_controller.selectedDSARStatusList.isNotEmpty
-                ? "Last Activity Status"
-                : null,
-            hintText: "Last Activity Status",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Last Activity Status",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.taskStatus).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<CallStatusMasterModel> selectedList) {
-          TaskMaster_page_controller.selectedDSARStatusList.value = selectedList;
-          TaskMaster_page_controller.lastActivityStatus_Controller.value.text =
-              selectedList.map((e) => e.taskStatus).join('|');
-        },
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          itemBuilder: (context, item, isSelected) => ListTile(
-            title: Text(item.taskStatus ?? ""),
-          ),
-        ),
-      );
-    });
-  }
-
-  Widget bindSaleCycleActiveDropDown(context) {
-    return DropdownMenu<String>(
-      width: MediaQuery.of(context).size.width - 15,
-      controller: TaskMaster_page_controller.SaleCycleActive_Controller,
-      label: Text(
-        "Sale Cycle Active",
-        style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.sisxteen,
-            fontWeight: FontWeight.w500),
-      ),
-
-      inputDecorationTheme: const InputDecorationTheme(
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(
-            color: AllColors.primaryDark1,),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-
-        border: OutlineInputBorder(
-          borderSide: BorderSide(
-              color: AllColors.primaryDark1), // Change the color to green
-        ),
-        filled: false,
-        contentPadding: EdgeInsets.symmetric(
-            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-      ),
-      onSelected: (String? selection) {
-        print(selection);
-        TaskMaster_page_controller.SaleCycleActive_Controller.text =
-            _displaySaleCycleActiveForOption(selection!).toString();
-      },
-
-      dropdownMenuEntries: TaskMaster_page_controller.SaleCycleActiveTypeList
-          .map<DropdownMenuEntry<String>>((String e) {
-        return DropdownMenuEntry<String>(
-            value: e, label: e!, style: ButtonStyle(
-          foregroundColor: MaterialStateProperty.all<Color>(
-              AllColors.primaryDark1),));
-      }).toList(),
-    );
-
-  }
-
   bindTypeOfCallDropDown(BuildContext context) {
     return Obx(() {
+      if (TaskMaster_page_controller.Type_of_call_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.Type_of_call_controller.value.text.split('|');
+
+        TaskMaster_page_controller.Selection_CallStatus_Master_list.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
         items: TaskMaster_page_controller.CallStatus_Master_list,
         itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
@@ -1123,6 +615,16 @@ class TaskApprovalListScreen extends StatelessWidget{
   }
   bindMethodOfCallDropDown(BuildContext context) {
     return Obx(() {
+      if (TaskMaster_page_controller.method_of_call_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.method_of_call_controller.value.text.split('|');
+
+        TaskMaster_page_controller.Selection_MethodOfCall_Master_list.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CallStatusMasterModel>.multiSelection(
         items: TaskMaster_page_controller.MethodOfCall_Master_list,
         itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
@@ -1188,34 +690,36 @@ class TaskApprovalListScreen extends StatelessWidget{
       );
     });
   }
-
-  bindProductCategory(BuildContext context) {
+  bindCompProfileTypeDropDown(BuildContext context) {
     return Obx(() {
-      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
-        items: TaskMaster_page_controller.Item_Category_master_list_without_task,
-        itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
-        selectedItems: TaskMaster_page_controller.Selected_Item_Category_master_list_without_task,
+      if (TaskMaster_page_controller.companyProfileTypeController.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.companyProfileTypeController.value.text.split('|');
+
+        TaskMaster_page_controller.selected_company_type_list.value =
+            List.generate(nameList.length, (index) {
+              return CompanyTypeModal(
+                description: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<CompanyTypeModal>.multiSelection(
+        items: TaskMaster_page_controller.company_profile_type_list,
+        itemAsString: (CompanyTypeModal u) => u.description ?? "",
+        selectedItems: TaskMaster_page_controller.selected_company_type_list,
         dropdownDecoratorProps: DropDownDecoratorProps(
           baseStyle: TextStyle(color: Colors.black),
           dropdownSearchDecoration: InputDecoration(
             filled: false,
-            labelText: TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
-            hintText:  "Product Category" ,
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
+            labelText: TaskMaster_page_controller.selected_company_type_list.isNotEmpty ? "Company Profile Type" : null,
+            hintText: "Company Profile Type",
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
           ),
         ),
         dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
           if (selectedItems.isEmpty) {
             return Text(
-              "Product Category",
+              "Company Profile Type",
               style: GoogleFonts.poppins(
                 color: AllColors.primaryDark1, // Match your hint color
                 fontSize: AllFontSize.sisxteen,
@@ -1226,15 +730,15 @@ class TaskApprovalListScreen extends StatelessWidget{
           return SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Text(
-              selectedItems.map((e) => e.categoryName).join(', '),
+              selectedItems.map((e) => e.description).join(', '),
               style: TextStyle(color: Colors.black), // Only black text
             ),
           );
         },
-        onChanged: (List<ItemCategoryMstModel> selectedList) {
-          TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.value = selectedList;
-          TaskMaster_page_controller.product_category_controller.value.text =
-              selectedList.map((e) => e.categoryName).join('|');
+        onChanged: (List<CompanyTypeModal> selectedList) {
+          TaskMaster_page_controller.selected_company_type_list.value = selectedList;
+          TaskMaster_page_controller.companyProfileTypeController.value.text =
+              selectedList.map((e) => e.description).join('|');
         },
         popupProps: PopupPropsMultiSelection.dialog(
           showSearchBox: true,
@@ -1249,18 +753,91 @@ class TaskApprovalListScreen extends StatelessWidget{
             ),
           ),
           itemBuilder: (context, item, isSelected) => ListTile(
-            title: Text(item.categoryName ?? ""),
+            title: Text(item.description ?? ""),
           ),
         ),
       );
     });
   }
-  Widget bindProductCategoryTypeDropDown(context) {
+
+  bindLastActivityStatus(BuildContext context) {
+    return Obx(() {
+      if (TaskMaster_page_controller.lastActivityStatus_Controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.lastActivityStatus_Controller.value.text.split('|');
+
+        TaskMaster_page_controller.selectedDSARStatusList.value =
+            List.generate(nameList.length, (index) {
+              return CallStatusMasterModel(
+                taskStatus: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<CallStatusMasterModel>.multiSelection(
+        items: TaskMaster_page_controller.DSARStatus_Master_list,
+        itemAsString: (CallStatusMasterModel u) => u.taskStatus ?? "",
+        selectedItems: TaskMaster_page_controller.selectedDSARStatusList,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText:
+            TaskMaster_page_controller.selectedDSARStatusList.isNotEmpty
+                ? "Last Activity Status"
+                : null,
+            hintText: "Last Activity Status",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Last Activity Status",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.taskStatus).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<CallStatusMasterModel> selectedList) {
+          TaskMaster_page_controller.selectedDSARStatusList.value = selectedList;
+          TaskMaster_page_controller.lastActivityStatus_Controller.value.text =
+              selectedList.map((e) => e.taskStatus).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.taskStatus ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+  Widget bindSaleCycleActiveDropDown(context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width - 15,
-      controller: TaskMaster_page_controller.product_category_type_Controller.value,
+      controller: TaskMaster_page_controller.SaleCycleActive_Controller,
       label: Text(
-        "Product Category Type",
+        "Sale Cycle Active",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.sisxteen,
@@ -1288,10 +865,11 @@ class TaskApprovalListScreen extends StatelessWidget{
       ),
       onSelected: (String? selection) {
         print(selection);
-        TaskMaster_page_controller.product_category_type_Controller.value.text =
+        TaskMaster_page_controller.SaleCycleActive_Controller.text =
             _displaySaleCycleActiveForOption(selection!).toString();
       },
-      dropdownMenuEntries: TaskMaster_page_controller.productCategoryTypeList
+
+      dropdownMenuEntries: TaskMaster_page_controller.SaleCycleActiveTypeList
           .map<DropdownMenuEntry<String>>((String e) {
         return DropdownMenuEntry<String>(
             value: e, label: e!, style: ButtonStyle(
@@ -1301,74 +879,10 @@ class TaskApprovalListScreen extends StatelessWidget{
     );
 
   }
-
-  bindCreatedOn(BuildContext context) {
-    return TextField(
-        cursorColor: AllColors.primaryDark1,
-        controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Created On',
-            labelText: 'Created On',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
-        ),
-        onTap: () async {
-          DateTime start_date = new DateTime(1900);
-          DateTime ending_date = new DateTime(2200);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  // Header background color
-                  //accentColor: AllColors.primaryDark1, // Color of the buttons
-                  colorScheme: ColorScheme.light(
-                      primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(
-                      textTheme: ButtonTextTheme.primary),
-                ),
-                child: child!,
-              );
-            },
-
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            TaskMaster_page_controller.filterTaskCreationOnController.value.text = outputFormat.format(date);
-          else
-            TaskMaster_page_controller.filterTaskCreationOnController.value.text = "";
-        }
-
-    );
-  }
-
-
   filterWithTaskDueDate(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,
-        controller: TaskMaster_page_controller.filterTaskDuedateController
-            .value,
+        controller: TaskMaster_page_controller.filterTaskDuedateController.value,
         decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.two, horizontal: AllFontSize.ten
@@ -1428,7 +942,6 @@ class TaskApprovalListScreen extends StatelessWidget{
 
     );
   }
-
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = TaskMaster_page_controller.clusterGetByEmailList;
@@ -1896,6 +1409,264 @@ class TaskApprovalListScreen extends StatelessWidget{
     });
   }
 
+  bindAccountOwnerFilter(BuildContext context) {
+    return Obx((){
+      if (TaskMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.AccountOwner_controller.value.text.split(',');
 
+        TaskMaster_page_controller.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
+      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
+        items: TaskMaster_page_controller.employee_Member_list,
+        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
+        selectedItems: TaskMaster_page_controller.SelectedEmployee_Member_list,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.SelectedEmployee_Member_list.isNotEmpty?"Account Owner":null,
+            hintText: "Task Owner",
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          // Custom builder to just show comma-separated names
+          if (selectedItems.isEmpty) {
+            return Text(
+              " Task Owner",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.fullName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<EmployeeMemberModel> selectedList) {
+          TaskMaster_page_controller.SelectedEmployee_Member_list.value =
+              selectedList;
+          TaskMaster_page_controller.AccountOwner_controller.value.text =
+              selectedList.map((e) => e.fullName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) =>
+              ListTile(
+                title: Text(item.fullName??""),
+              ),
+        ),
+      );
+    });
+
+  }
+  bindCreatedOn(BuildContext context) {
+    return TextField(
+        cursorColor: AllColors.primaryDark1,
+        controller: TaskMaster_page_controller.filterTaskCreationOnController.value,
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.two, horizontal: AllFontSize.ten
+            ),
+            suffixIcon: Icon(Icons.calendar_month),
+            hintText: 'Created On',
+            labelText: 'Created On',
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+            )
+        ),
+        onTap: () async {
+          DateTime start_date = new DateTime(1900);
+          DateTime ending_date = new DateTime(2200);
+          FocusScope.of(context).requestFocus(new FocusNode());
+          DateTime? date = await showDatePicker(
+            context: context,
+            initialDate: DateTime.now(),
+            firstDate: start_date,
+            lastDate: ending_date,
+            builder: (BuildContext context, Widget? child) {
+              return Theme(
+                data: ThemeData.light().copyWith(
+                  primaryColor: AllColors.primaryDark1,
+                  // Header background color
+                  //accentColor: AllColors.primaryDark1, // Color of the buttons
+                  colorScheme: ColorScheme.light(
+                      primary: AllColors.primaryDark1),
+                  buttonTheme: ButtonThemeData(
+                      textTheme: ButtonTextTheme.primary),
+                ),
+                child: child!,
+              );
+            },
+
+          );
+          var outputFormat = DateFormat('yyyy-MM-dd');
+          if (date != null && date != "")
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text = outputFormat.format(date);
+          else
+            TaskMaster_page_controller.filterTaskCreationOnController.value.text = "";
+        }
+
+    );
+  }
+
+  bindProductCategory(BuildContext context) {
+    return Obx(() {
+      if (TaskMaster_page_controller.product_category_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.product_category_controller.value.text.split('|');
+        TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: TaskMaster_page_controller.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
+        selectedItems: TaskMaster_page_controller.Selected_Item_Category_master_list_without_task,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
+            hintText:  "Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
+            ),
+          );
+        },
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          TaskMaster_page_controller.Selected_Item_Category_master_list_without_task.value = selectedList;
+          TaskMaster_page_controller.product_category_controller.value.text =
+              selectedList.map((e) => e.categoryName).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.categoryName ?? ""),
+          ),
+        ),
+      );
+    });
+  }
+
+  Widget bindProductCategoryTypeDropDown(context) {
+
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width - 15,
+      controller: TaskMaster_page_controller.product_category_type_Controller.value,
+      label: Text(
+        "Product Category Type",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.sisxteen,
+            fontWeight: FontWeight.w500),
+      ),
+
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        TaskMaster_page_controller.product_category_type_Controller.value.text =
+            _displaySaleCycleActiveForOption(selection!).toString();
+      },
+      dropdownMenuEntries: TaskMaster_page_controller.productCategoryTypeList
+          .map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e, label: e!, style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(
+              AllColors.primaryDark1),));
+      }).toList(),
+    );
+
+  }
 
 }

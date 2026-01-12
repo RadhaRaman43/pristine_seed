@@ -433,7 +433,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                               bindData(context,'Purchase Process',salesCyclePendingForApprovalController.purchaseProcessController.value),
                               SizedBox(height: 10,),
 
-
                               bindCompProfileTypeDropDown(context),
 
                               SizedBox(height: 10,),

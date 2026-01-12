@@ -203,11 +203,16 @@ class Taskmastervm extends GetxController{
         print("isAdminWritePermission.valueTask....${isAdminWritePermission.value.toString()}");
         getMenuList();
         print("List${userGeoHierarchyy.length}");
+        TaskStatusListTypeList.value = ['All','Pending For Approval', 'Approved', 'Rejected'];
+        SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
+        approveRejectList.value = ['Approve', 'Reject'];
+        Item_Category_Selected_list.value = [];
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
         //getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
         bindFinancialYear();
         product_category_type_Controller.value.text="Contains";
 
+        getFilterData();
         getClustersGetByEmail();
         getAccountMaster(pageNumber);
         getItemCategoryMstWithoutTaskIdApi();
@@ -215,10 +220,7 @@ class Taskmastervm extends GetxController{
         CallStatusMasterApiHit('Call');
         MethodOfCallMasterApiHit();
         CallDSARsMasterApiHit();
-        TaskStatusListTypeList.value = ['All','Pending For Approval', 'Approved', 'Rejected'];
-        SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
-        approveRejectList.value = ['Approve', 'Reject'];
-        Item_Category_Selected_list.value = [];
+
       if(this.isAdminWritePermission.value==1){
           EmployeeMasterGet('');
       }
@@ -1761,4 +1763,69 @@ class Taskmastervm extends GetxController{
        SelectedEmployee_Member_list.value = [];
   }
 
+    RxString filterDataChecker = ''.obs;
+
+    void SaveFilterData() async{
+      await sessionManagement.saveTaskApproverData({
+        'Task_status_controller': Task_status_controller.value.text,
+        'task_id': filterTask_Id_controller.value.text,
+        'customer_name': account_Name_controller.value.text,
+        'customer_code': account_code_controller.value.text,
+        'Type_of_call_controller': Type_of_call_controller.value.text,
+        'method_of_call_controller': method_of_call_controller.value.text,
+        'company_Profile_Type_Controller': companyProfileTypeController.value.text,
+        'lastActivityStatus_Controller': lastActivityStatus_Controller.value.text,
+        'SaleCycleActive_Controller': SaleCycleActive_Controller.value.text,
+        'Sale_cycle_Id_controller': Sale_cycle_Id_controller.value.text,
+        'filterTaskDuedateController': filterTaskDuedateController.value.text,
+        'createdOnStartToEnd': createdOnStartToEnd.value,
+        'pin_code': postalCodeController.value.text,
+        'district': district_controller.value.text,
+        'region_name': RegionName_controller.value.text,
+        'cluster_name': clusterName_controller.value.text,
+        'account_owner': AccountOwner_controller.value.text,
+        'filterTaskCreationOnController': filterTaskCreationOnController.value.text,
+        'product_category': product_category_controller.value.text,
+        'product_category_type': product_category_type_Controller.value.text,
+        'approved_by_controller': approved_by_controller.value.text,
+      });
+      filterDataChecker.value='';
+
+    }
+
+    void getFilterData() async{
+      Map getFilterData=await sessionManagement.getTaskApproverData();
+
+      Task_status_controller.text=getFilterData["Task_status_controller"];
+      filterTask_Id_controller.text=getFilterData["task_id"];
+      account_Name_controller.text=getFilterData["customer_name"];
+      account_code_controller.text=getFilterData["customer_code"];
+      Type_of_call_controller.value.text=getFilterData["Type_of_call_controller"];
+      method_of_call_controller.value.text=getFilterData["method_of_call_controller"];
+      companyProfileTypeController.value.text=getFilterData["company_Profile_Type_Controller"];
+      lastActivityStatus_Controller.value.text=getFilterData["lastActivityStatus_Controller"];
+      SaleCycleActive_Controller.text=getFilterData["SaleCycleActive_Controller"];
+      Sale_cycle_Id_controller.text=getFilterData["Sale_cycle_Id_controller"];
+      filterTaskDuedateController.value.text=getFilterData["filterTaskDuedateController"];
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"];
+      postalCodeController.value.text=getFilterData["pin_code"];
+      district_controller.value.text=getFilterData["district"];
+      RegionName_controller.value.text=getFilterData["region_name"];
+      clusterName_controller.value.text=getFilterData["cluster_name"];
+      AccountOwner_controller.value.text=getFilterData["account_owner"];
+      filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"];
+      product_category_controller.value.text=getFilterData["product_category"];
+      product_category_type_Controller.value.text=getFilterData["product_category_type"];
+      approved_by_controller.value.text=getFilterData["approved_by_controller"];
+
+      filterDataChecker.value='1';
+      pageNumber=0;
+      //getTaskMaster(pageNumber, is_Active.toString(), '', '', Task_status_controller.text.toString(), date_filter, is_done.value);
+
+    }
+
+    void clearFilterData() {
+      filterDataChecker.value='';
+      sessionManagement.clearTaskApproverData();
+    }
 }
