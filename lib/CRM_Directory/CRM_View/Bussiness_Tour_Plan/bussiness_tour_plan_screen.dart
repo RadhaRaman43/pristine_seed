@@ -698,36 +698,21 @@ class BussinessTourPlanScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindfilterText(context,'Tour ID',businessTourPlanController.filterTourIdController.value),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindfilterText(context,'Touring Region',businessTourPlanController.filterTouringRegionController.value),
-                              SizedBox(
-                                height: 10,
-                              ),
-
+                              SizedBox(height: 10,),
                               bindFilterStartDate(context),
                               SizedBox(height: 10,),
                               bindFilterEndDate(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindfilterText(context,'Created By',businessTourPlanController.filterCreatedByController.value),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindCrteatedOn(context),
 
                             ],
@@ -736,7 +721,49 @@ class BussinessTourPlanScreen extends StatelessWidget{
                       ),
                     ),
                   ),
+
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            businessTourPlanController.pageNumber = 0;
+                            businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            businessTourPlanController.clearFilterData();
+                            businessTourPlanController.clearAllFieldOfFilter();
+                            businessTourPlanController.pageNumber=0;
+                            businessTourPlanController.getBusinessTourPlanData(businessTourPlanController.pageNumber);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            businessTourPlanController.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+
+                 /* Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -792,7 +819,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -802,6 +829,42 @@ class BussinessTourPlanScreen extends StatelessWidget{
       },
     );
   }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   bindFilterStartDate(BuildContext context) {
     return  TextFormField(

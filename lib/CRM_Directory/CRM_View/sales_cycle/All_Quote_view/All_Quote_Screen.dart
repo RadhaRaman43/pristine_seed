@@ -138,6 +138,7 @@ class AllQuoteScreen extends StatelessWidget{
       );
     }
   }
+  
 
   Widget BindCustomerRequestListView(context, int position) {
     String? quoteValidityDate=StaticMethod.convertDateFormat1(pendingDraftQuoteController.PendingDraftQuoteList[position].quoteValidity ?? "");
@@ -203,478 +204,40 @@ class AllQuoteScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Version: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    pendingDraftQuoteController.PendingDraftQuoteList[position].quoteVersion.toString(),
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.end,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Status : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .36,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteStatus ?? "",
-                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteStatus ?? "",
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(saleCycleStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
+              _buildLabelWithValue(label: "Quote Version: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteVersion.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
+              _buildLabelOnTap(label: "Sales Cycle Id: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId ?? "",color:Colors.blueAccent,
+                onTap: (){
+                  saleCycleController.pageNumber = 0;
+                  saleCycleController.filterQuoteAcceptedFlag.value="";
+                  saleCycleController.clearAllFieldOfFilter();
+                  saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!, "ViewHeader", "QuoteApprovalPage");
+                },),
+              _buildLabelWithValue(label: "Customer Code: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountCode ?? "",color:AllColors.textColor),
 
-                      ),
+              _buildLabelOnTap(label: "Customer Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountName ?? "",color:Colors.blueAccent,
+                onTap: (){
+                  account_vm_controller.view='FromQuoteApproval';
+                  contact_vm_controller.view='FromQuoteVIEW';
+                  account_vm_controller.getAccMasterBuyCodeApi(pendingDraftQuoteController.PendingDraftQuoteList[position]
+                      .accountCode!);
+                },),
+              _buildLabelWithValue(label: "Contact Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].contactName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productCategory ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Total Amt: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteTotalAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Gst Amt: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGstAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Gross Amt: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGrossAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Spr No.: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "RH Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "CBH Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM  Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Cluster Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].clustureHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Region Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].zoneHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdBy ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].createdOn ?? "") ,color:AllColors.textColor),
 
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sale Cycle Id : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
-                      saleCycleController.pageNumber = 0;
-                      saleCycleController.filterQuoteAcceptedFlag.value="";
-                      saleCycleController.clearAllFieldOfFilter();
-                      saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .salesCycleId!, "ViewHeader", "FromAllQuotePage");
-                    },
-                    child: Container(
-                      width: size.width * .36,
-                      child: Tooltip(
-                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .salesCycleId ?? "",
-                        child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .salesCycleId ?? "",
-                          style: GoogleFonts.poppins(
-                            color: Colors.blueAccent,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
-
-                        ),
-
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Code : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      account_vm_controller.view = 'FromAllQuotePage';
-                      contact_vm_controller.view = 'FromAllQuotePage';
-                      account_vm_controller.getAccMasterBuyCodeApi(
-                          pendingDraftQuoteController
-                              .PendingDraftQuoteList[position].accountCode!);
-                    },
-                    child: Container(
-                      width: size.width*0.4,
-                      child: Tooltip(
-                        message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountCode  ?? "",
-                        child: Text(
-                          pendingDraftQuoteController.PendingDraftQuoteList[position]
-                              .accountCode ??
-                              "",
-                          overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.end,
-                          style: GoogleFonts.poppins(
-                            color: Colors.blueAccent,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width*0.3,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .accountName  ?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .accountName ??
-                            "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .contactName ?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .contactName ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Validity : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .35,
-                    child: Tooltip(
-                      message: quoteValidityDate.toString(),
-                      child: Text(
-                        quoteValidityDate.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Expected Closure Date: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    expectedClosuredateDate.toString(),
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.end,
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Total Amt : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .37,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteTotalAmount.toString(),
-                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteTotalAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Gst Amt. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteGstAmount.toString(),
-                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteGstAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Gross Amt. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .35,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteGrossAmount.toString(),
-                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteGrossAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Region Name: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .branchHeadValue ?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .branchHeadValue ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Cluster Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .35,
-                    child: Tooltip(
-                      message:  pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .clustureHeadValue ?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .clustureHeadValue ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Spr No. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
-                      child: Text(pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .createdBy?? "",
-                      child: Text(
-                        pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .createdBy ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created On : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: createdOn.toString(),
-                      child: Text(
-                        createdOn.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.end,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -702,8 +265,83 @@ class AllQuoteScreen extends StatelessWidget{
     );
   }
 
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    required Color color,
+
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  Widget _buildLabelOnTap({
+    required String label,
+    required String? value,
+    required Color color,
+    required void Function() onTap,
+
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w500),
+        ),
+        Flexible(
+          child: InkWell(
+            onTap: onTap,
+            child: Tooltip(
+              message: value??"",
+              child: Text(value??"",
+                style: GoogleFonts.poppins(
+                  color: color,
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w500,
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.wavy,
+                ),
+                overflow: TextOverflow.ellipsis,
+
+              ),
+
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  
+  
   void showDialogForFilter(BuildContext context) {
-    // accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -810,6 +448,46 @@ class AllQuoteScreen extends StatelessWidget{
                     ),
                   ),
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            pendingDraftQuoteController.pageNumberForQuote = 0;
+                            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "All");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            pendingDraftQuoteController.clearFilterData();
+                            pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+                            pendingDraftQuoteController.pageNumberForQuote = 0;
+                            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "All");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            pendingDraftQuoteController.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -867,7 +545,7 @@ class AllQuoteScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -878,9 +556,45 @@ class AllQuoteScreen extends StatelessWidget{
     );
   }
 
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   bindData(BuildContext context, String labelText, TextEditingController controller,) {
     return TextField(
       controller: controller,
+      keyboardType:labelText=='Quote Version'?TextInputType.number: TextInputType.text,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
@@ -910,6 +624,15 @@ class AllQuoteScreen extends StatelessWidget{
 
   filterWithQuoteProductCategory(BuildContext context) {
     return Obx(() {
+      if (pendingDraftQuoteController.productCategoryController.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.productCategoryController.value.text.split('|');
+        pendingDraftQuoteController.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: pendingDraftQuoteController.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
@@ -1025,10 +748,7 @@ class AllQuoteScreen extends StatelessWidget{
   Widget filterWithQuoteStatus(BuildContext context){
     return Container(
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: pendingDraftQuoteController.quoteStatusController.value,
         label: Text(
           "Quote Status",

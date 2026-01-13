@@ -432,9 +432,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                               SizedBox(height: 10,),
                               bindData(context,'Purchase Process',salesCyclePendingForApprovalController.purchaseProcessController.value),
                               SizedBox(height: 10,),
-
                               bindCompProfileTypeDropDown(context),
-
                               SizedBox(height: 10,),
                               bindIsCommintdrpdown(context),
                               SizedBox(height: 10,),
@@ -447,6 +445,8 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                               bindExpectedClosureDate(context),
                               SizedBox(height: 10,),
                               bindCreatedOn(context),
+                             /* SizedBox(height: 10,),
+                              bindData(context,'Reporting Manager',salesCyclePendingForApprovalController.reporting_manager_Controller.value),*/
                               SizedBox(height: 10,),
                               bindRegionNameFilter(context),
                               SizedBox(height: 10,),
@@ -466,6 +466,52 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                     ),
                   ),
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            salesCyclePendingForApprovalController.pageNumber = 0;
+                            salesCyclePendingForApprovalController.getsalesCycleData(salesCyclePendingForApprovalController.pageNumber,);
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            Get.back();
+                            salesCyclePendingForApprovalController.filterDataChecker.value='';
+                            salesCyclePendingForApprovalController.clearAllFieldOfFilter();
+                            salesCyclePendingForApprovalController.clearFilterData();
+                            salesCyclePendingForApprovalController.pageNumber=0;
+                            salesCyclePendingForApprovalController.getsalesCycleData(salesCyclePendingForApprovalController.pageNumber,);
+                          },
+                        )),
+
+                        const SizedBox(width: 6),
+
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            salesCyclePendingForApprovalController.filterDataChecker.value='';
+                            salesCyclePendingForApprovalController.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -521,7 +567,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -531,6 +577,43 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
       },
     );
   }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
   Widget bindSaleCycleStatusDropDown(BuildContext context){
     return Container(
       child: DropdownMenu<String>(
@@ -617,6 +700,16 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
   }
 
   bindProductCategory(BuildContext context) {
+    if (salesCyclePendingForApprovalController.productCategoryController.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
+      List<String> nameList = salesCyclePendingForApprovalController.productCategoryController.value.text.split(',');
+
+      salesCyclePendingForApprovalController.Selected_Item_Category_master_list_without_task.value =
+          List.generate(nameList.length, (index) {
+            return ItemCategoryMstModel(
+              categoryName: nameList[index].trim(),
+            );
+          });
+    }
     return Obx(() {
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: salesCyclePendingForApprovalController.Item_Category_master_list_without_task,
@@ -731,6 +824,16 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
   bindCompProfileTypeDropDown(BuildContext context) {
     return Obx(() {
+      if (salesCyclePendingForApprovalController.companyProfileTypeController.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCyclePendingForApprovalController.companyProfileTypeController.value.text.split('|');
+
+        salesCyclePendingForApprovalController.selected_company_type_list.value =
+            List.generate(nameList.length, (index) {
+              return CompanyTypeModal(
+                description: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<CompanyTypeModal>.multiSelection(
         items: salesCyclePendingForApprovalController.company_profile_type_list,
         itemAsString: (CompanyTypeModal u) => u.description ?? "",
@@ -1261,6 +1364,15 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
   bindAccountOwnerFilter(BuildContext context) {
     return Obx((){
+      if (salesCyclePendingForApprovalController.AccountOwner_controller.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCyclePendingForApprovalController.AccountOwner_controller.value.text.split(',');
+        salesCyclePendingForApprovalController.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: salesCyclePendingForApprovalController.employee_Member_list,
         itemAsString: (EmployeeMemberModel u) => u.fullName??"",
@@ -1356,12 +1468,8 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
   Widget bindSolutionAccepted(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only( right: 15),
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: salesCyclePendingForApprovalController.solutionAcceptedController.value,
         label: Text(
           "Solution Accepted",

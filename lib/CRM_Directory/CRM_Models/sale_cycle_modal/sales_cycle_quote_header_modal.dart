@@ -12,40 +12,54 @@ class SalesCycleQuoteHeaderModal {
   String? quoteStatus;
   String? quoteValidity;
   String? expClosureDate;
-  int? quoteCommit;
-  String? approvedBy;
-  String? approvedFullName;
-  String? approvedOn;
-  String? rejectReason;
+  dynamic? quoteCommit;
   String? createdBy;
   String? createdFullName;
   String? createdOn;
   String? updatedBy;
   String? updatedOn;
-  String? regretBy;
-  String? regretOn;
-  String? regretReason;
-  int? isActive;
-  double? installationCharges;
-  double? otherCharges;
+  dynamic? regretBy;
+  dynamic? regretOn;
+  dynamic? regretReason;
+  dynamic? isActive;
+  dynamic? installationCharges;
+  dynamic? otherCharges;
   String? warrantyPeriod;
   String? deliveryInWeeks;
-  double? advancePaymentPer;
-  double? advancePaymentAmt;
+  dynamic? advancePaymentPer;
+  dynamic? advancePaymentAmt;
   String? otherRemarks;
-  int? isSpr;
-  String? sprNo;
-  int? isReadyForApprove;
-  int? isReadySendForApproval;
-  double? quoteTotalAmount;
-  double? quoteGrossAmount;
-  double? quoteGstAmount;
+  dynamic? isSpr;
+  dynamic? noOfSalesAdvice;
+  dynamic? isSalesAdviceCreated;
+  String? kindAttention;
+  String? quoteStatusWon;
+  dynamic? wonBy;
+  String? quoteWonName;
+  dynamic? wonOn;
+  dynamic? lossReason;
+  String? rhApprovalEmail;
+  String? rhApproval;
+  dynamic? rhApprovalOn;
+  dynamic? cbhApprovalEmail;
+  String? cbhApproval;
+  dynamic? cbhApprovalOn;
+  dynamic? gmApprovalEmail;
+  String? gmApproval;
+  dynamic? gmApprovalOn;
   String? frontlinerValue;
   String? branchHeadValue;
   String? zoneHeadValue;
   String? clustureHeadValue;
-  String? kindAttention;
+  String? postCode;
+  String? district;
+  String? sprNo;
   String? quoteAccepted;
+  dynamic? isReadyForApprove;
+  dynamic? isReadySendForApproval;
+  dynamic? quoteTotalAmount;
+  dynamic? quoteGrossAmount;
+  dynamic? quoteGstAmount;
 
   SalesCycleQuoteHeaderModal(
       {this.condition,
@@ -62,10 +76,6 @@ class SalesCycleQuoteHeaderModal {
         this.quoteValidity,
         this.expClosureDate,
         this.quoteCommit,
-        this.approvedBy,
-        this.approvedFullName,
-        this.approvedOn,
-        this.rejectReason,
         this.createdBy,
         this.createdFullName,
         this.createdOn,
@@ -83,18 +93,36 @@ class SalesCycleQuoteHeaderModal {
         this.advancePaymentAmt,
         this.otherRemarks,
         this.isSpr,
-        this.sprNo,
-        this.isReadyForApprove,
-        this.isReadySendForApproval,
-        this.quoteTotalAmount,
-        this.quoteGrossAmount,
-        this.quoteGstAmount,
+        this.noOfSalesAdvice,
+        this.isSalesAdviceCreated,
+        this.kindAttention,
+        this.quoteStatusWon,
+        this.wonBy,
+        this.quoteWonName,
+        this.wonOn,
+        this.lossReason,
+        this.rhApprovalEmail,
+        this.rhApproval,
+        this.rhApprovalOn,
+        this.cbhApprovalEmail,
+        this.cbhApproval,
+        this.cbhApprovalOn,
+        this.gmApprovalEmail,
+        this.gmApproval,
+        this.gmApprovalOn,
         this.frontlinerValue,
         this.branchHeadValue,
         this.zoneHeadValue,
         this.clustureHeadValue,
-        this.kindAttention,
-        this.quoteAccepted,});
+        this.postCode,
+        this.district,
+        this.sprNo,
+        this.quoteAccepted,
+        this.isReadyForApprove,
+        this.isReadySendForApproval,
+        this.quoteTotalAmount,
+        this.quoteGrossAmount,
+        this.quoteGstAmount});
 
   SalesCycleQuoteHeaderModal.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -111,10 +139,6 @@ class SalesCycleQuoteHeaderModal {
     quoteValidity = json['quote_validity'];
     expClosureDate = json['exp_closure_date'];
     quoteCommit = json['quote_commit'];
-    approvedBy = json['approved_by'];
-    approvedFullName = json['approved_full_name'];
-    approvedOn = json['approved_on'];
-    rejectReason = json['reject_reason'];
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
@@ -132,18 +156,36 @@ class SalesCycleQuoteHeaderModal {
     advancePaymentAmt = json['advance_payment_amt'];
     otherRemarks = json['other_remarks'];
     isSpr = json['is_spr'];
+    noOfSalesAdvice = json['no_of_sales_advice'];
+    isSalesAdviceCreated = json['is_sales_advice_created'];
+    kindAttention = json['kind_attention'];
+    quoteStatusWon = json['quote_status_won'];
+    wonBy = json['won_by'];
+    quoteWonName = json['quote_won_name'];
+    wonOn = json['won_on'];
+    lossReason = json['loss_reason'];
+    rhApprovalEmail = json['rh_approval_email'];
+    rhApproval = json['rh_approval'];
+    rhApprovalOn = json['rh_approval_on'];
+    cbhApprovalEmail = json['cbh_approval_email'];
+    cbhApproval = json['cbh_approval'];
+    cbhApprovalOn = json['cbh_approval_on'];
+    gmApprovalEmail = json['gm_approval_email'];
+    gmApproval = json['gm_approval'];
+    gmApprovalOn = json['gm_approval_on'];
+    frontlinerValue = json['frontliner_value'];
+    branchHeadValue = json['branch_head_value'];
+    zoneHeadValue = json['zone_head_value'];
+    clustureHeadValue = json['clusture_head_value'];
+    postCode = json['post_code'];
+    district = json['district'];
     sprNo = json['spr_no'];
+    quoteAccepted = json['quote_accepted'];
     isReadyForApprove = json['is_ready_for_approve'];
     isReadySendForApproval = json['is_ready_send_for_approval'];
     quoteTotalAmount = json['quote_total_amount'];
     quoteGrossAmount = json['quote_gross_amount'];
     quoteGstAmount = json['quote_gst_amount'];
-    frontlinerValue = json['frontliner_value'];
-    branchHeadValue = json['branch_head_value'];
-    zoneHeadValue = json['zone_head_value'];
-    clustureHeadValue = json['clusture_head_value'];
-    kindAttention = json['kind_attention'];
-    quoteAccepted = json['quote_accepted'];
   }
 
   Map<String, dynamic> toJson() {
@@ -162,10 +204,6 @@ class SalesCycleQuoteHeaderModal {
     data['quote_validity'] = this.quoteValidity;
     data['exp_closure_date'] = this.expClosureDate;
     data['quote_commit'] = this.quoteCommit;
-    data['approved_by'] = this.approvedBy;
-    data['approved_full_name'] = this.approvedFullName;
-    data['approved_on'] = this.approvedOn;
-    data['reject_reason'] = this.rejectReason;
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
@@ -183,18 +221,36 @@ class SalesCycleQuoteHeaderModal {
     data['advance_payment_amt'] = this.advancePaymentAmt;
     data['other_remarks'] = this.otherRemarks;
     data['is_spr'] = this.isSpr;
+    data['no_of_sales_advice'] = this.noOfSalesAdvice;
+    data['is_sales_advice_created'] = this.isSalesAdviceCreated;
+    data['kind_attention'] = this.kindAttention;
+    data['quote_status_won'] = this.quoteStatusWon;
+    data['won_by'] = this.wonBy;
+    data['quote_won_name'] = this.quoteWonName;
+    data['won_on'] = this.wonOn;
+    data['loss_reason'] = this.lossReason;
+    data['rh_approval_email'] = this.rhApprovalEmail;
+    data['rh_approval'] = this.rhApproval;
+    data['rh_approval_on'] = this.rhApprovalOn;
+    data['cbh_approval_email'] = this.cbhApprovalEmail;
+    data['cbh_approval'] = this.cbhApproval;
+    data['cbh_approval_on'] = this.cbhApprovalOn;
+    data['gm_approval_email'] = this.gmApprovalEmail;
+    data['gm_approval'] = this.gmApproval;
+    data['gm_approval_on'] = this.gmApprovalOn;
+    data['frontliner_value'] = this.frontlinerValue;
+    data['branch_head_value'] = this.branchHeadValue;
+    data['zone_head_value'] = this.zoneHeadValue;
+    data['clusture_head_value'] = this.clustureHeadValue;
+    data['post_code'] = this.postCode;
+    data['district'] = this.district;
     data['spr_no'] = this.sprNo;
+    data['quote_accepted'] = this.quoteAccepted;
     data['is_ready_for_approve'] = this.isReadyForApprove;
     data['is_ready_send_for_approval'] = this.isReadySendForApproval;
     data['quote_total_amount'] = this.quoteTotalAmount;
     data['quote_gross_amount'] = this.quoteGrossAmount;
     data['quote_gst_amount'] = this.quoteGstAmount;
-    data['frontliner_value'] = this.frontlinerValue;
-    data['branch_head_value'] = this.branchHeadValue;
-    data['zone_head_value'] = this.zoneHeadValue;
-    data['clusture_head_value'] = this.clustureHeadValue;
-    data['kind_attention'] = this.kindAttention;
-    data['quote_accepted'] = this.quoteAccepted;
     return data;
   }
 }

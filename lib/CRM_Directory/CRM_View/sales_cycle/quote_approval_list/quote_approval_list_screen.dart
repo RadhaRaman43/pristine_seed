@@ -169,7 +169,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
            // saleCycleController.quoteApprovalPage.value="quoteApprovalScreen";
             saleCycleController.getQuoteHeaderInformation(quoteApprovalController.quoteApprovalList[position].quoteId, "quoteApprovalScreen");
           },
-          subtitle: Column(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Row(
                 children: [
@@ -196,371 +197,44 @@ class QuoteApprovalListScreen extends StatelessWidget{
                   ),
                 ],
               ),
-              Row(
-                children: [
-                  Text(
-                    "Quote Version: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                    quoteApprovalController.quoteApprovalList[position].quoteVersion.toString(),
-                    overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Quote Status : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .36,
-                    child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
-                          .quoteStatus ?? "",
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
-                          .quoteStatus ?? "",
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(saleCycleStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                        overflow: TextOverflow.ellipsis,
+              Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+            ],
+          ),
+          subtitle: Column(
+            children: [
+               _buildLabelWithValue(label: "Quote Version: ", value:  quoteApprovalController.quoteApprovalList[position].quoteVersion.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Status: ", value:  quoteApprovalController.quoteApprovalList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
+              _buildLabelOnTap(label: "Sales Cycle Id: ", value:  quoteApprovalController.quoteApprovalList[position].salesCycleId ?? "",color:Colors.blueAccent,
+                onTap: (){
+                  saleCycleController.pageNumber = 0;
+                  saleCycleController.filterQuoteAcceptedFlag.value="";
+                  saleCycleController.clearAllFieldOfFilter();
+                  saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position].salesCycleId!, "ViewHeader", "QuoteApprovalPage");
+                },),
+              _buildLabelWithValue(label: "Customer Code: ", value:  quoteApprovalController.quoteApprovalList[position].accountCode ?? "",color:AllColors.textColor),
 
-                      ),
-
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Sales Cycle Id : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  InkWell(
-                    onTap: (){
-                      saleCycleController.pageNumber = 0;
-                      saleCycleController.filterQuoteAcceptedFlag.value="";
-                      saleCycleController.clearAllFieldOfFilter();
-                      saleCycleController.getsalesCycleData(saleCycleController.pageNumber, quoteApprovalController.quoteApprovalList[position]
-                          .salesCycleId!, "ViewHeader", "QuoteApprovalPage");
-                    },
-                    child: Container(
-                      width: size.width * .36,
-                      child: Tooltip(
-                        message: quoteApprovalController.quoteApprovalList[position]
-                            .salesCycleId ?? "",
-                        child: Text(quoteApprovalController.quoteApprovalList[position]
-                            .salesCycleId ?? "",
-                          style: GoogleFonts.poppins(
-                            color: Colors.blueAccent,
-                            fontSize: AllFontSize.sisxteen,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-
-                        ),
-
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Customer Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  InkWell(
-                    child: Container(
-                      width: size.width*0.4,
-                      child: Tooltip(
-                        message: quoteApprovalController.quoteApprovalList[position]
-                            .accountName  ?? "",
-                        child: Text(
-                          quoteApprovalController.quoteApprovalList[position]
-                              .accountName ??
-                              "",
-                          overflow: TextOverflow.ellipsis,
-                          //textAlign: TextAlign.end,
-                          style: GoogleFonts.poppins(
-                            color: Colors.blueAccent,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500,
-                            decoration: TextDecoration.underline,
-                            decorationStyle: TextDecorationStyle.wavy,),
-                        ),
-                      ),
-                    ),
-                    onTap: (){
-                      account_vm_controller.view='FromQuoteApproval';
-                      contact_vm_controller.view='FromQuoteVIEW';
-                      account_vm_controller.getAccMasterBuyCodeApi(quoteApprovalController.quoteApprovalList[position]
-                          .accountCode!);
-                    },
-                  ),
-
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
-                          .contactName ?? "",
-                      child: Text(
-                        quoteApprovalController.quoteApprovalList[position]
-                            .contactName ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Quote Validity : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .35,
-                    child: Tooltip(
-                      message: quoteValidityDate.toString(),
-                      child: Text(
-                        quoteValidityDate.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Expected Closure Date: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Text(
-                  expectedClosuredateDate.toString(),
-                    style: GoogleFonts.poppins(
-                        color: AllColors.textColor,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Quote Total Amt : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .37,
-                    child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
-                          .quoteTotalAmount.toString(),
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
-                          .quoteTotalAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Quote Gst Amt. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
-                          .quoteGstAmount.toString(),
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
-                          .quoteGstAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Quote Gross Amt. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .35,
-                    child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
-                          .quoteGrossAmount.toString(),
-                      child: Text(quoteApprovalController.quoteApprovalList[position]
-                          .quoteGrossAmount.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Spr No. : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position].sprNo ?? "",
-                      child: Text(quoteApprovalController.quoteApprovalList[position].sprNo ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: quoteApprovalController.quoteApprovalList[position]
-                          .createdBy?? "",
-                      child: Text(
-                        quoteApprovalController.quoteApprovalList[position]
-                            .createdBy ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Created On : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Container(
-                    width: size.width * .4,
-                    child: Tooltip(
-                      message: createdOn.toString(),
-                      child: Text(
-                       createdOn.toString(),
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _buildLabelOnTap(label: "Customer Name: ", value:  quoteApprovalController.quoteApprovalList[position].accountName ?? "",color:Colors.blueAccent,
+                onTap: (){
+                  account_vm_controller.view='FromQuoteApproval';
+                  contact_vm_controller.view='FromQuoteVIEW';
+                  account_vm_controller.getAccMasterBuyCodeApi(quoteApprovalController.quoteApprovalList[position]
+                      .accountCode!);
+                },),
+              _buildLabelWithValue(label: "Contact Name: ", value:  quoteApprovalController.quoteApprovalList[position].contactName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Product Category: ", value:  quoteApprovalController.quoteApprovalList[position].productCategory ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Total Amt: ", value:  quoteApprovalController.quoteApprovalList[position].quoteTotalAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Gst Amt: ", value:  quoteApprovalController.quoteApprovalList[position].quoteGstAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Gross Amt: ", value:  quoteApprovalController.quoteApprovalList[position].quoteGrossAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Spr No.: ", value:  quoteApprovalController.quoteApprovalList[position].sprNo ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "RH Approval: ", value:  quoteApprovalController.quoteApprovalList[position].rhApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "CBH Approval: ", value:  quoteApprovalController.quoteApprovalList[position].cbhApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM  Approval: ", value:  quoteApprovalController.quoteApprovalList[position].gmApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Cluster Name: ", value:  quoteApprovalController.quoteApprovalList[position].clustureHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Region Name: ", value:  quoteApprovalController.quoteApprovalList[position].zoneHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  quoteApprovalController.quoteApprovalList[position].createdBy ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created on: ", value: StaticMethod.onlyDate(quoteApprovalController.quoteApprovalList[position].createdOn ?? "") ,color:AllColors.textColor),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -582,13 +256,87 @@ class QuoteApprovalListScreen extends StatelessWidget{
               ),
             ],
           ),
-          trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+
         ),
       ),
     );
   }
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    required Color color,
+
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  Widget _buildLabelOnTap({
+    required String label,
+    required String? value,
+    required Color color,
+    required void Function() onTap,
+
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w500),
+        ),
+        Flexible(
+          child: InkWell(
+            onTap: onTap,
+            child: Tooltip(
+              message: value??"",
+              child: Text(value??"",
+                style: GoogleFonts.poppins(
+                  color: color,
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w500,
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.wavy,
+                ),
+                overflow: TextOverflow.ellipsis,
+            
+              ),
+            
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   void showDialogForFilter(BuildContext context) {
-    // accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -604,7 +352,6 @@ class QuoteApprovalListScreen extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -690,7 +437,50 @@ class QuoteApprovalListScreen extends StatelessWidget{
                       ),
                     ),
                   ),
+
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            quoteApprovalController.pageNumberForQuote = 0;
+                            quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            Get.back();
+                            quoteApprovalController.clearFilterData();
+                            quoteApprovalController.clearAllFieldOfQuoteFilter();
+                            quoteApprovalController.pageNumberForQuote = 0;
+                            quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            quoteApprovalController.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+
+                 /* Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -706,10 +496,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                                   width: 1),
                             )),
                             onPressed: () {
-
                               quoteApprovalController.pageNumberForQuote = 0;
-                              quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,
-                                );
+                              quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
                               Get.back();
                             },
                             child: Text(
@@ -731,10 +519,8 @@ class QuoteApprovalListScreen extends StatelessWidget{
                                   color: AllColors.redColor, width: 1),
                             )),
                             onPressed: () {
-
                               quoteApprovalController.clearAllFieldOfQuoteFilter();
                               quoteApprovalController.pageNumberForQuote = 0;
-                              //saleCycleController.getQuoteHeaderData(saleCycleController.pageNumberForQuote,"","");
                               quoteApprovalController.getQuoteHeaderData(quoteApprovalController.pageNumberForQuote,);
                               Get.back();
 
@@ -750,7 +536,7 @@ class QuoteApprovalListScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -760,6 +546,43 @@ class QuoteApprovalListScreen extends StatelessWidget{
       },
     );
   }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+
   bindData(BuildContext context, String labelText, TextEditingController controller,) {
     return TextField(
       controller: controller,
@@ -792,6 +615,15 @@ class QuoteApprovalListScreen extends StatelessWidget{
 
   bindProductCategory(BuildContext context) {
     return Obx(() {
+      if (quoteApprovalController.productCategoryController.value.text.isNotEmpty && quoteApprovalController.filterDataChecker.value=='1') {
+        List<String> nameList = quoteApprovalController.productCategoryController.value.text.split('|');
+        quoteApprovalController.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: quoteApprovalController.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",

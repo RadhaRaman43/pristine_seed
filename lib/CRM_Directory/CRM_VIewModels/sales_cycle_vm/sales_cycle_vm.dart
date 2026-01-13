@@ -5854,6 +5854,7 @@ class SalesCycleVm extends GetxController {
       'pin_code': postalCodeController.value.text,
       'district': district_controller.value.text,
       'expected_closure_date': filterExpectedClosuredateController.value.text,
+      'extClosureStartToEnd': extClosureStartToEnd.value,
       'created_by': createdByController.value.text,
       'createdOn_Controller': createdOnCnontroller.value.text,
       'region_name': RegionName_controller.value.text,
@@ -5883,6 +5884,7 @@ class SalesCycleVm extends GetxController {
     postalCodeController.value.text=getFilterData["pin_code"];
     district_controller.value.text=getFilterData["district"];
     filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"];
+    extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"];
     createdByController.value.text=getFilterData["created_by"];
     createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
     RegionName_controller.value.text=getFilterData["region_name"];

@@ -54,6 +54,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   var ApprovalStatusController = TextEditingController().obs;
   var filterExpectedClosuredateController = TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
+  //var reporting_manager_Controller = TextEditingController().obs;
 
   var AccountOwnerForApi;
   var AccountOwner_controller=TextEditingController().obs;
@@ -87,6 +88,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     }
     //getsalesCycleData(pageNumber);
     getClustersGetByEmail();
+    getFilterData();
   }
 
   getItemCategoryMstWithoutTaskIdApi() {
@@ -334,10 +336,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     try {
       AccountOwnerForApi = '';
       if(AccountOwner_controller.value.text.isNotEmpty){
-        AccountOwnerForApi = AccountOwner_controller.value.text
-            .split(',')
-            .map((e) => e.trim())
-            .join('|');
+        AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
       }
       Map data = {
         "filter_sales_cycle_id":saleCycleController.value.text.isEmpty?"" : saleCycleController.value.text,
@@ -445,6 +444,77 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   Future<void> refreshList() async {
     pageNumber = 0;
     getsalesCycleData(pageNumber);
+  }
+
+  RxString filterDataChecker = ''.obs;
+  void SaveFilterData() async{
+    await sessionManagement.saveSaleCycleApproverData({
+
+      'sale_cycle_stage': SaleCycleStatusController.value.text,
+      'sale_cycle_id': saleCycleController.value.text,
+      //'quote_accepted': filterQuoteAcceptedController.value.text,
+      'task_id': filterTask_Id_controller.value.text,
+      'customer_name': accountNameController.value.text,
+      'customer_code': accountCodeController.value.text,
+      'purchase_process': purchaseProcessController.value.text,
+      'company_profile_type': companyProfileTypeController.value.text,
+      'is_commit': isCommitController.value.text,
+      'solution_accepted': solutionAcceptedController.value.text,
+      'pin_code': postalCodeController.value.text,
+      'district': district_controller.value.text,
+      'expected_closure_date': filterExpectedClosuredateController.value.text,
+      'extClosureStartToEnd': extClosureStartToEnd.value,
+      'createdOn_Controller': createdOnCnontroller.value.text,
+      //'reporting_manager_Controller': reporting_manager_Controller.value.text,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
+      'account_owner': AccountOwner_controller.value.text,
+      'product_category': productCategoryController.value.text,
+      'product_category_type': product_category_type_Controller.value.text,
+
+      /*'approval_status': ApprovalStatusController.value.text,
+      'created_by': createdByController.value.text,*/
+    });
+    filterDataChecker.value='';
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getSaleCycleApproverData();
+
+    SaleCycleStatusController.value.text=getFilterData["sale_cycle_stage"];
+    saleCycleController.value.text=getFilterData["sale_cycle_id"];
+    //filterQuoteAcceptedController.value.text=getFilterData["quote_accepted"];
+    filterTask_Id_controller.value.text=getFilterData["task_id"];
+    accountNameController.value.text=getFilterData["customer_name"];
+    accountCodeController.value.text=getFilterData["customer_code"];
+    purchaseProcessController.value.text=getFilterData["purchase_process"];
+    companyProfileTypeController.value.text=getFilterData["company_profile_type"];
+    isCommitController.value.text=getFilterData["is_commit"];
+    solutionAcceptedController.value.text=getFilterData["solution_accepted"];
+    postalCodeController.value.text=getFilterData["pin_code"];
+    district_controller.value.text=getFilterData["district"];
+    filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"];
+    extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"];
+    createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
+    RegionName_controller.value.text=getFilterData["region_name"];
+    clusterName_controller.value.text=getFilterData["cluster_name"];
+    AccountOwner_controller.value.text=getFilterData["account_owner"];
+    productCategoryController.value.text=getFilterData["product_category"];
+    product_category_type_Controller.value.text=getFilterData["product_category_type"];
+
+    /*createdByController.value.text=getFilterData["created_by"];
+    ApprovalStatusController.value.text=getFilterData["approval_status"];*/
+
+    pageNumber=0;
+    filterDataChecker.value='1';
+    getsalesCycleData(pageNumber,);
+
+  }
+
+  void clearFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearSaleCycleApproverData();
   }
 
 }

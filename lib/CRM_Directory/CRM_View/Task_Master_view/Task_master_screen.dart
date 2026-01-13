@@ -1554,9 +1554,7 @@ class TaskMasterScreen extends StatelessWidget {
                                 TaskMaster_page_controller.is_done.value);
                           },
                         )),
-
                         const SizedBox(width: 6),
-
                         Expanded(child: _buildButton(
                           text: 'Reset',
                           borderColor: AllColors.redColor,
@@ -1576,9 +1574,7 @@ class TaskMasterScreen extends StatelessWidget {
                                 TaskMaster_page_controller.is_done.value);
                           },
                         )),
-
                         const SizedBox(width: 6),
-
                         Expanded(child: _buildButton(
                           text: 'Saved Filter',
                           borderColor: AllColors.green,

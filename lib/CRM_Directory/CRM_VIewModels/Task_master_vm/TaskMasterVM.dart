@@ -1766,7 +1766,7 @@ class Taskmastervm extends GetxController{
     RxString filterDataChecker = ''.obs;
 
     void SaveFilterData() async{
-      await sessionManagement.saveTaskApproverData({
+      await sessionManagement.saveTaskData({
         'Task_status_controller': Task_status_controller.value.text,
         'task_id': filterTask_Id_controller.value.text,
         'customer_name': account_Name_controller.value.text,
@@ -1794,7 +1794,7 @@ class Taskmastervm extends GetxController{
     }
 
     void getFilterData() async{
-      Map getFilterData=await sessionManagement.getTaskApproverData();
+      Map getFilterData=await sessionManagement.getTaskData();
 
       Task_status_controller.text=getFilterData["Task_status_controller"];
       filterTask_Id_controller.text=getFilterData["task_id"];
@@ -1826,6 +1826,6 @@ class Taskmastervm extends GetxController{
 
     void clearFilterData() {
       filterDataChecker.value='';
-      sessionManagement.clearTaskApproverData();
+      sessionManagement.clearTaskData();
     }
 }

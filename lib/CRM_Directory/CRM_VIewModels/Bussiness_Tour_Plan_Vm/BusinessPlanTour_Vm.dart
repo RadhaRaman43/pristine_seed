@@ -119,8 +119,7 @@ class BusinessPlanTourViewModel extends GetxController{
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
     getClustersGetByEmail();
-    //getBusinessTourPlanData(pageNumber);
-    //getBusinessTourPlanAllLineGet(pageNumber);
+    getFilterData();
     super.onInit();
   }
 
@@ -1132,6 +1131,56 @@ class BusinessPlanTourViewModel extends GetxController{
     TourType_Controller.value.clear();
     SelectedAlongPersonWith_list.value=[];
     SelectedMeetingWith_List.value=[];
+  }
+
+  RxString filterDataChecker = ''.obs;
+  void SaveFilterData() async{
+    await sessionManagement.saveBusinessTourPlanData({
+
+      'filterTourIdController': filterTourIdController.value.text,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
+      'filterTouringRegionController': filterTouringRegionController.value,
+      'StartDate_filter_controller': StartDate_filter_controller.value,
+      'EndDate_filter_controller': EndDate_filter_controller.value,
+      'filterCreatedByController': filterCreatedByController.value,
+      'createdOn_filter_controller': createdOn_filter_controller.value,
+
+    });
+    filterDataChecker.value='';
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getBusinessTourPlanData();
+
+    filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
+    RegionName_controller.value.text=getFilterData["region_name"]??"";
+    clusterName_controller.value.text=getFilterData["cluster_name"]??"";
+    filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
+    StartDate_filter_controller.value.text=getFilterData["StartDate_filter_controller"]??"";
+    EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
+    filterCreatedByController.value=getFilterData["filterCreatedByController"]??"";
+    createdOn_filter_controller.value=getFilterData["createdOn_filter_controller"]??"";
+
+    filterDataChecker.value='1';
+
+    if(RegionName_controller.value.text.isEmpty){
+      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+    }
+    if(clusterName_controller.value.text.isEmpty){
+      clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+    }
+
+    pageNumber=0;
+    getBusinessTourPlanData(pageNumber);
+
+
+  }
+
+  void clearFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearBusinessTourPlanData();
   }
 
 }
