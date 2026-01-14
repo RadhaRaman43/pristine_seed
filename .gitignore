@@ -44,3 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/release/app-release.apk
+/release/baselineProfiles/0/app-release.dm
+/release/baselineProfiles/1/app-release.dm
+/release/output-metadata.json
+/android/build/reports/problems/problems-report.html
+/pubspec.lock

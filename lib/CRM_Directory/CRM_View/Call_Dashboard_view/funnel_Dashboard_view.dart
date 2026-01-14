@@ -638,380 +638,34 @@ class FunnelDashboardView extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Cycle Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .salesCycleId??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .salesCycleId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Task Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .taskId??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .taskId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Accepted	: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .quoteAccepted??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .quoteAccepted??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Approval Status: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: Status,
-                      child: Text(
-                        Status,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(Status),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .accountName ?? "",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .accountName ??
-                            "" + " | ${dashboard_view_Controller
-                                .funnelDashboardUserWiseDataList[position]
-                                .accountName ?? ""}",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Code : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .contactName??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .contactName??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .contactName??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .contactName??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Product Category : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .productCategory??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .productCategory??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Cluster Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .clustureHeadValue??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .clustureHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Region Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .branchHeadValue??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .branchHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .funnelDashboardUserWiseDataList[position]
-                          .createdFullName??"" +
-                          "| ${StaticMethod.dateTimeToDate(
-                              dashboard_view_Controller
-                                  .funnelDashboardUserWiseDataList[position]
-                                  .createdOn??"")}",
-                      child: Text(
-                        dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .createdFullName??"" +
-                            "| ${StaticMethod.dateTimeToDate(
-                                dashboard_view_Controller
-                                    .funnelDashboardUserWiseDataList[position]
-                                    .createdOn??"")}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _buildLabelWithValue(label: "Sales Cycle Id: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleId??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Task Id: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].taskId??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Accepted: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].quoteAccepted??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approval Status: ", value:  Status,color:getStatusColor(Status)),
+              _buildLabelWithValue(label: "Customer Name: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].accountName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Customer Code: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].accountCode??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Account Owner: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].accountOwnerFullName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Estimate Amount: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].estimatedAmount.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Contact Name: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].contactName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].productCategory??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Purchase Process: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].purchaseProcess??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Company Profile Type: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].companyProfileType??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].postCode??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].district??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].clustureHeadValue??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Region Name: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].branchHeadValue??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Sales Cycle Owner: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].salesCycleOwnerName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Expected Closure Date: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].estClosureDate??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].createdFullName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created On: ", value: StaticMethod.onlyDate( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].createdOn??""),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Reporting Manager: ", value: dashboard_view_Controller.funnelDashboardUserWiseDataList[position].approvedFullName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approved On: ", value: StaticMethod.onlyDate( dashboard_view_Controller.funnelDashboardUserWiseDataList[position].approvedOn??""),color:AllColors.textColor),
 
               Visibility(
                 visible: dashboard_view_Controller.funnelDashboardUserWiseDataList[position]
                     .salesCycleApprovalStatus == 'Rejected' ? true : false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Rejected Reason : ",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Tooltip(
-                        message: dashboard_view_Controller
-                            .funnelDashboardUserWiseDataList[position]
-                            .rejectReason??"",
-                        child: Text(
-                          dashboard_view_Controller
-                              .funnelDashboardUserWiseDataList[position]
-                              .rejectReason??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: _buildLabelWithValue(label: "Rejected Reason: ", value: dashboard_view_Controller.funnelDashboardUserWiseDataList[position].rejectReason??"",color:AllColors.textColor),
+
               ),
 
             ],
@@ -1021,7 +675,40 @@ class FunnelDashboardView extends StatelessWidget{
       ),
     );
   }
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    required Color color,
 
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
 
   void showFilterBottomSheet(BuildContext context) {
@@ -1106,71 +793,7 @@ class FunnelDashboardView extends StatelessWidget{
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.funnelDashboardData();
-                            Get.back();
-                          },
-                        )),
-                        /*ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(color: AllColors.primaryDark, width: 1),
-                          )),
-                          onPressed: () {
-                            dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.funnelDashboardData();
-                            Get.back();
-                          },
-                          child: Text(
-                            'Submit',
-                            style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.sisxteen,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),*/
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Saved Filter',
-                          borderColor: AllColors.green,
-                          textColor: AllColors.green,
-                          onTap: () {
-                            dashboard_view_Controller.filterDataChecker.value='';
-                            dashboard_view_Controller.SaveFilterData();
-                            /*dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.funnelDashboardData();*/
-                            Get.back();
-                          },
-                        )),
-                        /*ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              foregroundColor: AllColors.green, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(
-                                color: AllColors.green,
-                                width: 1),
-                          )),
-                          onPressed: () {
-                            dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.funnelDashboardData();
-                            Get.back();
-                          },
-                          child: Text(
-                            'SavedFilter',
-                            style: GoogleFonts.poppins(
-                                color: AllColors.primaryDark1,
-                                fontSize: AllFontSize.sisxteen,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),*/
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
+                          text: 'Clear',
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
@@ -1182,28 +805,30 @@ class FunnelDashboardView extends StatelessWidget{
                             Get.back();
                           },
                         )),
-                        /*ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15),
-                            side: BorderSide(
-                                color: AllColors.redColor, width: 1),
-                          )),
-                          onPressed: () {
-                            dashboard_view_Controller.clearAllFilterController();
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
                             dashboard_view_Controller.pageNumber = 0;
                             dashboard_view_Controller.funnelDashboardData();
                             Get.back();
-
                           },
-                          child: Text(
-                            'Reset',
-                            style: GoogleFonts.poppins(
-                                color: AllColors.redColor,
-                                fontSize: AllFontSize.sisxteen,
-                                fontWeight: FontWeight.w700),
-                          ),
-                        ),*/
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.SaveFilterData();
+                            /*dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();*/
+                            Get.back();
+                          },
+                        )),
                       ],
                     ),
                   ),
@@ -2076,23 +1701,20 @@ class FunnelDashboardView extends StatelessWidget{
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedCluster_list.isEmpty) {
-        dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
-        dashboard_view_Controller.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
-      }
       if (dashboard_view_Controller.clusterName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
-        dashboard_view_Controller.SelectedCluster_list.value=[];
-        List<String> nameList = dashboard_view_Controller.clusterName_controller.value.text.split('|');
-
+        List<String> nameList = dashboard_view_Controller.clusterName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedCluster_list.value =[];
         dashboard_view_Controller.SelectedCluster_list.value =
             List.generate(nameList.length, (index) {
-              return ClusterModal(
-                geoValue: nameList[index].trim(),
-              );
+              return ClusterModal(geoValue: nameList[index].trim(),);
             });
+      }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedCluster_list.isEmpty) {
+          dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
+          dashboard_view_Controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+        }
       }
 
     });
@@ -2100,9 +1722,7 @@ class FunnelDashboardView extends StatelessWidget{
     return Obx(() {
 
       final selected = dashboard_view_Controller.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -2116,21 +1736,12 @@ class FunnelDashboardView extends StatelessWidget{
               final searchController = TextEditingController();
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedCluster_list);
-
-              List<ClusterModal> allItems =
-                  dashboard_view_Controller.clusterGetByEmailList;
+              List<ClusterModal> allItems = dashboard_view_Controller.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2159,12 +1770,12 @@ class FunnelDashboardView extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                             
+                             IconButton(onPressed: () {
+                               Navigator.of(context).pop();
+                             }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                            
+
                             ],
                           ),
                         ),
@@ -2180,8 +1791,7 @@ class FunnelDashboardView extends StatelessWidget{
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
+                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
                                 icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   searchController.clear();
@@ -2206,8 +1816,7 @@ class FunnelDashboardView extends StatelessWidget{
                             onChanged: (val) {
                               setState(() {
                                 if (val == true) {
-                                  tempSelected
-                                      .clear();
+                                  tempSelected.clear();
                                   tempSelected.addAll(allItems);
                                 } else {
                                   tempSelected.clear();
@@ -2221,17 +1830,12 @@ class FunnelDashboardView extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No clusters found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
+                              final isSel = tempSelected.any((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                               return CheckboxListTile(
                                 title: Text(item.geoValue ?? ""),
                                 value: isSel,
@@ -2240,9 +1844,7 @@ class FunnelDashboardView extends StatelessWidget{
                                     if (v == true) {
                                       if (!isSel) tempSelected.add(item);
                                     } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
+                                      tempSelected.removeWhere((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                                     }
                                   });
                                 },
@@ -2253,26 +1855,30 @@ class FunnelDashboardView extends StatelessWidget{
 
                         // Done button
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    dashboard_view_Controller
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedCluster_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
+                                    dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child:  Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2325,21 +1931,9 @@ class FunnelDashboardView extends StatelessWidget{
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedRegion_list.isEmpty) {
-        dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
-        dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
-        print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
-
-
-      }
-      else{
-        print("region does not bind first time");
-      }
       if (dashboard_view_Controller.RegionName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
         dashboard_view_Controller.SelectedRegion_list.value=[];
-        List<String> nameList = dashboard_view_Controller.RegionName_controller.value.text.split('|');
-
+        List<String> nameList = dashboard_view_Controller.RegionName_controller.value.text.split(',');
         dashboard_view_Controller.SelectedRegion_list.value =
             List.generate(nameList.length, (index) {
               return RegionWithClusterFilterModal(
@@ -2347,13 +1941,21 @@ class FunnelDashboardView extends StatelessWidget{
               );
             });
       }
-
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedRegion_list.isEmpty) {
+          dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
+          dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
+      }
     });
 
     return Obx(() {
       final selected = dashboard_view_Controller.SelectedRegion_list;
       final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
-
       return GestureDetector(
         onTap: () async {
           await showModalBottomSheet(
@@ -2367,20 +1969,13 @@ class FunnelDashboardView extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedRegion_list);
 
-              final allItems =
-                  dashboard_view_Controller.regionwithclusterGetByEmailList;
+              final allItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2409,12 +2004,9 @@ class FunnelDashboardView extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -2470,11 +2062,8 @@ class FunnelDashboardView extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No regions found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
@@ -2503,22 +2092,28 @@ class FunnelDashboardView extends StatelessWidget{
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                              horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedRegion_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2568,144 +2163,11 @@ class FunnelDashboardView extends StatelessWidget{
     });
   }
 
-  /*bindClusterNameFilter(BuildContext context) {
-    return Obx((){
-      return  DropdownSearch<ClusterModal>.multiSelection(
-        items: dashboard_view_Controller.clusterGetByEmailList,
-        itemAsString: (ClusterModal u) => u.geoValue??"",
-        selectedItems: dashboard_view_Controller.SelectedCluster_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedCluster_list.isNotEmpty?"Cluster Name":null,
-            hintText: "Cluster Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Cluster Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.geoValue).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<ClusterModal> selectedList) {
-          dashboard_view_Controller.SelectedCluster_list.value = selectedList;
-          dashboard_view_Controller.clusterName_controller.value.text = selectedList.map((e) => e.geoValue).join(', ');
-          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.geoValue??""),
-              ),
-        ),
-      );
-    });
-
-  }*/
-
-
-
-  /*bindRegionNameFilter(BuildContext context) {
-    return Obx((){
-      return  DropdownSearch<RegionWithClusterFilterModal>.multiSelection(
-        items: dashboard_view_Controller.regionwithclusterGetByEmailList,
-        itemAsString: (RegionWithClusterFilterModal u) => u.geoValue??"",
-        selectedItems: dashboard_view_Controller.SelectedRegion_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedRegion_list.isNotEmpty?"Region Name":null,
-            hintText: "Region Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Region Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.geoValue).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<RegionWithClusterFilterModal> selectedList) {
-          dashboard_view_Controller.SelectedRegion_list.value = selectedList;
-          dashboard_view_Controller.RegionName_controller.value.text =
-              selectedList.map((e) => e.geoValue).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.geoValue??""),
-              ),
-        ),
-      );
-    });
-
-  }*/
-
   bindQuoteSubmitted(BuildContext context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width*.96,
       controller: dashboard_view_Controller.QuoteAccepted_controller.value,
-      label: Text(
-        "Quote Accepted",
+      label: Text("Quote Accepted",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.fourtine,

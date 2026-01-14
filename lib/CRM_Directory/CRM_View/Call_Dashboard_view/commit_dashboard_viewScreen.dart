@@ -798,445 +798,77 @@ class CommitDashboardViewscreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
+              _buildLabelWithValue(label: "Sales Cycle Id: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleId??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Task Id: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].taskId??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Accepted: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].quoteAccepted??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approval Status: ", value:  Status,color:getStatusColor(Status)),
+              _buildLabelWithValue(label: "Customer Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].accountName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Customer Code: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].accountCode??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Account Owner: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].accountOwnerFullName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Estimate Amount: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].estimatedAmount.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Contact Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].contactName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].productCategory??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Purchase Process: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].purchaseProcess??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Company Profile Type: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].companyProfileType??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].postCode??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].district??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].clustureHeadValue??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Region Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].branchHeadValue??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Sales Cycle Owner: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].salesCycleOwnerName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Expected Closure Date: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].estClosureDate??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].createdFullName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created On: ", value: StaticMethod.onlyDate( dashboard_view_Controller.commitDashboardUserWiseDataList[position].createdOn??""),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Reporting Manager: ", value: dashboard_view_Controller.commitDashboardUserWiseDataList[position].approvedFullName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approved On: ", value: StaticMethod.onlyDate( dashboard_view_Controller.commitDashboardUserWiseDataList[position].approvedOn??""),color:AllColors.textColor),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Sales Cycle Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .salesCycleId??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .salesCycleId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Task Id: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .taskId??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .taskId??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Quote Accepted: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .quoteAccepted??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .quoteAccepted??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Approval Status: ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: Status,
-                      child: Text(
-                        Status,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(Status),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .accountName ?? "",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .accountName ??
-                            "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Code : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .contactName!,
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .contactName!,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .contactName!,
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .contactName!,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Cluster Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .clustureHeadValue??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .clustureHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Region Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .branchHeadValue??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .branchHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Is Commit : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .commit.toString() == '1'?'Yes':'No',
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .commit.toString() == '1'?'Yes':'No',
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Solution Accepted : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .isSolutionAccepted.toString() == '1'?'Yes':'No',
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .isSolutionAccepted.toString() == '1'?'Yes':'No',
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .createdFullName??"" +
-                          "| ${StaticMethod.dateTimeToDate(
-                              dashboard_view_Controller
-                                  .commitDashboardUserWiseDataList[position]
-                                  .createdOn??"")}",
-                      child: Text(
-                        dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .createdFullName??"" +
-                            "| ${StaticMethod.dateTimeToDate(
-                                dashboard_view_Controller
-                                    .commitDashboardUserWiseDataList[position]
-                                    .createdOn??"")}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Expected Closure Date : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .estClosureDate,
-                      child: Text(" ${dashboard_view_Controller
-                          .commitDashboardUserWiseDataList[position]
-                          .estClosureDate ??
-                          ""}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
               Visibility(
                 visible: dashboard_view_Controller.commitDashboardUserWiseDataList[position]
                     .salesCycleApprovalStatus == 'Rejected' ? true : false,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Rejected Reason : ",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: Tooltip(
-                        message: dashboard_view_Controller
-                            .commitDashboardUserWiseDataList[position]
-                            .rejectReason??"",
-                        child: Text(
-                          dashboard_view_Controller
-                              .commitDashboardUserWiseDataList[position]
-                              .rejectReason??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                child: _buildLabelWithValue(label: "Rejected Reason: ", value: dashboard_view_Controller.commitDashboardUserWiseDataList[position].rejectReason??"",color:AllColors.textColor),
+
               ),
+
 
             ],
           ),
           // trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
+    );
+  }
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    required Color color,
+
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -1302,15 +934,9 @@ class CommitDashboardViewscreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 5,
-                              ),
+                              SizedBox(height: 5,),
                               RadioGroupDateRangeFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
-
-
+                              SizedBox(height: 10,),
 
                             ],
                           ),
@@ -1324,33 +950,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.commitDashboardData();
-                            Get.back();
-                          },
-                        )),
-
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Saved Filter',
-                          borderColor: AllColors.green,
-                          textColor: AllColors.green,
-                          onTap: () {
-                            dashboard_view_Controller.filterDataChecker.value='';
-                            dashboard_view_Controller.SaveFilterData();
-                            /*dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.funnelDashboardData();*/
-                            Get.back();
-                          },
-                        )),
-
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
+                          text: 'Clear',
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
@@ -1363,60 +963,34 @@ class CommitDashboardViewscreen extends StatelessWidget{
                           },
                         )),
 
-                       /* Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.primaryDark,
-                                  width: 1),
-                            )),
-                            onPressed: () {
-                              dashboard_view_Controller.filterDataChecker.value='';
-                              dashboard_view_Controller.SaveFilterData();
 
-                              dashboard_view_Controller.pageNumber = 0;
-                              dashboard_view_Controller.commitDashboardData();
-                              Get.back();
-                            },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              side: BorderSide(
-                                  color: AllColors.redColor, width: 1),
-                            )),
-                            onPressed: () {
-                              dashboard_view_Controller.filterDataChecker.value='';
-                              dashboard_view_Controller.clearFilterData();
-                              dashboard_view_Controller.clearAllFilterController();
-                              dashboard_view_Controller.pageNumber = 0;
-                              dashboard_view_Controller.commitDashboardData();
-                              Get.back();
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.commitDashboardData();
+                            Get.back();
+                          },
+                        )),
 
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),*/
+
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.SaveFilterData();
+                            /*dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.funnelDashboardData();*/
+                            Get.back();
+                          },
+                        )),
+
                       ],
                     ),
                   ),
@@ -2404,12 +1978,20 @@ class CommitDashboardViewscreen extends StatelessWidget{
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedCluster_list.isEmpty) {
-        dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
-        dashboard_view_Controller.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-        dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+      if (dashboard_view_Controller.clusterName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.clusterName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedCluster_list.value =[];
+        dashboard_view_Controller.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedCluster_list.isEmpty) {
+          dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
+          dashboard_view_Controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+        }
       }
     });
 
@@ -2431,21 +2013,12 @@ class CommitDashboardViewscreen extends StatelessWidget{
               final searchController = TextEditingController();
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedCluster_list);
-
-              List<ClusterModal> allItems =
-                  dashboard_view_Controller.clusterGetByEmailList;
-
+              List<ClusterModal> allItems = dashboard_view_Controller.clusterGetByEmailList;
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2471,15 +2044,13 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
                             ],
                           ),
                         ),
@@ -2536,17 +2107,14 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
-                              : ListView.builder(
+                          child: filtered.isEmpty ? const Center(child: Text('No clusters found')) : ListView.builder(
                             padding:
                             const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
                               final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
+                              (s.geoValue ?? "") == (item.geoValue ?? ""));
                               return CheckboxListTile(
                                 title: Text(item.geoValue ?? ""),
                                 value: isSel,
@@ -2569,25 +2137,30 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                              horizontal: 50, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    dashboard_view_Controller
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedCluster_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(', ');
+                                    dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child:  Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2640,48 +2213,48 @@ class CommitDashboardViewscreen extends StatelessWidget{
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedRegion_list.isEmpty) {
-        dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
-        dashboard_view_Controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-
+      if (dashboard_view_Controller.RegionName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        dashboard_view_Controller.SelectedRegion_list.value=[];
+        List<String> nameList = dashboard_view_Controller.RegionName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedRegion_list.isEmpty) {
+          dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
+          dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
     return Obx(() {
       final selected = dashboard_view_Controller.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
           await showModalBottomSheet(
             context: context,
             isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            ),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)),),
             builder: (context) {
               final searchController = TextEditingController();
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedRegion_list);
 
-              final allItems =
-                  dashboard_view_Controller.regionwithclusterGetByEmailList;
+              final allItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
-
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
                 return Padding(
                   padding: EdgeInsets.only(
                       bottom: MediaQuery.of(context).viewInsets.bottom),
@@ -2709,12 +2282,10 @@ class CommitDashboardViewscreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
                             ],
                           ),
                         ),
@@ -2803,22 +2374,28 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                              horizontal: 50, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedRegion_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(', ');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],

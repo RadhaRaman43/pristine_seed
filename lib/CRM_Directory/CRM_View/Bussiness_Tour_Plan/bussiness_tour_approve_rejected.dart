@@ -429,7 +429,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
-                            businessTourPlanController.clearFilterData();
+                            //businessTourPlanController.clearFilterData();
                             businessTourPlanController.clearAllFieldOfFilter();
                             businessTourPlanController.pageNumber=0;
                             businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber);

@@ -16,7 +16,7 @@ class AllColors{
   static const grayColor=Color(0x4dd3d7d3);
   static const grayColor1=Color(0xb3f4f8f4);
   static const lightgreyColor=Color(0xc8a9a7a7);
-  static const ripple_green=Color(0xf9e6ece6);
+  static const ripple_green=Color(0xf9fdfffd);
   static const redColor=Color(0xc5de1919);
   static const lightredColor=Color(0xc5ee8282);
   static const whiteColor=Color(0xcfffffff);

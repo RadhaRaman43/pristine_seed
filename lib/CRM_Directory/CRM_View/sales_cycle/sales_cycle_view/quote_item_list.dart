@@ -722,10 +722,6 @@ class QuoteItemList extends StatelessWidget{
 
 
 
-
-
-
-
                   ],
                 ),
               ),

@@ -1985,10 +1985,7 @@ class SalesCycleScreen extends StatelessWidget{
 
     return Obx(() {
       final selected = salesCycleController.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
-
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
       return GestureDetector(
         onTap: () async {
           await showModalBottomSheet(

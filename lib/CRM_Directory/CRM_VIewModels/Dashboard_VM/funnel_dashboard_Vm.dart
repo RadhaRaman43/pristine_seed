@@ -107,9 +107,8 @@ class FunnelDashboardVm extends GetxController{
       getEmployeeTeamMemberGetByClusterRegionApi();
     }
     getItemCategoryMstWithoutTaskIdApi();
-
     getAccountMaster("");
-    getFilterData();
+    //getFilterData();
   }
 
 
@@ -201,7 +200,7 @@ class FunnelDashboardVm extends GetxController{
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
       };
 
-      print(data);
+      print("funnel data......$data");
       loading.value = true;
       isShimmerLoading.value = true;
 
@@ -552,7 +551,7 @@ class FunnelDashboardVm extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(',');
 
               getRegionsWithClusterFilterGetByEmail();
 
@@ -584,7 +583,7 @@ class FunnelDashboardVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -592,7 +591,7 @@ class FunnelDashboardVm extends GetxController{
         "cluster_filter":selectedCluster.isEmpty?"":selectedCluster
       };
       loading.value=true;
-      print("data is ${data}");
+      print(data);
       _api.RegionsWithClusterFilterGetByEmailApiHit(data, sessionManagement).then((onValue){
         print(onValue);
         final jsonResponse = json.decode(onValue);
@@ -603,7 +602,8 @@ class FunnelDashboardVm extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
             print('region....${RegionName_controller.value.text}');
-            funnelDashboardData();
+            // funnelDashboardData();
+             getFilterData();
 
           }else {
             loading.value = false;
@@ -777,29 +777,53 @@ class FunnelDashboardVm extends GetxController{
       "filter_region_name":RegionName_controller.value.text,
       "filter_cluster_name": clusterName_controller.value.text,
     });
-    /*Map getFilterData=await sessionManagement.getFunnelDashboardData();
-    print("filter data save ${getFilterData}");*/
-
+    funnelDashboardData();
   }
 
   void getFilterData() async{
-    Map getFilterData=await sessionManagement.getFunnelDashboardData();
-    formattedStartDate.value=getFilterData["start_date"];
-    formattedEndDate.value=getFilterData["end_date"];
-    filterCustomDateController.value.text=getFilterData["filter_custom_date"];
-    StageName_controller.value.text=getFilterData["filter_stage_name"];
-    QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"];
-    CustomerName_controller.value.text=getFilterData["filter_customer_name"];
-    ProductCategory_controller.value.text=getFilterData["filter_product_category"];
-    IsCommit_controller.value.text=getFilterData["filter_commit"];
-    filter_created_on_cont.value.text=getFilterData["filter_created_on"];
-    RegionName_controller.value.text=getFilterData["filter_region_name"];
-    clusterName_controller.value.text=getFilterData["filter_cluster_name"];
-    AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
-    pageNumber=0;
-    filterDataChecker.value='1';
-    print("filter data save ${getFilterData}");
-    funnelDashboardData();
+    try{
+      Map getFilterData=await sessionManagement.getFunnelDashboardData();
+
+      if(getFilterData.isNotEmpty){
+        filterDataChecker.value='1';
+        filterCustomDateController.value.text=getFilterData["filter_custom_date"]??"";
+        StageName_controller.value.text=getFilterData["filter_stage_name"]??"";
+        QuoteAccepted_controller.value.text=getFilterData["filter_quote_accepted"]??"";
+        CustomerName_controller.value.text=getFilterData["filter_customer_name"]??"";
+        ProductCategory_controller.value.text=getFilterData["filter_product_category"]??"";
+        IsCommit_controller.value.text=getFilterData["filter_commit"]??"";
+        filter_created_on_cont.value.text=getFilterData["filter_created_on"]??"";
+        AccountOwner_controller.value.text=getFilterData["filter_owner_name"]??"";
+        pageNumber=0;
+
+        if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){
+          formattedStartDate.value = "";
+          formattedStartDate.value=getFilterData["start_date"]??"";
+        }
+        if(getFilterData["end_date"].toString().isNotEmpty && getFilterData["end_date"].toString()!=""){
+          formattedEndDate.value = "";
+          formattedEndDate.value=getFilterData["end_date"]??"";
+        }
+        if(getFilterData["filter_region_name"].toString().isNotEmpty && getFilterData["filter_region_name"].toString()!=""){
+          RegionName_controller.value.text = "";
+          RegionName_controller.value.text = getFilterData["filter_region_name"].toString()??"";
+        }
+        if(getFilterData["filter_cluster_name"].toString().isNotEmpty && getFilterData["filter_cluster_name"].toString()!=""){
+          clusterName_controller.value.text="";
+          clusterName_controller.value.text=getFilterData["filter_cluster_name"].toString()??"";
+          print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+        }
+      }
+      else{
+        print("else condition");
+      }
+
+      funnelDashboardData();
+    }
+    catch(e){
+      print("get data from filter data ${e}");
+    }
+
   }
   void clearFilterData() {
     sessionManagement.clearFunnelDashboardData();

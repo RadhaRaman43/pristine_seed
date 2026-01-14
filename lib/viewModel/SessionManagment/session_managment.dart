@@ -630,8 +630,10 @@ class SessionManagement {
   Future<Map<String, dynamic>> getFunnelDashboardData() async {
     final prefs = await SharedPreferences.getInstance();
     String? data = prefs.getString("funnel_dashboard_data");
+    print("object....${data != null? jsonDecode(data):"<<<<<<<"} ");
     return data != null ? jsonDecode(data) : {};
   }
+
   Future<void> clearFunnelDashboardData() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("funnel_dashboard_data");
