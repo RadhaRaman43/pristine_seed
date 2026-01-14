@@ -1140,15 +1140,14 @@ class BusinessPlanTourViewModel extends GetxController{
       'filterTourIdController': filterTourIdController.value.text,
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
-      'filterTouringRegionController': filterTouringRegionController.value,
-      'StartDate_filter_controller': StartDate_filter_controller.value,
-      'EndDate_filter_controller': EndDate_filter_controller.value,
-      'filterCreatedByController': filterCreatedByController.value,
-      'createdOn_filter_controller': createdOn_filter_controller.value,
+      'filterTouringRegionController': filterTouringRegionController.value.text,
+      'StartDate_filter_controller': StartDate_filter_controller.value.text,
+      'EndDate_filter_controller': EndDate_filter_controller.value.text,
+      'filterCreatedByController': filterCreatedByController.value.text,
+      'createdOn_filter_controller': createdOn_filter_controller.value.text,
 
     });
     filterDataChecker.value='';
-
   }
 
   void getFilterData() async{
@@ -1160,9 +1159,8 @@ class BusinessPlanTourViewModel extends GetxController{
     filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
     StartDate_filter_controller.value.text=getFilterData["StartDate_filter_controller"]??"";
     EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
-    filterCreatedByController.value=getFilterData["filterCreatedByController"]??"";
-    createdOn_filter_controller.value=getFilterData["createdOn_filter_controller"]??"";
-
+    filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
+    createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
     filterDataChecker.value='1';
 
     if(RegionName_controller.value.text.isEmpty){
@@ -1181,6 +1179,51 @@ class BusinessPlanTourViewModel extends GetxController{
   void clearFilterData() {
     filterDataChecker.value='';
     sessionManagement.clearBusinessTourPlanData();
+  }
+
+  void SaveBusinessPlanLineFilterData() async{
+    await sessionManagement.saveBusinessTourPlanLineData({
+
+      'filterTourIdController': filterTourIdController.value.text,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
+      'filterTouringRegionController': filterTouringRegionController.value.text,
+      'filterTourDateController': filterTourDateController.value.text,
+      'filterCreatedByController': filterCreatedByController.value.text,
+      'filterCreatedOnController': filterCreatedOnController.value.text,
+
+    });
+    filterDataChecker.value='';
+  }
+
+  void getBusinessPlanLineFilterData() async{
+    Map getFilterData=await sessionManagement.getBusinessTourPlanLineData();
+
+    filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
+    RegionName_controller.value.text=getFilterData["region_name"]??"";
+    clusterName_controller.value.text=getFilterData["cluster_name"]??"";
+    filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
+    filterTourDateController.value.text=getFilterData["filterTourDateController"]??"";
+    filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
+    filterCreatedOnController.value.text=getFilterData["filterCreatedOnController"]??"";
+    filterDataChecker.value='1';
+
+    if(RegionName_controller.value.text.isEmpty){
+      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+    }
+    if(clusterName_controller.value.text.isEmpty){
+      clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+    }
+
+    pageNumber=0;
+    getBusinessTourPlanData(pageNumber);
+
+
+  }
+
+  void clearBusinessPlanLineFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearBusinessTourPlanLineData();
   }
 
 }

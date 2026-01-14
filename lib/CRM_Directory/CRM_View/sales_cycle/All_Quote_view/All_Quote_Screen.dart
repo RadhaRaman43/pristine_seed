@@ -357,7 +357,6 @@ class AllQuoteScreen extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -401,7 +400,7 @@ class AllQuoteScreen extends StatelessWidget{
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               SizedBox(height: 5,),
                               bindData(context,'Quote Id',pendingDraftQuoteController.filterQuoteIdController.value),

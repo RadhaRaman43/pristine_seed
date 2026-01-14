@@ -636,14 +636,13 @@ class BussinessTourPlanScreen extends StatelessWidget{
 
 
   void showFilterBottomSheet(BuildContext context) {
-    // accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
           expand: false,
-         // initialChildSize: 0.85,
+          initialChildSize: 0.85,
           minChildSize: 0.5,
           maxChildSize: 0.95,
           builder: (_, scrollController) {
@@ -652,7 +651,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                mainAxisSize: MainAxisSize.max, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),

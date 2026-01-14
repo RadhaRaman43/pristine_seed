@@ -688,7 +688,6 @@ class SalesCycleScreen extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),

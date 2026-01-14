@@ -591,6 +591,36 @@ class SessionManagement {
     prefs.remove("BusinessTourPlan_data");
   }
 
+  //todo business tour line detail
+  Future<void> saveBusinessTourPlanLineData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("BusinessTourPlanLine_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getBusinessTourPlanLineData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("BusinessTourPlanLine_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearBusinessTourPlanLineData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("BusinessTourPlanLine_data");
+  }
+
+  //todo business approved and rejected tour
+  Future<void> saveBusinessApproveRejectedTourPlanData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("BusinessApproveRejectedTourPlan_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getBusinessApproveRejectedTourPlanData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("BusinessApproveRejectedTourPlan_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearBusinessApproveRejectedTourPlanData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("BusinessApproveRejectedTourPlan_data");
+  }
+
 
   //todo dashboard
   Future<void> saveFunnelDashboardData(Map<String, dynamic> data) async {

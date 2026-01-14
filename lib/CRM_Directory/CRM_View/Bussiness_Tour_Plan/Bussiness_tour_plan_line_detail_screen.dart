@@ -269,7 +269,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
       builder: (BuildContext context) {
         return DraggableScrollableSheet(
           expand: false,
-          initialChildSize: 0.65,
+          initialChildSize: 0.85,
           minChildSize: 0.6,
           maxChildSize: 0.95,
           builder: (_, scrollController) {
@@ -326,21 +326,14 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                             children: [
                               SizedBox(height: 10,),
                               bindTextField(context,businessTourPlanController.filterTourIdController.value,'Tour ID'),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindRegionNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-
                               SizedBox(height: 10,),
                               bindTextField(context,businessTourPlanController.filterTouringRegionController.value,'Touring Region'),
-
                               SizedBox(height: 10,),
                               bindTextField(context,businessTourPlanController.filterCreatedByController.value,'Created By'),
-
                               SizedBox(height: 10,),
                               BindTourDate(context),
                               SizedBox(height: 10,),
@@ -352,7 +345,48 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                       ),
                     ),
                   ),
+
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Submit',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            businessTourPlanController.pageNumber = 0;
+                            businessTourPlanController.getBusinessTourPlanAllLineGet(businessTourPlanController.pageNumber);
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Reset',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            businessTourPlanController.clearBusinessPlanLineFilterData();
+                            businessTourPlanController.clearAllFieldOfFilter();
+                            businessTourPlanController.pageNumber=0;
+                            businessTourPlanController.getBusinessTourPlanAllLineGet(businessTourPlanController.pageNumber);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            businessTourPlanController.SaveBusinessPlanLineFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -408,7 +442,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -418,6 +452,42 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
       },
     );
   }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 
   Widget bindTextField(BuildContext context, TextEditingController controller, String lavel_text){
     return  TextField(
