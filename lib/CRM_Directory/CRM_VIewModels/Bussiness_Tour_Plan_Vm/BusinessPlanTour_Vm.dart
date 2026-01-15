@@ -32,6 +32,7 @@ class BusinessPlanTourViewModel extends GetxController{
   String email = "";
   String isAdminWritePermission = "";
   String isHeadOfficePermission = "";
+  String filterRouting = "";
   int pageNumber = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
@@ -116,10 +117,11 @@ class BusinessPlanTourViewModel extends GetxController{
     email = await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadOfficePermission = await sessionManagement.getisHeadofficePermission() ?? '';
+    filterRouting = await sessionManagement.getfilterRouting() ?? '';
     approveRejectList.value = ['Approve', 'Reject'];
     clearAllFieldOfFilter();
     getClustersGetByEmail();
-    getFilterData();
+
     super.onInit();
   }
 
@@ -207,8 +209,15 @@ class BusinessPlanTourViewModel extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getBusinessTourPlanData(pageNumber);
-            getBusinessTourPlanAllLineGet(pageNumber);
+            if(filterRouting=='Business Tour Plan Line Details'){
+              getBusinessPlanLineFilterData();
+            }
+            else if(filterRouting=='Business Tour Plan'){
+              getFilterData();
+            }
+
+
+            //getBusinessTourPlanAllLineGet(pageNumber);
 
           }else {
             loading.value = false;
@@ -1148,32 +1157,38 @@ class BusinessPlanTourViewModel extends GetxController{
 
     });
     filterDataChecker.value='';
+    pageNumber=0;
+    getBusinessTourPlanData(pageNumber);
   }
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getBusinessTourPlanData();
 
-    filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
-    RegionName_controller.value.text=getFilterData["region_name"]??"";
-    clusterName_controller.value.text=getFilterData["cluster_name"]??"";
-    filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
-    StartDate_filter_controller.value.text=getFilterData["StartDate_filter_controller"]??"";
-    EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
-    filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
-    createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
-    filterDataChecker.value='1';
+    if(getFilterData.isNotEmpty){
+      filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
+      filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
+      StartDate_filter_controller.value.text=getFilterData["StartDate_filter_controller"]??"";
+      EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
+      filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
+      createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
+      filterDataChecker.value='1';
 
-    if(RegionName_controller.value.text.isEmpty){
-      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
     }
-    if(clusterName_controller.value.text.isEmpty){
-      clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+    else{
+      print("else condition");
     }
 
     pageNumber=0;
     getBusinessTourPlanData(pageNumber);
-
-
   }
 
   void clearFilterData() {
@@ -1181,9 +1196,9 @@ class BusinessPlanTourViewModel extends GetxController{
     sessionManagement.clearBusinessTourPlanData();
   }
 
+  //todo business tour plan data
   void SaveBusinessPlanLineFilterData() async{
     await sessionManagement.saveBusinessTourPlanLineData({
-
       'filterTourIdController': filterTourIdController.value.text,
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
@@ -1191,34 +1206,37 @@ class BusinessPlanTourViewModel extends GetxController{
       'filterTourDateController': filterTourDateController.value.text,
       'filterCreatedByController': filterCreatedByController.value.text,
       'filterCreatedOnController': filterCreatedOnController.value.text,
-
     });
     filterDataChecker.value='';
+    pageNumber=0;
+    getBusinessTourPlanAllLineGet(pageNumber);
   }
 
   void getBusinessPlanLineFilterData() async{
     Map getFilterData=await sessionManagement.getBusinessTourPlanLineData();
+    if(getFilterData.isNotEmpty){
+      filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
+      filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
+      filterTourDateController.value.text=getFilterData["filterTourDateController"]??"";
+      filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
+      filterCreatedOnController.value.text=getFilterData["filterCreatedOnController"]??"";
+      filterDataChecker.value='1';
 
-    filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
-    RegionName_controller.value.text=getFilterData["region_name"]??"";
-    clusterName_controller.value.text=getFilterData["cluster_name"]??"";
-    filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
-    filterTourDateController.value.text=getFilterData["filterTourDateController"]??"";
-    filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
-    filterCreatedOnController.value.text=getFilterData["filterCreatedOnController"]??"";
-    filterDataChecker.value='1';
-
-    if(RegionName_controller.value.text.isEmpty){
-      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
     }
-    if(clusterName_controller.value.text.isEmpty){
-      clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+    else{
+      print("else condition");
     }
-
     pageNumber=0;
-    getBusinessTourPlanData(pageNumber);
-
-
+    getBusinessTourPlanAllLineGet(pageNumber);
   }
 
   void clearBusinessPlanLineFilterData() {

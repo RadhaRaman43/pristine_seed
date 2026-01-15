@@ -645,6 +645,7 @@ class _Drawer extends State<CustomDrawer> {
           break;
 
         case 'Business Tour Plan':
+          sessionManagement.setfilterRouting("Business Tour Plan");
           IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
           home_vm.openMenu(cTitle, iconData);
           Get.delete<BusinessPlanTourViewModel>();
@@ -653,6 +654,7 @@ class _Drawer extends State<CustomDrawer> {
           break;
 
         case 'Business Tour Plan Line Details':
+          sessionManagement.setfilterRouting("Business Tour Plan Line Details");
           IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
           home_vm.openMenu(cTitle, iconData);
           Get.delete<BusinessPlanTourViewModel>();

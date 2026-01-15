@@ -152,28 +152,26 @@ class TaskApprovalListScreen extends StatelessWidget{
       );
     }
   }
-
+  Color getStatusColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'approved':
+        return Colors.green;
+      case 'rejected':
+        return Colors.red;
+      case 'pending for approval':
+        return Colors.yellow[700]!;
+      default:
+        return Colors.black;
+    }
+  }
   Widget BindCustomerRequestListView(context, int position) {
-    String taskStatus = TaskMaster_page_controller.Task_Master_list[position]
-        .taskStatus!;
 
     int IsReadyForApprove = TaskMaster_page_controller
         .Task_Master_list[position].isReadyForApprove!;
     String pipeLine = TaskMaster_page_controller.Task_Master_list[position]
         .taskDueTime!.isNotEmpty ? "|" : "";
     // Determine the color based on taskStatus
-    Color getStatusColor(String status) {
-      switch (status.toLowerCase()) {
-        case 'approved':
-          return Colors.green;
-        case 'rejected':
-          return Colors.red;
-        case 'pending for approval':
-          return Colors.yellow[700]!;
-        default:
-          return Colors.black;
-      }
-    }
+
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -193,7 +191,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      "Task Status : ",
+                      "Task Id : ",
                       style: GoogleFonts.poppins(
                           color: AllColors.primaryDark1,
                           fontSize: AllFontSize.fourtine,
@@ -203,14 +201,15 @@ class TaskApprovalListScreen extends StatelessWidget{
                       child: Tooltip(
                         message: TaskMaster_page_controller
                             .Task_Master_list[position]
-                            .taskStatus??"",
+                            .taskId??"",
                         child: Text(
                           TaskMaster_page_controller
                               .Task_Master_list[position]
-                              .taskStatus??"",
+                              .taskId??"",
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.poppins(
-                              color: getStatusColor(taskStatus),
+                              //color: getStatusColor(taskStatus),
+                              color: AllColors.textColor,
                               fontSize: AllFontSize.fourtine,
                               fontWeight: FontWeight.w500),
                         ),
@@ -241,33 +240,37 @@ class TaskApprovalListScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              _buildLabelWithValue(label: "Task Id: ", value: TaskMaster_page_controller.Task_Master_list[position].taskId??"",),
+              _buildLabelWithValue(label: "Task Status: ", value: TaskMaster_page_controller.Task_Master_list[position].taskStatus??"",),
               _buildLabelWithValue(label: "Customer Name: ", value: TaskMaster_page_controller.Task_Master_list[position].accountName??"",),
               _buildLabelWithValue(label: "Customer Code: ", value: TaskMaster_page_controller.Task_Master_list[position].accountCode??"",),
               _buildLabelWithValue(label: "Contact Name: ", value: TaskMaster_page_controller.Task_Master_list[position].contactName??"",),
+              _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
+              _buildLabelWithValue(label: "Task Due Date: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
               _buildLabelWithValue(label: "Type Of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].typeOfCall??"",),
-              _buildLabelWithValue(label: "Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
-              _buildLabelWithValue(label: "Task Remarks: ", value: TaskMaster_page_controller.Task_Master_list[position].taskRemarks??"",),
-              _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.Task_Master_list[position].purposeOfVisit??"",),
-              _buildLabelWithValue(label: "Company Profile Type: ", value: TaskMaster_page_controller.Task_Master_list[position].companyProfileType??"",),
+              _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
-              _buildLabelWithValue(label: "Last Activity Updated On: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??"",),
+              _buildLabelWithValue(label: "Sale Cycle Id: ", value: TaskMaster_page_controller.Task_Master_list[position].salesCycleId??"",),
               _buildLabelWithValue(label: "Product Category: ", value: TaskMaster_page_controller.Task_Master_list[position].productCategory??"",),
+              _buildLabelWithValue(label: "Company Profile Type: ", value: TaskMaster_page_controller.Task_Master_list[position].companyProfileType??"",),
+              //_buildLabelWithValue(label: "Account Category Type: ", value: TaskMaster_page_controller.Task_Master_list[position].acc??"",),
               _buildLabelWithValue(label: "Along With Person Name: ", value: TaskMaster_page_controller.Task_Master_list[position].alongWithPersonName??"",),
-              _buildLabelWithValue(label: "Due Date: ", value: StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].taskDueDate??""),),
-              Visibility(
-                visible: TaskMaster_page_controller.Task_Master_list[position]
-                    .taskStatus == 'Rejected' ? true : false,
-                child:  _buildLabelWithValue(label: "Rejected Reason: ", value: TaskMaster_page_controller.Task_Master_list[position].rejectReason??"",),
-
-              ),
               _buildLabelWithValue(label: "Pin Code: ", value: TaskMaster_page_controller.Task_Master_list[position].postCode??"",),
               _buildLabelWithValue(label: "District: ", value: TaskMaster_page_controller.Task_Master_list[position].district??"",),
               _buildLabelWithValue(label: "Cluster Name: ", value: TaskMaster_page_controller.Task_Master_list[position].clustureHeadValue??"",),
               _buildLabelWithValue(label: "Region Name: ", value: TaskMaster_page_controller.Task_Master_list[position].branchHeadValue??"",),
-              _buildLabelWithValue(label: "Task Owner: ", value: TaskMaster_page_controller.Task_Master_list[position].taskOwner??"",),
+              _buildLabelWithValue(label: "Task Remarks: ", value: TaskMaster_page_controller.Task_Master_list[position].taskRemarks??"",),
+              _buildLabelWithValue(label: "Purpose Of Visit: ", value: TaskMaster_page_controller.Task_Master_list[position].purposeOfVisit??"",),
+              _buildLabelWithValue(label: "Last Activity Updated On: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityUpdatedOn??"",),
               _buildLabelWithValue(label: "Created On: ", value:StaticMethod.onlyDate(TaskMaster_page_controller.Task_Master_list[position].createdOn??"") ,),
-              _buildLabelWithValue(label: "Reporting Manager: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
+              _buildLabelWithValue(label: "Reporting Person: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
+              _buildLabelWithValue(label: "Approved By: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedFullName??"",),
+              _buildLabelWithValue(label: "Approved On: ", value: TaskMaster_page_controller.Task_Master_list[position].approvedOn??"",),
+              Visibility(
+                visible: TaskMaster_page_controller.Task_Master_list[position]
+                    .taskStatus == 'Rejected' ? true : false,
+                child:  _buildLabelWithValue(label: "Rejected Reason: ", value: TaskMaster_page_controller.Task_Master_list[position].rejectReason??"",),
+              ),
+              _buildLabelWithValue(label: "Manager Remarks: ", value: TaskMaster_page_controller.Task_Master_list[position].managerRemarks??"",),
 
             ],
           ),
@@ -297,7 +300,7 @@ class TaskApprovalListScreen extends StatelessWidget{
               value ?? "",
               overflow: TextOverflow.ellipsis,
               style: GoogleFonts.poppins(
-                color: color,
+                color:label=="Task Status: "? getStatusColor(value!):color,
                 fontSize: AllFontSize.fourtine,
                 fontWeight: FontWeight.w500,
               ),
@@ -421,23 +424,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                     child: Row(
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            Get.back();
-                            TaskMaster_page_controller.pageNumber = 0;
-                            TaskMaster_page_controller.getTaskMasterApprovalList(
-                              TaskMaster_page_controller.pageNumber,
-                              TaskMaster_page_controller.SaleCycleActive_Controller.text,
-                            );
-                          },
-                        )),
-
-                        const SizedBox(width: 6),
-
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
+                          text: 'Clear',
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
@@ -449,11 +436,23 @@ class TaskApprovalListScreen extends StatelessWidget{
                               TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(),);
                           },
                         )),
-
                         const SizedBox(width: 6),
-
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.pageNumber = 0;
+                            TaskMaster_page_controller.getTaskMasterApprovalList(
+                              TaskMaster_page_controller.pageNumber,
+                              TaskMaster_page_controller.SaleCycleActive_Controller.text,
+                            );
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
@@ -461,6 +460,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                             TaskMaster_page_controller.SaveFilterData();
                           },
                         )),
+
                       ],
                     ),
                   )
@@ -881,77 +881,83 @@ class TaskApprovalListScreen extends StatelessWidget{
   }
   filterWithTaskDueDate(BuildContext context) {
     return TextField(
-        cursorColor: AllColors.primaryDark1,
-        controller: TaskMaster_page_controller.filterTaskDuedateController.value,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten
-            ),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Task Due Date',
-            labelText: 'Task Due Date',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )
+      cursorColor: AllColors.primaryDark1,
+      controller: TaskMaster_page_controller.filterTaskDuedateController.value,
+      readOnly: true,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+        suffixIcon: Icon(Icons.calendar_month),
+        hintText: 'Due Date',
+        labelText: 'Due Date',
+        hintStyle: GoogleFonts.poppins(
+            color: AllColors.lightblackColor,
+            fontWeight: FontWeight.w300,
+            fontSize: AllFontSize.ten),
+        labelStyle: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontWeight: FontWeight.w500,
+            fontSize: AllFontSize.sisxteen),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        onTap: () async {
-          DateTime start_date = new DateTime(1900);
-          DateTime ending_date = new DateTime(2200);
-          FocusScope.of(context).requestFocus(new FocusNode());
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: DateTime.now(),
-            firstDate: start_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  // Header background color
-                  //accentColor: AllColors.primaryDark1, // Color of the buttons
-                  colorScheme: ColorScheme.light(
-                      primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(
-                      textTheme: ButtonTextTheme.primary),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      onTap: () async {
+        FocusScope.of(context).requestFocus(FocusNode()); // hide keyboard
+        DateTimeRange? picked = await showDateRangePicker(
+          context: context,
+          firstDate: DateTime(1900),
+          lastDate: DateTime(2200),
+          builder: (BuildContext context, Widget? child) {
+            return Theme(
+              data: ThemeData.light().copyWith(
+                primaryColor: AllColors.primaryDark1,
+                colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
+                buttonTheme: ButtonThemeData(
+                  textTheme: ButtonTextTheme.primary,
                 ),
-                child: child!,
-              );
-            },
+              ),
+              child: child!,
+            );
+          },
+        );
 
-          );
-          var outputFormat = DateFormat('yyyy-MM-dd');
-          if (date != null && date != "")
-            TaskMaster_page_controller.filterTaskDuedateController.value.text =
-                outputFormat.format(date);
-          else
-            TaskMaster_page_controller.filterTaskDuedateController.value.text =
-            "";
+        if (picked != null) {
+          final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
+          final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
+          TaskMaster_page_controller.createdOnStartToEnd.value="$startDate@$endDate";
+          TaskMaster_page_controller.filterTaskDuedateController.value.text = '$startDate - $endDate';
+        } else {
+          TaskMaster_page_controller.filterTaskDuedateController.value.text = '';
+          TaskMaster_page_controller.createdOnStartToEnd.value="";
         }
-
-
+      },
     );
   }
+
+
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = TaskMaster_page_controller.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          TaskMaster_page_controller.SelectedCluster_list.isEmpty) {
-        TaskMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
-        TaskMaster_page_controller.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        TaskMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
+      if (TaskMaster_page_controller.clusterName_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.clusterName_controller.value.text.split('|');
+        TaskMaster_page_controller.SelectedCluster_list.value =[];
+        TaskMaster_page_controller.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && TaskMaster_page_controller.SelectedCluster_list.isEmpty) {
+          TaskMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
+          TaskMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          TaskMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
@@ -1012,15 +1018,12 @@ class TaskApprovalListScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1115,20 +1118,26 @@ class TaskApprovalListScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    TaskMaster_page_controller.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    TaskMaster_page_controller
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    TaskMaster_page_controller
-                                        .getRegionsWithClusterFilterGetByEmail();
+
+                                    TaskMaster_page_controller.filterDataChecker.value='';
+                                    TaskMaster_page_controller.SelectedCluster_list.assignAll(tempSelected);
+                                    TaskMaster_page_controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
+                                    TaskMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1181,19 +1190,30 @@ class TaskApprovalListScreen extends StatelessWidget{
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = TaskMaster_page_controller.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          TaskMaster_page_controller.SelectedRegion_list.isEmpty) {
-        TaskMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
-        TaskMaster_page_controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-
+      if (TaskMaster_page_controller.RegionName_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        TaskMaster_page_controller.SelectedRegion_list.value=[];
+        List<String> nameList = TaskMaster_page_controller.RegionName_controller.value.text.split('|');
+        TaskMaster_page_controller.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && TaskMaster_page_controller.SelectedRegion_list.isEmpty) {
+          TaskMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
+          TaskMaster_page_controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${TaskMaster_page_controller.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
     return Obx(() {
       final selected = TaskMaster_page_controller.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1208,20 +1228,13 @@ class TaskApprovalListScreen extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(TaskMaster_page_controller.SelectedRegion_list);
 
-              final allItems =
-                  TaskMaster_page_controller.regionwithclusterGetByEmailList;
+              final allItems = TaskMaster_page_controller.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1250,12 +1263,9 @@ class TaskApprovalListScreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1349,17 +1359,23 @@ class TaskApprovalListScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    TaskMaster_page_controller.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    TaskMaster_page_controller.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    TaskMaster_page_controller.filterDataChecker.value='';
+                                    TaskMaster_page_controller.SelectedRegion_list.assignAll(tempSelected);
+                                    TaskMaster_page_controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1408,6 +1424,7 @@ class TaskApprovalListScreen extends StatelessWidget{
       );
     });
   }
+
 
   bindAccountOwnerFilter(BuildContext context) {
     return Obx((){

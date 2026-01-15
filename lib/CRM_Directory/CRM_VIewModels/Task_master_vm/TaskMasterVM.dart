@@ -1818,7 +1818,6 @@ class Taskmastervm extends GetxController{
         product_category_controller.value.text=getFilterData["product_category"]??"";
         product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
         approved_by_controller.value.text=getFilterData["approved_by_controller"]??"";
-        pageNumber=0;
 
         if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
           RegionName_controller.value.text = "";

@@ -351,18 +351,7 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                     child: Row(
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            Get.back();
-                            businessTourPlanController.pageNumber = 0;
-                            businessTourPlanController.getBusinessTourPlanAllLineGet(businessTourPlanController.pageNumber);
-                          },
-                        )),
-                        const SizedBox(width: 6),
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
+                          text: 'Clear',
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
@@ -375,7 +364,18 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                         )),
                         const SizedBox(width: 6),
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            businessTourPlanController.pageNumber = 0;
+                            businessTourPlanController.getBusinessTourPlanAllLineGet(businessTourPlanController.pageNumber);
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
@@ -632,10 +632,6 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
             context: context,
             firstDate: DateTime(1900),
             lastDate: DateTime(2200),
-            /* initialDateRange: DateTimeRange(
-            start: DateTime.now(),
-            end: DateTime.now().add(Duration(days: 7)),
-          ),*/
             builder: (BuildContext context, Widget? child) {
               return Theme(
                 data: ThemeData.light().copyWith(
@@ -663,90 +659,27 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
       );
 
 
-    /*return Container(
-      decoration: BoxDecoration(
-          //color: Colors.white,
-          borderRadius: BorderRadius.circular(10)
-      ),
-      child: TextFormField(
-        controller: businessTourPlanController.filterCreatedOnController.value,
-        readOnly: true,
-        decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(
-                vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-            suffixIcon: Icon(Icons.calendar_month),
-            hintText: 'Created On',
-            labelText: 'Created On',
-            hintStyle: GoogleFonts.poppins(
-                color: AllColors.lightblackColor,
-                fontWeight: FontWeight.w300,
-                fontSize: AllFontSize.ten),
-            labelStyle: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontWeight: FontWeight.w500,
-                fontSize: AllFontSize.sisxteen),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-            )),
-        cursorColor: AllColors.primaryDark1,
-        onTap: () async {
-
-          DateTime stating_date = DateTime(1900);
-          DateTime ending_date = DateTime(2200);
-
-          DateTime initialDate = DateTime.now();
-          if (businessTourPlanController.filterCreatedOnController.value.text.isNotEmpty) {
-            initialDate = DateFormat('yyyy-MM-dd').parse(
-              businessTourPlanController.filterCreatedOnController.value.text,
-            );
-          }
-
-
-          // Remove focus from the field
-          FocusScope.of(context).requestFocus(FocusNode());
-
-          // Show the date picker
-          DateTime? date = await showDatePicker(
-            context: context,
-            initialDate: initialDate.isBefore(stating_date) ? stating_date : initialDate,
-            firstDate: stating_date,
-            lastDate: ending_date,
-            builder: (BuildContext context, Widget? child) {
-              return Theme(
-                data: ThemeData.light().copyWith(
-                  primaryColor: AllColors.primaryDark1,
-                  colorScheme: ColorScheme.light(primary: AllColors.primaryDark1),
-                  buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-                ),
-                child: child!,
-              );
-            },
-          );
-
-          // Update the controller with the selected date
-          if (date != null) {
-            var outputFormat = DateFormat('yyyy-MM-dd');
-            businessTourPlanController.filterCreatedOnController.value.text =
-                outputFormat.format(date);
-          }
-        },
-      ),
-    );*/
   }
 
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = businessTourPlanController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          businessTourPlanController.SelectedCluster_list.isEmpty) {
-        businessTourPlanController.SelectedCluster_list.assignAll(availableItems);
-        businessTourPlanController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
+      if (businessTourPlanController.clusterName_controller.value.text.isNotEmpty && businessTourPlanController.filterDataChecker.value=='1') {
+        List<String> nameList = businessTourPlanController.clusterName_controller.value.text.split('|');
+        businessTourPlanController.SelectedCluster_list.value =[];
+        businessTourPlanController.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && businessTourPlanController.SelectedCluster_list.isEmpty) {
+          businessTourPlanController.SelectedCluster_list.assignAll(availableItems);
+          businessTourPlanController.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
@@ -807,15 +740,12 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -910,20 +840,26 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    businessTourPlanController.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    businessTourPlanController
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    businessTourPlanController
-                                        .getRegionsWithClusterFilterGetByEmail();
+
+                                    businessTourPlanController.filterDataChecker.value='';
+                                    businessTourPlanController.SelectedCluster_list.assignAll(tempSelected);
+                                    businessTourPlanController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
+                                    businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -972,23 +908,33 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
       );
     });
   }
-
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = businessTourPlanController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          businessTourPlanController.SelectedRegion_list.isEmpty) {
-        businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
-        businessTourPlanController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-
+      if (businessTourPlanController.RegionName_controller.value.text.isNotEmpty && businessTourPlanController.filterDataChecker.value=='1') {
+        businessTourPlanController.SelectedRegion_list.value=[];
+        List<String> nameList = businessTourPlanController.RegionName_controller.value.text.split('|');
+        businessTourPlanController.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && businessTourPlanController.SelectedRegion_list.isEmpty) {
+          businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
+          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${businessTourPlanController.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
     return Obx(() {
       final selected = businessTourPlanController.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1003,20 +949,13 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(businessTourPlanController.SelectedRegion_list);
 
-              final allItems =
-                  businessTourPlanController.regionwithclusterGetByEmailList;
+              final allItems = businessTourPlanController.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1045,17 +984,13 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
 
-                        // Search Field
                         Padding(
                           padding:
                           const EdgeInsets.symmetric(horizontal: 16.0),
@@ -1144,17 +1079,23 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    businessTourPlanController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    businessTourPlanController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    businessTourPlanController.filterDataChecker.value='';
+                                    businessTourPlanController.SelectedRegion_list.assignAll(tempSelected);
+                                    businessTourPlanController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1203,5 +1144,6 @@ class BussinessTourPlanLineDetailScreen extends StatelessWidget{
       );
     });
   }
+
 
 }
