@@ -957,19 +957,19 @@ class CallDashboardViewScreen extends StatelessWidget {
               _buildLabelWithValue(label: "Last Activity Status: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].lastActivityStatus ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Last Activity Updated On: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].lastActivityUpdatedOn ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Sales Cycle Id: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].salesCycleId ?? "",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].productCategory  ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Along With Person Name: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].alongWithPersonName ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Due Date: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].taskDueDate ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].postCode ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].district ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].clustureHeadValue ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Region Name: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].branchHeadValue ?? "",color:getStatusColor(taskStatus)),
-              //_buildLabelWithValue(label: "Task Owner: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].ow ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Created By: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].createdBy ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Created By: ", value:  StaticMethod.onlyDate(dashboard_view_Controller.callDashboardUserWiseDataList[position].createdOn?? ""),color:getStatusColor(taskStatus)),
-              //_buildLabelWithValue(label: "Reporting Manager: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].re ?? "",color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Approved On: ", value:  StaticMethod.onlyDate(dashboard_view_Controller.callDashboardUserWiseDataList[position].approvedOn?? ""),color:getStatusColor(taskStatus)),
-              _buildLabelWithValue(label: "Manager Remarks: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].managerRemarks ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].productCategory  ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Along With Person Name: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].alongWithPersonName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Due Date: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].taskDueDate ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].postCode ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].district ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].clustureHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Region Name: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].branchHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Task Owner: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].createdFullName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].createdBy ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  StaticMethod.onlyDate(dashboard_view_Controller.callDashboardUserWiseDataList[position].createdOn?? ""),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Reporting Manager: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].approvedFullName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approved On: ", value:  StaticMethod.onlyDate(dashboard_view_Controller.callDashboardUserWiseDataList[position].approvedOn?? ""),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Manager Remarks: ", value:  dashboard_view_Controller.callDashboardUserWiseDataList[position].managerRemarks ?? "",color:AllColors.textColor),
 
               Visibility(
                 visible: dashboard_view_Controller
@@ -1153,7 +1153,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                         )),
                         const SizedBox(width: 3,),
                         Expanded(child: _buildButton(
-                          text: 'Submit',
+                          text: 'Apply',
                           borderColor: AllColors.primaryDark,
                           textColor: AllColors.primaryDark1,
                           onTap: () {
@@ -1164,7 +1164,7 @@ class CallDashboardViewScreen extends StatelessWidget {
                         )),
                         const SizedBox(width: 3,),
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {

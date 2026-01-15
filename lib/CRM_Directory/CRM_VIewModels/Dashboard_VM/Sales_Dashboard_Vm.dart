@@ -52,10 +52,8 @@ class SalesDashboardVm extends GetxController{
   var PeriodFrom_Controller = TextEditingController().obs;
   var SalesPersonER_Code_Controller = TextEditingController().obs;
   var SalesPersonName_Controller = TextEditingController().obs;
-  var RegionName_Controller = TextEditingController().obs;
-  var ClusterName_Controller = TextEditingController().obs;
-  var clusterNameFilter_controller=TextEditingController().obs;
-  var RegionNameFilter_controller=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
   var EmployeeNameFilter_controller=TextEditingController().obs;
   var DepartmentNameFilter_controller=TextEditingController().obs;
 
@@ -214,15 +212,15 @@ class SalesDashboardVm extends GetxController{
 
   Future<void> salesDashboardData() async {
     ClusterNameForApi = '';
-    if(clusterNameFilter_controller.value.text.isNotEmpty){
-      ClusterNameForApi = clusterNameFilter_controller.value.text
+    if(clusterName_controller.value.text.isNotEmpty){
+      ClusterNameForApi = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
           .join('|');
     }
     RegionNameForApi = '';
-    if(RegionNameFilter_controller.value.text.isNotEmpty){
-      RegionNameForApi = RegionNameFilter_controller.value.text
+    if(RegionName_controller.value.text.isNotEmpty){
+      RegionNameForApi = RegionName_controller.value.text
           .split(',')
           .map((e) => e.trim())
           .join('|');
@@ -277,8 +275,8 @@ class SalesDashboardVm extends GetxController{
           monthWiseCollectionCommitmentList.value = response[0].monthwisecollectioncommitmentvsactualcollectionachive ?? [];
           monthWiseAoVsBookingList.value = response[0].monthwiseaovsbookingachive ?? [];
           monthWiseFinalBookingList.value = response[0].monthwisefinalbookingcommitment ?? [];
-          ClusterName_Controller.value.text = response[0].clusterhead??"";
-          RegionName_Controller.value.text = response[0].regionhead??"";
+          clusterName_controller.value.text = response[0].clusterhead??"";
+          RegionName_controller.value.text = response[0].regionhead??"";
           SalesPersonName_Controller.value.text = response[0].salepersonname??"";
           SalesPersonER_Code_Controller.value.text = response[0].salepersonempcode??"";
           PeriodFrom_Controller.value.text = response[0].periodfrom??"";
@@ -459,8 +457,7 @@ class SalesDashboardVm extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterNameFilter_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -524,11 +521,11 @@ class SalesDashboardVm extends GetxController{
 
   void getRegionsWithClusterFilterGetByEmail() {
     var selectedCluster="";
-    if(clusterNameFilter_controller.value.text.isNotEmpty){
-      selectedCluster = clusterNameFilter_controller.value.text
+    if(clusterName_controller.value.text.isNotEmpty){
+      selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -572,8 +569,8 @@ class SalesDashboardVm extends GetxController{
     RegionNameForApi = '';
     EmployeeNameForApi = '';
     DepartNameForApi = '';
-    clusterNameFilter_controller.value.clear();
-    RegionNameFilter_controller.value.clear();
+    clusterName_controller.value.clear();
+    RegionName_controller.value.clear();
     filterCustomDateController.value.clear();
     EmployeeNameFilter_controller.value.clear();
     DepartmentNameFilter_controller.value.clear();
@@ -593,8 +590,11 @@ class SalesDashboardVm extends GetxController{
       "filter_custom_date": filterCustomDateController.value.text,
       "Department_Name_Filter": DepartmentNameFilter_controller.value.text,
       "Employee_Name_Filter": EmployeeNameFilter_controller.value.text,
+      "filter_region_name":RegionName_controller.value.text,
+      "filter_cluster_name": clusterName_controller.value.text,
 
     });
+
     pageNumber = 0;
     salesDashboardData();
 
@@ -604,14 +604,38 @@ class SalesDashboardVm extends GetxController{
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getSalesDashboardData();
-    formattedStartDate.value=getFilterData["start_date"];
-    formattedEndDate.value=getFilterData["end_date"];
-    filterCustomDateController.value.text=getFilterData["filter_custom_date"];
-    DepartmentNameFilter_controller.value.text=getFilterData["Department_Name_Filter"];
-    EmployeeNameFilter_controller.value.text=getFilterData["Employee_Name_Filter"];
 
-    pageNumber=0;
-    filterDataChecker.value='1';
+    print("object......${getFilterData["filter_region_name"].toString()} and ${getFilterData["filter_cluster_name"].toString()} ");
+
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filterCustomDateController.value.text=getFilterData["filter_custom_date"];
+      DepartmentNameFilter_controller.value.text=getFilterData["Department_Name_Filter"];
+      EmployeeNameFilter_controller.value.text=getFilterData["Employee_Name_Filter"];
+      pageNumber=0;
+
+      if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){
+        formattedStartDate.value = "";
+        formattedStartDate.value=getFilterData["start_date"]??"";
+      }
+      if(getFilterData["end_date"].toString().isNotEmpty && getFilterData["end_date"].toString()!=""){
+        formattedEndDate.value = "";
+        formattedEndDate.value=getFilterData["end_date"]??"";
+      }
+      if(getFilterData["filter_region_name"].toString().isNotEmpty && getFilterData["filter_region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["filter_region_name"].toString()??"";
+      }
+      if(getFilterData["filter_cluster_name"].toString().isNotEmpty && getFilterData["filter_cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["filter_cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+
     print("filter data save ${getFilterData}");
     salesDashboardData();
   }

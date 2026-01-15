@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
@@ -116,7 +117,7 @@ class ContactMasterScreen extends StatelessWidget{
             bottom: MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.min, // Ensure minimal height
+            mainAxisSize: MainAxisSize.max, // Ensure minimal height
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -154,278 +155,153 @@ class ContactMasterScreen extends StatelessWidget{
                     height: 1,
                     color: AllColors.primaryDark1,
                   )),
-              SingleChildScrollView(
-                child: Container(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 5,
-                        ),
-                        TextField(
-                          controller: contact_vm_controller.contact_name_controller,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Contact Name',
-                            hintText: 'Contact Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                          controller: contact_vm_controller.account_name_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                            labelText: 'Customer Name',
-                            hintText: 'Customer Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                          controller: contact_vm_controller.account_code_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Customer Code',
-                              hintText: 'Customer Code',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-
-                        TextField(
-                          controller: contact_vm_controller.emailId_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Email Id',
-                              hintText: 'Email Id',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-
-                        TextField(
-                          controller: contact_vm_controller.phone_no_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Phone No',
-                              hintText: 'Phone No',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-
-                        TextField(
-                          controller: contact_vm_controller.depart_name_controller,
-                          decoration: InputDecoration(
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                              labelText: 'Department Name',
-                              hintText: 'Department Name',
-                              hintStyle: GoogleFonts.poppins(
-                                  color: AllColors.lightblackColor,
-                                  fontWeight: FontWeight.w300,
-                                  fontSize: AllFontSize.ten),
-                              labelStyle: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: AllFontSize.sisxteen),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(10)),
-                              )
-                          ),
-                          cursorColor: AllColors.primaryDark1,
-                          onChanged: (value) {
-                            // Handle the text field value changes if needed
-                          },
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Container(
-                              width: size.width * 0.4,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark,
-                                      width: 1),
-                                )),
-                                onPressed: () {
-                                  contact_vm_controller.pageNumber=0;
-                                  Get.back();
-                                  contact_vm_controller.getContactMasterList(
-                                    contact_vm_controller.pageNumber,
-                                    contact_vm_controller.account_name_controller.text,
-                                    contact_vm_controller.contact_name_controller.text,
-                                    contact_vm_controller.depart_name_controller.text,
-                                  );
-                                  contact_vm_controller.filterIconColor.value=true;
-                                  print('icon color ${contact_vm_controller.filterIconColor}');
-                                  if(contact_vm_controller.account_name_controller.text.isEmpty &&
-                                      contact_vm_controller.contact_name_controller.text.isEmpty &&contact_vm_controller.depart_name_controller.text.isEmpty){
-                                    contact_vm_controller.filterIconColor.value=false;
-                                  }
-
-                                },
-                                child: Text(
-                                  'Submit',
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.primaryDark1,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: size.width * 0.4,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                    foregroundColor: AllColors.lightgreyColor, backgroundColor: AllColors.whiteColor, shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.redColor, width: 1),
-                                )),
-                                onPressed: () {
-                                  Get.back();
-                                  contact_vm_controller.pageNumber=0;
-                                  contact_vm_controller.clearAllFilterContoller();
-                                  contact_vm_controller.getContactMasterList(contact_vm_controller.pageNumber, '', '', '');
-
-
-                                },
-                                child: Text(
-                                  'Reset',
-                                  style: GoogleFonts.poppins(
-                                      color: AllColors.redColor,
-                                      fontSize: AllFontSize.sisxteen,
-                                      fontWeight: FontWeight.w700),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-
-
-                      ],
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          SizedBox(height: 5,),
+                          bindFilterData(context,'Contact Name',contact_vm_controller.contact_name_controller),
+                          SizedBox(height: 5,),
+                          bindFilterData(context,'Customer Name',contact_vm_controller.account_name_controller),
+                          SizedBox(height: 5,),
+                          bindFilterData(context,'Customer Code',contact_vm_controller.account_code_controller),
+                          SizedBox(height: 5,),
+                          bindFilterData(context,'Email Id',contact_vm_controller.emailId_controller),
+                          SizedBox(height: 5,),
+                          bindFilterData(context,'Phone No',contact_vm_controller.phone_no_controller),
+                          SizedBox(height: 5,),
+                          bindFilterData(context,'Department Name',contact_vm_controller.depart_name_controller),
+                          SizedBox(height: 5,),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              )
+              ),
+              Container(
+                padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                child: Row(
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: _buildButton(
+                      text: 'Clear',
+                      borderColor: AllColors.redColor,
+                      textColor: AllColors.redColor,
+                      onTap: () {
+                        contact_vm_controller.filterDataChecker.value='';
+                        contact_vm_controller.clearFilterData();
+                        contact_vm_controller.pageNumber=0;
+                        contact_vm_controller.clearAllFilterContoller();
+                        contact_vm_controller.getContactMasterList(contact_vm_controller.pageNumber, '', '', '');
+                        Get.back();
+                      },
+                    )),
+                    const SizedBox(width: 3,),
+                    Expanded(child: _buildButton(
+                      text: 'Apply',
+                      borderColor: AllColors.primaryDark,
+                      textColor: AllColors.primaryDark1,
+                      onTap: () {
+                        contact_vm_controller.pageNumber=0;
+                        contact_vm_controller.getContactMasterList(
+                          contact_vm_controller.pageNumber,
+                          contact_vm_controller.account_name_controller.text,
+                          contact_vm_controller.contact_name_controller.text,
+                          contact_vm_controller.depart_name_controller.text,
+                        );
+                        contact_vm_controller.filterIconColor.value=true;
+                        if(contact_vm_controller.account_name_controller.text.isEmpty &&
+                            contact_vm_controller.contact_name_controller.text.isEmpty &&contact_vm_controller.depart_name_controller.text.isEmpty){
+                          contact_vm_controller.filterIconColor.value=false;
+                        }
+                        Get.back();
+                      },
+                    )),
+                    const SizedBox(width: 3,),
+                    Expanded(child: _buildButton(
+                      text: 'Save Filters',
+                      borderColor: AllColors.green,
+                      textColor: AllColors.green,
+                      onTap: () {
+                        contact_vm_controller.filterDataChecker.value='';
+                        contact_vm_controller.SaveFilterData();
+                        Get.back();
+                      },
+                    )),
+                  ],
+                ),
+              ),
             ],
           ),
         );
+      },
+    );
+  }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget bindFilterData(BuildContext context,String hintData, TextEditingController controller,){
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: hintData,
+          hintText: hintData,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
       },
     );
   }
@@ -543,12 +419,8 @@ class ContactMasterScreen extends StatelessWidget{
         ),
         subtitle: Column(
           children: [
-            //_buildLabelWithValue( "Contact Code : ",contact_vm_controller.contact_master_list[position].contactCode?? "" ),
-            //SizedBox(height: 3),
-            _buildLabelWithValue( "Contact Name : ",contact_vm_controller.contact_master_list[position].contactName?? "" ),
-            SizedBox(
-              height: 2,
-            ),
+           _buildLabelWithValue( "Contact Name : ",contact_vm_controller.contact_master_list[position].contactName?? "" ),
+            SizedBox(height: 2,),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -588,19 +460,28 @@ class ContactMasterScreen extends StatelessWidget{
                 ),
               ],
             ),
-            SizedBox(
-              height: 2,
-            ),
-            _buildLabelWithValue( "Email Id : ",contact_vm_controller.contact_master_list[position].emailId?? "" ),
-            SizedBox(height: 3),
-            _buildLabelWithValue( "Phone No. : ",contact_vm_controller.contact_master_list[position].phoneNo?? "" ),
-            SizedBox(height: 3),
-            _buildLabelWithValue( "Department Name : ",contact_vm_controller.contact_master_list[position].departmentName?? "" ),
-            SizedBox(height: 3),
-            _buildLabelWithValue( "Reporting Person : ",contact_vm_controller.contact_master_list[position].reportingPerson?? "" ),
+            SizedBox(height: 2,),
+            _buildLabelWithValue( "Customer Code : ",contact_vm_controller.contact_master_list[position].accountCode?? "" ),
+            SizedBox(height: 2,),
 
-            SizedBox(height: 3),
+            _buildLabelWithValue( "Email Id : ",contact_vm_controller.contact_master_list[position].emailId?? "" ),
+            SizedBox(height: 2),
+            _buildLabelWithValue( "Phone No. : ",contact_vm_controller.contact_master_list[position].phoneNo?? "" ),
+            SizedBox(height: 2),
+            _buildLabelWithValue( "Department Name : ",contact_vm_controller.contact_master_list[position].departmentName?? "" ),
+            SizedBox(height: 2),
+            _buildLabelWithValue( "Reporting Person : ",contact_vm_controller.contact_master_list[position].reportingPerson?? "" ),
+            SizedBox(height: 2),
+            _buildLabelWithValue( "Contact Master : ",contact_vm_controller.contact_master_list[position].contactRole ?? "" ),
+
+            SizedBox(height: 2),
             _buildLabelWithValue( "Created By : ",contact_vm_controller.contact_master_list[position].createdFullName?? "" ),
+            SizedBox(height: 2),
+            _buildLabelWithValue( "Created On : ", StaticMethod.onlyDate(contact_vm_controller.contact_master_list[position].createdOn?? "") ??""),
+            SizedBox(height: 2),
+            _buildLabelWithValue( "Updated By : ",contact_vm_controller.contact_master_list[position].updatedBy?? "" ),
+            SizedBox(height: 2),
+            _buildLabelWithValue( "Updated On : ", StaticMethod.onlyDate(contact_vm_controller.contact_master_list[position].updatedOn?? "") ??""),
 
           ],
         ),

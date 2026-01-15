@@ -97,7 +97,7 @@ class CallDashboardVm extends GetxController{
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //callDashboardData();
     //getDashboardUserWiseData(pageNumber);
-    getFilterData();
+
     CallDSARsMasterApiHit();
     CallMasterApiHit();
     isAdminWritePermission == 1 ? EmployeeMasterGet(""): getEmployeeTeamMemberGetByClusterRegionApi();
@@ -642,7 +642,7 @@ class CallDashboardVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -661,7 +661,8 @@ class CallDashboardVm extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
             print('region....${RegionName_controller.value.text}');
-            callDashboardData();
+            //callDashboardData();
+            getFilterData();
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];

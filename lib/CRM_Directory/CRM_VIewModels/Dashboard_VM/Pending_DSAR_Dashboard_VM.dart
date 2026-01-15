@@ -98,7 +98,7 @@ class PendingDsarDashboardVm extends GetxController{
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
     getAccountMaster(pageNumber);
-    getFilterData();
+
   }
 
 
@@ -633,7 +633,7 @@ class PendingDsarDashboardVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -652,7 +652,8 @@ class PendingDsarDashboardVm extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
             print('region....${RegionName_controller.value.text}');
-            callDashboardData();
+            //callDashboardData();
+            getFilterData();
           }else {
             loading.value = false;
             regionwithclusterGetByEmailList.value=[];
@@ -787,19 +788,41 @@ class PendingDsarDashboardVm extends GetxController{
   }
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getDSARDashboardData();
-    formattedStartDate.value=getFilterData["start_date"];
-    formattedEndDate.value=getFilterData["end_date"];
-    filterCustomDateController.value.text=getFilterData["filter_custom_date"];
-    task_Status_controller.value.text=getFilterData["filter_task_status"];
-    CustomerName_controller.value.text=getFilterData["filter_customer_name"];
-    typeOfCall_controller.value.text=getFilterData["filter_type_of_call"];
-    lastActivity_Status_controller.value.text=getFilterData["last_activity_status"];
-    ProductCategory_controller.value.text=getFilterData["filter_product_category"];
-    RegionName_controller.value.text=getFilterData["filter_region_name"];
-    clusterName_controller.value.text=getFilterData["filter_cluster_name"];
-    AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
-    pageNumber=0;
-    filterDataChecker.value='1';
+
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filterCustomDateController.value.text=getFilterData["filter_custom_date"];
+      task_Status_controller.value.text=getFilterData["filter_task_status"];
+      CustomerName_controller.value.text=getFilterData["filter_customer_name"];
+      typeOfCall_controller.value.text=getFilterData["filter_type_of_call"];
+      lastActivity_Status_controller.value.text=getFilterData["last_activity_status"];
+      ProductCategory_controller.value.text=getFilterData["filter_product_category"];
+      AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
+
+      pageNumber=0;
+
+      if(getFilterData["start_date"].toString().isNotEmpty && getFilterData["start_date"].toString()!="" ){
+        formattedStartDate.value = "";
+        formattedStartDate.value=getFilterData["start_date"]??"";
+      }
+      if(getFilterData["end_date"].toString().isNotEmpty && getFilterData["end_date"].toString()!=""){
+        formattedEndDate.value = "";
+        formattedEndDate.value=getFilterData["end_date"]??"";
+      }
+      if(getFilterData["filter_region_name"].toString().isNotEmpty && getFilterData["filter_region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["filter_region_name"].toString()??"";
+      }
+      if(getFilterData["filter_cluster_name"].toString().isNotEmpty && getFilterData["filter_cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["filter_cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+
     print("filter data save ${getFilterData}");
     callDashboardData();
   }

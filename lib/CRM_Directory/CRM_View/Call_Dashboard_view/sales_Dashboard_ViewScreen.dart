@@ -1494,7 +1494,21 @@ class SalesDashboardViewscreen extends StatelessWidget{
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.clearFilterData();
+                            dashboard_view_Controller.clearAllFilterController();
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.salesDashboardData();
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
                           borderColor: AllColors.primaryDark,
                           textColor: AllColors.primaryDark1,
                           onTap: () {
@@ -1505,26 +1519,12 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         )),
                         const SizedBox(width: 3,),
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
                             dashboard_view_Controller.filterDataChecker.value='';
                             dashboard_view_Controller.SaveFilterData();
-                            Get.back();
-                          },
-                        )),
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
-                          borderColor: AllColors.redColor,
-                          textColor: AllColors.redColor,
-                          onTap: () {
-                            dashboard_view_Controller.filterDataChecker.value='';
-                            dashboard_view_Controller.clearFilterData();
-                            dashboard_view_Controller.clearAllFilterController();
-                            dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.salesDashboardData();
                             Get.back();
                           },
                         )),
@@ -1832,19 +1832,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
                 ),
               ),
             ),
-            //filterWithCustomDate(context),
-            /*SizedBox(height: 10),
-          bindTaskStatus(context),
-          SizedBox(height: 10),
-          bindCustomerNameFilter(context),
-          SizedBox(height: 10),
-          bindTypeCallFilter(context),
-          SizedBox(height: 10),
-          bindLastActivityStatus(context),
-          SizedBox(height: 10),
-          bindProductCategoryFilter(context),
-          SizedBox(height: 10),
-          bindAccountOwnerFilter(context),*/
             SizedBox(height: 10),
             bindClusterNameFilter(context),
             SizedBox(height: 10),
@@ -1857,70 +1844,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
       ),
     );
   }
-
-  /*bindEmployeeNameFilter(BuildContext context) {
-    return Obx((){
-      return  DropdownSearch<EmployeeMemberModel>.multiSelection(
-        items: dashboard_view_Controller.employee_Member_list,
-        itemAsString: (EmployeeMemberModel u) => u.fullName??"",
-        selectedItems: dashboard_view_Controller.SelectedEmployee_Member_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedEmployee_Member_list.isNotEmpty?"Employee Name":null,
-            hintText: "Employee Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Employee Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.fullName).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<EmployeeMemberModel> selectedList) {
-          dashboard_view_Controller.SelectedEmployee_Member_list.value = selectedList;
-          dashboard_view_Controller.EmployeeNameFilter_controller.value.text = selectedList.map((e) => e.fullName).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.fullName??""),
-              ),
-        ),
-      );
-    });
-
-  }*/
 
   Widget bindDepartmnetIdFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -2322,10 +2245,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               Expanded(
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedEmployee_Member_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller.EmployeeNameFilter_controller.value.text =
-                                        tempSelected.map((e) => e.fullName).join(', ');
+                                    dashboard_view_Controller.SelectedEmployee_Member_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.EmployeeNameFilter_controller.value.text = tempSelected.map((e) => e.fullName).join(', ');
 
                                     Navigator.of(context).pop();
                                   },
@@ -2448,23 +2369,32 @@ class SalesDashboardViewscreen extends StatelessWidget{
     );
   }
 
+
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedCluster_list.isEmpty) {
-        dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
-        dashboard_view_Controller.clusterNameFilter_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+      if (dashboard_view_Controller.clusterName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.clusterName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedCluster_list.value =[];
+        dashboard_view_Controller.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedCluster_list.isEmpty) {
+          dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
+          dashboard_view_Controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
+
       final selected = dashboard_view_Controller.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -2478,21 +2408,12 @@ class SalesDashboardViewscreen extends StatelessWidget{
               final searchController = TextEditingController();
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedCluster_list);
-
-              List<ClusterModal> allItems =
-                  dashboard_view_Controller.clusterGetByEmailList;
+              List<ClusterModal> allItems = dashboard_view_Controller.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2518,15 +2439,15 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+
                             ],
                           ),
                         ),
@@ -2542,8 +2463,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
+                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
                                 icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   searchController.clear();
@@ -2568,8 +2488,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                             onChanged: (val) {
                               setState(() {
                                 if (val == true) {
-                                  tempSelected
-                                      .clear();
+                                  tempSelected.clear();
                                   tempSelected.addAll(allItems);
                                 } else {
                                   tempSelected.clear();
@@ -2583,17 +2502,12 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No clusters found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
+                              final isSel = tempSelected.any((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                               return CheckboxListTile(
                                 title: Text(item.geoValue ?? ""),
                                 value: isSel,
@@ -2602,9 +2516,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                     if (v == true) {
                                       if (!isSel) tempSelected.add(item);
                                     } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
+                                      tempSelected.removeWhere((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                                     }
                                   });
                                 },
@@ -2615,26 +2527,30 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
                         // Done button
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller
-                                        .clusterNameFilter_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    dashboard_view_Controller
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedCluster_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
+                                    dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child:  Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2687,20 +2603,31 @@ class SalesDashboardViewscreen extends StatelessWidget{
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedRegion_list.isEmpty) {
-        dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
-        dashboard_view_Controller.RegionNameFilter_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-
+      if (dashboard_view_Controller.RegionName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        dashboard_view_Controller.SelectedRegion_list.value=[];
+        List<String> nameList = dashboard_view_Controller.RegionName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedRegion_list.isEmpty) {
+          dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
+          dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
+
     return Obx(() {
       final selected = dashboard_view_Controller.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
-
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
       return GestureDetector(
         onTap: () async {
           await showModalBottomSheet(
@@ -2714,20 +2641,13 @@ class SalesDashboardViewscreen extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedRegion_list);
 
-              final allItems =
-                  dashboard_view_Controller.regionwithclusterGetByEmailList;
+              final allItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2756,12 +2676,9 @@ class SalesDashboardViewscreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -2817,11 +2734,8 @@ class SalesDashboardViewscreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No regions found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
@@ -2850,22 +2764,28 @@ class SalesDashboardViewscreen extends StatelessWidget{
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                              horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller.RegionNameFilter_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedRegion_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2914,133 +2834,6 @@ class SalesDashboardViewscreen extends StatelessWidget{
       );
     });
   }
-
-/*bindClusterNameFilter(BuildContext context) {
-    return Obx(() {
-      return DropdownSearch<ClusterModal>.multiSelection(
-        items: dashboard_view_Controller.clusterGetByEmailList,
-        itemAsString: (ClusterModal u) => u.geoValue ?? "",
-        selectedItems: dashboard_view_Controller.SelectedCluster_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedCluster_list.isNotEmpty
-                ? "Cluster Name"
-                : null,
-            hintText: "Cluster Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Cluster Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.geoValue).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<ClusterModal> selectedList) {
-          dashboard_view_Controller.SelectedCluster_list.value = selectedList;
-          dashboard_view_Controller.clusterNameFilter_controller.value.text =
-              selectedList.map((e) => e.geoValue).join(', ');
-          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
-        },
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          itemBuilder: (context, item, isSelected) => ListTile(
-            title: Text(item.geoValue ?? ""),
-          ),
-        ),
-      );
-    });
-  }
-
-  bindRegionNameFilter(BuildContext context) {
-    return Obx(() {
-      return DropdownSearch<RegionWithClusterFilterModal>.multiSelection(
-        items: dashboard_view_Controller.regionwithclusterGetByEmailList,
-        itemAsString: (RegionWithClusterFilterModal u) => u.geoValue ?? "",
-        selectedItems: dashboard_view_Controller.SelectedRegion_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedRegion_list.isNotEmpty
-                ? "Region Name"
-                : null,
-            hintText: "Region Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Region Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.geoValue).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<RegionWithClusterFilterModal> selectedList) {
-          dashboard_view_Controller.SelectedRegion_list.value = selectedList;
-          dashboard_view_Controller.RegionNameFilter_controller.value.text =
-              selectedList.map((e) => e.geoValue).join(', ');
-        },
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          itemBuilder: (context, item, isSelected) => ListTile(
-            title: Text(item.geoValue ?? ""),
-          ),
-        ),
-      );
-    });
-  }*/
 
 
 

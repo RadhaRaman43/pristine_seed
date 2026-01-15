@@ -174,7 +174,7 @@ class AccountmasterScreen extends StatelessWidget{
   Widget BindCustomerRequestListView(context, int position) {
     print('isadminpermosdsdkf....${accountMaster_page_controller.isAdminWritePermission}');
     int? IsActive = accountMaster_page_controller.Account_Master_list[position].isActive;
-    String? createdOn = StaticMethod.dateTimeToDate(accountMaster_page_controller.Account_Master_list[position].createdOn??"");
+    String? createdOn = StaticMethod.onlyDate(accountMaster_page_controller.Account_Master_list[position].createdOn??"");
     var controller=accountMaster_page_controller.Account_Master_list[position];
     String isActive = "";
     if(IsActive == 1){
@@ -191,9 +191,17 @@ class AccountmasterScreen extends StatelessWidget{
       controller.permanentAddress!.postCode??"",
 
     ];
+    final shippingparts = [
+      controller.shippingAddress??"",
+      controller.shippingAddress2??"",
+      controller.shippingStateName??"",
+      controller.shippingCity??"",
+      controller.shippingPostCode??"",
+    ];
 
     // Filter out empty strings and join with commas
     final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+    final shippingfullAddress = shippingparts.where((part) => part.trim().isNotEmpty).join(", ");
 
    // accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
     return Card(
@@ -260,22 +268,25 @@ class AccountmasterScreen extends StatelessWidget{
           subtitle:Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-             // buildInfoRow(context,"Customer Code", controller.accountCode,account_code:accountMaster_page_controller.Account_Master_list[position].accountCode??"",index: position),
-              buildInfoRow(context,"Customer Name", controller.accountName),
-              buildInfoRow(context,"Customer Type", controller.accountType),
-              buildInfoRow(context,"Company Type", controller.companyProfileType),
-              buildInfoRow(context,"Company Sub Type", controller.companyProfileSubType),
-              buildInfoRow(context,"Email Id", controller.emailId),
-              buildInfoRow(context,"Phone No.", controller.phoneNo),
-              buildInfoRow(context,"Created By", controller.accountOwnerFullName),
-              buildInfoRow(context,"Created On", createdOn),
-              buildInfoRow(context,"Region Name", controller.branchHeadValue),
-             // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-              buildInfoRow(context,"Cluster Name", controller.clustureHeadValue),
-              //buildInfoRow("Address", controller.permanentAddress!.address! + ","+ controller.permanentAddress!.address2! + ", " + controller.permanentAddress!.city! + ","+ "\n" + controller.permanentAddress!.district! + ","+ controller.permanentAddress!.stateName! + ","+  controller.permanentAddress!.postCode!),
+              buildInfoRow(context,"Customer Name", controller.accountName??""),
+              buildInfoRow(context,"Account Type", controller.accountType??""),
+              buildInfoRow(context,"Account Category Type", controller.accountCategoryType??""),
+              buildInfoRow(context,"Email Id", controller.emailId??""),
+              buildInfoRow(context,"Phone No.", controller.phoneNo??""),
+              buildInfoRow(context,"Company Profile Type", controller.companyProfileType??""),
+              buildInfoRow(context,"Company Profile Sub Type", controller.companyProfileSubType??""),
+              buildInfoRow(context,"Post Code", controller.postCode??""),
               buildInfoRow(context,"Address", fullAddress),
-             // buildInfoRow("Shipping Address", fullAddress),
+              buildInfoRow(context,"Shipping Address", shippingfullAddress),
+              buildInfoRow(context,"Account Owner", controller.accountCreateFullName??""),
+              buildInfoRow(context,"Annual Revenue", controller.annualRevenue.toString()??""),
+              buildInfoRow(context,"No. Of Employees", controller.noOfEmployees.toString()??""),
+              buildInfoRow(context,"Old Crm Account No.", controller.oldCrmAccountNo??""),
+              buildInfoRow(context,"Region Name", controller.branchHeadValue??""),
+              buildInfoRow(context,"Cluster Name", controller.clustureHeadValue??""),
+              buildInfoRow(context,"Created By", controller.accountCreateFullName??""),
+              buildInfoRow(context,"Created On", createdOn),
+             
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
@@ -404,44 +415,6 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
 
-  /*Widget buildInfoRow(String label, String? value) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "$label: ",
-            style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w500),
-          ),
-          Flexible(
-            child: Tooltip(
-              message: value ?? "",
-              child: Text(
-                value ?? "",
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.poppins(
-                    color: AllColors.textColor,
-                    fontSize: AllFontSize.fourtine,
-                    fontWeight: FontWeight.w500),
-              ),
-            ),
-          ),
-          if(label=="Customer Code")
-          Obx((){
-            return Visibility(
-                visible:label=="Customer Code"&& accountMaster_page_controller.isAdminWritePermission=="1" && accountMaster_page_controller.isHeadofficePermission=='0',
-                child: Icon(Icons.delete,color: Colors.red,));
-          }),
-        ],
-      ),
-    );
-  }*/
-
-
   Widget bindAvatar(String? profile){
     if (profile != null && profile != "")
       return Container(
@@ -496,7 +469,7 @@ class AccountmasterScreen extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                mainAxisSize: MainAxisSize.max, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -540,7 +513,7 @@ class AccountmasterScreen extends StatelessWidget{
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               SizedBox(height: 5,),
                               bindData(context,'Customer Code',accountMaster_page_controller.account_code_controller),
@@ -578,6 +551,48 @@ class AccountmasterScreen extends StatelessWidget{
                     ),
                   ),
                   Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            accountMaster_page_controller.filterDataChecker.value='';
+                            accountMaster_page_controller.clearFilterData();
+                            accountMaster_page_controller.clearAcountMasterFilter();
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            accountMaster_page_controller.pageNumber = 0;
+                            accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+
+                            accountMaster_page_controller.filterDataChecker.value='';
+                            accountMaster_page_controller.SaveFilterData();
+                            Get.back();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -631,7 +646,7 @@ class AccountmasterScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -639,6 +654,41 @@ class AccountmasterScreen extends StatelessWidget{
 
         );
       },
+    );
+  }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -725,6 +775,16 @@ class AccountmasterScreen extends StatelessWidget{
   }
   bindAccountOwnerFilter(BuildContext context) {
     return Obx((){
+      if (accountMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = accountMaster_page_controller.AccountOwner_controller.value.text.split(',');
+
+        accountMaster_page_controller.SelectedEmployee_Member_list.value =
+            List.generate(nameList.length, (index) {
+              return EmployeeMemberModel(
+                fullName: nameList[index].trim(),
+              );
+            });
+      }
       return  DropdownSearch<EmployeeMemberModel>.multiSelection(
         items: accountMaster_page_controller.employee_Member_list,
         itemAsString: (EmployeeMemberModel u) => u.fullName??"",
@@ -1193,20 +1253,28 @@ class AccountmasterScreen extends StatelessWidget{
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = accountMaster_page_controller.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          accountMaster_page_controller.SelectedCluster_list.isEmpty) {
-        accountMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
-        accountMaster_page_controller.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        accountMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
+      if (accountMaster_page_controller.clusterName_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = accountMaster_page_controller.clusterName_controller.value.text.split(',');
+        accountMaster_page_controller.SelectedCluster_list.value =[];
+        accountMaster_page_controller.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && accountMaster_page_controller.SelectedCluster_list.isEmpty) {
+          accountMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
+          accountMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          accountMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
+
       final selected = accountMaster_page_controller.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1220,21 +1288,12 @@ class AccountmasterScreen extends StatelessWidget{
               final searchController = TextEditingController();
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(accountMaster_page_controller.SelectedCluster_list);
-
-              List<ClusterModal> allItems =
-                  accountMaster_page_controller.clusterGetByEmailList;
+              List<ClusterModal> allItems = accountMaster_page_controller.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1260,15 +1319,15 @@ class AccountmasterScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+
                             ],
                           ),
                         ),
@@ -1284,8 +1343,7 @@ class AccountmasterScreen extends StatelessWidget{
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
+                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
                                 icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   searchController.clear();
@@ -1310,8 +1368,7 @@ class AccountmasterScreen extends StatelessWidget{
                             onChanged: (val) {
                               setState(() {
                                 if (val == true) {
-                                  tempSelected
-                                      .clear();
+                                  tempSelected.clear();
                                   tempSelected.addAll(allItems);
                                 } else {
                                   tempSelected.clear();
@@ -1325,17 +1382,12 @@ class AccountmasterScreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No clusters found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
+                              final isSel = tempSelected.any((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                               return CheckboxListTile(
                                 title: Text(item.geoValue ?? ""),
                                 value: isSel,
@@ -1344,9 +1396,7 @@ class AccountmasterScreen extends StatelessWidget{
                                     if (v == true) {
                                       if (!isSel) tempSelected.add(item);
                                     } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
+                                      tempSelected.removeWhere((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                                     }
                                   });
                                 },
@@ -1357,26 +1407,30 @@ class AccountmasterScreen extends StatelessWidget{
 
                         // Done button
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    accountMaster_page_controller.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    accountMaster_page_controller
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    accountMaster_page_controller
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                    accountMaster_page_controller.filterDataChecker.value='';
+                                    accountMaster_page_controller.SelectedCluster_list.assignAll(tempSelected);
+                                    accountMaster_page_controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
+                                    accountMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child:  Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1429,20 +1483,31 @@ class AccountmasterScreen extends StatelessWidget{
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = accountMaster_page_controller.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          accountMaster_page_controller.SelectedRegion_list.isEmpty) {
-        accountMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
-        accountMaster_page_controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-
+      if (accountMaster_page_controller.RegionName_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
+        accountMaster_page_controller.SelectedRegion_list.value=[];
+        List<String> nameList = accountMaster_page_controller.RegionName_controller.value.text.split(',');
+        accountMaster_page_controller.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && accountMaster_page_controller.SelectedRegion_list.isEmpty) {
+          accountMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
+          accountMaster_page_controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${accountMaster_page_controller.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
+
     return Obx(() {
       final selected = accountMaster_page_controller.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
-
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
       return GestureDetector(
         onTap: () async {
           await showModalBottomSheet(
@@ -1456,20 +1521,13 @@ class AccountmasterScreen extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(accountMaster_page_controller.SelectedRegion_list);
 
-              final allItems =
-                  accountMaster_page_controller.regionwithclusterGetByEmailList;
+              final allItems = accountMaster_page_controller.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1498,12 +1556,9 @@ class AccountmasterScreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1559,11 +1614,8 @@ class AccountmasterScreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No regions found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
@@ -1592,22 +1644,28 @@ class AccountmasterScreen extends StatelessWidget{
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                              horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    accountMaster_page_controller.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    accountMaster_page_controller.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    accountMaster_page_controller.filterDataChecker.value='';
+                                    accountMaster_page_controller.SelectedRegion_list.assignAll(tempSelected);
+                                    accountMaster_page_controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1656,6 +1714,8 @@ class AccountmasterScreen extends StatelessWidget{
       );
     });
   }
+  
+  
   bindCreatedOn(BuildContext context) {
     return TextField(
         cursorColor: AllColors.primaryDark1,

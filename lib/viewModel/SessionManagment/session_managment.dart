@@ -695,5 +695,20 @@ class SessionManagement {
     prefs.remove("DSAR_dashboard_data");
   }
 
+  //todo account master
+  Future<void> saveAccountMasterData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("AccountMaster_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getAccountMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("AccountMaster_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearAccountMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("AccountMaster_data");
+  }
+
 
 }

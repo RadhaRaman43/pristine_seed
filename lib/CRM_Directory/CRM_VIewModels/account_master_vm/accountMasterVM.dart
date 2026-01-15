@@ -467,7 +467,8 @@ class Accountmastervm extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getAccountMaster(pageNumber ,is_Active.toString());
+            getFilterData();
+            //getAccountMaster(pageNumber ,is_Active.toString());
             
           }else {
             loading.value = false;
@@ -3065,8 +3066,72 @@ class Accountmastervm extends GetxController{
       );
     });
 
+  }
+
+  RxString filterDataChecker = ''.obs;
+  void SaveFilterData() async{
+    await sessionManagement.saveAccountMasterData({
+      "account_code_controller": account_code_controller.text,
+      "account_name_controller": account_name_controller.text,
+      "account_type_controller": account_type_controller.text,
+      "EmailId_Controller": EmailId_Controller.text,
+      "PhoneNo_Controller": PhoneNo_Controller.text,
+      "comp_prof_type_controller": comp_prof_type_controller.text,
+      "stateName_controller": stateName_controller.text,
+      "postal_code_controller": postal_code_controller.value.text,
+      "district_controller": district_controller.value.text,
+      "IsActive_controller": IsActive_controller.text,
+      "filter_owner_name": AccountOwner_controller.value.text,
+      "filter_region_name":RegionName_controller.value.text,
+      "filter_cluster_name": clusterName_controller.value.text,
+      "created_on_controller": created_on_controller.value.text,
+    });
+    pageNumber = 0;
+    Map getFilterData=await sessionManagement.getAccountMasterData();
+    print("account master detail ${getFilterData}");
+    getAccountMaster(pageNumber, IsActive_controller.text);
 
   }
 
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getAccountMasterData();
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      account_code_controller.text=getFilterData["account_code_controller"];
+      account_name_controller.text=getFilterData["account_name_controller"];
+      account_type_controller.text=getFilterData["account_type_controller"];
+      EmailId_Controller.text=getFilterData["EmailId_Controller"];
+      PhoneNo_Controller.text=getFilterData["PhoneNo_Controller"];
+      comp_prof_type_controller.text=getFilterData["comp_prof_type_controller"];
+      stateName_controller.text=getFilterData["stateName_controller"];
+      postal_code_controller.value.text=getFilterData["postal_code_controller"];
+      district_controller.value.text=getFilterData["district_controller"];
+      IsActive_controller.text=getFilterData["IsActive_controller"];
+      AccountOwner_controller.value.text=getFilterData["filter_owner_name"];
+      created_on_controller.value.text=getFilterData["created_on_controller"];
+      pageNumber=0;
+
+      if(getFilterData["filter_region_name"].toString().isNotEmpty && getFilterData["filter_region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["filter_region_name"].toString()??"";
+      }
+      if(getFilterData["filter_cluster_name"].toString().isNotEmpty && getFilterData["filter_cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["filter_cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+
+
+    print("filter data save ${getFilterData}");
+    getAccountMaster(pageNumber, IsActive_controller.text);
+  }
+
+  void clearFilterData() {
+    sessionManagement.clearAccountMasterData();
+  }
 
 }

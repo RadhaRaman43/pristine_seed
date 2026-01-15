@@ -5,6 +5,7 @@ class AccountMasterModel {
   String? accountCode;
   String? accountName;
   String? accountOwnerFullName;
+  String? accountCreateFullName;
   String? accountOwner;
   String? accountTitle;
   String? accountType;
@@ -17,34 +18,37 @@ class AccountMasterModel {
   String? companyProfileRemark;
   String? stateCode;
   String? stateName;
+  String? postCode;
   PermanentAddress? permanentAddress;
-  int? noOfEmployees;
-  double? annualRevenue;
+  dynamic? noOfEmployees;
+  dynamic? annualRevenue;
   String? tatResponseType;
-  int? tatResponseTime;
+  dynamic? tatResponseTime;
   String? salesRepresentative;
   String? regionalServiceHead;
   String? salesRepresentativeName;
   String? regionalServiceHeadName;
   String? profile;
-  int? isActive;
+  dynamic? isActive;
   String? createdBy;
   String? createdOn;
-  String? updatedBy;
-  String? updatedOn;
-  int? isManager;
+  dynamic? updatedBy;
+  dynamic? updatedOn;
+  dynamic? isManager;
   String? shippingAddress;
   String? shippingAddress2;
   String? shippingCity;
   String? shippingDistrict;
   String? shippingPostCode;
-  String? shippingStateCode;
-  int? isReferral;
+  dynamic? shippingStateCode;
+  String? shippingStateName;
+  dynamic? isReferral;
   String? frontlinerValue;
   String? branchHeadValue;
   String? zoneHeadValue;
   String? clustureHeadValue;
-  int? isAccountFixed;
+  dynamic? isAccountFixed;
+  dynamic? oldCrmAccountNo;
 
   AccountMasterModel(
       {this.condition,
@@ -53,6 +57,7 @@ class AccountMasterModel {
         this.accountCode,
         this.accountName,
         this.accountOwnerFullName,
+        this.accountCreateFullName,
         this.accountOwner,
         this.accountTitle,
         this.accountType,
@@ -65,6 +70,7 @@ class AccountMasterModel {
         this.companyProfileRemark,
         this.stateCode,
         this.stateName,
+        this.postCode,
         this.permanentAddress,
         this.noOfEmployees,
         this.annualRevenue,
@@ -87,12 +93,14 @@ class AccountMasterModel {
         this.shippingDistrict,
         this.shippingPostCode,
         this.shippingStateCode,
+        this.shippingStateName,
         this.isReferral,
         this.frontlinerValue,
         this.branchHeadValue,
         this.zoneHeadValue,
         this.clustureHeadValue,
-        this.isAccountFixed});
+        this.isAccountFixed,
+        this.oldCrmAccountNo});
 
   AccountMasterModel.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -101,6 +109,7 @@ class AccountMasterModel {
     accountCode = json['account_code'];
     accountName = json['account_name'];
     accountOwnerFullName = json['account_owner_full_name'];
+    accountCreateFullName = json['account_create_full_name'];
     accountOwner = json['account_owner'];
     accountTitle = json['account_title'];
     accountType = json['account_type'];
@@ -113,9 +122,11 @@ class AccountMasterModel {
     companyProfileRemark = json['company_profile_remark'];
     stateCode = json['StateCode'];
     stateName = json['StateName'];
+    postCode = json['post_code'];
     permanentAddress = json['PermanentAddress'] != null
         ? new PermanentAddress.fromJson(json['PermanentAddress'])
         : null;
+
     noOfEmployees = json['no_of_employees'];
     annualRevenue = json['annual_revenue'];
     tatResponseType = json['tat_response_type'];
@@ -137,12 +148,14 @@ class AccountMasterModel {
     shippingDistrict = json['shipping_district'];
     shippingPostCode = json['shipping_post_code'];
     shippingStateCode = json['shipping_state_code'];
+    shippingStateName = json['shipping_state_name'];
     isReferral = json['is_referral'];
     frontlinerValue = json['frontliner_value'];
     branchHeadValue = json['branch_head_value'];
     zoneHeadValue = json['zone_head_value'];
     clustureHeadValue = json['clusture_head_value'];
     isAccountFixed = json['is_account_fixed'];
+    oldCrmAccountNo = json['old_crm_account_no'];
   }
 
   Map<String, dynamic> toJson() {
@@ -153,6 +166,7 @@ class AccountMasterModel {
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;
     data['account_owner_full_name'] = this.accountOwnerFullName;
+    data['account_create_full_name'] = this.accountCreateFullName;
     data['account_owner'] = this.accountOwner;
     data['account_title'] = this.accountTitle;
     data['account_type'] = this.accountType;
@@ -165,7 +179,8 @@ class AccountMasterModel {
     data['company_profile_remark'] = this.companyProfileRemark;
     data['StateCode'] = this.stateCode;
     data['StateName'] = this.stateName;
-    if (this.permanentAddress != null) {
+    data['post_code'] = this.postCode;
+    if (this.permanentAddress != dynamic) {
       data['PermanentAddress'] = this.permanentAddress!.toJson();
     }
     data['no_of_employees'] = this.noOfEmployees;
@@ -189,12 +204,14 @@ class AccountMasterModel {
     data['shipping_district'] = this.shippingDistrict;
     data['shipping_post_code'] = this.shippingPostCode;
     data['shipping_state_code'] = this.shippingStateCode;
+    data['shipping_state_name'] = this.shippingStateName;
     data['is_referral'] = this.isReferral;
     data['frontliner_value'] = this.frontlinerValue;
     data['branch_head_value'] = this.branchHeadValue;
     data['zone_head_value'] = this.zoneHeadValue;
     data['clusture_head_value'] = this.clustureHeadValue;
     data['is_account_fixed'] = this.isAccountFixed;
+    data['old_crm_account_no'] = this.oldCrmAccountNo;
     return data;
   }
 }
@@ -210,15 +227,16 @@ class PermanentAddress {
   String? city;
   String? district;
 
-  PermanentAddress({this.address,
-    this.address2,
-    this.postCode,
-    this.stateCode,
-    this.stateName,
-    this.countryCode,
-    this.countryName,
-    this.city,
-    this.district});
+  PermanentAddress(
+      {this.address,
+        this.address2,
+        this.postCode,
+        this.stateCode,
+        this.stateName,
+        this.countryCode,
+        this.countryName,
+        this.city,
+        this.district});
 
   PermanentAddress.fromJson(Map<String, dynamic> json) {
     address = json['Address'];

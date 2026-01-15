@@ -35,15 +35,6 @@ class AccountdashboardcountScreen extends StatelessWidget{
             color: AllColors.whiteColor,
 
           ),
-          /*actions: [
-            IconButton(
-              onPressed: (){
-               // FilterDialog(context);
-
-              },
-              icon: const Icon(Icons.filter_alt_sharp),
-            )
-          ],*/
           title:Row(
             children: [
               Text(
