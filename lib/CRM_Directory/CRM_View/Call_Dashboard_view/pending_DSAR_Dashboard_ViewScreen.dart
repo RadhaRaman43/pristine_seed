@@ -902,350 +902,33 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Task Status : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position]
-                          .taskStatus??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .taskStatus??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: getStatusColor(taskStatus),
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              _buildLabelWithValue(label: "Task Status: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].taskStatus ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Customer Name: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].accountName  ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Customer Code: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].accountCode  ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Contact Name: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].contactName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Type of Call: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].typeOfCall ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Mode of Call: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].methodOfCall ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Task Remarks: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].taskRemarks ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Purpose Of Visit: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].purposeOfVisit ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Company Profile Type: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].companyProfileType ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Account Owner: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].accountOwnerFullName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Last Activity Status: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].lastActivityStatus ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Last Activity Updated On: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].lastActivityUpdatedOn ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Sales Cycle Id: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].salesCycleId ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].productCategory  ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Along With Person Name: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].alongWithPersonName ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Due Date: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].taskDueDate ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].postCode ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].district ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].clustureHeadValue ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Region Name: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].branchHeadValue ?? "",color:getStatusColor(taskStatus)),
+              //_buildLabelWithValue(label: "Task Owner: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].ow ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Created By: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].createdBy ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Created By: ", value:  StaticMethod.onlyDate(dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].createdOn?? ""),color:getStatusColor(taskStatus)),
+              //_buildLabelWithValue(label: "Reporting Manager: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].re ?? "",color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Approved On: ", value:  StaticMethod.onlyDate(dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].approvedOn?? ""),color:getStatusColor(taskStatus)),
+              _buildLabelWithValue(label: "Manager Remarks: ", value:  dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position].managerRemarks ?? "",color:getStatusColor(taskStatus)),
 
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .accountName ?? "",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .accountName ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.start,
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Customer Code : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .accountName??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .accountName??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Contact Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .contactName??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .contactName??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Type Of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .typeOfCall??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .typeOfCall??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Method of Call : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .methodOfCall??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .methodOfCall??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Cluster Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .clustureHeadValue??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .clustureHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Region Name : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .branchHeadValue??"",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .branchHeadValue??"",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Created By : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .createdFullName??"" +
-                          "| ${StaticMethod.dateTimeToDate(
-                              dashboard_view_Controller
-                                  .pendingDSARDashboardUserWiseDataList[position]
-                                  .createdOn??"")}",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position]
-                            .createdFullName??"" +
-                            "| ${StaticMethod.dateTimeToDate(
-                                dashboard_view_Controller
-                                    .pendingDSARDashboardUserWiseDataList[position]
-                                    .createdOn??"")}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Due Date : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .taskDueDate,
-                      child: Text(" ${dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .taskDueDate ??
-                          ""} ${pipeLine} ${dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position]
-                          .taskDueTime } "
-                        ,
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Remarks : ",
-                    style: GoogleFonts.poppins(
-                        color: AllColors.primaryDark1,
-                        fontSize: AllFontSize.fourtine,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Tooltip(
-                      message: dashboard_view_Controller
-                          .pendingDSARDashboardUserWiseDataList[position].taskRemarks ?? "",
-                      child: Text(
-                        dashboard_view_Controller
-                            .pendingDSARDashboardUserWiseDataList[position].taskRemarks ?? "",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.textColor,
-                            fontSize: AllFontSize.fourtine,
-                            fontWeight: FontWeight.w500),
-                      ),
-
-                    ),
-                  ),
-                ],
-              ),
               Visibility(
                 visible: dashboard_view_Controller.pendingDSARDashboardUserWiseDataList[position]
                     .taskStatus == 'Rejected' ? true : false,
@@ -1286,6 +969,41 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
           // trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
+    );
+  }
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    required Color color,
+
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value ?? "",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -1372,7 +1090,21 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                       //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            dashboard_view_Controller.filterDataChecker.value='';
+                            dashboard_view_Controller.clearFilterData();
+                            dashboard_view_Controller.clearAllFilterController();
+                            dashboard_view_Controller.pageNumber = 0;
+                            dashboard_view_Controller.callDashboardData();
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
                           borderColor: AllColors.primaryDark,
                           textColor: AllColors.primaryDark1,
                           onTap: () {
@@ -1383,26 +1115,12 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                         )),
                         const SizedBox(width: 3,),
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
                             dashboard_view_Controller.filterDataChecker.value='';
                             dashboard_view_Controller.SaveFilterData();
-                            Get.back();
-                          },
-                        )),
-                        const SizedBox(width: 3,),
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
-                          borderColor: AllColors.redColor,
-                          textColor: AllColors.redColor,
-                          onTap: () {
-                            dashboard_view_Controller.filterDataChecker.value='';
-                            dashboard_view_Controller.clearFilterData();
-                            dashboard_view_Controller.clearAllFilterController();
-                            dashboard_view_Controller.pageNumber = 0;
-                            dashboard_view_Controller.callDashboardData();
                             Get.back();
                           },
                         )),
@@ -2524,20 +2242,28 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedCluster_list.isEmpty) {
-        dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
-        dashboard_view_Controller.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-        dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+      if (dashboard_view_Controller.clusterName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        List<String> nameList = dashboard_view_Controller.clusterName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedCluster_list.value =[];
+        dashboard_view_Controller.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedCluster_list.isEmpty) {
+          dashboard_view_Controller.SelectedCluster_list.assignAll(availableItems);
+          dashboard_view_Controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
+
       final selected = dashboard_view_Controller.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -2551,21 +2277,12 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
               final searchController = TextEditingController();
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedCluster_list);
-
-              List<ClusterModal> allItems =
-                  dashboard_view_Controller.clusterGetByEmailList;
+              List<ClusterModal> allItems = dashboard_view_Controller.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2591,15 +2308,15 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+
+
                             ],
                           ),
                         ),
@@ -2615,8 +2332,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(8)),
                               isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
+                              suffixIcon: searchController.text.isNotEmpty ? IconButton(
                                 icon: const Icon(Icons.clear),
                                 onPressed: () {
                                   searchController.clear();
@@ -2641,8 +2357,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                             onChanged: (val) {
                               setState(() {
                                 if (val == true) {
-                                  tempSelected
-                                      .clear();
+                                  tempSelected.clear();
                                   tempSelected.addAll(allItems);
                                 } else {
                                   tempSelected.clear();
@@ -2656,17 +2371,12 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No clusters found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No clusters found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
+                              final isSel = tempSelected.any((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                               return CheckboxListTile(
                                 title: Text(item.geoValue ?? ""),
                                 value: isSel,
@@ -2675,9 +2385,7 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                     if (v == true) {
                                       if (!isSel) tempSelected.add(item);
                                     } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
+                                      tempSelected.removeWhere((s) => (s.geoValue ?? "") == (item.geoValue ?? ""));
                                     }
                                   });
                                 },
@@ -2688,26 +2396,30 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
                         // Done button
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                          padding: const EdgeInsets.symmetric(horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    dashboard_view_Controller
-                                        .getRegionsWithClusterFilterGetByEmail();
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedCluster_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
+                                    dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child:  Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2760,20 +2472,31 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          dashboard_view_Controller.SelectedRegion_list.isEmpty) {
-        dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
-        dashboard_view_Controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-
+      if (dashboard_view_Controller.RegionName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
+        dashboard_view_Controller.SelectedRegion_list.value=[];
+        List<String> nameList = dashboard_view_Controller.RegionName_controller.value.text.split(',');
+        dashboard_view_Controller.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && dashboard_view_Controller.SelectedRegion_list.isEmpty) {
+          dashboard_view_Controller.SelectedRegion_list.assignAll(availableItems);
+          dashboard_view_Controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${dashboard_view_Controller.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
+
     return Obx(() {
       final selected = dashboard_view_Controller.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
-
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
       return GestureDetector(
         onTap: () async {
           await showModalBottomSheet(
@@ -2787,20 +2510,13 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(dashboard_view_Controller.SelectedRegion_list);
 
-              final allItems =
-                  dashboard_view_Controller.regionwithclusterGetByEmailList;
+              final allItems = dashboard_view_Controller.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2829,12 +2545,9 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -2890,11 +2603,8 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
 
                         // List
                         Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
+                          child: filtered.isEmpty ? const Center(child: Text('No regions found')) : ListView.builder(
+                            padding: const EdgeInsets.symmetric(vertical: 8),
                             itemCount: filtered.length,
                             itemBuilder: (context, idx) {
                               final item = filtered[idx];
@@ -2923,22 +2633,28 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
                         // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
+                              horizontal: 50.0, vertical: 20),
                           child: Row(
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    dashboard_view_Controller.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    dashboard_view_Controller.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
+                                    dashboard_view_Controller.filterDataChecker.value='';
+                                    dashboard_view_Controller.SelectedRegion_list.assignAll(tempSelected);
+                                    dashboard_view_Controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2988,136 +2704,6 @@ class PendingDsarDashboardViewscreen extends StatelessWidget{
     });
   }
 
-  /*bindClusterNameFilter(BuildContext context) {
-    return Obx((){
-      return  DropdownSearch<ClusterModal>.multiSelection(
-        items: dashboard_view_Controller.clusterGetByEmailList,
-        itemAsString: (ClusterModal u) => u.geoValue??"",
-        selectedItems: dashboard_view_Controller.SelectedCluster_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedCluster_list.isNotEmpty?"Cluster Name":null,
-            hintText: "Cluster Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Cluster Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.geoValue).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<ClusterModal> selectedList) {
-          dashboard_view_Controller.SelectedCluster_list.value =
-              selectedList;
-          dashboard_view_Controller.clusterName_controller.value.text =
-              selectedList.map((e) => e.geoValue).join(', ');
-          dashboard_view_Controller.getRegionsWithClusterFilterGetByEmail();
-        },
 
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.geoValue??""),
-              ),
-        ),
-      );
-    });
-
-  }
-
-  bindRegionNameFilter(BuildContext context) {
-    return Obx((){
-      return  DropdownSearch<RegionWithClusterFilterModal>.multiSelection(
-        items: dashboard_view_Controller.regionwithclusterGetByEmailList,
-        itemAsString: (RegionWithClusterFilterModal u) => u.geoValue??"",
-        selectedItems: dashboard_view_Controller.SelectedRegion_list,
-        dropdownDecoratorProps: DropDownDecoratorProps(
-          baseStyle: TextStyle(color: Colors.black),
-          dropdownSearchDecoration: InputDecoration(
-            filled: false,
-            labelText: dashboard_view_Controller.SelectedRegion_list.isNotEmpty?"Region Name":null,
-            hintText: "Region Name",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        dropdownBuilder: (context, selectedItems) {
-          // Custom builder to just show comma-separated names
-          if (selectedItems.isEmpty) {
-            return Text(
-              "Region Name",
-              style: GoogleFonts.poppins(
-                color: AllColors.primaryDark1, // Match your hint color
-                fontSize: AllFontSize.sisxteen,
-                fontWeight: FontWeight.w500,
-              ),
-            );
-          }
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Text(
-              selectedItems.map((e) => e.geoValue).join(', '),
-              style: TextStyle(color: Colors.black), // Only black text
-            ),
-          );
-        },
-        onChanged: (List<RegionWithClusterFilterModal> selectedList) {
-          dashboard_view_Controller.SelectedRegion_list.value = selectedList;
-          dashboard_view_Controller.RegionName_controller.value.text =
-              selectedList.map((e) => e.geoValue).join(', ');
-        },
-
-        popupProps: PopupPropsMultiSelection.dialog(
-          showSearchBox: true,
-          searchFieldProps: TextFieldProps(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
-            decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
-              hintText: "Search...",
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-
-          itemBuilder: (context, item, isSelected) =>
-              ListTile(
-                title: Text(item.geoValue??""),
-              ),
-        ),
-      );
-    });
-
-  }*/
 
 }
