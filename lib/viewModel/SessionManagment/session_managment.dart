@@ -710,5 +710,65 @@ class SessionManagement {
     prefs.remove("AccountMaster_data");
   }
 
+  Future<void> saveDraftAccountMasterData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("DraftAccountMaster_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getDraftAccountMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("DraftAccountMaster_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearDraftAccountMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("DraftAccountMaster_data");
+  }
+
+  //todo contact master
+  Future<void> saveContactMasterData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("ContactMaster_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getContactMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("ContactMaster_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearContactMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("ContactMaster_data");
+  }
+
+  //todo All contact master
+  Future<void> saveAllContactMasterData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("AllContactMaster_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getAllContactMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("AllContactMaster_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearAllContactMasterData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("AllContactMaster_data");
+  }
+
+  void setfilterRouting(String pageName) async{
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("pageName",pageName );
+  }
+
+  Future<String?> getfilterRouting() async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      var department = prefs.getString('pageName');
+      if (department == null || department == "") return null;
+      return department;
+    } catch (e) {
+      return null;
+    }
+  }
+
 
 }

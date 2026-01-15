@@ -829,11 +829,9 @@ class CallDashboardVm extends GetxController{
       }
     }
     else{
-      print("else condition");
+      //print("else condition");
     }
 
-
-    print("filter data save ${getFilterData}");
     callDashboardData();
   }
 

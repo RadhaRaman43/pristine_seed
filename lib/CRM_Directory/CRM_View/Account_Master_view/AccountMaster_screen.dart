@@ -123,6 +123,7 @@ class AccountmasterScreen extends StatelessWidget{
   }
 
   Widget BindCustomerListView(context) {
+
     if (accountMaster_page_controller
         .Account_Master_list.value.isNotEmpty &&
         accountMaster_page_controller
@@ -141,8 +142,7 @@ class AccountmasterScreen extends StatelessWidget{
               accountMaster_page_controller.rowsPerPage) >
               0) total_page += 1;
 
-          print(
-              "last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
+          print("last index ${accountMaster_page_controller.pageNumber} ${accountMaster_page_controller.total_rows} ${accountMaster_page_controller.rowsPerPage} ${total_page}");
 
           if (accountMaster_page_controller.pageNumber + 1 < total_page) {
             accountMaster_page_controller.getAccountMaster(accountMaster_page_controller.pageNumber + 1,accountMaster_page_controller.IsActive_controller.text);
@@ -279,7 +279,7 @@ class AccountmasterScreen extends StatelessWidget{
               buildInfoRow(context,"Address", fullAddress),
               buildInfoRow(context,"Shipping Address", shippingfullAddress),
               buildInfoRow(context,"Account Owner", controller.accountCreateFullName??""),
-              buildInfoRow(context,"Annual Revenue", controller.annualRevenue.toString()??""),
+              buildInfoRow(context,"Annual Revenue", "₹ ${controller.annualRevenue.toString()??""}"),
               buildInfoRow(context,"No. Of Employees", controller.noOfEmployees.toString()??""),
               buildInfoRow(context,"Old Crm Account No.", controller.oldCrmAccountNo??""),
               buildInfoRow(context,"Region Name", controller.branchHeadValue??""),
@@ -1254,7 +1254,7 @@ class AccountmasterScreen extends StatelessWidget{
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = accountMaster_page_controller.clusterGetByEmailList;
       if (accountMaster_page_controller.clusterName_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
-        List<String> nameList = accountMaster_page_controller.clusterName_controller.value.text.split(',');
+        List<String> nameList = accountMaster_page_controller.clusterName_controller.value.text.split('|');
         accountMaster_page_controller.SelectedCluster_list.value =[];
         accountMaster_page_controller.SelectedCluster_list.value =
             List.generate(nameList.length, (index) {
@@ -1264,7 +1264,7 @@ class AccountmasterScreen extends StatelessWidget{
       else{
         if (availableItems.isNotEmpty && accountMaster_page_controller.SelectedCluster_list.isEmpty) {
           accountMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
-          accountMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          accountMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
           accountMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
         }
       }
@@ -1424,7 +1424,7 @@ class AccountmasterScreen extends StatelessWidget{
                                   onPressed: () {
                                     accountMaster_page_controller.filterDataChecker.value='';
                                     accountMaster_page_controller.SelectedCluster_list.assignAll(tempSelected);
-                                    accountMaster_page_controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
+                                    accountMaster_page_controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     accountMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
@@ -1485,7 +1485,7 @@ class AccountmasterScreen extends StatelessWidget{
       final availableItems = accountMaster_page_controller.regionwithclusterGetByEmailList;
       if (accountMaster_page_controller.RegionName_controller.value.text.isNotEmpty && accountMaster_page_controller.filterDataChecker.value=='1') {
         accountMaster_page_controller.SelectedRegion_list.value=[];
-        List<String> nameList = accountMaster_page_controller.RegionName_controller.value.text.split(',');
+        List<String> nameList = accountMaster_page_controller.RegionName_controller.value.text.split('|');
         accountMaster_page_controller.SelectedRegion_list.value =
             List.generate(nameList.length, (index) {
               return RegionWithClusterFilterModal(
@@ -1496,7 +1496,7 @@ class AccountmasterScreen extends StatelessWidget{
       else{
         if (availableItems.isNotEmpty && accountMaster_page_controller.SelectedRegion_list.isEmpty) {
           accountMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
-          accountMaster_page_controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          accountMaster_page_controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
           print("bind region ${accountMaster_page_controller.RegionName_controller.value.text}");
         }
         else{
@@ -1661,7 +1661,7 @@ class AccountmasterScreen extends StatelessWidget{
                                   onPressed: () {
                                     accountMaster_page_controller.filterDataChecker.value='';
                                     accountMaster_page_controller.SelectedRegion_list.assignAll(tempSelected);
-                                    accountMaster_page_controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join(',');
+                                    accountMaster_page_controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     Navigator.of(context).pop();
                                   },
                                   child: Text('Done',style: GoogleFonts.poppins(

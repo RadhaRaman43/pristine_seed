@@ -4,6 +4,7 @@ class AccountMasterGetByCodeModel {
   String? totalRows;
   String? accountCode;
   String? accountName;
+  String? accountCreateFullName;
   String? accountOwner;
   String? accountOwnerFullName;
   String? accountTitle;
@@ -17,6 +18,7 @@ class AccountMasterGetByCodeModel {
   String? companyProfileRemark;
   String? stateCode;
   String? stateName;
+  String? postCode;
   PermanentAddress? permanentAddress;
   int? noOfEmployees;
   double? annualRevenue;
@@ -57,6 +59,7 @@ class AccountMasterGetByCodeModel {
         this.totalRows,
         this.accountCode,
         this.accountName,
+        this.accountCreateFullName,
         this.accountOwner,
         this.accountOwnerFullName,
         this.accountTitle,
@@ -70,6 +73,7 @@ class AccountMasterGetByCodeModel {
         this.companyProfileRemark,
         this.stateCode,
         this.stateName,
+        this.postCode,
         this.permanentAddress,
         this.noOfEmployees,
         this.annualRevenue,
@@ -110,6 +114,7 @@ class AccountMasterGetByCodeModel {
     totalRows = json['total_rows'];
     accountCode = json['account_code'];
     accountName = json['account_name'];
+    accountCreateFullName = json['account_create_full_name'];
     accountOwner = json['account_owner'];
     accountOwnerFullName = json['account_owner_full_name'];
     accountTitle = json['account_title'];
@@ -123,6 +128,7 @@ class AccountMasterGetByCodeModel {
     companyProfileRemark = json['company_profile_remark'];
     stateCode = json['StateCode'];
     stateName = json['StateName'];
+    postCode = json['post_code'];
     permanentAddress = json['PermanentAddress'] != null
         ? new PermanentAddress.fromJson(json['PermanentAddress'])
         : null;
@@ -167,6 +173,7 @@ class AccountMasterGetByCodeModel {
     data['total_rows'] = this.totalRows;
     data['account_code'] = this.accountCode;
     data['account_name'] = this.accountName;
+    data['account_create_full_name'] = this.accountCreateFullName;
     data['account_owner'] = this.accountOwner;
     data['account_owner_full_name'] = this.accountOwnerFullName;
     data['account_title'] = this.accountTitle;
@@ -180,6 +187,7 @@ class AccountMasterGetByCodeModel {
     data['company_profile_remark'] = this.companyProfileRemark;
     data['StateCode'] = this.stateCode;
     data['StateName'] = this.stateName;
+    data['post_code'] = this.postCode;
     if (this.permanentAddress != null) {
       data['PermanentAddress'] = this.permanentAddress!.toJson();
     }

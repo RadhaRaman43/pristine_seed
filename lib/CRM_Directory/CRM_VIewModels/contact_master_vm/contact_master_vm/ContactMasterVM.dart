@@ -74,7 +74,8 @@ class ContactMasterVM extends GetxController{
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
     isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
-    getContactMasterList(pageNumber,"","","");
+    //getContactMasterList(pageNumber,"","","");
+    getFilterData();
     getDecisionRoleMaster();
 
   }
@@ -575,28 +576,30 @@ class ContactMasterVM extends GetxController{
 
   RxString filterDataChecker = ''.obs;
   void SaveFilterData() async{
-    await sessionManagement.saveAccountMasterData({
+    await sessionManagement.saveContactMasterData({
       "contact_name_controller": contact_name_controller.text,
       "account_code_controller": account_code_controller.text,
       "account_name_controller": account_name_controller.text,
       "emailId_controller": emailId_controller.text,
+      "phone_no_controller": phone_no_controller.text,
+      "depart_name_controller": depart_name_controller.text,
 
     });
     pageNumber = 0;
-    Map getFilterData=await sessionManagement.getAccountMasterData();
-    print("account master detail ${getFilterData}");
     getContactMasterList(pageNumber, account_name_controller.text, contact_name_controller.text, depart_name_controller.text,);
 
   }
 
   void getFilterData() async{
-    Map getFilterData=await sessionManagement.getAccountMasterData();
+    Map getFilterData=await sessionManagement.getContactMasterData();
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
       contact_name_controller.text=getFilterData["contact_name_controller"];
       account_code_controller.text=getFilterData["account_code_controller"];
       account_name_controller.text=getFilterData["account_name_controller"];
       emailId_controller.text=getFilterData["emailId_controller"];
+      phone_no_controller.text=getFilterData["phone_no_controller"];
+      depart_name_controller.text=getFilterData["depart_name_controller"];
 
       pageNumber=0;
     }
@@ -608,7 +611,7 @@ class ContactMasterVM extends GetxController{
   }
 
   void clearFilterData() {
-    sessionManagement.clearAccountMasterData();
+    sessionManagement.clearContactMasterData();
   }
 
 }

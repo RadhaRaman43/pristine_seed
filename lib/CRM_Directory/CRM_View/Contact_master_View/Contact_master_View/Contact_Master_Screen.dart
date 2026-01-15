@@ -155,8 +155,8 @@ class ContactMasterScreen extends StatelessWidget{
                     height: 1,
                     color: AllColors.primaryDark1,
                   )),
-              Expanded(
-                child: SingleChildScrollView(
+
+             SingleChildScrollView(
                   child: Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -180,7 +180,7 @@ class ContactMasterScreen extends StatelessWidget{
                     ),
                   ),
                 ),
-              ),
+
               Container(
                 padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 child: Row(
@@ -346,8 +346,6 @@ class ContactMasterScreen extends StatelessWidget{
     }
   }
   Widget BindCustomerRequestListView(context, int position) {
-    //var createdOn = StaticMethod.convertDateFormat1(contact_vm_controller.contact_master_list[position].createdOn?? "");
-    //var updatedOn = StaticMethod.convertDateFormat1(contact_vm_controller.contact_master_list[position].updatedOn?? "");
 
     return Card(
       margin: EdgeInsets.all(5),
@@ -585,42 +583,5 @@ class ContactMasterScreen extends StatelessWidget{
     );
   }
 
-  Widget bindAvatar(String? text){
-    //if (profile != null && profile != "")
-      return Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle, // Makes the container circular
-          border: Border.all(
-            color: Colors.grey, // Border color
-            width: 1.0,        // Border width
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: CircleAvatar(
-              backgroundColor: AllColors.grayColor,
-              child: Text(text!,style: GoogleFonts.poppins(color: AllColors.primaryDark1,fontSize: AllFontSize.fourtine,
-    fontWeight: FontWeight.w700)),
-        ),
-      ));
-   /* else
-      return Container(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle, // Makes the container circular
-          border: Border.all(
-            color: Colors.grey, // Border color
-            width: 1.0,        // Border width
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: CircleAvatar(
-            backgroundColor: AllColors.grayColor,
-            backgroundImage: AssetImage("assets/images/no_file.png"),
-          ),
-        ),
-      );*/
-
-  }
 
 }

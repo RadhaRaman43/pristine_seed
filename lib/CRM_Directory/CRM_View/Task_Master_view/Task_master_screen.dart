@@ -51,16 +51,6 @@ class TaskMasterScreen extends StatelessWidget {
   static String _displayIsInfraLeadForOption(String option) =>
       option;
 
-  static String _displayTypeOfCallForOption(CallStatusMasterModel option) =>
-      option.taskStatus!;
-
-  static String _displayMethodOfCallForOption(CallStatusMasterModel option) =>
-      option.taskStatus!;
-  static String _displayItemCatMasterForOption(ItemCategoryMstModel option) =>
-      option.categoryName!;
-
-  static String _displayCompanyTypeMasterForOption(CompanyTypeModal option) =>
-      option.description!;
 
   @override
   Widget build(BuildContext context) {
@@ -1424,7 +1414,6 @@ class TaskMasterScreen extends StatelessWidget {
 
 
   void showFilterBottomSheet(BuildContext context) {
-    //TaskMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -1539,24 +1528,7 @@ class TaskMasterScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            Get.back();
-                            TaskMaster_page_controller.getTaskMaster(
-                                TaskMaster_page_controller.pageNumber,
-                                TaskMaster_page_controller.is_Active.toString(),
-                                '',
-                                '',
-                                TaskMaster_page_controller.Task_status_controller.text.toString(),
-                                TaskMaster_page_controller.date_filter,
-                                TaskMaster_page_controller.is_done.value);
-                          },
-                        )),
-                        const SizedBox(width: 6),
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
+                          text: 'Clear',
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
@@ -1576,7 +1548,24 @@ class TaskMasterScreen extends StatelessWidget {
                         )),
                         const SizedBox(width: 6),
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            TaskMaster_page_controller.getTaskMaster(
+                                TaskMaster_page_controller.pageNumber,
+                                TaskMaster_page_controller.is_Active.toString(),
+                                '',
+                                '',
+                                TaskMaster_page_controller.Task_status_controller.text.toString(),
+                                TaskMaster_page_controller.date_filter,
+                                TaskMaster_page_controller.is_done.value);
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
@@ -1587,83 +1576,7 @@ class TaskMasterScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                 /* Container(
-                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.primaryDark,
-                                      width: 1),
-                                )),
-                            onPressed: () {
-                              Get.back();
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.getTaskMaster(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active.toString(),
-                                  '',
-                                  '',
-                                  TaskMaster_page_controller.Task_status_controller.text.toString(),
-                                  TaskMaster_page_controller.date_filter,
-                                  TaskMaster_page_controller.is_done.value);
-                             },
-                            child: Text(
-                              'Submit',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.primaryDark1,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: size.width * 0.4,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                foregroundColor: AllColors.lightgreyColor,
-                                backgroundColor: AllColors.whiteColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(15),
-                                  side: BorderSide(
-                                      color: AllColors.redColor, width: 1),
-                                )),
-                            onPressed: () {
-                              Get.back();
-
-                              TaskMaster_page_controller.resetAllFieldOfFilter();
-                              TaskMaster_page_controller.pageNumber = 0;
-                              TaskMaster_page_controller.getTaskMaster(
-                                  TaskMaster_page_controller.pageNumber,
-                                  TaskMaster_page_controller.is_Active.toString(),
-                                  '',
-                                  '',
-                                  TaskMaster_page_controller.Task_status_controller.text.toString(),
-                                  TaskMaster_page_controller.date_filter,
-                                  TaskMaster_page_controller.is_done.value);
-
-
-                            },
-                            child: Text(
-                              'Reset',
-                              style: GoogleFonts.poppins(
-                                  color: AllColors.redColor,
-                                  fontSize: AllFontSize.sisxteen,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),*/
+                 
                 ],
               ),
             );
@@ -1870,20 +1783,33 @@ class TaskMasterScreen extends StatelessWidget {
       },
     );
   }
+
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = TaskMaster_page_controller.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          TaskMaster_page_controller.SelectedCluster_list.isEmpty) {
-        TaskMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
-        TaskMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
-        TaskMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
+      if (TaskMaster_page_controller.clusterName_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        List<String> nameList = TaskMaster_page_controller.clusterName_controller.value.text.split('|');
+        TaskMaster_page_controller.SelectedCluster_list.value =[];
+        TaskMaster_page_controller.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && TaskMaster_page_controller.SelectedCluster_list.isEmpty) {
+          TaskMaster_page_controller.SelectedCluster_list.assignAll(availableItems);
+          TaskMaster_page_controller.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          TaskMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
       final selected = TaskMaster_page_controller.SelectedCluster_list;
-      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty
+          ? null
+          : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1898,12 +1824,17 @@ class TaskMasterScreen extends StatelessWidget {
               final tempSelected = <ClusterModal>[];
               tempSelected.addAll(TaskMaster_page_controller.SelectedCluster_list);
 
-              List<ClusterModal> allItems = TaskMaster_page_controller.clusterGetByEmailList;
+              List<ClusterModal> allItems =
+                  TaskMaster_page_controller.clusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty ? allItems
-                    : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+                final filtered = query.isEmpty
+                    ? allItems
+                    : allItems
+                    .where((c) =>
+                    (c.geoValue ?? "").toLowerCase().contains(query))
+                    .toList();
 
                 final allSelected =
                     allItems.isNotEmpty && tempSelected.length == allItems.length;
@@ -1932,18 +1863,17 @@ class TaskMasterScreen extends StatelessWidget {
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
+
+                        // Search Field
                         Padding(
                           padding:
                           const EdgeInsets.symmetric(horizontal: 16.0),
@@ -1961,12 +1891,16 @@ class TaskMasterScreen extends StatelessWidget {
                                   searchController.clear();
                                   setState(() {});
                                 },
-                              ) : null,
+                              )
+                                  : null,
                             ),
                             onChanged: (v) => setState(() {}),
                           ),
                         ),
+
                         const SizedBox(height: 8),
+
+                        // Select All
                         Padding(
                           padding:
                           const EdgeInsets.symmetric(horizontal: 8.0),
@@ -1986,7 +1920,10 @@ class TaskMasterScreen extends StatelessWidget {
                             },
                           ),
                         ),
+
                         const Divider(height: 1),
+
+                        // List
                         Expanded(
                           child: filtered.isEmpty
                               ? const Center(child: Text('No clusters found'))
@@ -2017,6 +1954,8 @@ class TaskMasterScreen extends StatelessWidget {
                             },
                           ),
                         ),
+
+                        // Done button
                         Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 16.0, vertical: 12),
@@ -2024,20 +1963,26 @@ class TaskMasterScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    TaskMaster_page_controller.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    TaskMaster_page_controller
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    TaskMaster_page_controller
-                                        .getRegionsWithClusterFilterGetByEmail();
+
+                                    TaskMaster_page_controller.filterDataChecker.value='';
+                                    TaskMaster_page_controller.SelectedCluster_list.assignAll(tempSelected);
+                                    TaskMaster_page_controller.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
+                                    TaskMaster_page_controller.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2090,19 +2035,30 @@ class TaskMasterScreen extends StatelessWidget {
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = TaskMaster_page_controller.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          TaskMaster_page_controller.SelectedRegion_list.isEmpty) {
-        TaskMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
-        TaskMaster_page_controller.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-
+      if (TaskMaster_page_controller.RegionName_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {
+        TaskMaster_page_controller.SelectedRegion_list.value=[];
+        List<String> nameList = TaskMaster_page_controller.RegionName_controller.value.text.split('|');
+        TaskMaster_page_controller.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && TaskMaster_page_controller.SelectedRegion_list.isEmpty) {
+          TaskMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
+          TaskMaster_page_controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${TaskMaster_page_controller.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
     return Obx(() {
       final selected = TaskMaster_page_controller.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -2117,20 +2073,13 @@ class TaskMasterScreen extends StatelessWidget {
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(TaskMaster_page_controller.SelectedRegion_list);
 
-              final allItems =
-                  TaskMaster_page_controller.regionwithclusterGetByEmailList;
+              final allItems = TaskMaster_page_controller.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -2159,12 +2108,9 @@ class TaskMasterScreen extends StatelessWidget {
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -2258,17 +2204,23 @@ class TaskMasterScreen extends StatelessWidget {
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    TaskMaster_page_controller.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    TaskMaster_page_controller.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    TaskMaster_page_controller.filterDataChecker.value='';
+                                    TaskMaster_page_controller.SelectedRegion_list.assignAll(tempSelected);
+                                    TaskMaster_page_controller.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -2317,7 +2269,7 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
-  
+
   bindTaskOwnerFilter(BuildContext context) {
     return Obx((){
       if (TaskMaster_page_controller.AccountOwner_controller.value.text.isNotEmpty && TaskMaster_page_controller.filterDataChecker.value=='1') {

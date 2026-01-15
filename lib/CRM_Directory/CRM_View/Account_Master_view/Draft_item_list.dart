@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
+import '../../../constants/static_methods.dart';
 import '../../../reources/routes/routes_name.dart';
 import '../../../view/custom_drawer.dart';
 import '../../CRM_Models/AccountMaster_model/CompanyTypeModel.dart';
@@ -141,8 +142,28 @@ class DraftItemList extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position){
-    var controller=accountMaster_page_controller
-        .Account_Master_Draft_list1[position];
+    var controller=accountMaster_page_controller.Account_Master_Draft_list1[position];
+    final parts = [
+      controller.permanentAddress!.address??"",
+      controller.permanentAddress!.address2??"",
+      controller.permanentAddress!.city??"",
+      controller.permanentAddress!.district??"",
+      controller.permanentAddress!.stateName??"",
+      controller.permanentAddress!.postCode??"",
+
+    ];
+    final shippingparts = [
+      controller.shippingAddress??"",
+      controller.shippingAddress2??"",
+      controller.stateName??"",
+      controller.shippingCity??"",
+      controller.shippingPostCode??"",
+    ];
+
+    // Filter out empty strings and join with commas
+    final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+    final shippingfullAddress = shippingparts.where((part) => part.trim().isNotEmpty).join(", ");
+
     return Card(
       margin: EdgeInsets.all(5),
       child: ListTile(
@@ -163,225 +184,64 @@ class DraftItemList extends StatelessWidget{
           Get.toNamed(RoutesName.add_New_AccountMaster_screen);
          // accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.Account_Master_list[position].companyProfileType);
         },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Row(
+              children: [
+                Text(
+                  "Customer /Draft Code:",
+                  style: GoogleFonts.poppins(
+                      color: AllColors.primaryDark1,
+                      fontSize: AllFontSize.fourtine,
+                      fontWeight: FontWeight.w500),
+                ),
+                Tooltip(
+                  message: controller.accountCode ?? "",
+                  child: Text(
+                    controller.accountCode ?? "",
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.poppins(
+                        color: AllColors.textColor,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],),
+            ),
+
+            InkWell(
+              child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
+            ),
+          ],
+        ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildInfoRow("Customer /Draft Code", controller.accountCode),
-            buildInfoRow("Customer Name", controller.accountName),
-            buildInfoRow("Customer Type", controller.accountType),
-            buildInfoRow("Company Type", controller.companyProfileType),
-            buildInfoRow("Company Sub Type", controller.companyProfileSubType),
-            buildInfoRow("Email Id", controller.emailId),
-            buildInfoRow("Phone No.", controller.phoneNo),
-            buildInfoRow("Created By", controller.accountOwnerFullName),
-           // buildInfoRow("Frontliner Value", controller.frontlinerValue),
-           // buildInfoRow("Region Name", controller.branchHeadValue),
-           // buildInfoRow("Zone Head Value", controller.zoneHeadValue),
-            //buildInfoRow("Cluster Name", controller.clustureHeadValue),
-            buildInfoRow("Address", controller.permanentAddress?.address ?? ""),
-          ],
-        ),
 
-          /*Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Account Name : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: accountMaster_page_controller
-                        .Account_Master_Draft_list1[position]
-                        .accountName!,
-                    child: Text(
-                      accountMaster_page_controller
-                          .Account_Master_Draft_list1[position]
-                          .accountName!,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Account Type : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: accountMaster_page_controller
-                        .Account_Master_Draft_list1[position]
-                        .accountType!,
-                    child: Text(
-                      accountMaster_page_controller
-                          .Account_Master_Draft_list1[position]
-                          .accountType!,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Company Type : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  accountMaster_page_controller
-                      .Account_Master_Draft_list1[position]
-                      .companyProfileType!,
-                  style: GoogleFonts.poppins(
-                      color: AllColors.textColor,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Company Sub Type : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .3,
-                  child: Tooltip(
-                    message: accountMaster_page_controller
-                        .Account_Master_Draft_list1[position]
-                        .companyProfileSubType!,
-                    child: Text(
-                      accountMaster_page_controller
-                          .Account_Master_Draft_list1[position]
-                          .companyProfileSubType!,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Address : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .4,
-                  child: Tooltip(
-                    message: accountMaster_page_controller
-                        .Account_Master_Draft_list1[position]
-                        .permanentAddress!.address!,
-                    child: Text(
-                      accountMaster_page_controller
-                          .Account_Master_Draft_list1[position]
-                          .permanentAddress!.address!,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 3),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Account Category Type : ",
-                  style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
-                      fontSize: AllFontSize.fourtine,
-                      fontWeight: FontWeight.w500),
-                ),
-                Container(
-                  width: size.width * .2,
-                  child: Tooltip(
-                    message: accountMaster_page_controller
-                        .Account_Master_Draft_list1[position]
-                        .accountCategoryType!,
-                    child: Text(
-                      accountMaster_page_controller
-                          .Account_Master_Draft_list1[position]
-                          .accountCategoryType!,
-                      overflow: TextOverflow.ellipsis,
-                      style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-
-              ],
-            ),
-
+            buildInfoRow(context,"Customer Name", controller.accountName??""),
+            buildInfoRow(context,"Account Type", controller.accountType??""),
+            buildInfoRow(context,"Account Category Type", controller.accountCategoryType??""),
+            buildInfoRow(context,"Email Id", controller.emailId??""),
+            buildInfoRow(context,"Phone No.", controller.phoneNo??""),
+            buildInfoRow(context,"Company Profile Type", controller.companyProfileType??""),
+            buildInfoRow(context,"Company Profile Sub Type", controller.companyProfileSubType??""),
+            buildInfoRow(context,"Post Code", controller.postCode??""),
+            buildInfoRow(context,"Address", fullAddress),
+            buildInfoRow(context,"Shipping Address", shippingfullAddress),
+            buildInfoRow(context,"Account Owner", controller.accountCreateFullName??""),
+            buildInfoRow(context,"Annual Revenue", "₹ ${controller.annualRevenue.toString()??""}"),
+            buildInfoRow(context,"No. Of Employees", controller.noOfEmployees.toString()??""),
+            buildInfoRow(context,"Created By", controller.accountCreateFullName??""),
+            buildInfoRow(context,"Created On", StaticMethod.onlyDate(controller.createdOn??"")),
           ],
-        ),*/
-        /*leading: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            bindAvatar(accountMaster_page_controller.Account_Master_Draft_list1[position].profile),
-            VerticalDivider(color: Colors.grey),
-          ],
-        ),*/
-        trailing: InkWell(
-          child: accountMaster_page_controller.isAdminWritePermission == "0" ?Icon(Icons.update) : Icon(Icons.remove_red_eye),
         ),
       ),
     );
   }
 
-  Widget buildInfoRow(String label, String? value) {
+  Widget buildInfoRow(BuildContext context,String label, String? value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2),
       child: Row(
@@ -452,7 +312,6 @@ class DraftItemList extends StatelessWidget{
 
 
   void showFilterBottomSheet(BuildContext context) {
-    //accountMaster_page_controller.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -528,10 +387,6 @@ class DraftItemList extends StatelessWidget{
                               bindData(context,'Pin Code',accountMaster_page_controller.postal_code_controller.value),
                               SizedBox(height: 10,),
                               bindData(context,'District',accountMaster_page_controller.district_controller.value),
-                              /*SizedBox(height: 10,),
-                              bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
-                              bindClusterNameFilter(context),*/
                               SizedBox(height: 10,),
                               bindCreatedBy(),
                               SizedBox(height: 10,),
@@ -543,6 +398,50 @@ class DraftItemList extends StatelessWidget{
                     ),
                   ),
                   Container(
+                    padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                    child: Row(
+                      //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            accountMaster_page_controller.filterDataChecker.value='';
+                            accountMaster_page_controller.cleardraftFilterData();
+                            accountMaster_page_controller.clearFilterController();
+                            accountMaster_page_controller.pageNumber=0;
+                            accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber,'All');
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            accountMaster_page_controller.pageNumber = 0;
+                            accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber, accountMaster_page_controller.IsActive_controller.text);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 3,),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+
+                            accountMaster_page_controller.filterDataChecker.value='';
+                            accountMaster_page_controller.SavedraftFilterData();
+                            Get.back();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -598,7 +497,7 @@ class DraftItemList extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -606,6 +505,41 @@ class DraftItemList extends StatelessWidget{
 
         );
       },
+    );
+  }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 

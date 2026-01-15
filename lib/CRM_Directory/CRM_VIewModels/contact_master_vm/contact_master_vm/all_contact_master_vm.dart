@@ -53,7 +53,8 @@ class AllContactMasterVm extends GetxController{
     // TODO: implement onInit
     super.onInit();
     email=await sessionManagement.getEmail() ?? '';
-    getContactMasterAllList(pageNumber,);
+    getFilterData();
+    //getContactMasterAllList(pageNumber,);
 
 
   }
@@ -115,6 +116,44 @@ class AllContactMasterVm extends GetxController{
   }
 
 
+  RxString filterDataChecker = ''.obs;
+  void SaveFilterData() async{
+    await sessionManagement.saveAllContactMasterData({
+      "contact_name_controller": contact_name_controller.text,
+      "account_code_controller": account_code_controller.text,
+      "account_name_controller": account_name_controller.text,
+      "emailId_controller": emailId_controller.text,
+      "phone_no_controller": phone_no_controller.text,
+      "depart_name_controller": depart_name_controller.text,
+
+    });
+    pageNumber = 0;
+    getContactMasterAllList(pageNumber,);
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getAllContactMasterData();
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      contact_name_controller.text=getFilterData["contact_name_controller"];
+      account_code_controller.text=getFilterData["account_code_controller"];
+      account_name_controller.text=getFilterData["account_name_controller"];
+      emailId_controller.text=getFilterData["emailId_controller"];
+      phone_no_controller.text=getFilterData["phone_no_controller"];
+      depart_name_controller.text=getFilterData["depart_name_controller"];
+
+      pageNumber=0;
+    }
+    else{
+      print("else condition");
+    }
+    print("filter data save ${getFilterData}");
+    getContactMasterAllList(pageNumber,);
+  }
+
+  void clearFilterData() {
+    sessionManagement.clearAllContactMasterData();
+  }
 
 
 

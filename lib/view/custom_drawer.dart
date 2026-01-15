@@ -491,6 +491,7 @@ class _Drawer extends State<CustomDrawer> {
           break;
 
         case 'Accounts Master':
+          sessionManagement.setfilterRouting('Accounts Master');
           IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
           home_vm.openMenu(cTitle, iconData);
           Get.delete<Accountmastervm>();
@@ -507,6 +508,7 @@ class _Drawer extends State<CustomDrawer> {
           break;
 
         case 'Account Draft':
+          sessionManagement.setfilterRouting('Account Draft');
           IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
           home_vm.openMenu(cTitle, iconData);
           Get.delete<Accountmastervm>();

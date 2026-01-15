@@ -211,8 +211,6 @@ class Taskmastervm extends GetxController{
         //getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
         bindFinancialYear();
         product_category_type_Controller.value.text="Contains";
-
-        getFilterData();
         getClustersGetByEmail();
         getAccountMaster(pageNumber);
         getItemCategoryMstWithoutTaskIdApi();
@@ -403,7 +401,7 @@ class Taskmastervm extends GetxController{
       var selectedCluster="";
       if(clusterName_controller.value.text.isNotEmpty){
         selectedCluster = clusterName_controller.value.text
-            .split(',')
+            .split('|')
             .map((e) => e.trim())
             .join('|');
       }
@@ -423,7 +421,8 @@ class Taskmastervm extends GetxController{
               regionwithclusterGetByEmailList.value=response;
               RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
               print('region....${RegionName_controller.value.text}');
-              getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
+              getFilterData();
+              //getTaskMaster(pageNumber, is_Active.toString(), '', '', '', date_filter,is_done.value);
 
             }else {
               regionwithclusterGetByEmailList.value=[];
@@ -1790,37 +1789,53 @@ class Taskmastervm extends GetxController{
         'approved_by_controller': approved_by_controller.value.text,
       });
       filterDataChecker.value='';
+      print("Cluster data region data ${clusterName_controller.value.text} ${RegionName_controller.value.text}");
+      getTaskMaster(pageNumber, is_Active.toString(), '', '', Task_status_controller.text.toString(), date_filter, is_done.value);
 
     }
 
     void getFilterData() async{
       Map getFilterData=await sessionManagement.getTaskData();
 
-      Task_status_controller.text=getFilterData["Task_status_controller"];
-      filterTask_Id_controller.text=getFilterData["task_id"];
-      account_Name_controller.text=getFilterData["customer_name"];
-      account_code_controller.text=getFilterData["customer_code"];
-      Type_of_call_controller.value.text=getFilterData["Type_of_call_controller"];
-      method_of_call_controller.value.text=getFilterData["method_of_call_controller"];
-      companyProfileTypeController.value.text=getFilterData["company_Profile_Type_Controller"];
-      lastActivityStatus_Controller.value.text=getFilterData["lastActivityStatus_Controller"];
-      SaleCycleActive_Controller.text=getFilterData["SaleCycleActive_Controller"];
-      Sale_cycle_Id_controller.text=getFilterData["Sale_cycle_Id_controller"];
-      filterTaskDuedateController.value.text=getFilterData["filterTaskDuedateController"];
-      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"];
-      postalCodeController.value.text=getFilterData["pin_code"];
-      district_controller.value.text=getFilterData["district"];
-      RegionName_controller.value.text=getFilterData["region_name"];
-      clusterName_controller.value.text=getFilterData["cluster_name"];
-      AccountOwner_controller.value.text=getFilterData["account_owner"];
-      filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"];
-      product_category_controller.value.text=getFilterData["product_category"];
-      product_category_type_Controller.value.text=getFilterData["product_category_type"];
-      approved_by_controller.value.text=getFilterData["approved_by_controller"];
+      if(getFilterData.isNotEmpty){
+        filterDataChecker.value='1';
+        Task_status_controller.text=getFilterData["Task_status_controller"]??"";
+        filterTask_Id_controller.text=getFilterData["task_id"]??"";
+        account_Name_controller.text=getFilterData["customer_name"]??"";
+        account_code_controller.text=getFilterData["customer_code"]??"";
+        Type_of_call_controller.value.text=getFilterData["Type_of_call_controller"]??"";
+        method_of_call_controller.value.text=getFilterData["method_of_call_controller"]??"";
+        companyProfileTypeController.value.text=getFilterData["company_Profile_Type_Controller"]??"";
+        lastActivityStatus_Controller.value.text=getFilterData["lastActivityStatus_Controller"]??"";
+        SaleCycleActive_Controller.text=getFilterData["SaleCycleActive_Controller"]??"";
+        Sale_cycle_Id_controller.text=getFilterData["Sale_cycle_Id_controller"]??"";
+        filterTaskDuedateController.value.text=getFilterData["filterTaskDuedateController"]??"";
+        createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
+        postalCodeController.value.text=getFilterData["pin_code"]??"";
+        district_controller.value.text=getFilterData["district"]??"";
+        AccountOwner_controller.value.text=getFilterData["account_owner"]??"";
+        filterTaskCreationOnController.value.text=getFilterData["filterTaskCreationOnController"]??"";
+        product_category_controller.value.text=getFilterData["product_category"]??"";
+        product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+        approved_by_controller.value.text=getFilterData["approved_by_controller"]??"";
+        pageNumber=0;
 
-      filterDataChecker.value='1';
+        if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+          RegionName_controller.value.text = "";
+          RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+        }
+        if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+          clusterName_controller.value.text="";
+          clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+          print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+        }
+      }
+      else{
+        print("else condition");
+      }
+
       pageNumber=0;
-      //getTaskMaster(pageNumber, is_Active.toString(), '', '', Task_status_controller.text.toString(), date_filter, is_done.value);
+      getTaskMaster(pageNumber, is_Active.toString(), '', '', Task_status_controller.text.toString(), date_filter, is_done.value);
 
     }
 
