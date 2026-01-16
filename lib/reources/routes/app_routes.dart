@@ -3,6 +3,8 @@ import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Contact_master_View/Contact_master_View/all_contact_master_screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/Task_Approval_List_Screen.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/Task_Master_view/task_master_approval_details.dart';
+import 'package:navigation_drawer_flutter/CRM_Directory/CRM_View/pageNotFound.dart';
+import 'package:navigation_drawer_flutter/component/default_button.dart';
 import 'package:navigation_drawer_flutter/component/error_404.dart';
 import 'package:navigation_drawer_flutter/reources/routes/routes_name.dart';
 import 'package:navigation_drawer_flutter/view/check_in_approval/check_in_approval_screen.dart';
@@ -170,6 +172,13 @@ class AppRoutes{
         transitionDuration: Duration(microseconds: 180),
         transition: Transition.rightToLeftWithFade
     ),
+
+    GetPage(name: RoutesName.pageNotFoundScreen,
+        page: ()=>PageNotFoundScreen(),
+        transitionDuration: Duration(microseconds: 180),
+        transition: Transition.rightToLeftWithFade
+    ),
+
 
     //todo Corrective Screen....
 
