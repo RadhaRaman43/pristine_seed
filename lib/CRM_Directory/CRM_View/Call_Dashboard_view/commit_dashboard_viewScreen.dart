@@ -130,7 +130,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                'Task Due ${dashboard_view_Controller.character.value}',
+                                'Commit Due ${dashboard_view_Controller.character.value}',
                                 style: GoogleFonts.poppins(
                                   color: AllColors.primaryDark1,
                                   fontSize: AllFontSize.fourtine,
@@ -149,8 +149,6 @@ class CommitDashboardViewscreen extends StatelessWidget{
                             ],
                           );
                         })
-
-
                     ),
 
                     Obx(() {
@@ -805,7 +803,13 @@ class CommitDashboardViewscreen extends StatelessWidget{
               _buildLabelWithValue(label: "Customer Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].accountName??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Customer Code: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].accountCode??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Account Owner: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].accountOwnerFullName??"",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Estimate Amount: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].estimatedAmount.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Estimate Amount: ", value: "₹ ${
+                  dashboard_view_Controller
+                      .numberFormatWithComma(dashboard_view_Controller
+                      .commitDashboardUserWiseDataList[position]
+                      .estimatedAmount)
+                      .toString()
+              }",color:AllColors.textColor),
               _buildLabelWithValue(label: "Contact Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].contactName??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].productCategory??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Purchase Process: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].purchaseProcess??"",color:AllColors.textColor),
@@ -898,7 +902,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
                         Icon(Icons.shield_moon_rounded, color: AllColors.primaryDark1,),
                         SizedBox(width: 5,),
                         Text(
-                          "Dashboard Filter ",
+                          " Filter ",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twentee,
@@ -1111,15 +1115,15 @@ class CommitDashboardViewscreen extends StatelessWidget{
 
                   Obx((){
                     return RadioListTile<String>(
-                      title: const Text('Month' ,style: TextStyle(
+                      title: const Text('Monthly' ,style: TextStyle(
                           fontSize: AllFontSize.sisxteen
                       ),),
-                      value: 'Month',
+                      value: 'Monthly',
                       dense: true,
                       groupValue: dashboard_view_Controller.character.value.toString(),
                       onChanged: (value) {
                         dashboard_view_Controller.character.value = value??"";
-                        dashboard_view_Controller.DateRange('month');
+                        dashboard_view_Controller.DateRange('monthly');
                         dashboard_view_Controller.filterCustomDateController.value.text =
                         '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                         dashboard_view_Controller.pageNumber = 0;

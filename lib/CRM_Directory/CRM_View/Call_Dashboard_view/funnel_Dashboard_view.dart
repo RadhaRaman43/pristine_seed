@@ -645,11 +645,19 @@ class FunnelDashboardView extends StatelessWidget{
               _buildLabelWithValue(label: "Customer Name: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].accountName??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Customer Code: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].accountCode??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Account Owner: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].accountOwnerFullName??"",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Estimate Amount: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].estimatedAmount.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Estimate Amount: ", value: "₹ ${
+                    dashboard_view_Controller
+                        .numberFormatWithComma(dashboard_view_Controller
+                            .funnelDashboardUserWiseDataList[position]
+                            .estimatedAmount)
+                        .toString()
+                  }",color:AllColors.textColor),
               _buildLabelWithValue(label: "Contact Name: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].contactName??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].productCategory??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Purchase Process: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].purchaseProcess??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Company Profile Type: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].companyProfileType??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Is Commit : ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].commit==1?"Yes":"No",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Is Solution Accepted: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].isSolutionAccepted==1?"Yes":"No"??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].postCode??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].district??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.funnelDashboardUserWiseDataList[position].clustureHeadValue??"",color:AllColors.textColor),
@@ -952,15 +960,15 @@ class FunnelDashboardView extends StatelessWidget{
 
                   Obx((){
                     return RadioListTile<String>(
-                      title: const Text('Month' ,style: TextStyle(
+                      title: const Text('Monthly' ,style: TextStyle(
                           fontSize: AllFontSize.sisxteen
                       ),),
-                      value: 'Month',
+                      value: 'Monthly',
                       dense: true,
                       groupValue: dashboard_view_Controller.character.value.toString(),
                       onChanged: (value) {
                         dashboard_view_Controller.character.value = value??"";
-                        dashboard_view_Controller.DateRange('month');
+                        dashboard_view_Controller.DateRange('monthly');
                         dashboard_view_Controller.filterCustomDateController.value.text =
                         '${dashboard_view_Controller.formattedStartDate} - ${dashboard_view_Controller.formattedEndDate}';
                         dashboard_view_Controller.pageNumber = 0;
@@ -1266,11 +1274,9 @@ class FunnelDashboardView extends StatelessWidget{
             });
       }
       return  DropdownSearch<AccountMasterModel>.multiSelection(
-       // items: dashboard_view_Controller.Account_Master_list,
         asyncItems: (String filter) async {
           return await dashboard_view_Controller.getAccountMaster(filter);
         },
-
         itemAsString: (AccountMasterModel u) => u.accountName??"",
         selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
         dropdownDecoratorProps: DropDownDecoratorProps(
@@ -1310,12 +1316,11 @@ class FunnelDashboardView extends StatelessWidget{
 
         popupProps: PopupPropsMultiSelection.dialog(
           showSearchBox: true,
-          searchDelay: const Duration(milliseconds: 500),
+          searchDelay: const Duration(milliseconds: 0),
           searchFieldProps: TextFieldProps(
             padding: EdgeInsets.only(top: 20, left: 10, right: 10),
             decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
-              // Top margin here
               hintText: "Search...",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),

@@ -26,7 +26,7 @@ class CommitDashboardVm extends GetxController{
   var selectedOption = 'Employee'.obs;
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
-  RxString character = 'Month'.obs;
+  RxString character = 'Monthly'.obs;
   RxString rodName = ''.obs;
   RxString geoValueName = ''.obs;
   RxString isAdminWritePermission = "".obs;
@@ -88,7 +88,7 @@ class CommitDashboardVm extends GetxController{
     selectedSalesStageStatusList.value = ["All"];
     QuoteAccepted_controller.value.text = "All";
     IsCommit_controller.value.text = 'All';
-    DateRange("month");
+    DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     //commitDashboardData();
     isAdminWritePermission == 1 ? EmployeeMasterGet(""): getEmployeeTeamMemberGetByClusterRegionApi();
@@ -115,7 +115,7 @@ class CommitDashboardVm extends GetxController{
         endDate = now.add(Duration(days: 7 - currentWeekday));
         break;
 
-      case 'month':
+      case 'monthly':
         startDate = DateTime(now.year, now.month, 1);
         endDate = DateTime(now.year, now.month + 1, 0);
         break;
@@ -168,42 +168,42 @@ class CommitDashboardVm extends GetxController{
       CustomerNameApi = CustomerName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     AccountOwnerForApi = '';
     if(AccountOwner_controller.value.text.isNotEmpty){
       AccountOwnerForApi = AccountOwner_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     ClusterNameForApi = '';
     if(clusterName_controller.value.text.isNotEmpty){
       ClusterNameForApi = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     RegionNameForApi = '';
     if(RegionName_controller.value.text.isNotEmpty){
       RegionNameForApi = RegionName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     ProductCategoryForApi = '';
     if(ProductCategory_controller.value.text.isNotEmpty){
       ProductCategoryForApi = ProductCategory_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     QuoteAcceptedForApi = '';
     if (QuoteAccepted_controller.value.text.isNotEmpty) {
       QuoteAcceptedForApi = QuoteAccepted_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
 
     StageNameForApi = '';
@@ -211,7 +211,7 @@ class CommitDashboardVm extends GetxController{
       StageNameForApi = StageName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
 
     if (IsCommit_controller.value.text.isNotEmpty) {
@@ -658,7 +658,7 @@ class CommitDashboardVm extends GetxController{
   }
 
   clearAllFilterController(){
-    character.value = 'Month';
+    character.value = 'Monthly';
     rodName.value = '';
     geoValueName.value = '';
     ProductCategoryForApi = '';
@@ -686,7 +686,7 @@ class CommitDashboardVm extends GetxController{
     SelectedRegion_list.value = [];
     //selectedSalesStageStatusList.value = [];
     selectedSalesStageStatusList.value = ["All"];
-    DateRange("month");
+    DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 
   }
@@ -754,4 +754,8 @@ class CommitDashboardVm extends GetxController{
     sessionManagement.clearCommitDashboardData();
   }
 
+  String numberFormatWithComma(dynamic number) {
+    final formatter = NumberFormat('#,##,###', 'en_IN');
+    return formatter.format(number);
+  }
 }

@@ -11,6 +11,8 @@ class RoutesName{
   static const installation_details_screen="/installation_view_details_screen.dart";
   static const installation_mark_visit="/mark_visit_screen.dart";
   static const installation_Indent_view="/indent_header_view_screen.dart";
+
+  static const pageNotFoundScreen="/pageNotFound.dart";
   //todo corrective Screen.......
 
   static const corrective_screen="/corrective_screen.dart";

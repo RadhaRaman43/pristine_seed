@@ -31,7 +31,7 @@ class FunnelDashboardVm extends GetxController{
 
   RxString formattedStartDate = "".obs;
   RxString formattedEndDate = "".obs;
-  RxString character = 'Month'.obs;
+  RxString character = 'Monthly'.obs;
 
   RxString totalSuspectPrice = ''.obs;
   RxString totalProspectPrice = ''.obs;
@@ -56,7 +56,7 @@ class FunnelDashboardVm extends GetxController{
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
-  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  //RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
   RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
   RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
@@ -95,7 +95,7 @@ class FunnelDashboardVm extends GetxController{
     selectedSalesStageStatusList.value = ["All"];
     QuoteAccepted_controller.value.text = "All";
     IsCommit_controller.value.text = 'ALL';
-    DateRange("month");
+    DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
     getClustersGetByEmail();
     //funnelDashboardData();
@@ -118,6 +118,11 @@ class FunnelDashboardVm extends GetxController{
     pageNumber = 0;
     funnelDashboardData();
 
+  }
+
+  String numberFormatWithComma(dynamic number) {
+    final formatter = NumberFormat('#,##,###', 'en_IN');
+    return formatter.format(number);
   }
 
   Future<void> funnelDashboardData() async {
@@ -166,10 +171,15 @@ class FunnelDashboardVm extends GetxController{
 
     StageNameForApi = '';
     if (StageName_controller.value.text.isNotEmpty) {
-      StageNameForApi = StageName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+      if(StageName_controller.value.text.contains("All")){
+        StageNameForApi="";
+      }else{
+        StageNameForApi = StageName_controller.value.text
+            .split(',')
+            .map((e) => e.trim())
+            .join('|');
+
+      }
     }
 
     if (IsCommit_controller.value.text.isNotEmpty) {
@@ -311,7 +321,7 @@ class FunnelDashboardVm extends GetxController{
         endDate = now.add(Duration(days: 7 - currentWeekday));
         break;
 
-      case 'month':
+      case 'monthly':
         startDate = DateTime(now.year, now.month, 1);
         endDate = DateTime(now.year, now.month + 1, 0);
         break;
@@ -728,7 +738,7 @@ class FunnelDashboardVm extends GetxController{
 
 
   clearAllFilterController(){
-    character.value = 'Month';
+    character.value = 'Monthly';
     ProductCategoryForApi = '';
     AccountOwnerForApi = '';
     ClusterNameForApi = '';
@@ -757,7 +767,7 @@ class FunnelDashboardVm extends GetxController{
     SelectedRegion_list.value = [];
     //selectedSalesStageStatusList.value = [];
     selectedSalesStageStatusList.value = ["All"];
-    DateRange("month");
+    DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
 
   }
