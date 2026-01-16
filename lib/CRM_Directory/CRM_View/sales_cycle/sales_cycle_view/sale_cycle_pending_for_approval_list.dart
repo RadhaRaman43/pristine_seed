@@ -120,10 +120,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           print(
               "last index ${salesCyclePendingForApprovalController.pageNumber} ${salesCyclePendingForApprovalController.total_rows} ${salesCyclePendingForApprovalController.rowsPerPage} ${total_page}");
 
-          /*if (salesCycleController.pageNumber + 1 != total_page) {
-            salesCycleController.getsalesCycleData(salesCycleController.pageNumber +1, "", "", "Sales");
-            this.salesCycleController.pageNumber += 1;
-          }*/
 
           if (salesCyclePendingForApprovalController.pageNumber + 1 < total_page) {
             salesCyclePendingForApprovalController.getsalesCycleData(salesCyclePendingForApprovalController.pageNumber + 1,);
@@ -156,14 +152,14 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     var approvedOn=StaticMethod.dateTimeToDate(salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].approvedOn??"");
     String saleCycleStatus = salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleApprovalStatus??"";
     Color getStatusColor(String status) {
-      switch (status) {
-        case 'PENDING' || 'Pending':
+      switch (status.toLowerCase()) {
+        case 'pending' || 'pending':
           return Colors.red[900]!;
-        case 'Rejected' || 'rejected':
+        case 'rejected' || 'rejected':
           return AllColors.redColor;
-        case 'APPROVED' || 'Approved':
+        case 'approved' || 'approved':
           return Colors.green;
-        case 'PENDING FOR APPROVAL' || 'Pending For Approval':
+        case 'pending for approval' || 'pending for approval':
           return Colors.yellow[700]!;
         default:
           return Colors.black;
@@ -173,13 +169,10 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-          //salesCycleController.FromPage.value = "FromSCPendingForApproval";
           var item = salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position];
           String salesCycleId = item.salesCycleId ?? "";
           String taskId = item.taskId ?? "";
           salesCyclePendingForApprovalController.extClosureStartToEnd.value="";
-          //salesCycleController.filter.value = "Sales cycle";
-          //salesCyclePendingForApprovalController.clearSaleProductListController();
           salesCycleController.filterQuoteAcceptedFlag.value="";
           salesCycleController.salesCycleId.value=salesCycleId;
           salesCycleController.pageNumber=0;
@@ -191,127 +184,38 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCycleController.ProductCategoryWiseAmtGet(0, salesCycleId);
           salesCycleController.pageNumber=0;
           salesCycleController.getSaleCycleProductByIdList(salesCycleController.pageNumber,salesCycleId);
-         // salesCycleController.getsalesCycleCompetitorProductGetBySalesCycleId(salesCycleController.pageNumber,salesCycleId);
           salesCycleController.clearAllFieldOfQuoteFilter();
 
         },
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabelWithValue(
-              label: "Sales Cycle Stage : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleStatus,
-              //width: size.width * 0.33,
-              color: Colors.blue,
-            ),
-            _buildLabelWithValue(
-              label: "Sales Cycle Id: ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleId,
-            ),
-            _buildLabelWithValue(
-              label: "Task Id : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].taskId,
-              //width: size.width * 0.36,
-            ),
-            _buildLabelWithValue(
-              label: "Approval Status : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleApprovalStatus,
-              // width: size.width * 0.36,
-              color: getStatusColor(saleCycleStatus),
-            ),
-            /*_buildClickableLabel(
-              label: "Account Name : ",
-              value: salesCycleController.saleCyclePendingForApprovalList[position].accountName,
-              width: size.width * 0.4,
-              onTap: () {
-                account_vm_controller.view = 'FromSaleCycleMainScreen';
-                contact_vm_controller.view = 'FromSaleCycleMainScreen';
-                account_vm_controller.getAccMasterBuyCodeApi(
-                  salesCycleController.saleCyclePendingForApprovalList[position].accountCode!,
-                );
-              },
-            ),*/
-            _buildLabelWithValue(
-              label: "Customer Code : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].accountCode,
-              //width: size.width * 0.4,
-            ),
-            _buildLabelWithValue(
-              label: "Sales Cycle Owner : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleOwnerName,
-              //width: size.width * 0.33,
-            ),
-            _buildLabelWithValue(
-              label: "Contact Name : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].contactName,
-              //width: size.width * 0.4,
-            ),
-            _buildLabelWithValue(
-              label: "Product Category : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].productCategory,
-              //width: size.width * 0.35,
-            ),
-            _buildLabelWithValue(
-              label: "Purchase Process : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].purchaseProcess,
-              //width: size.width * 0.35,
-            ),
-            _buildLabelWithValue(
-              label: "Company Pro. Type : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].companyProfileType,
-              //width: size.width * 0.3,
-            ),
-            _buildLabelWithValue(
-              label: "Is Commit : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].commit==1?"Yes":"No",
-              //width: size.width * 0.4,
-            ),
-            _buildLabelWithValue(
-              label: "Solution Accepted : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].isSolutionAccepted == 1 ? "Yes" : "No",
-            ),
-
-            _buildLabelWithValue(
-              label: "Pin Code : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].postCode,
-            ),
-
-            _buildLabelWithValue(
-              label: "District : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].district,
-            ),
-
-            _buildLabelWithValue(
-              label: "Region Name : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].branchHeadValue,
-            ),
-            _buildLabelWithValue(
-              label: "Cluster Name : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].clustureHeadValue,
-            ),
-
-            _buildLabelWithValue(
-              label: "Created By : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].createdFullName,
-              //width: size.width * 0.4,
-            ),
-            _buildLabelWithValue(
-              label: "Approved By : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].approvedBy == ""
-                  ? ""
-                  : salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].approvedFullName,
-              //width: size.width * 0.4,
-            ),
-            _buildLabelWithValue(
-              label: "Exp. Closure Date : ",
-              value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].estClosureDate,
-              //width: size.width * 0.3,
-            ),
-            _buildLabelWithValue(
-              label: "Created On: ",
-              value: createdOn,
-              //: size.width * 0.33,
-            ),
+            _buildLabelWithValue(label: "Sale Cycle Id : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleId, ),
+            _buildLabelWithValue(label: "Approval Status : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleApprovalStatus, color: getStatusColor(saleCycleStatus),),
+            _buildLabelWithValue(label: "Customer Name: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].accountName, ),
+            _buildLabelWithValue(label: "Customer Code : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].accountCode,),
+            _buildLabelWithValue(label: "Sales Cycle Owner : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleOwnerName,),
+            _buildLabelWithValue(label: "Exp. Closure Date : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].estClosureDate,),
+            _buildLabelWithValue(label: "Expected Amount: ", value: '₹ ${salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].estBudgetAmount}',),
+            _buildLabelWithValue(label: "Is Commit : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].commit==1?"Yes":"No",),
+            _buildLabelWithValue(label: "Sales Cycle Stage: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleStatus,),
+            _buildLabelWithValue(label: "Quote Accepted: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].quoteAccepted, color: getStatusColor(salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].quoteAccepted!),),
+            _buildLabelWithValue(label: "Product Category : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].productCategory,),
+            _buildLabelWithValue(label: "Budget Amount : ", value: "₹ ${salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].budgetAmount.toString()}",),
+            _buildLabelWithValue(label: "Contact Name : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].contactName,),
+            _buildLabelWithValue(label: "Purchase Process : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].purchaseProcess,),
+            _buildLabelWithValue(label: "Company Pro. Type : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].companyProfileType,),
+            _buildLabelWithValue(label: "Is Solution Accepted : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].isSolutionAccepted.toString()=="1"?"Yes":"No",),
+            _buildLabelWithValue(label: "Task Id : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].taskId,),
+            _buildLabelWithValue(label: "Pin Code : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].postCode,),
+            _buildLabelWithValue(label: "District : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].district,),
+            _buildLabelWithValue(label: "Cluster Name : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].clustureHeadValue,),
+            _buildLabelWithValue(label: "Region Name : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].branchHeadValue,),
+            _buildLabelWithValue(label: "Created By : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].createdFullName,),
+            _buildLabelWithValue(label: "Created On: ", value: createdOn,),
+            _buildLabelWithValue(label: "Reporting Manager : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].approvedFullName,),
+            _buildLabelWithValue(label: "Approved On: ", value: approvedOn,),
+            _buildLabelWithValue(label: "Reject Reason : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].rejectReason,),
 
           ],
         ),
@@ -445,12 +349,10 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                               bindExpectedClosureDate(context),
                               SizedBox(height: 10,),
                               bindCreatedOn(context),
-                             /* SizedBox(height: 10,),
-                              bindData(context,'Reporting Manager',salesCyclePendingForApprovalController.reporting_manager_Controller.value),*/
-                              SizedBox(height: 10,),
-                              bindRegionNameFilter(context),
                               SizedBox(height: 10,),
                               bindClusterNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindRegionNameFilter(context),
                               SizedBox(height: 10,),
                               bindAccountOwnerFilter(context),
                               SizedBox(height: 10,),
@@ -649,11 +551,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
         onSelected: (String? selection) {
           print(selection);
-          salesCyclePendingForApprovalController.SaleCycleStatusController.value.text =
-              _displaySaleCycleStatusForOption(selection!)
-                  .toString();
-          /*print('IsActive.....${salesCycleController.solutionAcceptedController
-              .value.text}');*/
+          salesCyclePendingForApprovalController.SaleCycleStatusController.value.text = _displaySaleCycleStatusForOption(selection!).toString();
 
         },
         dropdownMenuEntries:
@@ -900,246 +798,26 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     });
   }
 
-  Widget bindRegionNameFilter(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = salesCyclePendingForApprovalController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          salesCyclePendingForApprovalController.SelectedRegion_list.isEmpty) {
-        salesCyclePendingForApprovalController.SelectedRegion_list.assignAll(availableItems);
-        salesCyclePendingForApprovalController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
 
-      }
-    });
-    return Obx(() {
-      final selected = salesCyclePendingForApprovalController.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
-
-      return GestureDetector(
-        onTap: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            ),
-            builder: (context) {
-              final searchController = TextEditingController();
-              final tempSelected = <RegionWithClusterFilterModal>[];
-              tempSelected.addAll(salesCyclePendingForApprovalController.SelectedRegion_list);
-
-              final allItems =
-                  salesCyclePendingForApprovalController.regionwithclusterGetByEmailList;
-
-              return StatefulBuilder(builder: (context, setState) {
-                final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
-
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 50,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(2)),
-                        ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Select Regions',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Search Field
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  searchController.clear();
-                                  setState(() {});
-                                },
-                              )
-                                  : null,
-                            ),
-                            onChanged: (v) => setState(() {}),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // Select All
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CheckboxListTile(
-                            title: const Text('Select All'),
-                            value: allSelected,
-                            onChanged: (val) {
-                              setState(() {
-                                if (val == true) {
-                                  tempSelected.clear();
-                                  tempSelected.addAll(allItems);
-                                } else {
-                                  tempSelected.clear();
-                                }
-                              });
-                            },
-                          ),
-                        ),
-
-                        const Divider(height: 1),
-
-                        // List
-                        Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
-                            itemCount: filtered.length,
-                            itemBuilder: (context, idx) {
-                              final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
-                              return CheckboxListTile(
-                                title: Text(item.geoValue ?? ""),
-                                value: isSel,
-                                onChanged: (v) {
-                                  setState(() {
-                                    if (v == true) {
-                                      if (!isSel) tempSelected.add(item);
-                                    } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                          ),
-                        ),
-
-                        // Done button
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    salesCyclePendingForApprovalController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    salesCyclePendingForApprovalController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Done'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
-            },
-          );
-        },
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: selectedText == null
-                    ? Text(
-                  "Select Region",
-                  style: GoogleFonts.poppins(
-                    color: Colors.grey.shade600,
-                    fontSize: AllFontSize.sisxteen,
-                  ),
-                )
-                    : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    selectedText,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              const Icon(Icons.arrow_drop_down),
-            ],
-          ),
-        ),
-      );
-    });
-  }
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = salesCyclePendingForApprovalController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          salesCyclePendingForApprovalController.SelectedCluster_list.isEmpty) {
-        salesCyclePendingForApprovalController.SelectedCluster_list.assignAll(availableItems);
-        salesCyclePendingForApprovalController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        salesCyclePendingForApprovalController.getRegionsWithClusterFilterGetByEmail();
+      if (salesCyclePendingForApprovalController.clusterName_controller.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
+        List<String> nameList = salesCyclePendingForApprovalController.clusterName_controller.value.text.split('|');
+        salesCyclePendingForApprovalController.SelectedCluster_list.value =[];
+        salesCyclePendingForApprovalController.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && salesCyclePendingForApprovalController.SelectedCluster_list.isEmpty) {
+          salesCyclePendingForApprovalController.SelectedCluster_list.assignAll(availableItems);
+          salesCyclePendingForApprovalController.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          salesCyclePendingForApprovalController.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
@@ -1166,15 +844,9 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1200,15 +872,12 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1303,16 +972,26 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
+
+                                    salesCyclePendingForApprovalController.filterDataChecker.value='';
                                     salesCyclePendingForApprovalController.SelectedCluster_list.assignAll(tempSelected);
-                                    salesCyclePendingForApprovalController.clusterName_controller.value.text = tempSelected
-                                        .map((e) => e.geoValue)
-                                        .join('|');
+                                    salesCyclePendingForApprovalController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
                                     salesCyclePendingForApprovalController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1343,6 +1022,243 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
                   "Select Cluster",
                   style: GoogleFonts.poppins(
                     color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+  Widget bindRegionNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = salesCyclePendingForApprovalController.regionwithclusterGetByEmailList;
+      if (salesCyclePendingForApprovalController.RegionName_controller.value.text.isNotEmpty && salesCyclePendingForApprovalController.filterDataChecker.value=='1') {
+        salesCyclePendingForApprovalController.SelectedRegion_list.value=[];
+        List<String> nameList = salesCyclePendingForApprovalController.RegionName_controller.value.text.split('|');
+        salesCyclePendingForApprovalController.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && salesCyclePendingForApprovalController.SelectedRegion_list.isEmpty) {
+          salesCyclePendingForApprovalController.SelectedRegion_list.assignAll(availableItems);
+          salesCyclePendingForApprovalController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          print("bind region ${salesCyclePendingForApprovalController.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
+      }
+    });
+    return Obx(() {
+      final selected = salesCyclePendingForApprovalController.SelectedRegion_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <RegionWithClusterFilterModal>[];
+              tempSelected.addAll(salesCyclePendingForApprovalController.SelectedRegion_list);
+
+              final allItems = salesCyclePendingForApprovalController.regionwithclusterGetByEmailList;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Regions',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No regions found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") ==
+                                  (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    salesCyclePendingForApprovalController.filterDataChecker.value='';
+                                    salesCyclePendingForApprovalController.SelectedRegion_list.assignAll(tempSelected);
+                                    salesCyclePendingForApprovalController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Region Name", // 👈 Label like before
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Region",
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey.shade600,
                     fontSize: AllFontSize.sisxteen,
                   ),
                 )

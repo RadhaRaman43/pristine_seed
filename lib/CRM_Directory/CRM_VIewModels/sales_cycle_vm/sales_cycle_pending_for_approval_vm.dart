@@ -88,7 +88,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     }
     //getsalesCycleData(pageNumber);
     getClustersGetByEmail();
-    getFilterData();
+
   }
 
   getItemCategoryMstWithoutTaskIdApi() {
@@ -309,7 +309,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getsalesCycleData(pageNumber);
+            getFilterData();
+            //getsalesCycleData(pageNumber);
 
           }else {
             loading.value = false;
@@ -449,10 +450,8 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   RxString filterDataChecker = ''.obs;
   void SaveFilterData() async{
     await sessionManagement.saveSaleCycleApproverData({
-
       'sale_cycle_stage': SaleCycleStatusController.value.text,
       'sale_cycle_id': saleCycleController.value.text,
-      //'quote_accepted': filterQuoteAcceptedController.value.text,
       'task_id': filterTask_Id_controller.value.text,
       'customer_name': accountNameController.value.text,
       'customer_code': accountCodeController.value.text,
@@ -465,49 +464,56 @@ class SalesCyclePendingForApprovalVm extends GetxController{
       'expected_closure_date': filterExpectedClosuredateController.value.text,
       'extClosureStartToEnd': extClosureStartToEnd.value,
       'createdOn_Controller': createdOnCnontroller.value.text,
-      //'reporting_manager_Controller': reporting_manager_Controller.value.text,
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
       'account_owner': AccountOwner_controller.value.text,
       'product_category': productCategoryController.value.text,
       'product_category_type': product_category_type_Controller.value.text,
 
-      /*'approval_status': ApprovalStatusController.value.text,
-      'created_by': createdByController.value.text,*/
     });
     filterDataChecker.value='';
-
+    getsalesCycleData(pageNumber,);
   }
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getSaleCycleApproverData();
 
-    SaleCycleStatusController.value.text=getFilterData["sale_cycle_stage"];
-    saleCycleController.value.text=getFilterData["sale_cycle_id"];
-    //filterQuoteAcceptedController.value.text=getFilterData["quote_accepted"];
-    filterTask_Id_controller.value.text=getFilterData["task_id"];
-    accountNameController.value.text=getFilterData["customer_name"];
-    accountCodeController.value.text=getFilterData["customer_code"];
-    purchaseProcessController.value.text=getFilterData["purchase_process"];
-    companyProfileTypeController.value.text=getFilterData["company_profile_type"];
-    isCommitController.value.text=getFilterData["is_commit"];
-    solutionAcceptedController.value.text=getFilterData["solution_accepted"];
-    postalCodeController.value.text=getFilterData["pin_code"];
-    district_controller.value.text=getFilterData["district"];
-    filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"];
-    extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"];
-    createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
-    RegionName_controller.value.text=getFilterData["region_name"];
-    clusterName_controller.value.text=getFilterData["cluster_name"];
-    AccountOwner_controller.value.text=getFilterData["account_owner"];
-    productCategoryController.value.text=getFilterData["product_category"];
-    product_category_type_Controller.value.text=getFilterData["product_category_type"];
 
-    /*createdByController.value.text=getFilterData["created_by"];
-    ApprovalStatusController.value.text=getFilterData["approval_status"];*/
 
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      SaleCycleStatusController.value.text=getFilterData["sale_cycle_stage"];
+      saleCycleController.value.text=getFilterData["sale_cycle_id"];
+      filterTask_Id_controller.value.text=getFilterData["task_id"];
+      accountNameController.value.text=getFilterData["customer_name"];
+      accountCodeController.value.text=getFilterData["customer_code"];
+      purchaseProcessController.value.text=getFilterData["purchase_process"];
+      companyProfileTypeController.value.text=getFilterData["company_profile_type"];
+      isCommitController.value.text=getFilterData["is_commit"];
+      solutionAcceptedController.value.text=getFilterData["solution_accepted"];
+      postalCodeController.value.text=getFilterData["pin_code"];
+      district_controller.value.text=getFilterData["district"];
+      filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"];
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"];
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
+      AccountOwner_controller.value.text=getFilterData["account_owner"];
+      productCategoryController.value.text=getFilterData["product_category"];
+      product_category_type_Controller.value.text=getFilterData["product_category_type"];
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
     pageNumber=0;
-    filterDataChecker.value='1';
     getsalesCycleData(pageNumber,);
 
   }

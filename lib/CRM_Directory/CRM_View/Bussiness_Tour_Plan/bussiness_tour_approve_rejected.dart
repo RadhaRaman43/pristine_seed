@@ -14,12 +14,13 @@ import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/BusinessPlanTour_Vm.dart';
 import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/Business_Tour_Approval_Vm.dart';
+import '../../CRM_VIewModels/Bussiness_Tour_Plan_Vm/Business_tour_Approval_rejected_Vm.dart';
 
 class BussinessTourApproveRejected extends StatelessWidget{
   BussinessTourApproveRejected({super.key});
 
 
-  BusinessTourApprovalVm businessTourPlanController=Get.put(BusinessTourApprovalVm());
+  BusinessTourApproveRejectedVm businessTourPlanController=Get.put(BusinessTourApproveRejectedVm());
   BusinessPlanTourViewModel businessTourPlanViewController=Get.put(BusinessPlanTourViewModel());
   Size size=Get.size;
 
@@ -56,7 +57,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
         ),
         drawer: CustomDrawer(),
         body: RefreshIndicator(
-          onRefresh:businessTourPlanController.refreshApproveRejectList,
+          onRefresh:businessTourPlanController.refreshList,
           child: Container(
             width: double.infinity,
             height: double.infinity,
@@ -105,7 +106,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                               onPressed: () {
                                 businessTourPlanController.filterStatusFlag.value = 'Approved';
                                 businessTourPlanController.pageNumber=0;
-                                businessTourPlanController.getBusinessTourApproveRejectListData(businessTourPlanController.pageNumber,  businessTourPlanController.filterStatusFlag.value);
+                                businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber,  businessTourPlanController.filterStatusFlag.value);
                               },
                             );
                           }),
@@ -135,7 +136,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                               onPressed: () {
                                 businessTourPlanController.filterStatusFlag.value = 'Rejected';
                                 businessTourPlanController.pageNumber=0;
-                                businessTourPlanController.getBusinessTourApproveRejectListData(businessTourPlanController.pageNumber,  businessTourPlanController.filterStatusFlag.value);
+                                businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber,  businessTourPlanController.filterStatusFlag.value);
                               },
                             );
                           }),
@@ -161,8 +162,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
   }
 
   Widget BindCustomerListView(context) {
-
-    if (businessTourPlanController.BusinessTourApproveRejectList.value.isNotEmpty && businessTourPlanController.BusinessTourApproveRejectList.value.length > 0) {
+    if (businessTourPlanController.BusinessTourApprovalList.value.isNotEmpty && businessTourPlanController.BusinessTourApprovalList.value.length > 0) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {
         if (scrollController.position.pixels ==
@@ -176,10 +176,9 @@ class BussinessTourApproveRejected extends StatelessWidget{
               0) total_page += 1;
 
           print("last index ${businessTourPlanController.pageNumber} ${businessTourPlanController.total_rows} ${businessTourPlanController.rowsPerPage} ${total_page}");
-
-
+          
           if (businessTourPlanController.pageNumber + 1 < total_page) {
-            businessTourPlanController.getBusinessTourApproveRejectListData(businessTourPlanController.pageNumber + 1,businessTourPlanController.filterStatusFlag.value);
+            businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber + 1,businessTourPlanController.filterStatusFlag.value);
             businessTourPlanController.pageNumber += 1;
           }
         }
@@ -193,7 +192,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
             color: Colors.transparent,
           ),
           shrinkWrap: true,
-          itemCount: businessTourPlanController.BusinessTourApproveRejectList.value.length,
+          itemCount: businessTourPlanController.BusinessTourApprovalList.value.length,
           itemBuilder: (BuildContext context, int index) {
             return BindCustomerRequestListView(context, index);
           });
@@ -205,9 +204,9 @@ class BussinessTourApproveRejected extends StatelessWidget{
   }
 
   Widget BindCustomerRequestListView(context, int position) {
-    var createdOn=StaticMethod.dateTimeToDate(businessTourPlanController.BusinessTourApproveRejectList[position].createdOn??"");
-    var complatedOn=StaticMethod.dateTimeToDate(businessTourPlanController.BusinessTourApproveRejectList[position].completedOn??"");
-    String saleCycleStatus = businessTourPlanController.BusinessTourApproveRejectList[position].status?.toLowerCase()??"";
+    var createdOn=StaticMethod.dateTimeToDate(businessTourPlanController.BusinessTourApprovalList[position].createdOn??"");
+    var complatedOn=StaticMethod.dateTimeToDate(businessTourPlanController.BusinessTourApprovalList[position].completedOn??"");
+    String saleCycleStatus = businessTourPlanController.BusinessTourApprovalList[position].status?.toLowerCase()??"";
     Color getStatusColor(String status) {
       switch (status) {
         case 'rejected':
@@ -222,47 +221,47 @@ class BussinessTourApproveRejected extends StatelessWidget{
       margin: EdgeInsets.all(5),
       child: ListTile(
         onTap: () {
-          businessTourPlanViewController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourApproveRejectList[position].tourId, "ApproveRejectPage");
+          businessTourPlanViewController.getBusinessTourPlanDetailsApi(businessTourPlanController.BusinessTourApprovalList[position].tourId, "ApproveRejectPage");
         },
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildLabelWithValue(
               label: "Tour ID :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].tourId,
+              value: businessTourPlanController.BusinessTourApprovalList[position].tourId,
             ),
             _buildLabelWithValue(
               label: "Cluster :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].cluster,
+              value: businessTourPlanController.BusinessTourApprovalList[position].cluster,
             ),
             _buildLabelWithValue(
               label: "Region :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].region,
+              value: businessTourPlanController.BusinessTourApprovalList[position].region,
             ),
             _buildLabelWithValue(
               label: "Touring Region :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].touringRegion,
+              value: businessTourPlanController.BusinessTourApprovalList[position].touringRegion,
             ),
             _buildLabelWithValue(
               label: "Status :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].status,
+              value: businessTourPlanController.BusinessTourApprovalList[position].status,
               color: getStatusColor(saleCycleStatus),
             ),
             _buildLabelWithValue(
               label: "Start Date :",
-              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApproveRejectList[position].startDate??"")
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApprovalList[position].startDate??"")
             ),
             _buildLabelWithValue(
               label: "End Date :",
-              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApproveRejectList[position].endDate??"")
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApprovalList[position].endDate??"")
             ),
             _buildLabelWithValue(
               label: "Reporting Manager :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].accountReportingFullName,
+              value: businessTourPlanController.BusinessTourApprovalList[position].accountReportingFullName,
             ),
             _buildLabelWithValue(
               label: "Created By :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].accountCreateFullName,
+              value: businessTourPlanController.BusinessTourApprovalList[position].accountCreateFullName,
             ),
             _buildLabelWithValue(
               label: "Created On :",
@@ -274,11 +273,11 @@ class BussinessTourApproveRejected extends StatelessWidget{
             ),
             _buildLabelWithValue(
               label: "Approved/Rejected By :",
-              value: businessTourPlanController.BusinessTourApproveRejectList[position].accountApproveFullName,
+              value: businessTourPlanController.BusinessTourApprovalList[position].accountApproveFullName,
             ),
             _buildLabelWithValue(
               label: "Approved On	 :",
-              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApproveRejectList[position].approvedOn??"")
+              value: StaticMethod.convertDateFormat1(businessTourPlanController.BusinessTourApprovalList[position].approvedOn??"")
             ),
           ],
         ),
@@ -341,7 +340,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                mainAxisSize: MainAxisSize.max, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -421,7 +420,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                             //businessTourPlanController.clearFilterData();
                             businessTourPlanController.clearAllFieldOfFilter();
                             businessTourPlanController.pageNumber=0;
-                            businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber);
+                            businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber,businessTourPlanController.filterStatusFlag.value);
                             Get.back();
                           },
                         )),
@@ -434,7 +433,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                           onTap: () {
                             Get.back();
                             businessTourPlanController.pageNumber = 0;
-                            businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber);
+                            businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber,businessTourPlanController.filterStatusFlag.value);
                           },
                         )),
                         const SizedBox(width: 6),
@@ -1052,7 +1051,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
       else{
         if (availableItems.isNotEmpty && businessTourPlanController.SelectedRegion_list.isEmpty) {
           businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
-          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
           print("bind region ${businessTourPlanController.RegionName_controller.value.text}");
         }
         else{

@@ -1362,7 +1362,7 @@ class BussinessTourPlanScreen extends StatelessWidget{
       else{
         if (availableItems.isNotEmpty && businessTourPlanController.SelectedRegion_list.isEmpty) {
           businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
-          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
           print("bind region ${businessTourPlanController.RegionName_controller.value.text}");
         }
         else{

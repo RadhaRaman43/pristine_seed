@@ -1971,7 +1971,6 @@ class TaskMasterScreen extends StatelessWidget {
       );
     });
   }
-
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = TaskMaster_page_controller.regionwithclusterGetByEmailList;

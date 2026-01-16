@@ -266,7 +266,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                mainAxisSize: MainAxisSize.min, // Ensure minimal height
+                mainAxisSize: MainAxisSize.max, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -310,7 +310,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            mainAxisSize: MainAxisSize.min,
+                            mainAxisSize: MainAxisSize.max,
                             children: [
                               SizedBox(height: 10,),
                               bindfilterText(context,'Tour ID',businessTourPlanController.filterTourIdController.value),
@@ -974,7 +974,7 @@ class BusinessTourApprovalListScreen extends StatelessWidget{
       else{
         if (availableItems.isNotEmpty && businessTourPlanController.SelectedRegion_list.isEmpty) {
           businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
-          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
           print("bind region ${businessTourPlanController.RegionName_controller.value.text}");
         }
         else{

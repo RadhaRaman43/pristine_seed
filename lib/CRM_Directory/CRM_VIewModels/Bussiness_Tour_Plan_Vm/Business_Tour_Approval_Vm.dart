@@ -42,10 +42,7 @@ class BusinessTourApprovalVm extends GetxController{
     email = await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     clearAllFieldOfFilter();
-    //getBusinessTourApprovalListData(pageNumber);
-    //getBusinessTourApproveRejectListData(pageNumber, filterStatusFlag.value);
     getClustersGetByEmail();
-    getFilterData();
     super.onInit();
   }
 
@@ -56,7 +53,8 @@ class BusinessTourApprovalVm extends GetxController{
 
   Future<void> refreshApproveRejectList() async {
     pageNumber = 0;
-    getBusinessTourApproveRejectListData(pageNumber, filterStatusFlag.value);
+    getBusinessTourApprovalListData(pageNumber);
+    //getBusinessTourApproveRejectListData(pageNumber, filterStatusFlag.value);
   }
 
   void clearAllFieldOfFilter() {
@@ -87,8 +85,7 @@ class BusinessTourApprovalVm extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -136,8 +133,10 @@ class BusinessTourApprovalVm extends GetxController{
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getBusinessTourApprovalListData(pageNumber);
-            getBusinessTourApproveRejectListData(pageNumber, filterStatusFlag.value);
+            //getBusinessTourApprovalListData(pageNumber);
+            getApproveFilterData();
+
+
 
           }else {
             loading.value = false;
@@ -213,100 +212,9 @@ class BusinessTourApprovalVm extends GetxController{
     }
   }
 
-  getBusinessTourApproveRejectListData(int page_no, String Status) {
-    try {
-      Map data = {
-        "filter_created_by": filterCreatedByController.value.text.isEmpty?"":filterCreatedByController.value.text,
-        "email_id": email,
-        "approve_status": Status,
-        "rowsPerPage": rowsPerPage,
-        "pageNumber": page_no,
-        "tour_id": filterTourIdController.value.text.isEmpty?"":filterTourIdController.value.text,
-
-      };
-      loading.value = true;
-      _api.BusinessTourPlanApprovalGet(data, sessionManagement).then(
-            (onValue) {
-          final jsonResponse = json.decode(onValue);
-          print(onValue);
-          if (jsonResponse is List) {
-            List<BusinessTourApprovalModel> response =
-            jsonResponse.map((e) => BusinessTourApprovalModel.fromJson(e)).toList();
-            if (response.length > 0 && response[0].condition == "True") {
-              loading.value = false;
-              if (page_no == 0) {
-                BusinessTourApproveRejectList.clear();
-              }
-              BusinessTourApproveRejectList.addAll(response);
-              print('listSize.....${BusinessTourApproveRejectList.length}');
-              total_rows = int.parse(BusinessTourApproveRejectList[0].totalRows!.toString());
-
-            } else {
-              loading.value = false;
-              BusinessTourApproveRejectList.value = [];
-            }
-          } else {
-            loading.value = false;
-          }
-        },
-      ).onError(
-            (error, stackTrace) {
-          print(error);
-          loading.value = false;
-        },
-      );
-    } catch (e) {
-      loading.value = false;
-      print(e);
-    }
-  }
 
   RxString filterDataChecker = ''.obs;
-  void SaveFilterData() async{
-    await sessionManagement.saveBusinessApproveRejectedTourPlanData({
 
-      'filterTourIdController': filterTourIdController.value.text,
-      'region_name': RegionName_controller.value.text,
-      'cluster_name': clusterName_controller.value.text,
-      //'filterTouringRegionController': filterTouringRegionController.value.text,
-      'StartDate_filter_controller': StartDate_filter_controller.value.text,
-      'EndDate_filter_controller': EndDate_filter_controller.value.text,
-      'filterCreatedByController': filterCreatedByController.value.text,
-      'createdOn_filter_controller': createdOn_filter_controller.value.text,
-
-    });
-    filterDataChecker.value='';
-  }
-
-  void getFilterData() async{
-    Map getFilterData=await sessionManagement.getBusinessApproveRejectedTourPlanData();
-
-    filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
-    RegionName_controller.value.text=getFilterData["region_name"]??"";
-    clusterName_controller.value.text=getFilterData["cluster_name"]??"";
-    //filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
-    StartDate_filter_controller.value.text=getFilterData["StartDate_filter_controller"]??"";
-    EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
-    filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
-    createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
-    filterDataChecker.value='1';
-
-    if(RegionName_controller.value.text.isEmpty){
-      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
-    }
-    if(clusterName_controller.value.text.isEmpty){
-      clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
-    }
-
-    pageNumber=0;
-    getBusinessTourApprovalListData(pageNumber);
-
-  }
-
-  void clearFilterData() {
-    filterDataChecker.value='';
-    sessionManagement.clearBusinessApproveRejectedTourPlanData();
-  }
 
   void SaveApprovFilterData() async{
     await sessionManagement.saveBusinessApproveTourPlanData({
@@ -329,23 +237,28 @@ class BusinessTourApprovalVm extends GetxController{
   void getApproveFilterData() async{
     Map getFilterData=await sessionManagement.getBusinessApproveTourPlanData();
 
-    filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
-    RegionName_controller.value.text=getFilterData["region_name"]??"";
-    clusterName_controller.value.text=getFilterData["cluster_name"]??"";
-    //filterTouringRegionController.value.text=getFilterData["filterTouringRegionController"]??"";
-    StartDate_filter_controller.value.text=getFilterData["StartDate_filter_controller"]??"";
-    EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
-    filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
-    createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
-    filterDataChecker.value='1';
+    if(getFilterData.isNotEmpty){
+      filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
+      StartDate_filter_controller.value.text=getFilterData["StartDate_filter_controller"]??"";
+      EndDate_filter_controller.value.text=getFilterData["EndDate_filter_controller"]??"";
+      filterCreatedByController.value.text=getFilterData["filterCreatedByController"]??"";
+      createdOn_filter_controller.value.text=getFilterData["createdOn_filter_controller"]??"";
+      filterDataChecker.value='1';
 
-    if(RegionName_controller.value.text.isEmpty){
-      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
-    }
-    if(clusterName_controller.value.text.isEmpty){
-      clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
-    }
 
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
     pageNumber=0;
     getBusinessTourApprovalListData(pageNumber);
 
