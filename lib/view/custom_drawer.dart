@@ -579,6 +579,7 @@ class _Drawer extends State<CustomDrawer> {
           break;
 
         case 'Pending Draft Quote':
+          sessionManagement.setfilterRouting('Pending Draft Quote');
           IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
           home_vm.openMenu(cTitle, iconData);
           Get.delete<PendingDraftQuoteVm>();
@@ -612,6 +613,7 @@ class _Drawer extends State<CustomDrawer> {
 
 
         case 'All Quote':
+          sessionManagement.setfilterRouting('All Quote');
           IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
           home_vm.openMenu(cTitle, iconData);
           Get.delete<PendingDraftQuoteVm>();

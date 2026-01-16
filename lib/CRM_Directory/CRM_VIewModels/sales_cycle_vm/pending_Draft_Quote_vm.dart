@@ -71,17 +71,18 @@ class PendingDraftQuoteVm extends GetxController{
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
-
+  String filterRouting = "";
 
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    filterRouting = await sessionManagement.getfilterRouting() ?? '';
     //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
-    getFilterData();
+
 
     super.onInit();
   }
@@ -138,7 +139,7 @@ class PendingDraftQuoteVm extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -181,9 +182,15 @@ class PendingDraftQuoteVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
-            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
+            if(filterRouting =='Pending Draft Quote'){
+              getPendingDraftQuoteFilterData();
+            }
+            else if(filterRouting =='All Quote'){
+              getFilterData();
+            }
+            //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
           }else {
             loading.value = false;
@@ -350,48 +357,126 @@ class PendingDraftQuoteVm extends GetxController{
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getQuoteData();
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"]??"";
+      filterQuoteVersionController.value.text=getFilterData["filterQuoteVersionController"]??"";
+      filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"]??"";
+      accountNameController.value.text=getFilterData["customer_name"]??"";
+      accountCodeController.value.text=getFilterData["customer_code"]??"";
+      quoteStatusController.value.text=getFilterData["quoteStatusController"]??"";
+      filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
+      quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
+      filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"]??"";
+      rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"]??"";
+      cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
+      category_Approval_controller.value.text=getFilterData["category_Approval_controller"]??"";
+      gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
+      createdByCnontroller.value.text=getFilterData["createdByCnontroller"]??"";
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
+      productCategoryController.value.text=getFilterData["product_category"]??"";
+      product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
 
-    filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"]??"";
-    filterQuoteVersionController.value.text=getFilterData["filterQuoteVersionController"]??"";
-    filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"]??"";
-    accountNameController.value.text=getFilterData["customer_name"]??"";
-    accountCodeController.value.text=getFilterData["customer_code"]??"";
-    quoteStatusController.value.text=getFilterData["quoteStatusController"]??"";
-    filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
-    quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
-    extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
-    filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"]??"";
-    rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"]??"";
-    cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
-    category_Approval_controller.value.text=getFilterData["category_Approval_controller"]??"";
-    gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
-    RegionName_controller.value.text=getFilterData["region_name"]??"";
-    clusterName_controller.value.text=getFilterData["cluster_name"]??"";
-    createdByCnontroller.value.text=getFilterData["createdByCnontroller"]??"";
-    createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
-    createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
-    productCategoryController.value.text=getFilterData["product_category"]??"";
-    product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
 
     pageNumberForQuote=0;
-    filterDataChecker.value='1';
-    if(product_category_type_Controller.value.text.isEmpty){
-      product_category_type_Controller.value.text="Contains";
-    }
-    if(RegionName_controller.value.text.isEmpty){
-      RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
-    }
-    if(clusterName_controller.value.text.isEmpty){
-      clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
-    }
-
     getPendingDraftQuoteList(pageNumberForQuote, "All");
-
 
   }
 
   void clearFilterData() {
     filterDataChecker.value='';
     sessionManagement.clearQuoteData();
+  }
+
+  //todo pending draft quote
+
+  void SavePendingDraftQuoteFilterData() async{
+    await sessionManagement.savePendingDraftQuoteData({
+      'filterQuoteIdController': filterQuoteIdController.value.text,
+      'filterQuoteVersionController': filterQuoteVersionController.value.text,
+      'filterQuoteSaleCycleController': filterQuoteSaleCycleController.value.text,
+      'customer_name': accountNameController.value.text,
+      'customer_code': accountCodeController.value.text,
+      'quoteStatusController': quoteStatusController.value.text,
+      'filterQuoteValidityController': filterQuoteValidityController.value.text,
+      'quoteValidityStartToEnd': quoteValidityStartToEnd.value,
+      'filterExpectedClosuredateController': filterExpectedClosuredateController.value.text,
+      'extClosureStartToEnd': extClosureStartToEnd.value,
+      'rh_Approval_controller': rh_Approval_controller.value.text,
+      'cbh_Approval_controller': cbh_Approval_controller.value.text,
+      'category_Approval_controller': category_Approval_controller.value.text,
+      'gm_Approval_controller': gm_Approval_controller.value.text,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
+      'createdByCnontroller': createdByCnontroller.value.text,
+      'createdOn_Controller': createdOnCnontroller.value.text,
+      'createdOnStartToEnd': createdOnStartToEnd.value,
+      'product_category': productCategoryController.value.text,
+      'product_category_type': product_category_type_Controller.value.text,
+    });
+    filterDataChecker.value='';
+
+  }
+
+  void getPendingDraftQuoteFilterData() async{
+    Map getFilterData=await sessionManagement.getPendingDraftQuoteData();
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"]??"";
+      filterQuoteVersionController.value.text=getFilterData["filterQuoteVersionController"]??"";
+      filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"]??"";
+      accountNameController.value.text=getFilterData["customer_name"]??"";
+      accountCodeController.value.text=getFilterData["customer_code"]??"";
+      quoteStatusController.value.text=getFilterData["quoteStatusController"]??"";
+      filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
+      quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
+      filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"]??"";
+      rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"]??"";
+      cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
+      category_Approval_controller.value.text=getFilterData["category_Approval_controller"]??"";
+      gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
+      createdByCnontroller.value.text=getFilterData["createdByCnontroller"]??"";
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
+      productCategoryController.value.text=getFilterData["product_category"]??"";
+      product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+    pageNumberForQuote=0;
+    getPendingDraftQuoteList(pageNumberForQuote, "All");
+
+  }
+
+  void clearPendingDraftQuoteFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearPendingDraftQuoteData();
   }
 }

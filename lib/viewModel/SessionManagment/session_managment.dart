@@ -546,6 +546,21 @@ class SessionManagement {
     prefs.remove("Quote_data");
   }
 
+  //todo Pending Draft Quote
+  Future<void> savePendingDraftQuoteData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("PendingDraftQuote_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getPendingDraftQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("PendingDraftQuote_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearPendingDraftQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("PendingDraftQuote_data");
+  }
+
   //todo task data
   Future<void> saveTaskData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
