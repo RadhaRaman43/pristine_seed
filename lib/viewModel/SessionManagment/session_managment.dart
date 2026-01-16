@@ -621,6 +621,21 @@ class SessionManagement {
     prefs.remove("BusinessApproveRejectedTourPlan_data");
   }
 
+  //todo business approved  tour
+  Future<void> saveBusinessApproveTourPlanData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("BusinessApproveTourPlan_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getBusinessApproveTourPlanData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("BusinessApproveTourPlan_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearBusinessApproveTourPlanData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("BusinessApproveTourPlan_data");
+  }
+
 
   //todo dashboard
   Future<void> saveFunnelDashboardData(Map<String, dynamic> data) async {

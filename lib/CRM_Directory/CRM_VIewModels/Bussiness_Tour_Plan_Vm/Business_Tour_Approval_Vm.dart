@@ -308,8 +308,8 @@ class BusinessTourApprovalVm extends GetxController{
     sessionManagement.clearBusinessApproveRejectedTourPlanData();
   }
 
- /* void SaveFilterData() async{
-    await sessionManagement.saveBusinessApproveRejectedTourPlanData({
+  void SaveApprovFilterData() async{
+    await sessionManagement.saveBusinessApproveTourPlanData({
 
       'filterTourIdController': filterTourIdController.value.text,
       'region_name': RegionName_controller.value.text,
@@ -322,10 +322,12 @@ class BusinessTourApprovalVm extends GetxController{
 
     });
     filterDataChecker.value='';
+    getBusinessTourApprovalListData(pageNumber);
+
   }
 
-  void getFilterData() async{
-    Map getFilterData=await sessionManagement.getBusinessApproveRejectedTourPlanData();
+  void getApproveFilterData() async{
+    Map getFilterData=await sessionManagement.getBusinessApproveTourPlanData();
 
     filterTourIdController.value.text=getFilterData["filterTourIdController"]??"";
     RegionName_controller.value.text=getFilterData["region_name"]??"";
@@ -349,8 +351,8 @@ class BusinessTourApprovalVm extends GetxController{
 
   }
 
-  void clearFilterData() {
+  void clearApproveFilterData() {
     filterDataChecker.value='';
-    sessionManagement.clearBusinessApproveRejectedTourPlanData();
-  }*/
+    sessionManagement.clearBusinessApproveTourPlanData();
+  }
 }

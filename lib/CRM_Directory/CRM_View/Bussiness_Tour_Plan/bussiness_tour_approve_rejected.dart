@@ -390,9 +390,9 @@ class BussinessTourApproveRejected extends StatelessWidget{
                               SizedBox(height: 10,),
                               bindfilterText(context,'Tour ID',businessTourPlanController.filterTourIdController.value),
                               SizedBox(height: 10,),
-                              bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
                               bindClusterNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindRegionNameFilter(context),
                               SizedBox(height: 10,),
                               bindFilterStartDate(context),
                               SizedBox(height: 10,),
@@ -414,18 +414,7 @@ class BussinessTourApproveRejected extends StatelessWidget{
                     child: Row(
                       children: [
                         Expanded(child: _buildButton(
-                          text: 'Submit',
-                          borderColor: AllColors.primaryDark,
-                          textColor: AllColors.primaryDark1,
-                          onTap: () {
-                            Get.back();
-                            businessTourPlanController.pageNumber = 0;
-                            businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber);
-                          },
-                        )),
-                        const SizedBox(width: 6),
-                        Expanded(child: _buildButton(
-                          text: 'Reset',
+                          text: 'Clear',
                           borderColor: AllColors.redColor,
                           textColor: AllColors.redColor,
                           onTap: () {
@@ -436,9 +425,21 @@ class BussinessTourApproveRejected extends StatelessWidget{
                             Get.back();
                           },
                         )),
+
                         const SizedBox(width: 6),
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            Get.back();
+                            businessTourPlanController.pageNumber = 0;
+                            businessTourPlanController.getBusinessTourApprovalListData(businessTourPlanController.pageNumber);
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
@@ -790,13 +791,22 @@ class BussinessTourApproveRejected extends StatelessWidget{
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = businessTourPlanController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          businessTourPlanController.SelectedCluster_list.isEmpty) {
-        businessTourPlanController.SelectedCluster_list.assignAll(availableItems);
-        businessTourPlanController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-        businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
+      if (businessTourPlanController.clusterName_controller.value.text.isNotEmpty && businessTourPlanController.filterDataChecker.value=='1') {
+        List<String> nameList = businessTourPlanController.clusterName_controller.value.text.split('|');
+        businessTourPlanController.SelectedCluster_list.value =[];
+        businessTourPlanController.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && businessTourPlanController.SelectedCluster_list.isEmpty) {
+          businessTourPlanController.SelectedCluster_list.assignAll(availableItems);
+          businessTourPlanController.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
@@ -857,15 +867,12 @@ class BussinessTourApproveRejected extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -960,20 +967,26 @@ class BussinessTourApproveRejected extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    businessTourPlanController.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    businessTourPlanController
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
-                                    businessTourPlanController
-                                        .getRegionsWithClusterFilterGetByEmail();
+
+                                    businessTourPlanController.filterDataChecker.value='';
+                                    businessTourPlanController.SelectedCluster_list.assignAll(tempSelected);
+                                    businessTourPlanController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
+                                    businessTourPlanController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1026,19 +1039,30 @@ class BussinessTourApproveRejected extends StatelessWidget{
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = businessTourPlanController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          businessTourPlanController.SelectedRegion_list.isEmpty) {
-        businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
-        businessTourPlanController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join('|');
-
+      if (businessTourPlanController.RegionName_controller.value.text.isNotEmpty && businessTourPlanController.filterDataChecker.value=='1') {
+        businessTourPlanController.SelectedRegion_list.value=[];
+        List<String> nameList = businessTourPlanController.RegionName_controller.value.text.split('|');
+        businessTourPlanController.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && businessTourPlanController.SelectedRegion_list.isEmpty) {
+          businessTourPlanController.SelectedRegion_list.assignAll(availableItems);
+          businessTourPlanController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          print("bind region ${businessTourPlanController.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
     return Obx(() {
       final selected = businessTourPlanController.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1053,20 +1077,13 @@ class BussinessTourApproveRejected extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(businessTourPlanController.SelectedRegion_list);
 
-              final allItems =
-                  businessTourPlanController.regionwithclusterGetByEmailList;
+              final allItems = businessTourPlanController.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1095,17 +1112,13 @@ class BussinessTourApproveRejected extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
 
-                        // Search Field
                         Padding(
                           padding:
                           const EdgeInsets.symmetric(horizontal: 16.0),
@@ -1194,17 +1207,23 @@ class BussinessTourApproveRejected extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    businessTourPlanController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    businessTourPlanController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join('|');
+                                    businessTourPlanController.filterDataChecker.value='';
+                                    businessTourPlanController.SelectedRegion_list.assignAll(tempSelected);
+                                    businessTourPlanController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1253,5 +1272,4 @@ class BussinessTourApproveRejected extends StatelessWidget{
       );
     });
   }
-
 }
