@@ -221,9 +221,6 @@ class _Drawer extends State<CustomDrawer> {
                                                 Get.toNamed(RoutesName.installation_screen,preventDuplicates: false);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Navigator.of(context);
-                                                /*home_vm.openMenu(cTitle,
-                                                    Icon(_getChildIconForIndex(index)))*/;
-          
                                                 break;
                                               case 'Corrective Request':
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
@@ -328,8 +325,7 @@ class _Drawer extends State<CustomDrawer> {
           
           
                                             //todo crm routing.....
-          
-          
+
                                               case 'Accounts Master':
                                                 sessionManagement.setfilterRouting('Accounts Master');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);

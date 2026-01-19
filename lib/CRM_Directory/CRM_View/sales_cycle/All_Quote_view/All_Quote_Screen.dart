@@ -268,6 +268,7 @@ class AllQuoteScreen extends StatelessWidget{
 
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -302,7 +303,7 @@ class AllQuoteScreen extends StatelessWidget{
 
   }) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
