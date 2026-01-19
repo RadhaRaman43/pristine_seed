@@ -451,10 +451,10 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Approved / Rejected Quote':
+                                                sessionManagement.setfilterRouting('Approved / Rejected Quote');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("APPROVED & REJECTED"));
                                                 Get.toNamed(RoutesName.approvedRejectedQuoteScreen,);
                                                 Navigator.of(context);
                                                 break;
@@ -488,10 +488,10 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'All Quote Line Items':
+                                                sessionManagement.setfilterRouting('All Quote Line Items');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLQuoteLineItems"));
                                                 Get.toNamed(RoutesName.allQuoteLineItemScreen,);
                                                 Navigator.of(context);
                                                 break;

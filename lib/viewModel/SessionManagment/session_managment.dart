@@ -561,6 +561,37 @@ class SessionManagement {
     prefs.remove("PendingDraftQuote_data");
   }
 
+  //todo Quote rejected and approve
+  Future<void> saveApproveRejectedQuoteData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("ApproveRejectedQuote_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getApproveRejectedQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("ApproveRejectedQuote_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearApproveRejectedQuoteData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("ApproveRejectedQuote_data");
+  }
+
+  //todo Quote line item
+  Future<void> saveQuoteLineItemData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("QuoteLineItem_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getQuoteLineItemData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("QuoteLineItem_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearQuoteLineItemData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("QuoteLineItem_data");
+  }
+
+
   //todo task data
   Future<void> saveTaskData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
