@@ -95,7 +95,7 @@ class CommitDashboardVm extends GetxController{
 
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
-    getAccountMaster(pageNumber);
+   getAccountMaster("");
   }
 
   void DateRange(String type) {
@@ -602,7 +602,52 @@ class CommitDashboardVm extends GetxController{
     }
   }
 
-  void getAccountMaster(int page_no){
+
+  Future<List<AccountMasterModel>> getAccountMaster(
+      String searchText) async {
+    try {
+      Map<String, String> data = {
+        "filter_account_code": '',
+        "filter_account_name": searchText,
+        "filter_account_type": '',
+        "filter_email_id": '',
+        "filter_phone_no": '',
+        "filter_company_profile_type": '',
+        "filter_state_name": '',
+        "filter_postal_code": '',
+        "filter_district": '',
+        "filter_created_by": '',
+        "filter_account_owner": email,
+        "filter_frontliner_value": "",
+        "filter_branch_head_value": '',
+        "filter_zone_head_value": "",
+        "filter_clusture_head_value": '',
+        "filter_is_active": '-1',
+        "row_per_page": '20',
+        "page_number": '0'
+      };
+      print("data is master....${data}");
+      final response =
+      await _api.AccountMasterGetApiHit(data, sessionManagement);
+
+      final jsonResponse = json.decode(response);
+
+      if (jsonResponse is List) {
+        List<AccountMasterModel> list =
+        jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
+        if (list.isNotEmpty && list[0].condition?.toLowerCase() == "true") {
+          Account_Master_list.value = list;
+          return list;
+        }
+      }
+      return [];
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
+  /*void getAccountMaster(int page_no){
     try{
       Map<String, String> data={
         "filter_account_code":'',
@@ -655,7 +700,7 @@ class CommitDashboardVm extends GetxController{
       loading.value = false;
       print(e);
     }
-  }
+  }*/
 
   clearAllFilterController(){
     character.value = 'Monthly';

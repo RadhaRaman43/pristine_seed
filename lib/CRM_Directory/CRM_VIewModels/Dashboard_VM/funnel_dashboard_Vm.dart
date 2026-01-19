@@ -56,7 +56,7 @@ class FunnelDashboardVm extends GetxController{
   RxList<ClusterModal> SelectedCluster_list = <ClusterModal>[].obs;
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
-  //RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
+  RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
   RxList<AccountMasterModel> SelectedAccount_Master_list=<AccountMasterModel>[].obs;
   RxList<String> quoteAcceptedList = ["ALL","OPEN","WON", "LOSS"].obs;
   RxList<String> isCommitList = ["ALL","YES", "NO"].obs;
@@ -693,11 +693,10 @@ class FunnelDashboardVm extends GetxController{
 
   Future<List<AccountMasterModel>> getAccountMaster(
       String searchText) async {
-    print("API HIT WITH: $searchText");
     try {
       Map<String, String> data = {
         "filter_account_code": '',
-        "filter_account_name": searchText, // 👈 SEARCH HERE
+        "filter_account_name": searchText,
         "filter_account_type": '',
         "filter_email_id": '',
         "filter_phone_no": '',
@@ -724,8 +723,8 @@ class FunnelDashboardVm extends GetxController{
       if (jsonResponse is List) {
         List<AccountMasterModel> list =
         jsonResponse.map((e) => AccountMasterModel.fromJson(e)).toList();
-
-        if (list.isNotEmpty && list[0].condition == "True") {
+        if (list.isNotEmpty && list[0].condition?.toLowerCase() == "true") {
+          Account_Master_list.value = list;
           return list;
         }
       }
