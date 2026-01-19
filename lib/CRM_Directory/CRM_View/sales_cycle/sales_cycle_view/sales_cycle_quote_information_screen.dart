@@ -333,13 +333,20 @@ class QuoteInformationScreen extends StatelessWidget {
                           );
                         }),
                         Obx(() {
+                          print("draft quote status ${saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()} ");
+                          print("draft quote accepted ${saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase()} ");
+                          print("draft is read ${saleCycleController.quoteHeaderdata[0].isReadySendForApproval} ");
+                          print("draft isAdminWritePermission ${saleCycleController.isAdminWritePermission} ");
+                          print("draft userType ${saleCycleController.userType} ");
+                          print("draft actualSalesCycleApprovalStatus ${saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase()} ");
                           return Visibility(
-                            visible: (saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
+                            visible: ((saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "draft" &&
                                     saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open"&&
-                                    saleCycleController.quoteHeaderdata[0].isReadyForApprove == 1) ||
-                                    saleCycleController.isAdminWritePermission=="1" ||
-                                    (saleCycleController.userType.toLowerCase()=="branch head" &&
-                                    saleCycleController.saleCycleList[0].actualSalesCycleApprovalStatus?.toLowerCase() != "pending for approval") ? true : false,
+                                    saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1) ||
+                                saleCycleController.isAdminWritePermission=="1" ||
+                                    ((saleCycleController.userType.toLowerCase()=="cluster head"||saleCycleController.userType.toLowerCase()=="branch head"||
+                                        saleCycleController.userType.toLowerCase()=="general manager") &&
+                                    saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase() == "pending for approval")) ? true : false,
                             child: GestureDetector(
                               onTap: () {
                                 saleCycleController.bindAddress();
@@ -2392,7 +2399,7 @@ class QuoteInformationScreen extends StatelessWidget {
           return Container(
             child: AlertDialog(
               title: Text(
-                "Header Quote Update",
+                "Update Quote Header",
                 style: GoogleFonts.poppins(
                   color: AllColors.primaryDark1,
                   fontSize: AllFontSize.fourtine,
@@ -2406,10 +2413,9 @@ class QuoteInformationScreen extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Visibility(visible:saleCycleController.isAdminWritePermission=="1" || saleCycleController.userType.toLowerCase()=="branch head",
+                    Visibility(visible:saleCycleController.isAdminWritePermission=="1" || saleCycleController.userType.toLowerCase()=="branch head"||
+                        saleCycleController.userType.toLowerCase()=="cluster head"||saleCycleController.userType.toLowerCase()=="general manager",
                         child: bindCharges(context),),
-                    SizedBox(height: 5),
-                    bindGeneralAddress(context),
                     SizedBox(height: 10),
                     bindShippingAddress(context),
                     SizedBox(height: 10,),
@@ -2478,90 +2484,6 @@ class QuoteInformationScreen extends StatelessWidget {
                     SizedBox(
                       height: 10,
                     ),
-                    /*Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              AllColors.primaryDark1,
-                            ),
-                          ),
-                          onPressed: () {
-                            address_vm_controller.clearController();
-                            accountMaster_page_controller.gst_registration_type_controller.value.text = 'UnRegistered';
-                            address_vm_controller.getGeoPostalCodeApi();
-                            Get.toNamed(RoutesName.addNewAddress_screen);
-                          },
-                          child: Container(
-                            child: Text(
-                              'Add Address',
-                              style: GoogleFonts.poppins(
-                                color: AllColors.whiteColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              AllColors.primaryDark1,
-                            ),
-                          ),
-                          onPressed: () {
-                            saleCycleController.pageNumber = 0;
-                            saleCycleController.getAddressMasterList(
-                                saleCycleController.pageNumber,
-                                saleCycleController.accountCode.value);
-                            saleCycleController.showConsigneeAddressList(
-                                context, saleCycleController.address_master_list);
-                          },
-                          child: Container(
-                            child: Text(
-                              'Change Address',
-                              style: GoogleFonts.poppins(
-                                color: AllColors.whiteColor,
-                                fontSize: AllFontSize.fourtine,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),*/
-                    /*Container(
-                      width: size.width,
-                      child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            AllColors.primaryDark1,
-                          ),
-                        ),
-                        onPressed: () {
-                          saleCycleController.pageNumber = 0;
-                          saleCycleController.getAddressMasterList(
-                              saleCycleController.pageNumber,
-                              saleCycleController.accountCode.value);
-                          saleCycleController.showConsigneeAddressList(
-                              context, saleCycleController.address_master_list);
-                        },
-                        child: Container(
-                          child: Text(
-                            'Change Address',
-                            style: GoogleFonts.poppins(
-                              color: AllColors.whiteColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-                      ),
-                    )*/
                   ],
                 ),
               )),
@@ -2681,8 +2603,10 @@ class QuoteInformationScreen extends StatelessWidget {
   }
 
   Widget bindTermCondition(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15.0, right: 15, top: 15),
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)),
+
       child: Obx(() {
         return TextField(
           readOnly:  saleCycleController.BusinessTerm.value,
@@ -2691,8 +2615,8 @@ class QuoteInformationScreen extends StatelessWidget {
           decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
                   vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-              hintText: 'Term & Condition *',
-              labelText: 'Term & Condition *',
+              hintText: 'Term & Condition',
+              labelText: 'Term & Condition',
               hintStyle: GoogleFonts.poppins(
                   color: AllColors.lightblackColor,
                   fontWeight: FontWeight.w300,
@@ -2920,8 +2844,7 @@ class QuoteInformationScreen extends StatelessWidget {
       child: DropdownMenu<String>(
         width: size.width - 155,
         controller: saleCycleController.activeController.value,
-        label: Text(
-          "Active",
+        label: Text("Active",
           style: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontSize: AllFontSize.fourtine,
@@ -2946,15 +2869,10 @@ class QuoteInformationScreen extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(
               vertical: AllFontSize.two, horizontal: AllFontSize.ten),
         ),
-        enabled:
-            saleCycleController.quoteHeaderdata[0].isReadySendForApproval != 1
-                ? false
-                : true,
+        //enabled: saleCycleController.quoteHeaderdata[0].isReadySendForApproval != 1 ? false : true,
         onSelected: (String? selection) {
           print(selection);
-          saleCycleController.activeController.value.text =
-              _displayCustomerNeedIdentityStatusForOption(selection!)
-                  .toString();
+          saleCycleController.activeController.value.text = _displayCustomerNeedIdentityStatusForOption(selection!).toString();
         },
         dropdownMenuEntries: saleCycleController.customerNeedIdentityList
             .map<DropdownMenuEntry<String>>((String e) {
@@ -3123,7 +3041,7 @@ class QuoteInformationScreen extends StatelessWidget {
       ),
       child: InputDecorator(
         decoration: InputDecoration(
-          //labelText: 'Address',
+          labelText: 'General',
           labelStyle: GoogleFonts.poppins(
               color: AllColors.primaryDark1,
               fontWeight: FontWeight.w700,
@@ -3135,6 +3053,10 @@ class QuoteInformationScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
+            updateQuoteValidity(context),
+            const SizedBox(height: 10),
+            updateExpectedClosureDate(context),
+            const SizedBox(height: 10),
             bindInputData(context,'Installation Charges',saleCycleController.installationChargesController.value,Icon(Icons.currency_rupee)),
             const SizedBox(height: 10),
             bindInputData(context,'Other Charges',saleCycleController.otherChargesController.value,Icon(Icons.currency_rupee)),
@@ -3157,54 +3079,15 @@ class QuoteInformationScreen extends StatelessWidget {
             const SizedBox(height: 10),
             bindTermCondition(context),
             const SizedBox(height: 10),
-
-          ],
-        ),
-      ),
-    );
-  }
-
-
-
-
-  Widget bindGeneralAddress(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: AllColors.grayColor, // Set the border color here
-          width: 1.0, // Adjust the border width if necessary
-        ),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      child: InputDecorator(
-        decoration: InputDecoration(
-          labelText: 'Address',
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w700,
-              fontSize: AllFontSize.sisxteen),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
-        ),
-        child: Column(
-          children: [
-            updateQuoteValidity(context),
-            SizedBox(height: 10),
-            updateExpectedClosureDate(context),
-            SizedBox(height: 10),
-            /* quoteCommitDropDown(context),
-                        SizedBox(height: 10),*/
             bindActive(context),
-            SizedBox(height: 10,),
-            bindKindAttention(context),
+            const SizedBox(height: 10,),
 
           ],
         ),
       ),
     );
   }
+
 
   bindShippinbAddressData(BuildContext context, String hintText, TextEditingController controller) {
     return Container(

@@ -71,7 +71,7 @@ class QuoteApprovalListVm extends GetxController{
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
     getClustersGetByEmail();
-    getFilterData();
+
     super.onInit();
   }
 
@@ -84,7 +84,6 @@ class QuoteApprovalListVm extends GetxController{
     Map<String, String> data = {
 
     };
-
     _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
       try {
         List<ItemCategoryMstModel> Response =
@@ -130,8 +129,7 @@ class QuoteApprovalListVm extends GetxController{
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -160,7 +158,7 @@ class QuoteApprovalListVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -177,9 +175,10 @@ class QuoteApprovalListVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
-            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getQuoteHeaderData(pageNumberForQuote);
+            getFilterData();
+            //getQuoteHeaderData(pageNumberForQuote);
 
           }else {
             loading.value = false;
@@ -315,35 +314,49 @@ class QuoteApprovalListVm extends GetxController{
 
     });
     filterDataChecker.value='';
+    getQuoteHeaderData(pageNumberForQuote,);
 
   }
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getQuoteApproverData();
 
-    filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"];
-    filterQuoteVersionController.value.text=getFilterData["filterQuoteVersionController"];
-    filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"];
-    accountNameController.value.text=getFilterData["customer_name"];
-    accountCodeController.value.text=getFilterData["customer_code"];
-    filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"];
-    quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"];
-    extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"];
-    filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"];
-    rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"];
-    cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"];
-    category_Approval_controller.value.text=getFilterData["category_Approval_controller"];
-    gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"];
-    RegionName_controller.value.text=getFilterData["region_name"];
-    clusterName_controller.value.text=getFilterData["cluster_name"];
-    createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
-    createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"];
-    productCategoryController.value.text=getFilterData["product_category"];
-    product_category_type_Controller.value.text=getFilterData["product_category_type"];
 
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"];
+      filterQuoteVersionController.value.text=getFilterData["filterQuoteVersionController"];
+      filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"];
+      accountNameController.value.text=getFilterData["customer_name"];
+      accountCodeController.value.text=getFilterData["customer_code"];
+      filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"];
+      quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"];
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"];
+      filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"];
+      rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"];
+      cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"];
+      category_Approval_controller.value.text=getFilterData["category_Approval_controller"];
+      gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"];
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"];
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"];
+      productCategoryController.value.text=getFilterData["product_category"];
+      product_category_type_Controller.value.text=getFilterData["product_category_type"];
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
 
     pageNumberForQuote=0;
-    filterDataChecker.value='1';
     getQuoteHeaderData(pageNumberForQuote,);
   }
 

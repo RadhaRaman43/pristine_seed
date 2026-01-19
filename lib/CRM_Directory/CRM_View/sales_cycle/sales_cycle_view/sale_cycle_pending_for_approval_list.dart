@@ -187,10 +187,41 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           salesCycleController.clearAllFieldOfQuoteFilter();
 
         },
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    "Sales Cycle Id: ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Flexible(
+                    child: Tooltip(
+                      message: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleId??"",
+                      child: Text(salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleId??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
+
+          ],
+        ),
         subtitle:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildLabelWithValue(label: "Sale Cycle Id : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleId, ),
             _buildLabelWithValue(label: "Approval Status : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleApprovalStatus, color: getStatusColor(saleCycleStatus),),
             _buildLabelWithValue(label: "Customer Name: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].accountName, ),
             _buildLabelWithValue(label: "Customer Code : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].accountCode,),
@@ -199,7 +230,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
             _buildLabelWithValue(label: "Expected Amount: ", value: '₹ ${salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].estBudgetAmount}',),
             _buildLabelWithValue(label: "Is Commit : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].commit==1?"Yes":"No",),
             _buildLabelWithValue(label: "Sales Cycle Stage: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].salesCycleStatus,),
-            _buildLabelWithValue(label: "Quote Accepted: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].quoteAccepted, color: getStatusColor(salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].quoteAccepted!),),
+            _buildLabelWithValue(label: "Quote Accepted: ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].quoteAccepted, ),
             _buildLabelWithValue(label: "Product Category : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].productCategory,),
             _buildLabelWithValue(label: "Budget Amount : ", value: "₹ ${salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].budgetAmount.toString()}",),
             _buildLabelWithValue(label: "Contact Name : ", value: salesCyclePendingForApprovalController.saleCyclePendingForApprovalList[position].contactName,),
@@ -220,7 +251,6 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
           ],
         ),
 
-        trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
       ),
     );
   }
@@ -232,6 +262,7 @@ class SaleCyclePendingForApprovalList extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,

@@ -221,9 +221,6 @@ class _Drawer extends State<CustomDrawer> {
                                                 Get.toNamed(RoutesName.installation_screen,preventDuplicates: false);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Navigator.of(context);
-                                                /*home_vm.openMenu(cTitle,
-                                                    Icon(_getChildIconForIndex(index)))*/;
-          
                                                 break;
                                               case 'Corrective Request':
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
@@ -328,18 +325,13 @@ class _Drawer extends State<CustomDrawer> {
           
           
                                             //todo crm routing.....
-          
-          
+
                                               case 'Accounts Master':
+                                                sessionManagement.setfilterRouting('Accounts Master');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<Accountmastervm>();
-                                                var controller=Get.put(Accountmastervm());
-                                                //Get.offAllNamed(RoutesName.accountMaster_screen,);
                                                 Get.toNamed(RoutesName.accountMaster_screen,);
-                                                /*  accountMaster_page_controller.clearController();
-                                                accountMaster_page_controller.pageNumber = 0;
-                                                accountMaster_page_controller.getAccountMaster(0 ,accountMaster_page_controller.IsActive_controller.text);*/
                                                 Navigator.of(context);
                                                 break;
           
@@ -347,25 +339,15 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<ContactMasterVM>();
-                                                var controller=Get.put(ContactMasterVM());
-                                                //Get.offAllNamed(RoutesName.contactMaster_screen);
-                                                /* contact_vm_controller.clearAllFilterContoller();
-                                                contact_vm_controller.pageNumber = 0;*/
                                                 Get.toNamed(RoutesName.contactMaster_screen);
-                                                //contact_vm_controller.getContactMasterList(0,"","","");
                                                 Navigator.of(context);
                                                 break;
           
                                               case 'Account Draft':
+                                                sessionManagement.setfilterRouting('Account Draft');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<Accountmastervm>();
-                                                var controller=Get.put(Accountmastervm());
-                                                //accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                                                // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
-                                                /*   accountMaster_page_controller.clearFilterController();
-                                                accountMaster_page_controller.pageNumber = 0;
-                                                accountMaster_page_controller.getDraftAccountMaster(accountMaster_page_controller.pageNumber ,accountMaster_page_controller.is_Active.toString())*/;
                                                 Get.toNamed(RoutesName.Draft_item_list);
                                                 Navigator.of(context);
                                                 break;
@@ -374,11 +356,6 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<AllContactMasterVm>();
-                                                var controller=Get.put(AllContactMasterVm());
-                                                //accountMaster_page_controller.Account_Master_Draft_list  = await crmDatabase.getItems();
-                                                // print('DraftListsize...${accountMaster_page_controller.Account_Master_Draft_list[1].address}');
-                                                /*  allContactMastercontroller.pageNumber = 0;
-                                                allContactMastercontroller.getContactMasterAllList(allContactMastercontroller.pageNumber);*/
                                                 Get.toNamed(RoutesName.allContactMasterScreen);
                                                 Navigator.of(context);
                                                 break;
@@ -387,30 +364,14 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<Taskmastervm>();
-                                                var controller=Get.put(Taskmastervm());
-                                                //Get.offAllNamed(RoutesName.taskMaster_screen);
-                                                // TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
-                                                /* TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
-                                                TaskMaster_page_controller.date_filter.value = "Today";
-                                                TaskMaster_page_controller.is_done.value = 0;
-                                                TaskMaster_page_controller.filter.value = "Running";
-                                                TaskMaster_page_controller.resetAllFieldOfFilter();
-                                                accountMaster_page_controller.FromPage.value = '';
-                                                contact_vm_controller.FromPage.value ='';
-                                                TaskMaster_page_controller.pageNumber = 0;*/
                                                 Get.toNamed(RoutesName.taskMaster_screen);
-                                                //TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '', '', '',TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
                                                 Navigator.of(context);
                                                 break;
                                               case 'Task Approval List':
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<TaskApprovalvm>();
-                                                /* TaskApproval_page_controller.resetAllFieldOfFilter();
-                                                TaskApproval_page_controller.pageNumber = 0;*/
-                                                var controller=Get.put(TaskApprovalvm());
                                                 Get.toNamed(RoutesName.taskApproval_List);
-                                                //TaskApproval_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), '','');
                                                 Navigator.of(context);
                                                 break;
                                               case 'Sales Cycle':
@@ -477,21 +438,19 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Pending Draft Quote':
+                                                sessionManagement.setfilterRouting('Pending Draft Quote');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("PENDING & PENDING FOR APPROVAL"));
-                                                /*  pendingDraftQuoteController.pageNumberForQuote=0;
-                                                pendingDraftQuoteController.getPendingDraftQuoteList(0);*/
                                                 Get.toNamed(RoutesName.pendingDraftQuoteScreen,);
                                                 Navigator.of(context);
                                                 break;
           
                                               case 'Approved / Rejected Quote':
+                                                sessionManagement.setfilterRouting('Approved / Rejected Quote');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("APPROVED & REJECTED"));
                                                 Get.toNamed(RoutesName.approvedRejectedQuoteScreen,);
                                                 Navigator.of(context);
                                                 break;
@@ -516,19 +475,19 @@ class _Drawer extends State<CustomDrawer> {
           
           
                                               case 'All Quote':
+                                                sessionManagement.setfilterRouting('All Quote');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("All"));
                                                 Get.toNamed(RoutesName.allQuoteScreenScreen,);
                                                 Navigator.of(context);
                                                 break;
           
                                               case 'All Quote Line Items':
+                                                sessionManagement.setfilterRouting('All Quote Line Items');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLQuoteLineItems"));
                                                 Get.toNamed(RoutesName.allQuoteLineItemScreen,);
                                                 Navigator.of(context);
                                                 break;
@@ -553,6 +512,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Business Tour Plan':
+                                                sessionManagement.setfilterRouting('Business Tour Plan');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<BusinessPlanTourViewModel>();
@@ -562,6 +522,7 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'Business Tour Plan Line Details':
+                                                sessionManagement.setfilterRouting('Business Tour Plan Line Details');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<BusinessPlanTourViewModel>();
