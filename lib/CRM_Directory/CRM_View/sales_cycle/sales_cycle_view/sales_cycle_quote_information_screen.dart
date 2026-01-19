@@ -559,27 +559,64 @@ class QuoteInformationScreen extends StatelessWidget {
                                   TableRow(
                                     children: [
                                       tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteTotalQty),
+                                          .quoteHeaderdata[0].quoteTotalQty?.toInt()),
                                       tableValueCell(saleCycleController
                                           .quoteHeaderdata[0].quoteTotalBmPerAverage
                                           ),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteApprovedAmtPerUnit),
+                                      tableValueCell("₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteHeaderdata[0]
+                                                .quoteApprovedAmtPerUnit)}"),
                                       tableValueCell(saleCycleController
                                           .quoteHeaderdata[0].quoteSalesCreditAverage),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),
+                                     /* tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteTotalApprovedDiscountAmount),*/
+                                      tableValueCell("₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteHeaderdata[0]
+                                                  .quoteTotalApprovedDiscountAmount)}"),
                                       tableValueCell(saleCycleController
                                           .quoteHeaderdata[0].quoteTotalGmPerAverage),
-                                      tableValueCell(saleCycleController
+
+                                      /*tableValueCell(saleCycleController
                                           .quoteHeaderdata[0]
-                                          .quoteTotalGmDiscountAmount),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteNewTotalGmDiscountAmount),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteGstAmount),
-                                      tableValueCell(saleCycleController
-                                          .quoteHeaderdata[0].quoteGrossAmount),
+                                          .quoteTotalGmDiscountAmount),*/
+                                      tableValueCell("₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteHeaderdata[0]
+                                                  .quoteTotalGmDiscountAmount)}"),
+                                     /* tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteNewTotalGmDiscountAmount),*/
+
+                                      tableValueCell("₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteHeaderdata[0]
+                                                  .quoteNewTotalGmDiscountAmount)}"),
+
+                                     /* tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteGstAmount),*/
+                                      tableValueCell("₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteHeaderdata[0]
+                                                  .quoteGstAmount)}"),
+                                      /*tableValueCell(saleCycleController
+                                          .quoteHeaderdata[0].quoteGrossAmount),*/
+                                      tableValueCell("₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteHeaderdata[0]
+                                                  .quoteGrossAmount)}"),
                                     ],
                                   ),
                                 ],
@@ -894,7 +931,7 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              saleCycleController.quoteLinedata[index].qty
+                             (saleCycleController.quoteLinedata[index].qty?.toInt())
                                   .toString(),
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
@@ -914,16 +951,16 @@ class QuoteInformationScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Container(
-                              width: size.width*0.12,
+                            Flexible(
+                              //width: size.width*0.12,
                               child: Tooltip(
-                                message:  saleCycleController
-                                    .quoteLinedata[index].quoteLinePrice
-                                    .toString(),
+                                message:  "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                    .quoteLinedata[index].quoteLinePrice).toString()
+                                }",
                                 child: Text(
-                                  saleCycleController
-                                      .quoteLinedata[index].quoteLinePrice
-                                      .toString(),
+                                  "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                      .quoteLinedata[index].quoteLinePrice).toString()
+                                  }",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -949,17 +986,16 @@ class QuoteInformationScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Container(
-                                  width: size.width * .12,
+                                Flexible(
+                                  //width: size.width * .12,
                                   child: Tooltip(
-                                    message: saleCycleController
-                                        .quoteLinedata[index]
-                                        .minimalAcceptablePrice
-                                        .toString(),
+                                    message: "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                        .quoteLinedata[index].minimalAcceptablePrice).toString()
+                                    }",
                                     child: Text(
-                                      saleCycleController.quoteLinedata[index]
-                                          .minimalAcceptablePrice
-                                          .toString(),
+                                      "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                          .quoteLinedata[index].minimalAcceptablePrice).toString()
+                                      }",
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
@@ -1798,19 +1834,25 @@ class QuoteInformationScreen extends StatelessWidget {
                   SizedBox(height: 3,),
                   _buildLabelWithValue(
                     label: "Quote Total Amt.",
-                    value: saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString() ?? '',
+                    value:" ₹ ${saleCycleController.numberFormatWithComma(
+                      saleCycleController.quoteHeaderdata[0].quoteTotalAmount).toString()}",
+                    //value: saleCycleController.quoteHeaderdata[0].quoteTotalAmount.toString() ?? '',
                     color: AllColors.textColor,
                   ),
                   SizedBox(height: 3,),
                   _buildLabelWithValue(
                     label: "Quote GST Amt.",
-                    value:  saleCycleController.quoteHeaderdata[0].quoteGstAmount.toString() ?? '',
+                    value:" ₹ ${saleCycleController.numberFormatWithComma(
+                        saleCycleController.quoteHeaderdata[0].quoteGstAmount).toString()}",
+                    //value:  saleCycleController.quoteHeaderdata[0].quoteGstAmount.toString() ?? '',
                     color: AllColors.textColor,
                   ),
                   SizedBox(height: 3,),
                   _buildLabelWithValue(
                     label: "Quote Gross Amt.",
-                    value: saleCycleController.quoteHeaderdata[0].quoteGrossAmount.toString() ?? "",
+                    value:" ₹ ${saleCycleController.numberFormatWithComma(
+                        saleCycleController.quoteHeaderdata[0].quoteGrossAmount).toString()}",
+                    //value: saleCycleController.quoteHeaderdata[0].quoteGrossAmount.toString() ?? "",
                     color: AllColors.textColor,
                   ),
                   SizedBox(height: 3,),
@@ -1907,7 +1949,9 @@ class QuoteInformationScreen extends StatelessWidget {
                   SizedBox(height: 3,),
                   _buildLabelWithValue(
                     label: "Advance Payment Amt",
-                    value: saleCycleController.quoteHeaderdata[0].advancePaymentAmt == null ? "" : saleCycleController.quoteHeaderdata[0].advancePaymentAmt.toString(),
+                    value:saleCycleController.quoteHeaderdata[0].advancePaymentAmt == null?"":" ₹ ${saleCycleController.numberFormatWithComma(
+                        saleCycleController.quoteHeaderdata[0].advancePaymentAmt).toString()}",
+                    //value: saleCycleController.quoteHeaderdata[0].advancePaymentAmt == null ? "" : saleCycleController.quoteHeaderdata[0].advancePaymentAmt.toString(),
                     color: AllColors.textColor,
                   ),
 

@@ -1438,7 +1438,7 @@ class SalesDashboardViewscreen extends StatelessWidget{
                           width: 5,
                         ),
                         Text(
-                          "Dashboard Filter ",
+                          " Filter ",
                           style: GoogleFonts.poppins(
                             color: AllColors.primaryDark1,
                             fontSize: AllFontSize.twentee,

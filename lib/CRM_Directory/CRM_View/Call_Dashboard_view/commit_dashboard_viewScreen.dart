@@ -814,6 +814,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
               _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].productCategory??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Purchase Process: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].purchaseProcess??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Company Profile Type: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].companyProfileType??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Is Commit: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].commit==1?"Yes":"No"??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Is Solution Accepted: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].isSolutionAccepted==1?"Yes":"No"??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].postCode??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].district??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].clustureHeadValue??"",color:AllColors.textColor),
@@ -1526,8 +1528,102 @@ class CommitDashboardViewscreen extends StatelessWidget{
     });
 
   }
-
   bindCustomerNameFilter(BuildContext context) {
+    return Obx(() {
+      if (dashboard_view_Controller.CustomerName_controller.value.text
+          .isNotEmpty &&
+          dashboard_view_Controller.filterDataChecker.value == '1') {
+        List<String> nameList = dashboard_view_Controller
+            .CustomerName_controller.value.text.split(',');
+
+        dashboard_view_Controller.SelectedAccount_Master_list.assignAll(
+          List.generate(nameList.length, (index) {
+            return AccountMasterModel(
+              accountName: nameList[index].trim(),
+            );
+          }),
+        );
+      }
+
+      return DropdownSearch<AccountMasterModel>.multiSelection(
+        compareFn: (item, selectedItem) =>
+        item.accountName == selectedItem.accountName,
+        asyncItems: (String filter) async {
+          return await dashboard_view_Controller.getAccountMaster(filter);
+        },
+        itemAsString: (AccountMasterModel u) => u.accountName ?? "",
+        selectedItems: dashboard_view_Controller.SelectedAccount_Master_list,
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Customer Name",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.accountName).join(', '),
+              style: TextStyle(color: Colors.black),
+            ),
+          );
+        },
+
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          dropdownSearchDecoration: InputDecoration(
+            labelText: dashboard_view_Controller.SelectedAccount_Master_list
+                .isNotEmpty ? "Customer Name" : null,
+            hintText: "Search Customer",
+            contentPadding: const EdgeInsets.symmetric(
+                horizontal: 12, vertical: 8),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+
+        onChanged: (List<AccountMasterModel> selectedList) {
+          dashboard_view_Controller.SelectedAccount_Master_list.assignAll(
+              selectedList);
+          dashboard_view_Controller.CustomerName_controller.value.text =
+              selectedList.map((e) => e.accountName).join(', ');
+        },
+
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          isFilterOnline: true,
+          searchDelay: const Duration(milliseconds: 300),
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              hintText: "Search...",
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8)),
+            ),
+          ),
+
+          itemBuilder: (context, item, isSelected) {
+            return ListTile(
+              title: Text(
+                item.accountName ?? "",
+                style: TextStyle(
+                  color: isSelected ? Colors.blue : Colors.black,
+                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                ),
+              ),
+              /*trailing: isSelected
+                  ? const Icon(Icons.check_box, color: Colors.blue)
+                  : const Icon(
+                  Icons.check_box_outline_blank, color: Colors.grey),*/
+              selected: isSelected,
+            );
+          },
+        ),
+      );
+    });
+  }
+/*  bindCustomerNameFilter(BuildContext context) {
     return Obx((){
       if (dashboard_view_Controller.CustomerName_controller.value.text.isNotEmpty && dashboard_view_Controller.filterDataChecker.value=='1') {
         List<String> nameList = dashboard_view_Controller.CustomerName_controller.value.text.split(',');
@@ -1601,7 +1697,7 @@ class CommitDashboardViewscreen extends StatelessWidget{
       );
     });
 
-  }
+  }*/
 
   Widget bindAccountOwnerFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {

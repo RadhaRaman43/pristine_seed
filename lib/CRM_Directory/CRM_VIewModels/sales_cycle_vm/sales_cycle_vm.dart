@@ -5917,4 +5917,11 @@ class SalesCycleVm extends GetxController {
   }
 
 
+  String numberFormatWithComma(dynamic number) {
+    if (number == null || number.toString().isEmpty) return "0.00";
+
+    final formatter = NumberFormat('#,##,##0.00', 'en_IN');
+    return formatter.format(num.parse(number.toString()));
+  }
+
 }
