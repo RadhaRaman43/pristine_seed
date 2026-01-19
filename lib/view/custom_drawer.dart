@@ -456,10 +456,10 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'All SPR Mapping Line Items':
+                                                sessionManagement.setfilterRouting('All SPR Mapping Line Items');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLSPRMAPPING"));
                                                 Get.toNamed(RoutesName.allSPRMappingScreen,);
                                                 Navigator.of(context);
                                                 break;

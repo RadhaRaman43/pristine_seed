@@ -15,68 +15,81 @@ class Pending_Draft_Quote_Model {
   dynamic? quoteCommit;
   String? approvedBy;
   String? approvedFullName;
-  String? approvedOn;
+  dynamic? approvedOn;
   String? rejectReason;
   String? createdBy;
   String? createdFullName;
   String? createdOn;
+  String? ownerFullName;
   String? updatedBy;
   String? updatedFullName;
   String? updatedOn;
-  String? regretBy;
-  String? regretOn;
-  String? regretReason;
+  dynamic? regretBy;
+  dynamic? regretOn;
+  dynamic? regretReason;
   dynamic? isActive;
   dynamic? installationCharges;
   dynamic? otherCharges;
   String? warrantyPeriod;
   String? deliveryInWeeks;
-  double? advancePaymentPer;
-  double? advancePaymentAmt;
+  dynamic? advancePaymentPer;
+  dynamic? advancePaymentAmt;
   String? otherRemarks;
   dynamic? isSpr;
   dynamic? noOfSalesAdvice;
   dynamic? isSalesAdviceCreated;
+  String? quoteStatusWon;
+  dynamic? wonBy;
+  String? quoteWonName;
+  dynamic? wonOn;
+  dynamic? lossReason;
+  String? quoteAccepted;
+  dynamic? expectedRevenue;
   String? rhApprovalEmail;
   String? rhApproval;
-  String? rhApprovalOn;
-  String? cbhApprovalEmail;
+  dynamic? rhApprovalOn;
+  dynamic? cbhApprovalEmail;
   String? cbhApproval;
-  String? cbhApprovalOn;
+  dynamic? cbhApprovalOn;
   String? gmApprovalEmail;
   String? gmApproval;
-  String? gmApprovalOn;
-  String? frontlinerValue;
+  dynamic? gmApprovalOn;
+  dynamic? frontlinerValue;
   String? branchHeadValue;
-  String? zoneHeadValue;
+  dynamic? zoneHeadValue;
   String? clustureHeadValue;
   String? postCode;
   String? district;
   String? sprNo;
-  int? isReadyForApprove;
-  int? isReadySendForApproval;
-  double? quoteTotalAmount;
+  dynamic? isReadyForApprove;
+  dynamic? isReadySendForApproval;
+  dynamic? quoteTotalAmount;
   double? quoteGrossAmount;
   double? quoteGstAmount;
   String? itemCode;
   String? itemName;
   String? itemDescription;
+  String? productName;
+  String? productDescription;
   dynamic? qty;
-  double? unitPrice;
-  double? mrpPrice;
-  double? quoteLinePrice;
-  double? totalPrice;
+  dynamic? unitPrice;
+  dynamic? mrpPrice;
+  dynamic? quoteLinePrice;
+  dynamic? totalPrice;
   dynamic? discountPer;
-  double? discountAmt;
+  dynamic? discountAmt;
+  dynamic? discountAmtPerUnit;
   double? bmDiscountPer;
   double? gmDiscountPer;
-  double? gmDiscountAmount;
+  dynamic? gmDiscountAmount;
+  dynamic? gmTotalDiscountAmount;
   dynamic? approvedDiscountPer;
-  double? approvedAmount;
-  double? standardCost;
-  double? branchTransferPrice;
-  double? minimalAcceptablePrice;
-  double? listSellingPrice;
+  dynamic? approvedAmount;
+  dynamic? approvedAmountPerUnit;
+  dynamic? standardCost;
+  dynamic? branchTransferPrice;
+  dynamic? minimalAcceptablePrice;
+  dynamic? listSellingPrice;
   dynamic? isSprRequired;
   dynamic? sgstPer;
   dynamic? cgstPer;
@@ -88,6 +101,7 @@ class Pending_Draft_Quote_Model {
   double? grossAmount;
   dynamic? salesCredit;
   String? lineStatus;
+  String? itemCategoryName;
 
   Pending_Draft_Quote_Model(
       {this.condition,
@@ -111,6 +125,7 @@ class Pending_Draft_Quote_Model {
         this.createdBy,
         this.createdFullName,
         this.createdOn,
+        this.ownerFullName,
         this.updatedBy,
         this.updatedFullName,
         this.updatedOn,
@@ -128,6 +143,13 @@ class Pending_Draft_Quote_Model {
         this.isSpr,
         this.noOfSalesAdvice,
         this.isSalesAdviceCreated,
+        this.quoteStatusWon,
+        this.wonBy,
+        this.quoteWonName,
+        this.wonOn,
+        this.lossReason,
+        this.quoteAccepted,
+        this.expectedRevenue,
         this.rhApprovalEmail,
         this.rhApproval,
         this.rhApprovalOn,
@@ -152,6 +174,8 @@ class Pending_Draft_Quote_Model {
         this.itemCode,
         this.itemName,
         this.itemDescription,
+        this.productName,
+        this.productDescription,
         this.qty,
         this.unitPrice,
         this.mrpPrice,
@@ -159,11 +183,14 @@ class Pending_Draft_Quote_Model {
         this.totalPrice,
         this.discountPer,
         this.discountAmt,
+        this.discountAmtPerUnit,
         this.bmDiscountPer,
         this.gmDiscountPer,
         this.gmDiscountAmount,
+        this.gmTotalDiscountAmount,
         this.approvedDiscountPer,
         this.approvedAmount,
+        this.approvedAmountPerUnit,
         this.standardCost,
         this.branchTransferPrice,
         this.minimalAcceptablePrice,
@@ -178,7 +205,8 @@ class Pending_Draft_Quote_Model {
         this.gstAmount,
         this.grossAmount,
         this.salesCredit,
-        this.lineStatus});
+        this.lineStatus,
+        this.itemCategoryName});
 
   Pending_Draft_Quote_Model.fromJson(Map<String, dynamic> json) {
     condition = json['condition'];
@@ -202,6 +230,7 @@ class Pending_Draft_Quote_Model {
     createdBy = json['created_by'];
     createdFullName = json['created_full_name'];
     createdOn = json['created_on'];
+    ownerFullName = json['owner_full_name'];
     updatedBy = json['updated_by'];
     updatedFullName = json['updated_full_name'];
     updatedOn = json['updated_on'];
@@ -219,6 +248,13 @@ class Pending_Draft_Quote_Model {
     isSpr = json['is_spr'];
     noOfSalesAdvice = json['no_of_sales_advice'];
     isSalesAdviceCreated = json['is_sales_advice_created'];
+    quoteStatusWon = json['quote_status_won'];
+    wonBy = json['won_by'];
+    quoteWonName = json['quote_won_name'];
+    wonOn = json['won_on'];
+    lossReason = json['loss_reason'];
+    quoteAccepted = json['quote_accepted'];
+    expectedRevenue = json['expected_revenue'];
     rhApprovalEmail = json['rh_approval_email'];
     rhApproval = json['rh_approval'];
     rhApprovalOn = json['rh_approval_on'];
@@ -243,6 +279,8 @@ class Pending_Draft_Quote_Model {
     itemCode = json['item_code'];
     itemName = json['item_name'];
     itemDescription = json['item_description'];
+    productName = json['product_name'];
+    productDescription = json['product_description'];
     qty = json['qty'];
     unitPrice = json['unit_price'];
     mrpPrice = json['mrp_price'];
@@ -250,11 +288,14 @@ class Pending_Draft_Quote_Model {
     totalPrice = json['total_price'];
     discountPer = json['discount_per'];
     discountAmt = json['discount_amt'];
+    discountAmtPerUnit = json['discount_amt_per_unit'];
     bmDiscountPer = json['bm_discount_per'];
     gmDiscountPer = json['gm_discount_per'];
     gmDiscountAmount = json['gm_discount_amount'];
+    gmTotalDiscountAmount = json['gm_total_discount_amount'];
     approvedDiscountPer = json['approved_discount_per'];
     approvedAmount = json['approved_amount'];
+    approvedAmountPerUnit = json['approved_amount_per_unit'];
     standardCost = json['standard_cost'];
     branchTransferPrice = json['branch_transfer_price'];
     minimalAcceptablePrice = json['minimal_acceptable_price'];
@@ -270,6 +311,7 @@ class Pending_Draft_Quote_Model {
     grossAmount = json['gross_amount'];
     salesCredit = json['sales_credit'];
     lineStatus = json['line_status'];
+    itemCategoryName = json['item_category_name'];
   }
 
   Map<String, dynamic> toJson() {
@@ -295,6 +337,7 @@ class Pending_Draft_Quote_Model {
     data['created_by'] = this.createdBy;
     data['created_full_name'] = this.createdFullName;
     data['created_on'] = this.createdOn;
+    data['owner_full_name'] = this.ownerFullName;
     data['updated_by'] = this.updatedBy;
     data['updated_full_name'] = this.updatedFullName;
     data['updated_on'] = this.updatedOn;
@@ -312,6 +355,13 @@ class Pending_Draft_Quote_Model {
     data['is_spr'] = this.isSpr;
     data['no_of_sales_advice'] = this.noOfSalesAdvice;
     data['is_sales_advice_created'] = this.isSalesAdviceCreated;
+    data['quote_status_won'] = this.quoteStatusWon;
+    data['won_by'] = this.wonBy;
+    data['quote_won_name'] = this.quoteWonName;
+    data['won_on'] = this.wonOn;
+    data['loss_reason'] = this.lossReason;
+    data['quote_accepted'] = this.quoteAccepted;
+    data['expected_revenue'] = this.expectedRevenue;
     data['rh_approval_email'] = this.rhApprovalEmail;
     data['rh_approval'] = this.rhApproval;
     data['rh_approval_on'] = this.rhApprovalOn;
@@ -336,6 +386,8 @@ class Pending_Draft_Quote_Model {
     data['item_code'] = this.itemCode;
     data['item_name'] = this.itemName;
     data['item_description'] = this.itemDescription;
+    data['product_name'] = this.productName;
+    data['product_description'] = this.productDescription;
     data['qty'] = this.qty;
     data['unit_price'] = this.unitPrice;
     data['mrp_price'] = this.mrpPrice;
@@ -343,11 +395,14 @@ class Pending_Draft_Quote_Model {
     data['total_price'] = this.totalPrice;
     data['discount_per'] = this.discountPer;
     data['discount_amt'] = this.discountAmt;
+    data['discount_amt_per_unit'] = this.discountAmtPerUnit;
     data['bm_discount_per'] = this.bmDiscountPer;
     data['gm_discount_per'] = this.gmDiscountPer;
     data['gm_discount_amount'] = this.gmDiscountAmount;
+    data['gm_total_discount_amount'] = this.gmTotalDiscountAmount;
     data['approved_discount_per'] = this.approvedDiscountPer;
     data['approved_amount'] = this.approvedAmount;
+    data['approved_amount_per_unit'] = this.approvedAmountPerUnit;
     data['standard_cost'] = this.standardCost;
     data['branch_transfer_price'] = this.branchTransferPrice;
     data['minimal_acceptable_price'] = this.minimalAcceptablePrice;
@@ -363,6 +418,7 @@ class Pending_Draft_Quote_Model {
     data['gross_amount'] = this.grossAmount;
     data['sales_credit'] = this.salesCredit;
     data['line_status'] = this.lineStatus;
+    data['item_category_name'] = this.itemCategoryName;
     return data;
   }
 }

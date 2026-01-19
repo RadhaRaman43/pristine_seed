@@ -51,7 +51,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                       'Sales Cycle Competitor List',
                       style: GoogleFonts.poppins(
                         color: AllColors.whiteColor,
-                        fontSize: 18.0,
+                        fontSize: 16.0,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -104,7 +104,6 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
   }
 
   void showDialogForFilter(BuildContext context) {
-    // saleCycleCompetitorController.IsActive_controller.clear();
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -171,82 +170,17 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 5,
-                              ),
-                              filterWithQuoteId(context),
+                              SizedBox(height: 5,),
+                              bindFilterData('Quote Id',saleCycleCompetitorController.filterQuoteIdController.value ),
                               SizedBox(height: 10),
-                              TextField(
-                                controller: saleCycleCompetitorController
-                                    .accountNameController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Name',
-                                    hintText: 'Customer Name',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    )),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
+                              bindFilterData('Customer Name',saleCycleCompetitorController.accountNameController.value ),
+                              SizedBox(height: 10,),
+                              bindFilterData('Customer Code',saleCycleCompetitorController.accountCodeController.value ),
                               SizedBox(
                                 height: 10,
                               ),
-                              TextField(
-                                controller: saleCycleCompetitorController
-                                    .accountCodeController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Code',
-                                    hintText: 'Customer Code',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    )),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-
-                              filterWithSalesCycleId(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              bindFilterData('Sale Cycle Id',saleCycleCompetitorController.filterSalesCycleIdController.value ),
+                              SizedBox(height: 10,),
                               filterWithSalesCycleStatus(context),
                               SizedBox(height: 10),
                               filterWithSalesCycleApprovalStatus(context),
@@ -255,25 +189,14 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                               SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
                               SizedBox(height: 10),
-                              filterWithQuoteCategoryApproval(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              
-                              filterWithItemCode(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              //filterWithQuoteBranchHead(),
-                              bindRegionNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              //filterWithQuoteClusterHead(),
+                              bindFilterData('Category Approval',saleCycleCompetitorController.category_Approval_controller.value ),
+                              SizedBox(height: 10,),
+                              bindFilterData('Item Code',saleCycleCompetitorController.filterItemCodeController.value ),
+                              SizedBox(height: 10,),
                               bindClusterNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindRegionNameFilter(context),
+                              SizedBox(height: 10,),
                               filterWithQuoteCreatedOn(context),
                               SizedBox(height: 10,),
                               bindProductCategory(context),
@@ -286,7 +209,51 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                       ),
                     ),
                   ),
+
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            saleCycleCompetitorController.filterDataChecker.value='';
+                            saleCycleCompetitorController.clearAllField();
+                            saleCycleCompetitorController.clearFilterData();
+                            saleCycleCompetitorController.pageNumber=0;
+                            saleCycleCompetitorController.getGalesCycleCompetitorProductInformationGet( saleCycleCompetitorController.pageNumber);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            saleCycleCompetitorController.pageNumber=0;
+                            saleCycleCompetitorController.getGalesCycleCompetitorProductInformationGet( saleCycleCompetitorController.pageNumber);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Saved Filter',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            saleCycleCompetitorController.filterDataChecker.value='';
+                            saleCycleCompetitorController.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -344,7 +311,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -354,14 +321,70 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
     );
   }
 
-
-
-
-
-
-
-
-
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+  
+  Widget bindFilterData(String hintdata, TextEditingController value,){
+    return  TextField(
+      controller: value,
+      decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: hintdata,
+          hintText: hintdata,
+          hintStyle: GoogleFonts.poppins(
+              color: AllColors.lightblackColor,
+              fontWeight: FontWeight.w300,
+              fontSize: AllFontSize.ten),
+          labelStyle: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontWeight: FontWeight.w500,
+              fontSize: AllFontSize.sisxteen),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
+    );
+  }
 
   Widget bindQuoteItemList(BuildContext context) {
     if (saleCycleCompetitorController.salesCycleCompetitorProductInformationList.value.isNotEmpty) {
@@ -429,23 +452,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
             fontWeight: FontWeight.w500,
           ),
         ),
-        /* width != null
-            ? Container(
-          width: width,
-          child: Tooltip(
-            message: value ?? "",
-            child: Text(
-              value ?? "",
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.poppins(
-                color: color,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        )
-            :*/ Flexible(
+        Flexible(
           child: Tooltip(
             message: value??"",
             child: Text(
@@ -465,12 +472,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
 
 
 
-  Widget _buildClickableLabel({
-    required String label,
-    required String? value,
-    required VoidCallback onTap,
-    double? width,
-  }) {
+  Widget _buildClickableLabel({required String label, required String? value, required VoidCallback onTap,}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -482,10 +484,9 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
             fontWeight: FontWeight.w500,
           ),
         ),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            width: width,
+        Flexible(
+          child: InkWell(
+            onTap: onTap,
             child: Tooltip(
               message: value ?? "",
               child: Text(
@@ -583,174 +584,74 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                   .salesCycleCompetitorProductInformationList[position].salesCycleStatus,
               color: getStatusColor(saleCycleStatus),
             ),
-            /*_buildLabelWithValue(
-              label: "Task Id : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].taskId,
-              //width: size.width * 0.36,
-            ),*/
+            
             _buildLabelWithValue(
               label: "Quote Accepted: ",
               value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].quoteAccepted,
               color: getQouteAcceptedColor(saleQuoteAccepted),
             ),
-            /*_buildLabelWithValue(
-              label: "Approval Status : ",
-              value: salesCycleController.saleCycleList[position].salesCycleApprovalStatus,
-              // width: size.width * 0.36,
-              color: getStatusColor(saleCycleStatus),
-            ),*/
+            
             _buildLabelWithValue(
               label: "Line Status : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].lineStatus,
-              //width: size.width * 0.33,
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].lineStatus,
               color: Colors.blue,
             ),
             _buildClickableLabel(
               label: "Customer Name : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].accountName,
-              width: size.width * 0.4,
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].accountName,
+              
               onTap: () {
                 /*account_vm_controller.view = 'FromSaleCycleMainScreen';
                 contact_vm_controller.view = 'FromSaleCycleMainScreen';
                 account_vm_controller.getAccMasterBuyCodeApi(
-                  salesCycleController.saleCycleList[position].accountCode!,
+                  saleCycleCompetitorController.saleCycleList[position].accountCode!,
                 );*/
               },
             ),
             _buildLabelWithValue(
               label: "Customer Code : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].accountCode,
-              //width: size.width * 0.4,
-            ),
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].accountCode,),
 
             _buildLabelWithValue(
               label: "Product Category : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].productCategory,
-              //width: size.width * 0.35,
-            ),
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].productCategory,),
 
             _buildLabelWithValue(
               label: "Qty : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].qty.toString(),
-              //width: size.width * 0.3,
-            ),
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].qty.toString(),),
             _buildLabelWithValue(
               label: "Item Code : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].itemCode,
-              //width: size.width * 0.4,
-            ),
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].itemCode,),
             _buildLabelWithValue(
               label: "Item Description : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].itemDescription,
-              //width: size.width * 0.4,
-            ),
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].itemDescription,),
             _buildLabelWithValue(
               label: "Unit Price : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].unitPrice.toString(),
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].unitPrice.toString(),
             ),
 
-            _buildLabelWithValue(
-              label: "Mrp Price : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].mrpPrice.toString(),
-            ),
+            _buildLabelWithValue(label: "Mrp Price : ",
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].mrpPrice.toString(),),
 
-            _buildLabelWithValue(
-              label: "Methodex Price : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].methodexPrice.toString(),
-              //width: size.width * 0.35,
+            _buildLabelWithValue(label: "Methodex Price : ",
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].methodexPrice.toString(),
             ),
-            _buildLabelWithValue(
-              label: "Competitor Name : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].competitorName,
-              //width: size.width * 0.35,
+            _buildLabelWithValue(label: "Competitor Name : ",
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].competitorName,
+
             ),
-            _buildLabelWithValue(
-              label: "Competitor Price : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].competitorPrice.toString(),
-              //width: size.width * 0.35,
+            _buildLabelWithValue(label: "Competitor Price : ",
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].competitorPrice.toString(),
+
             ),
-            _buildLabelWithValue(
-              label: "Created By : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].createdFullName,
-              //width: size.width * 0.33,
+            _buildLabelWithValue(label: "Created By : ",
+              value: saleCycleCompetitorController.salesCycleCompetitorProductInformationList[position].createdFullName,
+
             ),
-            _buildLabelWithValue(
-              label: "Created On : ",
-              value: createdOn,
-              //width: size.width * 0.4,
-            ),
+            _buildLabelWithValue(label: "Created On : ", value: createdOn,),
           ],
         ),
       ),
-    );
-  }
-
-  Widget filterWithQuoteCategoryApproval() {
-    return TextField(
-      controller: saleCycleCompetitorController.category_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Category Approval',
-          hintText: 'Category Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  Widget filterWithQuoteStatus(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: saleCycleCompetitorController.filterQuoteStatusController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Quote Status',
-          labelText: 'Quote Status',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
     );
   }
 
@@ -873,8 +774,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
         if (picked != null) {
           final startDate = DateFormat('yyyy-MM-dd').format(picked.start);
           final endDate = DateFormat('yyyy-MM-dd').format(picked.end);
-          saleCycleCompetitorController.extClosureStartToEnd.value =
-          "$startDate@$endDate";
+          saleCycleCompetitorController.extClosureStartToEnd.value = "$startDate@$endDate";
           saleCycleCompetitorController.filterExpectedClosuredateController.value.text =
           '$startDate - $endDate';
         } else {
@@ -916,6 +816,16 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
 
   bindProductCategory(BuildContext context) {
     return Obx(() {
+      if (saleCycleCompetitorController.productCategoryController.value.text.isNotEmpty && saleCycleCompetitorController.filterDataChecker.value=='1') {
+        List<String> nameList = saleCycleCompetitorController.productCategoryController.value.text.split(',');
+
+        saleCycleCompetitorController.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: saleCycleCompetitorController.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
@@ -1027,18 +937,25 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
     );
 
   }
-
-
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = saleCycleCompetitorController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          saleCycleCompetitorController.SelectedCluster_list.isEmpty) {
-        saleCycleCompetitorController.SelectedCluster_list.assignAll(availableItems);
-        saleCycleCompetitorController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-        saleCycleCompetitorController.getRegionsWithClusterFilterGetByEmail();
+      if (saleCycleCompetitorController.clusterName_controller.value.text.isNotEmpty && saleCycleCompetitorController.filterDataChecker.value=='1') {
+        List<String> nameList = saleCycleCompetitorController.clusterName_controller.value.text.split('|');
+        saleCycleCompetitorController.SelectedCluster_list.value =[];
+        saleCycleCompetitorController.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && saleCycleCompetitorController.SelectedCluster_list.isEmpty) {
+          saleCycleCompetitorController.SelectedCluster_list.assignAll(availableItems);
+          saleCycleCompetitorController.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          saleCycleCompetitorController.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
@@ -1065,15 +982,9 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1099,15 +1010,12 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1202,20 +1110,26 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    saleCycleCompetitorController.SelectedCluster_list
-                                        .assignAll(tempSelected);
-                                    saleCycleCompetitorController
-                                        .clusterName_controller.value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    saleCycleCompetitorController
-                                        .getRegionsWithClusterFilterGetByEmail();
+
+                                    saleCycleCompetitorController.filterDataChecker.value='';
+                                    saleCycleCompetitorController.SelectedCluster_list.assignAll(tempSelected);
+                                    saleCycleCompetitorController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
+                                    saleCycleCompetitorController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1264,23 +1178,33 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       );
     });
   }
-
   Widget bindRegionNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = saleCycleCompetitorController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          saleCycleCompetitorController.SelectedRegion_list.isEmpty) {
-        saleCycleCompetitorController.SelectedRegion_list.assignAll(availableItems);
-        saleCycleCompetitorController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-
+      if (saleCycleCompetitorController.RegionName_controller.value.text.isNotEmpty && saleCycleCompetitorController.filterDataChecker.value=='1') {
+        saleCycleCompetitorController.SelectedRegion_list.value=[];
+        List<String> nameList = saleCycleCompetitorController.RegionName_controller.value.text.split('|');
+        saleCycleCompetitorController.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && saleCycleCompetitorController.SelectedRegion_list.isEmpty) {
+          saleCycleCompetitorController.SelectedRegion_list.assignAll(availableItems);
+          saleCycleCompetitorController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          print("bind region ${saleCycleCompetitorController.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
       }
     });
     return Obx(() {
       final selected = saleCycleCompetitorController.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1295,20 +1219,13 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
               final tempSelected = <RegionWithClusterFilterModal>[];
               tempSelected.addAll(saleCycleCompetitorController.SelectedRegion_list);
 
-              final allItems =
-                  saleCycleCompetitorController.regionwithclusterGetByEmailList;
+              final allItems = saleCycleCompetitorController.regionwithclusterGetByEmailList;
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1337,12 +1254,9 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                                       fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1436,17 +1350,23 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
-                                    saleCycleCompetitorController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    saleCycleCompetitorController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
+                                    saleCycleCompetitorController.filterDataChecker.value='';
+                                    saleCycleCompetitorController.SelectedRegion_list.assignAll(tempSelected);
+                                    saleCycleCompetitorController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1495,8 +1415,6 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       );
     });
   }
-
-
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -1563,12 +1481,8 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
 
   filterWithQuoteAccepted(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: saleCycleCompetitorController.filterQuoteAcceptedController.value,
         label: Text(
           "Select Quote Accepted",
@@ -1619,12 +1533,8 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
 
   Widget filterWithSalesCycleApprovalStatus(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only( right: 15),
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: saleCycleCompetitorController.filterSalesCycleApprovalStatusController.value,
         label: Text(
           "Approval Status",
@@ -1705,12 +1615,8 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
 
   Widget filterWithSalesCycleStatus(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only(right: 15),
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: saleCycleCompetitorController.filterSalesCycleStatusController.value,
         label: Text(
           "Sales Cycle Status",
@@ -1745,7 +1651,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
           saleCycleCompetitorController.filterSalesCycleStatusController.value.text =
               _displaySaleCycleStatusForOption(selection!)
                   .toString();
-          /*print('IsActive.....${salesCycleController.solutionAcceptedController
+          /*print('IsActive.....${saleCycleCompetitorController.solutionAcceptedController
               .value.text}');*/
 
         },

@@ -909,6 +909,7 @@ class TaskMasterScreen extends StatelessWidget {
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,

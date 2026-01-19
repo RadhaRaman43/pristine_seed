@@ -80,31 +80,26 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           Get.offAllNamed(RoutesName.taskMaster_screen);
         } else if (saleCycleController.FromPage.value == "FromDashboard") {
           Get.toNamed(RoutesName.AccountDashboardDataSales_Screen);
-        } else if (saleCycleController.FromPage.value ==
-            "FromSCPendingForApproval") {
+        } else if (saleCycleController.FromPage.value == "FromSCPendingForApproval") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.salesCyclePendingForApprovalListScreen);
         } else if (saleCycleController.FromPage.value == "QuotePendingPage") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.pendingDraftQuoteScreen);
-        } else if (saleCycleController.FromPage.value ==
-            "ApprovedRejectedQuotePage") {
+        } else if (saleCycleController.FromPage.value == "ApprovedRejectedQuotePage") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.approvedRejectedQuoteScreen);
         } else if (saleCycleController.FromPage.value == "FromAllQuotePage") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.allQuoteScreenScreen);
-        } else if (saleCycleController.FromPage.value ==
-            "FromALLQuoteLineItems") {
+        } else if (saleCycleController.FromPage.value == "FromALLQuoteLineItems") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.allQuoteLineItemScreen);
-        }else if (saleCycleController.FromPage.value ==
-            "FromFunnelDashboard") {
+        }else if (saleCycleController.FromPage.value == "FromFunnelDashboard") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.funnelDashboardViewScreen);
         }
-        else if (saleCycleController.FromPage.value ==
-            "FromCommitDashboard") {
+        else if (saleCycleController.FromPage.value == "FromCommitDashboard") {
           saleCycleController.clearAllFieldOfFilter();
           Get.toNamed(RoutesName.commitDashboardViewScreen);
 

@@ -175,7 +175,7 @@ class AllSprMappingScreen extends StatelessWidget{
               Row(
                 children: [
                   Text(
-                    "Quote Id : ",
+                    "Category Name : ",
                     style: GoogleFonts.poppins(
                         color: AllColors.primaryDark1,
                         fontSize: AllFontSize.fourtine,
@@ -185,10 +185,10 @@ class AllSprMappingScreen extends StatelessWidget{
                     width: size.width * .35,
                     child: Tooltip(
                       message:  pendingDraftQuoteController.PendingDraftQuoteList[position]
-                          .quoteId ?? "",
+                          .itemCategoryName ?? "",
                       child: Text(
                         pendingDraftQuoteController.PendingDraftQuoteList[position]
-                            .quoteId ?? "",
+                            .itemCategoryName ?? "",
                         overflow: TextOverflow.ellipsis,
                         style: GoogleFonts.poppins(
                             color: AllColors.textColor,
@@ -204,129 +204,157 @@ class AllSprMappingScreen extends StatelessWidget{
           ),
           subtitle: Column(
             children: [
-              _buildLabelWithValue(
-                label: "Quote Version: ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteVersion.toString(),
-                //width: size.width * 0.33,
 
-              ),
+              _buildLabelWithValue(label: "Product  Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productName??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Product  Description: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productDescription??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Price Per Unit: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].unitPrice.toString() ?? ""}"  ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quantity: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].qty.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "LSP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor),
 
-              _buildLabelWithValue(
-                label: "Quote Status: ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus,
-                //width: size.width * 0.33,
-                color:getStatusColor(saleCycleStatus)
+              _buildLabelWithValue(label: "Seeking Price Per Unit: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].discountAmtPerUnit.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Seeking Discount Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].discountPer.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Total Seeking Price: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].discountAmt.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Cost STD: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Discount Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedDiscountPer.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor),
 
-              ),
-              _buildLabelWithValue(
-                label: "Sale Cycle Id : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId,
-                //width: size.width * 0.33,
-              ),
-              _buildClickableLabel(
-                label: "Customer Code : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].accountCode,
-                onTap: () {
+              _buildLabelWithValue(label: "Approved Price Per Unit: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].approvedAmountPerUnit.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Sales Credit Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "BM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM Absolute: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmTotalDiscountAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approved Price: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedAmount.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GST Per: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].igstPer.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GST Amount: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].gstAmount.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Amount Incl GST: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].grossAmount.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Related Quote: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteId.toString(),color:AllColors.textColor),
+              _buildLabelOnTap(label: "Sales Cycle Id: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId ?? "",color:Colors.blueAccent,
+                onTap: (){
+                  /*saleCycleController.ProductCategoryWiseAmtGet(0, pendingDraftQuoteController.PendingDraftQuoteList[position].salesCycleId!);
+                  saleCycleController.pageNumber = 0;
+                  saleCycleController.filterQuoteAcceptedFlag.value="";
+                  saleCycleController.clearAllFieldOfFilter();
+                  saleCycleController.getsalesCycleData(saleCycleController.pageNumber, pendingDraftQuoteController.PendingDraftQuoteList[position]
+                      .salesCycleId!, "ViewHeader", "FromALLQuoteLineItems");*/
+                },),
+              _buildLabelWithValue(label: "Created By: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdBy ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Cluster Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].clustureHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Region Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].zoneHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approved on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].approvedOn ?? "") ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Accepted: ",value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteAccepted ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Approval Manager: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedFullName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Product Category: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].productCategory ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
+              _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Expected Revenue: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].expectedRevenue.toString() ?? ""}"  ,color:AllColors.textColor),
+              _buildLabelOnTap(label: "Customer Code: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountCode ?? "",color:Colors.blueAccent,
+                onTap: (){
                   account_vm_controller.view = 'FromAllSPRMapping';
                   contact_vm_controller.view = 'FromAllSPRMapping';
                   account_vm_controller.getAccMasterBuyCodeApi(
                     pendingDraftQuoteController
                         .PendingDraftQuoteList[position].accountCode!,
                   );
-                },
-              ),
+                },),
 
-              _buildLabelWithValue(
-                label: "Customer Name : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].accountName,
-                //width: size.width * 0.33,
+              _buildLabelWithValue(label: "Customer Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].accountName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Owner: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdFullName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].createdOn ?? "") ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Total Gross Amount: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].quoteTotalAmount.toString() ?? ""}"  ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "RH Approval  Gmail: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApprovalEmail ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "RH Approval  On: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApprovalOn ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "RH Approval : ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "CBH Approval Gmail: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApprovalEmail ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "CBH Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "CBH Approval On: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApprovalOn ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM  Approval Gmail: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApprovalEmail ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM  Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApproval ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM  Approval On: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApprovalOn ?? "",color:AllColors.textColor),
 
-              ),
-              _buildLabelWithValue(
-                label: "Contact Name : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].contactName,
-                //width: size.width * 0.33,
 
-              ),
-              _buildLabelWithValue(
-                label: "Quote Validity : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteValidity,
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "Expected Closure Date : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].expClosureDate,
-                //width: size.width * 0.33,
-
-              ),
-              _buildLabelWithValue(
-                label: "Quote Total Amt : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteTotalAmount.toString(),
-                //width: size.width * 0.33,
-
-              ),
-              _buildLabelWithValue(
-                label: "Quote Gst Amt. : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGstAmount.toString(),
-                //width: size.width * 0.33,
-
-              ),
-              _buildLabelWithValue(
-                label: "Quote Gross Amt. : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGrossAmount.toString(),
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "Region Name : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                    .branchHeadValue,
-              ),
-              _buildLabelWithValue(
-                label: "Cluster Name : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position]
-                    .clustureHeadValue,
-              ),
-              _buildLabelWithValue(
-                label: "Item Code :  ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].itemCode,
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "Item Name :  ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].itemName,
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "LSP :  ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString(),
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "Sales Credit :  ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString(),
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "Spr No. : ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].sprNo,
-                //width: size.width * 0.33,
-              ),
-
-              _buildLabelWithValue(
-                label: "Created By :  ",
-                value: pendingDraftQuoteController.PendingDraftQuoteList[position].createdBy,
-                //width: size.width * 0.33,
-              ),
-              _buildLabelWithValue(
-                label: "Created On :  ",
-                value: createdOn,
-                //width: size.width * 0.33,
-              ),
             ],
           ),
          // trailing: Icon(Icons.remove_red_eye_outlined,  color: Colors.blue,),
         ),
       ),
+    );
+  }
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    double? width,
+    Color color = AllColors.textColor,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        Flexible(
+          child: Tooltip(
+            message: value??"",
+            child: Text(
+              value ?? "",
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.poppins(
+                color: color,
+                fontSize: AllFontSize.fourtine,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLabelOnTap({
+    required String label,
+    required String? value,
+    required Color color,
+    required void Function() onTap,
+
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w500),
+        ),
+        Flexible(
+          child: InkWell(
+            onTap: onTap,
+            child: Tooltip(
+              message: value??"",
+              child: Text(value??"",
+                style: GoogleFonts.poppins(
+                  color: color,
+                  fontSize: AllFontSize.sisxteen,
+                  fontWeight: FontWeight.w500,
+                  decoration: TextDecoration.underline,
+                  decorationStyle: TextDecorationStyle.wavy,
+                ),
+                overflow: TextOverflow.ellipsis,
+
+              ),
+
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -346,7 +374,6 @@ class AllSprMappingScreen extends StatelessWidget{
                 bottom: MediaQuery.of(context).viewInsets.bottom,
               ),
               child: Column(
-                //mainAxisSize: MainAxisSize.min, // Ensure minimal height
                 children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -392,151 +419,49 @@ class AllSprMappingScreen extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 5,
-                              ),
-                              filterWithQuoteId(context),
+                              SizedBox(height: 5,),
+                              bindData(context,'Quantity', pendingDraftQuoteController.quantityFilterController.value),
                               SizedBox(height: 10),
-                              TextField(
-                                controller: pendingDraftQuoteController.filterQuoteVersionController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Quote Version',
-                                    hintText: 'Quote Version',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
+                              bindData(context,'LSP', pendingDraftQuoteController.LSPFilterController.value),
                               SizedBox(height: 10),
-                              filterWithSaleCycle(context),
+                              bindData(context,'MAP', pendingDraftQuoteController.MAPFilterController.value),
                               SizedBox(height: 10),
-                              TextField(
-                                controller: pendingDraftQuoteController.accountCodeController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Code',
-                                    hintText: 'Customer Code',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
+                              bindData(context,'Cost STD', pendingDraftQuoteController.StandardCostController.value),
                               SizedBox(height: 10),
-                              TextField(
-                                controller: pendingDraftQuoteController.accountNameController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Name',
-                                    hintText: 'Customer Name',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
+                              bindData(context,'BTP', pendingDraftQuoteController.BTPFilterController.value),
                               SizedBox(height: 10,),
-                              
+                              bindData(context,'BM Per', pendingDraftQuoteController.BmDiscountPerController.value),
+                              SizedBox(height: 10,),
+                              bindData(context,'GN Per', pendingDraftQuoteController.GmDiscountPerController.value),
+                              SizedBox(height: 10,),
+                              bindData(context,'Sale Cycle Id', pendingDraftQuoteController.filterQuoteSaleCycleController.value),
+                              SizedBox(height: 10,),
                               filterWithQuoteStatus(context),
                               SizedBox(height: 10),
                               filterWithQuoteValidity(context),
                               SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
                               SizedBox(height: 10),
-                              filterWithQuoteRhApproval(),
-                              SizedBox(height: 10,),
-                              filterWithQuotecnhApproval(),
-                              SizedBox(height: 10,),
-                              filterWithQuoteCategoryApproval(),
-                              SizedBox(height: 10,),
-                              filterWithQuoteGmApproval(),
-                              SizedBox(height: 10,),
-                              //filterWithQuoteBranchHead(),
-                              bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
-                              //filterWithQuoteClusterHead(),
-                              bindClusterNameFilter(context),
-                              SizedBox(height: 10,),
-                              TextField(
-                                controller: pendingDraftQuoteController.createdByCnontroller.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-                                    labelText: 'Created By',
-                                    hintText: 'Created By',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                                    )
-                                ),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(height: 10,),
+                              bindData(context,'Customer', pendingDraftQuoteController.accountNameController.value),
+                              SizedBox(height: 10),
+                              bindData(context,'Customer Code', pendingDraftQuoteController.accountCodeController.value),
+                              SizedBox(height: 10),
                               filterWithQuoteCreatedOn(context),
                               SizedBox(height: 10,),
-                              filterWithQuoteProductCategory(),
+                              bindData(context,'Rh Approval', pendingDraftQuoteController.rh_Approval_controller.value),
                               SizedBox(height: 10,),
-
+                              bindData(context,'CBH Approval', pendingDraftQuoteController.cbh_Approval_controller.value),
+                              SizedBox(height: 10,),
+                              bindData(context,'GM Approval', pendingDraftQuoteController.gm_Approval_controller.value),
+                              SizedBox(height: 10,),
+                              bindClusterNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindRegionNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindProductCategory(context),
+                              SizedBox(height: 10,),
+                              bindProductCategoryTypeDropDown(context),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -544,6 +469,47 @@ class AllSprMappingScreen extends StatelessWidget{
                     ),
                   ),
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            pendingDraftQuoteController.clearAllSPRMapFilterData();
+                            pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+                            pendingDraftQuoteController.pageNumberForQuote = 0;
+                            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            pendingDraftQuoteController.pageNumberForQuote = 0;
+                            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLSPRMAPPING");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            pendingDraftQuoteController.SaveAllSPRMapFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -601,7 +567,7 @@ class AllSprMappingScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -611,43 +577,49 @@ class AllSprMappingScreen extends StatelessWidget{
       },
     );
   }
-
-  Widget filterWithQuoteId(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: pendingDraftQuoteController.filterQuoteIdController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Quote Id',
-          labelText: 'Quote Id',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
+        ),
       ),
     );
   }
 
-  filterWithSaleCycle(BuildContext context) {
-    return  TextField(
-      cursorColor:AllColors.primaryDark1 ,
-      controller: pendingDraftQuoteController.filterQuoteSaleCycleController.value,
+  bindData(BuildContext context, String labelText, TextEditingController controller,) {
+    return TextField(
+      controller: controller,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Sale Cycle Id',
-          labelText: 'Sale Cycle Id',
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: labelText,
+          hintText: labelText,
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -663,11 +635,24 @@ class AllSprMappingScreen extends StatelessWidget{
             borderRadius: BorderRadius.all(Radius.circular(10)),
           )
       ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
   }
 
   bindProductCategory(BuildContext context) {
     return Obx(() {
+      if (pendingDraftQuoteController.productCategoryController.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.productCategoryController.value.text.split('|');
+        pendingDraftQuoteController.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: pendingDraftQuoteController.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
@@ -780,39 +765,9 @@ class AllSprMappingScreen extends StatelessWidget{
 
   }
 
-  filterWithQuoteProductCategory() {
-    return TextField(
-      controller: pendingDraftQuoteController.productCategoryController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Product Category',
-          hintText: 'Product Category',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
 
   Widget filterWithQuoteStatus(BuildContext context){
     return Container(
-      padding: const EdgeInsets.only(  right: 15),
       child: DropdownMenu<String>(
         width: MediaQuery
             .of(context)
@@ -995,433 +950,31 @@ class AllSprMappingScreen extends StatelessWidget{
     );
   }
 
-  filterWithQuoteRhApproval() {
-    return TextField(
-      controller: pendingDraftQuoteController.rh_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Rh Approval',
-          hintText: 'Rh Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
 
-  filterWithQuotecnhApproval() {
-    return TextField(
-      controller: pendingDraftQuoteController.cbh_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'CBH Approval',
-          hintText: 'CbH Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteCategoryApproval() {
-    return  TextField(
-      controller: pendingDraftQuoteController.category_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Category Approval',
-          hintText: 'Category Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteGmApproval() {
-    return TextField(
-      controller: pendingDraftQuoteController.gm_Approval_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Gm Approval',
-          hintText: 'Gm Approval',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-/*  filterWithQuoteBranchHead() {
-    return TextField(
-      controller: pendingDraftQuoteController.region_name_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region Name',
-          hintText: 'Region Name ',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-  filterWithQuoteClusterHead() {
-    return TextField(
-      controller: pendingDraftQuoteController.cluster_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Name ',
-          hintText: 'Cluster Name ',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
-
-  Widget bindRegionNameFilter(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = pendingDraftQuoteController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          pendingDraftQuoteController.SelectedRegion_list.isEmpty) {
-        pendingDraftQuoteController.SelectedRegion_list.assignAll(availableItems);
-        pendingDraftQuoteController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-
-      }
-    });
-    return Obx(() {
-      final selected = pendingDraftQuoteController.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
-
-      return GestureDetector(
-        onTap: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            ),
-            builder: (context) {
-              final searchController = TextEditingController();
-              final tempSelected = <RegionWithClusterFilterModal>[];
-              tempSelected.addAll(pendingDraftQuoteController.SelectedRegion_list);
-
-              final allItems =
-                  pendingDraftQuoteController.regionwithclusterGetByEmailList;
-
-              return StatefulBuilder(builder: (context, setState) {
-                final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
-
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 50,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(2)),
-                        ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Select Regions',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Search Field
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  searchController.clear();
-                                  setState(() {});
-                                },
-                              )
-                                  : null,
-                            ),
-                            onChanged: (v) => setState(() {}),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // Select All
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CheckboxListTile(
-                            title: const Text('Select All'),
-                            value: allSelected,
-                            onChanged: (val) {
-                              setState(() {
-                                if (val == true) {
-                                  tempSelected.clear();
-                                  tempSelected.addAll(allItems);
-                                } else {
-                                  tempSelected.clear();
-                                }
-                              });
-                            },
-                          ),
-                        ),
-
-                        const Divider(height: 1),
-
-                        // List
-                        Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
-                            itemCount: filtered.length,
-                            itemBuilder: (context, idx) {
-                              final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
-                              return CheckboxListTile(
-                                title: Text(item.geoValue ?? ""),
-                                value: isSel,
-                                onChanged: (v) {
-                                  setState(() {
-                                    if (v == true) {
-                                      if (!isSel) tempSelected.add(item);
-                                    } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                          ),
-                        ),
-
-                        // Done button
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    pendingDraftQuoteController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    pendingDraftQuoteController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Done'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
-            },
-          );
-        },
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: selectedText == null
-                    ? Text(
-                  "Select Region",
-                  style: GoogleFonts.poppins(
-                    color: Colors.grey.shade600,
-                    fontSize: AllFontSize.sisxteen,
-                  ),
-                )
-                    : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    selectedText,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              const Icon(Icons.arrow_drop_down),
-            ],
-          ),
-        ),
-      );
-    });
-  }
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = pendingDraftQuoteController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          pendingDraftQuoteController.SelectedCluster_list.isEmpty) {
-        pendingDraftQuoteController.SelectedCluster_list.assignAll(availableItems);
-        pendingDraftQuoteController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-        pendingDraftQuoteController.getRegionsWithClusterFilterGetByEmail();
+      if (pendingDraftQuoteController.clusterName_controller.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.clusterName_controller.value.text.split('|');
+        pendingDraftQuoteController.SelectedCluster_list.value =[];
+        pendingDraftQuoteController.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && pendingDraftQuoteController.SelectedCluster_list.isEmpty) {
+          pendingDraftQuoteController.SelectedCluster_list.assignAll(availableItems);
+          pendingDraftQuoteController.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          pendingDraftQuoteController.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
       final selected = pendingDraftQuoteController.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1441,15 +994,9 @@ class AllSprMappingScreen extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1475,15 +1022,12 @@ class AllSprMappingScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1578,16 +1122,26 @@ class AllSprMappingScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
+
+                                    pendingDraftQuoteController.filterDataChecker.value='';
                                     pendingDraftQuoteController.SelectedCluster_list.assignAll(tempSelected);
-                                    pendingDraftQuoteController.clusterName_controller.value.text = tempSelected
-                                        .map((e) => e.geoValue)
-                                        .join(', ');
+                                    pendingDraftQuoteController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
                                     pendingDraftQuoteController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1618,6 +1172,243 @@ class AllSprMappingScreen extends StatelessWidget{
                   "Select Cluster",
                   style: GoogleFonts.poppins(
                     color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+  Widget bindRegionNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = pendingDraftQuoteController.regionwithclusterGetByEmailList;
+      if (pendingDraftQuoteController.RegionName_controller.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        pendingDraftQuoteController.SelectedRegion_list.value=[];
+        List<String> nameList = pendingDraftQuoteController.RegionName_controller.value.text.split('|');
+        pendingDraftQuoteController.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && pendingDraftQuoteController.SelectedRegion_list.isEmpty) {
+          pendingDraftQuoteController.SelectedRegion_list.assignAll(availableItems);
+          pendingDraftQuoteController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          print("bind region ${pendingDraftQuoteController.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
+      }
+    });
+    return Obx(() {
+      final selected = pendingDraftQuoteController.SelectedRegion_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <RegionWithClusterFilterModal>[];
+              tempSelected.addAll(pendingDraftQuoteController.SelectedRegion_list);
+
+              final allItems = pendingDraftQuoteController.regionwithclusterGetByEmailList;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Regions',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No regions found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") ==
+                                  (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    pendingDraftQuoteController.filterDataChecker.value='';
+                                    pendingDraftQuoteController.SelectedRegion_list.assignAll(tempSelected);
+                                    pendingDraftQuoteController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Region Name", // 👈 Label like before
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Region",
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey.shade600,
                     fontSize: AllFontSize.sisxteen,
                   ),
                 )
@@ -1702,97 +1493,6 @@ class AllSprMappingScreen extends StatelessWidget{
   }
 
 
-  Widget _buildLabelWithValue({
-    required String label,
-    required String? value,
-    double? width,
-    Color color = AllColors.textColor,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        /* width != null
-            ? Container(
-          width: width,
-          child: Tooltip(
-            message: value ?? "",
-            child: Text(
-              value ?? "",
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.poppins(
-                color: color,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        )
-            :*/ Flexible(
-          child: Tooltip(
-            message: value??"",
-            child: Text(
-              value ?? "",
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.poppins(
-                color: color,
-                fontSize: AllFontSize.fourtine,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 
 
-
-  Widget _buildClickableLabel({
-    required String label,
-    required String? value,
-    required VoidCallback onTap,
-    double? width,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          label,
-          style: GoogleFonts.poppins(
-            color: AllColors.primaryDark1,
-            fontSize: AllFontSize.fourtine,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            width: width,
-            child: Tooltip(
-              message: value ?? "",
-              child: Text(
-                value ?? "",
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.poppins(
-                  color: Colors.blueAccent,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w500,
-                  decoration: TextDecoration.underline,
-                  decorationStyle: TextDecorationStyle.wavy,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
