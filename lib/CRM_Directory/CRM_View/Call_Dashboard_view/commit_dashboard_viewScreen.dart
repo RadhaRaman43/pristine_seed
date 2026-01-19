@@ -814,6 +814,8 @@ class CommitDashboardViewscreen extends StatelessWidget{
               _buildLabelWithValue(label: "Product Category: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].productCategory??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Purchase Process: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].purchaseProcess??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Company Profile Type: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].companyProfileType??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Is Commit: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].commit==1?"Yes":"No"??"",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Is Solution Accepted: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].isSolutionAccepted==1?"Yes":"No"??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Pin Code: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].postCode??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "District: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].district??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Cluster Name: ", value:  dashboard_view_Controller.commitDashboardUserWiseDataList[position].clustureHeadValue??"",color:AllColors.textColor),
