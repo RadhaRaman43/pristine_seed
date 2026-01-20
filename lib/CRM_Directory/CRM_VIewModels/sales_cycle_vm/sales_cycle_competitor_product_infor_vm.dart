@@ -316,7 +316,6 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
         'createdOn_Controller': createdOnCnontroller.value.text,
         'product_category': productCategoryController.value.text,
         'product_category_type': product_category_type_Controller.value.text,
-
       });
     }
     catch(e){

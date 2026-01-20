@@ -240,7 +240,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
                         )),
                         const SizedBox(width: 6),
                         Expanded(child: _buildButton(
-                          text: 'Saved Filter',
+                          text: 'Save Filters',
                           borderColor: AllColors.green,
                           textColor: AllColors.green,
                           onTap: () {
@@ -321,12 +321,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
     );
   }
 
-  Widget _buildButton({
-    required String text,
-    required Color borderColor,
-    required Color textColor,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildButton({required String text, required Color borderColor, required Color textColor, required VoidCallback onTap,}) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
         backgroundColor: AllColors.whiteColor,
@@ -355,7 +350,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       ),
     );
   }
-  
+
   Widget bindFilterData(String hintdata, TextEditingController value,){
     return  TextField(
       controller: value,
@@ -890,7 +885,6 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       );
     });
   }
-
   Widget bindProductCategoryTypeDropDown(context) {
     return DropdownMenu<String>(
       width: MediaQuery.of(context).size.width - 15,
@@ -937,6 +931,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
     );
 
   }
+
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = saleCycleCompetitorController.clusterGetByEmailList;
@@ -1415,6 +1410,7 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       );
     });
   }
+
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
       cursorColor: AllColors.primaryDark1,
@@ -1581,36 +1577,6 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
       ),
     );
 
-  }
-
-  Widget filterWithSalesCycleId(BuildContext context) {
-    return  TextField(
-      controller: saleCycleCompetitorController.filterSalesCycleIdController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Sale Cycle Id',
-          hintText: 'Sale Cycle Id',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
   }
 
   Widget filterWithSalesCycleStatus(BuildContext context){

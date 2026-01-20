@@ -1,4 +1,5 @@
 
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -14,6 +15,7 @@ import '../../../../reources/routes/routes_name.dart';
 import '../../../../view/custom_drawer.dart';
 import '../../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_advise_all_list_vm.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
@@ -23,8 +25,8 @@ class AllSalesAdviseList extends StatelessWidget{
   SalesAdviseAllListVm salesAdviseAllVmController=Get.put(SalesAdviseAllListVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
-  static String _displaySalesAdviseStatusForOption(String option) =>
-      option;
+  static String _displaySalesAdviseStatusForOption(String option) => option;
+  static String _displaySaleCycleActiveForOption(String option) => option;
 
   @override
   Widget build(BuildContext context) {
@@ -393,99 +395,36 @@ class AllSalesAdviseList extends StatelessWidget{
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              SizedBox(
-                                height: 5,
-                              ),
-                              filterWithSalesAdviseId(context),
-                              SizedBox(height: 10),
+                              SizedBox(height: 5,),
                               filterWithSalesAdviseStatus(context),
+                              SizedBox(height: 10),
+                              bindFilterData('Sale Advise Id',salesAdviseAllVmController.salesAdviseIdController.value ),
+                              SizedBox(height: 10),
+                              bindFilterData('Quote Id',salesAdviseAllVmController.quoteIdController.value ),
+                              SizedBox(height: 10),
+                              bindFilterData('Quote Version',salesAdviseAllVmController.quoteVersionController.value ),
+                              SizedBox(height: 10),
+                              bindFilterData('Sale Cycle Id',salesAdviseAllVmController.saleCycleIdController.value ),
+                              SizedBox(height: 10),
+                              bindFilterData('Customer Name',salesAdviseAllVmController.accountNameController.value ),
+                              SizedBox(height: 10),
+                              bindFilterData('Customer Code',salesAdviseAllVmController.accountCodeController.value ),
                               SizedBox(height: 10),
                               filterWithQuoteValidity(context),
                               SizedBox(height: 10),
                               filterWithQuoteClosureDate(context),
-                              SizedBox(height: 10),
-                              TextField(
-                                controller: salesAdviseAllVmController
-                                    .accountNameController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Name',
-                                    hintText: 'Customer Name',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    )),
-                                cursorColor: AllColors.primaryDark1,
-
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              TextField(
-                                controller: salesAdviseAllVmController
-                                    .accountCodeController.value,
-                                decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-                                    labelText: 'Customer Code',
-                                    hintText: 'Customer Code',
-                                    hintStyle: GoogleFonts.poppins(
-                                        color: AllColors.lightblackColor,
-                                        fontWeight: FontWeight.w300,
-                                        fontSize: AllFontSize.ten),
-                                    labelStyle: GoogleFonts.poppins(
-                                        color: AllColors.primaryDark1,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: AllFontSize.sisxteen),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius:
-                                      BorderRadius.all(Radius.circular(10)),
-                                    )),
-                                cursorColor: AllColors.primaryDark1,
-                                onChanged: (value) {
-                                  // Handle the text field value changes if needed
-                                },
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              filterWithQuoteProductCategory(),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              //filterWithQuoteBranchHead(),
-                              bindRegionNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              //filterWithQuoteClusterHead(),
-                              bindClusterNameFilter(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
                               filterWithQuoteCreatedOn(context),
-                              SizedBox(
-                                height: 10,
-                              ),
+                              SizedBox(height: 10,),
+                              bindClusterNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindRegionNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindProductCategory(context),
+                              SizedBox(height: 10,),
+                              bindProductCategoryTypeDropDown(context),
+                              SizedBox(height: 10,),
+
                             ],
                           ),
                         ),
@@ -493,6 +432,48 @@ class AllSalesAdviseList extends StatelessWidget{
                     ),
                   ),
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            salesAdviseAllVmController.filterDataChecker.value='';
+                            salesAdviseAllVmController.clearFilterData();
+                            salesAdviseAllVmController.clearAllField();
+                            salesAdviseAllVmController.pageNumber=0;
+                            salesAdviseAllVmController.getSaleCycleProductByIdList(salesAdviseAllVmController.pageNumber);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            salesAdviseAllVmController.pageNumber=0;
+                            salesAdviseAllVmController.getSaleCycleProductByIdList(salesAdviseAllVmController.pageNumber);
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            salesAdviseAllVmController.filterDataChecker.value='';
+                            salesAdviseAllVmController.SaveFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  /*Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -550,7 +531,7 @@ class AllSalesAdviseList extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -559,17 +540,44 @@ class AllSalesAdviseList extends StatelessWidget{
       },
     );
   }
+  Widget _buildButton({required String text, required Color borderColor, required Color textColor, required VoidCallback onTap,}) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 
-
-  Widget filterWithSalesAdviseId(BuildContext context) {
-    return TextField(
-      cursorColor: AllColors.primaryDark1,
-      controller: salesAdviseAllVmController.salesAdviseIdController.value,
+  Widget bindFilterData(String hintdata, TextEditingController value,){
+    return  TextField(
+      controller: value,
       decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.two, horizontal: AllFontSize.ten),
-          hintText: 'Sales Advise Id',
-          labelText: 'Sales Advise Id',
+              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
+          labelText: hintdata,
+          hintText: hintdata,
           hintStyle: GoogleFonts.poppins(
               color: AllColors.lightblackColor,
               fontWeight: FontWeight.w300,
@@ -583,9 +591,15 @@ class AllSalesAdviseList extends StatelessWidget{
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-          )),
+          )
+      ),
+      cursorColor: AllColors.primaryDark1,
+      onChanged: (value) {
+        // Handle the text field value changes if needed
+      },
     );
   }
+
 
   filterWithQuoteValidity(BuildContext context) {
     return TextField(
@@ -718,12 +732,8 @@ class AllSalesAdviseList extends StatelessWidget{
 
   filterWithSalesAdviseStatus(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only( right: 15),
       child: DropdownMenu<String>(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width-15,
+        width: MediaQuery.of(context).size.width-15,
         controller: salesAdviseAllVmController.salesAdviseStatusController.value,
         label: Text(
           "Sales Advise Status",
@@ -770,340 +780,147 @@ class AllSalesAdviseList extends StatelessWidget{
       ),
     );
   }
-
-  filterWithQuoteProductCategory() {
-    return TextField(
-      controller: salesAdviseAllVmController.productCategoryController.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Product Category',
-          hintText: 'Product Category',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-
-
-
-
-
-  /*filterWithQuoteBranchHead() {
-    return TextField(
-      controller: salesAdviseAllVmController.branch_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Region Name',
-          hintText: 'Region Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }
-  filterWithQuoteClusterHead() {
-    return TextField(
-      controller: salesAdviseAllVmController.cluster_head_value_controller.value,
-      decoration: InputDecoration(
-          contentPadding: EdgeInsets.symmetric(
-              vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-          labelText: 'Cluster Name',
-          hintText: 'Cluster Name',
-          hintStyle: GoogleFonts.poppins(
-              color: AllColors.lightblackColor,
-              fontWeight: FontWeight.w300,
-              fontSize: AllFontSize.ten),
-          labelStyle: GoogleFonts.poppins(
-              color: AllColors.primaryDark1,
-              fontWeight: FontWeight.w500,
-              fontSize: AllFontSize.sisxteen),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-          )
-      ),
-      cursorColor: AllColors.primaryDark1,
-      onChanged: (value) {
-        // Handle the text field value changes if needed
-      },
-    );
-  }*/
-
-  Widget bindRegionNameFilter(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = salesAdviseAllVmController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          salesAdviseAllVmController.SelectedRegion_list.isEmpty) {
-        salesAdviseAllVmController.SelectedRegion_list.assignAll(availableItems);
-        salesAdviseAllVmController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-
-      }
-    });
+  bindProductCategory(BuildContext context) {
     return Obx(() {
-      final selected = salesAdviseAllVmController.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      if (salesAdviseAllVmController.productCategoryController.value.text.isNotEmpty && salesAdviseAllVmController.filterDataChecker.value=='1') {
+        List<String> nameList = salesAdviseAllVmController.productCategoryController.value.text.split(',');
 
-      return GestureDetector(
-        onTap: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        salesAdviseAllVmController.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
+      return DropdownSearch<ItemCategoryMstModel>.multiSelection(
+        items: salesAdviseAllVmController.Item_Category_master_list_without_task,
+        itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
+        selectedItems: salesAdviseAllVmController.Selected_Item_Category_master_list_without_task,
+        dropdownDecoratorProps: DropDownDecoratorProps(
+          baseStyle: TextStyle(color: Colors.black),
+          dropdownSearchDecoration: InputDecoration(
+            filled: false,
+            labelText: salesAdviseAllVmController.Selected_Item_Category_master_list_without_task.isNotEmpty ? "Product Category" : null,
+            hintText:  "Product Category" ,
+            hintStyle: GoogleFonts.poppins(
+                color: AllColors.lightblackColor,
+                fontWeight: FontWeight.w300,
+                fontSize: AllFontSize.ten),
+            labelStyle: GoogleFonts.poppins(
+                color: AllColors.primaryDark1,
+                fontWeight: FontWeight.w500,
+                fontSize: AllFontSize.sisxteen),
+            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        ),
+        dropdownBuilder: (context, selectedItems) {
+          if (selectedItems.isEmpty) {
+            return Text(
+              "Product Category",
+              style: GoogleFonts.poppins(
+                color: AllColors.primaryDark1, // Match your hint color
+                fontSize: AllFontSize.sisxteen,
+                fontWeight: FontWeight.w500,
+              ),
+            );
+          }
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Text(
+              selectedItems.map((e) => e.categoryName).join(', '),
+              style: TextStyle(color: Colors.black), // Only black text
             ),
-            builder: (context) {
-              final searchController = TextEditingController();
-              final tempSelected = <RegionWithClusterFilterModal>[];
-              tempSelected.addAll(salesAdviseAllVmController.SelectedRegion_list);
-
-              final allItems =
-                  salesAdviseAllVmController.regionwithclusterGetByEmailList;
-
-              return StatefulBuilder(builder: (context, setState) {
-                final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
-
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 50,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(2)),
-                        ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Select Regions',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Search Field
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  searchController.clear();
-                                  setState(() {});
-                                },
-                              )
-                                  : null,
-                            ),
-                            onChanged: (v) => setState(() {}),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // Select All
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CheckboxListTile(
-                            title: const Text('Select All'),
-                            value: allSelected,
-                            onChanged: (val) {
-                              setState(() {
-                                if (val == true) {
-                                  tempSelected.clear();
-                                  tempSelected.addAll(allItems);
-                                } else {
-                                  tempSelected.clear();
-                                }
-                              });
-                            },
-                          ),
-                        ),
-
-                        const Divider(height: 1),
-
-                        // List
-                        Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
-                            itemCount: filtered.length,
-                            itemBuilder: (context, idx) {
-                              final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
-                              return CheckboxListTile(
-                                title: Text(item.geoValue ?? ""),
-                                value: isSel,
-                                onChanged: (v) {
-                                  setState(() {
-                                    if (v == true) {
-                                      if (!isSel) tempSelected.add(item);
-                                    } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                          ),
-                        ),
-
-                        // Done button
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    salesAdviseAllVmController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    salesAdviseAllVmController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Done'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
-            },
           );
         },
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: selectedText == null
-                    ? Text(
-                  "Select Region",
-                  style: GoogleFonts.poppins(
-                    color: Colors.grey.shade600,
-                    fontSize: AllFontSize.sisxteen,
-                  ),
-                )
-                    : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    selectedText,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
+        onChanged: (List<ItemCategoryMstModel> selectedList) {
+          salesAdviseAllVmController.Selected_Item_Category_master_list_without_task.value = selectedList;
+          salesAdviseAllVmController.productCategoryController.value.text =
+              selectedList.map((e) => e.categoryName).join('|');
+        },
+        popupProps: PopupPropsMultiSelection.dialog(
+          showSearchBox: true,
+          searchFieldProps: TextFieldProps(
+            decoration: InputDecoration(
+              contentPadding: EdgeInsets.only(top: 20, left: 12, right: 12),
+              // Top margin here
+              hintText: "Search...",
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
               ),
-              const Icon(Icons.arrow_drop_down),
-            ],
+            ),
+          ),
+          itemBuilder: (context, item, isSelected) => ListTile(
+            title: Text(item.categoryName ?? ""),
           ),
         ),
       );
     });
   }
+  Widget bindProductCategoryTypeDropDown(context) {
+    return DropdownMenu<String>(
+      width: MediaQuery.of(context).size.width - 15,
+      controller: salesAdviseAllVmController.product_category_type_Controller.value,
+      label: Text(
+        "Product Category Type",
+        style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.sisxteen,
+            fontWeight: FontWeight.w500),
+      ),
+
+      inputDecorationTheme: const InputDecorationTheme(
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderSide: BorderSide(
+            color: AllColors.primaryDark1,),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+
+        border: OutlineInputBorder(
+          borderSide: BorderSide(
+              color: AllColors.primaryDark1), // Change the color to green
+        ),
+        filled: false,
+        contentPadding: EdgeInsets.symmetric(
+            vertical: AllFontSize.two, horizontal: AllFontSize.ten),
+      ),
+      onSelected: (String? selection) {
+        print(selection);
+        salesAdviseAllVmController.product_category_type_Controller.value.text =
+            _displaySaleCycleActiveForOption(selection!).toString();
+      },
+      dropdownMenuEntries: salesAdviseAllVmController.productCategoryTypeList.map<DropdownMenuEntry<String>>((String e) {
+        return DropdownMenuEntry<String>(
+            value: e, label: e!, style: ButtonStyle(
+          foregroundColor: MaterialStateProperty.all<Color>(
+              AllColors.primaryDark1),));
+      }).toList(),
+    );
+
+  }
+
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = salesAdviseAllVmController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          salesAdviseAllVmController.SelectedCluster_list.isEmpty) {
-        salesAdviseAllVmController.SelectedCluster_list.assignAll(availableItems);
-        salesAdviseAllVmController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-        salesAdviseAllVmController.getRegionsWithClusterFilterGetByEmail();
+      if (salesAdviseAllVmController.clusterName_controller.value.text.isNotEmpty && salesAdviseAllVmController.filterDataChecker.value=='1') {
+        List<String> nameList = salesAdviseAllVmController.clusterName_controller.value.text.split('|');
+        salesAdviseAllVmController.SelectedCluster_list.value =[];
+        salesAdviseAllVmController.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && salesAdviseAllVmController.SelectedCluster_list.isEmpty) {
+          salesAdviseAllVmController.SelectedCluster_list.assignAll(availableItems);
+          salesAdviseAllVmController.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          salesAdviseAllVmController.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
@@ -1130,15 +947,9 @@ class AllSalesAdviseList extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1164,15 +975,12 @@ class AllSalesAdviseList extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1267,16 +1075,26 @@ class AllSalesAdviseList extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
+
+                                    salesAdviseAllVmController.filterDataChecker.value='';
                                     salesAdviseAllVmController.SelectedCluster_list.assignAll(tempSelected);
-                                    salesAdviseAllVmController.clusterName_controller.value.text = tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
+                                    salesAdviseAllVmController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
                                     salesAdviseAllVmController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1325,6 +1143,244 @@ class AllSalesAdviseList extends StatelessWidget{
       );
     });
   }
+  Widget bindRegionNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = salesAdviseAllVmController.regionwithclusterGetByEmailList;
+      if (salesAdviseAllVmController.RegionName_controller.value.text.isNotEmpty && salesAdviseAllVmController.filterDataChecker.value=='1') {
+        salesAdviseAllVmController.SelectedRegion_list.value=[];
+        List<String> nameList = salesAdviseAllVmController.RegionName_controller.value.text.split('|');
+        salesAdviseAllVmController.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && salesAdviseAllVmController.SelectedRegion_list.isEmpty) {
+          salesAdviseAllVmController.SelectedRegion_list.assignAll(availableItems);
+          salesAdviseAllVmController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          print("bind region ${salesAdviseAllVmController.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
+      }
+    });
+    return Obx(() {
+      final selected = salesAdviseAllVmController.SelectedRegion_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <RegionWithClusterFilterModal>[];
+              tempSelected.addAll(salesAdviseAllVmController.SelectedRegion_list);
+
+              final allItems = salesAdviseAllVmController.regionwithclusterGetByEmailList;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Regions',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No regions found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") ==
+                                  (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    salesAdviseAllVmController.filterDataChecker.value='';
+                                    salesAdviseAllVmController.SelectedRegion_list.assignAll(tempSelected);
+                                    salesAdviseAllVmController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Region Name", // 👈 Label like before
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Region",
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey.shade600,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+
 
   filterWithQuoteCreatedOn(BuildContext context) {
     return TextField(
