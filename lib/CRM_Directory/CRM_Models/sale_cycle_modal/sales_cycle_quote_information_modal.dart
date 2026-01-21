@@ -63,6 +63,11 @@ class SalesCycleQuoteInformationModal {
   String? shippingDistrict;
   String? shippingPhoneNo;
   String? shippingEmailId;
+  String? quoteStatusWon;
+  dynamic? wonBy;
+  String? quoteWonName;
+  dynamic? wonOn;
+  dynamic? lossReason;
   List<QuoteItems>? quoteItems;
 
   SalesCycleQuoteInformationModal(
@@ -130,6 +135,11 @@ class SalesCycleQuoteInformationModal {
         this.shippingDistrict,
         this.shippingPhoneNo,
         this.shippingEmailId,
+        this.quoteStatusWon,
+        this.wonBy,
+        this.quoteWonName,
+        this.wonOn,
+        this.lossReason,
         this.quoteItems});
 
   SalesCycleQuoteInformationModal.fromJson(Map<String, dynamic> json) {
@@ -198,6 +208,11 @@ class SalesCycleQuoteInformationModal {
     shippingDistrict = json['shipping_district'];
     shippingPhoneNo = json['shipping_phone_no'];
     shippingEmailId = json['shipping_email_id'];
+    quoteStatusWon = json['quote_status_won'];
+    wonBy = json['won_by'];
+    quoteWonName = json['quote_won_name'];
+    lossReason = json['loss_reason'];
+    wonOn = json['won_on'];
     if (json['quote_items'] != null) {
       quoteItems = <QuoteItems>[];
       json['quote_items'].forEach((v) {
@@ -274,6 +289,11 @@ class SalesCycleQuoteInformationModal {
     data['shipping_district'] = this.shippingDistrict;
     data['shipping_phone_no'] = this.shippingPhoneNo;
     data['shipping_email_id'] = this.shippingEmailId;
+    data['quote_status_won'] = this.quoteStatusWon;
+    data['won_by'] = this.wonBy;
+    data['quote_won_name'] = this.quoteWonName;
+    data['won_on'] = this.wonOn;
+    data['loss_reason'] = this.lossReason;
     if (this.quoteItems != null) {
       data['quote_items'] = this.quoteItems!.map((v) => v.toJson()).toList();
     }

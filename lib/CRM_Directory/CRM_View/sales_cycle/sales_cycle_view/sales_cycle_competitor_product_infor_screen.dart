@@ -607,18 +607,21 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
               //width: size.width * 0.33,
               color: Colors.blue,
             ),
-            _buildClickableLabel(
+          /*  _buildClickableLabel(
               label: "Customer Name : ",
               value: saleCycleCompetitorController
                   .salesCycleCompetitorProductInformationList[position].accountName,
               width: size.width * 0.4,
               onTap: () {
-                /*account_vm_controller.view = 'FromSaleCycleMainScreen';
-                contact_vm_controller.view = 'FromSaleCycleMainScreen';
-                account_vm_controller.getAccMasterBuyCodeApi(
-                  salesCycleController.saleCycleList[position].accountCode!,
-                );*/
+
               },
+            ),
+*/
+            _buildLabelWithValue(
+              label: "Customer Name : ",
+              value: saleCycleCompetitorController
+                  .salesCycleCompetitorProductInformationList[position].accountName,
+              //width: size.width * 0.33,
             ),
             _buildLabelWithValue(
               label: "Customer Code : ",
@@ -636,8 +639,8 @@ class SalesCycleCompetitorProductInforScreen extends StatelessWidget{
 
             _buildLabelWithValue(
               label: "Qty : ",
-              value: saleCycleCompetitorController
-                  .salesCycleCompetitorProductInformationList[position].qty.toString(),
+              value: (saleCycleCompetitorController
+                  .salesCycleCompetitorProductInformationList[position].qty.toInt()).toString(),
               //width: size.width * 0.3,
             ),
             _buildLabelWithValue(

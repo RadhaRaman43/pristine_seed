@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/AccountMaster_model/getMasterTypeModel.dart';
 import 'package:navigation_drawer_flutter/CRM_Directory/CRM_Models/sale_cycle_modal/productCategoryWiseAmtModel.dart';
 import 'package:navigation_drawer_flutter/component/default_button.dart';
+import 'package:navigation_drawer_flutter/component/default_button_red.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
 import '../../../../component/back_button.dart';
@@ -3260,7 +3261,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
 
 // Remove any existing ₹, Rs, or spaces, then add ₹ once
   if(fixText=="Budget Amount" || fixText=="Expected Amount"){
-    String formattedAmount = '₹${data}';
+    String formattedAmount = '₹ ${data}';
     data= formattedAmount;
   }
 
@@ -3605,7 +3606,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text("₹${saleCycleController.get_SalesCycleProductById_List[index].mrpPrice.toString()}",
+                Text("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.get_SalesCycleProductById_List[index].mrpPrice).toString()}",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -3625,7 +3626,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                Text("₹${saleCycleController.get_SalesCycleProductById_List[index].totalPrice.toString()}",
+                Text("₹ ${saleCycleController.numberFormatWithComma(saleCycleController.get_SalesCycleProductById_List[index].totalPrice).toString()}",
                   style: GoogleFonts.poppins(
                     color: AllColors.textColor,
                     fontSize: AllFontSize.twelve,
@@ -3692,13 +3693,11 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 Flexible(
                   //width: size.width * 0.4,
                   child: Tooltip(
-                    message: saleCycleController
-                        .get_SalesCycleProductById_List[index].methodexPrice
-                        .toString(),
+                    message: "₹ ${saleCycleController.numberFormatWithComma(
+                        saleCycleController.get_SalesCycleProductById_List[index].methodexPrice).toString()}",
                     child: Text(
-                      saleCycleController
-                          .get_SalesCycleProductById_List[index].methodexPrice
-                          .toString(),
+                      "₹ ${saleCycleController.numberFormatWithComma(
+                          saleCycleController.get_SalesCycleProductById_List[index].methodexPrice).toString()}",
                       style: GoogleFonts.poppins(
                         color: AllColors.textColor,
                         fontSize: AllFontSize.twelve,
@@ -3887,7 +3886,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       child: Visibility(
                         visible: saleCycleController.saleCycleList[0].isReadySendForApproval == 1 &&
                                 saleCycleController.saleCycleList[0].isSalesCycleClosed != 1 &&
-                                flagForManage == "Quote"
+                                saleCycleController.isAdminWritePermission!='1' &&
+                            saleCycleController.saleCycleList[0].createdBy?.toLowerCase()==saleCycleController.email.toLowerCase()
+                        && flagForManage == "Quote"
                             ? true
                             : false,
                         child: InkWell(
@@ -3898,10 +3899,13 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                           .quoteList[index].quoteId ??
                                       "");
                             },
-                            child: Icon(
-                              Icons.add_chart,
-                              color: Colors.blueAccent,
-                              size: 30,
+                            child: Tooltip(
+                              message: "Duplicate",
+                              child: Icon(
+                                Icons.add_chart,
+                                color: Colors.blueAccent,
+                                size: 30,
+                              ),
                             )),
                       ),
                     ),
@@ -4055,6 +4059,28 @@ class ViewSaleHeaderScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
+                  "Quote Status Won : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(
+                  saleCycleController.quoteList[index].quoteStatusWon ?? "",
+                  style: GoogleFonts.poppins(
+                    color: getQuoteAccepted(quoteAccepted),
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
                   "Quote Validity : ",
                   style: GoogleFonts.poppins(
                     color: AllColors.primaryDark1,
@@ -4165,6 +4191,48 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                 ),
               ],
             ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Spr Required : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(" ${saleCycleController.quoteList[index].isSpr==1?"Yes":"No"}",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Spr No : ",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.primaryDark1,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text(" ${saleCycleController.quoteList[index].sprNo??""}",
+                  style: GoogleFonts.poppins(
+                    color: AllColors.textColor,
+                    fontSize: AllFontSize.twelve,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -4586,6 +4654,71 @@ class ViewSaleHeaderScreen extends StatelessWidget {
       ),
     );
   }
+
+  Widget _buildLabelWithValue({
+    required String label,
+    required String? value,
+    double? width,
+    Color color = AllColors.textColor,
+    BuildContext? context,
+  }) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: GoogleFonts.poppins(
+            color: AllColors.primaryDark1,
+            fontSize: AllFontSize.fourtine,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+
+        const SizedBox(width: 8),
+
+        Expanded(
+          child: Align(
+            alignment: Alignment.centerRight,
+            child: Tooltip(
+              message: value ?? "",
+              child: Text(
+                value ?? "",
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.poppins(
+                  color: color,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        if (label == "Product Category" &&
+            saleCycleController.quoteHeaderdata[0].quoteStatus
+                .toString()
+                .toLowerCase() ==
+                "draft")
+          InkWell(
+            onTap: () {
+              saleCycleController.itemCategorySelectedlist.clear();
+              for (var item in saleCycleController.productCategoryList) {
+                if (item.isSelected == 1) {
+                  saleCycleController.itemCategorySelectedlist.add(item);
+                }
+              }
+              saleCycleController.productCategoryController.value.clear();
+              showProductCatDialog(context);
+            },
+            child: const Padding(
+              padding: EdgeInsets.only(left: 6),
+              child: Icon(Icons.add),
+            ),
+          ),
+      ],
+    );
+  }
+
+
   showConfirmCompleteDialog(BuildContext context, int index){
     showDialog(
       context: context,
@@ -6770,7 +6903,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                       child: Padding(
                         padding:
                             const EdgeInsets.only(top: 10, left: 10, right: 10),
-                        child: Text('₹${user.estimatedAmount.toString()}',
+                        child: Text('₹ ${saleCycleController.numberFormatWithComma(user.estimatedAmount).toString() }',
                           style: TextStyle(color: AllColors.primaryDark1),
                         ),
                       ),
@@ -6896,7 +7029,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0, right: 10),
-                    child: Text('₹${saleCycleController.budgetAmountList[0].totalEstimatedAmount.toString()}',
+                    child: Text('₹ ${saleCycleController.numberFormatWithComma(saleCycleController.budgetAmountList[0].totalEstimatedAmount).toString()}',
                       style: GoogleFonts.poppins(
                           color: Colors.blue[900],
                           fontSize: AllFontSize.fourtine,
@@ -9214,8 +9347,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                         );
                         if (saleCycleController
                                 .saleCycleList[0].salesCycleStatus
-                                ?.toLowerCase() ==
-                            "prospect") {
+                                ?.toLowerCase() !=
+                            "suspect" || saleCycleController
+                            .saleCycleList[0].isMarkRateContract==1) {
                           items.add(
                             PopupMenuItem(
                               child: Row(
@@ -9316,9 +9450,9 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                                               .productTotalQty ==
                                           null
                                       ? "0"
-                                      : saleCycleController
+                                      : (saleCycleController
                                           .competitorMappingSalesCycleProductList[0]
-                                          .productTotalQty
+                                          .productTotalQty?.toInt())
                                           .toString())
                                   : "",
                               style: GoogleFonts.poppins(
@@ -11395,7 +11529,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Expanded(
-                        child: DefaultButton(
+                        child: DefaultButtonRed(
                           text: "Cancel",
                           press: () {
                             Get.back();
@@ -11656,15 +11790,15 @@ class ViewSaleHeaderScreen extends StatelessWidget {
           children: [
             _buildRow("Item Description :", product.itemDescription),
             _buildRow("Category :", product.categoryName),
-            _buildRow("Qty :", product.qty.toString()),
-            _buildRow("Unit Price :", product.mrpPrice.toString()),
-            _buildRow("Total Price :", product.totalPrice.toString()),
+            _buildRow("Qty :", (product.qty?.toInt()).toString()),
+            _buildRow("Unit Price :", saleCycleController.numberFormatWithComma(product.mrpPrice).toString()),
+            _buildRow("Total Price :",saleCycleController.numberFormatWithComma(product.totalPrice).toString()),
             _buildRow("Created By :", product.createdFullName),
             _buildRow("Created On :",
                 StaticMethod.convertDateFormat1(product.createdOn ?? "")),
-            _buildRow("Methodex Price :", product.methodexPrice.toString()),
+            _buildRow("Methodex Price :", saleCycleController.numberFormatWithComma(product.methodexPrice).toString()),
             _buildRow("Competitor Name : ", product.competitorName),
-            _buildRow("Competitor Price : ", product.competitorPrice.toString()),
+            _buildRow("Competitor Price : ", saleCycleController.numberFormatWithComma(product.competitorPrice).toString()),
             _buildRow("Loss Reason :", product.lossReason),
             _buildRow("Loss On :", StaticMethod.convertDateFormat1(product.lossOn??"")),
             _buildRow( "Loss By :", product.lossBy),

@@ -134,7 +134,7 @@ class QuoteInformationScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() == 'draft' ? false : true,
+                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() != 'draft' && saleCycleController.isHeadofficePermission !="1",
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       return [
@@ -155,7 +155,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                         /*if (saleCycleController.isHeadofficePermission != 0 &&
                             saleCycleController.quoteHeaderdata[0].isSpr == 1)*/
-                        if(saleCycleController.isHeadofficePermission != 0 && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved")
+                        /*if(saleCycleController.isHeadofficePermission != 0 &&
+                            saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved")*/
                           PopupMenuItem(
                             child: Row(
                               children: [
@@ -1994,6 +1995,34 @@ class QuoteInformationScreen extends StatelessWidget {
                     value: saleCycleController.quoteHeaderdata[0].otherRemarks ?? '',
                     color: AllColors.textColor,
                   ),
+
+                  _buildLabelWithValue(
+                    label: "Quote Status Won",
+                    value: saleCycleController.quoteHeaderdata[0].quoteStatusWon ?? '',
+                    color: AllColors.textColor,
+                  ),
+
+                  _buildLabelWithValue(
+                    label: "Quote Won Name",
+                    value: saleCycleController.quoteHeaderdata[0].quoteWonName ?? '',
+                    color: AllColors.textColor,
+                  ),
+
+                  _buildLabelWithValue(
+                    label: "Loss Reason",
+                    value: saleCycleController.quoteHeaderdata[0].lossReason ?? '',
+                    color: AllColors.textColor,
+                  ),
+                  _buildLabelWithValue(
+                    label: "Won By",
+                    value: saleCycleController.quoteHeaderdata[0].wonBy ?? '',
+                    color: AllColors.textColor,
+                  ),
+                  _buildLabelWithValue(
+                    label: "Won On",
+                    value: saleCycleController.quoteHeaderdata[0].wonOn ?? '',
+                    color: AllColors.textColor,
+                  ),
                   SizedBox(height: 3,),
                 ],
               ),
@@ -3251,7 +3280,7 @@ class QuoteInformationScreen extends StatelessWidget {
         child: Column(
           children: [
             bindShippinbAddressData(context,"Address",saleCycleController.shippingController.value),
-            Container(
+          /*  Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -3269,7 +3298,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10))),
               ),
-            ),
+            ),*/
             const SizedBox(height: 15,),
             Container(
               decoration: BoxDecoration(

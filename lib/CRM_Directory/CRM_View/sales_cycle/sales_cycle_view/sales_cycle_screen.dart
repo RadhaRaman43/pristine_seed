@@ -9,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:navigation_drawer_flutter/constants/static_methods.dart';
 
+import '../../../../component/circular_loading.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
 import '../../../../reources/routes/routes_name.dart';
@@ -78,170 +79,176 @@ class SalesCycleScreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: RefreshIndicator(
-          onRefresh:salesCycleController.refreshList,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              children: [
-                Obx((){
-                  return Visibility(
-                    visible:salesCycleController.loading.value ,
-                    child: LinearProgressIndicator(
-                      backgroundColor: AllColors.primaryDark1,
-                      color: AllColors.textColor,
-                    ),
-                  );
-                }),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Obx(() {
-                            return ActionChip(
-                              elevation: 2,
-                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                              backgroundColor:
-                              salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
-                                  ? AllColors.primaryDark1
-                                  : AllColors.grayColor,
-                              shadowColor: Colors.black,
-                              shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor),
-                              ),
-                              label: Text(
-                                'Open',
-                                style: GoogleFonts.poppins(
-                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onPressed: () {
-                                salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
-                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
-                                salesCycleController.pageNumber=0;
-                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                              },
-                            );
-                          }),
-                          SizedBox(width: 8),
-                          Obx(() {
-                            return ActionChip(
-                              elevation: 2,
-                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
+        body: Obx((){
+           if(salesCycleController.loading.value)
+            return const FullScreenLoader();
+           return  RefreshIndicator(
+             onRefresh:salesCycleController.refreshList,
+             child: Container(
+               width: double.infinity,
+               height: double.infinity,
+               child: Column(
+                 children: [
+                   /*Obx((){
+                     return Visibility(
+                       visible:salesCycleController.loading.value ,
+                       child: LinearProgressIndicator(
+                         backgroundColor: AllColors.primaryDark1,
+                         color: AllColors.textColor,
+                       ),
+                     );
+                   }),*/
+                   SingleChildScrollView(
+                     scrollDirection: Axis.horizontal,
+                     child: ConstrainedBox(
+                       constraints: BoxConstraints(minWidth: MediaQuery.of(context).size.width),
+                       child: Container(
+                         padding: EdgeInsets.symmetric(horizontal: 8), // optional spacing
+                         child: Row(
+                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                           children: [
+                             Obx(() {
+                               return ActionChip(
+                                 elevation: 2,
+                                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                                 backgroundColor:
+                                 salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
+                                     ? AllColors.primaryDark1
+                                     : AllColors.grayColor,
+                                 shadowColor: Colors.black,
+                                 shape: StadiumBorder(
+                                   side: BorderSide(color: AllColors.grayColor),
+                                 ),
+                                 label: Text(
+                                   'Open',
+                                   style: GoogleFonts.poppins(
+                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Open"
+                                         ? AllColors.whiteColor
+                                         : AllColors.primaryDark1,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w500,
+                                   ),
+                                 ),
+                                 onPressed: () {
+                                   salesCycleController.filterQuoteAcceptedFlag.value = 'Open';
+                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Open";
+                                   salesCycleController.pageNumber=0;
+                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                                 },
+                               );
+                             }),
+                             SizedBox(width: 8),
+                             Obx(() {
+                               return ActionChip(
+                                 elevation: 2,
+                                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                                 backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
 
-                                  ? AllColors.primaryDark1
-                                  : AllColors.grayColor,
-                              shadowColor: Colors.black,
-                              shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor),
-                              ),
-                              label: Text(
-                                'Won',
-                                style: GoogleFonts.poppins(
-                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onPressed: () {
-                                salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
-                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Won";
-                                salesCycleController.pageNumber=0;
-                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                              },
-                            );
-                          }),
-                          SizedBox(width: 8), // optional spacing between chips
-                          Obx(() {
-                            return ActionChip(
-                              elevation: 2,
-                              padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
-                              backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
-                                  ? AllColors.primaryDark1
-                                  : AllColors.grayColor,
-                              shadowColor: Colors.black,
-                              shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor),
-                              ),
-                              label: Text(
-                                'Loss',
-                                style: GoogleFonts.poppins(
-                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onPressed: () {
-                                salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
-                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Loss";
-                                salesCycleController.pageNumber=0;
-                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                              },
-                            );
-                          }),
-                          SizedBox(width: 8),
-                          Obx(() {
-                            return ActionChip(
-                              elevation: 2,
-                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
-                              backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
-                                  ? AllColors.primaryDark1
-                                  : AllColors.grayColor,
-                              shadowColor: Colors.black,
-                              shape: StadiumBorder(
-                                side: BorderSide(color: AllColors.grayColor),
-                              ),
-                              label: Text(
-                                'All',
-                                style: GoogleFonts.poppins(
-                                  color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
-                                      ? AllColors.whiteColor
-                                      : AllColors.primaryDark1,
-                                  fontSize: AllFontSize.fourtine,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              onPressed: () {
-                                salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";
-                                salesCycleController.filterQuoteAcceptedFlag.value = '';
-                                salesCycleController.pageNumber=0;
-                                salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
-                              },
-                            );
-                          }),
-                          SizedBox(width: 8),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Container(
-                    child: Obx(() {
-                      return BindCustomerListView(context);
-                    }),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
+                                     ? AllColors.primaryDark1
+                                     : AllColors.grayColor,
+                                 shadowColor: Colors.black,
+                                 shape: StadiumBorder(
+                                   side: BorderSide(color: AllColors.grayColor),
+                                 ),
+                                 label: Text(
+                                   'Won',
+                                   style: GoogleFonts.poppins(
+                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Won"
+                                         ? AllColors.whiteColor
+                                         : AllColors.primaryDark1,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w500,
+                                   ),
+                                 ),
+                                 onPressed: () {
+                                   salesCycleController.filterQuoteAcceptedFlag.value = 'Won';
+                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value = "Won";
+                                   salesCycleController.pageNumber=0;
+                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                                 },
+                               );
+                             }),
+                             SizedBox(width: 8), // optional spacing between chips
+                             Obx(() {
+                               return ActionChip(
+                                 elevation: 2,
+                                 padding: EdgeInsets.symmetric(horizontal: 35, vertical: 2),
+                                 backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
+                                     ? AllColors.primaryDark1
+                                     : AllColors.grayColor,
+                                 shadowColor: Colors.black,
+                                 shape: StadiumBorder(
+                                   side: BorderSide(color: AllColors.grayColor),
+                                 ),
+                                 label: Text(
+                                   'Loss',
+                                   style: GoogleFonts.poppins(
+                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value=="Loss"
+                                         ? AllColors.whiteColor
+                                         : AllColors.primaryDark1,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w500,
+                                   ),
+                                 ),
+                                 onPressed: () {
+                                   salesCycleController.filterQuoteAcceptedFlag.value = 'Loss';
+                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="Loss";
+                                   salesCycleController.pageNumber=0;
+                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                                 },
+                               );
+                             }),
+                             SizedBox(width: 8),
+                             Obx(() {
+                               return ActionChip(
+                                 elevation: 2,
+                                 padding: EdgeInsets.symmetric(horizontal: 30, vertical: 2),
+                                 backgroundColor:salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
+                                     ? AllColors.primaryDark1
+                                     : AllColors.grayColor,
+                                 shadowColor: Colors.black,
+                                 shape: StadiumBorder(
+                                   side: BorderSide(color: AllColors.grayColor),
+                                 ),
+                                 label: Text(
+                                   'All',
+                                   style: GoogleFonts.poppins(
+                                     color: salesCycleController.quoteAcceptedForFilterOnSaleCycle.value==""
+                                         ? AllColors.whiteColor
+                                         : AllColors.primaryDark1,
+                                     fontSize: AllFontSize.fourtine,
+                                     fontWeight: FontWeight.w500,
+                                   ),
+                                 ),
+                                 onPressed: () {
+                                   salesCycleController.quoteAcceptedForFilterOnSaleCycle.value="";
+                                   salesCycleController.filterQuoteAcceptedFlag.value = '';
+                                   salesCycleController.pageNumber=0;
+                                   salesCycleController.getsalesCycleData(salesCycleController.pageNumber, "", "",'',);
+                                 },
+                               );
+                             }),
+                             SizedBox(width: 8),
+                           ],
+                         ),
+                       ),
+                     ),
+                   ),
+                   Flexible(
+                     fit: FlexFit.loose,
+                     child: Container(
+                       child: Obx(() {
+                         return BindCustomerListView(context);
+                       }),
+                     ),
+                   )
+                 ],
+               ),
+             ),
+           );
+        })
+
+
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -88,7 +89,7 @@ class PendingDraftQuoteVm extends GetxController{
   }
 
   Future<void>refreshList() async{
-    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
+    getPendingDraftQuoteList(pageNumberForQuote, "All");
   }
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
@@ -267,7 +268,6 @@ class PendingDraftQuoteVm extends GetxController{
         if(jsonResponse is List){
           List<Pending_Draft_Quote_Model> response = jsonResponse.map((e) => Pending_Draft_Quote_Model.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(pageNumberForQuote==0){
               PendingDraftQuoteList.clear();
             }
@@ -276,7 +276,6 @@ class PendingDraftQuoteVm extends GetxController{
             total_rows=int.parse(PendingDraftQuoteList[0].totalRows!);
           }else {
             PendingDraftQuoteList.value=[];
-            loading.value = false;
           }
         } else {
           loading.value = false;
@@ -642,6 +641,14 @@ class PendingDraftQuoteVm extends GetxController{
   void clearQuoteLineItemFilterData() {
     filterDataChecker.value='';
     sessionManagement.clearQuoteLineItemData();
+  }
+
+
+  String numberFormatWithComma(dynamic number) {
+    if (number == null || number.toString().isEmpty) return "0.00";
+
+    final formatter = NumberFormat('#,##,##0.00', 'en_IN');
+    return formatter.format(num.parse(number.toString()));
   }
 
 }

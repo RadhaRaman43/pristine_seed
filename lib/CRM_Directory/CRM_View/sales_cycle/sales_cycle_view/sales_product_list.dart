@@ -172,36 +172,31 @@ class SalesCycleProductList extends StatelessWidget{
         child: ListTile(
           contentPadding: EdgeInsets.only(left: 5, right: 5),
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    "Item Code: ",
+              Text(
+                "Item Code: ",
+                style: GoogleFonts.poppins(
+                  color: AllColors.primaryDark1,
+                  fontSize: AllFontSize.fourtine,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+              Flexible(
+               // width: size.width * .5,
+                child: Tooltip(
+                  message:
+                  "${saleCycleController.quoteLinedata[index].itemCode??""}",
+                  child: Text(
+                    "${saleCycleController.quoteLinedata[index].itemCode??""}",
+                    overflow: TextOverflow.ellipsis,
                     style: GoogleFonts.poppins(
-                      color: AllColors.primaryDark1,
+                      color: AllColors.textColor,
                       fontSize: AllFontSize.fourtine,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  Container(
-                    width: size.width * .5,
-                    child: Tooltip(
-                      message:
-                      "${saleCycleController.quoteLinedata[index].itemCode}",
-                      child: Text(
-                        "${saleCycleController.quoteLinedata[index].itemCode}",
-                        overflow: TextOverflow.ellipsis,
-                        style: GoogleFonts.poppins(
-                          color: AllColors.textColor,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),
@@ -254,8 +249,8 @@ class SalesCycleProductList extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Container(
-                                  width: size.width * .2,
+                                Flexible(
+                                  //width: size.width * .2,
                                   child: Tooltip(
                                     message: saleCycleController
                                         .quoteLinedata[index].itemDescription ??
@@ -345,14 +340,14 @@ class SalesCycleProductList extends StatelessWidget{
                                             .numberFormatWithComma(
                                             saleCycleController
                                                 .quoteLinedata[index]
-                                                .quoteLinePrice)}",
+                                                .quoteLinePrice).toString()}",
                                     child: Text(
                                       "₹ ${
                                           saleCycleController
                                               .numberFormatWithComma(
                                               saleCycleController
                                                   .quoteLinedata[index]
-                                                  .quoteLinePrice)}",
+                                                  .quoteLinePrice).toString()}",
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
                                         fontSize: AllFontSize.twelve,
@@ -386,7 +381,7 @@ class SalesCycleProductList extends StatelessWidget{
                                                 .numberFormatWithComma(
                                                 saleCycleController
                                                     .quoteLinedata[index]
-                                                    .minimalAcceptablePrice)}",
+                                                    .minimalAcceptablePrice).toString()}",
                                         child: Text(
                                           "₹ ${
                                               saleCycleController
@@ -417,15 +412,33 @@ class SalesCycleProductList extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Text(
-                                  saleCycleController.quoteLinedata[index].sgstAmt
-                                      .toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
+
+                                Flexible(
+                                  //width: size.width * .12,
+                                  child: Tooltip(
+                                    message:  "₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteLinedata[index]
+                                                .sgstAmt)}",
+                                    child: Text(
+                                      "₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .sgstAmt)}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ),
+
                               ],
                             ),
                             Obx((){
@@ -442,16 +455,23 @@ class SalesCycleProductList extends StatelessWidget{
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    Container(
-                                      width: size.width * .1,
+
+                                    Flexible(
+                                      //width: size.width * .12,
                                       child: Tooltip(
-                                        message: saleCycleController
-                                            .quoteLinedata[index].branchTransferPrice
-                                            .toString(),
+                                        message:  "₹ ${
+                                            saleCycleController
+                                                .numberFormatWithComma(
+                                                saleCycleController
+                                                    .quoteLinedata[index]
+                                                    .branchTransferPrice)}",
                                         child: Text(
-                                          saleCycleController
-                                              .quoteLinedata[index].branchTransferPrice
-                                              .toString(),
+                                          "₹ ${
+                                              saleCycleController
+                                                  .numberFormatWithComma(
+                                                  saleCycleController
+                                                      .quoteLinedata[index]
+                                                      .branchTransferPrice)}",
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
@@ -461,6 +481,7 @@ class SalesCycleProductList extends StatelessWidget{
                                         ),
                                       ),
                                     ),
+
                                   ],
                                 ),);
                             }),
@@ -479,17 +500,24 @@ class SalesCycleProductList extends StatelessWidget{
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    Container(
-                                      width: size.width * .12,
+
+
+                                    Flexible(
+                                      //width: size.width * .12,
                                       child: Tooltip(
-                                        message: saleCycleController
-                                            .quoteLinedata[index]
-                                            .minimalAcceptablePrice
-                                            .toString(),
+                                        message:  "₹ ${
+                                            saleCycleController
+                                                .numberFormatWithComma(
+                                                saleCycleController
+                                                    .quoteLinedata[index]
+                                                    .minimalAcceptablePrice)}",
                                         child: Text(
-                                          saleCycleController.quoteLinedata[index]
-                                              .minimalAcceptablePrice
-                                              .toString(),
+                                          "₹ ${
+                                              saleCycleController
+                                                  .numberFormatWithComma(
+                                                  saleCycleController
+                                                      .quoteLinedata[index]
+                                                      .minimalAcceptablePrice)}",
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
@@ -499,6 +527,7 @@ class SalesCycleProductList extends StatelessWidget{
                                         ),
                                       ),
                                     ),
+
                                   ],
                                 ),
                               );
@@ -545,16 +574,23 @@ class SalesCycleProductList extends StatelessWidget{
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                    Container(
-                                      width: size.width * .12,
+
+                                    Flexible(
+                                      //width: size.width * .12,
                                       child: Tooltip(
-                                        message: saleCycleController
-                                            .quoteLinedata[index].standardCost
-                                            .toString(),
+                                        message:  "₹ ${
+                                            saleCycleController
+                                                .numberFormatWithComma(
+                                                saleCycleController
+                                                    .quoteLinedata[index]
+                                                    .standardCost)}",
                                         child: Text(
-                                          saleCycleController
-                                              .quoteLinedata[index].standardCost
-                                              .toString(),
+                                          "₹ ${
+                                              saleCycleController
+                                                  .numberFormatWithComma(
+                                                  saleCycleController
+                                                      .quoteLinedata[index]
+                                                      .standardCost)}",
                                           overflow: TextOverflow.ellipsis,
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
@@ -564,6 +600,8 @@ class SalesCycleProductList extends StatelessWidget{
                                         ),
                                       ),
                                     ),
+
+
                                   ],
                                 ),
                               );
@@ -639,31 +677,40 @@ class SalesCycleProductList extends StatelessWidget{
                             Row(
                               children: [
                                 Text(
-                                  "Appr. Amt per Unit : ",
+                                  "Appr. Amt/Unit : ",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.twelve,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
+
                                 Flexible(
+                                  //width: size.width * .12,
                                   child: Tooltip(
-                                    message:  saleCycleController
-                                        .quoteLinedata[index].approvedAmountPerUnit
-                                        .toString(),
+                                    message:  "₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteLinedata[index]
+                                                .approvedAmountPerUnit)}",
                                     child: Text(
-                                      saleCycleController
-                                          .quoteLinedata[index].approvedAmountPerUnit
-                                          .toString(),
+                                      "₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .approvedAmountPerUnit)}",
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
                                         fontSize: AllFontSize.twelve,
                                         fontWeight: FontWeight.w500,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
+
                               ],
                             ),
                             Obx(() {
@@ -697,34 +744,41 @@ class SalesCycleProductList extends StatelessWidget{
                                     Row(
                                       children: [
                                         Text(
-                                          "Gm Absolute Amt:",
+                                          "Gm Abs Amt:",
                                           style: GoogleFonts.poppins(
                                             color: AllColors.primaryDark1,
                                             fontSize: AllFontSize.twelve,
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
+
                                         Flexible(
-                                          fit: FlexFit.loose,
+                                          //width: size.width * .12,
                                           child: Tooltip(
-                                            message: saleCycleController
-                                                .quoteLinedata[index]
-                                                .gmDiscountAmount
-                                                .toString(),
+                                            message:  "₹ ${
+                                                saleCycleController
+                                                    .numberFormatWithComma(
+                                                    saleCycleController
+                                                        .quoteLinedata[index]
+                                                        .gmDiscountAmount)}",
                                             child: Text(
-                                              saleCycleController
-                                                  .quoteLinedata[index]
-                                                  .gmDiscountAmount
-                                                  .toString(),
+                                              "₹ ${
+                                                  saleCycleController
+                                                      .numberFormatWithComma(
+                                                      saleCycleController
+                                                          .quoteLinedata[index]
+                                                          .gmDiscountAmount)}",
+                                              overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.poppins(
                                                 color: AllColors.textColor,
                                                 fontSize: AllFontSize.twelve,
                                                 fontWeight: FontWeight.w500,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ),
+
+
                                       ],
                                     ),
                                     Row(
@@ -737,27 +791,33 @@ class SalesCycleProductList extends StatelessWidget{
                                             fontWeight: FontWeight.w500,
                                           ),
                                         ),
+
                                         Flexible(
-                                          fit: FlexFit.loose,
+                                          //width: size.width * .12,
                                           child: Tooltip(
-                                            message: saleCycleController
-                                                .quoteLinedata[index]
-                                                .gmTotalDiscountAmount
-                                                .toString(),
+                                            message:  "₹ ${
+                                                saleCycleController
+                                                    .numberFormatWithComma(
+                                                    saleCycleController
+                                                        .quoteLinedata[index]
+                                                        .gmTotalDiscountAmount)}",
                                             child: Text(
-                                              saleCycleController
-                                                  .quoteLinedata[index]
-                                                  .gmTotalDiscountAmount
-                                                  .toString(),
+                                              "₹ ${
+                                                  saleCycleController
+                                                      .numberFormatWithComma(
+                                                      saleCycleController
+                                                          .quoteLinedata[index]
+                                                          .gmTotalDiscountAmount)}",
+                                              overflow: TextOverflow.ellipsis,
                                               style: GoogleFonts.poppins(
                                                 color: AllColors.textColor,
                                                 fontSize: AllFontSize.twelve,
                                                 fontWeight: FontWeight.w500,
                                               ),
-                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
                                         ),
+
                                       ],
                                     ),
                                   ],
@@ -790,41 +850,40 @@ class SalesCycleProductList extends StatelessWidget{
                             Row(
                               children: [
                                 Text(
-                                  "Approved Price :",
+                                  "Appr. Price :",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.primaryDark1,
                                     fontSize: AllFontSize.twelve,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
+
                                 Flexible(
-                                  fit: FlexFit.loose,
+                                  //width: size.width * .12,
                                   child: Tooltip(
-                                    message: saleCycleController
-                                        .quoteLinedata[index]
-                                        .approvedAmount ==
-                                        null
-                                        ? "0"
-                                        : saleCycleController
-                                        .quoteLinedata[index].approvedAmount
-                                        .toString(),
+                                    message:  "₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteLinedata[index]
+                                                .approvedAmount)}",
                                     child: Text(
-                                      saleCycleController.quoteLinedata[index]
-                                          .approvedAmount ==
-                                          null
-                                          ? ""
-                                          : saleCycleController
-                                          .quoteLinedata[index].approvedAmount
-                                          .toString(),
+                                      "₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .approvedAmount)}",
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
                                         fontSize: AllFontSize.twelve,
                                         fontWeight: FontWeight.w500,
                                       ),
-                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ),
+
                               ],
                             ),
 
@@ -859,15 +918,33 @@ class SalesCycleProductList extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Text(
-                                  saleCycleController.quoteLinedata[index].gstAmount
-                                      .toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
+
+                                Flexible(
+                                  //width: size.width * .12,
+                                  child: Tooltip(
+                                    message:  "₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteLinedata[index]
+                                                .gstAmount)}",
+                                    child: Text(
+                                      "₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .gstAmount)}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ),
+
                               ],
                             ),
                             Row(
@@ -880,16 +957,32 @@ class SalesCycleProductList extends StatelessWidget{
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Text(
-                                  saleCycleController
-                                      .quoteLinedata[index].totalPrice
-                                      .toString(),
-                                  style: GoogleFonts.poppins(
-                                    color: AllColors.textColor,
-                                    fontSize: AllFontSize.twelve,
-                                    fontWeight: FontWeight.w500,
+                                Flexible(
+                                  //width: size.width * .12,
+                                  child: Tooltip(
+                                    message:  "₹ ${
+                                        saleCycleController
+                                            .numberFormatWithComma(
+                                            saleCycleController
+                                                .quoteLinedata[index]
+                                                .totalPrice)}",
+                                    child: Text(
+                                      "₹ ${
+                                          saleCycleController
+                                              .numberFormatWithComma(
+                                              saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .totalPrice)}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: GoogleFonts.poppins(
+                                        color: AllColors.textColor,
+                                        fontSize: AllFontSize.twelve,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                 ),
+
                               ],
                             ),
 
