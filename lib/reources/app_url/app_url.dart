@@ -221,7 +221,7 @@ class AppUrl {
      static const String TaskDSARMstCreate = "$BASE_URL/api/CRM/Task/TaskDSARMstCreate";
      static const String ItemCategoryMstGetByTaskId = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByTaskId";
      static const String ItemCategoryMstGetByDocument = "$BASE_URL/api/CRM/Task/ItemCategoryMstGetByDocument";
-     static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/TaskSalesProductCategoryCreate";
+     static const String TaskSalesProductCategoryCreate = "$BASE_URL/api/CRM/Task/SalesProductCategoryCreate";
      static const String taskMstInfraUpdate = "$BASE_URL/api/CRM/Task/TaskMstInfraUpdate";
      static const String ItemCategoryMstGet = "$BASE_URL/api/ItemMaster/ItemCategoryMstGet";
      static const String TaskPersonMstGetByTaskId = "$BASE_URL/api/CRM/Task/TakPersonMstGetByTaskId";

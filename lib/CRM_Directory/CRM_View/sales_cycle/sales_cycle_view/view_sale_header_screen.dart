@@ -8114,10 +8114,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                   Obx(() {
                     return Visibility(
                       visible:
-                          saleCycleController.itemCategorySelectedlist.length >
-                                  0
-                              ? true
-                              : false,
+                          saleCycleController.itemCategorySelectedlist.length > 0 ? true : false,
                       child: Wrap(
                         spacing: 8.0,
                         children: saleCycleController.itemCategorySelectedlist
@@ -8125,8 +8122,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           return Chip(
                             label: Text(category.categoryName ?? ""),
                             onDeleted: () {
-                              saleCycleController.itemCategorySelectedlist
-                                  .remove(category);
+                              saleCycleController.itemCategorySelectedlist.remove(category);
                             },
                           );
                         }).toList(),
@@ -8146,9 +8142,7 @@ class ViewSaleHeaderScreen extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          saleCycleController.TaskSaleCatCreateApiHit(
-                              saleCycleController.saleCycleList[0].salesCycleId!,
-                              saleCycleController.saleCycleList[0].taskId!);
+                          saleCycleController.TaskSaleCatCreateApiHit(saleCycleController.saleCycleList[0].salesCycleId??"", saleCycleController.saleCycleList[0].taskId??"");
                           Navigator.pop(context);
                         },
                         child: Container(

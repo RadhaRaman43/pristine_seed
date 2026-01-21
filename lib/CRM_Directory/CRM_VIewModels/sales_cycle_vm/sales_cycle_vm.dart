@@ -1389,8 +1389,9 @@ class SalesCycleVm extends GetxController {
         .map((item) => TaskSalesProductCategoryLinesModel(
         productCategoryCode: item.categoryCode!)).toList();
     Map<String, dynamic> data = {
-      "created_by": email,
       "task_id": TaskID,
+      "sales_cycle_id": SalesId,
+      "created_by": email,
       "lines": lines.map((line) => line.toJson()).toList(),
     };
     print(data);
@@ -1402,11 +1403,9 @@ class SalesCycleVm extends GetxController {
 
       if (JsonResponse is List) {
         List<SalesCycleQuoteInformationModal> response =
-        JsonResponse.map((e) => SalesCycleQuoteInformationModal.fromJson(e))
-            .toList();
+        JsonResponse.map((e) => SalesCycleQuoteInformationModal.fromJson(e)).toList();
 
         if (response != null && response.isNotEmpty && response[0].condition?.toLowerCase() == "true") {
-          loading.value = false;
           Utils.sanckBarSuccess("Success!", response[0].message.toString());
           getItemCategoryMstApi(SalesId, TaskID,"");
           filterQuoteAcceptedFlag.value = "";
@@ -1415,19 +1414,18 @@ class SalesCycleVm extends GetxController {
           getsalesCycleData(pageNumber, SalesId, "ViewHeader", 'Sales');
           //Get.toNamed(RoutesName.viewSalesCycleHeaderScreen);
         } else {
-          loading.value = false;
-          Utils.sanckBarError(
-              "Error!", "Please select at least single product category");
+          Utils.sanckBarError("Error!", "Please select at least single product category");
           getItemCategoryMstApi(SalesId, TaskID,"");
         }
       } else {
-        loading.value = false;
-        Utils.sanckBarException(
-            "Api Error!", JsonResponse.toString());
+        Utils.sanckBarException("Api Error!", JsonResponse.toString());
       }
     } catch (error, stackTrace) {
       print(error);
       print(stackTrace);
+    }
+    finally{
+      loading.value = false;
     }
   }
 

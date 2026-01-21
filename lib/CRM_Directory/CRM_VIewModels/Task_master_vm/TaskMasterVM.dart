@@ -1453,8 +1453,7 @@ class Taskmastervm extends GetxController{
                             Utils.sanckBarSuccess("Message !", response[0].message.toString());
                             getTaskMaster(0,
                                 is_Active.toString(),
-                               Task_Master_list[0].taskId,
-                                '', 'GET FROM TASK ID', date_filter, is_done.value);
+                               Task_Master_list[0].taskId, '', 'GET FROM TASK ID', date_filter, is_done.value);
 
                             if(flag == 'FromDSARPage'){
                                 isInfraLeadValueSubmit.value = true;

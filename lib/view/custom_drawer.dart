@@ -589,7 +589,6 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDsarDashboardVm>();
-                                                PendingDsarDashboardVm callDashboardController=Get.put(PendingDsarDashboardVm());
                                                 Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
                                                 Navigator.of(context);
                                                 break;
