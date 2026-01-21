@@ -1404,7 +1404,6 @@ class Accountmastervm extends GetxController{
     String message = account_cat_type_controller.text;
 
     String accountCatTypeCode = message.substring(0,1);
-
     Map<String, dynamic> data = {
       "created_by": email,
       "flag": flag,
@@ -1476,6 +1475,7 @@ class Accountmastervm extends GetxController{
               TaskMaster_page_controller.clearCreateTaskController();
               TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
               TaskMaster_page_controller.getEmpMstEmailByApi();
+              //TaskMaster_page_controller.getAccountMaster(10);
               Get.toNamed(RoutesName.addNewTaskMaster_screen);
             }else if(FromPage == "Contact"){
               clearController();
@@ -2381,6 +2381,34 @@ class Accountmastervm extends GetxController{
       SalesRepresentativeEmail = response[position].salesRepresentative??"";
       Regional_service_head_Controller.value.text = response[position].regionalServiceHeadName??"";
       RegionalHeadEmail = response[position].regionalServiceHead??"";
+
+      //todo billing address
+      final parts = [
+        Address_controller.text,
+        Address2_Controller.text,
+        City_Controller.text,
+        District_Controller.text,
+       State_Controller.text,
+        PostCode_Controller.text,
+      ];
+      final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+      FullAddress_Controller.value.text = fullAddress;
+
+      //todo sgipping address
+      final parts1 = [
+        Shipping_Address_controller.value.text,
+        Shipping_Address2_Controller.value.text,
+        Shipping_City_Controller.value.text,
+        Shipping_District_Controller.value.text,
+        Shipping_State_Controller.value.text,
+        Shipping_PostCode_Controller.value.text,
+      ];
+
+      // Filter out empty strings and join with commas
+      final fullAddress1 = parts1.where((part) => part.trim().isNotEmpty).join(", ");
+
+      Shipping_FullAddress_Controller.value.text = fullAddress1;
+
 
     }catch(e){
 

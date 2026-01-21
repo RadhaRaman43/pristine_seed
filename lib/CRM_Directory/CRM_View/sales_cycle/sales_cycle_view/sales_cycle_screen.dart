@@ -563,10 +563,9 @@ class SalesCycleScreen extends StatelessWidget{
             fontWeight: FontWeight.w500,
           ),
         ),
-        InkWell(
-          onTap: onTap,
-          child: Container(
-            width: width,
+        Flexible(
+          child: InkWell(
+            onTap: onTap,
             child: Tooltip(
               message: value ?? "",
               child: Text(

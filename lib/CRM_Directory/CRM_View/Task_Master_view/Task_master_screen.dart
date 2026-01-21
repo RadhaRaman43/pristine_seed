@@ -130,17 +130,14 @@ class TaskMasterScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Obx(() {
+                          Obx(()  {
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.only(
                                   right: 15, top: 2, left: 15, bottom: 2),
-                              backgroundColor: TaskMaster_page_controller.is_done
-                                  .value == 0 &&
-                                  TaskMaster_page_controller.filter.value ==
-                                      'Running'
-                                  ? AllColors.primaryDark1
-                                  : AllColors.grayColor,
+                              backgroundColor: TaskMaster_page_controller.is_done.value == 0 &&
+                                  TaskMaster_page_controller.filter.value == 'Running'
+                                  ? AllColors.primaryDark1 : AllColors.grayColor,
                               shadowColor: Colors.black,
                               shape: StadiumBorder(
                                   side: BorderSide(
@@ -1412,31 +1409,27 @@ class TaskMasterScreen extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: 5,),
-                              bindTaskStatusDropDown(context),
-                              SizedBox(height: 10,),
                               bindFilterData(context,'Task Id',TaskMaster_page_controller.filterTask_Id_controller),
+                              SizedBox(height: 10,),
+                              bindTaskStatusDropDown(context),
                               SizedBox(height: 5,),
                               bindFilterData(context,'Customer Name',TaskMaster_page_controller.account_Name_controller),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Customer Code',TaskMaster_page_controller.account_code_controller),
                               SizedBox(height: 10,),
+                              bindTaskOwnerFilter(context),
+                              SizedBox(height: 10,),
+                              filterWithTaskDueDate(context),
+                              SizedBox(height: 10,),
                               bindTypeOfCallDropDown(context),
                               SizedBox(height: 10,),
                               bindMethodOfCallDropDown(context),
                               SizedBox(height: 10,),
-                              bindCompProfileTypeDropDown(context),
-                              SizedBox(height: 10,),
                               bindLastActivityStatus(context),
-                              SizedBox(height: 10,),
-                              bindSaleCycleActiveDropDown(context),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Sale Cycle Id',TaskMaster_page_controller.Sale_cycle_Id_controller),
                               SizedBox(height: 10,),
-                              bindProductCategoryDropDown(context),
-                              SizedBox(height: 10,),
-                              bindProductCategoryTypeDropDown(context),
-                              SizedBox(height: 10,),
-                              filterWithTaskDueDate(context),
+                              bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Pin Code',TaskMaster_page_controller.postalCodeController.value),
                               SizedBox(height: 10,),
@@ -1446,12 +1439,16 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(height: 10,),
                               bindRegionNameFilter(context),
                               SizedBox(height: 10,),
-                              bindTaskOwnerFilter(context),
+                              bindSaleCycleActiveDropDown(context),
                               SizedBox(height: 10,),
                               bindCreatedOn(context),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Approved By',TaskMaster_page_controller.approved_by_controller.value),
-
+                              SizedBox(height: 10,),
+                              bindProductCategoryDropDown(context),
+                              SizedBox(height: 10,),
+                              bindProductCategoryTypeDropDown(context),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -2272,13 +2269,10 @@ class TaskMasterScreen extends StatelessWidget {
 
   Widget bindSaleCycleActiveDropDown(context) {
     return DropdownMenu<String>(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width - 15,
+      width: MediaQuery.of(context).size.width - 15,
       controller: TaskMaster_page_controller.SaleCycleActive_Controller,
       label: Text(
-        "Sale Cycle Active",
+        "Is Sale Cycle Active",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.sisxteen,

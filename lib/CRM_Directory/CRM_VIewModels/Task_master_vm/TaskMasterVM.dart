@@ -195,7 +195,6 @@ class Taskmastervm extends GetxController{
     @override
     void onInit() async {
       super.onInit();
-
         email=await sessionManagement.getEmail() ?? '';
         isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
         isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
@@ -205,6 +204,7 @@ class Taskmastervm extends GetxController{
         print("List${userGeoHierarchyy.length}");
         TaskStatusListTypeList.value = ['All','Pending For Approval', 'Approved', 'Rejected'];
         SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
+        SaleCycleActive_Controller.text = SaleCycleActiveTypeList[0];
         approveRejectList.value = ['Approve', 'Reject'];
         Item_Category_Selected_list.value = [];
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
