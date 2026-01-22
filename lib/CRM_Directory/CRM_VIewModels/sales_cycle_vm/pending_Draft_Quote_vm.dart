@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
@@ -88,7 +89,7 @@ class PendingDraftQuoteVm extends GetxController{
   }
 
   Future<void>refreshList() async{
-    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
+    getPendingDraftQuoteList(pageNumberForQuote, "All");
   }
   getItemCategoryMstWithoutTaskIdApi() {
     this.loading.value = true;
@@ -749,6 +750,12 @@ class PendingDraftQuoteVm extends GetxController{
   void clearAllSPRMapFilterData() {
     filterDataChecker.value='';
     sessionManagement.clearAllSPRMapData();
+  }
+  String numberFormatWithComma(dynamic number) {
+    if (number == null || number.toString().isEmpty) return "0.00";
+
+    final formatter = NumberFormat('#,##,##0.00', 'en_IN');
+    return formatter.format(num.parse(number.toString()));
   }
 
 }
