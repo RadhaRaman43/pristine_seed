@@ -130,17 +130,14 @@ class TaskMasterScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Obx(() {
+                          Obx(()  {
                             return ActionChip(
                               elevation: 2,
                               padding: EdgeInsets.only(
                                   right: 15, top: 2, left: 15, bottom: 2),
-                              backgroundColor: TaskMaster_page_controller.is_done
-                                  .value == 0 &&
-                                  TaskMaster_page_controller.filter.value ==
-                                      'Running'
-                                  ? AllColors.primaryDark1
-                                  : AllColors.grayColor,
+                              backgroundColor: TaskMaster_page_controller.is_done.value == 0 &&
+                                  TaskMaster_page_controller.filter.value == 'Running'
+                                  ? AllColors.primaryDark1 : AllColors.grayColor,
                               shadowColor: Colors.black,
                               shape: StadiumBorder(
                                   side: BorderSide(
@@ -347,94 +344,50 @@ class TaskMasterScreen extends StatelessWidget {
                               Obx(() {
                                 return ActionChip(
                                   elevation: 2,
-                                  padding: EdgeInsets.only(
-                                      right: 15, top: 2, left: 15, bottom: 2),
-                                  backgroundColor: TaskMaster_page_controller
-                                      .date_filter.value ==
-                                      "Today"
-                                      ? AllColors.primaryDark1
-                                      : AllColors.grayColor,
+                                  padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
+                                  backgroundColor: TaskMaster_page_controller.date_filter.value == "Today" ? AllColors.primaryDark1 : AllColors.grayColor,
                                   shadowColor: Colors.black,
-                                  shape: StadiumBorder(
-                                      side: BorderSide(
-                                          color: AllColors.grayColor)),
-                                  //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                  //CircleAvatar
+                                  shape: StadiumBorder(side: BorderSide(color: AllColors.grayColor)),
                                   label: Text("Today Calls",
                                       style: GoogleFonts.poppins(
-                                        color: TaskMaster_page_controller
-                                            .date_filter.value ==
-                                            "Today"
-                                            ? AllColors.whiteColor
-                                            : AllColors.primaryDark1,
+                                        color: TaskMaster_page_controller.date_filter.value == "Today" ? AllColors.whiteColor : AllColors.primaryDark1,
                                         fontSize: AllFontSize.fourtine,
                                         fontWeight: FontWeight.w500,
                                       )),
                                   onPressed: () {
                                     TaskMaster_page_controller.pageNumber = 0;
-                                    TaskMaster_page_controller
-                                        .date_filter.value = "Today";
+                                    TaskMaster_page_controller.date_filter.value = "Today";
                                     TaskMaster_page_controller.is_done.value = 0;
-                                    TaskMaster_page_controller
-                                        .getTaskMaster(
-                                        TaskMaster_page_controller.pageNumber,
-                                        TaskMaster_page_controller.is_Active
-                                            .toString(),
-                                        '',
-                                        '',
+                                    TaskMaster_page_controller.getTaskMaster(TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '',
                                         TaskMaster_page_controller.Task_status_controller.value.text,
                                         TaskMaster_page_controller.date_filter,
                                         TaskMaster_page_controller.is_done.value);
                                   }, //Text
                                 );
                               }),
-                              SizedBox(
-                                width: size.width * 0.02,
-                              ),
-                              Obx(
-                                    () {
+                              SizedBox(width: size.width * 0.02,),
+                              Obx(() {
                                   return ActionChip(
                                     elevation: 2,
-                                    padding: EdgeInsets.only(
-                                        right: 15, top: 2, left: 15, bottom: 2),
-                                    backgroundColor: TaskMaster_page_controller
-                                        .date_filter.value ==
-                                        "Future"
-                                        ? AllColors.primaryDark1
-                                        : AllColors.grayColor,
+                                    padding: EdgeInsets.only(right: 15, top: 2, left: 15, bottom: 2),
+                                    backgroundColor: TaskMaster_page_controller.date_filter.value == "Future" ? AllColors.primaryDark1 : AllColors.grayColor,
                                     shadowColor: Colors.black,
-                                    shape: StadiumBorder(
-                                        side: BorderSide(
-                                            color: AllColors.grayColor)),
-                                    //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
-                                    //CircleAvatar
+                                    shape: StadiumBorder(side: BorderSide(color: AllColors.grayColor)),
                                     label: Text("Future Calls",
                                         style: GoogleFonts.poppins(
-                                          color: TaskMaster_page_controller
-                                              .date_filter.value ==
-                                              "Future"
-                                              ? AllColors.whiteColor
-                                              : AllColors.primaryDark1,
+                                          color: TaskMaster_page_controller.date_filter.value == "Future" ? AllColors.whiteColor : AllColors.primaryDark1,
                                           fontSize: AllFontSize.fourtine,
                                           fontWeight: FontWeight.w500,
                                         )),
                                     onPressed: () {
-                                      TaskMaster_page_controller
-                                          .date_filter.value = "Future";
+                                      TaskMaster_page_controller.date_filter.value = "Future";
                                       TaskMaster_page_controller.pageNumber = 0;
-                                      TaskMaster_page_controller.is_done.value =
-                                      0;
-                                      TaskMaster_page_controller
-                                          .getTaskMaster(
-                                          TaskMaster_page_controller.pageNumber,
-                                          TaskMaster_page_controller.is_Active
-                                              .toString(),
-                                          '',
-                                          '',
+                                      TaskMaster_page_controller.is_done.value = 0;
+                                      TaskMaster_page_controller.getTaskMaster(
+                                          TaskMaster_page_controller.pageNumber, TaskMaster_page_controller.is_Active.toString(), '', '',
                                           TaskMaster_page_controller.Task_status_controller.value.text,
                                           TaskMaster_page_controller.date_filter,
-                                          TaskMaster_page_controller.is_done
-                                              .value);
+                                          TaskMaster_page_controller.is_done.value);
                                     }, //Text
                                   );
                                 },
@@ -443,57 +396,38 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(
                                 width: size.width * 0.02,
                               ),
-                              Obx(
-                                    () {
+                              Obx(() {
                                   return ActionChip(
                                     elevation: 2,
                                     padding: EdgeInsets.all(2),
-                                    backgroundColor: TaskMaster_page_controller
-                                        .date_filter.value ==
-                                        "Breached"
-                                        ? AllColors.primaryDark1
-                                        : AllColors.grayColor,
+                                    backgroundColor: TaskMaster_page_controller.date_filter.value == "Breached" ? AllColors.primaryDark1 : AllColors.grayColor,
                                     shadowColor: Colors.black,
                                     shape: StadiumBorder(
-                                        side: BorderSide(
-                                            color: AllColors.grayColor)),
+                                        side: BorderSide(color: AllColors.grayColor)),
                                     //avatar: Icon(Icons.add, color: AllColors.customDarkerWhite),
                                     //CircleAvatar
                                     label: Text('Lapsed Calls',
                                         style: GoogleFonts.poppins(
-                                          color: TaskMaster_page_controller
-                                              .date_filter.value ==
-                                              "Breached"
-                                              ? AllColors.whiteColor
-                                              : AllColors.primaryDark1,
+                                          color: TaskMaster_page_controller.date_filter.value == "Breached" ? AllColors.whiteColor : AllColors.primaryDark1,
                                           fontSize: AllFontSize.fourtine,
                                           fontWeight: FontWeight.w500,
                                         )),
                                     onPressed: () {
-                                      TaskMaster_page_controller
-                                          .date_filter.value = "Breached";
+                                      TaskMaster_page_controller.date_filter.value = "Breached";
                                       TaskMaster_page_controller.pageNumber = 0;
-                                      TaskMaster_page_controller.is_done.value =
-                                      0;
-                                      TaskMaster_page_controller
-                                          .getTaskMaster(
+                                      TaskMaster_page_controller.is_done.value = 0;
+                                      TaskMaster_page_controller.getTaskMaster(
                                           TaskMaster_page_controller.pageNumber,
-                                          TaskMaster_page_controller.is_Active
-                                              .toString(),
-                                          '',
-                                          '',
+                                          TaskMaster_page_controller.is_Active.toString(), '', '',
                                           TaskMaster_page_controller.Task_status_controller.value.text,
                                           TaskMaster_page_controller.date_filter,
-                                          TaskMaster_page_controller.is_done
-                                              .value);
+                                          TaskMaster_page_controller.is_done.value);
                                     }, //Text
                                   );
                                 },
                               ),
 
-                              SizedBox(
-                                width: size.width * 0.02,
-                              ),
+                              SizedBox(width: size.width * 0.02,),
                               Obx(
                                     () {
                                   return ActionChip(
@@ -522,8 +456,7 @@ class TaskMasterScreen extends StatelessWidget {
                                           fontWeight: FontWeight.w500,
                                         )),
                                     onPressed: () {
-                                      TaskMaster_page_controller
-                                          .date_filter.value = "ALL";
+                                      TaskMaster_page_controller.date_filter.value = "ALL";
                                       TaskMaster_page_controller.pageNumber = 0;
                                       TaskMaster_page_controller.is_done.value =
                                       0;
@@ -676,7 +609,7 @@ class TaskMasterScreen extends StatelessWidget {
             children: [
               _buildLabelWithValue(label: "Task Status: ", value: TaskMaster_page_controller.Task_Master_list[position].taskStatus??"",),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Customer Name : ",
@@ -727,7 +660,7 @@ class TaskMasterScreen extends StatelessWidget {
               _buildLabelWithValue(label: "Type Of Mode of Call: ", value: TaskMaster_page_controller.Task_Master_list[position].methodOfCall??"",),
               _buildLabelWithValue(label: "Last Activity Status: ", value: TaskMaster_page_controller.Task_Master_list[position].lastActivityStatus??"",),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Sale Cycle ID : ",
@@ -909,6 +842,7 @@ class TaskMasterScreen extends StatelessWidget {
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,
@@ -1475,31 +1409,27 @@ class TaskMasterScreen extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               SizedBox(height: 5,),
-                              bindTaskStatusDropDown(context),
-                              SizedBox(height: 10,),
                               bindFilterData(context,'Task Id',TaskMaster_page_controller.filterTask_Id_controller),
+                              SizedBox(height: 10,),
+                              bindTaskStatusDropDown(context),
                               SizedBox(height: 5,),
                               bindFilterData(context,'Customer Name',TaskMaster_page_controller.account_Name_controller),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Customer Code',TaskMaster_page_controller.account_code_controller),
                               SizedBox(height: 10,),
+                              bindTaskOwnerFilter(context),
+                              SizedBox(height: 10,),
+                              filterWithTaskDueDate(context),
+                              SizedBox(height: 10,),
                               bindTypeOfCallDropDown(context),
                               SizedBox(height: 10,),
                               bindMethodOfCallDropDown(context),
                               SizedBox(height: 10,),
-                              bindCompProfileTypeDropDown(context),
-                              SizedBox(height: 10,),
                               bindLastActivityStatus(context),
-                              SizedBox(height: 10,),
-                              bindSaleCycleActiveDropDown(context),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Sale Cycle Id',TaskMaster_page_controller.Sale_cycle_Id_controller),
                               SizedBox(height: 10,),
-                              bindProductCategoryDropDown(context),
-                              SizedBox(height: 10,),
-                              bindProductCategoryTypeDropDown(context),
-                              SizedBox(height: 10,),
-                              filterWithTaskDueDate(context),
+                              bindCompProfileTypeDropDown(context),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Pin Code',TaskMaster_page_controller.postalCodeController.value),
                               SizedBox(height: 10,),
@@ -1509,12 +1439,16 @@ class TaskMasterScreen extends StatelessWidget {
                               SizedBox(height: 10,),
                               bindRegionNameFilter(context),
                               SizedBox(height: 10,),
-                              bindTaskOwnerFilter(context),
+                              bindSaleCycleActiveDropDown(context),
                               SizedBox(height: 10,),
                               bindCreatedOn(context),
                               SizedBox(height: 10,),
                               bindFilterData(context,'Approved By',TaskMaster_page_controller.approved_by_controller.value),
-
+                              SizedBox(height: 10,),
+                              bindProductCategoryDropDown(context),
+                              SizedBox(height: 10,),
+                              bindProductCategoryTypeDropDown(context),
+                              SizedBox(height: 10,),
                             ],
                           ),
                         ),
@@ -2335,13 +2269,10 @@ class TaskMasterScreen extends StatelessWidget {
 
   Widget bindSaleCycleActiveDropDown(context) {
     return DropdownMenu<String>(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width - 15,
+      width: MediaQuery.of(context).size.width - 15,
       controller: TaskMaster_page_controller.SaleCycleActive_Controller,
       label: Text(
-        "Sale Cycle Active",
+        "Is Sale Cycle Active",
         style: GoogleFonts.poppins(
             color: AllColors.primaryDark1,
             fontSize: AllFontSize.sisxteen,

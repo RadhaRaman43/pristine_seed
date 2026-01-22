@@ -197,6 +197,9 @@ class PendingDraftQuoteVm extends GetxController{
             else if(filterRouting =='All Quote Line Items'){
               getQuoteLineItemFilterData();
             }
+            else if(filterRouting =='All SPR Mapping Line Items'){
+              getAllSPRMapFilterData();
+            }
 
 
             //getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
@@ -268,6 +271,7 @@ class PendingDraftQuoteVm extends GetxController{
         if(jsonResponse is List){
           List<Pending_Draft_Quote_Model> response = jsonResponse.map((e) => Pending_Draft_Quote_Model.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
+            loading.value = false;
             if(pageNumberForQuote==0){
               PendingDraftQuoteList.clear();
             }
@@ -276,6 +280,7 @@ class PendingDraftQuoteVm extends GetxController{
             total_rows=int.parse(PendingDraftQuoteList[0].totalRows!);
           }else {
             PendingDraftQuoteList.value=[];
+            loading.value = false;
           }
         } else {
           loading.value = false;
@@ -585,6 +590,16 @@ class PendingDraftQuoteVm extends GetxController{
       'gm_Approval_controller': gm_Approval_controller.value.text,
       'region_name': RegionName_controller.value.text,
       'cluster_name': clusterName_controller.value.text,
+      'itemCodeController': itemCodeController.value.text,
+      'itemNameController': itemNameController.value.text,
+      'quantityFilterController': quantityFilterController.value.text,
+      'GmDiscountPerController': GmDiscountPerController.value.text,
+      'BmDiscountPerController': BmDiscountPerController.value.text,
+      'SalesCreditController': SalesCreditController.value.text,
+      'LSPFilterController': LSPFilterController.value.text,
+      'BTPFilterController': BTPFilterController.value.text,
+      'MAPFilterController': MAPFilterController.value.text,
+      'StandardCostController': MAPFilterController.value.text,
       'createdByCnontroller': createdByCnontroller.value.text,
       'createdOn_Controller': createdOnCnontroller.value.text,
       'createdOnStartToEnd': createdOnStartToEnd.value,
@@ -614,6 +629,16 @@ class PendingDraftQuoteVm extends GetxController{
       cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
       category_Approval_controller.value.text=getFilterData["category_Approval_controller"]??"";
       gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
+      itemCodeController.value.text=getFilterData["itemCodeController"]??"";
+      itemNameController.value.text=getFilterData["itemNameController"]??"";
+      quantityFilterController.value.text=getFilterData["quantityFilterController"]??"";
+      BmDiscountPerController.value.text=getFilterData["BmDiscountPerController"]??"";
+      GmDiscountPerController.value.text=getFilterData["GmDiscountPerController"]??"";
+      SalesCreditController.value.text=getFilterData["SalesCreditController"]??"";
+      LSPFilterController.value.text=getFilterData["LSPFilterController"]??"";
+      BTPFilterController.value.text=getFilterData["BTPFilterController"]??"";
+      MAPFilterController.value.text=getFilterData["MAPFilterController"]??"";
+      StandardCostController.value.text=getFilterData["StandardCostController"]??"";
       createdByCnontroller.value.text=getFilterData["createdByCnontroller"]??"";
       createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
       createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
@@ -643,7 +668,89 @@ class PendingDraftQuoteVm extends GetxController{
     sessionManagement.clearQuoteLineItemData();
   }
 
+  //todo All SPR Mapping
 
+  void SaveAllSPRMapFilterData() async{
+    await sessionManagement.saveQAllSPRMapData({
+      'quantityFilterController':quantityFilterController.value.text,
+      'LSPFilterController':LSPFilterController.value.text,
+      'MAPFilterController':MAPFilterController.value.text,
+      'StandardCostController':StandardCostController.value.text,
+      'BTPFilterController':BTPFilterController.value.text,
+      'BmDiscountPerController':BmDiscountPerController.value.text,
+      'GmDiscountPerController':GmDiscountPerController.value.text,
+      'filterQuoteSaleCycleController': filterQuoteSaleCycleController.value.text,
+      'quoteStatusController': quoteStatusController.value.text,
+      'filterQuoteValidityController': filterQuoteValidityController.value.text,
+      'quoteValidityStartToEnd': quoteValidityStartToEnd.value,
+      'filterExpectedClosuredateController': filterExpectedClosuredateController.value.text,
+      'extClosureStartToEnd': extClosureStartToEnd.value,
+      'customer_name': accountNameController.value.text,
+      'customer_code': accountCodeController.value.text,
+      'createdOn_Controller': createdOnCnontroller.value.text,
+      'createdOnStartToEnd': createdOnStartToEnd.value,
+      'rh_Approval_controller': rh_Approval_controller.value.text,
+      'cbh_Approval_controller': cbh_Approval_controller.value.text,
+      'gm_Approval_controller': gm_Approval_controller.value.text,
+      'region_name': RegionName_controller.value.text,
+      'cluster_name': clusterName_controller.value.text,
+      'product_category': productCategoryController.value.text,
+      'product_category_type': product_category_type_Controller.value.text,
+    });
+    filterDataChecker.value='';
+    getPendingDraftQuoteList(pageNumberForQuote, "ALLQuoteLineItems");
+
+  }
+
+  void getAllSPRMapFilterData() async{
+    Map getFilterData=await sessionManagement.getAllSPRMapData();
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      quantityFilterController.value.text=getFilterData["quantityFilterController"]??"";
+      LSPFilterController.value.text=getFilterData["LSPFilterController"]??"";
+      MAPFilterController.value.text=getFilterData["MAPFilterController"]??"";
+      StandardCostController.value.text=getFilterData["StandardCostController"]??"";
+      BTPFilterController.value.text=getFilterData["BTPFilterController"]??"";
+      BmDiscountPerController.value.text=getFilterData["BmDiscountPerController"]??"";
+      GmDiscountPerController.value.text=getFilterData["GmDiscountPerController"]??"";
+      filterQuoteSaleCycleController.value.text=getFilterData["filterQuoteSaleCycleController"]??"";
+      quoteStatusController.value.text=getFilterData["quoteStatusController"]??"";
+      filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
+      quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
+      filterExpectedClosuredateController.value.text=getFilterData["filterExpectedClosuredateController"]??"";
+      accountNameController.value.text=getFilterData["customer_name"]??"";
+      accountCodeController.value.text=getFilterData["customer_code"]??"";
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
+      rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"]??"";
+      cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
+      gm_Approval_controller.value.text=getFilterData["gm_Approval_controller"]??"";
+      productCategoryController.value.text=getFilterData["product_category"]??"";
+      product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+    pageNumberForQuote=0;
+    getPendingDraftQuoteList(pageNumberForQuote, "ALLQuoteLineItems");
+
+  }
+
+  void clearAllSPRMapFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearAllSPRMapData();
+  }
   String numberFormatWithComma(dynamic number) {
     if (number == null || number.toString().isEmpty) return "0.00";
 

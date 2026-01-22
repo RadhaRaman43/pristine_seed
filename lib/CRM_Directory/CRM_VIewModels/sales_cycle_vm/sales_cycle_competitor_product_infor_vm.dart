@@ -138,7 +138,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
               clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -167,7 +167,7 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -184,9 +184,10 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
-            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getGalesCycleCompetitorProductInformationGet(pageNumber);
+            getFilterData();
+            //getGalesCycleCompetitorProductInformationGet(pageNumber);
 
           }else {
             loading.value = false;
@@ -254,12 +255,15 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
               salesCycleCompetitorProductInformationList.addAll(response);
               total_rows = int.parse(salesCycleCompetitorProductInformationList[0].totalRows!);
             } else {
+              salesCycleCompetitorProductInformationList.value=[];
               Utils.sanckBarError("False Message", response[0].message.toString());
             }
           } else {
+            salesCycleCompetitorProductInformationList.value=[];
             loading.value = false;
           }
         } catch (e) {
+          salesCycleCompetitorProductInformationList.value=[];
           print(e) ;
         } finally {
           loading.value = false;
@@ -289,6 +293,84 @@ class SalesCycleCompetitorProductInforVm extends GetxController{
     createdOnStartToEnd.value="";
     clusterName_controller.value.clear();
     RegionName_controller.value.clear();
+  }
+
+  RxString filterDataChecker = ''.obs;
+  void SaveFilterData() async{
+    try{
+      await sessionManagement.saveSaleCycleCompetitorData({
+        'filterQuoteIdController': filterQuoteIdController.value.text,
+        'customer_name': accountNameController.value.text,
+        'customer_code': accountCodeController.value.text,
+        'filterSalesCycleIdController': filterSalesCycleIdController.value.text,
+        'filterSalesCycleStatusController': filterSalesCycleStatusController.value.text,
+        'filterSalesCycleApprovalStatusController': filterSalesCycleApprovalStatusController.value.text,
+        'quote_accepted': filterQuoteAcceptedController.value.text,
+        'expected_closure_date': filterExpectedClosuredateController.value.text,
+        'extClosureStartToEnd': extClosureStartToEnd.value,
+        'category_Approval_controller': category_Approval_controller.value.text,
+        'filterItemCodeController': filterItemCodeController.value.text,
+        'region_name': RegionName_controller.value.text,
+        'cluster_name': clusterName_controller.value.text,
+        'created_by': createdByController.value.text,
+        'createdOn_Controller': createdOnCnontroller.value.text,
+        'product_category': productCategoryController.value.text,
+        'product_category_type': product_category_type_Controller.value.text,
+      });
+    }
+    catch(e){
+      print("Exception ${e.toString()}");
+    }
+
+    filterDataChecker.value='';
+    getGalesCycleCompetitorProductInformationGet( pageNumber);
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getSaleCycleCompetitorData();
+
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+      filterQuoteIdController.value.text=getFilterData["filterQuoteIdController"]??"";
+      accountNameController.value.text=getFilterData["customer_name"]??"";
+      accountCodeController.value.text=getFilterData["customer_code"]??"";
+      filterSalesCycleIdController.value.text=getFilterData["filterSalesCycleIdController"]??"";
+      filterSalesCycleStatusController.value.text=getFilterData["filterSalesCycleStatusController"]??"";
+      filterSalesCycleApprovalStatusController.value.text=getFilterData["filterSalesCycleApprovalStatusController"]??"";
+      filterQuoteAcceptedController.value.text=getFilterData["quote_accepted"]??"";
+      filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"]??"";
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
+      category_Approval_controller.value.text=getFilterData["category_Approval_controller"]??"";
+      filterItemCodeController.value.text=getFilterData["filterItemCodeController"]??"";
+      createdByController.value.text=getFilterData["created_by"]??"";
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
+      productCategoryController.value.text=getFilterData["product_category"]??"";
+      product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+
+    pageNumber=0;
+    getGalesCycleCompetitorProductInformationGet( pageNumber);
+
+  }
+
+  void clearFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearSaleCycleCompetitorData();
   }
 
 }

@@ -21,10 +21,8 @@ import '../../../CRM_VIewModels/sales_cycle_vm/pending_Draft_Quote_vm.dart';
 import '../../../CRM_VIewModels/sales_cycle_vm/sales_cycle_vm.dart';
 
 
-
 class AllQuoteLineItemScreen extends StatelessWidget{
   AllQuoteLineItemScreen({super.key});
-
   PendingDraftQuoteVm pendingDraftQuoteController=Get.put(PendingDraftQuoteVm());
   SalesCycleVm saleCycleController=Get.put(SalesCycleVm());
   Size size=Get.size;
@@ -232,16 +230,26 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Quote Status: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteStatus ?? "",color:getStatusColor(saleCycleStatus)),
               _buildLabelWithValue(label: "Quote Validity: ", value:  quoteValidityDate.toString(),color:AllColors.textColor),
               _buildLabelWithValue(label: "Expected Closure Date: ", value: expectedClosuredateDate.toString(),color:AllColors.textColor),
-              _buildLabelWithValue(label: "Quote Commit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteCommit.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Quote Commit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].quoteCommit.toString()=="0"?"No":"Yes" ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Rejected Reason: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rejectReason ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "RH Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].rhApproval ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "CBH Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].cbhApproval ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "GM  Approval: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmApproval ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Cluster Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].clustureHeadValue ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Region Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].zoneHeadValue ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Item Code: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].itemCode ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Item Name: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].itemName ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Qty: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].qty.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "LSP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].listSellingPrice.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "MAP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].minimalAcceptablePrice.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "BTP: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].branchTransferPrice.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "BM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].bmDiscountPer.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "GM %: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].gmDiscountPer.toString(),color:AllColors.textColor),
+              _buildLabelWithValue(label: "Standard Cost: ", value:  "₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].standardCost.toString() ?? ""}",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Sales Credit: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].salesCredit.toString()??"",color:AllColors.textColor),
               _buildLabelWithValue(label: "Is Active: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].isActive.toString()=="1"? "Yes":"No",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Installation Charges : ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].installationCharges.toString() ?? "",color:AllColors.textColor),
-              _buildLabelWithValue(label: "Other Charges : ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].otherCharges.toString() ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Installation Charges : ", value:"₹ ${ pendingDraftQuoteController.PendingDraftQuoteList[position].installationCharges.toString() ?? ""}" ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Other Charges : ", value:"₹ ${ pendingDraftQuoteController.PendingDraftQuoteList[position].otherCharges.toString() ?? ""}" ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Warranty Period : ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].warrantyPeriod.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Delivery In Weeks : ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].deliveryInWeeks.toString() ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Advance Payment Per : ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].advancePaymentPer.toString() ?? "",color:AllColors.textColor),
@@ -252,8 +260,10 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               _buildLabelWithValue(label: "Quote Total Amt: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].quoteTotalAmount.toString() ?? ""}"  ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Gross Amt: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGrossAmount.toString() ?? ""}"  ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Quote Gst Amt: ", value:"₹ ${pendingDraftQuoteController.PendingDraftQuoteList[position].quoteGstAmount.toString() ?? ""}"  ,color:AllColors.textColor),
-              _buildLabelWithValue(label: "Created By: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdBy ?? "",color:AllColors.textColor),
+              _buildLabelWithValue(label: "Created By: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].createdFullName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Created on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].createdOn ?? "") ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Updated By: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].approvedFullName ?? "") ,color:AllColors.textColor),
+              _buildLabelWithValue(label: "Updated on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].updatedOn ?? "") ,color:AllColors.textColor),
               _buildLabelWithValue(label: "Reporting Manager: ", value:  pendingDraftQuoteController.PendingDraftQuoteList[position].approvedFullName ?? "",color:AllColors.textColor),
               _buildLabelWithValue(label: "Approved on: ", value: StaticMethod.onlyDate(pendingDraftQuoteController.PendingDraftQuoteList[position].approvedOn ?? "") ,color:AllColors.textColor),
 
@@ -428,9 +438,9 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                               SizedBox(height: 10,),
                               bindData(context,'Gm Approval', pendingDraftQuoteController.gm_Approval_controller.value),
                               SizedBox(height: 10,),
-                              bindRegionNameFilter(context),
-                              SizedBox(height: 10,),
                               bindClusterNameFilter(context),
+                              SizedBox(height: 10,),
+                              bindRegionNameFilter(context),
                               SizedBox(height: 10,),
                               bindData(context,'Item Code', pendingDraftQuoteController.itemCodeController.value),
                               SizedBox(height: 10,),
@@ -468,6 +478,47 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                     ),
                   ),
                   Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                    child: Row(
+                      children: [
+                        Expanded(child: _buildButton(
+                          text: 'Clear',
+                          borderColor: AllColors.redColor,
+                          textColor: AllColors.redColor,
+                          onTap: () {
+                            pendingDraftQuoteController.clearQuoteLineItemFilterData();
+                            pendingDraftQuoteController.clearAllFieldOfQuoteFilter();
+                            pendingDraftQuoteController.pageNumberForQuote = 0;
+                            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLQuoteLineItems");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Apply',
+                          borderColor: AllColors.primaryDark,
+                          textColor: AllColors.primaryDark1,
+                          onTap: () {
+                            pendingDraftQuoteController.pageNumberForQuote = 0;
+                            pendingDraftQuoteController.getPendingDraftQuoteList(pendingDraftQuoteController.pageNumberForQuote, "ALLQuoteLineItems");
+                            Get.back();
+                          },
+                        )),
+                        const SizedBox(width: 6),
+                        Expanded(child: _buildButton(
+                          text: 'Save Filters',
+                          borderColor: AllColors.green,
+                          textColor: AllColors.green,
+                          onTap: () {
+                            Get.back();
+                            pendingDraftQuoteController.SaveQuoteLineItemFilterData();
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+
+                 /* Container(
                     padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -525,7 +576,7 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                         ),
                       ],
                     ),
-                  ),
+                  ),*/
                 ],
               ),
             );
@@ -533,6 +584,41 @@ class AllQuoteLineItemScreen extends StatelessWidget{
 
         );
       },
+    );
+  }
+
+  Widget _buildButton({
+    required String text,
+    required Color borderColor,
+    required Color textColor,
+    required VoidCallback onTap,
+  }) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AllColors.whiteColor,
+        foregroundColor: AllColors.lightgreyColor,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+          side: BorderSide(color: borderColor, width: 1),
+        ),
+      ),
+      onPressed: onTap,
+      child: Center(
+        child: FittedBox( // 🔥 PREVENTS OVERFLOW
+          fit: BoxFit.scaleDown,
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: GoogleFonts.poppins(
+              color: textColor,
+              fontSize: AllFontSize.sisxteen,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ),
     );
   }
 
@@ -569,6 +655,15 @@ class AllQuoteLineItemScreen extends StatelessWidget{
 
   bindProductCategory(BuildContext context) {
     return Obx(() {
+      if (pendingDraftQuoteController.productCategoryController.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.productCategoryController.value.text.split('|');
+        pendingDraftQuoteController.Selected_Item_Category_master_list_without_task.value =
+            List.generate(nameList.length, (index) {
+              return ItemCategoryMstModel(
+                categoryName: nameList[index].trim(),
+              );
+            });
+      }
       return DropdownSearch<ItemCategoryMstModel>.multiSelection(
         items: pendingDraftQuoteController.Item_Category_master_list_without_task,
         itemAsString: (ItemCategoryMstModel u) => u.categoryName ?? "",
@@ -865,253 +960,30 @@ class AllQuoteLineItemScreen extends StatelessWidget{
     );
   }
 
-  Widget bindRegionNameFilter(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final availableItems = pendingDraftQuoteController.regionwithclusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          pendingDraftQuoteController.SelectedRegion_list.isEmpty) {
-        pendingDraftQuoteController.SelectedRegion_list.assignAll(availableItems);
-        pendingDraftQuoteController.RegionName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-
-      }
-    });
-    return Obx(() {
-      final selected = pendingDraftQuoteController.SelectedRegion_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
-
-      return GestureDetector(
-        onTap: () async {
-          await showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-            ),
-            builder: (context) {
-              final searchController = TextEditingController();
-              final tempSelected = <RegionWithClusterFilterModal>[];
-              tempSelected.addAll(pendingDraftQuoteController.SelectedRegion_list);
-
-              final allItems =
-                  pendingDraftQuoteController.regionwithclusterGetByEmailList;
-
-              return StatefulBuilder(builder: (context, setState) {
-                final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
-
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
-
-                return Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 8),
-                        Container(
-                          width: 50,
-                          height: 4,
-                          decoration: BoxDecoration(
-                              color: Colors.grey[400],
-                              borderRadius: BorderRadius.circular(2)),
-                        ),
-                        const SizedBox(height: 12),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  'Select Regions',
-                                  style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // Search Field
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: TextField(
-                            controller: searchController,
-                            decoration: InputDecoration(
-                              hintText: 'Search...',
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(8)),
-                              isDense: true,
-                              suffixIcon: searchController.text.isNotEmpty
-                                  ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  searchController.clear();
-                                  setState(() {});
-                                },
-                              )
-                                  : null,
-                            ),
-                            onChanged: (v) => setState(() {}),
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        // Select All
-                        Padding(
-                          padding:
-                          const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CheckboxListTile(
-                            title: const Text('Select All'),
-                            value: allSelected,
-                            onChanged: (val) {
-                              setState(() {
-                                if (val == true) {
-                                  tempSelected.clear();
-                                  tempSelected.addAll(allItems);
-                                } else {
-                                  tempSelected.clear();
-                                }
-                              });
-                            },
-                          ),
-                        ),
-
-                        const Divider(height: 1),
-
-                        // List
-                        Expanded(
-                          child: filtered.isEmpty
-                              ? const Center(child: Text('No regions found'))
-                              : ListView.builder(
-                            padding:
-                            const EdgeInsets.symmetric(vertical: 8),
-                            itemCount: filtered.length,
-                            itemBuilder: (context, idx) {
-                              final item = filtered[idx];
-                              final isSel = tempSelected.any((s) =>
-                              (s.geoValue ?? "") ==
-                                  (item.geoValue ?? ""));
-                              return CheckboxListTile(
-                                title: Text(item.geoValue ?? ""),
-                                value: isSel,
-                                onChanged: (v) {
-                                  setState(() {
-                                    if (v == true) {
-                                      if (!isSel) tempSelected.add(item);
-                                    } else {
-                                      tempSelected.removeWhere((s) =>
-                                      (s.geoValue ?? "") ==
-                                          (item.geoValue ?? ""));
-                                    }
-                                  });
-                                },
-                              );
-                            },
-                          ),
-                        ),
-
-                        // Done button
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0, vertical: 12),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {
-                                    pendingDraftQuoteController.SelectedRegion_list
-                                        .assignAll(tempSelected);
-                                    pendingDraftQuoteController.RegionName_controller
-                                        .value.text =
-                                        tempSelected
-                                            .map((e) => e.geoValue)
-                                            .join(', ');
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: const Text('Done'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              });
-            },
-          );
-        },
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: "Region Name", // 👈 Label like before
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            contentPadding:
-            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: selectedText == null
-                    ? Text(
-                  "Select Region",
-                  style: GoogleFonts.poppins(
-                    color: Colors.grey.shade600,
-                    fontSize: AllFontSize.sisxteen,
-                  ),
-                )
-                    : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Text(
-                    selectedText,
-                    style: const TextStyle(color: Colors.black),
-                  ),
-                ),
-              ),
-              const Icon(Icons.arrow_drop_down),
-            ],
-          ),
-        ),
-      );
-    });
-  }
   Widget bindClusterNameFilter(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final availableItems = pendingDraftQuoteController.clusterGetByEmailList;
-      if (availableItems.isNotEmpty &&
-          pendingDraftQuoteController.SelectedCluster_list.isEmpty) {
-        pendingDraftQuoteController.SelectedCluster_list.assignAll(availableItems);
-        pendingDraftQuoteController.clusterName_controller.value.text =
-            availableItems.map((e) => e.geoValue).join(', ');
-        pendingDraftQuoteController.getRegionsWithClusterFilterGetByEmail();
+      if (pendingDraftQuoteController.clusterName_controller.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        List<String> nameList = pendingDraftQuoteController.clusterName_controller.value.text.split('|');
+        pendingDraftQuoteController.SelectedCluster_list.value =[];
+        pendingDraftQuoteController.SelectedCluster_list.value =
+            List.generate(nameList.length, (index) {
+              return ClusterModal(geoValue: nameList[index].trim(),);
+            });
       }
+      else{
+        if (availableItems.isNotEmpty && pendingDraftQuoteController.SelectedCluster_list.isEmpty) {
+          pendingDraftQuoteController.SelectedCluster_list.assignAll(availableItems);
+          pendingDraftQuoteController.clusterName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          pendingDraftQuoteController.getRegionsWithClusterFilterGetByEmail();
+        }
+      }
+
     });
 
     return Obx(() {
       final selected = pendingDraftQuoteController.SelectedCluster_list;
-      final selectedText = selected.isEmpty
-          ? null
-          : selected.map((e) => e.geoValue).join(', ');
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
 
       return GestureDetector(
         onTap: () async {
@@ -1131,15 +1003,9 @@ class AllQuoteLineItemScreen extends StatelessWidget{
 
               return StatefulBuilder(builder: (context, setState) {
                 final query = searchController.text.toLowerCase();
-                final filtered = query.isEmpty
-                    ? allItems
-                    : allItems
-                    .where((c) =>
-                    (c.geoValue ?? "").toLowerCase().contains(query))
-                    .toList();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
 
-                final allSelected =
-                    allItems.isNotEmpty && tempSelected.length == allItems.length;
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
 
                 return Padding(
                   padding: EdgeInsets.only(
@@ -1165,15 +1031,12 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                                 child: Text(
                                   'Select Clusters',
                                   style: GoogleFonts.poppins(
-                                      fontSize: 16, fontWeight: FontWeight.w600),
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: AllColors.primaryDark1),
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: const Text('Cancel'),
-                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
                             ],
                           ),
                         ),
@@ -1268,16 +1131,26 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                             children: [
                               Expanded(
                                 child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
                                   onPressed: () {
+
+                                    pendingDraftQuoteController.filterDataChecker.value='';
                                     pendingDraftQuoteController.SelectedCluster_list.assignAll(tempSelected);
-                                    pendingDraftQuoteController.clusterName_controller.value.text = tempSelected
-                                        .map((e) => e.geoValue)
-                                        .join(', ');
+                                    pendingDraftQuoteController.clusterName_controller.value.text = tempSelected.map((e) => e.geoValue).join('| ');
                                     pendingDraftQuoteController.getRegionsWithClusterFilterGetByEmail();
 
                                     Navigator.of(context).pop();
                                   },
-                                  child: const Text('Done'),
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
                                 ),
                               ),
                             ],
@@ -1308,6 +1181,243 @@ class AllQuoteLineItemScreen extends StatelessWidget{
                   "Select Cluster",
                   style: GoogleFonts.poppins(
                     color: Colors.black,
+                    fontSize: AllFontSize.sisxteen,
+                  ),
+                )
+                    : SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Text(
+                    selectedText,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                ),
+              ),
+              const Icon(Icons.arrow_drop_down),
+            ],
+          ),
+        ),
+      );
+    });
+  }
+  Widget bindRegionNameFilter(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final availableItems = pendingDraftQuoteController.regionwithclusterGetByEmailList;
+      if (pendingDraftQuoteController.RegionName_controller.value.text.isNotEmpty && pendingDraftQuoteController.filterDataChecker.value=='1') {
+        pendingDraftQuoteController.SelectedRegion_list.value=[];
+        List<String> nameList = pendingDraftQuoteController.RegionName_controller.value.text.split('|');
+        pendingDraftQuoteController.SelectedRegion_list.value =
+            List.generate(nameList.length, (index) {
+              return RegionWithClusterFilterModal(
+                geoValue: nameList[index].trim(),
+              );
+            });
+      }
+      else{
+        if (availableItems.isNotEmpty && pendingDraftQuoteController.SelectedRegion_list.isEmpty) {
+          pendingDraftQuoteController.SelectedRegion_list.assignAll(availableItems);
+          pendingDraftQuoteController.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
+          print("bind region ${pendingDraftQuoteController.RegionName_controller.value.text}");
+        }
+        else{
+          print("region does not bind first time");
+        }
+      }
+    });
+    return Obx(() {
+      final selected = pendingDraftQuoteController.SelectedRegion_list;
+      final selectedText = selected.isEmpty ? null : selected.map((e) => e.geoValue).join(', ');
+
+      return GestureDetector(
+        onTap: () async {
+          await showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            ),
+            builder: (context) {
+              final searchController = TextEditingController();
+              final tempSelected = <RegionWithClusterFilterModal>[];
+              tempSelected.addAll(pendingDraftQuoteController.SelectedRegion_list);
+
+              final allItems = pendingDraftQuoteController.regionwithclusterGetByEmailList;
+
+              return StatefulBuilder(builder: (context, setState) {
+                final query = searchController.text.toLowerCase();
+                final filtered = query.isEmpty ? allItems : allItems.where((c) => (c.geoValue ?? "").toLowerCase().contains(query)).toList();
+
+                final allSelected = allItems.isNotEmpty && tempSelected.length == allItems.length;
+
+                return Padding(
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.75,
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 8),
+                        Container(
+                          width: 50,
+                          height: 4,
+                          decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              borderRadius: BorderRadius.circular(2)),
+                        ),
+                        const SizedBox(height: 12),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Select Regions',
+                                  style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600, color: AllColors.primaryDark1),
+                                ),
+                              ),
+                              IconButton(onPressed: () {
+                                Navigator.of(context).pop();
+                              }, icon: Icon(Icons.close,color: AllColors.primaryDark1,weight: 700,))
+                            ],
+                          ),
+                        ),
+
+                        // Search Field
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: TextField(
+                            controller: searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search...',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              isDense: true,
+                              suffixIcon: searchController.text.isNotEmpty
+                                  ? IconButton(
+                                icon: const Icon(Icons.clear),
+                                onPressed: () {
+                                  searchController.clear();
+                                  setState(() {});
+                                },
+                              )
+                                  : null,
+                            ),
+                            onChanged: (v) => setState(() {}),
+                          ),
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        // Select All
+                        Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: CheckboxListTile(
+                            title: const Text('Select All'),
+                            value: allSelected,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val == true) {
+                                  tempSelected.clear();
+                                  tempSelected.addAll(allItems);
+                                } else {
+                                  tempSelected.clear();
+                                }
+                              });
+                            },
+                          ),
+                        ),
+
+                        const Divider(height: 1),
+
+                        // List
+                        Expanded(
+                          child: filtered.isEmpty
+                              ? const Center(child: Text('No regions found'))
+                              : ListView.builder(
+                            padding:
+                            const EdgeInsets.symmetric(vertical: 8),
+                            itemCount: filtered.length,
+                            itemBuilder: (context, idx) {
+                              final item = filtered[idx];
+                              final isSel = tempSelected.any((s) =>
+                              (s.geoValue ?? "") ==
+                                  (item.geoValue ?? ""));
+                              return CheckboxListTile(
+                                title: Text(item.geoValue ?? ""),
+                                value: isSel,
+                                onChanged: (v) {
+                                  setState(() {
+                                    if (v == true) {
+                                      if (!isSel) tempSelected.add(item);
+                                    } else {
+                                      tempSelected.removeWhere((s) =>
+                                      (s.geoValue ?? "") ==
+                                          (item.geoValue ?? ""));
+                                    }
+                                  });
+                                },
+                              );
+                            },
+                          ),
+                        ),
+
+                        // Done button
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AllColors.green,
+                                    shadowColor: AllColors.green,
+                                    foregroundColor: AllColors.primaryDark1,
+                                    side: BorderSide(color: AllColors.primaryDark1, width: 1),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    pendingDraftQuoteController.filterDataChecker.value='';
+                                    pendingDraftQuoteController.SelectedRegion_list.assignAll(tempSelected);
+                                    pendingDraftQuoteController.RegionName_controller.value.text = tempSelected.map((e) => e.geoValue).join('|');
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Done',style: GoogleFonts.poppins(
+                                      fontSize: 16, fontWeight: FontWeight.w600,color: Colors.white),),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              });
+            },
+          );
+        },
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: "Region Name", // 👈 Label like before
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            contentPadding:
+            const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: selectedText == null
+                    ? Text(
+                  "Select Region",
+                  style: GoogleFonts.poppins(
+                    color: Colors.grey.shade600,
                     fontSize: AllFontSize.sisxteen,
                   ),
                 )

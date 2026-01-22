@@ -212,7 +212,7 @@ class AccountmasterScreen extends StatelessWidget{
             accountMaster_page_controller.view = 'Account';
             accountMaster_page_controller.getEmployeeMemberApi();
             accountMaster_page_controller.getAccMasterBuyCodeApi(accountMaster_page_controller.Account_Master_list[position].accountCode);
-            accountMaster_page_controller.getCompanyProfileSubTypeApi(/*accountMaster_page_controller.Account_Master_list[position].companyProfileType*/);
+            accountMaster_page_controller.getCompanyProfileSubTypeApi();
             accountMaster_page_controller.getGeoPostalCodeApi();
 
           },

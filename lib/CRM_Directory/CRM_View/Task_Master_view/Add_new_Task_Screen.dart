@@ -187,6 +187,7 @@ class AddNewTaskScreen extends StatelessWidget{
                             accountMaster_page_controller.clearController();
                             accountMaster_page_controller.getEmployeeMemberApi();
                             accountMaster_page_controller.getCompanyProfileTypeApi("");
+                            accountMaster_page_controller.getCompanyProfileSubTypeApi();
                             accountMaster_page_controller.getGeoPostalCodeApi();
                             Get.toNamed(RoutesName.add_New_AccountMaster_screen);
                           }, icon: Icon(Icons.add)),
@@ -473,12 +474,8 @@ class AddNewTaskScreen extends StatelessWidget{
           return taskMaster_page_controller.Account_Master_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return taskMaster_page_controller.Account_Master_list
-            .where((AccountMasterModel option) {
-          return option.accountName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
+        return taskMaster_page_controller.Account_Master_list.where((AccountMasterModel option) {
+          return option.accountName.toString().toLowerCase().contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
       onSelected: (AccountMasterModel selection) {
@@ -518,8 +515,8 @@ class AddNewTaskScreen extends StatelessWidget{
             ),
             contentPadding: EdgeInsets.symmetric(
                 vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-            hintText: 'Account Name',
-            labelText: 'Account Name',
+            hintText: 'Customer Name',
+            labelText: 'Customer Name',
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))
             ),

@@ -258,7 +258,6 @@ class AddNewAccountMaster extends StatelessWidget{
                   return  ;
                 }
               }
-
               if(accountMaster_page_controller.Account_Master_list != null &&
                   accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1 && accountMaster_page_controller.IsActive_controller.text.isEmpty || accountMaster_page_controller.IsActive_controller == null){
                 Utils.sanckBarError('Active!', "Please Enter Active Type");
@@ -310,107 +309,25 @@ class AddNewAccountMaster extends StatelessWidget{
                       ),
                     ),
                     SizedBox(height: 15,),
-                    /*Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-
-                      ],
-                    ),
-                  ),*/
-                    Container(
-                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: TextFormField(
-                        controller: accountMaster_page_controller
-                            .ImageUrl_Controller,
-                        decoration: InputDecoration(
-                            hintText: "Image Url",
-                            labelText: "Image Url",
-                            //suffixIcon: Icon(Icons.email),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-
-                      ),
-                    ),
-
+                    bindInputData("Image Url",accountMaster_page_controller.ImageUrl_Controller, context),
+                    SizedBox(height: 15,),
+                    bindInputData("Customer Name*",accountMaster_page_controller.account_name_controller, context),
                     SizedBox(height: 15,),
 
-                    Container(
-                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: TextFormField(
-                        controller: accountMaster_page_controller
-                            .account_name_controller,
-                        decoration: InputDecoration(
-                            hintText: "Customer Name*",
-                            labelText: "Customer Name*",
-                            //suffixIcon: Icon(Icons.email),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-
-                      ),
-                    ),
-
-                    SizedBox(height: 15,),
                     Container(
                       padding: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: bindAccountOwnerDropDown(context),
                     ),
-
                     SizedBox(height: 15,),
-
-                    Container(
-                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: TextFormField(
-                        maxLength: 500,
-                        maxLines: 2,
-                        controller: accountMaster_page_controller.AccountTitle_Controller,
-                        decoration: InputDecoration(
-                            hintText: "Branch Name",
-                            labelText: "Branch Name",
-                            //suffixIcon: Icon(Icons.email),
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: AllFontSize.ten,
-                                horizontal: AllFontSize.ten),
-
-                            focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(color: Colors.blue)
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10)
-                            )
-                        ),
-
-                      ),
-                    ),
+                    bindInputData("Branch Name",accountMaster_page_controller.AccountTitle_Controller, context),
                     SizedBox(height: 15,),
 
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                      //color: AllColors.Card1Color,
-                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                       decoration: BoxDecoration(
-                        //color: AllColors.Card1Color, // Set the inside color here
                         border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
+                          color: AllColors.grayColor,
+                          width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -430,119 +347,24 @@ class AddNewAccountMaster extends StatelessWidget{
                         ),
                         child: Column(
                           children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                              child: TextFormField(
-                                readOnly: true,
-                                controller: accountMaster_page_controller
-                                    .OldCRMAccountNo_Controller,
-                                decoration: InputDecoration(
-                                    hintText: "Old Crm Customer No.",
-                                    labelText: "Old Crm Customer No.",
-                                    //suffixIcon: Icon(Icons.email),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue)
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                    )
-                                ),
-
-                              ),
-                            ),
-
+                            bindInputData("Old Crm Customer No.",accountMaster_page_controller.OldCRMAccountNo_Controller, context),
                             SizedBox(height: 15,),
-
                             bindAccountTypeDropDown(context),
-
                             SizedBox(height: 15,),
 
                             Form(
                               key: _formKey,
                               child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)
+                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)
                                 ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: TextFormField(
-                                  maxLength: 10,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return null; // No error when the field is empty
-                                    } else if (value.length != 10) {
-                                      return 'Phone No. should be exactly 10 digits';
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    // Trigger validation when the value changes
-                                    _formKey.currentState?.validate();
-                                  },
-                                  keyboardType: TextInputType.number,
-                                  controller: accountMaster_page_controller
-                                      .PhoneNo_Controller,
-                                  decoration: InputDecoration(
-                                      hintText: "Phone No.",
-                                      labelText: "Phone No.",
-                                      //suffixIcon: Icon(Icons.email),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: AllFontSize.ten,
-                                          horizontal: AllFontSize.ten),
-
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue)
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      )
-                                  ),
-
-                                ),
-                              ),
-                            ),
-
-                            SizedBox(height: 15,),
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: accountMaster_page_controller
-                                    .Alternate_PhoneNo_Controller,
-                                decoration: InputDecoration(
-                                    hintText: "Alternate Phone No.",
-                                    labelText: "Alternate Phone No.",
-                                    //suffixIcon: Icon(Icons.email),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue)
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                    )
-                                ),
+                                child: bindInputData("Phone No.",accountMaster_page_controller.PhoneNo_Controller, context),
 
                               ),
                             ),
 
                             SizedBox(height: 15,),
-
+                            bindInputData("Alternate Phone No.",accountMaster_page_controller.Alternate_PhoneNo_Controller, context),
+                            SizedBox(height: 15,),
                             Form(
                               key: _formKeyEmail,
                               child: Container(
@@ -550,42 +372,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                     color: Colors.white,
                                     borderRadius: BorderRadius.circular(10)
                                 ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: TextFormField(
-                                  validator: (value) {
-                                    // If the field is empty, no error is shown
-                                    if (value == null || value.isEmpty) {
-                                      return null;
-                                    }
-                                    // If the email is invalid, show an error
-                                    else if (!EmailValidator.validate(value)) {
-                                      return 'Please Enter A Valid Email Id';
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: (value) {
-                                    // Trigger validation when the value changes
-                                    _formKeyEmail.currentState?.validate();
-                                  },
-                                  controller: accountMaster_page_controller
-                                      .EmailId_Controller,
-                                  decoration: InputDecoration(
-                                      hintText: "Email Id**",
-                                      labelText: "Email Id*",
-                                      //suffixIcon: Icon(Icons.email),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: AllFontSize.ten,
-                                          horizontal: AllFontSize.ten),
-
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue)
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      )
-                                  ),
-
-                                ),
+                                child: bindInputData("Email Id*",accountMaster_page_controller.EmailId_Controller, context),
                               ),
                             ),
 
@@ -600,75 +387,15 @@ class AddNewAccountMaster extends StatelessWidget{
 
                             Obx((){
                               return Visibility(
-                                  visible:accountMaster_page_controller
-                                      .compProfileRemrk.isFalse ? true : false ,
+                                  visible:accountMaster_page_controller.compProfileRemrk.isFalse ? true : false ,
                                   child: bindComProfSubTypeDropDown(context)
                               );
                             }),
-
-
-
-                     /*       Obx(() {
-                              return
-                                Visibility(
-                                  visible: accountMaster_page_controller
-                                      .compProfileRemrk.isFalse ? true : false,
-                                  child: Column(
-                                    children: [
-                                      SizedBox(height: 15,),
-                                      Container(
-                                          height: 50,
-                                          width: size.width ,
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .spaceBetween,
-                                            children: [
-                                              Container(
-                                                margin: EdgeInsets.only(
-                                                    right: 10),
-                                                decoration: BoxDecoration(
-                                                  //color: AllColors.whiteColor,
-                                                    borderRadius: BorderRadius
-                                                        .circular(10)
-                                                ),
-                                                //height: size.height*10,
-                                                width: size.width * .65,
-                                                child: bindComProfSubTypeDropDown(context),
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                  color: AllColors.whiteColor,
-                                                  borderRadius: BorderRadius
-                                                      .circular(10),
-                                                  border: Border.all(
-                                                    color: AllColors
-                                                        .lightblackColor,
-                                                    // Set the border color to black
-                                                    width: 1.0, // You can adjust the width of the border as needed
-                                                  ),
-                                                ),
-                                                child: IconButton(
-                                                    onPressed: () {
-                                                      AddCompSubProTypeDailog(
-                                                          context);
-                                                    }, icon: Icon(Icons.add)),
-                                              )
-                                            ],
-                                          )
-
-                                      ),
-                                    ],
-                                  ),
-                                );
-                            }),*/
-
-
                             Visibility(
                               visible: (accountMaster_page_controller.Account_Master_list != null &&
                                   accountMaster_page_controller.Account_Master_list.isNotEmpty &&
                                   accountMaster_page_controller.Account_Master_list[0].isManager == 1)
-                                  ? true
-                                  : false,
+                                  ? true : false,
                               child: Column(
                                 children: [
                                   SizedBox(height: 15,),
@@ -676,51 +403,19 @@ class AddNewAccountMaster extends StatelessWidget{
                                 ],
                               ),
                             ),
-
                             SizedBox(height: 15,),
-
                             Obx(() {
                               return Visibility(
-                                visible: accountMaster_page_controller
-                                    .compProfileRemrk.value,
+                                visible: accountMaster_page_controller.compProfileRemrk.value,
                                 child: Column(
                                   children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                      child: TextFormField(
-                                        controller: accountMaster_page_controller
-                                            .comp_prof_remarks_controller,
-                                        decoration: InputDecoration(
-                                            hintText: "Company Profile Remarks",
-                                            labelText: "Company Profile Remarks",
-                                            //suffixIcon: Icon(Icons.email),
-                                            contentPadding: EdgeInsets.symmetric(
-                                                vertical: AllFontSize.ten,
-                                                horizontal: AllFontSize.ten),
-
-                                            focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.blue)
-                                            ),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius
-                                                    .circular(10)
-                                            )
-                                        ),
-
-                                      ),
-                                    ),
+                                    bindInputData("Company Profile Remarks",accountMaster_page_controller.comp_prof_remarks_controller, context),
                                     SizedBox(height: 15,),
-
                                   ],
                                 ),
+
                               );
                             }),
-
 
                             bindGstRegistrationTypeDropDown(context),
 
@@ -729,240 +424,37 @@ class AddNewAccountMaster extends StatelessWidget{
                             Obx(() {
                               return
                                 Visibility(
-                                  visible: accountMaster_page_controller
-                                      .GstRegistration.value,
+                                  visible: accountMaster_page_controller.GstRegistration.value,
                                   child: Column(
                                     children: [
                                       Form(
                                         key: _formKeyGst,
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.circular(
-                                                  10)
-                                          ),
-                                          //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                          child: TextFormField(
-                                            maxLength: 15,
-                                            validator: (value){
-                                              if(value == null || value.isEmpty){
-                                                return null;
-                                              }else if (!GSTValidator.validate(value)) {
-                                                return 'Invalid GST No.';
-                                              }
-                                              else if(value.length != 15){
-                                                return 'GST No. Should be exactly 15 digit';
-                                              }else {
-                                                return null;
-                                              }
-                                            },
-                                            onChanged: (value) {
-                                              // Clear the error when the user enters a value
-                                                _formKeyGst.currentState?.validate();
-
-                                              if(value.length >= 2){
-                                              accountMaster_page_controller.GstStateCode.value = value.substring(0, 2);
-                                              print('First two digits: ${accountMaster_page_controller.GstStateCode}');
-
-                                              print('List...${accountMaster_page_controller.StateMaster_list.length}');
-
-                                              /*for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
-                                                if(accountMaster_page_controller.GstStateCode == accountMaster_page_controller.StateMaster_list[i].governmentStateCode){
-                                                  accountMaster_page_controller.GstStateList.clear();
-                                                  accountMaster_page_controller.GstStateList.add(accountMaster_page_controller.StateMaster_list[i]);
-                                                  print('GstStae....${accountMaster_page_controller.GstStateList[0].governmentStateCode}');
-                                                }
-                                              }*/
-
-                                              }
-                                              if (value.length >= 12) {
-                                                accountMaster_page_controller.GstPanNo.value = value.substring(2, 12);
-                                                print('Next ten digits: ${accountMaster_page_controller.GstPanNo}');
-                                                // You can save nextTenDigits to a variable or perform other operations
-                                              }
-                                            },
-                                            controller: accountMaster_page_controller
-                                                .GstNo_Controller,
-                                            decoration: InputDecoration(
-                                                hintText: "GST No.*",
-                                                labelText: "GST No.*",
-                                                //suffixIcon: Icon(Icons.email),
-                                                contentPadding: EdgeInsets
-                                                    .symmetric(
-                                                    vertical: AllFontSize.ten,
-                                                    horizontal: AllFontSize.ten),
-
-                                                focusedBorder: OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.blue)
-                                                ),
-                                                border: OutlineInputBorder(
-                                                    borderRadius: BorderRadius
-                                                        .circular(10)
-                                                )
-                                            ),
-
-                                          ),
-                                        ),
+                                        child:  bindInputData("GST No.*",accountMaster_page_controller.GstNo_Controller, context),
                                       ),
                                       SizedBox(height: 15,),
                                     ],
                                   ),
                                 );
                             }),
-
-
                             Form(
                               key: _formKeyPanNo,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: TextFormField(
-                                  validator: (value){
-                                    if(value == null || value.isEmpty){
-                                      return null;
-                                    }
-                                    else if(accountMaster_page_controller.gst_registration_type_controller.value.text == 'Registered' && value != accountMaster_page_controller.GstPanNo.value){
-                                      return 'Please Enter Valid Pan No.';
-                                    }else {
-                                      return null;
-                                    }
-                                  },
-
-                                  onChanged: (value) {
-                                    // Clear the error when the user enters a value
-                                      _formKeyPanNo.currentState?.validate();
-
-                                  },
-                                  controller: accountMaster_page_controller
-                                      .PanNo_Controller,
-                                  decoration: InputDecoration(
-                                      hintText: "Customer PAN No.",
-                                      labelText: "Customer PAN No.",
-                                      //suffixIcon: Icon(Icons.email),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: AllFontSize.ten,
-                                          horizontal: AllFontSize.ten),
-
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue)
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      )
-                                  ),
-
-                                ),
-                              ),
+                              child: bindInputData("Customer PAN No.",accountMaster_page_controller.PanNo_Controller, context),
                             ),
-
                             SizedBox(height: 15,),
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                              child: TextFormField(
-                                maxLength: 11,
-                                controller: accountMaster_page_controller
-                                    .IfscCode_Controller,
-                                decoration: InputDecoration(
-                                    hintText: "Customer IFSC Code",
-                                    labelText: "Customer IFSC Code",
-                                    //suffixIcon: Icon(Icons.email),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue)
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                    )
-                                ),
-
-                              ),
-                            ),
-
+                            bindInputData("Customer IFSC Code",accountMaster_page_controller.IfscCode_Controller, context),
                             SizedBox(height: 15,),
-
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                              child: TextFormField(
-                                controller: accountMaster_page_controller
-                                    .Website_Controller,
-                                decoration: InputDecoration(
-                                    hintText: "Website",
-                                    labelText: "Website",
-                                    //suffixIcon: Icon(Icons.email),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue)
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                    )
-                                ),
-
-                              ),
-                            ),
-
+                            bindInputData("Website",accountMaster_page_controller.Website_Controller, context),
                             SizedBox(height: 15,),
-
 
                             bindIsReferralDropDown(context),
 
                             Obx(() {
                               return Visibility(
-                                visible: accountMaster_page_controller
-                                    .isReferral.value,
+                                visible: accountMaster_page_controller.isReferral.value,
                                 child: Column(
                                   children: [
                                     SizedBox(height: 15,),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color: Colors.white,
-                                          borderRadius: BorderRadius.circular(10)
-                                      ),
-                                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                      child: TextFormField(
-                                        controller: accountMaster_page_controller
-                                            .ReferralByName_Controller,
-                                        decoration: InputDecoration(
-                                            hintText: "Referral By",
-                                            labelText: "Referral By",
-                                            //suffixIcon: Icon(Icons.email),
-                                            contentPadding: EdgeInsets.symmetric(
-                                                vertical: AllFontSize.ten,
-                                                horizontal: AllFontSize.ten),
-
-                                            focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                    color: Colors.blue)
-                                            ),
-                                            border: OutlineInputBorder(
-                                                borderRadius: BorderRadius
-                                                    .circular(10)
-                                            )
-                                        ),
-
-                                      ),
-                                    ),
-
+                                    bindInputData("Referral By",accountMaster_page_controller.ReferralByName_Controller, context),
 
                                   ],
                                 ),
@@ -979,13 +471,10 @@ class AddNewAccountMaster extends StatelessWidget{
 
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                      //color: AllColors.Card1Color,
-                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                       decoration: BoxDecoration(
-                        //color: AllColors.Card2Color, // Set the inside color here
                         border: Border.all(
-                          color: AllColors.grayColor, // Set the border color here
-                          width: 1.0, // Adjust the border width if necessary
+                          color: AllColors.grayColor,
+                          width: 1.0,
                         ),
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -1005,101 +494,10 @@ class AddNewAccountMaster extends StatelessWidget{
                         ),
                         child: Column (
                           children: [
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                              child: TextFormField(
-                                //maxLength: 150,
-                                controller: accountMaster_page_controller
-                                    .Address_controller,
-                                onChanged: (value) {
-                                  final parts = [
-                                    value,
-                                    accountMaster_page_controller.Address2_Controller.text,
-                                    accountMaster_page_controller.City_Controller.text,
-                                    accountMaster_page_controller.District_Controller.text,
-                                    accountMaster_page_controller.State_Controller.text,
-                                    accountMaster_page_controller.PostCode_Controller.text,
-                                  ];
-
-                                  // Filter out empty strings and join with commas
-                                  final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                                  accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-                                },
-                                maxLength: 500,
-                                decoration: InputDecoration(
-                                    hintText: "Address",
-                                    labelText: "Address",
-                                    //suffixIcon: Icon(Icons.email),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue)
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                    )
-                                ),
-
-                              ),
-                            ),
-
+                            bindInputData("Address",accountMaster_page_controller.Address_controller, context),
                             SizedBox(height: 15,),
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                              child: TextFormField(
-                                //maxLength: 150,
-                                controller: accountMaster_page_controller.Address2_Controller,
-                                onChanged: (value) {
-                                  final parts = [
-                                    accountMaster_page_controller.Address_controller.text,
-                                    value,
-                                    accountMaster_page_controller.City_Controller.text,
-                                    accountMaster_page_controller.District_Controller.text,
-                                    accountMaster_page_controller.State_Controller.text,
-                                    accountMaster_page_controller.PostCode_Controller.text,
-                                  ];
-
-                                  // Filter out empty strings and join with commas
-                                  final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
-
-                                  accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
-                                },
-                                maxLength: 500,
-                                decoration: InputDecoration(
-                                    hintText: "Address2",
-                                    labelText: "Address2",
-                                    //suffixIcon: Icon(Icons.email),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue)
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                    )
-                                ),
-
-                              ),
-                            ),
-
+                            bindInputData("Address2",accountMaster_page_controller.Address2_Controller, context),
                             SizedBox(height: 15,),
-
-
 
                             Obx((){
                               return Visibility(
@@ -1111,8 +509,6 @@ class AddNewAccountMaster extends StatelessWidget{
                             }),
 
                             SizedBox(height: 15,),
-
-
                             Obx((){
                               return Visibility(
                                 visible:accountMaster_page_controller.ShowState1.value,
@@ -1121,11 +517,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                 ),
                               );
                             }),
-
-
                             SizedBox(height: 15,),
-
-
                             Obx((){
                               return Visibility(
                                 visible:accountMaster_page_controller.ShowState1.value,
@@ -1134,10 +526,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                 ),
                               );
                             }),
-
                             SizedBox(height: 15,),
-
-
                             Obx((){
                               return Visibility(
                                 visible:accountMaster_page_controller.ShowState1.value,
@@ -1146,40 +535,10 @@ class AddNewAccountMaster extends StatelessWidget{
                                 ),
                               );
                             }),
-
-
                             SizedBox(height: 15,),
-
                             Obx((){
-                              return Container(
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10)
-                                ),
-                                //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: TextFormField(
-                                  readOnly: true,
-                                  //maxLength: 500,
-                                  maxLines: 3,
-                                  controller: accountMaster_page_controller.FullAddress_Controller.value,
-                                  decoration: InputDecoration(
-                                      hintText: "Full Address",
-                                      labelText: "Full Address",
-                                      //suffixIcon: Icon(Icons.email),
-                                      contentPadding: EdgeInsets.symmetric(
-                                          vertical: AllFontSize.ten,
-                                          horizontal: AllFontSize.ten),
+                              return bindInputData("Full Address",accountMaster_page_controller.FullAddress_Controller.value, context);
 
-                                      focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.blue)
-                                      ),
-                                      border: OutlineInputBorder(
-                                          borderRadius: BorderRadius.circular(10)
-                                      )
-                                  ),
-
-                                ),
-                              );
                             }),
 
 
@@ -1227,10 +586,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                      //color: AllColors.Card1Color,
-                      //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                       decoration: BoxDecoration(
-                        //color: AllColors.Card2Color, // Set the inside color here
                         border: Border.all(
                           color: AllColors.grayColor, // Set the border color here
                           width: 1.0, // Adjust the border width if necessary
@@ -1334,7 +690,6 @@ class AddNewAccountMaster extends StatelessWidget{
                             ),
 
                             SizedBox(height: 15,),
-
                             Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -1378,9 +733,7 @@ class AddNewAccountMaster extends StatelessWidget{
 
                               ),
                             ),
-
                             SizedBox(height: 15,),
-
                             Obx((){
                               return Visibility(
                                   visible:accountMaster_page_controller.ShowState.value,
@@ -1389,11 +742,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                   ),
                               );
                             }),
-
-
-
                             SizedBox(height: 15,),
-
                             Obx(() {
                               return Visibility(
                                 visible:accountMaster_page_controller.ShowState.value,
@@ -1402,13 +751,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                   child: bindShippingStateDropDown(context),
                                 ),
                               );
-                            }
-
-                            ),
-
-
+                            }),
                             SizedBox(height: 15,),
-
                             Obx(() {
                               return Visibility(
                                 visible:accountMaster_page_controller.ShowState.value,
@@ -1416,13 +760,8 @@ class AddNewAccountMaster extends StatelessWidget{
                                     child: bindShippingCityDropDown(context)
                                 ),
                               );
-                            }
-
-                            ),
-
-
+                            }),
                             SizedBox(height: 15,),
-
                             Obx(() {
                               return Visibility(
                                 visible:accountMaster_page_controller.ShowState.value,
@@ -1430,12 +769,9 @@ class AddNewAccountMaster extends StatelessWidget{
                                     child: bindShippingDistrictDropDown(context)
                                 ),
                               );
-                            }
-
-                            ),
+                            }),
 
                             SizedBox(height: 15,),
-
                             Container(
                               decoration: BoxDecoration(
                                   color: Colors.white,
@@ -1465,9 +801,6 @@ class AddNewAccountMaster extends StatelessWidget{
 
                               ),
                             ),
-
-
-
                           ],
                         ),
                       ),
@@ -1504,35 +837,7 @@ class AddNewAccountMaster extends StatelessWidget{
                         ),
                         child: Column(
                           children: [
-
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)
-                              ),
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
-                              child: TextFormField(
-                                keyboardType: TextInputType.number,
-                                controller: accountMaster_page_controller
-                                    .No_Of_Emp_Controller,
-                                decoration: InputDecoration(
-                                    hintText: "No. Of Employees",
-                                    labelText: "No. Of Employees",
-                                    //suffixIcon: Icon(Icons.email),
-                                    contentPadding: EdgeInsets.symmetric(
-                                        vertical: AllFontSize.ten,
-                                        horizontal: AllFontSize.ten),
-
-                                    focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(color: Colors.blue)
-                                    ),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                    )
-                                ),
-
-                              ),
-                            ),
+                            bindInputData("No. Of Employees",accountMaster_page_controller.No_Of_Emp_Controller, context),
 
                             SizedBox(height: 15,),
 
@@ -1572,13 +877,9 @@ class AddNewAccountMaster extends StatelessWidget{
                             SizedBox(height: 15,),
 
                             Container(
-                              //padding: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: bindTatResponseTypeDropDown(context),
                             ),
-
-
                             SizedBox(height: 15,),
-
                             /*Obx((){
                               return Container(
                                 decoration: BoxDecoration(
@@ -1609,11 +910,7 @@ class AddNewAccountMaster extends StatelessWidget{
                                 ),
                               );
                             }),*/
-
-
-
                             SizedBox(height: 15,),
-
                             /*Obx((){
                               return Container(
                                 decoration: BoxDecoration(
@@ -1648,8 +945,6 @@ class AddNewAccountMaster extends StatelessWidget{
                         ),
                       ),
                     ),
-
-
                   ],
                 ),
               ),
@@ -1661,47 +956,154 @@ class AddNewAccountMaster extends StatelessWidget{
     );
   }
 
- /* Future<void> getMenuList() async {
-    print("GetList");
-    await sessionManagement.getUserGeoHierarchy().then((userGeoHierarchy) {
-      userGeoHierarchyy.value = userGeoHierarchy;
-      if(userGeoHierarchyy.isNotEmpty){
-        for(int i = 0; i<userGeoHierarchyy.length; i++){
-          if(accountMaster_page_controller.AccountOwner == userGeoHierarchyy[i].approverEmail){
-            int pos = i - 1;
-            int pos2 = i - 2;
-            print("RegionalHead ${userGeoHierarchy[pos].approverEmail}");
-            accountMaster_page_controller.Sale_Representative_Controller.text = userGeoHierarchy[pos2].approverEmail.toString();
-            accountMaster_page_controller.Regional_service_head_Controller.text = userGeoHierarchy[pos].approverEmail.toString();
-            print("SalesRepre.. ${userGeoHierarchy[pos2].approverEmail}");
+  Widget bindInputData(String hintData, TextEditingController controller, BuildContext context,){
+    int? maxLength;
+    int maxLines = 1;
+    double left =0;
+    double right =0;
+    bool readonly=false;
+    if(hintData == "Old Crm Customer No." || hintData =="Full Address"){
+      readonly=true;
+    }
+    if (hintData == "Branch Name") {
+      maxLength = 500;
+      maxLines = 2;
+    }
+    else if (hintData == "Full address") {
+      maxLines = 3;
+    }
+    else if(hintData == "Phone No."){
+      maxLength = 10;
+    }
+    else if(hintData == "GST No.*"){
+      maxLength = 15;
+    }
+    else if(hintData == "Customer IFSC Code"){
+      maxLength = 11;
+    }
+    else if(hintData == "Address" || hintData == "Address2"){
+      maxLength = 500;
+    }
+    else if(hintData == "Full Address" /*|| hintData == "Address2"*/){
+      maxLines = 3;
+    }
+
+    if(hintData=="Customer Name*" || hintData== "Image Url" || hintData== "Branch Name" ){
+      left=15;
+      right=15;
+    }
+
+    return Padding(
+      padding: EdgeInsets.only(left: left, right: right),
+      child: TextFormField(
+        controller: controller,
+        maxLength: maxLength,
+        maxLines: maxLines,
+        readOnly: readonly,
+        keyboardType:hintData == "Phone No." || hintData == "Alternate Phone No."?TextInputType.phone: TextInputType.text,
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return null;
           }
-        }
-      }else{
+          else if (hintData == "Phone No." && value.length != 10) {
+            return 'Phone No. should be exactly 10 digits';
+          }
+          else if (hintData == "Email Id*" && !EmailValidator.validate(value)) {
+            return 'Please Enter A Valid Email Id';
+          }
+          else if(hintData == "GST No.*"){
+           if (!GSTValidator.validate(value)) {
+              return 'Invalid GST No.';
+            }
+            else if(value.length != 15){
+              return 'GST No. Should be exactly 15 digit';
+            }
+          }
+          else if(hintData == "Customer PAN No.") {
+            if (accountMaster_page_controller.gst_registration_type_controller
+                .value.text == 'Registered' && value != accountMaster_page_controller.GstPanNo.value) {
+              return 'Please Enter Valid Pan No.';
+            }
+          }
+          return null;
+        },
+        onChanged: (value) {
+          if(hintData == "Phone No."){
+            _formKey.currentState?.validate();
+          }
+          else if(hintData == "Email Id*"){
+            _formKeyEmail.currentState?.validate();
+          }
+          else if(hintData == "GST No.*"){
+            _formKeyGst.currentState?.validate();
+            if(value.length >= 2){
+              accountMaster_page_controller.GstStateCode.value = value.substring(0, 2);
+            }
+            if (value.length >= 12) {
+              accountMaster_page_controller.GstPanNo.value = value.substring(2, 12);
+            }
+          }
+          else if(hintData == "Customer PAN No."){
+            _formKeyPanNo.currentState?.validate();
+          }
+          else if(hintData == "Address"){
+            final parts = [
+              value,
+              accountMaster_page_controller.Address2_Controller.text,
+              accountMaster_page_controller.City_Controller.text,
+              accountMaster_page_controller.District_Controller.text,
+              accountMaster_page_controller.State_Controller.text,
+              accountMaster_page_controller.PostCode_Controller.text,
+            ];
+            final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
 
-      }
+            accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+          }
+          else if(hintData == "Address2") {
+            final parts = [
+              accountMaster_page_controller.Address_controller.text,
+              value,
+              accountMaster_page_controller.City_Controller.text,
+              accountMaster_page_controller.District_Controller.text,
+              accountMaster_page_controller.State_Controller.text,
+              accountMaster_page_controller.PostCode_Controller.text,
+            ];
+            final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+            accountMaster_page_controller.FullAddress_Controller.value.text = fullAddress;
+          }
 
-    });
+
+        },
+        decoration: InputDecoration(
+            hintText: hintData,
+            labelText: hintData,
+            contentPadding: EdgeInsets.symmetric(
+                vertical: AllFontSize.ten,
+                horizontal: AllFontSize.ten),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.blue)
+            ),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10)
+            )
+        ),
+      ),
+    ) ;
   }
-*/
+
   Widget bindAccountOwnerDropDown(context){
     return Autocomplete<EmployeeMemberModel>(
       displayStringForOption: _displayEmpMemberForOption,
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
           return accountMaster_page_controller.employee_Member_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return accountMaster_page_controller.employee_Member_list
-            .where((EmployeeMemberModel option) {
-          return option.fullName
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
+        return accountMaster_page_controller.employee_Member_list.where((EmployeeMemberModel option) {
+          return option.fullName.toString().toLowerCase().contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
       onSelected: (EmployeeMemberModel selection) {
         print(selection.loginEmailId);
-        // Update the TextField with the selected
         accountMaster_page_controller.EmployeeMember_Controller.text =
             _displayEmpMemberForOption(selection).toString();
         accountMaster_page_controller.AccountOwner = selection.loginEmailId!;
@@ -1709,7 +1111,6 @@ class AddNewAccountMaster extends StatelessWidget{
         WidgetsBinding.instance.addPostFrameCallback((_) {
           accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
         });
-       // accountMaster_page_controller.getEmployee(selection.loginEmailId??"");
       },
       fieldViewBuilder: (BuildContext context, TextEditingController controller,
           FocusNode focusNode, VoidCallback onFieldSubmitted) {
@@ -1723,21 +1124,13 @@ class AddNewAccountMaster extends StatelessWidget{
         WidgetsBinding.instance.addPostFrameCallback((_) {
           accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
         });
-       // accountMaster_page_controller.getEmployee(accountMaster_page_controller.AccountOwner);
-
         return TextField(
           readOnly: accountMaster_page_controller.Account_Master_list != null &&
               accountMaster_page_controller.Account_Master_list.isNotEmpty && accountMaster_page_controller.Account_Master_list[0].isManager == 1?true :false,
           cursorColor: AllColors.primaryDark1,
-          /*controller: controller
-            ..text = accountMaster_page_controller.EmployeeMember_Controller
-                .text.isEmpty ?accountMaster_page_controller.employee_Member_list[0].fullName??"" :accountMaster_page_controller.EmployeeMember_Controller
-                .text,*/
-          controller: controller..text = accountMaster_page_controller.EmployeeMember_Controller
-              .text.isEmpty ?defaultFullName:accountMaster_page_controller.EmployeeMember_Controller
-              .text,
+          controller: controller..text = accountMaster_page_controller.EmployeeMember_Controller.text.isEmpty
+              ?defaultFullName:accountMaster_page_controller.EmployeeMember_Controller.text,
           focusNode: focusNode,
-          //onSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
             suffixIcon: IconButton(
               color: AllColors.primaryDark1,
@@ -1788,8 +1181,7 @@ class AddNewAccountMaster extends StatelessWidget{
                         style: GoogleFonts.poppins(
                             color: AllColors.blackColor,
                             fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
+                            fontSize: AllFontSize.sisxteen // Change the text color here
                         ),
                       ),
                     ),
@@ -1803,111 +1195,6 @@ class AddNewAccountMaster extends StatelessWidget{
     );
   }
 
-  /*Widget bindAccountTypeDropDown(context){
-    return Autocomplete<CustomList>(
-      displayStringForOption: _displayAccTypeForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Acc_type_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.get_Acc_type_list
-            .where((CustomList option) {
-          return option.value
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (CustomList selection) {
-       // print(selection.value);
-        // Update the TextField with the selected
-        accountMaster_page_controller.account_type_controller.text =
-            _displayAccTypeForOption(selection).toString();
-        print("AccType....${accountMaster_page_controller.account_type_controller.text}");
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.account_type_controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: Icon(Icons.arrow_drop_down),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Account Type*',
-              labelText: 'Account Type*',
-              *//*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),*//*
-              *//*labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),*//*
-              *//*focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*//*
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<CustomList> onSelected,
-          Iterable<CustomList> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final CustomList option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option.value.toString(),
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
 
   Widget bindAccountTypeDropDown(context) {
     return Container(
@@ -1968,12 +1255,8 @@ class AddNewAccountMaster extends StatelessWidget{
           return accountMaster_page_controller.get_Acc_category_list;
           // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return accountMaster_page_controller.get_Acc_category_list
-            .where((GetMasterTypeModel option) {
-          return option.code
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
+        return accountMaster_page_controller.get_Acc_category_list.where((GetMasterTypeModel option) {
+          return option.code.toString().toLowerCase().contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
       onSelected: (GetMasterTypeModel selection) {
@@ -2083,21 +1366,13 @@ class AddNewAccountMaster extends StatelessWidget{
       displayStringForOption: _displayCompProfileTypeForOption,
       optionsBuilder: (TextEditingValue textEditingValue) async {
         if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.get_Comp_Profile_type_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
+          //return accountMaster_page_controller.get_Comp_Profile_type_list;
+          await accountMaster_page_controller.getCompanyProfileTypeApi(textEditingValue.text);
         }
-        /*return accountMaster_page_controller.get_Comp_Profile_type_list
-            .where((CompanyTypeModel option) {
-          return option.description
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();*/
         return await accountMaster_page_controller.getCompanyProfileTypeApi(textEditingValue.text);
       },
       onSelected: (CompanyTypeModel selection) {
         print(selection.description);
-        // Update the TextField with the selected
         accountMaster_page_controller.comp_prof_type_controller.text =
             _displayCompProfileTypeForOption(selection).toString();
         if(accountMaster_page_controller.comp_prof_type_controller.value.text == 'Others'){
@@ -2117,9 +1392,7 @@ class AddNewAccountMaster extends StatelessWidget{
           ),
           child: TextField(
             cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.comp_prof_type_controller
-                  .text,
+            controller: controller..text = accountMaster_page_controller.comp_prof_type_controller.text,
             focusNode: focusNode,
             decoration: InputDecoration(
               suffixIcon: IconButton(
@@ -2354,151 +1627,6 @@ class AddNewAccountMaster extends StatelessWidget{
     );
   }
 
-  AddCompSubProTypeDailog(context){
-    accountMaster_page_controller.CompProfileDescription_Controller.clear;
-    showDialog(
-        context: context,
-        builder: (context){
-           return StatefulBuilder(
-             builder: (context, setState) {
-               return
-                 AlertDialog(
-                   title: Text(
-                     'Create Company Profile',
-                     style: GoogleFonts.poppins(
-                       fontSize: AllFontSize.sisxteen,
-                       fontWeight: FontWeight.w700,
-                       color: AllColors.primaryDark1,
-                     ),
-                   ),
-                   content: Container(
-                     /*height: size.height*.25,
-                 width: size.width*4,*/
-                     child: Column(
-                       mainAxisSize: MainAxisSize.min,
-                       children: [
-                         Divider(
-                           height: 1,
-                           thickness: 1,
-                         ),
-                         SizedBox(height: 15,),
-                         bindComProfTypeDropDown(context),
-                         SizedBox(height: 15,),
-                         Container(
-                           decoration: BoxDecoration(
-                               color: Colors.white,
-                               borderRadius: BorderRadius.circular(10)
-                           ),
-                           //padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                           child: TextFormField(
-                             controller: accountMaster_page_controller
-                                 .CompProfileDescription_Controller,
-                             decoration: InputDecoration(
-                                 hintText: "Description",
-                                 labelText: "Description",
-                                 //suffixIcon: Icon(Icons.email),
-                                 contentPadding: EdgeInsets.symmetric(
-                                     vertical: AllFontSize.ten,
-                                     horizontal: AllFontSize.ten),
-
-                                 /* focusedBorder: OutlineInputBorder(
-                                 borderSide: BorderSide(color: Colors.blue)
-                             ),*/
-                                 border: OutlineInputBorder(
-                                     borderRadius: BorderRadius.circular(10)
-                                 )
-                             ),
-
-                           ),
-                         ),
-                         SizedBox(height: 15,),
-
-                         Row(
-                           mainAxisAlignment: MainAxisAlignment.end,
-                           children: [
-                             ElevatedButton(
-                               style: ButtonStyle(
-                                 backgroundColor: MaterialStateProperty.all<
-                                     Color>(
-                                   AllColors.primaryDark1,
-                                 ),
-                               ),
-                               onPressed: () {
-                                 if (accountMaster_page_controller
-                                     .comp_prof_type_controller.text.isEmpty ||
-                                     accountMaster_page_controller
-                                         .comp_prof_type_controller == null) {
-                                   Utils.sanckBarError('Error : ',
-                                       'Please select company Type.');
-                                   return;
-                                 }
-                                 if (accountMaster_page_controller
-                                     .CompProfileDescription_Controller.text
-                                     .isEmpty || accountMaster_page_controller
-                                     .CompProfileDescription_Controller ==
-                                     null) {
-                                   Utils.sanckBarError(
-                                       'Error : ', 'Please Enter Description');
-                                   return;
-                                 }
-
-                                 accountMaster_page_controller
-                                     .CompanyProfileMasterUploaderApiHit(
-                                     'Create', "New");
-
-                                 Get.back();
-
-                                 // accountMaster_page_controller.getCompanyProfileSubTypeApi(accountMaster_page_controller.comp_prof_type_controller.value.text);
-                                 /*accountMaster_page_controller.comp_prof_sub_type_controller.value.text = accountMaster_page_controller.CompProfileDescription_Controller.value.text;
-                             print('compSubType.....${accountMaster_page_controller.comp_prof_sub_type_controller.value.text}');
-                             accountMaster_page_controller.CompProfileDescription_Controller.clear();*/
-
-                               },
-                               child: Container(
-                                 width: 80,
-                                 alignment: Alignment.center,
-                                 child: Text('Save'
-                                   /*accountMaster_page_controller.UploadImageType_controller.value =="Url"? 'Upload Url':'Choose files'*/,
-                                   style: GoogleFonts.poppins(
-                                     color: AllColors.customDarkerWhite,
-                                     fontSize: AllFontSize.fourtine,
-                                     fontWeight: FontWeight.w700,
-                                   ),
-                                 ),
-                               ),
-                             ),
-                             /* ElevatedButton(
-                             style: ButtonStyle(
-                               backgroundColor: MaterialStateProperty.all<Color>(
-                                 AllColors.primaryDark1,
-                               ),
-                             ),
-                             onPressed: () {
-                               Navigator.pop(context);
-                             },
-                             child: Container(
-                               width: 60,
-                               alignment: Alignment.center,
-                               child: Text(
-                                 'Cancel',
-                                 style: GoogleFonts.poppins(
-                                   color: AllColors.customDarkerWhite,
-                                   fontSize: AllFontSize.fourtine,
-                                   fontWeight: FontWeight.w700,
-                                 ),
-                               ),
-                             ),
-                           ),*/
-                           ],)
-                       ],
-                     ),
-                   ),
-                 );
-
-             });
-        });
-  }
-
   Widget bindIsActiveDropDown(context) {
     accountMaster_page_controller.IsActive_controller.text = 'Yes';
     return Autocomplete<String>(
@@ -2562,20 +1690,6 @@ class AddNewAccountMaster extends StatelessWidget{
                   vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
               hintText: 'Active',
               labelText: 'Active',
-              /*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*/
-
               border: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10))
               ),
@@ -2625,131 +1739,6 @@ class AddNewAccountMaster extends StatelessWidget{
       },
     );
   }
-
-  /*Widget bindIsReferralDropDown(context) {
-    return Autocomplete<String>(
-      displayStringForOption: _displayIsActiveForOption,
-      optionsBuilder: (TextEditingValue textEditingValue) {
-        if (textEditingValue.text.isEmpty) {
-          return accountMaster_page_controller.IsActiveTypeList;
-          // return const Iterable<VehicleTypeResponse>.empty();
-        }
-        return accountMaster_page_controller.IsActiveTypeList
-            .where((String option) {
-          return option
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
-        }).toList();
-      },
-      onSelected: (String selection) {
-        print(selection);
-        // Update the TextField with the selected
-        accountMaster_page_controller.ReferralBy_Controller.text =
-            _displayIsActiveForOption(selection).toString();
-        if(accountMaster_page_controller.ReferralBy_Controller.text == 'Yes'){
-          accountMaster_page_controller.isReferral.value = true;
-        }else{
-          accountMaster_page_controller.isReferral.value = false;
-        }
-
-      },
-      fieldViewBuilder: (BuildContext context, TextEditingController controller,
-          FocusNode focusNode, VoidCallback onFieldSubmitted) {
-        return Container(
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10)
-          ),
-          child: TextField(
-            onTap: (){
-              controller.clear();
-            },
-            cursorColor: AllColors.primaryDark1,
-            controller: controller
-              ..text = accountMaster_page_controller.ReferralBy_Controller
-                  .text,
-            focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
-            decoration: InputDecoration(
-              suffixIcon: IconButton(
-                color: AllColors.primaryDark1,
-                onPressed: (){
-                  if(focusNode.hasFocus){
-                    focusNode.unfocus();
-                  }else{
-                    focusNode.requestFocus();
-                  }
-                },
-                icon: Icon(Icons.arrow_drop_down),
-              ),
-              contentPadding: EdgeInsets.symmetric(
-                  vertical: AllFontSize.ten, horizontal: AllFontSize.ten),
-              hintText: 'Is Referral',
-              labelText: 'Is Referral',
-              *//*hintStyle: GoogleFonts.poppins(
-                  color: AllColors.lightblackColor,
-                  fontWeight: FontWeight.w300,
-                  fontSize: AllFontSize.ten
-              ),
-              labelStyle: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontWeight: FontWeight.w700,
-                  fontSize: AllFontSize.sisxteen),
-              focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: AllColors.primaryDark1), // Change the color to green
-              ),*//*
-
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-              ),
-            ),
-          ),
-        );
-      },
-      optionsViewBuilder: (BuildContext context,
-          AutocompleteOnSelected<String> onSelected,
-          Iterable<String> suggestions) {
-        return Align(
-          alignment: Alignment.topLeft,
-          child: Material(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
-            elevation: 4.0,
-            child: Container(
-              width: size.width*.85,
-              constraints: BoxConstraints(maxHeight: 200),
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: suggestions.length,
-                itemBuilder: (context, index) {
-                  final String option =
-                  suggestions.elementAt(index);
-                  return GestureDetector(
-                    onTap: () {
-                      onSelected(option);
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        option,
-                        style: GoogleFonts.poppins(
-                            color: AllColors.blackColor,
-                            fontWeight: FontWeight.w300,
-                            fontSize: AllFontSize
-                                .sisxteen // Change the text color here
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }*/
 
   Widget bindIsReferralDropDown(context) {
     return Container(
@@ -3138,17 +2127,6 @@ class AddNewAccountMaster extends StatelessWidget{
               borderRadius: BorderRadius.circular(10)
           ),
           child: TextFormField(
-            //maxLength: 50,
-            /*validator: (value){
-              if(value == null || value.isEmpty){
-                return null;
-              }
-              else if(value != accountMaster_page_controller.GstStateCode){
-                return 'Please select valid state';
-              }else{
-                return null;
-              }
-            },*/
             onChanged: (value) {
               /*for(int i = 0; i< accountMaster_page_controller.StateMaster_list.length; i++){
                 if(accountMaster_page_controller.GstStateCode == selection.governmentStateCode){
@@ -3181,7 +2159,6 @@ class AddNewAccountMaster extends StatelessWidget{
               ..text = accountMaster_page_controller.State_Controller
                   .text,
             focusNode: focusNode,
-            //onSubmitted: onFieldSubmitted,
             decoration: InputDecoration(
               suffixIcon: IconButton(
                 color: AllColors.primaryDark1,
@@ -3846,8 +2823,7 @@ class AddNewAccountMaster extends StatelessWidget{
               },
               cursorColor: AllColors.primaryDark1,
               controller: controller
-                ..text = accountMaster_page_controller.Shipping_District_Controller.value
-                    .text,
+                ..text = accountMaster_page_controller.Shipping_District_Controller.value.text,
               focusNode: focusNode,
               //onSubmitted: onFieldSubmitted,
               decoration: InputDecoration(
@@ -3923,14 +2899,9 @@ class AddNewAccountMaster extends StatelessWidget{
       optionsBuilder: (TextEditingValue textEditingValue) {
         if (textEditingValue.text.isEmpty) {
           return accountMaster_page_controller.TatResponseMaster_list;
-          // return const Iterable<VehicleTypeResponse>.empty();
         }
-        return accountMaster_page_controller.TatResponseMaster_list
-            .where((TatResponseModel option) {
-          return option.responseType
-              .toString()
-              .toLowerCase()
-              .contains(textEditingValue.text.toLowerCase());
+        return accountMaster_page_controller.TatResponseMaster_list.where((TatResponseModel option) {
+          return option.responseType.toString().toLowerCase().contains(textEditingValue.text.toLowerCase());
         }).toList();
       },
       onSelected: (TatResponseModel selection) {

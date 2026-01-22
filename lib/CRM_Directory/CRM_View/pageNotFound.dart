@@ -21,15 +21,23 @@ class PageNotFoundScreen extends StatelessWidget{
           ),
           title:Row(
             children: [
-              Text(
-                title,
-                style: GoogleFonts.poppins(
-                  color: AllColors.whiteColor,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
+              Flexible(
+                child: Tooltip(
+                  message: title,
+                  child: Text(
+                    title,
+                    style: GoogleFonts.poppins(
+                      color: AllColors.whiteColor,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w700,
+
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ),
-              Spacer(),
+
             ],
           )
       ),

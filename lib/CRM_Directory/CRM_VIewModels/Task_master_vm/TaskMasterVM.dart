@@ -195,7 +195,6 @@ class Taskmastervm extends GetxController{
     @override
     void onInit() async {
       super.onInit();
-
         email=await sessionManagement.getEmail() ?? '';
         isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
         isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
@@ -205,6 +204,7 @@ class Taskmastervm extends GetxController{
         print("List${userGeoHierarchyy.length}");
         TaskStatusListTypeList.value = ['All','Pending For Approval', 'Approved', 'Rejected'];
         SaleCycleActiveTypeList.value = ['All', 'Yes', 'No'];
+        SaleCycleActive_Controller.text = SaleCycleActiveTypeList[0];
         approveRejectList.value = ['Approve', 'Reject'];
         Item_Category_Selected_list.value = [];
         //userGeoHierarchy=await sessionManagement.getUserGeoHierarchy() ?? [];
@@ -1453,8 +1453,7 @@ class Taskmastervm extends GetxController{
                             Utils.sanckBarSuccess("Message !", response[0].message.toString());
                             getTaskMaster(0,
                                 is_Active.toString(),
-                               Task_Master_list[0].taskId,
-                                '', 'GET FROM TASK ID', date_filter, is_done.value);
+                               Task_Master_list[0].taskId, '', 'GET FROM TASK ID', date_filter, is_done.value);
 
                             if(flag == 'FromDSARPage'){
                                 isInfraLeadValueSubmit.value = true;

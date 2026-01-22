@@ -5,9 +5,11 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
 import '../../CRM_Models/AccountMaster_model/region_with_cluster_filter_modal.dart';
+import '../../CRM_Models/TaskMaster_model/Item_Category_Mast_model.dart';
 import '../../CRM_Models/sales_advise_modal/all_sales_advise_list_modal.dart';
 import '../../CRM_Repository/sales_cycle_repository/sales_cycle_repository.dart';
 
@@ -26,24 +28,39 @@ class SalesAdviseAllListVm extends GetxController{
   int rowsPerPage = 10;
   int total_rows = 0;
   int pageNumber = 0;
- var filterExpectedClosuredateController=TextEditingController().obs;
- var salesAdviseIdController=TextEditingController().obs;
- var filterQuoteValidityController=TextEditingController().obs;
- var salesAdviseStatusController=TextEditingController().obs;
- var accountNameController=TextEditingController().obs;
- var accountCodeController=TextEditingController().obs;
- var RegionName_controller=TextEditingController().obs;
- var clusterName_controller=TextEditingController().obs;
- var productCategoryController=TextEditingController().obs;
- var createdOnCnontroller=TextEditingController().obs;
- var itemCodeController=TextEditingController().obs;
- var itemNameController=TextEditingController().obs;
- var lspController=TextEditingController().obs;
- var salesCreditController=TextEditingController().obs;
 
- RxString quoteValidityStartToEnd="".obs;
- RxString extClosureStartToEnd="".obs;
- RxString createdOnStartToEnd="".obs;
+  var salesAdviseStatusController=TextEditingController().obs;
+  var salesAdviseIdController=TextEditingController().obs;
+  var quoteIdController=TextEditingController().obs;
+  var quoteVersionController=TextEditingController().obs;
+  var saleCycleIdController=TextEditingController().obs;
+  var accountNameController=TextEditingController().obs;
+  var accountCodeController=TextEditingController().obs;
+  var filterQuoteValidityController=TextEditingController().obs;
+  var filterExpectedClosuredateController=TextEditingController().obs;
+  var createdOnCnontroller=TextEditingController().obs;
+  var RegionName_controller=TextEditingController().obs;
+  var clusterName_controller=TextEditingController().obs;
+  var productCategoryController=TextEditingController().obs;
+  var product_category_type_Controller = TextEditingController().obs;
+  var rh_Approval_controller=TextEditingController().obs;
+  var cbh_Approval_controller=TextEditingController().obs;
+  var Gm_Approval_Controller=TextEditingController().obs;
+  var itemCodeController=TextEditingController().obs;
+  var itemNameController=TextEditingController().obs;
+  var quantityFilterController=TextEditingController().obs;
+  var LSPFilterController=TextEditingController().obs;
+  var MAPFilterController=TextEditingController().obs;
+  var BTPFilterController=TextEditingController().obs;
+  var BM_per_ilterController=TextEditingController().obs;
+  var GM_per_ilterController=TextEditingController().obs;
+  var StandardCostController=TextEditingController().obs;
+  var SalesCreditController=TextEditingController().obs;
+
+
+  RxString quoteValidityStartToEnd="".obs;
+  RxString extClosureStartToEnd="".obs;
+  RxString createdOnStartToEnd="".obs;
   RxList<String> salesAdviseStatusList = ["Draft", "Completed"].obs;
 
   RxList<AllSalesAdviseModal> salesAdviseList=<AllSalesAdviseModal>[].obs;
@@ -53,15 +70,58 @@ class SalesAdviseAllListVm extends GetxController{
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
+  RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
+  RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+  RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
+
+  String filterRouting = "";
+
   @override
   void onInit() async{
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    filterRouting = await sessionManagement.getfilterRouting() ?? '';
+    product_category_type_Controller.value.text="Contains";
+    getItemCategoryMstWithoutTaskIdApi();
     //getSaleCycleProductByIdList(pageNumber);
     getClustersGetByEmail();
     // TODO: implement onInit
     super.onInit();
+  }
+
+  getItemCategoryMstWithoutTaskIdApi() {
+    this.loading.value = true;
+    Map<String, String> data = {
+
+    };
+
+    _api.getItemCategoryMstWithoutTaskIdApiHit(data, sessionManagement).then((value) {
+      try {
+        List<ItemCategoryMstModel> Response =
+        (json.decode(value) as List<dynamic>)
+            .map((i) => ItemCategoryMstModel.fromJson(i as Map<String, dynamic>))
+            .toList();
+
+        if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
+          Item_Category_master_list_without_task.value = Response!;
+
+          // print('master list....${get_Acc_type_list.length.toString()}');
+        } else {
+          Item_Category_master_list_without_task.value = [];
+          //print('master listelsse....${get_Acc_type_list.length.toString()}');
+        }
+      } catch (e) {
+        Item_Category_master_list_without_task.value = [];
+        print('catch....${e.toString()}');
+      }
+    }).onError((error, stackTrace) {
+      Item_Category_master_list_without_task.value = [];
+      Utils.sanckBarError('Api Exception onError', error.toString());
+      print('catchEx....${error.toString()}');
+    }).whenComplete(() {
+      this.loading.value = false;
+    });
   }
 
   void getClustersGetByEmail() {
@@ -82,7 +142,7 @@ class SalesAdviseAllListVm extends GetxController{
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
               clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join(', ');
+                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
@@ -111,7 +171,7 @@ class SalesAdviseAllListVm extends GetxController{
       selectedCluster = clusterName_controller.value.text
           .split(',')
           .map((e) => e.trim())
-          .join('||');
+          .join('|');
     }
     try{
       Map<String, String> data={
@@ -128,9 +188,17 @@ class SalesAdviseAllListVm extends GetxController{
           if(response.length>0 && response[0].condition=="True"){
             loading.value = false;
             regionwithclusterGetByEmailList.value=response;
-            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join(', ');
+            RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
-            getSaleCycleProductByIdList(pageNumber);
+            if(filterRouting=='All Sales Advice Line Items'){
+              getAllSaleAdviseLineFilterData();
+
+            }
+            else if(filterRouting=='All Sales Advice List'){
+              getFilterData();
+            }
+
+            //getSaleCycleProductByIdList(pageNumber);
 
           }else {
             loading.value = false;
@@ -156,20 +224,21 @@ class SalesAdviseAllListVm extends GetxController{
   getSaleCycleProductByIdList(int pageNumber) {
     Map data = {
       "filter_sales_advice_id": salesAdviseIdController.value.text.isNotEmpty?salesAdviseIdController.value.text:"",
-      "filter_quote_id": "",
-      "filter_sales_cycle_id": "",
+      "filter_quote_id": quoteIdController.value.text.isNotEmpty?quoteIdController.value.text:"",
+      "filter_sales_cycle_id": saleCycleIdController.value.text.isNotEmpty?saleCycleIdController.value.text:"",
       "filter_account_code": accountNameController.value.text.isNotEmpty?accountNameController.value.text:"",
       "filter_account_name": accountCodeController.value.text.isNotEmpty?accountCodeController.value.text:"",
-      "filter_rh_approval": "",
-      "filter_cbh_approval": "",
+      "filter_rh_approval": rh_Approval_controller.value.text.isNotEmpty?rh_Approval_controller.value.text:"",
+      "filter_cbh_approval": cbh_Approval_controller.value.text.isNotEmpty?cbh_Approval_controller.value.text:"",
       "filter_category_approval": "",
-      "filter_gm_approval": "",
-      "filter_quote_version": -1,
+      "filter_gm_approval": Gm_Approval_Controller.value.text.isNotEmpty?Gm_Approval_Controller.value.text:"",
+      "filter_quote_version": quoteVersionController.value.text.isNotEmpty?quoteVersionController.value.text:"-1",
       "filter_quote_validity": quoteValidityStartToEnd.value,
       "filter_exp_closure_date": extClosureStartToEnd.value,
       "filter_sales_advice_status": salesAdviseStatusController.value.text.isNotEmpty?salesAdviseStatusController.value.text:"",
       "filter_flag": filterFlag,
       "filter_product_category": productCategoryController.value.text.isNotEmpty?productCategoryController.value.text:"",
+      "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
       "filter_created_by": email,
       "filter_created_on": createdOnStartToEnd.value,
       "filter_frontliner_value": "",
@@ -179,14 +248,14 @@ class SalesAdviseAllListVm extends GetxController{
       "filter_spr_no": "",
       "filter_item_code": itemCodeController.value.text.isNotEmpty?itemCodeController.value.text:"",
       "filter_item_name": itemNameController.value.text.isNotEmpty?itemNameController.value.text:"",
-      "filter_quantity": "",
-      "filter_gm_per": "",
-      "filter_bm_per": "",
-      "filter_sales_credit": salesCreditController.value.text.isNotEmpty?salesCreditController.value.text:"",
-      "filter_lsp": lspController.value.text.isNotEmpty?lspController.value.text:"",
-      "filter_map": "",
-      "filter_btp": "",
-      "filter_standard_cost": "",
+      "filter_quantity": quantityFilterController.value.text.isNotEmpty?quantityFilterController.value.text:"",
+      "filter_gm_per": GM_per_ilterController.value.text.isNotEmpty?GM_per_ilterController.value.text: "",
+      "filter_bm_per": BM_per_ilterController.value.text.isNotEmpty?BM_per_ilterController.value.text: "",
+      "filter_sales_credit": SalesCreditController.value.text.isNotEmpty?SalesCreditController.value.text:"",
+      "filter_lsp": LSPFilterController.value.text.isNotEmpty?LSPFilterController.value.text:"",
+      "filter_map": MAPFilterController.value.text.isNotEmpty?MAPFilterController.value.text:"",
+      "filter_btp": BTPFilterController.value.text.isNotEmpty?BTPFilterController.value.text:"",
+      "filter_standard_cost": StandardCostController.value.text.isNotEmpty?StandardCostController.value.text:"",
       "row_per_page": rowsPerPage,
       "page_number": pageNumber
     };
@@ -233,23 +302,222 @@ class SalesAdviseAllListVm extends GetxController{
   }
 
   void clearAllField() {
-     filterExpectedClosuredateController.value.clear();
-     salesAdviseIdController.value.clear();
-     filterQuoteValidityController.value.clear();
-     salesAdviseStatusController.value.clear();
-     accountNameController.value.clear();
-     accountCodeController.value.clear();
-     //RegionName_controller.value.clear();
-     //clusterName_controller.value.clear();
-     productCategoryController.value.clear();
-     createdOnCnontroller.value.clear();
-     extClosureStartToEnd.value="";
-     quoteValidityStartToEnd.value="";
-     createdOnStartToEnd.value="";
-     itemCodeController.value.clear();
-     itemNameController.value.clear();
-     lspController.value.clear();
-     salesCreditController.value.clear();
+    product_category_type_Controller.value.text="Contains";
+    Selected_Item_Category_master_list_without_task.value=[];
 
+    salesAdviseStatusController.value.clear();
+    filterExpectedClosuredateController.value.clear();
+    salesAdviseIdController.value.clear();
+    quoteIdController.value.clear();
+    quoteVersionController.value.clear();
+    saleCycleIdController.value.clear();
+    accountNameController.value.clear();
+    accountCodeController.value.clear();
+    filterQuoteValidityController.value.clear();
+    quoteValidityStartToEnd.value="";
+    extClosureStartToEnd.value="";
+    rh_Approval_controller.value.clear();
+    cbh_Approval_controller.value.clear();
+    Gm_Approval_Controller.value.clear();
+    itemCodeController.value.clear();
+    itemNameController.value.clear();
+    quantityFilterController.value.clear();
+    LSPFilterController.value.clear();
+    MAPFilterController.value.clear();
+    BTPFilterController.value.clear();
+    BM_per_ilterController.value.clear();
+    GM_per_ilterController.value.clear();
+    StandardCostController.value.clear();
+    SalesCreditController.value.clear();
+
+    createdOnStartToEnd.value="";
+    //RegionName_controller.value.clear();
+    //clusterName_controller.value.clear();
+    productCategoryController.value.clear();
+    createdOnCnontroller.value.clear();
+
+
+
+  }
+
+  RxString filterDataChecker = ''.obs;
+  void SaveFilterData() async{
+    try{
+      await sessionManagement.saveSaleAdviseListData({
+
+        'salesAdviseStatusController': salesAdviseStatusController.value.text,
+        'salesAdviseIdController': salesAdviseIdController.value.text,
+        'quoteIdController': quoteIdController.value.text,
+        'quoteVersionController': quoteVersionController.value.text,
+        'saleCycleIdController': saleCycleIdController.value.text,
+        'customer_name': accountNameController.value.text,
+        'customer_code': accountCodeController.value.text,
+        'filterQuoteValidityController': filterQuoteValidityController.value.text,
+        'quoteValidityStartToEnd': quoteValidityStartToEnd.value,
+        'expected_closure_date': filterExpectedClosuredateController.value.text,
+        'extClosureStartToEnd': extClosureStartToEnd.value,
+        'createdOn_Controller': createdOnCnontroller.value.text,
+        'createdOnStartToEnd': createdOnStartToEnd.value,
+        'region_name': RegionName_controller.value.text,
+        'cluster_name': clusterName_controller.value.text,
+        'product_category': productCategoryController.value.text,
+        'product_category_type': product_category_type_Controller.value.text,
+      });
+    }
+    catch(e){
+      print("Exception ${e.toString()}");
+    }
+    filterDataChecker.value='';
+    getSaleCycleProductByIdList(pageNumber);
+
+  }
+
+  void getFilterData() async{
+    Map getFilterData=await sessionManagement.getSaleAdviseListData();
+
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+
+      salesAdviseStatusController.value.text=getFilterData["salesAdviseStatusController"]??"";
+      salesAdviseIdController.value.text=getFilterData["salesAdviseIdController"]??"";
+      quoteIdController.value.text=getFilterData["quoteIdController"]??"";
+      quoteVersionController.value.text=getFilterData["quoteVersionController"]??"";
+      saleCycleIdController.value.text=getFilterData["saleCycleIdController"]??"";
+      accountNameController.value.text=getFilterData["customer_name"]??"";
+      accountCodeController.value.text=getFilterData["customer_code"]??"";
+      filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
+      quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
+      filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"]??"";
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
+      productCategoryController.value.text=getFilterData["product_category"]??"";
+      product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+
+    pageNumber=0;
+    getSaleCycleProductByIdList(pageNumber);
+
+  }
+
+  void clearFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearSaleAdviseListData();
+  }
+
+  void SaveAllSaleAdviseLineFilterData() async{
+    try{
+      await sessionManagement.saveAllSaleAdviseLineData({
+
+        'salesAdviseStatusController': salesAdviseStatusController.value.text,
+        'salesAdviseIdController': salesAdviseIdController.value.text,
+        'quoteIdController': quoteIdController.value.text,
+        'quoteVersionController': quoteVersionController.value.text,
+        'saleCycleIdController': saleCycleIdController.value.text,
+        'customer_name': accountNameController.value.text,
+        'customer_code': accountCodeController.value.text,
+        'filterQuoteValidityController': filterQuoteValidityController.value.text,
+        'quoteValidityStartToEnd': quoteValidityStartToEnd.value,
+        'expected_closure_date': filterExpectedClosuredateController.value.text,
+        'extClosureStartToEnd': extClosureStartToEnd.value,
+        'rh_Approval_controller':rh_Approval_controller.value.text,
+        'cbh_Approval_controller':cbh_Approval_controller.value.text,
+        'Gm_Approval_Controller':Gm_Approval_Controller.value.text,
+        'itemCodeController':itemCodeController.value.text,
+        'itemNameController':itemNameController.value.text,
+        'quantityFilterController':quantityFilterController.value.text,
+        'LSPFilterController':LSPFilterController.value.text,
+        'MAPFilterController':MAPFilterController.value.text,
+        'BTPFilterController':BTPFilterController.value.text,
+        'BM_per_ilterController':BM_per_ilterController.value.text,
+        'GM_per_ilterController':GM_per_ilterController.value.text,
+        'StandardCostController':StandardCostController.value.text,
+        'SalesCreditController':SalesCreditController.value.text,
+        'createdOn_Controller': createdOnCnontroller.value.text,
+        'createdOnStartToEnd': createdOnStartToEnd.value,
+        'region_name': RegionName_controller.value.text,
+        'cluster_name': clusterName_controller.value.text,
+        'product_category': productCategoryController.value.text,
+        'product_category_type': product_category_type_Controller.value.text,
+      });
+    }
+    catch(e){
+      print("Exception ${e.toString()}");
+    }
+    filterDataChecker.value='';
+    getSaleCycleProductByIdList(pageNumber);
+
+  }
+
+  void getAllSaleAdviseLineFilterData() async{
+    Map getFilterData=await sessionManagement.getAllSaleAdviseLineData();
+
+    if(getFilterData.isNotEmpty){
+      filterDataChecker.value='1';
+
+      salesAdviseStatusController.value.text=getFilterData["salesAdviseStatusController"]??"";
+      salesAdviseIdController.value.text=getFilterData["salesAdviseIdController"]??"";
+      quoteIdController.value.text=getFilterData["quoteIdController"]??"";
+      quoteVersionController.value.text=getFilterData["quoteVersionController"]??"";
+      saleCycleIdController.value.text=getFilterData["saleCycleIdController"]??"";
+      accountNameController.value.text=getFilterData["customer_name"]??"";
+      accountCodeController.value.text=getFilterData["customer_code"]??"";
+      filterQuoteValidityController.value.text=getFilterData["filterQuoteValidityController"]??"";
+      quoteValidityStartToEnd.value=getFilterData["quoteValidityStartToEnd"]??"";
+      filterExpectedClosuredateController.value.text=getFilterData["expected_closure_date"]??"";
+      extClosureStartToEnd.value=getFilterData["extClosureStartToEnd"]??"";
+      rh_Approval_controller.value.text=getFilterData["rh_Approval_controller"]??"";
+      cbh_Approval_controller.value.text=getFilterData["cbh_Approval_controller"]??"";
+      Gm_Approval_Controller.value.text=getFilterData["Gm_Approval_Controller"]??"";
+      itemCodeController.value.text=getFilterData["itemCodeController"]??"";
+      itemNameController.value.text=getFilterData["itemNameController"]??"";
+      quantityFilterController.value.text=getFilterData["quantityFilterController"]??"";
+      LSPFilterController.value.text=getFilterData["LSPFilterController"]??"";
+      MAPFilterController.value.text=getFilterData["MAPFilterController"]??"";
+      BTPFilterController.value.text=getFilterData["BTPFilterController"]??"";
+      BM_per_ilterController.value.text=getFilterData["BM_per_ilterController"]??"";
+      GM_per_ilterController.value.text=getFilterData["GM_per_ilterController"]??"";
+      StandardCostController.value.text=getFilterData["StandardCostController"]??"";
+      SalesCreditController.value.text=getFilterData["SalesCreditController"]??"";
+      createdOnCnontroller.value.text=getFilterData["createdOn_Controller"]??"";
+      createdOnStartToEnd.value=getFilterData["createdOnStartToEnd"]??"";
+      productCategoryController.value.text=getFilterData["product_category"]??"";
+      product_category_type_Controller.value.text=getFilterData["product_category_type"]??"";
+
+      if(getFilterData["region_name"].toString().isNotEmpty && getFilterData["region_name"].toString()!=""){
+        RegionName_controller.value.text = "";
+        RegionName_controller.value.text = getFilterData["region_name"].toString()??"";
+      }
+      if(getFilterData["cluster_name"].toString().isNotEmpty && getFilterData["cluster_name"].toString()!=""){
+        clusterName_controller.value.text="";
+        clusterName_controller.value.text=getFilterData["cluster_name"].toString()??"";
+        print("clusterName_controller.value.text.....${clusterName_controller.value.text}");
+      }
+    }
+    else{
+      print("else condition");
+    }
+
+    pageNumber=0;
+    getSaleCycleProductByIdList(pageNumber);
+
+  }
+
+  void clearAllSaleAdviseLineFilterData() {
+    filterDataChecker.value='';
+    sessionManagement.clearAllSaleAdviseLineData();
   }
 }

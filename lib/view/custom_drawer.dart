@@ -456,10 +456,10 @@ class _Drawer extends State<CustomDrawer> {
                                                 break;
           
                                               case 'All SPR Mapping Line Items':
+                                                sessionManagement.setfilterRouting('All SPR Mapping Line Items');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDraftQuoteVm>();
-                                                PendingDraftQuoteVm PendingDraftQuoteController=Get.put(PendingDraftQuoteVm("ALLSPRMAPPING"));
                                                 Get.toNamed(RoutesName.allSPRMappingScreen,);
                                                 Navigator.of(context);
                                                 break;
@@ -494,19 +494,19 @@ class _Drawer extends State<CustomDrawer> {
           
           
                                               case 'All Sales Advice List':
+                                                sessionManagement.setfilterRouting('All Sales Advice List');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<SalesAdviseAllListVm>();
-                                                SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceHeader"));
                                                 Get.toNamed(RoutesName.allSalesAdviseList,);
                                                 Navigator.of(context);
                                                 break;
           
                                               case 'All Sales Advice Line Items':
+                                                sessionManagement.setfilterRouting('All Sales Advice Line Items');
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<SalesAdviseAllListVm>();
-                                                SalesAdviseAllListVm PendingDraftQuoteController=Get.put(SalesAdviseAllListVm("AllSalesAdviceLineItem"));
                                                 Get.toNamed(RoutesName.allSalesAdviseLineItemsScreen,);
                                                 Navigator.of(context);
                                                 break;
@@ -589,7 +589,6 @@ class _Drawer extends State<CustomDrawer> {
                                                 IconData iconData = StaticMethod.getChildIconForIndex(cTitle);
                                                 home_vm.openMenu(cTitle, iconData);
                                                 Get.delete<PendingDsarDashboardVm>();
-                                                PendingDsarDashboardVm callDashboardController=Get.put(PendingDsarDashboardVm());
                                                 Get.toNamed(RoutesName.pendingDSARDashboardViewScreen);
                                                 Navigator.of(context);
                                                 break;

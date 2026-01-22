@@ -501,6 +501,54 @@ class SessionManagement {
     prefs.remove("sale_cycle_data");
   }
 
+  //todo sale cycle Competitor
+  Future<void> saveSaleCycleCompetitorData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("sale_cycle_Competitor_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleCycleCompetitorData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("sale_cycle_Competitor_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleCycleCompetitorData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("sale_cycle_Competitor_data");
+  }
+
+  //todo sale advise list
+  Future<void> saveSaleAdviseListData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("SaleAdviseList_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getSaleAdviseListData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("SaleAdviseList_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearSaleAdviseListData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("SaleAdviseList_data");
+  }
+
+  //todo All sale advise line list
+  Future<void> saveAllSaleAdviseLineData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("AllSaleAdviseLine_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getAllSaleAdviseLineData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("AllSaleAdviseLine_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearAllSaleAdviseLineData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("AllSaleAdviseLine_data");
+  }
+
+
+
+
   //todo sale cycle approver
   Future<void> saveSaleCycleApproverData(Map<String, dynamic> data) async {
     final prefs = await SharedPreferences.getInstance();
@@ -589,6 +637,21 @@ class SessionManagement {
   Future<void> clearQuoteLineItemData() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("QuoteLineItem_data");
+  }
+
+  //todo All SPR Mapping
+  Future<void> saveQAllSPRMapData(Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString("AllSPRMap_data", jsonEncode(data));
+  }
+  Future<Map<String, dynamic>> getAllSPRMapData() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString("AllSPRMap_data");
+    return data != null ? jsonDecode(data) : {};
+  }
+  Future<void> clearAllSPRMapData() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove("AllSPRMap_data");
   }
 
 

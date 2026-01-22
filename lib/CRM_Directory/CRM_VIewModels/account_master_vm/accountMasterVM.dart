@@ -866,9 +866,9 @@ class Accountmastervm extends GetxController{
 
 
 
-  getCompanyProfileSubTypeApi(/*String? companyProfileType*/) {
+  getCompanyProfileSubTypeApi() {
     Map data = {
-      "filter_company_type":comp_prof_type_controller.value.text.isEmpty ? "" : comp_prof_type_controller.value.text,
+      "filter_code":"",
       "filter_description": "",
       "row_per_page": 1000,
       "page_number": 0
@@ -1404,7 +1404,6 @@ class Accountmastervm extends GetxController{
     String message = account_cat_type_controller.text;
 
     String accountCatTypeCode = message.substring(0,1);
-
     Map<String, dynamic> data = {
       "created_by": email,
       "flag": flag,
@@ -1476,6 +1475,7 @@ class Accountmastervm extends GetxController{
               TaskMaster_page_controller.clearCreateTaskController();
               TaskMaster_page_controller.getItemCategoryMstWithoutTaskIdApi();
               TaskMaster_page_controller.getEmpMstEmailByApi();
+              //TaskMaster_page_controller.getAccountMaster(10);
               Get.toNamed(RoutesName.addNewTaskMaster_screen);
             }else if(FromPage == "Contact"){
               clearController();
@@ -1629,79 +1629,6 @@ class Accountmastervm extends GetxController{
       loading.value = false;
     }
   }
-
-
-
-
-  CompanyProfileMasterUploaderApiHit(String flag, String page) async {
-    Map<String, dynamic> data = {
-      "created_by": email,
-      "flag": flag,
-      "lines": [
-        {
-          "description": CompProfileDescription_Controller.text.isEmpty?'':CompProfileDescription_Controller.text,
-          "type_of_company": comp_prof_type_controller.text.isEmpty?'':comp_prof_type_controller.text ,
-        }
-      ]
-    };
-    print(data);
-    loading.value = true;
-    try {
-      final value = await _api.CompanyProfileMstUploaderApiHit(data, sessionManagement);
-      print(value);
-      final JsonResponse = json.decode(value);
-      if (JsonResponse is List) {
-        List<AccountMasterGetByCodeModel> response =
-        JsonResponse.map((e) => AccountMasterGetByCodeModel.fromJson(e)).toList();
-        if (response != null &&
-            response.length > 0 &&
-            response[0].condition == "True") {
-          loading.value = false;
-          //AccountMasterGetCode_list.value=response;
-
-          //     print('Api Hit Mster....${AccountMasterGetCode_list[0].message.toString()}');
-          if(flag == 'Create') {
-            if(page == 'New'){
-              print("ttttttttttt");
-              Utils.sanckBarSuccess("Success!", "Add Successful");
-              getCompanyProfileSubTypeApi(/*comp_prof_type_controller.value.text*/);
-              compProfileRemrk.value = true;
-              compProfileRemrk.value = false;
-              comp_prof_sub_type_controller.value.text = CompProfileDescription_Controller.value.text;
-              print('compSubType.....${comp_prof_sub_type_controller.value.text}');
-              CompProfileDescription_Controller.clear();
-            }else if(page == 'Update'){
-              Utils.sanckBarSuccess("Success!", "Add Successful");
-              getAccMasterBuyCodeApi(AccountCode);
-              getCompanyProfileSubTypeApi(/*comp_prof_type_controller.value.text*/);
-              compProfileRemrk.value = true;
-              compProfileRemrk.value = false;
-              comp_prof_sub_type_controller.value.text = CompProfileDescription_Controller.value.text;
-              print('compSubType.....${comp_prof_sub_type_controller.value.text}');
-              CompProfileDescription_Controller.clear();
-            }
-
-            //viewRequestDetails(response);
-          }
-        } else {
-          loading.value = false;
-          //AccountMasterGetCode_list.value = [];
-          Utils.sanckBarError("Error!", response[0].message??"");
-          //service_installation_details_list.value=[];
-        }
-      } else {
-        loading.value = false;
-        // service_indent_header_list.value = [];
-        Utils.sanckBarException("Api Error!", JsonResponse);
-      }
-    } catch (error, stackTrace) {
-      print(error);
-      print(stackTrace);
-      print("Exce3ption....");
-      //service_indent_header_list.value = [];
-    }
-  }
-
 
   viewRequestDetails(List<AccountMasterGetByCodeModel> response){
     try{
@@ -2454,6 +2381,34 @@ class Accountmastervm extends GetxController{
       SalesRepresentativeEmail = response[position].salesRepresentative??"";
       Regional_service_head_Controller.value.text = response[position].regionalServiceHeadName??"";
       RegionalHeadEmail = response[position].regionalServiceHead??"";
+
+      //todo billing address
+      final parts = [
+        Address_controller.text,
+        Address2_Controller.text,
+        City_Controller.text,
+        District_Controller.text,
+       State_Controller.text,
+        PostCode_Controller.text,
+      ];
+      final fullAddress = parts.where((part) => part.trim().isNotEmpty).join(", ");
+      FullAddress_Controller.value.text = fullAddress;
+
+      //todo sgipping address
+      final parts1 = [
+        Shipping_Address_controller.value.text,
+        Shipping_Address2_Controller.value.text,
+        Shipping_City_Controller.value.text,
+        Shipping_District_Controller.value.text,
+        Shipping_State_Controller.value.text,
+        Shipping_PostCode_Controller.value.text,
+      ];
+
+      // Filter out empty strings and join with commas
+      final fullAddress1 = parts1.where((part) => part.trim().isNotEmpty).join(", ");
+
+      Shipping_FullAddress_Controller.value.text = fullAddress1;
+
 
     }catch(e){
 
