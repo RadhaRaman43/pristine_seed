@@ -134,7 +134,7 @@ class QuoteInformationScreen extends StatelessWidget {
             actions: [
               Obx(() {
                 return Visibility(
-                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() == 'draft' ? false : true,
+                  visible: saleCycleController.quoteHeaderdata[0].quoteStatus!.toLowerCase() != 'draft' && saleCycleController.isHeadofficePermission !="1",
                   child: PopupMenuButton(
                     itemBuilder: (BuildContext context) {
                       return [
@@ -155,7 +155,8 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                         /*if (saleCycleController.isHeadofficePermission != 0 &&
                             saleCycleController.quoteHeaderdata[0].isSpr == 1)*/
-                        if(saleCycleController.isHeadofficePermission != 0 && saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved")
+                        /*if(saleCycleController.isHeadofficePermission != 0 &&
+                            saleCycleController.quoteHeaderdata[0].quoteStatus?.toLowerCase()=="approved")*/
                           PopupMenuItem(
                             child: Row(
                               children: [
@@ -1019,9 +1020,9 @@ class QuoteInformationScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              saleCycleController.quoteLinedata[index].sgstAmt
-                                  .toString(),
+                            Text("₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                .quoteLinedata[index].sgstAmt).toString()
+                            }",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1044,16 +1045,20 @@ class QuoteInformationScreen extends StatelessWidget {
                                      fontWeight: FontWeight.w500,
                                    ),
                                  ),
-                                 Container(
-                                   width: size.width * .1,
+                                 Flexible(
+                                   //width: size.width * .1,
                                    child: Tooltip(
-                                     message: saleCycleController
-                                         .quoteLinedata[index].branchTransferPrice
-                                         .toString(),
+                                     message: "₹ ${
+                                         saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index]
+                                          .branchTransferPrice)
+                                          .toString()
+                                    }",
                                      child: Text(
-                                       saleCycleController
-                                           .quoteLinedata[index].branchTransferPrice
-                                           .toString(),
+                                       "₹ ${
+                                           saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index]
+                                               .branchTransferPrice)
+                                               .toString()
+                                       }",
                                        overflow: TextOverflow.ellipsis,
                                        style: GoogleFonts.poppins(
                                          color: AllColors.textColor,
@@ -1081,17 +1086,20 @@ class QuoteInformationScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Container(
-                                  width: size.width * .12,
+                                Flexible(
+                                  //width: size.width * .12,
                                   child: Tooltip(
-                                    message: saleCycleController
-                                        .quoteLinedata[index]
-                                        .minimalAcceptablePrice
-                                        .toString(),
-                                    child: Text(
-                                      saleCycleController.quoteLinedata[index]
-                                          .minimalAcceptablePrice
-                                          .toString(),
+                                    message: "₹ ${
+                                        saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index]
+                                            .minimalAcceptablePrice)
+                                            .toString()
+                                    }",
+                                    child: Text( "₹ ${
+                                        saleCycleController.numberFormatWithComma( saleCycleController.quoteLinedata[index]
+                                            .minimalAcceptablePrice)
+                                            .toString()
+                                    }"
+                                     ,
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
@@ -1147,16 +1155,20 @@ class QuoteInformationScreen extends StatelessWidget {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
-                                Container(
-                                  width: size.width * .12,
+                                Flexible(
+                                  //width: size.width * .12,
                                   child: Tooltip(
-                                    message: saleCycleController
-                                        .quoteLinedata[index].standardCost
-                                        .toString(),
+                                    message: "₹ ${
+                                        saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index]
+                                            .standardCost)
+                                            .toString()
+                                    }",
                                     child: Text(
-                                      saleCycleController
-                                          .quoteLinedata[index].standardCost
-                                          .toString(),
+                                      "₹ ${
+                                          saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index]
+                                              .standardCost)
+                                              .toString()
+                                      }",
                                       overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.poppins(
                                         color: AllColors.textColor,
@@ -1238,7 +1250,7 @@ class QuoteInformationScreen extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "Appr. Amt per Unit : ",
+                              "Appr. Amt / Unit : ",
                               style: GoogleFonts.poppins(
                                 color: AllColors.primaryDark1,
                                 fontSize: AllFontSize.twelve,
@@ -1247,13 +1259,17 @@ class QuoteInformationScreen extends StatelessWidget {
                             ),
                             Flexible(
                               child: Tooltip(
-                                message:  saleCycleController
-                                    .quoteLinedata[index].approvedAmountPerUnit
-                                    .toString(),
+                                message:"₹ ${
+                                    saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index]
+                                          .approvedAmountPerUnit)
+                                      .toString()
+                                }",
                                 child: Text(
-                                  saleCycleController
-                                      .quoteLinedata[index].approvedAmountPerUnit
-                                      .toString(),
+                                  "₹ ${
+                                      saleCycleController.numberFormatWithComma(saleCycleController.quoteLinedata[index]
+                                          .approvedAmountPerUnit)
+                                          .toString()
+                                  }",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -1305,15 +1321,19 @@ class QuoteInformationScreen extends StatelessWidget {
                                     Flexible(
                                       fit: FlexFit.loose,
                                       child: Tooltip(
-                                        message: saleCycleController
-                                            .quoteLinedata[index]
-                                            .gmDiscountAmount
-                                            .toString(),
-                                        child: Text(
-                                          saleCycleController
+                                        message: "₹ ${
+                                          saleCycleController.numberFormatWithComma(saleCycleController
                                               .quoteLinedata[index]
-                                              .gmDiscountAmount
-                                              .toString(),
+                                              .gmDiscountAmount)
+                                              .toString()
+                                        }",
+                                        child: Text(
+                                          "₹ ${
+                                              saleCycleController.numberFormatWithComma(saleCycleController
+                                                  .quoteLinedata[index]
+                                                  .gmDiscountAmount)
+                                                  .toString()
+                                          }",
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
                                             fontSize: AllFontSize.twelve,
@@ -1338,15 +1358,15 @@ class QuoteInformationScreen extends StatelessWidget {
                                     Flexible(
                                       fit: FlexFit.loose,
                                       child: Tooltip(
-                                        message: saleCycleController
+                                        message: "₹ ${saleCycleController.numberFormatWithComma( saleCycleController
                                             .quoteLinedata[index]
-                                            .gmTotalDiscountAmount
-                                            .toString(),
+                                            .gmTotalDiscountAmount).toString()
+                                        }",
                                         child: Text(
-                                          saleCycleController
+                                          "₹ ${saleCycleController.numberFormatWithComma( saleCycleController
                                               .quoteLinedata[index]
-                                              .gmTotalDiscountAmount
-                                              .toString(),
+                                              .gmTotalDiscountAmount).toString()
+                                          }",
                                           style: GoogleFonts.poppins(
                                             color: AllColors.textColor,
                                             fontSize: AllFontSize.twelve,
@@ -1403,17 +1423,19 @@ class QuoteInformationScreen extends StatelessWidget {
                                     .approvedAmount ==
                                     null
                                     ? "0"
-                                    : saleCycleController
-                                    .quoteLinedata[index].approvedAmount
-                                    .toString(),
+                                    : "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                    .quoteLinedata[index]
+                                    .approvedAmount).toString()
+                                }",
                                 child: Text(
                                   saleCycleController.quoteLinedata[index]
                                       .approvedAmount ==
                                       null
                                       ? ""
-                                      : saleCycleController
-                                      .quoteLinedata[index].approvedAmount
-                                      .toString(),
+                                      : "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                      .quoteLinedata[index]
+                                      .approvedAmount).toString()
+                                  }",
                                   style: GoogleFonts.poppins(
                                     color: AllColors.textColor,
                                     fontSize: AllFontSize.twelve,
@@ -1457,13 +1479,24 @@ class QuoteInformationScreen extends StatelessWidget {
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Text(
-                              saleCycleController.quoteLinedata[index].gstAmount
-                                  .toString(),
-                              style: GoogleFonts.poppins(
-                                color: AllColors.textColor,
-                                fontSize: AllFontSize.twelve,
-                                fontWeight: FontWeight.w500,
+                            Flexible(
+                              child: Tooltip(
+                                message: "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                    .quoteLinedata[index]
+                                    .gstAmount).toString()
+                                }" ,
+                                child: Text(
+                                  "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                      .quoteLinedata[index]
+                                      .gstAmount).toString()
+                                  }",
+                                  style: GoogleFonts.poppins(
+                                    color: AllColors.textColor,
+                                    fontSize: AllFontSize.twelve,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
                             ),
                           ],
@@ -1479,9 +1512,10 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              saleCycleController
-                                  .quoteLinedata[index].totalPrice
-                                  .toString(),
+                              "₹ ${saleCycleController.numberFormatWithComma(saleCycleController
+                                  .quoteLinedata[index]
+                                  .totalPrice).toString()
+                              }",
                               style: GoogleFonts.poppins(
                                 color: AllColors.textColor,
                                 fontSize: AllFontSize.twelve,
@@ -1959,6 +1993,34 @@ class QuoteInformationScreen extends StatelessWidget {
                   _buildLabelWithValue(
                     label: "FrontLiner Remarks",
                     value: saleCycleController.quoteHeaderdata[0].otherRemarks ?? '',
+                    color: AllColors.textColor,
+                  ),
+
+                  _buildLabelWithValue(
+                    label: "Quote Status Won",
+                    value: saleCycleController.quoteHeaderdata[0].quoteStatusWon ?? '',
+                    color: AllColors.textColor,
+                  ),
+
+                  _buildLabelWithValue(
+                    label: "Quote Won Name",
+                    value: saleCycleController.quoteHeaderdata[0].quoteWonName ?? '',
+                    color: AllColors.textColor,
+                  ),
+
+                  _buildLabelWithValue(
+                    label: "Loss Reason",
+                    value: saleCycleController.quoteHeaderdata[0].lossReason ?? '',
+                    color: AllColors.textColor,
+                  ),
+                  _buildLabelWithValue(
+                    label: "Won By",
+                    value: saleCycleController.quoteHeaderdata[0].wonBy ?? '',
+                    color: AllColors.textColor,
+                  ),
+                  _buildLabelWithValue(
+                    label: "Won On",
+                    value: saleCycleController.quoteHeaderdata[0].wonOn ?? '',
                     color: AllColors.textColor,
                   ),
                   SizedBox(height: 3,),
@@ -3218,7 +3280,7 @@ class QuoteInformationScreen extends StatelessWidget {
         child: Column(
           children: [
             bindShippinbAddressData(context,"Address",saleCycleController.shippingController.value),
-            Container(
+          /*  Container(
               decoration: BoxDecoration(
                   color: Colors.white, borderRadius: BorderRadius.circular(10)),
               //padding: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -3236,7 +3298,7 @@ class QuoteInformationScreen extends StatelessWidget {
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10))),
               ),
-            ),
+            ),*/
             const SizedBox(height: 15,),
             Container(
               decoration: BoxDecoration(

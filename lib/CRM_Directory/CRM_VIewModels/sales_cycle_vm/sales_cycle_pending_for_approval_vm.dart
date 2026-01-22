@@ -21,6 +21,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
   SessionManagement sessionManagement = SessionManagement();
   String email = "";
   String isAdminWritePermission = "";
+  RxString isHeadofficePermission = "".obs;
   int pageNumber = 0;
   int rowsPerPage = 10;
   int total_rows = 0;
@@ -77,6 +78,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
     super.onInit();
     email = await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
     getCompanyTypeMasterGet();
@@ -344,7 +346,7 @@ class SalesCyclePendingForApprovalVm extends GetxController{
         "filter_task_id": filterTask_Id_controller.value.text.isEmpty ? "" : filterTask_Id_controller.value.text,
         "filter_account_code": accountCodeController.value.text.isEmpty ? "" : accountCodeController.value.text,
         "filter_account_name": accountNameController.value.text.isEmpty ? "" : accountNameController.value.text,
-        "filter_sales_cycle_owner": isAdminWritePermission=="1"?"":email,
+        "filter_sales_cycle_owner": isAdminWritePermission=="1" || isHeadofficePermission.value=="1"?"":email,
         "filter_product_category": productCategoryController.value.text.isEmpty ? "" : productCategoryController.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
         "filter_purchase_process": purchaseProcessController.value.text.isEmpty ? "" : purchaseProcessController.value.text,

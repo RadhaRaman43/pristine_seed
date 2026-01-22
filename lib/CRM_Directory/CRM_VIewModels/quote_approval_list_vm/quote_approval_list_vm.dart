@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import '../../../utils/app_utils.dart';
 import '../../../viewModel/SessionManagment/session_managment.dart';
 import '../../CRM_Models/AccountMaster_model/cluster_modal.dart';
@@ -52,6 +53,9 @@ class QuoteApprovalListVm extends GetxController{
   var productCategoryController=TextEditingController().obs;
   var product_category_type_Controller = TextEditingController().obs;
 
+  RxString isAdminWritePermission = "".obs;
+  RxString isHeadofficePermission = "".obs;
+
 
   RxList<SalesCycleQuoteHeaderModal> quoteApprovalList=<SalesCycleQuoteHeaderModal>[].obs;
 
@@ -67,6 +71,8 @@ class QuoteApprovalListVm extends GetxController{
   @override
   Future<void> onInit() async {
     email=await sessionManagement.getEmail() ?? '';
+    isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
+    isHeadofficePermission.value = await sessionManagement.getisHeadofficePermission() ?? '';
     //getQuoteHeaderData(pageNumberForQuote);
     product_category_type_Controller.value.text="Contains";
     getItemCategoryMstWithoutTaskIdApi();
@@ -217,7 +223,7 @@ class QuoteApprovalListVm extends GetxController{
         "filter_quote_status":"Under Approval",
         "filter_product_category": productCategoryController.value.text.isEmpty?"":productCategoryController.value.text,
         "filter_product_category_type": product_category_type_Controller.value.text.isEmpty?"":product_category_type_Controller.value.text,
-        "filter_created_by": email,
+        "filter_created_by": isAdminWritePermission.value=="1" || isHeadofficePermission.value=="1"?"":email,
         "filter_created_on": createdOnStartToEnd.value.isNotEmpty?createdOnStartToEnd.value:"",
         "filter_frontliner_value": frontliner_controller.value.text.isEmpty?"":frontliner_controller.value.text,
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
@@ -363,6 +369,15 @@ class QuoteApprovalListVm extends GetxController{
   void clearFilterData() {
     filterDataChecker.value='';
     sessionManagement.clearQuoteApproverData();
+  }
+
+
+
+  String numberFormatWithComma(dynamic number) {
+    if (number == null || number.toString().isEmpty) return "0.00";
+
+    final formatter = NumberFormat('#,##,##0.00', 'en_IN');
+    return formatter.format(num.parse(number.toString()));
   }
 }
 

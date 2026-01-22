@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../component/circular_loading.dart';
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_font_size.dart';
 import '../../../../constants/static_methods.dart';
@@ -64,34 +65,38 @@ class AllQuoteLineItemScreen extends StatelessWidget{
               )
           ),
           drawer: CustomDrawer(),
-          body: RefreshIndicator(
-            onRefresh:pendingDraftQuoteController.refreshList,
-            child: Container(
-              width: double.infinity,
-              height: double.infinity,
-              child: Column(
-                children: [
-                  Obx((){
-                    return Visibility(
-                      visible:pendingDraftQuoteController.loading.value ,
-                      child: LinearProgressIndicator(
-                        backgroundColor: AllColors.primaryDark1,
-                        color: AllColors.textColor,
+          body:Obx((){
+            if(pendingDraftQuoteController.loading.value)
+              return const FullScreenLoader();
+            return  RefreshIndicator(
+              onRefresh:pendingDraftQuoteController.refreshList,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Column(
+                  children: [
+                   /* Obx((){
+                      return Visibility(
+                        visible:pendingDraftQuoteController.loading.value ,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AllColors.primaryDark1,
+                          color: AllColors.textColor,
+                        ),
+                      );
+                    }),*/
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Container(
+                        child: Obx(() {
+                          return BindPendingListView(context);
+                        }),
                       ),
-                    );
-                  }),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: Container(
-                      child: Obx(() {
-                        return BindPendingListView(context);
-                      }),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          })
         ),
         );
   }

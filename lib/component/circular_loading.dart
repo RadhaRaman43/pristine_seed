@@ -7,11 +7,11 @@ class FullScreenLoader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.4), // dim background
+      color: Colors.black.withOpacity(0.03), // dim background
       child: const Center(
         child: CircularProgressIndicator(
           strokeWidth: 4,
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
         ),
       ),
     );
