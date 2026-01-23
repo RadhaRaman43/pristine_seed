@@ -254,7 +254,6 @@ class SalesCycleScreen extends StatelessWidget{
   }
 
   Widget BindCustomerListView(context) {
-
     if (salesCycleController.saleCycleList.value.isNotEmpty && salesCycleController.saleCycleList.value.length > 0) {
       ScrollController scrollController = ScrollController();
       scrollController.addListener(() {

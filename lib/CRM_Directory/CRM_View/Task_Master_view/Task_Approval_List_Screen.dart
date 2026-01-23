@@ -7,6 +7,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
+import '../../../component/circular_loading.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_font_size.dart';
 import '../../../constants/static_methods.dart';
@@ -28,8 +29,7 @@ class TaskApprovalListScreen extends StatelessWidget{
 
 
 
-  static String _displaySaleCycleActiveForOption(String option) =>
-      option;
+  static String _displaySaleCycleActiveForOption(String option) => option;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,6 @@ class TaskApprovalListScreen extends StatelessWidget{
                   ),
                 ),
                 Spacer(),
-
                 IconButton(onPressed: () {
                   TaskMaster_page_controller.isInfraLeadFilterController.text = "All";
                   TaskMaster_page_controller.SaleCycleActive_Controller.text = "All";
@@ -65,36 +64,46 @@ class TaskApprovalListScreen extends StatelessWidget{
             )
         ),
         drawer: CustomDrawer(),
-        body: RefreshIndicator(
-          onRefresh: TaskMaster_page_controller.refreshList,
-          child: Container(
-            width: double.infinity,
-            height: double.infinity,
-            child: Column(
-              children: [
-                Obx(() {
-                  return Visibility(
-                    visible: TaskMaster_page_controller.loading.value,
-                    child: LinearProgressIndicator(
-                      backgroundColor: AllColors.primaryDark1,
-                      color: AllColors.textColor,
-                    ),
-                  );
-                }),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: Container(
-                    padding: EdgeInsets.only(
-                        left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
-                    child: Obx(() {
-                      return BindCustomerListView(context);
+        body: Obx((){
+          print("Loading show conti ${TaskMaster_page_controller.loading.value}");
+          if(TaskMaster_page_controller.loading.value){
+            print("show loading.......");
+            return const FullScreenLoader();
+          }else{
+            print("no..... show loading.......");
+            return Visibility(child: RefreshIndicator(
+              onRefresh: TaskMaster_page_controller.refreshList,
+              child: Container(
+                width: double.infinity,
+                height: double.infinity,
+                child: Column(
+                  children: [
+                    Obx(() {
+                      return Visibility(
+                        visible: TaskMaster_page_controller.loading.value,
+                        child: LinearProgressIndicator(
+                          backgroundColor: AllColors.primaryDark1,
+                          color: AllColors.textColor,
+                        ),
+                      );
                     }),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            left: 2.0, top: 8.0, right: 2.0, bottom: 8.0),
+                        child: Obx(() {
+                          return BindCustomerListView(context);
+                        }),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),);
+          }
+
+        })
       ),
 
     );
@@ -177,6 +186,8 @@ class TaskApprovalListScreen extends StatelessWidget{
       child: ListTile(
           onTap: () {
             TaskMaster_page_controller.pageNumber=0;
+            TaskMaster_page_controller.clusterName_controller.value.text="";
+            TaskMaster_page_controller.RegionName_controller.value.text="";
             TaskMaster_page_controller.getTaskMaster(
               TaskMaster_page_controller.pageNumber,
                 TaskMaster_page_controller.is_Active.toString(),
@@ -197,7 +208,7 @@ class TaskApprovalListScreen extends StatelessWidget{
                           fontSize: AllFontSize.fourtine,
                           fontWeight: FontWeight.w500),
                     ),
-                    Flexible(
+                    Expanded(
                       child: Tooltip(
                         message: TaskMaster_page_controller
                             .Task_Master_list[position]
@@ -219,22 +230,21 @@ class TaskApprovalListScreen extends StatelessWidget{
                 ),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Obx((){
                     return  Visibility(
-                      visible: TaskMaster_page_controller
-                          .Task_Master_list[position]
+                      visible: TaskMaster_page_controller.Task_Master_list[position]
                           .isReadyForApprove.toString()=='1' && TaskMaster_page_controller.Task_Master_list[position].createdBy?.toLowerCase()!=TaskMaster_page_controller.email.toLowerCase()
                           && TaskMaster_page_controller.isHeadofficePermission!="1"?true:false,
                       child: IconButton(onPressed: () {
                         TaskMaster_page_controller.showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[0].taskId!);
-                      }, icon: Icon(Icons.update)),
+                      }, icon: const Icon(Icons.update)),
                     );
                   }),
                 ],
               ),
-              Icon(Icons.remove_red_eye, color: AllColors.textColor,),
+              const Icon(Icons.remove_red_eye, color: AllColors.textColor,),
 
             ],
           ),
@@ -284,6 +294,7 @@ class TaskApprovalListScreen extends StatelessWidget{
     Color color = AllColors.textColor,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           label,

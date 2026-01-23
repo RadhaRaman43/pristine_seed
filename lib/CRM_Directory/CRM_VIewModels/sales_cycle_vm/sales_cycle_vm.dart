@@ -59,8 +59,7 @@ import '../address_master_vm/AddressMasterVM.dart';
 class SalesCycleVm extends GetxController {
 
 
-  static String _displayCustomerNeedIdentityStatusForOption(String option) =>
-      option;
+  static String _displayCustomerNeedIdentityStatusForOption(String option) => option;
   //Addressmastervm address_vm_controller = Get.find();
   Size size = Get.size;
 
