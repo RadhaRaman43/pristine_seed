@@ -22,9 +22,7 @@ import '../../CRM_Repository/Task_master_Repository/Task_master_repo.dart';
 
 class TaskApprovalvm extends GetxController{
 
-  static String _displayApproveRejectForOption(String option) =>
-      option;
-
+  static String _displayApproveRejectForOption(String option) => option;
 
   final _api = TaskMasterRepo();
   SessionManagement sessionManagement = SessionManagement();
@@ -38,7 +36,6 @@ class TaskApprovalvm extends GetxController{
   int is_Active = -1;
   RxString createdOnStartToEnd="".obs;
   RxList<String> approveRejectList = <String>[].obs;
-
 
   var isInfraLeadFilterController=TextEditingController();
   var account_code_controller = TextEditingController().obs;
@@ -111,14 +108,11 @@ class TaskApprovalvm extends GetxController{
   RxList<RegionWithClusterFilterModal> regionwithclusterGetByEmailList = <RegionWithClusterFilterModal>[].obs;
   RxList<RegionWithClusterFilterModal> SelectedRegion_list = <RegionWithClusterFilterModal>[].obs;
 
-
   RxList<TaskMasterGetModel> Task_Master_list=<TaskMasterGetModel>[].obs;
   RxList<TaskMasterGetModel> Task_Master_list_line_Wise=<TaskMasterGetModel>[].obs;
   RxList<String> SaleCycleActiveTypeList = <String>[].obs;
   RxList<TaskDSARModel> TaskDSAR_Master_list = <TaskDSARModel>[].obs;
   var AccountOwnerForApi;
-
-
 
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
@@ -144,38 +138,36 @@ class TaskApprovalvm extends GetxController{
     approveRejectList.value = ['Approve', 'Reject'];
     product_category_type_Controller.value.text="Contains";
     //getFilterData();
-    getCompanyTypeMasterGet();
-    getItemCategoryMstWithoutTaskIdApi();
-    CallStatusMasterApiHit('Call');
-    MethodOfCallMasterApiHit();
-    CallDSARsMasterApiHit();
-    if(this.isAdminWritePermission==1){
-      EmployeeMasterGet('');
-    }
-    else{
-      getEmployeeMemberApi();
-    }
-    getClustersGetByEmail();
-    //getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
+      getCompanyTypeMasterGet();
+      getItemCategoryMstWithoutTaskIdApi();
+      CallStatusMasterApiHit('Call');
+      MethodOfCallMasterApiHit();
+      CallDSARsMasterApiHit();
+      if(isAdminWritePermission==1){
+        EmployeeMasterGet('');
+      }
+      else{
+        getEmployeeMemberApi();
+      }
+      getClustersGetByEmail();
 
+    //getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
 
   }
 
-  getCompanyTypeMasterGet() {
-    this.loading.value = true;
+  getCompanyTypeMasterGet() async {
+    loading.value = true;
     Map<String, dynamic> data = {
       "filter_description": "",
       "row_per_page": 999,
       "page_number": 0
     };
-
+     await Future.delayed(const Duration(seconds: 5));
     _api.getCompanyTypeMasterGet(data, sessionManagement).then((value) {
       print("company profile...${value}");
       try {
         List<CompanyTypeModal> Response =
-        (json.decode(value) as List<dynamic>)
-            .map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>))
-            .toList();
+        (json.decode(value) as List<dynamic>).map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>)).toList();
 
         if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
           company_profile_type_list.value=Response;
@@ -185,15 +177,19 @@ class TaskApprovalvm extends GetxController{
       } catch (e) {
         print('catch....${e.toString()}');
       }
+      finally{
+       loading.value = false;
+      }
     }).onError((error, stackTrace) {
       Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
     }).whenComplete(() {
-      this.loading.value = false;
+      loading.value = false;
     });
   }
+
   getItemCategoryMstWithoutTaskIdApi() {
-    this.loading.value = true;
+    loading.value = true;
     Map<String, String> data = {
 
     };
@@ -208,21 +204,22 @@ class TaskApprovalvm extends GetxController{
         if (Response.isNotEmpty && Response[0]?.condition.toString() == "True") {
           Item_Category_master_list_without_task.value = Response!;
 
-          // print('master list....${get_Acc_type_list.length.toString()}');
         } else {
           Item_Category_master_list_without_task.value = [];
-          //print('master listelsse....${get_Acc_type_list.length.toString()}');
         }
       } catch (e) {
         Item_Category_master_list_without_task.value = [];
         print('catch....${e.toString()}');
+      }
+      finally{
+        loading.value = false;
       }
     }).onError((error, stackTrace) {
       Item_Category_master_list_without_task.value = [];
       Utils.sanckBarError('Api Exception onError', error.toString());
       print('catchEx....${error.toString()}');
     }).whenComplete(() {
-      this.loading.value = false;
+      loading.value = false;
     });
   }
   CallDSARsMasterApiHit(){
@@ -236,7 +233,6 @@ class TaskApprovalvm extends GetxController{
         if(jsonResponse is List){
           List<CallStatusMasterModel> response = jsonResponse.map((e) => CallStatusMasterModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             DSARStatus_Master_list.add(
               CallStatusMasterModel(
                 taskStatus: "All",
@@ -245,23 +241,20 @@ class TaskApprovalvm extends GetxController{
             DSARStatus_Master_list.addAll(response);
 
           }else {
-            loading.value = false;
             DSARStatus_Master_list.value=[];
 
           }
-        } else {
-          loading.value = false;
-
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -277,6 +270,7 @@ class TaskApprovalvm extends GetxController{
       'rowsPerPage': 50,
       'pageNumber': 0,
     };
+    loading.value = true;
     String employee_response =await _api.EmployeeMatserGetApiHit(data, sessionManagement);
     try {
       final jsonResponse = json.decode(employee_response);
@@ -302,6 +296,9 @@ class TaskApprovalvm extends GetxController{
       Utils.sanckBarException('Exception!', e.toString());
       employee_Member_list.value = [];
     }
+    finally{
+      loading.value = false;
+    }
     return employee_Member_list.value;
   }
   getEmployeeMemberApi() {
@@ -323,18 +320,18 @@ class TaskApprovalvm extends GetxController{
             if (response != null &&
                 response.length > 0 &&
                 response[0].condition == "True") {
-              loading.value = false;
+
               employee_Member_list.value=response;
               //Get.toNamed(RoutesName.create_preventive_calender_view_screen);
 
             } else {
-              loading.value = false;
+
               employee_Member_list.value=[];
               //Utils.sanckBarError("Error!", "No Date Found");
               //service_installation_details_list.value=[];
             }
           } else {
-            loading.value = false;
+
             // service_indent_header_list.value = [];
             Utils.sanckBarException("Api Error!", JsonResponse);
           }
@@ -346,9 +343,11 @@ class TaskApprovalvm extends GetxController{
         },
       );
     } catch (e) {
-      loading.value = false;
       employee_Member_list.value = [];
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -357,6 +356,7 @@ class TaskApprovalvm extends GetxController{
   }
 
   RxInt infraLeadValue=0.obs;
+  
   getTaskMaster(int page_no, String IsActive, String? taskId){
     if(isInfraLeadFilterController.text=="All"){
       infraLeadValue.value=-1;
@@ -379,31 +379,32 @@ class TaskApprovalvm extends GetxController{
     }
     try{
       Map data={
-        "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.value.text,
         "filter_account_code": account_code_controller.value.text.isEmpty?"":account_code_controller.value.text,
         "filter_account_name": account_Name_controller.value.text.isEmpty?"":account_Name_controller.value.text,
-        "filter_task_status": 'GET FROM TASK ID',
-        "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
-        "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":Type_of_call_controller.value.text,
-        "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
-        "filter_last_activity_status": "",
-        "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
-        "filter_is_infra_lead": 0,
-        "filter_is_sales_cycle_active": is_Active.toString(),
-        "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
-        "filter_created_by": isAdminWritePermission == "0"?email:"",
         "filter_approved_by": "",
-        "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
-        "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
-        "filter_account_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
-        "filter_is_closed_completed": 0,
-        "filter_day_flag":"",
-        "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
-        "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
-        "filter_frontliner_value": "",
         "filter_branch_head_value": RegionName_controller.value.text.isEmpty?"":RegionName_controller.value.text,
-        "filter_zone_head_value": "",
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
+        "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
+        "filter_contact_name": "",
+        "filter_created_by": isAdminWritePermission == "0"?email:"",
+        "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
+        "filter_day_flag":"",
+        "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
+        "filter_frontliner_value": "",
+        "filter_is_closed_completed": 0,
+        "filter_is_infra_lead": -1,
+        "filter_is_sales_cycle_active": is_Active.toString(),
+        "filter_last_activity_status": "",
+        "filter_method_of_call": method_of_call_controller.value.text.isEmpty?"":method_of_call_controller.value.text,
+        "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
+        "filter_product_category": product_category_controller.value.text.isEmpty?"":product_category_controller.value.text,
+        "filter_sales_cycle_id": Sale_cycle_Id_controller.value.text.isEmpty?"":Sale_cycle_Id_controller.value.text,
+        "filter_task_id": taskId!.isNotEmpty?taskId:filterTask_Id_controller.value.text,
+        "filter_task_owner": account_owner_controller.value.text.isEmpty?"":account_owner_controller.value.text,
+        "filter_task_status": 'GET FROM TASK ID',
+        "filter_type_of_call":  Type_of_call_controller.value.text.isEmpty?"":Type_of_call_controller.value.text,
+        "filter_zone_head_value": "",
+        "filter_district": district_controller.value.text.isEmpty?"":district_controller.value.text,
         "row_per_page": rowsPerPage.toString(),
         "page_number": page_no.toString()
       };
@@ -411,32 +412,30 @@ class TaskApprovalvm extends GetxController{
       loading.value=true;
       _api.TaskMasterGetApiHit(data, sessionManagement).then((onValue){
         final jsonResponse = json.decode(onValue);
-        print(onValue);
+        print("onValue${onValue}");
         if(jsonResponse is List){
           List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
-            loading.value = false;
-            Task_Master_list_line_Wise..value=response;
+            Task_Master_list_line_Wise.value=response;
               getTaskMstDSARList(taskId);
               Get.toNamed(RoutesName.taslMasterApprovalDetailsScreen);
           }else {
-            loading.value = false;
+
             Task_Master_list_line_Wise.value=[];
 
           }
         } else {
-          loading.value = false;
+
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
-          loading.value = false;
+
         },
       );
     }catch(e){
-      loading.value = false;
-      print(e);
+
+      print("task approver list ${e.toString()}");
     }
     finally{
       loading.value = false;
@@ -469,7 +468,6 @@ class TaskApprovalvm extends GetxController{
         }
       },).onError((error, stackTrace) {
         print('call list...${error}');
-        loading.value = false;
       },
       );
     }catch(e){
@@ -505,10 +503,8 @@ class TaskApprovalvm extends GetxController{
           }
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
-          loading.value = false;
         },
       );
     }catch(e){
@@ -568,29 +564,22 @@ class TaskApprovalvm extends GetxController{
         if(jsonResponse is List){
           List<ClusterModal> response = jsonResponse.map((e) => ClusterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             clusterGetByEmailList.value=response;
             if (clusterGetByEmailList.value.isNotEmpty && SelectedCluster_list.isEmpty) {
               SelectedCluster_list.assignAll(clusterGetByEmailList.value);
-              clusterName_controller.value.text =
-                  clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
+              clusterName_controller.value.text = clusterGetByEmailList.value.map((e) => e.geoValue).join('|');
               getRegionsWithClusterFilterGetByEmail();
             }
           }else {
-            loading.value = false;
             clusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
@@ -599,10 +588,7 @@ class TaskApprovalvm extends GetxController{
   void getRegionsWithClusterFilterGetByEmail() {
     var selectedCluster="";
     if(clusterName_controller.value.text.isNotEmpty){
-      selectedCluster = clusterName_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+      selectedCluster = clusterName_controller.value.text.split(',').map((e) => e.trim()).join('|');
     }
     try{
       Map<String, String> data={
@@ -617,28 +603,21 @@ class TaskApprovalvm extends GetxController{
         if(jsonResponse is List){
           List<RegionWithClusterFilterModal> response = jsonResponse.map((e) => RegionWithClusterFilterModal.fromJson(e)).toList();
           if(response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             regionwithclusterGetByEmailList.value=response;
             RegionName_controller.value.text = regionwithclusterGetByEmailList.map((e) => e.geoValue).join('|');
             print('region....${RegionName_controller.value.text}');
             //getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
             getFilterData();
-
           }else {
-            loading.value = false;
             regionwithclusterGetByEmailList.value=[];
           }
-        } else {
-          loading.value = false;
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
     }finally{
       loading.value = false;
@@ -667,10 +646,7 @@ class TaskApprovalvm extends GetxController{
     }
     AccountOwnerForApi = '';
     if(AccountOwner_controller.value.text.isNotEmpty){
-      AccountOwnerForApi = AccountOwner_controller.value.text
-          .split(',')
-          .map((e) => e.trim())
-          .join('|');
+      AccountOwnerForApi = AccountOwner_controller.value.text.split(',').map((e) => e.trim()).join('|');
     }
     try{
       Map data={
@@ -691,7 +667,7 @@ class TaskApprovalvm extends GetxController{
         "filter_approved_by": "",
         "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
         "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,
-        "filter_task_owner":isAdminWritePermission=='1'?"":email,
+        "filter_task_owner":isAdminWritePermission=='1' || isHeadofficePermission.value=="1"?"":email,
         "filter_is_closed_completed": 0,
         "filter_day_flag":'All',
         "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
@@ -712,30 +688,23 @@ class TaskApprovalvm extends GetxController{
         if(jsonResponse is List){
           List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             if(page_no==0){
               Task_Master_list.clear();
             }
             Task_Master_list.addAll(response);
             total_rows=int.parse(Task_Master_list[0].totalRows!);
           }else {
-            loading.value = false;
             Task_Master_list.value=[];
 
           }
-        } else {
-          loading.value = false;
-
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
-          loading.value = false;
+
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
     }
     finally{
@@ -760,29 +729,27 @@ class TaskApprovalvm extends GetxController{
         if(jsonResponse is List){
           List<TaskDSARModel> response = jsonResponse.map((e) => TaskDSARModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition=="True"){
-            loading.value = false;
             TaskDSAR_Master_list.value=response;
             print("Success...1 ${response.toString()}");
           }else {
-            loading.value = false;
             TaskDSAR_Master_list.value=[];
             print("UnSuccess... ${response.toString()}");
 
           }
         } else {
-          loading.value = false;
           print("UnSuccessfull... ");
 
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
       print("jdsdhud...${e}");
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -802,32 +769,30 @@ class TaskApprovalvm extends GetxController{
         if(jsonResponse is List){
           List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
           if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
-            loading.value = false;
             Utils.sanckBarSuccess('Success!', response[0].message.toString());
             pageNumber=0;
             getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
             Get.toNamed(RoutesName.taskApproval_List);
           }else {
-            loading.value = false;
             Utils.sanckBarError('Error!', response[0].message.toString());
             print(response[0].message.toString());
             //Task_Master_list.value=[];
 
           }
         } else {
-          loading.value = false;
           print('APi Not hit');
 
         }
       },
-      ).onError(
-            (error, stackTrace) {
+      ).onError((error, stackTrace) {
           print(error);
         },
       );
     }catch(e){
-      loading.value = false;
       print(e);
+    }
+    finally{
+      loading.value = false;
     }
   }
 
@@ -1248,9 +1213,6 @@ class TaskApprovalvm extends GetxController{
 
   void getFilterData() async{
     Map getFilterData=await sessionManagement.getTaskApproverData();
-
-
-
     if(getFilterData.isNotEmpty){
       filterDataChecker.value='1';
       filterTask_Id_controller.value.text=getFilterData["task_id"];

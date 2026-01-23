@@ -105,7 +105,6 @@ class TaskMasterScreen extends StatelessWidget {
         ),
         drawer: CustomDrawer(),
         body: Obx((){
-          print("circular loading..${TaskMaster_page_controller.loading.value}");
           if(TaskMaster_page_controller.loading.value)
             return const FullScreenLoader();
           return Visibility(child: RefreshIndicator(
@@ -592,8 +591,7 @@ class TaskMasterScreen extends StatelessWidget {
   Widget BindCustomerRequestListView(context, int position) {
     String taskStatus = TaskMaster_page_controller.Task_Master_list[position].taskStatus!.toLowerCase();
 
-    int IsReadyForApprove = TaskMaster_page_controller
-        .Task_Master_list[position].isReadyForApprove!;
+    int IsReadyForApprove = TaskMaster_page_controller.Task_Master_list[position].isReadyForApprove!;
     String pipeLine = TaskMaster_page_controller.Task_Master_list[position]
         .taskDueTime!.isNotEmpty ? "|" : "";
     // Determine the color based on taskStatus
@@ -605,6 +603,96 @@ class TaskMasterScreen extends StatelessWidget {
             print('task id......${TaskMaster_page_controller.Task_Master_list[position].taskId}');
             TaskMaster_page_controller.getTaskMaster(0, TaskMaster_page_controller.is_Active.toString(), TaskMaster_page_controller.Task_Master_list[position].taskId, 'View', 'GET FROM TASK ID', TaskMaster_page_controller.date_filter, TaskMaster_page_controller.is_done.value);
           },
+          title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Text(
+                    "Task Id : ",
+                    style: GoogleFonts.poppins(
+                        color: AllColors.primaryDark1,
+                        fontSize: AllFontSize.fourtine,
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Expanded(
+                    child: Tooltip(
+                      message: TaskMaster_page_controller
+                          .Task_Master_list[position]
+                          .taskId??"",
+                      child: Text(
+                        TaskMaster_page_controller
+                            .Task_Master_list[position]
+                            .taskId??"",
+                        overflow: TextOverflow.ellipsis,
+                        style: GoogleFonts.poppins(
+                          //color: getStatusColor(taskStatus),
+                            color: AllColors.textColor,
+                            fontSize: AllFontSize.fourtine,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Obx(() {
+                  return Visibility(
+                    visible:TaskMaster_page_controller.Task_Master_list[position].taskStatus!.toLowerCase() == 'pending for approval'
+                        && TaskMaster_page_controller.isHeadofficePermission.value!="1",
+                    child: InkWell(
+                      onTap: () {
+                        if (IsReadyForApprove == 1) {
+                          showApprovRejectDialog(context, TaskMaster_page_controller.Task_Master_list[position].taskId!);
+                        } else {
+                          TaskMaster_page_controller.getTaskMaster(0,
+                              TaskMaster_page_controller.is_Active.toString(),
+                              TaskMaster_page_controller.Task_Master_list[position].taskId,
+                              'View',
+                              'GET FROM TASK ID',
+                              TaskMaster_page_controller.date_filter,
+                              TaskMaster_page_controller.is_done.value);
+                        }
+                      },
+                      child: const Icon(Icons.update, color: Colors.blue,),),
+                  );
+                }),
+                InkWell(
+                      onTap: () {
+                        TaskMaster_page_controller.getTaskMaster(0,
+                            TaskMaster_page_controller.is_Active.toString(),
+                            TaskMaster_page_controller.Task_Master_list[position].taskId,
+                            'View', 'GET FROM TASK ID',
+                            TaskMaster_page_controller.date_filter,
+                            TaskMaster_page_controller.is_done.value);
+
+                        // TaskMaster_page_controller.getTaskMstDSARList(TaskMaster_page_controller.Task_Master_list[position].taskId);
+                        // TaskMaster_page_controller.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[position].taskId);
+                      },
+                      child: const Padding(padding:EdgeInsets.only(left: 8.0), child: Icon(Icons.remove_red_eye_outlined, color: Colors.blue,)),
+                ),
+                Obx(() {
+                  return Visibility(
+                    visible: TaskMaster_page_controller.isAdminWritePermission.value == "1" &&
+                        TaskMaster_page_controller.isHeadofficePermission.value == "0",
+                    child: GestureDetector(
+                      onTap: () => showConfirmCompleteDialog(context, position!),
+                      child: const Padding(
+                        padding: EdgeInsets.only(left: 8.0),
+                        child: Icon(Icons.delete, color: Colors.red),
+                      ),
+                    ),
+                  );
+                }),
+              ],
+            ),
+
+          ],
+        ),
           subtitle: Column(
             children: [
               _buildLabelWithValue(label: "Task Status: ", value: TaskMaster_page_controller.Task_Master_list[position].taskStatus??"",),
@@ -739,99 +827,7 @@ class TaskMasterScreen extends StatelessWidget {
 
             ],
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Task Id : ",
-                      style: GoogleFonts.poppins(
-                          color: AllColors.primaryDark1,
-                          fontSize: AllFontSize.fourtine,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Flexible(
-                      child: Tooltip(
-                        message: TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .taskId??"",
-                        child: Text(
-                          TaskMaster_page_controller
-                              .Task_Master_list[position]
-                              .taskId??"",
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.poppins(
-                            //color: getStatusColor(taskStatus),
-                              color: AllColors.textColor,
-                              fontSize: AllFontSize.fourtine,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  taskStatus == 'pending for approval' ?
-                  InkWell(
-                    onTap: () {
-                      if (IsReadyForApprove == 1) {
-                        showApprovRejectDialog(context, TaskMaster_page_controller
-                            .Task_Master_list[position]
-                            .taskId!);
-                      } else {
-                        TaskMaster_page_controller.getTaskMaster(
-                            0,
-                            TaskMaster_page_controller.is_Active.toString(),
-                            TaskMaster_page_controller.Task_Master_list[position]
-                                .taskId,
-                            'View',
-                            'GET FROM TASK ID',
-                            TaskMaster_page_controller.date_filter,
-                            TaskMaster_page_controller.is_done.value);
-                      }
-                    },
-                    child: Icon(Icons.update, color: Colors.blue,),
-                  ) : (taskStatus.toLowerCase() == 'approved' || taskStatus.toLowerCase() == 'rejected' ? InkWell(
-                    onTap: () {
-                      TaskMaster_page_controller.getTaskMaster(
-                          0,
-                          TaskMaster_page_controller.is_Active.toString(),
-                          TaskMaster_page_controller.Task_Master_list[position].taskId,
-                          'View',
-                          'GET FROM TASK ID',
-                          TaskMaster_page_controller.date_filter,
-                          TaskMaster_page_controller.is_done.value);
 
-                      // TaskMaster_page_controller.getTaskMstDSARList(TaskMaster_page_controller.Task_Master_list[position].taskId);
-                      // TaskMaster_page_controller.getItemCategoryMstApi(TaskMaster_page_controller.Task_Master_list[position].taskId);
-                    },
-                    child: Icon(Icons.remove_red_eye_outlined, color: Colors.blue,),
-                  ) : SizedBox()),
-
-                  Obx(() {
-                    return Visibility(
-                      visible: TaskMaster_page_controller.isAdminWritePermission.value == "1" &&
-                          TaskMaster_page_controller.isHeadofficePermission.value == "0",
-                      child: GestureDetector(
-                        onTap: () => showConfirmCompleteDialog(context, position!),
-                        child: const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Icon(Icons.delete, color: Colors.red),
-                        ),
-                      ),
-                    );
-                  }),
-                ],
-              ),
-
-            ],
-          )
 
       ),
     );
