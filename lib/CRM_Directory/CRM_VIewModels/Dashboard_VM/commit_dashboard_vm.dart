@@ -40,7 +40,8 @@ class CommitDashboardVm extends GetxController{
   RxList<CommitDashboardUserWiseDataModel> commitDashboardUserWiseDataList = <CommitDashboardUserWiseDataModel>[].obs;
 
   RxList<String> SalesCycleStageStatusList = <String>[].obs;
-  RxList<String> selectedSalesStageStatusList = <String>[].obs;
+  //RxList<String> selectedSalesStageStatusList = <String>[].obs;
+  RxList<String> selectedSalesStageStatusList = ['ALL','Suspect', 'Prospect', 'Propose'].obs;
   RxList<EmployeeMemberModel> employee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<EmployeeMemberModel> SelectedEmployee_Member_list = <EmployeeMemberModel>[].obs;
   RxList<ItemCategoryMstModel> Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
@@ -84,9 +85,10 @@ class CommitDashboardVm extends GetxController{
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-    SalesCycleStageStatusList.value = ['All','Suspect', 'Prospect', 'Propose'];
-    selectedSalesStageStatusList.value = ["All"];
+    //SalesCycleStageStatusList.value = ['ALL','Suspect', 'Prospect', 'Propose'];
+   // selectedSalesStageStatusList.value = ["All"];
     QuoteAccepted_controller.value.text = "All";
+    StageName_controller.value.text = "All";
     IsCommit_controller.value.text = 'All';
     DateRange("monthly");
     filterCustomDateController.value.text = '${formattedStartDate} - ${formattedEndDate}';
@@ -236,8 +238,8 @@ class CommitDashboardVm extends GetxController{
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
         "filter_created_on": filter_created_on_cont.value.text.isEmpty?"": filter_created_on_cont.value.text,
-        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
-        "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi.toLowerCase()=='all')?"":QuoteAcceptedForApi,
+        "filter_stage_name": (StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=="all")?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
       };
@@ -289,8 +291,8 @@ class CommitDashboardVm extends GetxController{
         "filter_owner_name": AccountOwnerForApi.isEmpty?"":AccountOwnerForApi,
         "filter_region_name": RegionNameForApi.isEmpty?"":RegionNameForApi,
         "filter_cluster_name": ClusterNameForApi.isEmpty?"":ClusterNameForApi,
-        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi=='All')?"":QuoteAcceptedForApi,
-        "filter_stage_name": StageNameForApi.isEmpty?"":StageNameForApi,
+        "filter_quote_accepted": (QuoteAcceptedForApi.isEmpty||QuoteAcceptedForApi.toLowerCase()=='all')?"":QuoteAcceptedForApi,
+        "filter_stage_name": (StageNameForApi.isEmpty || StageNameForApi.toLowerCase()=='all')?"":StageNameForApi,
         "filter_product_category": ProductCategoryForApi.isEmpty?"":ProductCategoryForApi,
         "filter_customer_name": CustomerNameApi.isEmpty?"":CustomerNameApi,
         "rowsPerPage": rowsPerPage,
@@ -719,7 +721,7 @@ class CommitDashboardVm extends GetxController{
     ProductCategory_controller.value.clear();
     QuoteAccepted_controller.value.text = "All";
     IsCommit_controller.value.text = 'All';
-    StageName_controller.value.clear();
+    StageName_controller.value.text="All";
   //  clusterName_controller.value.clear();
     CustomerName_controller.value.clear();
     filter_created_on_cont.value.clear();

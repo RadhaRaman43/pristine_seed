@@ -40,8 +40,8 @@ class PendingDsarDashboardVm extends GetxController{
   RxList<Records> pendingDSARDashboardRecordList = <Records>[].obs;
   RxList<CallDashboardUserWiseDataModel> pendingDSARDashboardUserWiseDataList = <CallDashboardUserWiseDataModel>[].obs;
 
-  RxList<String> TaskStatusListTypeList = <String>[].obs;
-  RxList<String> selectedTaskStatusList = <String>[].obs;
+  RxList<String> TaskStatusListTypeList = ['ALL','Pending','Pending For Approval', 'Approved', 'Rejected'].obs;
+  //RxList<String> selectedTaskStatusList = <String>[].obs;
   RxList<CallStatusMasterModel> DSARStatus_Master_list = <CallStatusMasterModel>[].obs;
   RxList<CallStatusMasterModel> selectedDSARStatusList = <CallStatusMasterModel>[].obs;
   RxList<AccountMasterModel> Account_Master_list=<AccountMasterModel>[].obs;
@@ -85,8 +85,8 @@ class PendingDsarDashboardVm extends GetxController{
     email = await sessionManagement.getEmail() ?? '';
     userType = await sessionManagement.getUserType() ?? '';
     isAdminWritePermission.value = await sessionManagement.getIsAdminPermission() ?? '';
-    TaskStatusListTypeList.value = ['Pending','Pending For Approval', 'Approved', 'Rejected'];
-    selectedTaskStatusList.value = ["Approved"];
+    //TaskStatusListTypeList.value = ['Pending','Pending For Approval', 'Approved', 'Rejected'];
+    task_Status_controller.value.text='All';
     selectedTypeCallList.insert(0, CallStatusMasterModel(taskStatus: "All"));
     selectedDSARStatusList.insert(0, CallStatusMasterModel(taskStatus: 'All'));
     DateRange("month");
@@ -801,7 +801,8 @@ class PendingDsarDashboardVm extends GetxController{
     SelectedProductCategory_list.value = [];
     SelectedCluster_list.value = [];
     SelectedRegion_list.value = [];
-    selectedTaskStatusList.value = ["Approved"];
+    //selectedTaskStatusList.value = ["Approved"];
+    task_Status_controller.value.text='All';
     selectedTypeCallList.add(CallStatusMasterModel(taskStatus: "All",),);
     selectedDSARStatusList.add(CallStatusMasterModel(taskStatus: "All",),);
     DateRange("month");
