@@ -100,7 +100,6 @@ class TaskApprovalvm extends GetxController{
   void toggleInfraDetails() {
     isExpandInfraDeatils.value = !isExpandInfraDeatils.value;
 
-
   }
 
   RxList<ClusterModal> clusterGetByEmailList = <ClusterModal>[].obs;
@@ -150,7 +149,6 @@ class TaskApprovalvm extends GetxController{
         getEmployeeMemberApi();
       }
       getClustersGetByEmail();
-
     //getTaskMasterApprovalList(pageNumber, is_Active.toString(),);
 
   }
@@ -168,7 +166,6 @@ class TaskApprovalvm extends GetxController{
       try {
         List<CompanyTypeModal> Response =
         (json.decode(value) as List<dynamic>).map((i) => CompanyTypeModal.fromJson(i as Map<String, dynamic>)).toList();
-
         if (Response.isNotEmpty && Response[0].condition?.toLowerCase() == "true") {
           company_profile_type_list.value=Response;
         } else {

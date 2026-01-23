@@ -224,7 +224,8 @@ class QuoteInformationScreen extends StatelessWidget {
                               ),
                             ),);
                         }),
-                        Obx(() {
+                        Obx(()
+                        {
                           return Padding(
                             padding: const EdgeInsets.only(right: 0.0),
                             child: Visibility(
@@ -277,25 +278,6 @@ class QuoteInformationScreen extends StatelessWidget {
                                         side: BorderSide.none,
                                       ),
                                     ),
-                                    /* ActionChip(
-                                        label: Text("Reject", style: GoogleFonts.poppins(
-                                          color: AllColors.whiteColor,
-                                          fontWeight: FontWeight.w500,
-                                        ),),
-
-                                        onPressed: (){
-                                          showdialogForApproval(context);
-                                          //openConfirmationDialog(context, "Do you want to Update this Sales Cycle?", "Approved");
-                                          saleCycleController.quoteStatusController.value.clear();
-                                          saleCycleController.rejectreasonQuoteController.value.clear();
-                                          saleCycleController.isApprove.value=false;
-                                          saleCycleController.isReject.value=false;
-                                        },
-                                        backgroundColor: AllColors.primaryDark1,
-                                        shape: StadiumBorder(
-                                          side: BorderSide.none,
-                                        ),
-                                      ),*/
                                   ]),
                             ),
                           );
@@ -304,15 +286,8 @@ class QuoteInformationScreen extends StatelessWidget {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Visibility(
-                              visible: saleCycleController
-                                              .quoteHeaderdata[0].quoteAccepted
-                                              ?.toLowerCase() ==
-                                          "open" &&
-                                      saleCycleController.quoteHeaderdata[0]
-                                              .isReadySendForApproval ==
-                                          1
-                                  ? true
-                                  : false,
+                              visible: saleCycleController.quoteHeaderdata[0].quoteAccepted?.toLowerCase() == "open" &&
+                                      saleCycleController.quoteHeaderdata[0].isReadySendForApproval == 1 ? true : false,
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
@@ -2498,33 +2473,50 @@ class QuoteInformationScreen extends StatelessWidget {
     );
   }
 
+
   Future showDialogForHeaderUpdate(BuildContext context) {
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            child: AlertDialog(
-              title: Text(
-                "Update Quote Header",
-                style: GoogleFonts.poppins(
-                  color: AllColors.primaryDark1,
-                  fontSize: AllFontSize.fourtine,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              content: Container(
-                  /*height: size.height*.4,
-                  width: size.width*4,*/
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Update Quote Header",
+            style: GoogleFonts.poppins(
+              color: AllColors.primaryDark1,
+              fontSize: AllFontSize.fourtine,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          content: SizedBox(
+            width: double.maxFinite, // important
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+
+                /// 🔹 Scrollable content
+                Expanded(
                   child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                    child: Column(
+                      children: [
+                        Visibility(
+                          visible:
+                          saleCycleController.isAdminWritePermission == "1" ||
+                              saleCycleController.userType.toLowerCase() == "branch head" ||
+                              saleCycleController.userType.toLowerCase() == "cluster head" ||
+                              saleCycleController.userType.toLowerCase() == "general manager",
+                          child: bindCharges(context),
+                        ),
+                        SizedBox(height: 10),
+                        bindShippingAddress(context),
+                        SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
+                ),
+
+                /// 🔹 Fixed buttons at bottom
+                Column(
                   children: [
-                    Visibility(visible:saleCycleController.isAdminWritePermission=="1" || saleCycleController.userType.toLowerCase()=="branch head"||
-                        saleCycleController.userType.toLowerCase()=="cluster head"||saleCycleController.userType.toLowerCase()=="general manager",
-                        child: bindCharges(context),),
-                    SizedBox(height: 10),
-                    bindShippingAddress(context),
-                    SizedBox(height: 10,),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -2587,16 +2579,16 @@ class QuoteInformationScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
                   ],
-                ),
-              )),
+                )
+              ],
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
+
 
   bindInputData(BuildContext context,String levelText, TextEditingController controller, Widget suffixIcon) {
     if(levelText=="Warranty Period"){
