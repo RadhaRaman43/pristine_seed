@@ -487,7 +487,7 @@ class Taskmastervm extends GetxController{
                 "filter_approved_by": approved_by_controller.value.text.isEmpty?"":approved_by_controller.value.text,
                 "filter_created_on": filterTaskCreationOnController.value.text.isEmpty?"":filterTaskCreationOnController.value.text,
                 "filter_due_date": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
-                "filter_task_owner":isAdminWritePermission.value=='1'?"":email,
+                "filter_task_owner":isAdminWritePermission.value=='1' || isHeadofficePermission.value=='1'?"":email,
                 "filter_is_closed_completed": is_done,
                 "filter_day_flag": date_filter.toString(),
                 "filter_postal_code": postalCodeController.value.text.isEmpty?"":postalCodeController.value.text,
@@ -503,12 +503,13 @@ class Taskmastervm extends GetxController{
             };
             print("Data Json....${data}");
             loading.value=true;
-            var onValue =_api.TaskMasterGetApiHit(data, sessionManagement);
-                final jsonResponse = json.decode(await onValue);
+            var onValue = await _api.TaskMasterGetApiHit(data, sessionManagement);
+                final jsonResponse = json.decode(onValue);
+                print("Data Json...}");
                 print(onValue);
                 if(jsonResponse is List){
                     List<TaskMasterGetModel> response = jsonResponse.map((e) => TaskMasterGetModel.fromJson(e)).toList();
-                    if(response!= null && response.length>0 && response[0].condition=="True"){
+                    if(response!= null && response.length>0 && response[0].condition?.toLowerCase()=="true"){
                         if(page_no==0){
                             Task_Master_list.clear();
                         }
@@ -540,7 +541,7 @@ class Taskmastervm extends GetxController{
                     }
                 }
         }catch(e){
-            print(e);
+            print("Catch Block...$e");
         }
         finally{
             loading.value = false;

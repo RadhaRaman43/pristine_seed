@@ -383,7 +383,7 @@ class TaskApprovalvm extends GetxController{
         "filter_clusture_head_value": clusterName_controller.value.text.isEmpty?"":clusterName_controller.value.text,
         "filter_company_profile_type": companyProfileTypeController.value.text.isEmpty?"":companyProfileTypeController.value.text,
         "filter_contact_name": "",
-        "filter_created_by": isAdminWritePermission == "0"?email:"",
+        "filter_created_by": isAdminWritePermission == "1" || isHeadofficePermission.value =='1'?"":email,
         "filter_created_on": createdOnStartToEnd.value.isEmpty?"":createdOnStartToEnd.value,
         "filter_day_flag":"",
         "filter_due_date": filterTaskDuedateController.value.text.isEmpty?"":filterTaskDuedateController.value.text,

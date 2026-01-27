@@ -1486,7 +1486,7 @@ class TaskMasterScreen extends StatelessWidget {
                                 TaskMaster_page_controller.is_Active.toString(),
                                 '',
                                 '',
-                                TaskMaster_page_controller.Task_status_controller.text.toString(),
+                                TaskMaster_page_controller.Task_status_controller.text,
                                 TaskMaster_page_controller.date_filter,
                                 TaskMaster_page_controller.is_done.value);
                           },
@@ -1917,7 +1917,7 @@ class TaskMasterScreen extends StatelessWidget {
       else{
         if (availableItems.isNotEmpty && TaskMaster_page_controller.SelectedRegion_list.isEmpty) {
           TaskMaster_page_controller.SelectedRegion_list.assignAll(availableItems);
-          TaskMaster_page_controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join(',');
+          TaskMaster_page_controller.RegionName_controller.value.text = availableItems.map((e) => e.geoValue).join('|');
           print("bind region ${TaskMaster_page_controller.RegionName_controller.value.text}");
         }
         else{
