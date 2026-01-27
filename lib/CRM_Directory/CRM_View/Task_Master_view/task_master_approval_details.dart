@@ -198,10 +198,7 @@ class TaskMasterApprovalDetails extends StatelessWidget{
                                   }
                                 },
                                 icon: Icon(
-                                  TaskMaster_page_controller
-                                      .isExpandCrtd.value
-                                      ? Icons.arrow_drop_down
-                                      : Icons.arrow_drop_up,
+                                  TaskMaster_page_controller.isExpandCrtd.value ? Icons.arrow_drop_down : Icons.arrow_drop_up,
                                   size: 25,
                                   color: AllColors.whiteColor,
                                 ),
