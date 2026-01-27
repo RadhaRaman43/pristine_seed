@@ -73,9 +73,24 @@ class PendingDraftQuoteVm extends GetxController{
   RxList<ItemCategoryMstModel> Selected_Item_Category_master_list_without_task = <ItemCategoryMstModel>[].obs;
   RxList<String> productCategoryTypeList = <String>["Contains","Equals To"].obs;
   String filterRouting = "";
-
+  String title="";
   @override
   Future<void> onInit() async {
+    title = Get.arguments??"";
+    if(title=='Pending Draft Quote'){
+      filterFlag="PENDING & PENDING FOR APPROVAL";
+    }else if(title=='All Quote'){
+      filterFlag="All";
+    }else if(title=='All Quote Line Items'){
+      filterFlag="ALLQuoteLineItems";
+    }
+    else if(title=='All SPR Mapping Line Items'){
+      filterFlag="ALLSPRMAPPING";
+    }
+    else if(title=='Approved / Rejected Quote'){
+      filterFlag="APPROVED & REJECTED";
+    }
+
     email=await sessionManagement.getEmail() ?? '';
     isAdminWritePermission = await sessionManagement.getIsAdminPermission() ?? '';
     filterRouting = await sessionManagement.getfilterRouting() ?? '';
@@ -407,7 +422,7 @@ class PendingDraftQuoteVm extends GetxController{
     }
 
     pageNumberForQuote=0;
-    getPendingDraftQuoteList(pageNumberForQuote, "All");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
   }
 
@@ -484,7 +499,7 @@ class PendingDraftQuoteVm extends GetxController{
       print("else condition");
     }
     pageNumberForQuote=0;
-    getPendingDraftQuoteList(pageNumberForQuote, "All");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
   }
 
@@ -520,7 +535,7 @@ class PendingDraftQuoteVm extends GetxController{
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
-    getPendingDraftQuoteList(pageNumberForQuote, "APPROVED & REJECTED");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
   }
 
@@ -562,7 +577,7 @@ class PendingDraftQuoteVm extends GetxController{
       print("else condition");
     }
     pageNumberForQuote=0;
-    getPendingDraftQuoteList(pageNumberForQuote, "APPROVED & REJECTED");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
   }
 
@@ -608,7 +623,7 @@ class PendingDraftQuoteVm extends GetxController{
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
-    getPendingDraftQuoteList(pageNumberForQuote, "ALLQuoteLineItems");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
   }
 
@@ -660,7 +675,7 @@ class PendingDraftQuoteVm extends GetxController{
       print("else condition");
     }
     pageNumberForQuote=0;
-    getPendingDraftQuoteList(pageNumberForQuote, "ALLQuoteLineItems");
+    getPendingDraftQuoteList(pageNumberForQuote,filterFlag);
 
   }
 
@@ -699,7 +714,7 @@ class PendingDraftQuoteVm extends GetxController{
       'product_category_type': product_category_type_Controller.value.text,
     });
     filterDataChecker.value='';
-    getPendingDraftQuoteList(pageNumberForQuote, "ALLQuoteLineItems");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
   }
 
@@ -744,7 +759,7 @@ class PendingDraftQuoteVm extends GetxController{
       print("else condition");
     }
     pageNumberForQuote=0;
-    getPendingDraftQuoteList(pageNumberForQuote, "ALLQuoteLineItems");
+    getPendingDraftQuoteList(pageNumberForQuote, filterFlag);
 
   }
 
